@@ -4,12 +4,11 @@ import json
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Union
 
 import inductiva
-from inductiva import api
 from inductiva import projects
 from inductiva.client import models
 from inductiva.tasks.task import Task
 from inductiva.utils import format_utils
-from inductiva.client import ApiClient, ApiException
+from inductiva.client import ApiException
 from inductiva.client.apis.tags.tasks_api import TasksApi
 
 
@@ -69,9 +68,8 @@ def _fetch_tasks_from_api(
 
     Tags can be filtered by a status. Results are paginated indexed from 1.
     """
-    api_config = api.get_api_config()
 
-    with ApiClient(api_config) as client:
+    with inductiva.api.methods.get_client() as client:
         api_instance = TasksApi(client)
 
         query_params = {
