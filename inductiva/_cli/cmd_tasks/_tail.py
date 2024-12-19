@@ -10,7 +10,7 @@ from inductiva import _cli, tasks
 def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
-    lines = asyncio.run(task._tail_file(args.filename))  # pylint: disable=protected-access
+    lines = asyncio.run(task._tail_file(args.filename, args.lines))  # pylint: disable=protected-access
     print(lines, file=fout)
     return 0
 
@@ -30,4 +30,9 @@ def register(parser):
                            type=str,
                            help="ID of the task to list directories.")
     subparser.add_argument("filename", type=str, help="File to tail.")
+    subparser.add_argument("--lines",
+                           "-l",
+                           type=int,
+                           default=10,
+                           help="Number of lines to show.")
     subparser.set_defaults(func=tail)
