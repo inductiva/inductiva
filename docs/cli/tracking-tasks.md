@@ -6,7 +6,7 @@ easy to monitor and manage all tasks you generated with the `list` subcommand th
 tasks you launched. You can also track a specific task using its unique`--id`.
 
 ```{seealso}
-Learn more about how [tasks](https://tutorials.inductiva.ai/intro_to_api/tasks.html) are generated through the Inductiva API.
+Learn more about how [tasks](../intro_to_api/tasks.md) are generated through the Inductiva API.
 ```
 
 Here's an example of how you can use these features:
