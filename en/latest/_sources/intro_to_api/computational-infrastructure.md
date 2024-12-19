@@ -85,7 +85,7 @@ to accrue significant expenses if a large number of VMs are initiated! To protec
 you from inadvertently spinning up too many resources, the API imposes certain 
 limitations on the quantity and types of machines that you can launch. For details 
 on these limitations, please consult the
-[User Quotas](http://docs.inductiva.ai/en/latest/api_reference/tiers_and_quotas.html) 
+[User Quotas](../api_reference/tiers_and_quotas.md) 
 we put in place through the current version of the API.
 
 ````{eval-rst}
@@ -110,4 +110,12 @@ the resources you already invested in.
 - **High-performance Computing (HPC):** We are collaborating with HPC providers to allow 
 redirection of certain simulation loads to large HPC clusters you can access.
 
-Stay tuned for these updates, which will be rolled out in the upcoming releases!
+## What Next? 
+
+[In our blog post](https://inductiva.ai/blog/article/allocating-computational-resources-in-a-diverse-chip-ecosystem), 
+we talked about how the growing diversity of computing options 
+is transforming the landscape—and how it’s not always easy to find the best machine 
+for your job.
+
+With our new [benchmarking tool](benchmarking.md), we’re making it easier
+to make smarter, cost-effective decisions for your workloads.

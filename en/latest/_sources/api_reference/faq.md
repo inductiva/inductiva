@@ -27,7 +27,7 @@ to support@inductiva.ai.*
 Performance optimization involves adjusting simulation parameters and choosing
 the most appropriate processing option. For that, you should try running your
 simulation using the several types of 
-[computational resources](https://tutorials.inductiva.ai/intro_to_api/computational-infrastructure.html)
+[computational resources](../intro_to_api/computational-infrastructure.md)
 available via the API, and also check our
 [official benchmarks page](https://benchmarks.inductiva.ai/),
 where we compare the performance of running specific simulation use cases
