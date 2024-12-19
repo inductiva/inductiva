@@ -199,3 +199,10 @@ benchmark.export(fmt="json", select="distinct", status="success")
 * **Export Results Regularly**: After completing benchmark runs, export the results in your preferred format to facilitate analysis and reporting.  
 * **Terminate Resources**: Always call `terminate()` after completing a benchmark to free up resources, especially if using cloud providers like GCP.  
 * **Handle Quotas**: Consider enabling `wait_for_quotas=True` in `run()` to ensure your simulation runs without quota issues.
+
+---
+
+Ready to dive in? Check out these exciting tutorials for more insights on benchmarking besides documentation:
+
+- [How to Run a Benchmark](../../tutorials/how_to/run-benchmarks.md)
+- [Benchmarking Computational Resources](../../tutorials/generating-synthetic-data/synthetic-data-generation-6.md)
