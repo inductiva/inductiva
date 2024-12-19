@@ -77,7 +77,7 @@
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Templating Manager" href="templating.html" />
+    <link rel="next" title="Benchmarking" href="benchmarking.html" />
     <link rel="prev" title="Storage and Data Flow" href="data_flow.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -189,19 +189,10 @@
 <li class="toctree-l1"><a class="reference internal" href="shared_dedicated_resources.html">Resource Allocation Options</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_flow.html">Storage and Data Flow</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Computational Infrastructure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="benchmarking.html">Benchmarking</a></li>
 <li class="toctree-l1"><a class="reference internal" href="templating.html">Templating Manager</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuring-simulators.html">Configuring Simulators</a></li>
 <li class="toctree-l1"><a class="reference internal" href="projects.html">Projects</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Quick Recipes</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../how_to/run-parallel_simulations.html">Run Multiple Simulations in Parallel</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how_to/manage_computational_resources.html">Manage Computational Resources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how_to/set-up-elastic-machine-group.html">Set up an Elastic Machine Group</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how_to/set-up-mpi-cluster.html">Set up an MPI Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how_to/manage-remote-storage.html">Manage Remote Storage</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how_to/manage_tasks.html">Manage Tasks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how_to/manage_and_retrieve_results.html">Manage and Retrieve Results</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Command Line Interface (CLI)</span></p>
 <ul class="nav bd-sidenav">
@@ -373,6 +364,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-resource-management">Computational Resource Management</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#available-computational-resources">Available Computational Resources</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#upcoming-computational-resources">Upcoming Computational Resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-next">What Next?</a></li>
 </ul>
             </nav>
         </div>
@@ -465,7 +457,7 @@ to accrue significant expenses if a large number of VMs are initiated! To protec
 you from inadvertently spinning up too many resources, the API imposes certain
 limitations on the quantity and types of machines that you can launch. For details
 on these limitations, please consult the
-<a class="reference external" href="http://docs.inductiva.ai/en/latest/api_reference/tiers_and_quotas.html" rel="noreferer noopener" target="_blank">User Quotas</a>
+<a class="reference internal" href="../api_reference/tiers_and_quotas.html"><span class="std std-doc">User Quotas</span></a>
 we put in place through the current version of the API.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -487,7 +479,15 @@ the resources you already invested in.</p></li>
 <li><p><strong>High-performance Computing (HPC):</strong> We are collaborating with HPC providers to allow
 redirection of certain simulation loads to large HPC clusters you can access.</p></li>
 </ul>
-<p>Stay tuned for these updates, which will be rolled out in the upcoming releases!</p>
+</section>
+<section id="what-next">
+<h2>What Next?<a class="headerlink" href="#what-next" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="https://inductiva.ai/blog/article/allocating-computational-resources-in-a-diverse-chip-ecosystem" rel="noreferer noopener" target="_blank">In our blog post</a>,
+we talked about how the growing diversity of computing options
+is transforming the landscape—and how it’s not always easy to find the best machine
+for your job.</p>
+<p>With our new <a class="reference internal" href="benchmarking.html"><span class="std std-doc">benchmarking tool</span></a>, we’re making it easier
+to make smarter, cost-effective decisions for your workloads.</p>
 </section>
 </section>
 
@@ -512,11 +512,11 @@ redirection of certain simulation loads to large HPC clusters you can access.</p
       </div>
     </a>
     <a class="right-next"
-       href="templating.html"
+       href="benchmarking.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Templating Manager</p>
+        <p class="prev-next-title">Benchmarking</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -540,6 +540,7 @@ redirection of certain simulation loads to large HPC clusters you can access.</p
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#computational-resource-management">Computational Resource Management</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#available-computational-resources">Available Computational Resources</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#upcoming-computational-resources">Upcoming Computational Resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-next">What Next?</a></li>
 </ul>
   </nav></div>
 

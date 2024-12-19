@@ -1,0 +1,743 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NHJ03C6M91"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-NHJ03C6M91');
+    </script>
+    <meta property="og:title" content="Benchmarking" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.inductiva.ai/intro_to_api/benchmarking.html" />
+<meta property="og:site_name" content="Inductiva.ai Docs" />
+<meta property="og:description" content="The Benchmarking API is designed to help users run and evaluate simulations, measuring their performance, cost, and execution time. It allows you to configure benchmarking runs, export results, and..." />
+<meta property="og:image" content="https://docs.inductiva.ai/_static/inductiva-social-banner.jpg" />
+<meta property="og:image:alt" content="Inductiva.ai Docs" />
+<meta name="description" content="The Benchmarking API is designed to help users run and evaluate simulations, measuring their performance, cost, and execution time. It allows you to configure benchmarking runs, export results, and..." />
+
+    <title>Benchmarking &#8212; Python API for Cloud-based Simulation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'intro_to_api/benchmarking';</script>
+    <link rel="canonical" href="https://docs.inductiva.ai/intro_to_api/benchmarking.html" />
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Templating Manager" href="templating.html" />
+    <link rel="prev" title="Computational Infrastructure" href="computational-infrastructure.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="development" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/inductiva-logo-black.svg" class="logo__image only-light" alt="Python API for Cloud-based Simulation - Home"/>
+    <img src="../_static/inductiva-logo-white.svg" class="logo__image only-dark pst-js-only" alt="Python API for Cloud-based Simulation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Ready Your System</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../preinstallation/system/system-requirements.html">System Requirements for Installing the Inductiva API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../preinstallation/system/osx.html">MacOS System Prep Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../preinstallation/system/windows.html">Windows System Prep Guide</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction to Inductiva API</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="how_it_works.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tasks.html">Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shared_dedicated_resources.html">Resource Allocation Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_flow.html">Storage and Data Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="computational-infrastructure.html">Computational Infrastructure</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="templating.html">Templating Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring-simulators.html">Configuring Simulators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projects.html">Projects</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Command Line Interface (CLI)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cli/cli-overview.html">CLI Overview and Functionalities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/managing-resources.html">Manage your Computational Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/tracking-tasks.html">Track your Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/streaming-logs.html">Stream Logs of a Task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/access-storage.html">Access your Remote Storage</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api_reference/computational_resources/index.html">Class Description</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/machinegroup_class.html"><code class="docutils literal notranslate"><span class="pre">MachineGroup</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/elasticgroup_class.html"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/mpicluster_class.html"><code class="docutils literal notranslate"><span class="pre">MPICluster</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/compute_janitor.html">Computational Resources Janitor</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/tiers_and_quotas.html">Tiers, Capabilities and Quotas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/faq.html">FAQs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/uninstall_inductiva.html">Uninstall the <code class="docutils literal notranslate"><span class="pre">inductiva</span></code> package</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/intro_to_api/benchmarking.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Benchmarking</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-classes-and-concepts">Key Classes and Concepts</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmark"><strong><code class="docutils literal notranslate"><span class="pre">Benchmark</span></code></strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#constructor">Constructor</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#methods">Methods</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#set-default"><code class="docutils literal notranslate"><span class="pre">set_default</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#add-run"><strong><code class="docutils literal notranslate"><span class="pre">add_run</span></code></strong></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#run"><strong><code class="docutils literal notranslate"><span class="pre">run</span></code></strong></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wait"><strong><code class="docutils literal notranslate"><span class="pre">wait</span></code></strong></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#export"><strong><code class="docutils literal notranslate"><span class="pre">export</span></code></strong></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#terminate"><strong><code class="docutils literal notranslate"><span class="pre">terminate</span></code></strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#available-enums">Available Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exportformat"><strong><code class="docutils literal notranslate"><span class="pre">ExportFormat</span></code></strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#selectmode"><strong><code class="docutils literal notranslate"><span class="pre">SelectMode</span></code></strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-examples">Code Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-creating-a-basic-benchmark">Example 1: Creating a Basic Benchmark</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-adding-multiple-runs-with-different-parameters">Example 2: Adding Multiple Runs with Different Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-waiting-for-tasks-and-terminating-resources">Example 3: Waiting for Tasks and Terminating Resources</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-4-exporting-benchmark-results">Example 4: Exporting Benchmark Results</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="benchmarking">
+<h1>Benchmarking<a class="headerlink" href="#benchmarking" title="Link to this heading">#</a></h1>
+<p>The <strong>Benchmarking API</strong> is designed to help users run and evaluate simulations,
+measuring their performance, cost, and execution time. It allows you to configure
+benchmarking runs, export results, and manage resources.</p>
+<p>The tool supports different export formats, handles the execution of multiple
+simulations in parallel, and provides mechanisms to gather and present performance
+metrics.</p>
+<p>Here you can find documentation on the benchmarking features of our Inductiva API
+in Python.</p>
+<section id="key-classes-and-concepts">
+<h2>Key Classes and Concepts<a class="headerlink" href="#key-classes-and-concepts" title="Link to this heading">#</a></h2>
+<section id="benchmark">
+<h3><strong><code class="docutils literal notranslate"><span class="pre">Benchmark</span></code></strong><a class="headerlink" href="#benchmark" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">Benchmark</span></code> class is the core of the benchmarking tool. It manages benchmarking
+runs, including specifying simulation parameters, running simulations, and exporting results.</p>
+<section id="constructor">
+<h4>Constructor<a class="headerlink" href="#constructor" title="Link to this heading">#</a></h4>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">Benchmark</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">append</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>name (str)</strong>: The name of the benchmark. This will be used for identification and in output filenames.</p></li>
+<li><p><strong>append (bool)</strong>: Indicates whether to allow adding runs to the existing benchmark (default is <code class="docutils literal notranslate"><span class="pre">True</span></code>).</p></li>
+</ul>
+</section>
+<section id="methods">
+<h4>Methods<a class="headerlink" href="#methods" title="Link to this heading">#</a></h4>
+<section id="set-default">
+<h5><code class="docutils literal notranslate"><span class="pre">set_default</span></code><a class="headerlink" href="#set-default" title="Link to this heading">#</a></h5>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">set_default</span><span class="p">(</span><span class="n">simulator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">simulators</span><span class="o">.</span><span class="n">Simulator</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+            <span class="n">input_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+            <span class="n">on</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ComputationalResources</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
+</pre></div>
+</div>
+<p>Sets default parameters for all benchmarking runs.</p>
+<ul class="simple">
+<li><p><strong>simulator (Optional[simulators.Simulator])</strong>: The simulator to be used for future runs.</p></li>
+<li><p><strong>input_dir (Optional[str])</strong>: Directory for input files for the simulation in future runs.</p></li>
+<li><p><strong>on (Optional[types.ComputationalResources])</strong>: Computational resources for running the simulation in future runs.</p></li>
+<li><p><strong>kwargs</strong>: Additional parameters to be passed to each run (e.g., simulation-specific settings).</p></li>
+</ul>
+</section>
+<section id="add-run">
+<h5><strong><code class="docutils literal notranslate"><span class="pre">add_run</span></code></strong><a class="headerlink" href="#add-run" title="Link to this heading">#</a></h5>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">add_run</span><span class="p">(</span><span class="n">simulator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">simulators</span><span class="o">.</span><span class="n">Simulator</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+        <span class="n">input_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+        <span class="n">on</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">types</span><span class="o">.</span><span class="n">ComputationalResources</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
+</pre></div>
+</div>
+<p>Adds a new run to the benchmark. This allows you to specify the simulation parameters for each individual run.</p>
+<ul class="simple">
+<li><p><strong>simulator (Optional[simulators.Simulator])</strong>: The simulator for the current run.</p></li>
+<li><p><strong>input_dir (Optional[str])</strong>: Directory for input files for the run.</p></li>
+<li><p><strong>on (Optional[types.ComputationalResources])</strong>: Computational resources for the run.</p></li>
+<li><p><strong>kwargs</strong>: Additional parameters specific to this run.</p></li>
+</ul>
+</section>
+<section id="run">
+<h5><strong><code class="docutils literal notranslate"><span class="pre">run</span></code></strong><a class="headerlink" href="#run" title="Link to this heading">#</a></h5>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">run</span><span class="p">(</span><span class="n">num_repeats</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">wait_for_quotas</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span>
+</pre></div>
+</div>
+<p>Runs all the added benchmarking simulations. Each simulation can be repeated multiple times.</p>
+<ul class="simple">
+<li><p><strong>num_repeats (int)</strong>: The number of times each simulation run should be repeated (default is 2).</p></li>
+<li><p><strong>wait_for_quotas (bool)</strong>: Whether to wait for resource quotas before starting the runs (default is <code class="docutils literal notranslate"><span class="pre">False</span></code>).</p></li>
+</ul>
+</section>
+<section id="wait">
+<h5><strong><code class="docutils literal notranslate"><span class="pre">wait</span></code></strong><a class="headerlink" href="#wait" title="Link to this heading">#</a></h5>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">wait</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Self</span>
+</pre></div>
+</div>
+<p>Waits for all running tasks to finish. This is useful when you want to ensure that all tasks have completed before proceeding.</p>
+</section>
+<section id="export">
+<h5><strong><code class="docutils literal notranslate"><span class="pre">export</span></code></strong><a class="headerlink" href="#export" title="Link to this heading">#</a></h5>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">export</span><span class="p">(</span><span class="n">fmt</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExportFormat</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">ExportFormat</span><span class="o">.</span><span class="n">JSON</span><span class="p">,</span> 
+       <span class="n">filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+       <span class="n">status</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">TaskStatusCode</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> 
+       <span class="n">select</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">SelectMode</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">SelectMode</span><span class="o">.</span><span class="n">DISTINCT</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Exports the benchmark performance data to a specified file in the desired format.</p>
+<ul class="simple">
+<li><p><strong>fmt (Union[ExportFormat, str])</strong>: The format for the exported data. Can be <code class="docutils literal notranslate"><span class="pre">JSON</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">CSV</span></code>.</p></li>
+<li><p><strong>filename (Optional[str])</strong>: The filename to save the exported data. If not provided, the default name based on the benchmark’s name will be used.</p></li>
+<li><p><strong>status (Optional[Union[TaskStatusCode, str]])</strong>: The status of the tasks to be included in the export. If not provided, all tasks will be included.</p></li>
+<li><p><strong>select (Union[SelectMode, str])</strong>: Specifies which data to include in the export. <code class="docutils literal notranslate"><span class="pre">DISTINCT</span></code> (default) includes only distinct parameters that vary between runs, and <code class="docutils literal notranslate"><span class="pre">ALL</span></code> includes all parameters.</p></li>
+</ul>
+</section>
+<section id="terminate">
+<h5><strong><code class="docutils literal notranslate"><span class="pre">terminate</span></code></strong><a class="headerlink" href="#terminate" title="Link to this heading">#</a></h5>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="n">terminate</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Self</span>
+</pre></div>
+</div>
+<p>Terminates all active machine groups associated with the benchmark.</p>
+</section>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="available-enums">
+<h2>Available Enums<a class="headerlink" href="#available-enums" title="Link to this heading">#</a></h2>
+<section id="exportformat">
+<h3><strong><code class="docutils literal notranslate"><span class="pre">ExportFormat</span></code></strong><a class="headerlink" href="#exportformat" title="Link to this heading">#</a></h3>
+<p>Specifies the format for exporting benchmark results.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ExportFormat</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">JSON</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span>
+    <span class="n">CSV</span> <span class="o">=</span> <span class="s2">&quot;csv&quot;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ExportFormat.JSON</span></code>: Exports results in JSON format.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ExportFormat.CSV</span></code>: Exports results in CSV format.</p></li>
+</ul>
+</section>
+<section id="selectmode">
+<h3><strong><code class="docutils literal notranslate"><span class="pre">SelectMode</span></code></strong><a class="headerlink" href="#selectmode" title="Link to this heading">#</a></h3>
+<p>Specifies the selection mode for the exported benchmark data.</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SelectMode</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">ALL</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
+    <span class="n">DISTINCT</span> <span class="o">=</span> <span class="s2">&quot;distinct&quot;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SelectMode.ALL</span></code>: Exports all data for the runs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SelectMode.DISTINCT</span></code>: Exports only distinct parameters that vary between different runs.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="code-examples">
+<h2>Code Examples<a class="headerlink" href="#code-examples" title="Link to this heading">#</a></h2>
+<section id="example-1-creating-a-basic-benchmark">
+<h3>Example 1: Creating a Basic Benchmark<a class="headerlink" href="#example-1-creating-a-basic-benchmark" title="Link to this heading">#</a></h3>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">inductiva</span> <span class="kn">import</span> <span class="n">simulators</span><span class="p">,</span> <span class="n">resources</span><span class="p">,</span> <span class="n">benchmarks</span>
+
+<span class="c1"># Create a benchmark</span>
+<span class="n">benchmark</span> <span class="o">=</span> <span class="n">benchmarks</span><span class="o">.</span><span class="n">Benchmark</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyBenchmark&quot;</span><span class="p">)</span>
+
+<span class="c1"># Set default simulation parameters</span>
+<span class="n">benchmark</span><span class="o">.</span><span class="n">set_default</span><span class="p">(</span>
+    <span class="n">simulator</span><span class="o">=</span><span class="n">simulators</span><span class="o">.</span><span class="n">OpenFOAM</span><span class="p">(),</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;/path/to/input&quot;</span><span class="p">,</span>
+    <span class="n">on</span><span class="o">=</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="c1"># Add a new run with specific parameters</span>
+<span class="n">benchmark</span><span class="o">.</span><span class="n">add_run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;/path/to/another/input&quot;</span><span class="p">,</span>
+                  <span class="n">num_iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Run the benchmark</span>
+<span class="n">benchmark</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">num_repeats</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-2-adding-multiple-runs-with-different-parameters">
+<h3>Example 2: Adding Multiple Runs with Different Parameters<a class="headerlink" href="#example-2-adding-multiple-runs-with-different-parameters" title="Link to this heading">#</a></h3>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add multiple runs with different simulators and parameters</span>
+<span class="n">benchmark</span><span class="o">.</span><span class="n">add_run</span><span class="p">(</span><span class="n">simulator</span><span class="o">=</span><span class="n">simulators</span><span class="o">.</span><span class="n">AnotherSimulator</span><span class="p">(),</span>
+                  <span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;/input/dir1&quot;</span><span class="p">,</span>
+                  <span class="n">on</span><span class="o">=</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;c2-standard-8&quot;</span><span class="p">))</span>
+<span class="n">benchmark</span><span class="o">.</span><span class="n">add_run</span><span class="p">(</span><span class="n">simulator</span><span class="o">=</span><span class="n">simulators</span><span class="o">.</span><span class="n">MySimulator</span><span class="p">(),</span>
+                  <span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;/input/dir2&quot;</span><span class="p">,</span>
+                  <span class="n">on</span><span class="o">=</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;c2-standard-16&quot;</span><span class="p">),</span>
+                  <span class="n">num_iterations</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="c1"># Execute all runs twice</span>
+<span class="n">benchmark</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">num_repeats</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-3-waiting-for-tasks-and-terminating-resources">
+<h3>Example 3: Waiting for Tasks and Terminating Resources<a class="headerlink" href="#example-3-waiting-for-tasks-and-terminating-resources" title="Link to this heading">#</a></h3>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># Wait for tasks to finish</span>
+<span class="n">benchmark</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+<span class="c1"># Terminate all machine groups used during the benchmark</span>
+<span class="n">benchmark</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="example-4-exporting-benchmark-results">
+<h3>Example 4: Exporting Benchmark Results<a class="headerlink" href="#example-4-exporting-benchmark-results" title="Link to this heading">#</a></h3>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># Export the benchmark results in CSV format</span>
+<span class="n">benchmark</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;csv&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;benchmark_results.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># Export only distinct data for successfull tasks in JSON format</span>
+<span class="n">benchmark</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="s2">&quot;distinct&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;success&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><strong>Best Practices</strong></p>
+<ul class="simple">
+<li><p><strong>Set Default Parameters</strong>: Use <code class="docutils literal notranslate"><span class="pre">set_default()</span></code> to configure common parameters (e.g., simulator, resources) for all runs.</p></li>
+<li><p><strong>Export Results Regularly</strong>: After completing benchmark runs, export the results in your preferred format to facilitate analysis and reporting.</p></li>
+<li><p><strong>Terminate Resources</strong>: Always call <code class="docutils literal notranslate"><span class="pre">terminate()</span></code> after completing a benchmark to free up resources, especially if using cloud providers like GCP.</p></li>
+<li><p><strong>Handle Quotas</strong>: Consider enabling <code class="docutils literal notranslate"><span class="pre">wait_for_quotas=True</span></code> in <code class="docutils literal notranslate"><span class="pre">run()</span></code> to ensure your simulation runs without quota issues.</p></li>
+</ul>
+<hr class="docutils" />
+<p>Ready to dive in? Check out these exciting tutorials and our blog for more insights:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://inductiva.ai/blog/article/allocating-computational-resources-in-a-diverse-chip-ecosystem" rel="noreferer noopener" target="_blank">Allocating Computational Resources in a Diverse Chip Ecosystem</a></p></li>
+<li><p><a class="reference external" href="https://tutorials.inductiva.ai/how_to/run-benchmarks.html" rel="noreferer noopener" target="_blank">How to Run a Benchmark</a></p></li>
+<li><p><a class="reference external" href="https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-6.html" rel="noreferer noopener" target="_blank">Benchmarking Computational Resources - A Use Case</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="computational-infrastructure.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Computational Infrastructure</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="templating.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Templating Manager</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-classes-and-concepts">Key Classes and Concepts</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmark"><strong><code class="docutils literal notranslate"><span class="pre">Benchmark</span></code></strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#constructor">Constructor</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#methods">Methods</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#set-default"><code class="docutils literal notranslate"><span class="pre">set_default</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#add-run"><strong><code class="docutils literal notranslate"><span class="pre">add_run</span></code></strong></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#run"><strong><code class="docutils literal notranslate"><span class="pre">run</span></code></strong></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#wait"><strong><code class="docutils literal notranslate"><span class="pre">wait</span></code></strong></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#export"><strong><code class="docutils literal notranslate"><span class="pre">export</span></code></strong></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#terminate"><strong><code class="docutils literal notranslate"><span class="pre">terminate</span></code></strong></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#available-enums">Available Enums</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exportformat"><strong><code class="docutils literal notranslate"><span class="pre">ExportFormat</span></code></strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#selectmode"><strong><code class="docutils literal notranslate"><span class="pre">SelectMode</span></code></strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-examples">Code Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-creating-a-basic-benchmark">Example 1: Creating a Basic Benchmark</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-adding-multiple-runs-with-different-parameters">Example 2: Adding Multiple Runs with Different Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-waiting-for-tasks-and-terminating-resources">Example 3: Waiting for Tasks and Terminating Resources</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-4-exporting-benchmark-results">Example 4: Exporting Benchmark Results</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Inductiva Research Labs
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Inductiva Research Labs.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
