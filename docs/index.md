@@ -23,26 +23,10 @@ intro_to_api/tasks
 intro_to_api/shared_dedicated_resources
 intro_to_api/data_flow
 intro_to_api/computational-infrastructure
+intro_to_api/benchmarking
 intro_to_api/templating
 intro_to_api/configuring-simulators
 intro_to_api/projects
-
-```
-
-```{toctree}
----
-caption: Quick Recipes
-maxdepth: 1
-hidden: true
----
-how_to/run-parallel_simulations
-how_to/manage_computational_resources
-how_to/set-up-elastic-machine-group
-how_to/set-up-mpi-cluster
-how_to/manage-remote-storage
-how_to/manage_tasks
-how_to/manage_and_retrieve_results
-
 ```
 
 ```{toctree}
