@@ -1,8 +1,10 @@
 """DualSPHysics example."""
 import inductiva
+from datetime import timedelta
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+machine_group = inductiva.resources.MachineGroup(
+    "c2-standard-4", spot=True, max_idle_time=timedelta(minutes=1))
 machine_group.start()
 
 # Download the configuration files into a folder
@@ -18,8 +20,9 @@ commands = [
      "-onlytype:-all,+fluid")
 ]
 
-# Initialize the Simulator
-dualsphysics = inductiva.simulators.DualSPHysics()
+# Initialize DualSPHysics Simulator
+# Check available versions with the cli command "inductiva simulators list"
+dualsphysics = inductiva.simulators.DualSPHysics(version="5.2.1")
 
 # Run simulation with config files in the input directory
 task = dualsphysics.run(input_dir=input_dir,

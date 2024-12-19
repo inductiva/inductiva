@@ -1,5 +1,6 @@
 """OpenFOAM Foundation example."""
 import inductiva
+from datetime import timedelta
 
 # Instantiate machine group
 machine_group = inductiva.resources.MachineGroup("c2-standard-8")
@@ -11,8 +12,9 @@ input_dir = inductiva.utils.download_from_url(
     "openfoam-input-example.zip",
     unzip=True)
 
-# Initialize the Simulator
-openfoam = inductiva.simulators.OpenFOAM(distribution="foundation")
+# Initialize OpenFOAM Simulator
+# Check available versions with the cli command "inductiva simulators list"
+openfoam = inductiva.simulators.OpenFOAM(distribution="foundation", version="8")
 
 # Run simulation with config files in the input directory
 task = openfoam.run(input_dir=input_dir,
