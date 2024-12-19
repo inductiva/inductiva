@@ -1,16 +1,22 @@
 # **Benchmarking**
 
-## **Overview**
+The **Benchmarking API** is designed to help users run and evaluate simulations, 
+measuring their performance, cost, and execution time. It allows you to configure 
+benchmarking runs, export results, and manage resources. 
 
-The **Benchmarking API** is designed to help users run and evaluate simulations, measuring their performance, cost, and execution time. It allows you to configure benchmarking runs, export results, and manage resources. The tool supports different export formats, handles the execution of multiple simulations in parallel, and provides mechanisms to gather and present performance metrics.
+The tool supports different export formats, handles the execution of multiple 
+simulations in parallel, and provides mechanisms to gather and present performance 
+metrics.
 
-Here you can find documentation on the benchmarking features of our Inductiva API in Python.
+Here you can find documentation on the benchmarking features of our Inductiva API 
+in Python.
 
 ## **Key Classes and Concepts**
 
 ### **`Benchmark`**
 
-The `Benchmark` class is the core of the benchmarking tool. It manages benchmarking runs, including specifying simulation parameters, running simulations, and exporting results.
+The `Benchmark` class is the core of the benchmarking tool. It manages benchmarking 
+runs, including specifying simulation parameters, running simulations, and exporting results.
 
 #### **Constructor**
 
@@ -202,7 +208,8 @@ benchmark.export(fmt="json", select="distinct", status="success")
 
 ---
 
-Ready to dive in? Check out these exciting tutorials for more insights on benchmarking besides documentation:
+Ready to dive in? Check out these exciting tutorials and our blog for more insights:
 
+- [Allocating Computational Resources in a Diverse Chip Ecosystem](https://inductiva.ai/blog/article/allocating-computational-resources-in-a-diverse-chip-ecosystem)
 - [How to Run a Benchmark](../../tutorials/how_to/run-benchmarks.md)
 - [Benchmarking Computational Resources](../../tutorials/generating-synthetic-data/synthetic-data-generation-6.md)
