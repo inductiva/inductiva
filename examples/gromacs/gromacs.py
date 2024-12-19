@@ -1,8 +1,10 @@
 """GROMACS example."""
 import inductiva
+from datetime import timedelta
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+machine_group = inductiva.resources.MachineGroup(
+    "c2-standard-4", spot=True, max_idle_time=timedelta(minutes=1))
 machine_group.start()
 
 input_dir = inductiva.utils.download_from_url(
@@ -25,7 +27,9 @@ commands = [
      "-g eql.log"),
 ]
 
-gromacs = inductiva.simulators.GROMACS()
+# Initialize GROMACS simulator
+# Check available versions with the cli command "inductiva simulators list"
+gromacs = inductiva.simulators.GROMACS(version="2022.2")
 
 task = gromacs.run(input_dir=input_dir, commands=commands, on=machine_group)
 
