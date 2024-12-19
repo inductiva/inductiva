@@ -81,7 +81,7 @@ class SWASH(simulators.Simulator):
 
             machinefile_command = Command(
                 "dd if=/dev/stdin of=machinefile",
-                f"localhostsdasda slots={on.available_vcpus}")
+                f"localhost slots={on.available_vcpus}")
 
             commands.append(machinefile_command)
 
