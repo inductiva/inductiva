@@ -11,7 +11,7 @@ on state-of-the-art hardware. This allows scientists and engineers to focus thei
 time and energy on what matters: running simulations that solve real problems.
 
 This documentation includes:
-- An [introduction to our API](./intro_to_api/), highlighting its functionalities and key features.
+- An [introduction to our API](./intro_to_api/how_it_works.md), highlighting its functionalities and key features.
 - A guide on [Inductiva’s Command Line Interface (CLI)](./cli/cli-overview.md), which
 allows you to perform many tasks from your terminal, including listing available
 computational resources and checking the status of tasks;

@@ -85,7 +85,7 @@ to accrue significant expenses if a large number of VMs are initiated! To protec
 you from inadvertently spinning up too many resources, the API imposes certain 
 limitations on the quantity and types of machines that you can launch. For details 
 on these limitations, please consult the
-[User Quotas](http://docs.inductiva.ai/en/latest/api_reference/tiers_and_quotas.html) 
+[User Quotas](../api_reference/tiers_and_quotas.md) 
 we put in place through the current version of the API.
 
 ````{eval-rst}
