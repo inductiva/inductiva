@@ -1,8 +1,10 @@
 """SWAN example."""
 import inductiva
+from datetime import timedelta
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+machine_group = inductiva.resources.MachineGroup(
+    "c2-standard-4", spot=True, max_idle_time=timedelta(minutes=1))
 machine_group.start()
 
 # Set simulation input directory
@@ -10,8 +12,9 @@ input_dir = inductiva.utils.files.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "swan-input-example.zip", True)
 
-# Initialize the Simulator
-swan = inductiva.simulators.SWAN()
+# Initialize SWAN Simulator
+# Check available versions with the cli command "inductiva simulators list"
+swan = inductiva.simulators.SWAN(version="41.45")
 
 # Run simulation with config files in the input directory
 # Uses swanrun by default
