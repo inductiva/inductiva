@@ -93,7 +93,7 @@ For example
 $ inductiva tasks tail jjqwbn2yi5kwk5rv6qs2nth21 flow_cylinder/Run.out
 ```
 Prints out the last 10 lines of the `flow_cylinder/Run.outflow_cylinder/Run.out` file:
-Eg.
+
 ```bash
 ┌ (last 10 lines from flow_cylinder/Run.out)
 
@@ -109,6 +109,41 @@ Eg.
 │
 └
 
+```
+
+If you wish to configure the number of lines of the output you can use the argument `--lines`.
+
+The command:
+```bash
+$ inductiva tasks tail jjqwbn2yi5kwk5rv6qs2nth21 flow_cylinder/Run.out --lines 20
+```
+
+Prints out the last 20 lines of the file:
+
+```bash
+┌ (last 20 lines from flow_cylinder/Run.out)
+
+│  Particles out: 11  (total out: 577)
+│Part_0073      1.825354          4537       60      27.15  23-12-2024 10:47:12
+│  Particles new: 99 (total new: 9801)  -  Current np: 13338
+│  Particles out: 7  (total out: 584)
+│Part_0074      1.850040          4597       60      24.95  23-12-2024 10:47:12
+│  Particles new: 198 (total new: 9999)  -  Current np: 13418
+│  Particles out: 4  (total out: 588)
+│Part_0075      1.875261          4659       62      23.77  23-12-2024 10:47:12
+│  Particles new: 99 (total new: 10098)  -  Current np: 13392
+│  Particles out: 4  (total out: 592)
+│Part_0076      1.900121          4720       61      24.02  23-12-2024 10:47:11
+│  Particles new: 99 (total new: 10197)  -  Current np: 13370
+│  Particles out: 6  (total out: 598)
+│Part_0077      1.925168          4781       61      24.95  23-12-2024 10:47:12
+│  Particles new: 99 (total new: 10296)  -  Current np: 13338
+│  Particles out: 4  (total out: 602)
+│Part_0078      1.950401          4843       62      35.30  23-12-2024 10:47:12
+│  Particles new: 198 (total new: 10494)  -  Current np: 13414
+│  Particles out: 1  (total out: 603)
+│
+└
 ```
 
 This command is especially useful for tracking the progress of the simulation, debugging issues, and identifying potential problems early, allowing you to terminate your task preemptively if needed.
