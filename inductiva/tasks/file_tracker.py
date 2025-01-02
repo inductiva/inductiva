@@ -29,13 +29,13 @@ class FileTracker:
             aiortc.RTCConfiguration(iceServers=ICE_SERVERS))
         self._message = None
 
-    async def setup_channel(self, operation, **kwargs):
+    async def setup_channel(self, operation, follow=False, **kwargs):
         channel = self.pc.createDataChannel("file_transfer")
         fut = asyncio.Future()
 
         @channel.on("open")
         def on_open():
-            request = {"type" : operation.value}
+            request = {"type" : operation.value, "follow": follow}
             request["args"] = kwargs
             channel.send(json.dumps(request))
 
