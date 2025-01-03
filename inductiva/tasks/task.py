@@ -1109,7 +1109,7 @@ class Task:
             download_partial_files=data.download_partial_inputs,
         )
 
-    async def _file_operation(self, operation: Operations, formatter: Callable,
+    async def _file_operation(self, operation: Operations, formatter: Callable, follow: bool = False,
                               **kwargs) -> str:
         """Perform file operations on the task that is currently running.
 
@@ -1121,16 +1121,19 @@ class Task:
             The result of the operation.
         """
         file_tracker = FileTracker()
-        future_message = await file_tracker.setup_channel(operation, **kwargs)
+        message_queue, end_event = await file_tracker.setup_channel(operation,follow=follow, **kwargs)
         if not await file_tracker.connect_to_task(self._api, self.id):
             return "Failed to connect to the task."
-        message = await future_message
+        while not end_event.is_set():
+            message = await message_queue.get()
+            
+            if message["status"] != "success":
+                await file_tracker.cleanup()
+                return message["message"]
+
+            yield formatter(message["message"])
+
         await file_tracker.cleanup()
-
-        if message["status"] != "success":
-            return message["message"]
-
-        return formatter(message["message"])
 
     async def _list_files(self) -> str:
         """List the files in the task's working directory."""
@@ -1147,10 +1150,11 @@ class Task:
                                               sep="\n",
                                               endl="\n")
 
-        return await self._file_operation(Operations.TAIL,
+        async for lines in self._file_operation(Operations.TAIL,
                                           formatter=formatter,
                                           filename=filename,
-                                          lines=n_lines)
+                                          lines=n_lines):
+            yield lines
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""

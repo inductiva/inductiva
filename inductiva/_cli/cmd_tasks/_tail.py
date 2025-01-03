@@ -10,10 +10,13 @@ from inductiva import _cli, tasks
 def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
-    for lines in asyncio.run(task._tail_file(args.filename, args.lines)):  # pylint: disable=protected-access
-        print(lines, file=fout)
+    asyncio.run(consume(args, task))
     return 0
 
+
+async def consume(task: tasks.Task, args: argparse.Namespace, fout: TextIO = sys.stdout):
+        async for lines in task._tail_file(args.filename, args.lines, args.follow):  # pylint: disable=protected-access
+            print(lines, file=fout)
 
 def register(parser):
     """Register the info tasks command."""
