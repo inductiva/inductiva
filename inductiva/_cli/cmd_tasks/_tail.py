@@ -10,13 +10,14 @@ from inductiva import _cli, tasks
 def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
-    asyncio.run(consume(args, task))
+    asyncio.run(consume(task, args, fout))
     return 0
 
 
-async def consume(task: tasks.Task, args: argparse.Namespace, fout: TextIO = sys.stdout):
-        async for lines in task._tail_file(args.filename, args.lines, args.follow):  # pylint: disable=protected-access
-            print(lines, file=fout)
+async def consume(task: tasks.Task, args: argparse.Namespace, fout: TextIO):
+    async for lines in task._tail_file(args.filename, args.lines, args.follow):  # pylint: disable=protected-access
+        print(lines, file=fout)
+
 
 def register(parser):
     """Register the info tasks command."""
@@ -38,8 +39,10 @@ def register(parser):
                            type=int,
                            default=10,
                            help="Number of lines to show.")
-    subparser.add_argument("--follow",
-                            "-f",
-                            action="store_true",
-                            help="Keep the file open and show new lines.",)
+    subparser.add_argument(
+        "--follow",
+        "-f",
+        action="store_true",
+        help="Keep the file open and show new lines.",
+    )
     subparser.set_defaults(func=tail)

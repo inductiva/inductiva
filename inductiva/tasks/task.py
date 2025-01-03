@@ -1109,8 +1109,11 @@ class Task:
             download_partial_files=data.download_partial_inputs,
         )
 
-    async def _file_operation(self, operation: Operations, formatter: Callable, follow: bool = False,
-                              **kwargs) -> str:
+    async def _file_operation(self,
+                              operation: Operations,
+                              formatter: Callable,
+                              follow: bool = False,
+                              **kwargs):
         """Perform file operations on the task that is currently running.
 
         Args:
@@ -1121,15 +1124,18 @@ class Task:
             The result of the operation.
         """
         file_tracker = FileTracker()
-        message_queue, end_event = await file_tracker.setup_channel(operation,follow=follow, **kwargs)
+        message_queue, end_event = await file_tracker.setup_channel(
+            operation, follow=follow, **kwargs)
         if not await file_tracker.connect_to_task(self._api, self.id):
-            return "Failed to connect to the task."
+            yield "Failed to connect to the task."
+            return
         while not end_event.is_set():
             message = await message_queue.get()
-            
+
             if message["status"] != "success":
                 await file_tracker.cleanup()
-                return message["message"]
+                yield message["message"]
+                return
 
             yield formatter(message["message"])
 
@@ -1140,7 +1146,7 @@ class Task:
         return await self._file_operation(
             Operations.LIST, formatter=self._format_directory_listing)
 
-    async def _tail_file(self, filename: str, n_lines: int = 10) -> str:
+    async def _tail_file(self, filename: str, n_lines: int = 10, follow=False):
         """Get the last n_lines lines of a 
         file in the task's working directory."""
 
@@ -1151,9 +1157,10 @@ class Task:
                                               endl="\n")
 
         async for lines in self._file_operation(Operations.TAIL,
-                                          formatter=formatter,
-                                          filename=filename,
-                                          lines=n_lines):
+                                                formatter=formatter,
+                                                filename=filename,
+                                                lines=n_lines,
+                                                follow=follow):
             yield lines
 
     class _PathParams(TypedDict):

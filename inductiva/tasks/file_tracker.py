@@ -35,7 +35,7 @@ class FileTracker:
 
         @channel.on("open")
         def on_open():
-            request = {"type" : operation.value, "follow": follow}
+            request = {"type": operation.value, "follow": follow}
             request["args"] = kwargs
             channel.send(json.dumps(request))
 
@@ -43,11 +43,7 @@ class FileTracker:
         async def on_message(message):
             await queue.put(json.loads(message))
             if not follow:
-                await end_event.set()
-
-        @channel.on("close")
-        async def on_close():
-            await end_event.set()
+                end_event.set()
 
         return queue, end_event
 
