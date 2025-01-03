@@ -1123,23 +1123,28 @@ class Task:
         Returns:
             The result of the operation.
         """
-        file_tracker = FileTracker()
-        message_queue, end_event = await file_tracker.setup_channel(
+        self.file_tracker = FileTracker()
+        message_queue, end_event = await self.file_tracker.setup_channel(
             operation, follow=follow, **kwargs)
-        if not await file_tracker.connect_to_task(self._api, self.id):
+        if not await self.file_tracker.connect_to_task(self._api, self.id):
             yield "Failed to connect to the task."
             return
         while not end_event.is_set():
             message = await message_queue.get()
 
             if message["status"] != "success":
-                await file_tracker.cleanup()
+                await self.file_tracker.cleanup()
                 yield message["message"]
                 return
 
             yield formatter(message["message"])
 
-        await file_tracker.cleanup()
+        await self.file_tracker.cleanup()
+
+    async def close_stream(self):
+        """Close the stream to the task."""
+        if self.file_tracker is not None:
+            await self.file_tracker.cleanup()
 
     async def _list_files(self) -> str:
         """List the files in the task's working directory."""
