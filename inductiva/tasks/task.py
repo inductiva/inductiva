@@ -1151,11 +1151,11 @@ class Task:
     async def _list_files(self) -> str:
         """List the files in the task's working directory."""
 
-        files = [
+        directory = [
             files async for files in self._file_operation(
-                Operations.LIST, formatter=self._format_directory_listing)
+                Operations.LIST, formatter=self._format_directory_listing)  # pylint: disable=protected-access
         ]
-        return files[0]
+        return directory[0]
 
     async def _tail_file(self, filename: str, n_lines: int = 10, follow=False):
         """Get the last n_lines lines of a 
