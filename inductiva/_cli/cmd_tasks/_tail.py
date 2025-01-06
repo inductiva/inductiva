@@ -15,13 +15,12 @@ def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
 
 
 async def consume(task: tasks.Task, args: argparse.Namespace, fout: TextIO):
-    first = True
+    prefix = "\033[s"
     try:
         async for lines in task._tail_file(  # pylint: disable=protected-access
                 args.filename, args.lines, args.follow):
-            prefix = "\033[s" if first else "\033[u\033[s"
             print(f"{prefix}{lines}", file=fout, end="", flush=True)
-            first = False
+            prefix = "\033[u\033[s"
     except asyncio.CancelledError:
         await task.close_stream()
 
