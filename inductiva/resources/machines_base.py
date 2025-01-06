@@ -40,7 +40,7 @@ class BaseMachineGroup(ABC):
         threads_per_core: int = 2,
         data_disk_gb: int = 10,
         auto_resize_disk_max_gb: int = 500,
-        max_idle_time: Optional[datetime.timedelta] = None,
+        max_idle_time: Optional[Union[datetime.timedelta, int]] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
         register: bool = True,
     ) -> None:
@@ -66,7 +66,8 @@ class BaseMachineGroup(ABC):
                 is no longer automatically resized, and if the task continues to
                 output files, it will fail.
             max_idle_time: Time without executing any task, after which the
-              resource will be terminated.
+              resource will be terminated. Can be an exact timedelta or an int
+                representing the number of minutes.
             auto_terminate_ts: Moment in which the resource will be
               automatically terminated.
             register: Bool that indicates if a machine group should be register
@@ -114,7 +115,6 @@ class BaseMachineGroup(ABC):
         #the request machine_groups.get()
         self._active_machines = 0
         self.num_machines = 0
-        self._max_idle_time = max_idle_time
         self._auto_terminate_ts = auto_terminate_ts
         self._custom_vm_image = None
 
@@ -122,6 +122,9 @@ class BaseMachineGroup(ABC):
         # to the backend.
         self._api = compute_api.ComputeApi(api.get_client())
         self._estimated_cost = None
+        self._max_idle_time = max_idle_time
+        if isinstance(max_idle_time, int):
+            self._max_idle_time = datetime.timedelta(minutes=max_idle_time)
 
     @property
     def id(self):

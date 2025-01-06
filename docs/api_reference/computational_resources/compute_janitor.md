@@ -29,7 +29,9 @@ may take to run, and if this doesn't suffice for your needs, please [contact us]
 
 The allowed machine group maximum validity (`auto_terminate_ts`) and the total
 time of inactivity allowed (`max_idle_time`) can be defined when initializing
-the machine group (this is valid for all machine group types).
+the machine group (this is valid for all machine group types). `max_idle_time`
+is optional and when passed it can be a `datetime.timedelta` object or an integer
+representing the number of minutes.
 
 ```python
 import inductiva
@@ -38,7 +40,8 @@ import datetime
 machine_group = inductiva.resources.MachineGroup(
     machine_type="c2-standard-16",
     data_disk_gb=20,
-    max_idle_time=datetime.timedelta(minutes=1),
+    max_idle_time=1,
+    # or max_idle_time=datetime.timedelta(minutes=1),
     auto_terminate_ts=datetime.datetime.now(datetime.timezone.utc) +
     datetime.timedelta(hours=10),
 )
