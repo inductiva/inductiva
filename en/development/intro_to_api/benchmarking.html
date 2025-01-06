@@ -47,7 +47,7 @@
   <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
@@ -508,7 +508,7 @@ runs, including specifying simulation parameters, running simulations, and expor
 <section id="exportformat">
 <h3><strong><code class="docutils literal notranslate"><span class="pre">ExportFormat</span></code></strong><a class="headerlink" href="#exportformat" title="Link to this heading">#</a></h3>
 <p>Specifies the format for exporting benchmark results.</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ExportFormat</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ExportFormat</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="n">JSON</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span>
     <span class="n">CSV</span> <span class="o">=</span> <span class="s2">&quot;csv&quot;</span>
 </pre></div>
@@ -521,7 +521,7 @@ runs, including specifying simulation parameters, running simulations, and expor
 <section id="selectmode">
 <h3><strong><code class="docutils literal notranslate"><span class="pre">SelectMode</span></code></strong><a class="headerlink" href="#selectmode" title="Link to this heading">#</a></h3>
 <p>Specifies the selection mode for the exported benchmark data.</p>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SelectMode</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SelectMode</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="n">ALL</span> <span class="o">=</span> <span class="s2">&quot;all&quot;</span>
     <span class="n">DISTINCT</span> <span class="o">=</span> <span class="s2">&quot;distinct&quot;</span>
 </pre></div>
@@ -537,7 +537,7 @@ runs, including specifying simulation parameters, running simulations, and expor
 <h2>Code Examples<a class="headerlink" href="#code-examples" title="Link to this heading">#</a></h2>
 <section id="example-1-creating-a-basic-benchmark">
 <h3>Example 1: Creating a Basic Benchmark<a class="headerlink" href="#example-1-creating-a-basic-benchmark" title="Link to this heading">#</a></h3>
-<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">inductiva</span> <span class="kn">import</span> <span class="n">simulators</span><span class="p">,</span> <span class="n">resources</span><span class="p">,</span> <span class="n">benchmarks</span>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">inductiva</span><span class="w"> </span><span class="kn">import</span> <span class="n">simulators</span><span class="p">,</span> <span class="n">resources</span><span class="p">,</span> <span class="n">benchmarks</span>
 
 <span class="c1"># Create a benchmark</span>
 <span class="n">benchmark</span> <span class="o">=</span> <span class="n">benchmarks</span><span class="o">.</span><span class="n">Benchmark</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;MyBenchmark&quot;</span><span class="p">)</span>
