@@ -35,3 +35,5 @@ task.wait()
 task.download_outputs()
 
 machine_group.terminate()
+
+task.print_summary()
