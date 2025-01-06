@@ -1153,7 +1153,7 @@ class Task:
 
         directory = [
             files async for files in self._file_operation(
-                Operations.LIST, formatter=self._format_directory_listing)  # pylint: disable=protected-access
+                Operations.LIST, formatter=self._format_directory_listing)
         ]
         return directory[0]
 
