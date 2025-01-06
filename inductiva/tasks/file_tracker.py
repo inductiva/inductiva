@@ -45,6 +45,10 @@ class FileTracker:
             if not follow:
                 end_event.set()
 
+        @channel.on("close")
+        async def on_close():
+            await queue.put(None)
+
         return queue, end_event
 
     async def connect_to_task(self, api, task_id):

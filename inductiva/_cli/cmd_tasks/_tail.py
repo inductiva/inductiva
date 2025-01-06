@@ -17,7 +17,8 @@ def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
 async def consume(task: tasks.Task, args: argparse.Namespace, fout: TextIO):
     first = True
     try:
-        async for lines in task._tail_file(args.filename, args.lines, args.follow):  # pylint: disable=protected-access
+        async for lines in task._tail_file(args.filename, args.lines,
+                                           args.follow):  # pylint: disable=protected-access
             prefix = "\033[s" if first else "\033[u\033[s"
             print(f"{prefix}{lines}", file=fout, end="", flush=True)
             first = False

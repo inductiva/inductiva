@@ -1132,7 +1132,9 @@ class Task:
         while not end_event.is_set():
             message = await message_queue.get()
 
-            if message["status"] != "success":
+            if message is None:
+                return
+            elif message["status"] != "success":
                 await self.file_tracker.cleanup()
                 yield message["message"]
                 return
