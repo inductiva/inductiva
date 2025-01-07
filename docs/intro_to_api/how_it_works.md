@@ -43,6 +43,10 @@ especially how the API enables you to access a variety of computational resource
 manages your computational workload, and allocates it to the appropriate computational 
 resource through a unified Python code.
 
+- [Benchmarking](./benchmarking.md): Evaluate and compare the performance and cost 
+of different machine configurations for your computational jobs by running a sample 
+simulation across a variety of Virtual Machine (VM) options and get actionable insights.
+
 - [Templating Engine](./templating.md): Explore how the API enables you to transform 
 fixed parameter values in your "base case" simulation configuration files into 
 programmable variables you can adjust for running large variations of your simulation.

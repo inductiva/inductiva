@@ -1,6 +1,6 @@
 # Manage your Computational Resources
 
-The Inductiva API provides a simple way to [launch dedicated resources](../how_to/manage_computational_resources.md) 
+The Inductiva API provides a simple way to [launch dedicated resources](https://tutorials.inductiva.ai/how_to/manage_computational_resources.html) 
 for running your simulations. With the CLI, you can effectively manage these 
 computational resources, from selection and launch to termination, directly from 
 your terminal. For further details on each command and additional options, refer 

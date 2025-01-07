@@ -45,6 +45,20 @@ Below is an example of running a SWAN simulation via the Inductiva API:
 :language: python
 ```
 
+## SWAN limitation with reused files across multiple simulations
+
+With respect to [this](https://tutorials.inductiva.ai/how_to/reuse-files.html)
+feature.
+
+SWAN has constraints when reusing simulation outputs as inputs for subsequent
+simulations. Currently, SWAN supports using only a single simulation output as
+input for a new simulation.
+
+The issue stems from the inability to merge outputs from multiple simulations
+into a single folder. SWAN requires all simulation files to reside in the
+execution folder. For instance, if you have simulation outputs in folders A and
+B, running SWAN in folder A will only use the files in A, ignoring those in B.
+
 For more detailed information on SWAN configuration, refer to the [official documentation](https://swanmodel.sourceforge.io/).
 
 ## Available Benchmarks for SWAN

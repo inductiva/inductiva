@@ -94,7 +94,7 @@ how_to/set-up-mpi-cluster
 how_to/manage-remote-storage
 how_to/manage_tasks
 how_to/manage_and_retrieve_results
-how_to/reuse-input-files
+how_to/reuse-files
 how_to/run-benchmarks
 
 ```
@@ -111,6 +111,7 @@ generating-synthetic-data/synthetic-data-generation-2.md
 generating-synthetic-data/synthetic-data-generation-3.md
 generating-synthetic-data/synthetic-data-generation-4.md
 generating-synthetic-data/synthetic-data-generation-5.md
+generating-synthetic-data/synthetic-data-generation-6.md
 ```
 
 ```{toctree}
