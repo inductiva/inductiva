@@ -38,7 +38,6 @@ class DualSPHysics(simulators.Simulator):
 
         Args:
             input_dir: Directory with simulation input files.
-            sim_config_filename: Simulation config file.
             shell_script: Path to the shell script to run the simulation.
             on: The computational resource to launch the simulation on.
             storage_dir: Directory for storing results.
