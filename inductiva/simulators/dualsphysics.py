@@ -3,7 +3,6 @@
 from typing import List, Optional
 
 from inductiva import types, tasks, simulators
-from inductiva.utils.meta import deprecated_arg
 
 
 class DualSPHysics(simulators.Simulator):
@@ -24,14 +23,11 @@ class DualSPHysics(simulators.Simulator):
         self.simulator_name_alias = "dualsphysics"
         self.container_image = self._get_image_uri()
 
-    @deprecated_arg(commands="shell_script")
     def run(
         self,
         input_dir: Optional[str],
+        shell_script: str,
         *,
-        #todo make shell script or commands mandatory
-        commands: types.Commands = None,
-        shell_script: Optional[str] = None,
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
@@ -56,11 +52,7 @@ class DualSPHysics(simulators.Simulator):
         Returns:
             tasks.Task: An object representing the simulation task.
         """
-
-        if shell_script is not None:
-            print("shell script is not None")
-            print(shell_script)
-            commands = [f"bash {shell_script}"]
+        commands = [f"bash {shell_script}"]
 
         return super().run(input_dir,
                            on=on,
