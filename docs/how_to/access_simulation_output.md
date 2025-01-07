@@ -146,4 +146,10 @@ Prints out the last 20 lines of the file:
 └
 ```
 
+To monitor file updates in real-time, use the -f argument. Run the following command:
+```bash
+$ inductiva tasks tail jjqwbn2yi5kwk5rv6qs2nth21 flow_cylinder/Run.out -f
+```
+To stop monitoring, press `Ctrl+C`
+
 This command is especially useful for tracking the progress of the simulation, debugging issues, and identifying potential problems early, allowing you to terminate your task preemptively if needed.
