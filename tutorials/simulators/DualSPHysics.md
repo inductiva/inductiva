@@ -107,7 +107,9 @@ at `examples/chrono/09_Turbine/xCaseTurbine_linux64_CPU.sh`.
    ```
 
 2. **Remove User Input Prompt:**
-   Remove the line that waits for user input:
+   Remove the last line on the script. This line waits for user input and will
+   prevent the script from running in an automated environment:
+   
    ```bash
    read -n1 -r -p "Press any key to continue..." key
    ```
