@@ -34,19 +34,24 @@ different from that of your local setup.
 Also, interactive commands that wait for your keyboard input may have to be
 removed or set to run on default parameters.
 
-## Changing Path to DualSPHysics binaries
+## Technical details
 
-In order for you to create/configure your shell script it is important to know one
-major path. The location of all DualSPHysics binaries. This path is `/DualSPHysics_v5.2/bin/linux/`
-(dirbin as it is commonly called on the DualSPHysics examples). It is also important
-to note that this path was added to the environment variable `PATH`, so you can
-call the commands directly without the need to specify the full path if you wish so.
-We also created a list of simbolic links to allow you to call some binaries without
-the need to know the full name of the binary. For example, you can call `dualsphysics`
-instead of `DualSPHysics5.2CPU_linux64`. This renaming follows a pattern that is
-easy to understand. We removed the `_linux64` suffix and make the name lowercase.
-So, you can either use the names you are used to (`DualSPHysics5.2CPU_linux64`) or
-use the simplified names that will abstract achitecture and simulator version (`dualsphysics`).
+This section will focus on the implementation details of our compilation of 
+DualSPHysics.
+
+Lets start with the available versions of DualSPHysics. For that you can check
+our dockerhub page [here](https://hub.docker.com/r/inductiva/kutu/tags?name=dualsphysics).
+
+**Location of binaries**: All binaries related to DualSPHysics are located in
+`/DualSPHysics_v5.2/bin/linux/`. This path was added to the environment variable
+`PATH`, so you can call the commands directly without the need to specify the full
+path if you wish so. We also created a list of simbolic links to allow you to
+call some binaries without the need to know the full name of the binary. For
+example, you can call `dualsphysics` instead of `DualSPHysics5.2CPU_linux64`.
+This renaming follows a pattern that is easy to understand. We removed the
+`_linux64` suffix and make the name lowercase. So, you can either use the names
+you are used to (`DualSPHysics5.2CPU_linux64`) or use the simplified names that
+will abstract achitecture and simulator version (`dualsphysics`).
 
 Below, we have a concrete example that will let you better understand the
 changes you may potentially have to do.
