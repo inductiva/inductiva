@@ -79,6 +79,9 @@ class BaseMachineGroup(ABC):
                 Users should not set this argument in anyway.
         """
 
+        if max_idle_time is not None and max_idle_time <= 0:
+            raise ValueError("`max_idle_time` must be a positive.")
+
         provider = machine_types.ProviderType(provider)
         self.provider = provider.value
         self._free_space_threshold_gb = 5
