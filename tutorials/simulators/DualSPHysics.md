@@ -71,7 +71,7 @@ in the DualSPHysics distribution using the Inductiva API.
 
 ### Prerequisites
 
-1. **Download Input Files**: Download DualSPHysics (package)[https://dual.sphysics.org/downloads/]
+1. **Download Input Files**: Download DualSPHysics [package](https://dual.sphysics.org/downloads/)
 and see if you can find the example `examples/chrono/09_Turbine`. Navigate to 
 `examples/chrono`. We are going to work from that directory and write our
 Inductiva python script there.
@@ -142,7 +142,7 @@ These modifications prepare the script for automated execution.
 
 In order to chose the right machine for your simulation, you need to be aware
 of our computational infrastructure. We sujest you to read the documentation
-(here)[https://docs.inductiva.ai/en/latest/intro_to_api/computational-infrastructure.html].
+[here](https://docs.inductiva.ai/en/latest/intro_to_api/computational-infrastructure.html).
 
 For this simulation we decided to go with a `n2d-highcpu-64` machine. This
 machine has 64 virtual CPUs and a 20 GB data disk. We also decided to use a spot
