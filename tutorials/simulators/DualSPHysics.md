@@ -18,8 +18,23 @@ the physical properties of the fluids, the boundary conditions, the numerical
 parameters, and the output files. Sometimes the configuration can also use extra
 geometry files. 
 
-To run a DualSPHysics simulation you will need a shell script that will run all
-commands required to set up the simulation, run it, and post-process the results.
+Running your DualSPHysics simulation workflows using Inductiva is very similar
+to running them on your local machine, but instead of calling your DualSPHysics
+shell script directly, you will have to pass it to the Inductiva API via the
+run() method to be executed on a remote resource. So, if you already have a
+functioning shell script that orchestrates the entire DualSPHysics simulation on
+your local machine, you are mostly almost ready to run it via Inductiva.
+
+There are, however, some minor adaptations that may have to be done to your
+orchestration script to take into account the difference in the environment.
+For example, you may have to change path-related variables in your script
+because the location of the DualSPHysics binaries in our infrastructure may be
+different from that of your local setup.
+
+Also, interactive commands that wait for your keyboard input may have to be
+removed or set to run on default parameters.
+
+## Changing Path to DualSPHysics binaries
 
 In order for you to create/configure your shell script it is important to know one
 major path. The location of all DualSPHysics binaries. This path is `/DualSPHysics_v5.2/bin/linux/`
@@ -31,7 +46,10 @@ the need to know the full name of the binary. For example, you can call `dualsph
 instead of `DualSPHysics5.2CPU_linux64`. This renaming follows a pattern that is
 easy to understand. We removed the `_linux64` suffix and make the name lowercase.
 So, you can either use the names you are used to (`DualSPHysics5.2CPU_linux64`) or
-use the simplified names that will abstract achitecture and simulator version (`dualsphysics`). 
+use the simplified names that will abstract achitecture and simulator version (`dualsphysics`).
+
+Below, we have a concrete example that will let you better understand the
+changes you may potentially have to do.
 
 For an extensive list of commands, please refer to the DualSPHysics 
 [documentation](https://dual.sphysics.org/). You can pass the API commands in
@@ -53,13 +71,15 @@ in the DualSPHysics distribution using the Inductiva API.
 
 ### Prerequisites
 
-1. **Download Input Files**: Ensure the input files for the example are available
-in `examples/chrono/09_Turbine`.
-2. **Update Simulation Script**: Modify the simulation script in order to run the
-simulation.
+1. **Download Input Files**: Download DualSPHysics (package)[https://dual.sphysics.org/downloads/]
+and see if you can find the example `examples/chrono/09_Turbine`. Navigate to 
+`examples/chrono`. We are going to work from that directory and write our
+Inductiva python script there.
+
+2. **Update Simulation Script**: Update the simulation script of the example `09_Turbine`.
 
 ### Overview
-This example involves configuring the `xCaseTurbine_linux64_CPU.sh` script for
+The first step involves making changes to the `xCaseTurbine_linux64_CPU.sh` script for
 execution within our environment. This step is straightforward and requires only
 minor modifications to the original script. The simulation generates output files for 
 visualization in ParaView.
@@ -120,24 +140,24 @@ These modifications prepare the script for automated execution.
 
 #### a. Configure and Start Machine
 
-1. **Pick your machine**:
-   - Select a machine type with sufficient resources. For this tutorial,
-   we use `n2d-highcpu-64` with 64 vCPUs and a 20 GB data disk.
+In order to chose the right machine for your simulation, you need to be aware
+of our computational infrastructure. We sujest you to read the documentation
+(here)[https://docs.inductiva.ai/en/latest/intro_to_api/computational-infrastructure.html].
 
-   ```python
-   import inductiva
+For this simulation we decided to go with a `n2d-highcpu-64` machine. This
+machine has 64 virtual CPUs and a 20 GB data disk. We also decided to use a spot
+machine to reduce the cost of the simulation.
 
-   machine_group = inductiva.resources.MachineGroup(
-       machine_type="n2d-highcpu-64",
-       spot=True,
-       data_disk_gb=20)
-   ```
+```python
+import inductiva
 
-2. **Start your machine**:
-   Use the Inductiva API to create and start the machine group:
-   ```python
-   machine_group.start()
-   ```
+machine_group = inductiva.resources.MachineGroup(
+      machine_type="n2d-highcpu-64",
+      spot=True,
+      data_disk_gb=20)
+
+machine_group.start()
+```
 
 #### b. Simulation inputs
 
@@ -165,10 +185,13 @@ These modifications prepare the script for automated execution.
    ```
 
 2. **Wait**:
-   Wait for the simulation to complete and download the output files:
+   Wait for the simulation to complete:
    ```python
    task.wait()
    ```
+   > Note: The `wait()` method will block the execution of the script until the
+   simulation is completed. This is useful for scripts that need to perform
+   additional actions after the simulation completes.
 
 3. **Terminate Machine**:
    After the simulation completes, terminate the machine group:
@@ -177,7 +200,7 @@ These modifications prepare the script for automated execution.
    ```
 
 4. **Check your simulation summary**:
-   View the task summary to verify outputs and performance metrics:
+   View the task summary with:
    ```python
    task.print_summary()
    ```
