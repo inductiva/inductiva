@@ -34,9 +34,9 @@ task = custom_simulator.run(input_dir=input_dir, commands=["fds mccaffrey.fds"],
                             on=machine_group)
 
 task.wait()
-task.download_outputs()
-
 machine_group.terminate()
+
+task.download_outputs()
 ```
 
 This basic example demonstrates how to run a custom Docker image. To leverage
@@ -70,9 +70,9 @@ task = custom_simulator.run(input_dir=input_dir, commands=[command],
                             on=machine_group)
 
 task.wait()
-task.download_outputs()
-
 machine_group.terminate()
+
+task.download_outputs()
 ```
 
 This example runs four instances of your image with the command `fds mccaffrey.fds`
@@ -102,9 +102,9 @@ task = custom_simulator.run(input_dir=input_dir, commands=[command],
                             on=machine_group)
 
 task.wait()
-task.download_outputs()
-
 machine_group.terminate()
+
+task.download_outputs()
 ```
 
 This runs:

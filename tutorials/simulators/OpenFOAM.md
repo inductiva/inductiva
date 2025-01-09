@@ -129,8 +129,8 @@ task = openfoam.run(
             on=machine_group)
 
 task.wait()
-task.download_outputs()
 machine_group.terminate()
+task.download_outputs()
 
 task.print_summary()
 
@@ -193,21 +193,21 @@ We now have all we need to run our simulation.
                on=machine_group)
    ```
 
-2. **Wait and Download Outputs**:
+2. **Wait**:
 That is it. Our simulation is now running on the cloud. We can `wait` for the
 simulation to be over, or we can turn our computer off go for a coffe (☕️).
    ```python
    task.wait()
-   task.download_outputs()
    ```
 
-3. **Terminate Machine**:
+3. **Terminate Machine and download outputs**:
 Once our simulation is over we can/should terminate our machine to save on costs.
 If you forget, dont worry we got your back. By default, a machine will be
 automaticly terminated if no simulation runs on it for 30 minutes.
 
    ```python
    machine_group.terminate()
+   task.download_outputs()
    ```
 
 4. **Check your simulation summary**:
