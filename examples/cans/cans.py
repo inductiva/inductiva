@@ -21,8 +21,8 @@ task = cans.run(input_dir=input_dir,
                 n_vcpus=4)
 
 task.wait()
-task.download_outputs()
-
 machine_group.terminate()
+
+task.download_outputs()
 
 task.print_summary()
