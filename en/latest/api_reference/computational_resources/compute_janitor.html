@@ -387,14 +387,17 @@ the data of running simulations. So please be mindful of the time your simulatio
 may take to run, and if this doesn’t suffice for your needs, please <a class="reference external" href="mailto:support&#37;&#52;&#48;inductiva&#46;ai" rel="noreferer noopener" target="_blank">contact us</a>.</p>
 <p>The allowed machine group maximum validity (<code class="docutils literal notranslate"><span class="pre">auto_terminate_ts</span></code>) and the total
 time of inactivity allowed (<code class="docutils literal notranslate"><span class="pre">max_idle_time</span></code>) can be defined when initializing
-the machine group (this is valid for all machine group types).</p>
+the machine group (this is valid for all machine group types). <code class="docutils literal notranslate"><span class="pre">max_idle_time</span></code>
+is optional and when passed it can be a <code class="docutils literal notranslate"><span class="pre">datetime.timedelta</span></code> object or an integer
+representing the number of minutes.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 
 <span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
     <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-16&quot;</span><span class="p">,</span>
     <span class="n">data_disk_gb</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-    <span class="n">max_idle_time</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">max_idle_time</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="c1"># or max_idle_time=datetime.timedelta(minutes=1),</span>
     <span class="n">auto_terminate_ts</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span> <span class="o">+</span>
     <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
 <span class="p">)</span>
