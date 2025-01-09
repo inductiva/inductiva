@@ -34,6 +34,8 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
             "workdir": {'bind': '/workdir', 'mode': 'rw'},
             "./apptainer": {'bind': '/executer-images', 'mode': 'rw'},
         },
+        network="host",
+        detach=True,
     )
 
     print(f"File-Tracker launched with container ID: {file_tracker_container.short_id}", file=fout)
