@@ -108,10 +108,11 @@ task = splishsplash.run(input_dir=input_dir,
                         on=my_machine_group)
 
 task.wait()
-task.download_outputs()
 
 # Terminate the machine group
 my_machine_group.terminate()
+
+task.download_outputs()
 ```
 
 Notice the significant reduction in runtime for this simulation: down from 30m to just **10m07s**, achieving an approximately 3-fold increase in speed! Remember that, in practice, speed ups are not linear with the number of vCPUs, so this is already quite an achievement with just a few lines of code.

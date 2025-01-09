@@ -122,11 +122,12 @@ task = SPlisHSPlasH.run(input_dir=rendered_dir,
 
 # Wait for the simulation task to complete and download the results
 task.wait()
-task.download_outputs()
 
 # Ensure that the allocated resources are terminated
 # This is crucial to avoid incurring unnecessary costs from lingering resources
 machine_group.terminate()
+
+task.download_outputs()
 ```
 
 The result looks something like this:

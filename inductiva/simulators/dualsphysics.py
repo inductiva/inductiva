@@ -26,7 +26,7 @@ class DualSPHysics(simulators.Simulator):
     def run(
         self,
         input_dir: Optional[str],
-        commands: types.Commands,
+        shell_script: str,
         *,
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
@@ -38,7 +38,7 @@ class DualSPHysics(simulators.Simulator):
 
         Args:
             input_dir: Directory with simulation input files.
-            sim_config_filename: Simulation config file.
+            shell_script: Path to the shell script to run the simulation.
             on: The computational resource to launch the simulation on.
             storage_dir: Directory for storing results.
             remote_assets: Additional remote files that will be copied to
@@ -51,6 +51,8 @@ class DualSPHysics(simulators.Simulator):
         Returns:
             tasks.Task: An object representing the simulation task.
         """
+        commands = [f"bash {shell_script}"]
+
         return super().run(input_dir,
                            on=on,
                            commands=commands,

@@ -21,6 +21,8 @@ task = amr_wind.run(input_dir=input_dir,
                     n_vcpus=4)
 
 task.wait()
+machine_group.terminate()
+
 task.download_outputs()
 
-machine_group.terminate()
+task.print_summary()

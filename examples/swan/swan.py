@@ -32,6 +32,8 @@ task = swan.run(input_dir=input_dir,
 
 # Wait for the simulation to finish and download the results
 task.wait()
+machine_group.terminate()
+
 task.download_outputs()
 
-machine_group.terminate()
+task.print_summary()
