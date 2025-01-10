@@ -10,11 +10,10 @@ from inductiva import _cli, constants, _api_key
 def launch_task_runner(args, fout: TextIO = sys.stdout):
     """Launches a Task-Runner."""
     client = docker.from_env()
-
     file_tracker_container = client.containers.run(
         image=constants.FILE_TRACKER_IMAGE,
         environment={
-            "USER_API_KEY": _api_key,
+            "USER_API_KEY": _api_key.get(),
         },
         volumes={
             "workdir": {'bind': '/workdir', 'mode': 'rw'},
@@ -22,17 +21,16 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
         network="host",
         detach=True,
     )
-
     task_runner_container = client.containers.run(
         image=constants.TASK_RUNNER_IMAGE,
         environment={
-            "USER_API_KEY": _api_key,
+            "USER_API_KEY": _api_key.get(),
             "MACHINE_GROUP_NAME": args.machine_group_name,
             "HOST_NAME": args.hostname,
         },
         volumes={
             "workdir": {'bind': '/workdir', 'mode': 'rw'},
-            "./apptainer": {'bind': '/executer-images', 'mode': 'rw'},
+            "apptainer": {'bind': '/executer-images', 'mode': 'rw'},
         },
         network="host",
         detach=True,
@@ -40,7 +38,6 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
 
     print(f"File-Tracker launched with container ID: {file_tracker_container.short_id}", file=fout)
     print(f"Task-Runner launched with container ID: {task_runner_container.short_id}", file=fout)
-    return 0
 
 
 def register(parser):
@@ -53,12 +50,12 @@ def register(parser):
                              "a way to launch a Task-Runner on the platform.")
 
     _cli.utils.add_watch_argument(subparser)
-    subparser.add_argument("machine-group-name",
+    subparser.add_argument("machine_group_name",
                            type=str,
                            help="Name of the machine group to launch the Task-Runner.")
     
     subparser.add_argument("--hostname",
-                            "-h",
+                            "-ho",
                             type=str,
                             default=os.uname().nodename,
                             help="Hostname of the Task-Runner.")
