@@ -3,24 +3,31 @@ from typing import TextIO
 import docker
 import argparse
 import asyncio
+import queue
+import threading
 import sys
 import os
 
 from inductiva import _cli, constants, _api_key
 
-def generator_thread(queue, generator):
+def generator_thread(container, fout: TextIO):
     """Runs a generator in a separate thread."""
-    for item in generator:
-        queue.put(item)
-    queue.put(StopIteration)
+    for line in container.logs(stream=True):
+        print(line.decode("utf-8"), end="", file=fout)
 
-def join_generators(*generators):
-    """Join multiple generators into one."""
-    queue = asyncio.Queue()
-    lock = asyncio.Lock()
 
-    for generator in generators:
-        yield from generator
+def join_container_streams(*containers, fout: TextIO = sys.stdout):
+    """Join multiple containers into one."""
+    container_threads = []
+
+    for container in containers:
+        thread = threading.Thread(target=generator_thread, args=(container, fout))
+        thread.start()
+        container_threads.append(thread)
+    
+    print("Terminating threads...")
+    for thread in container_threads:
+        thread.join()
 
 def launch_task_runner(args, fout: TextIO = sys.stdout):
     """Launches a Task-Runner."""
@@ -51,13 +58,15 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
         detach=True,
     )
 
-    for line in join_generators(file_tracker_container.logs(stream=True),
-                                task_runner_container.logs(stream=True)):
-        print(line.decode("utf-8"), end="", file=fout)
-
     print(f"File-Tracker launched with container ID: {file_tracker_container.short_id}", file=fout)
     print(f"Task-Runner launched with container ID: {task_runner_container.short_id}", file=fout)
 
+    try:
+        join_container_streams(task_runner_container, file_tracker_container)
+    except KeyboardInterrupt:
+        print("Interrupted. Stopping containers...", file=fout)
+        task_runner_container.stop()
+        file_tracker_container.stop()
 
 def register(parser):
     """Register the launch task-runner command."""
