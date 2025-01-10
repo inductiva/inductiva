@@ -1,11 +1,17 @@
 """Launches a Task-Runner via CLI."""
 from typing import TextIO
-import docker
-from docker.errors import DockerException
 import argparse
 import threading
 import sys
 import os
+
+_docker_imported = True
+try:
+    import docker
+    from docker.errors import DockerException
+except ImportError:
+    _docker_imported = False
+
 
 from inductiva import _cli, constants, _api_key
 
@@ -30,6 +36,10 @@ def join_container_streams(*containers, fout: TextIO = sys.stdout):
 
 def launch_task_runner(args, fout: TextIO = sys.stdout):
     """Launches a Task-Runner."""
+    if not _docker_imported:
+        print("Docker Python API not installed, please run 'pip install inductiva[task-runner]' to install it", file=fout)
+        return
+
     try:
         client = docker.from_env()
     except DockerException as e:
