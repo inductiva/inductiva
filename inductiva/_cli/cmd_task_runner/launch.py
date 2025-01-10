@@ -1,6 +1,7 @@
 """Launches a Task-Runner via CLI."""
 from typing import TextIO
 import docker
+from docker.errors import DockerException
 import argparse
 import threading
 import sys
@@ -29,7 +30,13 @@ def join_container_streams(*containers, fout: TextIO = sys.stdout):
 
 def launch_task_runner(args, fout: TextIO = sys.stdout):
     """Launches a Task-Runner."""
-    client = docker.from_env()
+    try:
+        client = docker.from_env()
+    except DockerException as e:
+        print(f"Failed to connect to Docker: {e}", file=fout)
+        print("Please make sure Docker is running and you have the necessary permissions.", file=fout)
+        return
+
     file_tracker_container = client.containers.run(
         image=constants.FILE_TRACKER_IMAGE,
         environment={
