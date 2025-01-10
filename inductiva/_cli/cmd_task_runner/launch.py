@@ -2,10 +2,25 @@
 from typing import TextIO
 import docker
 import argparse
+import asyncio
 import sys
 import os
 
 from inductiva import _cli, constants, _api_key
+
+def generator_thread(queue, generator):
+    """Runs a generator in a separate thread."""
+    for item in generator:
+        queue.put(item)
+    queue.put(StopIteration)
+
+def join_generators(*generators):
+    """Join multiple generators into one."""
+    queue = asyncio.Queue()
+    lock = asyncio.Lock()
+
+    for generator in generators:
+        yield from generator
 
 def launch_task_runner(args, fout: TextIO = sys.stdout):
     """Launches a Task-Runner."""
@@ -35,6 +50,10 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
         network="host",
         detach=True,
     )
+
+    for line in join_generators(file_tracker_container.logs(stream=True),
+                                task_runner_container.logs(stream=True)):
+        print(line.decode("utf-8"), end="", file=fout)
 
     print(f"File-Tracker launched with container ID: {file_tracker_container.short_id}", file=fout)
     print(f"Task-Runner launched with container ID: {task_runner_container.short_id}", file=fout)
