@@ -79,9 +79,6 @@ class BaseMachineGroup(ABC):
                 Users should not set this argument in anyway.
         """
 
-        if max_idle_time is not None and max_idle_time <= 0:
-            raise ValueError("`max_idle_time` must be a positive.")
-
         provider = machine_types.ProviderType(provider)
         self.provider = provider.value
         self._free_space_threshold_gb = 5
@@ -126,7 +123,10 @@ class BaseMachineGroup(ABC):
         self._api = compute_api.ComputeApi(api.get_client())
         self._estimated_cost = None
         self._max_idle_time = max_idle_time
+
         if isinstance(max_idle_time, int):
+            if max_idle_time <= 0:
+                raise ValueError("`max_idle_time` must be positive.")
             self._max_idle_time = datetime.timedelta(minutes=max_idle_time)
 
     @property
