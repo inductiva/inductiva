@@ -2,8 +2,6 @@
 from typing import TextIO
 import docker
 import argparse
-import asyncio
-import queue
 import threading
 import sys
 import os
@@ -56,6 +54,7 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
         },
         network="host",
         privileged=True,
+        platform="linux/amd64",
         detach=True,
     )
 
