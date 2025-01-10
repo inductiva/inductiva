@@ -55,6 +55,7 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
             "apptainer": {'bind': '/executer-images', 'mode': 'rw'},
         },
         network="host",
+        privileged=True,
         detach=True,
     )
 
