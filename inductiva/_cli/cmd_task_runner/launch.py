@@ -46,9 +46,17 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
         print(f"Failed to connect to Docker: {e}", file=fout)
         print("Please make sure Docker is running and you have the necessary permissions.", file=fout)
         return
+    
+    task_runner = client.containers.list(filters={"name": "task-runner"})
+    file_tracker = client.containers.list(filters={"name": "file-tracker"})
+
+    if task_runner or file_tracker:
+        print("Task-Runner already running. Please stop it before launching a new one.", file=fout)
+        return
 
     file_tracker_container = client.containers.run(
         image=constants.FILE_TRACKER_IMAGE,
+        name="file-tracker",
         environment={
             "USER_API_KEY": _api_key.get(),
         },
@@ -60,6 +68,7 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
     )
     task_runner_container = client.containers.run(
         image=constants.TASK_RUNNER_IMAGE,
+        name="task-runner",
         environment={
             "USER_API_KEY": _api_key.get(),
             "MACHINE_GROUP_NAME": args.machine_group_name,
