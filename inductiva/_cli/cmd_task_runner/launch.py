@@ -4,6 +4,7 @@ import argparse
 import threading
 import sys
 import os
+from inductiva import _cli, constants, _api_key
 
 _docker_imported = True
 try:
@@ -11,8 +12,6 @@ try:
     from docker.errors import DockerException
 except ImportError:
     _docker_imported = False
-
-from inductiva import _cli, constants, _api_key
 
 
 def generator_thread(container, fout: TextIO):
@@ -39,7 +38,8 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
     """Launches a Task-Runner."""
     if not _docker_imported:
         print(
-            "Docker Python API not installed, please run 'pip install inductiva[task-runner]' to install it",
+            "Docker Python API not installed, please run "
+            "'pip install inductiva[task-runner]' to install it",
             file=fout)
         return
 
@@ -48,7 +48,8 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
     except DockerException as e:
         print(f"Failed to connect to Docker: {e}", file=fout)
         print(
-            "Please make sure Docker is running and you have the necessary permissions.",
+            "Please make sure Docker is running "
+            "and you have the necessary permissions.",
             file=fout)
         return
 
@@ -57,7 +58,8 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
 
     if task_runner or file_tracker:
         print(
-            "Task-Runner already running. Please stop it before launching a new one.",
+            "Task-Runner already running. "
+            "Please stop it before launching a new one.",
             file=fout)
         return
 
@@ -69,8 +71,8 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
         },
         volumes={
             "workdir": {
-                'bind': '/workdir',
-                'mode': 'rw'
+                "bind": "/workdir",
+                "mode": "rw"
             },
         },
         network="host",
@@ -86,12 +88,12 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
         },
         volumes={
             "workdir": {
-                'bind': '/workdir',
-                'mode': 'rw'
+                "bind": "/workdir",
+                "mode": "rw"
             },
             "apptainer": {
-                'bind': '/executer-images',
-                'mode': 'rw'
+                "bind": "/executer-images",
+                "mode": "rw"
             },
         },
         network="host",
@@ -101,10 +103,12 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
     )
 
     print(
-        f"File-Tracker launched with container ID: {file_tracker_container.short_id}",
+        "File-Tracker launched "
+        f"with container ID: {file_tracker_container.short_id}",
         file=fout)
     print(
-        f"Task-Runner launched with container ID: {task_runner_container.short_id}",
+        "Task-Runner launched "
+        f"with container ID: {task_runner_container.short_id}",
         file=fout)
 
     try:
