@@ -6,9 +6,11 @@ import platform
 LOGS_WEBSOCKET_URL = os.environ.get("INDUCTIVA_TASK_LOGS_URL",
                                     "wss://logs.inductiva.ai")
 
-TASK_RUNNER_IMAGE = os.environ.get("INDUCTIVA_TASK_RUNNER_IMAGE","inductiva/task-runner:main")
+TASK_RUNNER_IMAGE = os.environ.get("INDUCTIVA_TASK_RUNNER_IMAGE",
+                                   "inductiva/task-runner:main")
 
-FILE_TRACKER_IMAGE = os.environ.get("INDUCTIVA_FILE_TRACKER_IMAGE", "inductiva/file-tracker:main")
+FILE_TRACKER_IMAGE = os.environ.get("INDUCTIVA_FILE_TRACKER_IMAGE",
+                                    "inductiva/file-tracker:main")
 
 DEFAULT_QUEUE_MACHINE_TYPE = "c2-standard-4"
 
