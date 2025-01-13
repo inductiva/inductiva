@@ -126,7 +126,7 @@ class Benchmark(projects.Project):
         ))
         return self
 
-    def run(self, num_repeats: int = 2, wait_for_quotas: bool = False) -> Self:
+    def run(self, num_repeats: int = 2, wait_for_quotas: bool = True) -> Self:
         """
         Executes all added runs.
 
@@ -140,7 +140,7 @@ class Benchmark(projects.Project):
                 become available before starting each resource. If `True`, the 
                 program will actively wait in a loop, periodically sleeping and 
                 checking for quotas. If `False`, the program crashes if quotas 
-                are not available (default is `False`).
+                are not available (default is `True`).
 
         Returns:
             Self: The current instance for method chaining.
