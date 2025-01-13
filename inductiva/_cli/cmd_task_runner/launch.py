@@ -77,6 +77,7 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
         },
         network="host",
         detach=True,
+        auto_remove=True,
     )
     task_runner_container = client.containers.run(
         image=constants.TASK_RUNNER_IMAGE,
@@ -100,6 +101,7 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
         privileged=True,
         platform="linux/amd64",
         detach=True,
+        auto_remove=True,
     )
 
     print(
