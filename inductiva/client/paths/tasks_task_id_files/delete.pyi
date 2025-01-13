@@ -49,7 +49,7 @@ request_path_task_id = api_client.PathParameter(
     schema=TaskIdSchema,
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+SchemaFor200ResponseBodyApplicationJson = schemas.IntSchema
 
 
 @dataclass

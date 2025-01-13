@@ -24,12 +24,37 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.vm_group_config import VMGroupConfig
+
 from . import path
 
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+
+
+class SchemaFor200ResponseBodyApplicationJson(schemas.ListSchema):
+
+    class MetaOapg:
+
+        @staticmethod
+        def items() -> typing.Type['VMGroupConfig']:
+            return VMGroupConfig
+
+    def __new__(
+        cls,
+        _arg: typing.Union[typing.Tuple['VMGroupConfig'],
+                           typing.List['VMGroupConfig']],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+    ) -> 'SchemaFor200ResponseBodyApplicationJson':
+        return super().__new__(
+            cls,
+            _arg,
+            _configuration=_configuration,
+        )
+
+    def __getitem__(self, i: int) -> 'VMGroupConfig':
+        return super().__getitem__(i)
 
 
 @dataclass

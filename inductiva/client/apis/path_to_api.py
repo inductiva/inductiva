@@ -35,7 +35,6 @@ from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
 from inductiva.client.apis.paths.admin_groups_machine_group_id_terminate import AdminGroupsMachineGroupIdTerminate
 from inductiva.client.apis.paths.admin_organizations import AdminOrganizations
 from inductiva.client.apis.paths.admin_organizations_organization_id import AdminOrganizationsOrganizationId
-from inductiva.client.apis.paths.admin_organizations_billing_report import AdminOrganizationsBillingReport
 from inductiva.client.apis.paths.admin_organizations_costs import AdminOrganizationsCosts
 from inductiva.client.apis.paths.admin_tiers import AdminTiers
 from inductiva.client.apis.paths.task_runner_register import TaskRunnerRegister
@@ -57,6 +56,7 @@ from inductiva.client.apis.paths.compute_type import ComputeType
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
 from inductiva.client.apis.paths.compute_price import ComputePrice
 from inductiva.client.apis.paths.compute_groups import ComputeGroups
+from inductiva.client.apis.paths.compute_groups_history import ComputeGroupsHistory
 from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
 from inductiva.client.apis.paths.compute_machine_types import ComputeMachineTypes
 from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
@@ -158,8 +158,6 @@ PathToApi = typing_extensions.TypedDict(
             AdminOrganizations,
         PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID:
             AdminOrganizationsOrganizationId,
-        PathValues.ADMIN_ORGANIZATIONS_BILLING_REPORT:
-            AdminOrganizationsBillingReport,
         PathValues.ADMIN_ORGANIZATIONS_COSTS:
             AdminOrganizationsCosts,
         PathValues.ADMIN_TIERS:
@@ -202,6 +200,8 @@ PathToApi = typing_extensions.TypedDict(
             ComputePrice,
         PathValues.COMPUTE_GROUPS:
             ComputeGroups,
+        PathValues.COMPUTE_GROUPS_HISTORY:
+            ComputeGroupsHistory,
         PathValues.COMPUTE_GROUP_STATUS:
             ComputeGroupStatus,
         PathValues.COMPUTE_MACHINE_TYPES:
@@ -333,8 +333,6 @@ path_to_api = PathToApi({
         AdminOrganizations,
     PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID:
         AdminOrganizationsOrganizationId,
-    PathValues.ADMIN_ORGANIZATIONS_BILLING_REPORT:
-        AdminOrganizationsBillingReport,
     PathValues.ADMIN_ORGANIZATIONS_COSTS:
         AdminOrganizationsCosts,
     PathValues.ADMIN_TIERS:
@@ -377,6 +375,8 @@ path_to_api = PathToApi({
         ComputePrice,
     PathValues.COMPUTE_GROUPS:
         ComputeGroups,
+    PathValues.COMPUTE_GROUPS_HISTORY:
+        ComputeGroupsHistory,
     PathValues.COMPUTE_GROUP_STATUS:
         ComputeGroupStatus,
     PathValues.COMPUTE_MACHINE_TYPES:
