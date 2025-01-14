@@ -55,6 +55,7 @@ class OpenFOAM(simulators.Simulator):
             *,
             commands: Optional[List[types.Commands]] = None,
             shell_script: Optional[str] = None,
+            custom_solver_script: Optional[str] = None,
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
@@ -68,6 +69,8 @@ class OpenFOAM(simulators.Simulator):
             commands: List of commands to run using the OpenFOAM simulator.
             shell_script: Path to a shell script (relative to input_dir) to run
                 the simulation.
+            custom_solver_script: Path to a custom solver compilation script
+                (relative to input_dir).
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
@@ -82,9 +85,14 @@ class OpenFOAM(simulators.Simulator):
         if commands and shell_script:
             raise ValueError("Only one of 'commands' or 'shell_script'"
                              " must be provided.")
+        
+        commands = [] if commands is None else commands
+
+        if custom_solver_script:
+            commands.append(f"bash {custom_solver_script}")
 
         if shell_script:
-            commands = [f"bash {shell_script}"]
+            commands.append(f"bash {shell_script}")
 
         return super().run(input_dir,
                            on=on,
