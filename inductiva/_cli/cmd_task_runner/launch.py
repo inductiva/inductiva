@@ -76,6 +76,7 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
             },
         },
         network="host",
+        platform="linux/amd64",
         detach=True,
         auto_remove=True,
     )
