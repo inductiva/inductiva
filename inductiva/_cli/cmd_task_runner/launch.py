@@ -4,7 +4,7 @@ import argparse
 import threading
 import sys
 import os
-from inductiva import _cli, constants, _api_key
+from inductiva import _cli, constants, _api_key, api_url
 
 _docker_imported = True
 try:
@@ -67,6 +67,7 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
         image=constants.FILE_TRACKER_IMAGE,
         name="file-tracker",
         environment={
+            "API_URL": api_url,
             "USER_API_KEY": _api_key.get(),
         },
         volumes={
@@ -85,6 +86,7 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
         name="task-runner",
         environment={
             "USER_API_KEY": _api_key.get(),
+            "API_URL": api_url,
             "MACHINE_GROUP_NAME": args.machine_group_name,
             "HOST_NAME": args.hostname,
         },
