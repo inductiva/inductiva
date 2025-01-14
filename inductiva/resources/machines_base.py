@@ -157,7 +157,7 @@ class BaseMachineGroup(ABC):
     @property
     def available_vcpus(self):
         """Returns the maximum number of vCPUs that can be used on a task.
-        
+
         On a machine group with 2 machines, each with 4 vCPUs, this will return
         4.
         On an elastic machine group, this will also return 4.
@@ -199,8 +199,7 @@ class BaseMachineGroup(ABC):
     def _seconds_to_timedelta(
             value: Optional[float] = None) -> Optional[datetime.timedelta]:
         """Converts seconds to a timedelta object."""
-        return datetime.timedelta(
-            seconds=float(value)) if value is not None else None
+        return datetime.timedelta(seconds=float(value)) if value else None
 
     @staticmethod
     def _convert_auto_terminate_ts(
@@ -234,8 +233,11 @@ class BaseMachineGroup(ABC):
             timestamp: Optional[str]) -> Optional[datetime.datetime]:
         """Converts an ISO format string back to a datetime object. It ensures
         the datetime is timezone aware."""
-        if timestamp is not None:
+        if timestamp:
             dt = datetime.datetime.fromisoformat(str(timestamp))
+            if dt.year == 9999:
+                return None
+
             if dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None:
                 raise ValueError("The datetime string must be timezone aware.")
             return dt
