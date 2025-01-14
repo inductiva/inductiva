@@ -67,7 +67,7 @@ request_query_provider_id = api_client.QueryParameter(
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+SchemaFor200ResponseBodyApplicationJson = schemas.IntSchema
 
 
 @dataclass

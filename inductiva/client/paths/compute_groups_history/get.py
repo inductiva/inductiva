@@ -24,16 +24,55 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.machine_group_with_costs import MachineGroupWithCosts
 from inductiva.client.model.providers import Providers
-from inductiva.client.model.file_upload_url import FileUploadUrl
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
+from . import path
+
 # Query params
+
+
+class PageSchema(schemas.IntSchema):
+
+    class MetaOapg:
+        inclusive_minimum = 1
+
+
+class PerPageSchema(schemas.IntSchema):
+
+    class MetaOapg:
+        inclusive_maximum = 500
+        inclusive_minimum = 1
+
+
+CreatedBeforeSchema = schemas.DateTimeSchema
+CreatedAfterSchema = schemas.DateTimeSchema
 ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams', {
+        'page': typing.Union[
+            PageSchema,
+            decimal.Decimal,
+            int,
+        ],
+        'per_page': typing.Union[
+            PerPageSchema,
+            decimal.Decimal,
+            int,
+        ],
+        'created_before': typing.Union[
+            CreatedBeforeSchema,
+            str,
+            datetime,
+        ],
+        'created_after': typing.Union[
+            CreatedAfterSchema,
+            str,
+            datetime,
+        ],
         'provider_id': typing.Union[
             ProviderIdSchema,
         ],
@@ -46,36 +85,63 @@ class RequestQueryParams(RequestRequiredQueryParams,
     pass
 
 
+request_query_page = api_client.QueryParameter(
+    name="page",
+    style=api_client.ParameterStyle.FORM,
+    schema=PageSchema,
+    explode=True,
+)
+request_query_per_page = api_client.QueryParameter(
+    name="per_page",
+    style=api_client.ParameterStyle.FORM,
+    schema=PerPageSchema,
+    explode=True,
+)
+request_query_created_before = api_client.QueryParameter(
+    name="created_before",
+    style=api_client.ParameterStyle.FORM,
+    schema=CreatedBeforeSchema,
+    explode=True,
+)
+request_query_created_after = api_client.QueryParameter(
+    name="created_after",
+    style=api_client.ParameterStyle.FORM,
+    schema=CreatedAfterSchema,
+    explode=True,
+)
 request_query_provider_id = api_client.QueryParameter(
     name="provider_id",
     style=api_client.ParameterStyle.FORM,
     schema=ProviderIdSchema,
     explode=True,
 )
-# Path params
-TaskIdSchema = schemas.StrSchema
-RequestRequiredPathParams = typing_extensions.TypedDict(
-    'RequestRequiredPathParams', {
-        'task_id': typing.Union[
-            TaskIdSchema,
-            str,
-        ],
-    })
-RequestOptionalPathParams = typing_extensions.TypedDict(
-    'RequestOptionalPathParams', {}, total=False)
+_auth = [
+    'APIKeyHeader',
+]
 
 
-class RequestPathParams(RequestRequiredPathParams, RequestOptionalPathParams):
-    pass
+class SchemaFor200ResponseBodyApplicationJson(schemas.ListSchema):
 
+    class MetaOapg:
 
-request_path_task_id = api_client.PathParameter(
-    name="task_id",
-    style=api_client.ParameterStyle.SIMPLE,
-    schema=TaskIdSchema,
-    required=True,
-)
-SchemaFor200ResponseBodyApplicationJson = FileUploadUrl
+        @staticmethod
+        def items() -> typing.Type['MachineGroupWithCosts']:
+            return MachineGroupWithCosts
+
+    def __new__(
+        cls,
+        _arg: typing.Union[typing.Tuple['MachineGroupWithCosts'],
+                           typing.List['MachineGroupWithCosts']],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+    ) -> 'SchemaFor200ResponseBodyApplicationJson':
+        return super().__new__(
+            cls,
+            _arg,
+            _configuration=_configuration,
+        )
+
+    def __getitem__(self, i: int) -> 'MachineGroupWithCosts':
+        return super().__getitem__(i)
 
 
 @dataclass
@@ -115,16 +181,19 @@ _response_for_422 = api_client.OpenApiResponse(
                                 ),
     },
 )
+_status_code_to_response = {
+    '200': _response_for_200,
+    '422': _response_for_422,
+}
 _all_accept_content_types = ('application/json',)
 
 
 class BaseApi(api_client.Api):
 
     @typing.overload
-    def _get_input_upload_url_oapg(
+    def _list_user_instance_groups_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -135,11 +204,10 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _get_input_upload_url_oapg(
+    def _list_user_instance_groups_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -147,10 +215,9 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _get_input_upload_url_oapg(
+    def _list_user_instance_groups_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -161,38 +228,31 @@ class BaseApi(api_client.Api):
     ]:
         ...
 
-    def _get_input_upload_url_oapg(
+    def _list_user_instance_groups_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         """
-        Get Input Upload Url
+        List User Instance Groups
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
         self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
-        self._verify_typed_dict_inputs_oapg(RequestPathParams, path_params)
         used_path = path.value
 
-        _path_params = {}
-        for parameter in (request_path_task_id,):
-            parameter_data = path_params.get(parameter.name, schemas.unset)
-            if parameter_data is schemas.unset:
-                continue
-            serialized_data = parameter.serialize(parameter_data)
-            _path_params.update(serialized_data)
-
-        for k, v in _path_params.items():
-            used_path = used_path.replace('{%s}' % k, v)
-
         prefix_separator_iterator = None
-        for parameter in (request_query_provider_id,):
+        for parameter in (
+                request_query_page,
+                request_query_per_page,
+                request_query_created_before,
+                request_query_created_after,
+                request_query_provider_id,
+        ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
                 continue
@@ -214,6 +274,7 @@ class BaseApi(api_client.Api):
             resource_path=used_path,
             method='get'.upper(),
             headers=_headers,
+            auth_settings=_auth,
             stream=stream,
             timeout=timeout,
         )
@@ -239,14 +300,13 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class GetInputUploadUrl(BaseApi):
+class ListUserInstanceGroups(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def get_input_upload_url(
+    def list_user_instance_groups(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -257,11 +317,10 @@ class GetInputUploadUrl(BaseApi):
         ...
 
     @typing.overload
-    def get_input_upload_url(
+    def list_user_instance_groups(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -269,10 +328,9 @@ class GetInputUploadUrl(BaseApi):
         ...
 
     @typing.overload
-    def get_input_upload_url(
+    def list_user_instance_groups(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -283,18 +341,16 @@ class GetInputUploadUrl(BaseApi):
     ]:
         ...
 
-    def get_input_upload_url(
+    def list_user_instance_groups(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_input_upload_url_oapg(
+        return self._list_user_instance_groups_oapg(
             query_params=query_params,
-            path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
@@ -308,7 +364,6 @@ class ApiForget(BaseApi):
     def get(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -323,7 +378,6 @@ class ApiForget(BaseApi):
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -334,7 +388,6 @@ class ApiForget(BaseApi):
     def get(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -348,15 +401,13 @@ class ApiForget(BaseApi):
     def get(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_input_upload_url_oapg(
+        return self._list_user_instance_groups_oapg(
             query_params=query_params,
-            path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
