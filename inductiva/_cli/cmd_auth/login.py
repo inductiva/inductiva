@@ -25,8 +25,8 @@ def login(_):
     print(inductiva_art)
     if os.path.exists(constants.API_KEY_FILE_PATH):
         print(
-            "    You are already logged in. Run `inductiva logout` if you want "
-            "to log out. \n"
+            "    You are already logged in. Run `inductiva auth logout` if you "
+            "want to log out. \n"
             "    Setting a new API key will erase the existing one.")
 
     prompt = getpass.getpass(
