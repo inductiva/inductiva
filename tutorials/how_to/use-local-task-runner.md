@@ -1,4 +1,4 @@
-# Using the Local Task-Runner
+# Use the Local Task-Runner
 
 The local task-runner allows you to execute simulations on your own computer. This feature is particularly useful for testing and running simulations at minimal cost, as you only pay for storage while utilizing your local computational resources for free.
 
@@ -31,7 +31,7 @@ To start the local task-runner, use the `inductiva task-runner launch` command. 
 $ inductiva task-runner launch <machine-group-name>
 ```
 
-### Listing and Inspecting Resources
+### List and Inspect Resources
 After launching the task-runner, use the following commands to view and inspect your machine group:
 
 List resources:
@@ -63,7 +63,7 @@ In the web-console:
 
 ![Machine group detail](../_static/how_to/machine-group-detail.png)
 
-### Customizing the Hostname
+### Customize the Hostname
 You can customize the hostname using the --hostname argument:
 
 ```bash
@@ -135,5 +135,3 @@ We highlight the main bennefits of the local task-runner as:
 
 
 By following this tutorial, you can efficiently utilize the local task-runner to execute simulations at a small scale while minimizing costs. After you guarentee that your simulation is producing the intended results, you can scale-up to the state-of-the-art [computational resources](https://cloud.google.com/compute/docs/machine-resource) available on the cloud. 
-
-
