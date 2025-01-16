@@ -89,7 +89,8 @@ class OpenFOAM(simulators.Simulator):
         commands = [] if commands is None else commands
 
         if custom_solver_script:
-            commands.append(f"bash {custom_solver_script}")
+            commands.append(
+                f"bash {custom_solver_script}")
 
         if shell_script:
             commands.append(f"bash {shell_script}")
