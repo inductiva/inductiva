@@ -34,14 +34,16 @@ class MachineGroupWithCostsAdminView(schemas.DictSchema):
             "machine_type",
             "costs",
             "num_vms",
-            "threads_per_core",
             "creation_timestamp",
+            "type",
+            "disk_size_gb",
+            "threads_per_core",
+            "spot",
             "name",
             "provider_id",
             "id",
-            "type",
             "user",
-            "disk_size_gb",
+            "statistics",
             "status",
         }
 
@@ -51,6 +53,7 @@ class MachineGroupWithCostsAdminView(schemas.DictSchema):
             machine_type = schemas.StrSchema
             disk_size_gb = schemas.IntSchema
             num_vms = schemas.IntSchema
+            spot = schemas.BoolSchema
 
             @staticmethod
             def type() -> typing.Type['MachineGroupType']:
@@ -67,6 +70,10 @@ class MachineGroupWithCostsAdminView(schemas.DictSchema):
                 return MachineGroupStatus
 
             threads_per_core = schemas.IntSchema
+
+            @staticmethod
+            def statistics() -> typing.Type['MachineGroupUsageStatistics']:
+                return MachineGroupUsageStatistics
 
             @staticmethod
             def costs() -> typing.Type['MachineGroupCostsAdminView']:
@@ -545,11 +552,13 @@ class MachineGroupWithCostsAdminView(schemas.DictSchema):
                 "machine_type": machine_type,
                 "disk_size_gb": disk_size_gb,
                 "num_vms": num_vms,
+                "spot": spot,
                 "type": type,
                 "creation_timestamp": creation_timestamp,
                 "provider_id": provider_id,
                 "status": status,
                 "threads_per_core": threads_per_core,
+                "statistics": statistics,
                 "costs": costs,
                 "user": user,
                 "auto_resize_disk_max_gb": auto_resize_disk_max_gb,
@@ -565,14 +574,16 @@ class MachineGroupWithCostsAdminView(schemas.DictSchema):
     machine_type: MetaOapg.properties.machine_type
     costs: 'MachineGroupCostsAdminView'
     num_vms: MetaOapg.properties.num_vms
-    threads_per_core: MetaOapg.properties.threads_per_core
     creation_timestamp: MetaOapg.properties.creation_timestamp
+    type: 'MachineGroupType'
+    disk_size_gb: MetaOapg.properties.disk_size_gb
+    threads_per_core: MetaOapg.properties.threads_per_core
+    spot: MetaOapg.properties.spot
     name: MetaOapg.properties.name
     provider_id: 'Providers'
     id: MetaOapg.properties.id
-    type: 'MachineGroupType'
     user: 'UserEmailOrganization'
-    disk_size_gb: MetaOapg.properties.disk_size_gb
+    statistics: 'MachineGroupUsageStatistics'
     status: 'MachineGroupStatus'
 
     @typing.overload
@@ -607,6 +618,12 @@ class MachineGroupWithCostsAdminView(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+            self, name: typing_extensions.Literal["spot"]
+    ) -> MetaOapg.properties.spot:
+        ...
+
+    @typing.overload
+    def __getitem__(
             self,
             name: typing_extensions.Literal["type"]) -> 'MachineGroupType':
         ...
@@ -633,6 +650,12 @@ class MachineGroupWithCostsAdminView(schemas.DictSchema):
     def __getitem__(
         self, name: typing_extensions.Literal["threads_per_core"]
     ) -> MetaOapg.properties.threads_per_core:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["statistics"]
+    ) -> 'MachineGroupUsageStatistics':
         ...
 
     @typing.overload
@@ -705,11 +728,13 @@ class MachineGroupWithCostsAdminView(schemas.DictSchema):
         "machine_type",
         "disk_size_gb",
         "num_vms",
+        "spot",
         "type",
         "creation_timestamp",
         "provider_id",
         "status",
         "threads_per_core",
+        "statistics",
         "costs",
         "user",
         "auto_resize_disk_max_gb",
@@ -756,6 +781,12 @@ class MachineGroupWithCostsAdminView(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+            self, name: typing_extensions.Literal["spot"]
+    ) -> MetaOapg.properties.spot:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self,
             name: typing_extensions.Literal["type"]) -> 'MachineGroupType':
         ...
@@ -782,6 +813,12 @@ class MachineGroupWithCostsAdminView(schemas.DictSchema):
     def get_item_oapg(
         self, name: typing_extensions.Literal["threads_per_core"]
     ) -> MetaOapg.properties.threads_per_core:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["statistics"]
+    ) -> 'MachineGroupUsageStatistics':
         ...
 
     @typing.overload
@@ -857,11 +894,13 @@ class MachineGroupWithCostsAdminView(schemas.DictSchema):
         "machine_type",
         "disk_size_gb",
         "num_vms",
+        "spot",
         "type",
         "creation_timestamp",
         "provider_id",
         "status",
         "threads_per_core",
+        "statistics",
         "costs",
         "user",
         "auto_resize_disk_max_gb",
@@ -891,15 +930,25 @@ class MachineGroupWithCostsAdminView(schemas.DictSchema):
             decimal.Decimal,
             int,
         ],
+        creation_timestamp: typing.Union[
+            MetaOapg.properties.creation_timestamp,
+            str,
+            datetime,
+        ],
+        type: 'MachineGroupType',
+        disk_size_gb: typing.Union[
+            MetaOapg.properties.disk_size_gb,
+            decimal.Decimal,
+            int,
+        ],
         threads_per_core: typing.Union[
             MetaOapg.properties.threads_per_core,
             decimal.Decimal,
             int,
         ],
-        creation_timestamp: typing.Union[
-            MetaOapg.properties.creation_timestamp,
-            str,
-            datetime,
+        spot: typing.Union[
+            MetaOapg.properties.spot,
+            bool,
         ],
         name: typing.Union[
             MetaOapg.properties.name,
@@ -911,13 +960,8 @@ class MachineGroupWithCostsAdminView(schemas.DictSchema):
             str,
             uuid.UUID,
         ],
-        type: 'MachineGroupType',
         user: 'UserEmailOrganization',
-        disk_size_gb: typing.Union[
-            MetaOapg.properties.disk_size_gb,
-            decimal.Decimal,
-            int,
-        ],
+        statistics: 'MachineGroupUsageStatistics',
         status: 'MachineGroupStatus',
         auto_resize_disk_max_gb: typing.Union[
             MetaOapg.properties.auto_resize_disk_max_gb, dict,
@@ -977,14 +1021,16 @@ class MachineGroupWithCostsAdminView(schemas.DictSchema):
             machine_type=machine_type,
             costs=costs,
             num_vms=num_vms,
-            threads_per_core=threads_per_core,
             creation_timestamp=creation_timestamp,
+            type=type,
+            disk_size_gb=disk_size_gb,
+            threads_per_core=threads_per_core,
+            spot=spot,
             name=name,
             provider_id=provider_id,
             id=id,
-            type=type,
             user=user,
-            disk_size_gb=disk_size_gb,
+            statistics=statistics,
             status=status,
             auto_resize_disk_max_gb=auto_resize_disk_max_gb,
             min_vms=min_vms,
@@ -1002,5 +1048,6 @@ class MachineGroupWithCostsAdminView(schemas.DictSchema):
 from inductiva.client.model.machine_group_costs_admin_view import MachineGroupCostsAdminView
 from inductiva.client.model.machine_group_status import MachineGroupStatus
 from inductiva.client.model.machine_group_type import MachineGroupType
+from inductiva.client.model.machine_group_usage_statistics import MachineGroupUsageStatistics
 from inductiva.client.model.providers import Providers
 from inductiva.client.model.user_email_organization import UserEmailOrganization

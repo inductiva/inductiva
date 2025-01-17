@@ -29,12 +29,15 @@ from inductiva.client.model.file_info import FileInfo
 from inductiva.client.model.file_upload_details import FileUploadDetails
 from inductiva.client.model.file_upload_url import FileUploadUrl
 from inductiva.client.model.http_validation_error import HTTPValidationError
+from inductiva.client.model.machine_group_cost_per_hour import MachineGroupCostPerHour
 from inductiva.client.model.machine_group_costs import MachineGroupCosts
 from inductiva.client.model.machine_group_costs_admin_view import MachineGroupCostsAdminView
 from inductiva.client.model.machine_group_status import MachineGroupStatus
 from inductiva.client.model.machine_group_terminate_reason import MachineGroupTerminateReason
 from inductiva.client.model.machine_group_terminate_request import MachineGroupTerminateRequest
+from inductiva.client.model.machine_group_time_stat import MachineGroupTimeStat
 from inductiva.client.model.machine_group_type import MachineGroupType
+from inductiva.client.model.machine_group_usage_statistics import MachineGroupUsageStatistics
 from inductiva.client.model.machine_group_with_costs import MachineGroupWithCosts
 from inductiva.client.model.machine_group_with_costs_admin_view import MachineGroupWithCostsAdminView
 from inductiva.client.model.machine_info import MachineInfo
