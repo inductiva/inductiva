@@ -42,3 +42,7 @@ class MachineGroupTerminateReason(schemas.EnumBase, schemas.StrSchema):
     @schemas.classproperty
     def IDLE_TIMEOUT(cls):
         return cls("idle_timeout")
+
+    @schemas.classproperty
+    def CREDITS_EXHAUSTED(cls):
+        return cls("credits_exhausted")
