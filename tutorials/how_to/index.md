@@ -17,4 +17,5 @@ set-up-elastic-machine-group
 set-up-mpi-cluster
 reuse-files
 run-benchmarks
+use-local-task-runner
 ```
