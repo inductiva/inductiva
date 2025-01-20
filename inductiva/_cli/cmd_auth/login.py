@@ -6,8 +6,20 @@ import os
 import inductiva
 from inductiva import constants, users, utils
 
+from jose import jwe
+from jose.exceptions import JWEError
 
-def login(_):
+
+def is_valid_jwe(token):
+    try:
+        # Attempt to decode the JWE token
+        jwe.get_unverified_header(token)
+        return True
+    except JWEError:
+        return False
+
+
+def login(args):
     """
     Prompts the user to enter their API key and stores it securely.
 
@@ -29,15 +41,22 @@ def login(_):
             "want to log out. \n"
             "    Setting a new API key will erase the existing one.")
 
-    prompt = getpass.getpass(
+    prompt_func = getpass.getpass if args.private else input
+    warning = " (input will not be visible)" if args.private else ""
+
+    prompt = prompt_func(
         "    To log in, you need an API key. You can obtain it "
         "from your account at https://console.inductiva.ai/account.\n"
-        "Please paste your API key here (input will not be visible): ")
+        f"Please paste your API key here{warning}: ")
 
     api_key = prompt.strip()
 
     if not api_key:
         print("Error: API key cannot be empty.")
+        return
+
+    if not is_valid_jwe(api_key):
+        print("Error: Invalid API key format.")
         return
 
     # Set the API key to check if it is valid
@@ -62,4 +81,9 @@ def register(parser):
         "The `inductiva login` command allows you to log in using your key.\n"
         "You can obtain your API key from your account at "
         "https://console.inductiva.ai/account.\n")
+
+    subparser.add_argument("--private",
+                           action='store_true',
+                           help="Hide API Key.")
+
     subparser.set_defaults(func=login)
