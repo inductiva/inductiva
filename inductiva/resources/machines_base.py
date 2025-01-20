@@ -40,7 +40,7 @@ class BaseMachineGroup(ABC):
         threads_per_core: int = 2,
         data_disk_gb: int = 10,
         auto_resize_disk_max_gb: int = 500,
-        max_idle_time: Optional[datetime.timedelta] = None,
+        max_idle_time: Optional[Union[datetime.timedelta, int]] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
         register: bool = True,
     ) -> None:
@@ -66,7 +66,8 @@ class BaseMachineGroup(ABC):
                 is no longer automatically resized, and if the task continues to
                 output files, it will fail.
             max_idle_time: Time without executing any task, after which the
-              resource will be terminated.
+              resource will be terminated. Can be an exact timedelta or an int
+                representing the number of minutes.
             auto_terminate_ts: Moment in which the resource will be
               automatically terminated.
             register: Bool that indicates if a machine group should be register
@@ -114,7 +115,6 @@ class BaseMachineGroup(ABC):
         #the request machine_groups.get()
         self._active_machines = 0
         self.num_machines = 0
-        self._max_idle_time = max_idle_time
         self._auto_terminate_ts = auto_terminate_ts
         self._custom_vm_image = None
 
@@ -122,6 +122,12 @@ class BaseMachineGroup(ABC):
         # to the backend.
         self._api = compute_api.ComputeApi(api.get_client())
         self._estimated_cost = None
+        self._max_idle_time = max_idle_time
+
+        if isinstance(max_idle_time, int):
+            if max_idle_time <= 0:
+                raise ValueError("`max_idle_time` must be positive.")
+            self._max_idle_time = datetime.timedelta(minutes=max_idle_time)
 
     @property
     def id(self):
@@ -151,7 +157,7 @@ class BaseMachineGroup(ABC):
     @property
     def available_vcpus(self):
         """Returns the maximum number of vCPUs that can be used on a task.
-        
+
         On a machine group with 2 machines, each with 4 vCPUs, this will return
         4.
         On an elastic machine group, this will also return 4.
@@ -193,8 +199,7 @@ class BaseMachineGroup(ABC):
     def _seconds_to_timedelta(
             value: Optional[float] = None) -> Optional[datetime.timedelta]:
         """Converts seconds to a timedelta object."""
-        return datetime.timedelta(
-            seconds=float(value)) if value is not None else None
+        return datetime.timedelta(seconds=float(value)) if value else None
 
     @staticmethod
     def _convert_auto_terminate_ts(
@@ -228,8 +233,11 @@ class BaseMachineGroup(ABC):
             timestamp: Optional[str]) -> Optional[datetime.datetime]:
         """Converts an ISO format string back to a datetime object. It ensures
         the datetime is timezone aware."""
-        if timestamp is not None:
+        if timestamp:
             dt = datetime.datetime.fromisoformat(str(timestamp))
+            if dt.year == 9999:
+                return None
+
             if dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None:
                 raise ValueError("The datetime string must be timezone aware.")
             return dt

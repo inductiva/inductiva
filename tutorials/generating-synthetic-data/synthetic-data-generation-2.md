@@ -117,10 +117,10 @@ task = splishsplash.run(input_dir=input_dir,
 
 # Wait for the simulation to complete and download the outputs
 task.wait()
-task.download_outputs()
-
 # Terminate the machine group
 machine_group.terminate()
+
+task.download_outputs()
 ```
 This script will upload the input data from our local directory to the API server and schedule a simulation `task` for execution. We will be able check details about the `task`, including its ID and the machine group assigned for its computation, by observing the stdout of your terminal:
 

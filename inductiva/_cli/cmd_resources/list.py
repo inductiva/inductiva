@@ -118,11 +118,15 @@ def _machine_group_list_to_str(machine_group_list) -> str:
             if isinstance(machine_group, resources.MPICluster):
                 resource_type = machines_base.ResourceType.MPI.value
         num_active_machines = machine_group.active_machines_to_str()
+
+        idle_time = f"{machine_group.idle_time}"
+        if machine_group.max_idle_time:
+            idle_time += f"/{machine_group.max_idle_time}"
+
         rows.append([
             machine_group.name, machine_group.machine_type, is_elastic,
             resource_type, num_active_machines, machine_group.data_disk_gb,
-            spot, machine_group.create_time,
-            f"{machine_group.idle_time}/{machine_group.max_idle_time}",
+            spot, machine_group.create_time, idle_time,
             machine_group.quota_usage.get("max_price_hour")
         ])
 
