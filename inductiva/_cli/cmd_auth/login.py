@@ -83,7 +83,7 @@ def register(parser):
         "https://console.inductiva.ai/account.\n")
 
     subparser.add_argument("--private",
-                           action='store_true',
+                           action="store_true",
                            help="Hide API Key.")
 
     subparser.set_defaults(func=login)
