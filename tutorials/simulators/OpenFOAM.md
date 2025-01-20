@@ -16,7 +16,7 @@ chemical reactions, turbulence, and heat transfer) to **solid dynamics** and
 **electromagnetics**.
 
 There are two main open-source distributions of OpenFOAM: one developed by the
-[OpenFOAM foundation](www.openfoam.org) and another by the
+[OpenFOAM foundation](https://openfoam.org/) and another by the
 [ESI Group](https://www.openfoam.com/). The Inductiva API supports both,
 and you can select your preferred distribution by setting the `distribution` parameter
 when initializing the simulator. *By default, it uses the OpenFOAM Foundation version.*
