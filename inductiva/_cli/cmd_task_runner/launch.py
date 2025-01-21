@@ -116,12 +116,14 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
         f"with container ID: {task_runner_container.short_id}",
         file=fout)
 
-    try:
-        join_container_streams(task_runner_container, file_tracker_container)
-    except KeyboardInterrupt:
-        print("Interrupted. Stopping containers...", file=fout)
-        task_runner_container.stop()
-        file_tracker_container.stop()
+    if not args.detach:
+        try:
+            join_container_streams(task_runner_container,
+                                   file_tracker_container)
+        except KeyboardInterrupt:
+            print("Interrupted. Stopping containers...", file=fout)
+            file_tracker_container.stop()
+            task_runner_container.stop()
 
 
 def register(parser):
@@ -145,5 +147,10 @@ def register(parser):
                            type=str,
                            default=os.uname().nodename,
                            help="Hostname of the Task-Runner.")
+
+    subparser.add_argument("--detach",
+                           "-d",
+                           action="store_true",
+                           help="Run the task-runner in the background.")
 
     subparser.set_defaults(func=launch_task_runner)
