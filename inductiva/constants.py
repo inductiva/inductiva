@@ -43,3 +43,5 @@ LOGS_FILE_PATH = HOME_DIR / "inductiva.log"
 API_KEY_FILE_PATH = HOME_DIR / "api_key"
 
 TASK_OUTPUT_ZIP = "output.zip"
+
+LOGIN_MESSAGE = "Please login with `inductiva auth login`."
