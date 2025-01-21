@@ -510,8 +510,7 @@ class Task:
     def _format_list_of_lines(self,
                               lines: List[str],
                               file: str,
-                              sep: Optional[str] = "",
-                              endl: Optional[str] = "\n",
+                              endl: Optional[str] = "",
                               header : Optional[bool] = True) -> str:
         """Formats a list of lines with color.
 
@@ -542,14 +541,14 @@ class Task:
 
         n = len(lines)
 
-        new_lst = [f"{color_code}│{reset_color}{line}" for line in lines]
+        new_lst = [f"{color_code}│{reset_color}{line}{endl}" for line in lines]
 
         if header:
             new_lst.insert(
-                0, f"{color_code}┌ (last {n} lines from {file}){reset_color}{endl}")
-            new_lst.append(f"{color_code}└{reset_color}{endl}")
+                0, f"{color_code}┌ (last {n} lines from {file}){reset_color}\n")
+            new_lst.append(f"{color_code}└{reset_color}\n")
 
-        return sep.join(new_lst)
+        return "".join(new_lst)
 
     def _format_directory_listing(self, directories: list, indent=0) -> str:
         """Formats a dictionary with directory information.
@@ -1165,7 +1164,6 @@ class Task:
         def formatter(message):
             return self._format_list_of_lines(message,
                                               filename,
-                                              sep="\n",
                                               endl="\n",
                                               header=(not follow))
 
