@@ -511,7 +511,7 @@ class Task:
                               lines: List[str],
                               file: str,
                               endl: Optional[str] = "",
-                              header : Optional[bool] = True) -> str:
+                              header: Optional[bool] = True) -> str:
         """Formats a list of lines with color.
 
         This method formats a list of lines with a color and adds a header and
@@ -1161,6 +1161,7 @@ class Task:
     async def _tail_file(self, filename: str, n_lines: int = 10, follow=False):
         """Get the last n_lines lines of a 
         file in the task's working directory."""
+
         def formatter(message):
             return self._format_list_of_lines(message,
                                               filename,
