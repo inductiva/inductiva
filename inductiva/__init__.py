@@ -152,23 +152,28 @@ def _raise_api_key_error(message):
     raise ValueError(message)
 
 
-def set_api_key(api_key):
-    """Sets the value of `inductiva._api_key` to `api_key"""
+def _validate_api_key(api_key, login_message=True):
+    message = f" {constants.LOGIN_MESSAGE}" if login_message else ""
+
     if not api_key:
-        error = f"No API Key specified. {constants.LOGIN_MESSAGE}"
+        error = f"No API Key specified.{message}"
         _raise_api_key_error(error)
 
+    if not utils.authentication.is_valid_token(api_key):
+        error = f"Invalid API Key format.{message}"
+        _raise_api_key_error(error)
+
+
+def set_api_key(api_key, login_message=True):
+    """Sets the value of `inductiva._api_key` to `api_key"""
+    _validate_api_key(api_key, login_message)
     _api_key.set(api_key)
 
 
 def get_api_key():
     """Returns the value of inductiva._api_key or the stored API key."""
     api_key = _api_key.get() or utils.authentication.get_stored_api_key()
-
-    if not utils.authentication.is_valid_jwe(api_key):
-        error = f"Invalid API Key format. {constants.LOGIN_MESSAGE}"
-        _raise_api_key_error(error)
-
+    _validate_api_key(api_key)
     return api_key
 
 
