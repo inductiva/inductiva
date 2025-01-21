@@ -1,6 +1,6 @@
 # Use the Local Task-Runner
 
-The local task-runner allows you to execute simulations on your own computer. This feature is particularly useful for testing and running simulations at minimal cost, as you only pay for storage while utilizing your local computational resources for free.
+The local task-runner allows you to execute simulations on your own computer. This feature is particularly useful for testing and running simulations at minimal cost, as you only pay for storage while utilizing your local computational resources for free. The storage costs come from saving the simulation inputs and results in the cloud for future access.
 
 In this tutorial, we’ll guide you through setting up and using the local task-runner to execute simulations. By the end of this tutorial, you’ll know how to configure, launch, and run simulations locally with ease.
 
