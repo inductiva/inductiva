@@ -112,7 +112,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
 
     def start(self, wait_for_quotas: bool = False):
         """Start the machine group.
-        
+
         Args:
             wait_for_quotas: If True, the method will wait for quotas to
               become available before starting the resource.
@@ -137,23 +137,6 @@ class MachineGroup(machines_base.BaseMachineGroup):
         logging.info("\t· Number of machines:         %s", self.num_machines)
         logging.info("\t· Spot:                       %s", self.spot)
         self.estimate_cloud_cost()
-
-    def estimate_cloud_cost(self, verbose: bool = True):
-        """Estimates a cost per hour of the machine group in US dollars.
-
-        This is only an estimate of having a machine group with the
-        specified configurations up in the cloud. The actual cost may vary.
-
-        Returns:
-            The estimated cost per hour of the machine group, in US
-              dollars ($/h)."""
-        cost_per_machine = super()._get_estimated_cost(self.spot)
-        estimated_cost = cost_per_machine * self.num_machines
-        if verbose:
-            logging.info("\t· Estimated cloud cost of machine group: %.3f $/h",
-                         estimated_cost)
-            super()._log_estimated_spot_vm_savings()
-        return estimated_cost
 
 
 class ElasticMachineGroup(machines_base.BaseMachineGroup):
@@ -309,23 +292,3 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         logging.info("\t· Minimum number of machines: %s", self.min_machines)
         logging.info("\t· Spot:                       %s", self.spot)
         self.estimate_cloud_cost()
-
-    def estimate_cloud_cost(self, verbose: bool = True):
-        """Estimates a cost per hour of min and max machines in US dollars.
-
-        these are the estimted costs of having minimum and the
-        maximum number of machines up in the cloud. The final cost will vary
-        depending on the total usage of the machines."""
-        cost_per_machine = super()._get_estimated_cost(self.spot)
-        if verbose:
-            logging.info(
-                "\t· Minimum estimated cloud cost of elastic machine group: "
-                "%.3f $/h.", cost_per_machine * self.min_machines)
-            logging.info(
-                "\t· Maximum estimated cloud cost of elastic machine group:"
-                " %.3f $/h.", cost_per_machine * self.max_machines)
-            super()._log_estimated_spot_vm_savings()
-            logging.info(
-                "Note: these are the estimated costs of having minimum and the "
-                "maximum number of machines up in the cloud. The final cost "
-                "will vary depending on the total usage of the machines.")
