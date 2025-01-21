@@ -34,16 +34,8 @@ def login(args):
 
     api_key = prompt.strip()
 
-    if not api_key:
-        print("Error: API Key cannot be empty.")
-        return
-
-    if not utils.is_valid_jwe(api_key):
-        print("Error: Invalid API Key format.")
-        return
-
-    # Set the API Key to check if it is valid
-    inductiva.set_api_key(api_key)
+    # Set the API Key
+    inductiva.set_api_key(api_key, login_message=False)
 
     # If the API Key is invalid, this will raise an exception
     user_info = users.get_info()
