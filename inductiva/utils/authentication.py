@@ -1,6 +1,16 @@
 """This module contains utility functions for handling authentication. """
 
+import re
+
 from inductiva import constants
+
+
+def is_valid_token(token):
+    """Validate token characters."""
+    pattern = re.compile(r"^[A-Za-z0-9._-]+$")
+    if not pattern.match(token):
+        return False
+    return True
 
 
 def get_stored_api_key(path=None):
