@@ -12,6 +12,7 @@ from inductiva._cli.cmd_user.info import get_info
 from inductiva.client.api_client import ApiClient
 from inductiva.api.methods import get_client
 
+from . import constants
 from . import simulators
 from . import resources
 from . import projects
@@ -144,22 +145,31 @@ def compare_client_and_backend_versions(client_version: str):
                 f"Failed to compare client and API versions. {e}") from e
 
 
+def _raise_api_key_error(message):
+    if logs.is_cli():
+        print(f"Error: {message}")
+        sys.exit(1)
+    raise ValueError(message)
+
+
 def set_api_key(api_key):
     """Sets the value of `inductiva._api_key` to `api_key"""
     if not api_key:
-        if logs.is_cli():
-            print("Error: No API Key specified. "
-                  "Please login with `inductiva auth login`")
-            sys.exit(1)
-        raise ValueError("No API Key specified. "
-                         "Please login with `inductiva auth login`")
+        error = f"No API Key specified. {constants.LOGIN_MESSAGE}"
+        _raise_api_key_error(error)
 
     _api_key.set(api_key)
 
 
 def get_api_key():
     """Returns the value of inductiva._api_key or the stored API key."""
-    return _api_key.get() or utils.authentication.get_stored_api_key()
+    api_key = _api_key.get() or utils.authentication.get_stored_api_key()
+
+    if not utils.authentication.is_valid_jwe(api_key):
+        error = f"Invalid API Key format. {constants.LOGIN_MESSAGE}"
+        _raise_api_key_error(error)
+
+    return api_key
 
 
 def _supports_ansi():
