@@ -70,6 +70,7 @@ class PathValues(str, enum.Enum):
     STORAGE_COST = "/storage/cost"
     STORAGE_CONTENTS = "/storage/contents"
     STORAGE_INPUT_URL = "/storage/input_url"
+    STORAGE_SIGNEDURLS = "/storage/signed-urls"
     STORAGE_INPUT_NOTIFY = "/storage/input_notify"
     STORAGE_INPUT_REMOTE = "/storage/input_remote"
     STORAGE_ = "/storage/"

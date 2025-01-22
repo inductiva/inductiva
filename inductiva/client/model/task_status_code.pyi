@@ -76,6 +76,10 @@ class TaskStatusCode(schemas.EnumBase, schemas.StrSchema):
         return cls("executer-terminated-ttl-exceeded")
 
     @schemas.classproperty
+    def EXECUTERTERMINATEDCREDITSEXHAUSTED(cls):
+        return cls("executer-terminated-credits-exhausted")
+
+    @schemas.classproperty
     def EXECUTERFAILED(cls):
         return cls("executer-failed")
 
