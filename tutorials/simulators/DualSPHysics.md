@@ -1,39 +1,4 @@
-In this guide, we will walk you through setting up and running DualSPHysics, 
-a Smoothed-Particle Hydrodynamics (SPH) simulator, available as one of 
-the built-in tools via the Inductiva API. 
-
-We will cover:
-
-- Setting up DualSPHysics for use with our API.
-- Example code to help you get started with simulations.
-- An advanced Turbine example to show how to execute commands through the 
-Inductiva API.
-
-# DualSPHysics
-
-DualSPHysics is a Smoothed-Particle Hydrodynamics (SPH) simulator. The simulator 
-is usually configured by a single file with the extension `.xml`. This file
-contains all the information about the simulation, including the geometry, 
-the physical properties of the fluids, the boundary conditions, the numerical
-parameters, and the output files. Sometimes the configuration can also use extra
-geometry files. 
-
-Running your DualSPHysics simulation workflows using Inductiva is very similar
-to running them on your local machine, but instead of calling your DualSPHysics
-shell script directly, you will have to pass it to the Inductiva API via the
-run() method to be executed on a remote resource. So, if you already have a
-functioning shell script that orchestrates the entire DualSPHysics simulation on
-your local machine, you are mostly almost ready to run it via Inductiva.
-
-There are, however, some minor adaptations that may have to be done to your
-orchestration script to take into account the difference in the environment.
-For example, you may have to change path-related variables in your script
-because the location of the DualSPHysics binaries in our infrastructure may be
-different from that of your local setup.
-
-Also, interactive commands that wait for your keyboard input may have to be
-removed or set to run on default parameters.
-
+In
 ## Technical details
 
 This section will focus on the implementation details of our compilation of 
