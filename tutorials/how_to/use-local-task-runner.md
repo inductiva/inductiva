@@ -73,6 +73,20 @@ If you don’t specify a hostname, it defaults to your computer’s name.
 
 The task-runner is limited to one instance per computer, but you can add multiple task-runners to the same machine group.
 
+### Run the Task-Runner in background
+
+If you wish to run the task-runner in background the `--detach` flag can be useful:
+
+```bash
+$ inductiva task-runner launch <machine-group-name> --detach
+```
+This command will start the task-runner in the background, allowing you to close your SSH connection without interrupting the process.
+
+To terminate a task-runner running in background, use the `remove` command:
+```bash
+$ inductiva task-runner remove
+```
+
 ## Step 2: Run a Simulation Locally
 Once the task-runner is active, you can run simulations on your local machine. Below is an example using the GROMACS simulator.
 
