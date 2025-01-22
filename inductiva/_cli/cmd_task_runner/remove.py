@@ -53,7 +53,7 @@ def register(parser):
                                   formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = (
-        "The `inductiva task-runner removes` command provides "
+        "The `inductiva task-runner remove` command provides "
         "a way to remove the Task-Runner running in the background.")
 
     _cli.utils.add_watch_argument(subparser)
