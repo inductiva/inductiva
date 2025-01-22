@@ -84,6 +84,12 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
     )
 
     client.images.pull(constants.TASK_RUNNER_IMAGE, platform="linux/amd64")
+
+    apptainer_path = "apptainer"
+    os.makedirs(apptainer_path, exist_ok=True)
+    os.chmod(apptainer_path, 0o777)
+    apptainer_full_path = os.path.abspath(apptainer_path)
+
     task_runner_container = client.containers.run(
         image=constants.TASK_RUNNER_IMAGE,
         name="task-runner",
@@ -93,13 +99,14 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
             "MACHINE_GROUP_NAME": args.machine_group_name,
             "HOST_NAME": args.hostname,
         },
+        mounts=[
+            docker.types.Mount(target="/executer-images",
+                               source=apptainer_full_path,
+                               type="bind")
+        ],
         volumes={
             "workdir": {
                 "bind": "/workdir",
-                "mode": "rw"
-            },
-            "apptainer": {
-                "bind": "/executer-images",
                 "mode": "rw"
             },
         },
