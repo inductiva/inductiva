@@ -16,10 +16,11 @@ chemical reactions, turbulence, and heat transfer) to **solid dynamics** and
 **electromagnetics**.
 
 There are two main open-source distributions of OpenFOAM: one developed by the
-[OpenFOAM foundation](https://openfoam.org/) and another by the
+[OpenFOAM Foundation](https://openfoam.org/) and another by the
 [ESI Group](https://www.openfoam.com/). The Inductiva API supports both,
-and you can select your preferred distribution by setting the `distribution` parameter
-when initializing the simulator. *By default, it uses the latest version of OpenFOAM Foundation.*
+and you can select your preferred distribution and version by setting 
+the `distribution` and `version` parameters when initializing the simulator. 
+*By default, it uses the latest version of OpenFOAM Foundation.*
 
 We are assuming the canonical file structure for OpenFOAM simulations, which
 includes the `time`, `constant`, and `system` directories.
@@ -34,6 +35,21 @@ numerical parameters, and output files.
 In order to run your simulation you can simply run your `Allrun` script and you
 are good to go.
 
+## Supported Versions
+
+We currently support the following versions of OpenFOAM:
+
+- ESI GROUP
+   - **2412** (Dec, 2024)
+   - **2406** (Jun, 2024)
+   - **2206** (Jun, 2022)
+- Foundation
+   - **12** (Jul, 2024)
+   - **8** (Jul, 2020)
+
+To list all available versions of OpenFOAM ESI and OpenFOAM Foundation 
+(or other simulators), you can use the `inductiva simulators list` CLI command.
+
 ## First Example: Motorbike Tutorial
 
 In this example, we demonstrate how to run the [motorbike tutorial](https://github.com/OpenFOAM/OpenFOAM-8/tree/master/tutorials/incompressible/simpleFoam/motorBike) 
@@ -43,7 +59,7 @@ tutorial using the OpenFOAM Foundation distribution.
 :language: python
 ```
 
-The current example is devided into four steps:
+The current example is divided into four steps:
 
 1. **Configure the Machine Type**: In this step, we define the machine type and start
 it.
@@ -63,8 +79,8 @@ to finish, downloading the outputs, and terminating the machine, in that order.
 ### Example Code - ESI Distribution
 
 To run the sample simulation above, download the `openfoam-esi-input-example.zip`
-file, select the appropriate distribution with
-`inductiva.simulators.OpenFOAM(distribution="esi")`, and run the corresponding
+file, select the appropriate distribution and version with
+`inductiva.simulators.OpenFOAM(distribution="esi", version="2412")`, and run the corresponding
 `Allrun` script.
 
 ## Advanced Tutorial: Running the MB9 Micro-benchmark from ExaFOAM
@@ -195,15 +211,15 @@ We now have all we need to run our simulation.
 
 2. **Wait**:
 That is it. Our simulation is now running on the cloud. We can `wait` for the
-simulation to be over, or we can turn our computer off go for a coffe (☕️).
+simulation to be over, or we can turn our computer off go for a coffee (☕️).
    ```python
    task.wait()
    ```
 
 3. **Terminate Machine and download outputs**:
 Once our simulation is over we can/should terminate our machine to save on costs.
-If you forget, dont worry we got your back. By default, a machine will be
-automaticly terminated if no simulation runs on it for 30 minutes.
+If you forget, don't worry we got your back. By default, a machine will be
+automatically terminated if no simulation runs on it for 30 minutes.
 
    ```python
    machine_group.terminate()
