@@ -63,6 +63,7 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
             file=fout)
         return
 
+    client.images.pull(constants.FILE_TRACKER_IMAGE, platform="linux/amd64")
     file_tracker_container = client.containers.run(
         image=constants.FILE_TRACKER_IMAGE,
         name="file-tracker",
@@ -81,6 +82,8 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
         detach=True,
         auto_remove=True,
     )
+
+    client.images.pull(constants.TASK_RUNNER_IMAGE, platform="linux/amd64")
     task_runner_container = client.containers.run(
         image=constants.TASK_RUNNER_IMAGE,
         name="task-runner",
