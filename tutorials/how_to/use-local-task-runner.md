@@ -80,7 +80,7 @@ If you wish to run the task-runner in background the `--detach` flag can be usef
 ```bash
 $ inductiva task-runner launch <machine-group-name> --detach
 ```
-This command will start the task-runner in the background, allowing you to close your SSH connection without interrupting the process.
+This command will start the task-runner in background, allowing you to close your SSH connection without interrupting the process.
 
 To terminate a task-runner running in background, use the `remove` command:
 ```bash
