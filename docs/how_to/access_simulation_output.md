@@ -48,36 +48,37 @@ $ inductiva tasks list-files jjqwbn2yi5kwk5rv6qs2nth21
 Produces an output similar to:
 
 ```bash
-Directory contents:
-[FILE] stderr.txt
-[FILE] flow_cylinder.xml
-[FILE] flow_cylinder__Dp.vtk
-[FILE] stdout.txt
-[FILE] flow_cylinder_Fluid.vtk
-[FILE] flow_cylinder.bi4
-[DIR] flow_cylinder
-  [FILE] Run.out
-  [FILE] CfgInit_NormalsGhost.vtk
-  [FILE] CfgInit_Domain.vtk
-  [FILE] CfgInit_MapCells.vtk
-  [FILE] CfgInOut_DomainBox.vtk
-  [DIR] data
-    [FILE] Part_0004.bi4
-    [FILE] Part_0000.bi4
-    [FILE] PartOut_000.obi4
-    [FILE] Part_0001.bi4
-    [FILE] Part_Head.ibi4
-    [FILE] Part_0003.bi4
-    [FILE] Part_0005.bi4
-    [FILE] PartInfo.ibi4
-    [FILE] Part_0002.bi4
-  [FILE] CfgInit_Normals.vtk
-  [FILE] CfgInOut_DomainReal.vtk
-[FILE] flow_cylinder_Bound.vtk
-[FILE] config.xml
-[FILE] flow_cylinder.out
-[FILE] flow_cylinder_All.vtk
-[FILE] flow_cylinder_MkCells.vtk
+config_out/
+├── config_out/CfgInit_Normals.vtk
+├── config_out/CfgInOut_DomainBox.vtk
+├── config_out/config__Dp.vtk
+├── config_out/config.xml
+├── config_out/config_Bound.vtk
+├── config_out/CfgInit_NormalsGhost.vtk
+├── config_out/Run.out
+├── config_out/data/
+│   ├── config_out/data/Part_0004.bi4
+│   ├── config_out/data/Part_0000.bi4
+│   ├── config_out/data/Part_0002.bi4
+│   ├── config_out/data/Part_0003.bi4
+│   ├── config_out/data/Part_0005.bi4
+│   ├── config_out/data/Part_Head.ibi4
+│   ├── config_out/data/PartOut_000.obi4
+│   ├── config_out/data/PartInfo.ibi4
+│   └── config_out/data/Part_0001.bi4
+├── config_out/config_Fluid.vtk
+├── config_out/config_All.vtk
+├── config_out/CfgInit_MapCells.vtk
+├── config_out/config.bi4
+├── config_out/CfgInit_Domain.vtk
+├── config_out/config.out
+├── config_out/CfgInOut_DomainReal.vtk
+└── config_out/config_MkCells.vtk
+config.xml
+stderr.txt
+run.sh
+config_Def.xml
+stdout.txt
 ```
 
 ## Tail specific file
@@ -91,7 +92,6 @@ Prints out the last 10 lines of the `flow_cylinder/Run.outflow_cylinder/Run.out`
 
 ```bash
 ┌ (last 10 lines from flow_cylinder/Run.out)
-
 │Part_0024      0.600229          1535       63      87.02  16-12-2024 16:48:49
 │  Particles new: 99 (total new: 3762)  -  Current np: 13599
 │  Particles out: 9  (total out: 264)
