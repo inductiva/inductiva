@@ -4,7 +4,7 @@ import argparse
 import sys
 import asyncio
 
-from inductiva import _cli, tasks
+from inductiva import tasks
 
 
 def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
@@ -25,10 +25,8 @@ async def consume(task: tasks.Task, args: argparse.Namespace, fout: TextIO):
 
 def register(parser):
     """Register the info tasks command."""
-    subparser = parser.add_parser(
-        "tail",
-        help="Shows the last lines of a file in a task.",
-        formatter_class=argparse.RawTextHelpFormatter)
+    subparser = parser.add_parser("tail",
+                                  formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = (
         "The `inductiva tasks tail` shows the last lines "

@@ -22,7 +22,9 @@ MAX_CONFIRMATION_LINES = 5
 
 LOADER_COMMAND_PREFIX = "cmd_"
 
-LOADER_IGNORE_PREFIX = "_"
+LOADER_IGNORE_PREFIX = "__"
+
+LOADER_HIDE_PREFIX = "_"
 
 # when printing the stack trace, how many lines to show
 EXCEPTIONS_MAX_TRACEBACK_DEPTH = 2
