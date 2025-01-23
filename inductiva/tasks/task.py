@@ -567,8 +567,8 @@ class Task:
 
         def build_prefix(indent, is_last):
             """Creates the correct prefix for the current level."""
-            color_code = "\033[34m"
-            reset_color = "\033[0m"
+            color_code = "\033[34m" if inductiva.ansi_enabled else ""
+            reset_color = "\033[0m" if inductiva.ansi_enabled else ""
             if indent == 0:
                 return ""
             branch = "└── " if is_last else "├── "
