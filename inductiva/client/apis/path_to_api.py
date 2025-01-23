@@ -53,7 +53,6 @@ from inductiva.client.apis.paths.task_runner_machine_id_resize_disk import TaskR
 from inductiva.client.apis.paths.task_runner_machine_id_resize_disk_done import TaskRunnerMachineIdResizeDiskDone
 from inductiva.client.apis.paths.task_runner_machine_id_download_urls import TaskRunnerMachineIdDownloadUrls
 from inductiva.client.apis.paths.compute_group import ComputeGroup
-from inductiva.client.apis.paths.compute_type import ComputeType
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
 from inductiva.client.apis.paths.compute_price import ComputePrice
 from inductiva.client.apis.paths.compute_groups import ComputeGroups
@@ -196,8 +195,6 @@ PathToApi = typing_extensions.TypedDict(
             TaskRunnerMachineIdDownloadUrls,
         PathValues.COMPUTE_GROUP:
             ComputeGroup,
-        PathValues.COMPUTE_TYPE:
-            ComputeType,
         PathValues.COMPUTE_GROUP_START:
             ComputeGroupStart,
         PathValues.COMPUTE_PRICE:
@@ -375,8 +372,6 @@ path_to_api = PathToApi({
         TaskRunnerMachineIdDownloadUrls,
     PathValues.COMPUTE_GROUP:
         ComputeGroup,
-    PathValues.COMPUTE_TYPE:
-        ComputeType,
     PathValues.COMPUTE_GROUP_START:
         ComputeGroupStart,
     PathValues.COMPUTE_PRICE:
