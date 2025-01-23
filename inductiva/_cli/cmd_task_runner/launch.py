@@ -63,6 +63,7 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
             file=fout)
         return
 
+    client.images.pull(constants.FILE_TRACKER_IMAGE, platform="linux/amd64")
     file_tracker_container = client.containers.run(
         image=constants.FILE_TRACKER_IMAGE,
         name="file-tracker",
@@ -81,6 +82,14 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
         detach=True,
         auto_remove=True,
     )
+
+    client.images.pull(constants.TASK_RUNNER_IMAGE, platform="linux/amd64")
+
+    apptainer_path = "apptainer"
+    os.makedirs(apptainer_path, exist_ok=True)
+    os.chmod(apptainer_path, 0o777)
+    apptainer_full_path = os.path.abspath(apptainer_path)
+
     task_runner_container = client.containers.run(
         image=constants.TASK_RUNNER_IMAGE,
         name="task-runner",
@@ -90,13 +99,14 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
             "MACHINE_GROUP_NAME": args.machine_group_name,
             "HOST_NAME": args.hostname,
         },
+        mounts=[
+            docker.types.Mount(target="/executer-images",
+                               source=apptainer_full_path,
+                               type="bind")
+        ],
         volumes={
             "workdir": {
                 "bind": "/workdir",
-                "mode": "rw"
-            },
-            "apptainer": {
-                "bind": "/executer-images",
                 "mode": "rw"
             },
         },
@@ -116,12 +126,14 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
         f"with container ID: {task_runner_container.short_id}",
         file=fout)
 
-    try:
-        join_container_streams(task_runner_container, file_tracker_container)
-    except KeyboardInterrupt:
-        print("Interrupted. Stopping containers...", file=fout)
-        task_runner_container.stop()
-        file_tracker_container.stop()
+    if not args.detach:
+        try:
+            join_container_streams(task_runner_container,
+                                   file_tracker_container)
+        except KeyboardInterrupt:
+            print("Interrupted. Stopping containers...", file=fout)
+            file_tracker_container.stop()
+            task_runner_container.stop()
 
 
 def register(parser):
@@ -145,5 +157,10 @@ def register(parser):
                            type=str,
                            default=os.uname().nodename,
                            help="Hostname of the Task-Runner.")
+
+    subparser.add_argument("--detach",
+                           "-d",
+                           action="store_true",
+                           help="Run the task-runner in the background.")
 
     subparser.set_defaults(func=launch_task_runner)
