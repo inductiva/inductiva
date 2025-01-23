@@ -64,7 +64,7 @@ Adds a new run to the benchmark. This allows you to specify the simulation param
 ##### **`run`**
 
 ```py
-run(num_repeats: int = 2, wait_for_quotas: bool = False) -> Self
+run(num_repeats: int = 2, wait_for_quotas: bool = True) -> Self
 ```
 
 Runs all the added benchmarking simulations. Each simulation can be repeated multiple times.
