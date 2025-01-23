@@ -78,7 +78,7 @@ class MPICluster(machines_base.BaseMachineGroup):
     @property
     def available_vcpus(self):
         """Returns the number of vCPUs available to the resource.
-        
+
         For a mpi cluster with 2 machines, each with 4 vCPUs, this will
         return 8.
         """
@@ -128,19 +128,5 @@ class MPICluster(machines_base.BaseMachineGroup):
         logging.info("\t· Number of machines:       %s", self.num_machines)
         self.estimate_cloud_cost()
 
-    def estimate_cloud_cost(self, verbose: bool = True):
-        """Estimates a cost per hour of the MPI cluster in US dollars.
-
-        This is an estimate of the cost of MPI cluster with the
-        specified configurations up in the cloud. The actual cost may vary.
-
-        Returns:
-            The estimated cost per hour of the machine group, in US
-              dollars ($/h)."""
-        #TODO: Contemplate disk size in the price.
-        estimated_cost = super()._get_estimated_cost() * self.num_machines
-        if verbose:
-            logging.info(
-                "\t· Estimated cloud cost of the MPI cluster: %.3f $/h",
-                estimated_cost)
-        return estimated_cost
+    def _log_estimated_spot_vm_savings(self) -> None:
+        return

@@ -13,10 +13,6 @@
 
 from inductiva.client.model.autoscale_policy import AutoscalePolicy
 from inductiva.client.model.backend_version import BackendVersion
-from inductiva.client.model.base_vm_group import BaseVMGroup
-from inductiva.client.model.billing_report import BillingReport
-from inductiva.client.model.billing_report_entity import BillingReportEntity
-from inductiva.client.model.billing_report_row import BillingReportRow
 from inductiva.client.model.capability import Capability
 from inductiva.client.model.cost_components import CostComponents
 from inductiva.client.model.cost_detail import CostDetail
@@ -33,10 +29,17 @@ from inductiva.client.model.file_info import FileInfo
 from inductiva.client.model.file_upload_details import FileUploadDetails
 from inductiva.client.model.file_upload_url import FileUploadUrl
 from inductiva.client.model.http_validation_error import HTTPValidationError
+from inductiva.client.model.machine_group_cost_per_hour import MachineGroupCostPerHour
+from inductiva.client.model.machine_group_costs import MachineGroupCosts
+from inductiva.client.model.machine_group_costs_admin_view import MachineGroupCostsAdminView
 from inductiva.client.model.machine_group_status import MachineGroupStatus
 from inductiva.client.model.machine_group_terminate_reason import MachineGroupTerminateReason
 from inductiva.client.model.machine_group_terminate_request import MachineGroupTerminateRequest
+from inductiva.client.model.machine_group_time_stat import MachineGroupTimeStat
 from inductiva.client.model.machine_group_type import MachineGroupType
+from inductiva.client.model.machine_group_usage_statistics import MachineGroupUsageStatistics
+from inductiva.client.model.machine_group_with_costs import MachineGroupWithCosts
+from inductiva.client.model.machine_group_with_costs_admin_view import MachineGroupWithCostsAdminView
 from inductiva.client.model.machine_info import MachineInfo
 from inductiva.client.model.machine_operation import MachineOperation
 from inductiva.client.model.machine_operation_type import MachineOperationType
@@ -44,6 +47,7 @@ from inductiva.client.model.machine_type import MachineType
 from inductiva.client.model.operation_end import OperationEnd
 from inductiva.client.model.operation_start import OperationStart
 from inductiva.client.model.operation_status import OperationStatus
+from inductiva.client.model.operation_type import OperationType
 from inductiva.client.model.order import Order
 from inductiva.client.model.org_status import OrgStatus
 from inductiva.client.model.organization_cost_components import OrganizationCostComponents
@@ -94,6 +98,7 @@ from inductiva.client.model.user_costs_details import UserCostsDetails
 from inductiva.client.model.user_costs_over_time import UserCostsOverTime
 from inductiva.client.model.user_create import UserCreate
 from inductiva.client.model.user_credits import UserCredits
+from inductiva.client.model.user_email_organization import UserEmailOrganization
 from inductiva.client.model.user_most_used_machine_types_overview import UserMostUsedMachineTypesOverview
 from inductiva.client.model.user_most_used_simulators_overview import UserMostUsedSimulatorsOverview
 from inductiva.client.model.user_organization_update import UserOrganizationUpdate
