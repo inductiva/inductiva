@@ -17,6 +17,12 @@ configuration, offering a straightforward Python interface for running simulatio
 on state-of-the-art hardware. This allows scientists and engineers to focus their
 time and energy on what matters: running simulations that solve real problems.
 
+
+# System Requirements
+
+- Python 3.x interpreter
+- pip (or pip3) to install the inductiva package
+  
 # Getting started
 
 1. Register at:
