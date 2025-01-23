@@ -10,6 +10,7 @@ To show the , we will run the example [DualSPhysics](https://tutorials.inductiva
 ```python
 import inductiva
 
+# Instantiate machine group
 machine_group = inductiva.resources.MachineGroup("c2-standard-4")
 machine_group.start()
 
@@ -19,26 +20,20 @@ input_dir = inductiva.utils.download_from_url(
     "dualsphysics-input-example.zip",
     unzip=True)
 
-commands = [
-    "gencase config flow_cylinder -save:all",
-    "dualsphysics flow_cylinder flow_cylinder -dirdataout data -svres",
-    ("partvtk -dirin flow_cylinder/data -savevtk flow_cylinder/PartFluid "
-    "-onlytype:-all,+fluid")
-]
-
 # Initialize the Simulator
 dualsphysics = inductiva.simulators.DualSPHysics()
 
 # Run simulation with config files in the input directory
 task = dualsphysics.run(input_dir=input_dir,
-                        commands=commands,
+                        shell_script="run.sh",
                         on=machine_group)
 
 task.wait()
-task.download_outputs()
-
 machine_group.terminate()
 
+task.download_outputs()
+
+task.print_summary()
 ```
 
 ## List Files
