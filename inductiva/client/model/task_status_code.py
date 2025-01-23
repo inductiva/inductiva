@@ -33,22 +33,40 @@ class TaskStatusCode(schemas.EnumBase, schemas.StrSchema):
 
     class MetaOapg:
         enum_value_to_name = {
-            "pending-input": "PENDINGINPUT",
-            "submitted": "SUBMITTED",
-            "started": "STARTED",
-            "success": "SUCCESS",
-            "failed": "FAILED",
-            "pending-kill": "PENDINGKILL",
-            "killed": "KILLED",
-            "spot-instance-preempted": "SPOTINSTANCEPREEMPTED",
-            "executer-terminated": "EXECUTERTERMINATED",
-            "executer-terminated-by-user": "EXECUTERTERMINATEDBYUSER",
-            "executer-terminated-ttl-exceeded": "EXECUTERTERMINATEDTTLEXCEEDED",
-            "executer-failed": "EXECUTERFAILED",
-            "zombie": "ZOMBIE",
-            "computation-started": "COMPUTATIONSTARTED",
-            "computation-ended": "COMPUTATIONENDED",
-            "ttl-exceeded": "TTLEXCEEDED",
+            "pending-input":
+                "PENDINGINPUT",
+            "submitted":
+                "SUBMITTED",
+            "started":
+                "STARTED",
+            "success":
+                "SUCCESS",
+            "failed":
+                "FAILED",
+            "pending-kill":
+                "PENDINGKILL",
+            "killed":
+                "KILLED",
+            "spot-instance-preempted":
+                "SPOTINSTANCEPREEMPTED",
+            "executer-terminated":
+                "EXECUTERTERMINATED",
+            "executer-terminated-by-user":
+                "EXECUTERTERMINATEDBYUSER",
+            "executer-terminated-ttl-exceeded":
+                "EXECUTERTERMINATEDTTLEXCEEDED",
+            "executer-terminated-credits-exhausted":
+                "EXECUTERTERMINATEDCREDITSEXHAUSTED",
+            "executer-failed":
+                "EXECUTERFAILED",
+            "zombie":
+                "ZOMBIE",
+            "computation-started":
+                "COMPUTATIONSTARTED",
+            "computation-ended":
+                "COMPUTATIONENDED",
+            "ttl-exceeded":
+                "TTLEXCEEDED",
         }
 
     @schemas.classproperty
@@ -94,6 +112,10 @@ class TaskStatusCode(schemas.EnumBase, schemas.StrSchema):
     @schemas.classproperty
     def EXECUTERTERMINATEDTTLEXCEEDED(cls):
         return cls("executer-terminated-ttl-exceeded")
+
+    @schemas.classproperty
+    def EXECUTERTERMINATEDCREDITSEXHAUSTED(cls):
+        return cls("executer-terminated-credits-exhausted")
 
     @schemas.classproperty
     def EXECUTERFAILED(cls):
