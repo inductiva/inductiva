@@ -35,6 +35,6 @@ def load_commands(parser,
 
     if hasattr(parser, "choices") and hides_prefix:
         parser.metavar = (
-            '{' +
-            ','.join(cmd for cmd, name in zip(parser._name_parser_map, metavar)
-                     if not name.startswith(hides_prefix)) + '}')
+            "{" +
+            ",".join(cmd for cmd, name in zip(parser._name_parser_map, metavar)  # pylint: disable=protected-access
+                     if not name.startswith(hides_prefix)) + "}")
