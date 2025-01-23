@@ -50,6 +50,10 @@ We currently support the following versions of OpenFOAM:
 To list all available versions of OpenFOAM ESI and OpenFOAM Foundation 
 (or other simulators), you can use the `inductiva simulators list` CLI command.
 
+If you need to use a version that is not listed, please open an 
+issue on our [GitHub repository](https://github.com/inductiva/inductiva/issues),
+or contact us via [support@inductiva.ai](mailto:support@inductiva.ai).
+
 ## First Example: Motorbike Tutorial
 
 In this example, we demonstrate how to run the [motorbike tutorial](https://github.com/OpenFOAM/OpenFOAM-8/tree/master/tutorials/incompressible/simpleFoam/motorBike) 
@@ -218,8 +222,9 @@ simulation to be over, or we can turn our computer off go for a coffee (☕️).
 
 3. **Terminate Machine and download outputs**:
 Once our simulation is over we can/should terminate our machine to save on costs.
-If you forget, don't worry we got your back. By default, a machine will be
-automatically terminated if no simulation runs on it for 30 minutes.
+If you forget, don't worry we got your back. By default, a machine is
+is automatically terminated if no simulation runs on it for 30 minutes, 
+but you can set a different time interval if you wish.  
 
    ```python
    machine_group.terminate()
