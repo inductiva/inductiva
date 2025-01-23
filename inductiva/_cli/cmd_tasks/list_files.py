@@ -24,7 +24,7 @@ def register(parser):
 
     subparser.description = ("The `inductiva tasks list-files` command lists "
                              "the contents of a task's working directory while "
-                             "the task in progress.")
+                             "the task in progress. (Experimental)")
 
     _cli.utils.add_watch_argument(subparser)
     subparser.add_argument("id", type=str, help="ID of the task to list files.")

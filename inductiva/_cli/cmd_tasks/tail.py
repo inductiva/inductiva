@@ -30,8 +30,9 @@ def register(parser):
         help="Shows the last lines of a file in a task.",
         formatter_class=argparse.RawTextHelpFormatter)
 
-    subparser.description = ("The `inductiva tasks tail` command allows"
-                             "to tail a file in a task that is running.")
+    subparser.description = ("The `inductiva tasks tail` shows the last lines "
+                             "of a file in the directory of a task that is running. "
+                             "(Experimental)")
 
     _cli.utils.add_watch_argument(subparser)
     subparser.add_argument("id",
