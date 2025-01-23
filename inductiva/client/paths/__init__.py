@@ -58,7 +58,6 @@ class PathValues(str, enum.Enum):
     TASKRUNNER_MACHINE_ID_RESIZE_DISK_DONE = "/task-runner/{machine_id}/resize_disk_done"
     TASKRUNNER_MACHINE_ID_DOWNLOAD_URLS = "/task-runner/{machine_id}/download_urls"
     COMPUTE_GROUP = "/compute/group"
-    COMPUTE_TYPE = "/compute/type"
     COMPUTE_GROUP_START = "/compute/group/start"
     COMPUTE_PRICE = "/compute/price"
     COMPUTE_GROUPS = "/compute/groups"
