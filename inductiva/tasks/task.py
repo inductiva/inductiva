@@ -1166,7 +1166,7 @@ class Task:
             return self._format_list_of_lines(message,
                                               filename,
                                               endl="\n",
-                                              header=(not follow))
+                                              header=not follow)
 
         async for lines in self._file_operation(Operations.TAIL,
                                                 formatter=formatter,
