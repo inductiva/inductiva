@@ -92,10 +92,9 @@ def list_machine_types_available(args):
             machines_dict[family][memory][config] = {"vcpus": []}
 
         if vcpus is not None:
-            if int(vcpus) not in machines_dict[family][memory][config][
-                    "vcpus"]:
+            if int(vcpus) not in machines_dict[family][memory][config]["vcpus"]:
                 bisect.insort(machines_dict[family][memory][config]["vcpus"],
-                            int(vcpus))
+                              int(vcpus))
     pretty_print_machines_info(machines_dict)
 
 
