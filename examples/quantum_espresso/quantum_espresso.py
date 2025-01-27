@@ -4,7 +4,6 @@ from inductiva.commands import MPIConfig, Command
 
 # Instantiate machine group
 machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
 
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
