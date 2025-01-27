@@ -10,7 +10,9 @@ from inductiva.client.configuration import Configuration
 from inductiva.client.exceptions import ApiException
 from inductiva._cli.cmd_user.info import get_info
 from inductiva.client.api_client import ApiClient
+from inductiva.api.methods import get_client
 
+from . import constants
 from . import simulators
 from . import resources
 from . import projects
@@ -39,7 +41,7 @@ _api_key = contextvars.ContextVar("INDUCTIVA_API_KEY",
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.11.2"
+__version__ = "0.13.0"
 
 
 def set_output_dir(new_output_dir):
@@ -92,6 +94,12 @@ def _set_key_and_check_version():
 _check_for_available_package_update()
 
 
+def get_api_agent():
+    if logs.is_cli():
+        return f"CLI/{__version__}/python"
+    return f"Client/{__version__}/python"
+
+
 def compare_client_and_backend_versions(client_version: str):
     """ Compares the provided client version 7with the backend API version.
 
@@ -108,9 +116,10 @@ def compare_client_and_backend_versions(client_version: str):
     - RuntimeError: If the API cannot be reached, or if the client version is
       incompatible with the backend version, or for other general failures.
     """
+
     api_config = Configuration(host=api_url)
 
-    with ApiClient(api_config) as client:
+    with get_client(api_config) as client:
         api_instance = VersionApi(client)
         query_params = {"client_version": client_version}
 
@@ -136,22 +145,36 @@ def compare_client_and_backend_versions(client_version: str):
                 f"Failed to compare client and API versions. {e}") from e
 
 
-def set_api_key(api_key):
-    """Sets the value of `inductiva._api_key` to `api_key"""
-    if not api_key:
-        if logs.is_cli():
-            print("Error: No API Key specified. "
-                  "Please login with `inductiva auth login`")
-            sys.exit(1)
-        raise ValueError("No API Key specified. "
-                         "Please login with `inductiva auth login`")
+def _raise_api_key_error(message):
+    if logs.is_cli():
+        print(f"Error: {message}")
+        sys.exit(1)
+    raise ValueError(message)
 
+
+def _validate_api_key(api_key, login_message=True):
+    message = f" {constants.LOGIN_MESSAGE}" if login_message else ""
+
+    if not api_key:
+        error = f"No API Key specified.{message}"
+        _raise_api_key_error(error)
+
+    if not utils.authentication.is_valid_token(api_key):
+        error = f"Invalid API Key format.{message}"
+        _raise_api_key_error(error)
+
+
+def set_api_key(api_key, login_message=True):
+    """Sets the value of `inductiva._api_key` to `api_key"""
+    _validate_api_key(api_key, login_message)
     _api_key.set(api_key)
 
 
 def get_api_key():
     """Returns the value of inductiva._api_key or the stored API key."""
-    return _api_key.get() or utils.authentication.get_stored_api_key()
+    api_key = _api_key.get() or utils.authentication.get_stored_api_key()
+    _validate_api_key(api_key)
+    return api_key
 
 
 def _supports_ansi():

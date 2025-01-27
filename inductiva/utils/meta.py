@@ -73,8 +73,6 @@ def deprecated_arg(**deprecated):
 
             for key in set(deprecated) & set(kwargs):
                 new_key = deprecated[key]
-                value = kwargs.pop(key)
-                kwargs[new_key] = value
 
                 warnings.warn(
                     f"The {key} argument was deprecated, "

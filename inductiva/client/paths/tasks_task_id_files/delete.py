@@ -54,7 +54,7 @@ request_path_task_id = api_client.PathParameter(
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+SchemaFor200ResponseBodyApplicationJson = schemas.IntSchema
 
 
 @dataclass

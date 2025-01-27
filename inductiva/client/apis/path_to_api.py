@@ -35,9 +35,9 @@ from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
 from inductiva.client.apis.paths.admin_groups_machine_group_id_terminate import AdminGroupsMachineGroupIdTerminate
 from inductiva.client.apis.paths.admin_organizations import AdminOrganizations
 from inductiva.client.apis.paths.admin_organizations_organization_id import AdminOrganizationsOrganizationId
-from inductiva.client.apis.paths.admin_organizations_billing_report import AdminOrganizationsBillingReport
 from inductiva.client.apis.paths.admin_organizations_costs import AdminOrganizationsCosts
 from inductiva.client.apis.paths.admin_tiers import AdminTiers
+from inductiva.client.apis.paths.admin_terminate_machine_groups_credits_exhausted import AdminTerminateMachineGroupsCreditsExhausted
 from inductiva.client.apis.paths.task_runner_register import TaskRunnerRegister
 from inductiva.client.apis.paths.task_runner_machine_id import TaskRunnerMachineId
 from inductiva.client.apis.paths.task_runner_machine_id_task import TaskRunnerMachineIdTask
@@ -52,25 +52,11 @@ from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_metric impo
 from inductiva.client.apis.paths.task_runner_machine_id_resize_disk import TaskRunnerMachineIdResizeDisk
 from inductiva.client.apis.paths.task_runner_machine_id_resize_disk_done import TaskRunnerMachineIdResizeDiskDone
 from inductiva.client.apis.paths.task_runner_machine_id_download_urls import TaskRunnerMachineIdDownloadUrls
-from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
-from inductiva.client.apis.paths.executer_tracker_machine_id import ExecuterTrackerMachineId
-from inductiva.client.apis.paths.executer_tracker_machine_id_task import ExecuterTrackerMachineIdTask
-from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_message import ExecuterTrackerMachineIdTaskTaskIdMessage
-from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_message_unblock import ExecuterTrackerMachineIdTaskTaskIdMessageUnblock
-from inductiva.client.apis.paths.executer_tracker_machine_id_event import ExecuterTrackerMachineIdEvent
-from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_operation import ExecuterTrackerMachineIdTaskTaskIdOperation
-from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_operation_operation_id_done import ExecuterTrackerMachineIdTaskTaskIdOperationOperationIdDone
-from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_download_input_url import ExecuterTrackerMachineIdTaskTaskIdDownloadInputUrl
-from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_upload_output_url import ExecuterTrackerMachineIdTaskTaskIdUploadOutputUrl
-from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_metric import ExecuterTrackerMachineIdTaskTaskIdMetric
-from inductiva.client.apis.paths.executer_tracker_machine_id_resize_disk import ExecuterTrackerMachineIdResizeDisk
-from inductiva.client.apis.paths.executer_tracker_machine_id_resize_disk_done import ExecuterTrackerMachineIdResizeDiskDone
-from inductiva.client.apis.paths.executer_tracker_machine_id_download_urls import ExecuterTrackerMachineIdDownloadUrls
 from inductiva.client.apis.paths.compute_group import ComputeGroup
-from inductiva.client.apis.paths.compute_type import ComputeType
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
 from inductiva.client.apis.paths.compute_price import ComputePrice
 from inductiva.client.apis.paths.compute_groups import ComputeGroups
+from inductiva.client.apis.paths.compute_groups_history import ComputeGroupsHistory
 from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
 from inductiva.client.apis.paths.compute_machine_types import ComputeMachineTypes
 from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
@@ -78,6 +64,7 @@ from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_cost import StorageCost
 from inductiva.client.apis.paths.storage_contents import StorageContents
 from inductiva.client.apis.paths.storage_input_url import StorageInputUrl
+from inductiva.client.apis.paths.storage_signed_urls import StorageSignedUrls
 from inductiva.client.apis.paths.storage_input_notify import StorageInputNotify
 from inductiva.client.apis.paths.storage_input_remote import StorageInputRemote
 from inductiva.client.apis.paths.storage_ import Storage
@@ -172,12 +159,12 @@ PathToApi = typing_extensions.TypedDict(
             AdminOrganizations,
         PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID:
             AdminOrganizationsOrganizationId,
-        PathValues.ADMIN_ORGANIZATIONS_BILLING_REPORT:
-            AdminOrganizationsBillingReport,
         PathValues.ADMIN_ORGANIZATIONS_COSTS:
             AdminOrganizationsCosts,
         PathValues.ADMIN_TIERS:
             AdminTiers,
+        PathValues.ADMIN_TERMINATE_MACHINE_GROUPS_CREDITS_EXHAUSTED:
+            AdminTerminateMachineGroupsCreditsExhausted,
         PathValues.TASKRUNNER_REGISTER:
             TaskRunnerRegister,
         PathValues.TASKRUNNER_MACHINE_ID:
@@ -206,44 +193,16 @@ PathToApi = typing_extensions.TypedDict(
             TaskRunnerMachineIdResizeDiskDone,
         PathValues.TASKRUNNER_MACHINE_ID_DOWNLOAD_URLS:
             TaskRunnerMachineIdDownloadUrls,
-        PathValues.EXECUTERTRACKER_REGISTER:
-            ExecuterTrackerRegister,
-        PathValues.EXECUTERTRACKER_MACHINE_ID:
-            ExecuterTrackerMachineId,
-        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK:
-            ExecuterTrackerMachineIdTask,
-        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_MESSAGE:
-            ExecuterTrackerMachineIdTaskTaskIdMessage,
-        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_MESSAGE_UNBLOCK:
-            ExecuterTrackerMachineIdTaskTaskIdMessageUnblock,
-        PathValues.EXECUTERTRACKER_MACHINE_ID_EVENT:
-            ExecuterTrackerMachineIdEvent,
-        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_OPERATION:
-            ExecuterTrackerMachineIdTaskTaskIdOperation,
-        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_OPERATION_OPERATION_ID_DONE:
-            ExecuterTrackerMachineIdTaskTaskIdOperationOperationIdDone,
-        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_DOWNLOAD_INPUT_URL:
-            ExecuterTrackerMachineIdTaskTaskIdDownloadInputUrl,
-        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_UPLOAD_OUTPUT_URL:
-            ExecuterTrackerMachineIdTaskTaskIdUploadOutputUrl,
-        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_METRIC:
-            ExecuterTrackerMachineIdTaskTaskIdMetric,
-        PathValues.EXECUTERTRACKER_MACHINE_ID_RESIZE_DISK:
-            ExecuterTrackerMachineIdResizeDisk,
-        PathValues.EXECUTERTRACKER_MACHINE_ID_RESIZE_DISK_DONE:
-            ExecuterTrackerMachineIdResizeDiskDone,
-        PathValues.EXECUTERTRACKER_MACHINE_ID_DOWNLOAD_URLS:
-            ExecuterTrackerMachineIdDownloadUrls,
         PathValues.COMPUTE_GROUP:
             ComputeGroup,
-        PathValues.COMPUTE_TYPE:
-            ComputeType,
         PathValues.COMPUTE_GROUP_START:
             ComputeGroupStart,
         PathValues.COMPUTE_PRICE:
             ComputePrice,
         PathValues.COMPUTE_GROUPS:
             ComputeGroups,
+        PathValues.COMPUTE_GROUPS_HISTORY:
+            ComputeGroupsHistory,
         PathValues.COMPUTE_GROUP_STATUS:
             ComputeGroupStatus,
         PathValues.COMPUTE_MACHINE_TYPES:
@@ -258,6 +217,8 @@ PathToApi = typing_extensions.TypedDict(
             StorageContents,
         PathValues.STORAGE_INPUT_URL:
             StorageInputUrl,
+        PathValues.STORAGE_SIGNEDURLS:
+            StorageSignedUrls,
         PathValues.STORAGE_INPUT_NOTIFY:
             StorageInputNotify,
         PathValues.STORAGE_INPUT_REMOTE:
@@ -375,12 +336,12 @@ path_to_api = PathToApi({
         AdminOrganizations,
     PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID:
         AdminOrganizationsOrganizationId,
-    PathValues.ADMIN_ORGANIZATIONS_BILLING_REPORT:
-        AdminOrganizationsBillingReport,
     PathValues.ADMIN_ORGANIZATIONS_COSTS:
         AdminOrganizationsCosts,
     PathValues.ADMIN_TIERS:
         AdminTiers,
+    PathValues.ADMIN_TERMINATE_MACHINE_GROUPS_CREDITS_EXHAUSTED:
+        AdminTerminateMachineGroupsCreditsExhausted,
     PathValues.TASKRUNNER_REGISTER:
         TaskRunnerRegister,
     PathValues.TASKRUNNER_MACHINE_ID:
@@ -409,44 +370,16 @@ path_to_api = PathToApi({
         TaskRunnerMachineIdResizeDiskDone,
     PathValues.TASKRUNNER_MACHINE_ID_DOWNLOAD_URLS:
         TaskRunnerMachineIdDownloadUrls,
-    PathValues.EXECUTERTRACKER_REGISTER:
-        ExecuterTrackerRegister,
-    PathValues.EXECUTERTRACKER_MACHINE_ID:
-        ExecuterTrackerMachineId,
-    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK:
-        ExecuterTrackerMachineIdTask,
-    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_MESSAGE:
-        ExecuterTrackerMachineIdTaskTaskIdMessage,
-    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_MESSAGE_UNBLOCK:
-        ExecuterTrackerMachineIdTaskTaskIdMessageUnblock,
-    PathValues.EXECUTERTRACKER_MACHINE_ID_EVENT:
-        ExecuterTrackerMachineIdEvent,
-    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_OPERATION:
-        ExecuterTrackerMachineIdTaskTaskIdOperation,
-    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_OPERATION_OPERATION_ID_DONE:
-        ExecuterTrackerMachineIdTaskTaskIdOperationOperationIdDone,
-    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_DOWNLOAD_INPUT_URL:
-        ExecuterTrackerMachineIdTaskTaskIdDownloadInputUrl,
-    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_UPLOAD_OUTPUT_URL:
-        ExecuterTrackerMachineIdTaskTaskIdUploadOutputUrl,
-    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_METRIC:
-        ExecuterTrackerMachineIdTaskTaskIdMetric,
-    PathValues.EXECUTERTRACKER_MACHINE_ID_RESIZE_DISK:
-        ExecuterTrackerMachineIdResizeDisk,
-    PathValues.EXECUTERTRACKER_MACHINE_ID_RESIZE_DISK_DONE:
-        ExecuterTrackerMachineIdResizeDiskDone,
-    PathValues.EXECUTERTRACKER_MACHINE_ID_DOWNLOAD_URLS:
-        ExecuterTrackerMachineIdDownloadUrls,
     PathValues.COMPUTE_GROUP:
         ComputeGroup,
-    PathValues.COMPUTE_TYPE:
-        ComputeType,
     PathValues.COMPUTE_GROUP_START:
         ComputeGroupStart,
     PathValues.COMPUTE_PRICE:
         ComputePrice,
     PathValues.COMPUTE_GROUPS:
         ComputeGroups,
+    PathValues.COMPUTE_GROUPS_HISTORY:
+        ComputeGroupsHistory,
     PathValues.COMPUTE_GROUP_STATUS:
         ComputeGroupStatus,
     PathValues.COMPUTE_MACHINE_TYPES:
@@ -461,6 +394,8 @@ path_to_api = PathToApi({
         StorageContents,
     PathValues.STORAGE_INPUT_URL:
         StorageInputUrl,
+    PathValues.STORAGE_SIGNEDURLS:
+        StorageSignedUrls,
     PathValues.STORAGE_INPUT_NOTIFY:
         StorageInputNotify,
     PathValues.STORAGE_INPUT_REMOTE:

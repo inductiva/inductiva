@@ -7,13 +7,8 @@ import inductiva
 from inductiva import constants, users, utils
 
 
-def login(_):
-    """
-    Prompts the user to enter their API key and stores it securely.
-
-    The function will prompt the user to enter their API key, which can be
-    obtained from their account at https://console.inductiva.ai/account.
-    """
+def login(args):
+    """Prompts the user to enter their API Key and stores it securely."""
 
     # pylint: disable=trailing-whitespace,line-too-long
     inductiva_art = r"""     ___  _   _  ____   _   _   ____  _____  ___ __     __ _    
@@ -25,25 +20,24 @@ def login(_):
     print(inductiva_art)
     if os.path.exists(constants.API_KEY_FILE_PATH):
         print(
-            "    You are already logged in. Run `inductiva logout` if you want "
-            "to log out. \n"
-            "    Setting a new API key will erase the existing one.")
+            "    You are already logged in. Run `inductiva auth logout` if you "
+            "want to log out. \n"
+            "    Setting a new API Key will erase the existing one.")
 
-    prompt = getpass.getpass(
-        "    To log in, you need an API key. You can obtain it "
+    prompt_func = getpass.getpass if args.private else input
+    warning = " (input will not be visible)" if args.private else ""
+
+    prompt = prompt_func(
+        "    To log in, you need an API Key. You can obtain it "
         "from your account at https://console.inductiva.ai/account.\n"
-        "Please paste your API key here (input will not be visible): ")
+        f"Please paste your API Key here{warning}: ")
 
     api_key = prompt.strip()
 
-    if not api_key:
-        print("Error: API key cannot be empty.")
-        return
+    # Set the API Key
+    inductiva.set_api_key(api_key, login_message=False)
 
-    # Set the API key to check if it is valid
-    inductiva.set_api_key(api_key)
-
-    # If the API key is invalid, this will raise an exception
+    # If the API Key is invalid, this will raise an exception
     user_info = users.get_info()
 
     utils.set_stored_api_key(api_key)
@@ -55,11 +49,16 @@ def login(_):
 def register(parser):
     """Register the login command."""
     subparser = parser.add_parser("login",
-                                  help="Login using Inductiva API key.",
+                                  help="Login using Inductiva API Key.",
                                   formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = (
         "The `inductiva login` command allows you to log in using your key.\n"
-        "You can obtain your API key from your account at "
+        "You can obtain your API Key from your account at "
         "https://console.inductiva.ai/account.\n")
+
+    subparser.add_argument("--private",
+                           action="store_true",
+                           help="Hide API Key.")
+
     subparser.set_defaults(func=login)

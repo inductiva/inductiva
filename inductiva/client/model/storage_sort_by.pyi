@@ -38,3 +38,7 @@ class StorageSortBy(schemas.EnumBase, schemas.StrSchema):
     @schemas.classproperty
     def SIZE(cls):
         return cls("size")
+
+    @schemas.classproperty
+    def NAME(cls):
+        return cls("name")

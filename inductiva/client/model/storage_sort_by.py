@@ -35,6 +35,7 @@ class StorageSortBy(schemas.EnumBase, schemas.StrSchema):
         enum_value_to_name = {
             "creation_time": "CREATION_TIME",
             "size": "SIZE",
+            "name": "NAME",
         }
 
     @schemas.classproperty
@@ -44,3 +45,7 @@ class StorageSortBy(schemas.EnumBase, schemas.StrSchema):
     @schemas.classproperty
     def SIZE(cls):
         return cls("size")
+
+    @schemas.classproperty
+    def NAME(cls):
+        return cls("name")

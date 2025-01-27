@@ -11,12 +11,7 @@ on state-of-the-art hardware. This allows scientists and engineers to focus thei
 time and energy on what matters: running simulations that solve real problems.
 
 This documentation includes:
-- A [Quick Recipes](./how_to/index.md) where we will guide you through
-several common tasks and provides practical examples for you to try;
-- A [list of the various open-source simulation packages](https://tutorials.inductiva.ai/simulators/overview.html)
-that you can invoke via the API (if you have suggestions for adding more
-simulation packages, please let us know by
-[opening a GitHub issue](https://github.com/inductiva/inductiva/issues));
+- An [introduction to our API](./intro_to_api/how_it_works.md), highlighting its functionalities and key features.
 - A guide on [Inductiva’s Command Line Interface (CLI)](./cli/cli-overview.md), which
 allows you to perform many tasks from your terminal, including listing available
 computational resources and checking the status of tasks;

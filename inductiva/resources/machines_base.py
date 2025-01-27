@@ -7,6 +7,7 @@ import datetime
 import time
 import enum
 import json
+import math
 
 import logging
 
@@ -40,7 +41,7 @@ class BaseMachineGroup(ABC):
         threads_per_core: int = 2,
         data_disk_gb: int = 10,
         auto_resize_disk_max_gb: int = 500,
-        max_idle_time: Optional[datetime.timedelta] = None,
+        max_idle_time: Optional[Union[datetime.timedelta, int]] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
         register: bool = True,
     ) -> None:
@@ -66,7 +67,8 @@ class BaseMachineGroup(ABC):
                 is no longer automatically resized, and if the task continues to
                 output files, it will fail.
             max_idle_time: Time without executing any task, after which the
-              resource will be terminated.
+              resource will be terminated. Can be an exact timedelta or an int
+                representing the number of minutes.
             auto_terminate_ts: Moment in which the resource will be
               automatically terminated.
             register: Bool that indicates if a machine group should be register
@@ -114,7 +116,6 @@ class BaseMachineGroup(ABC):
         #the request machine_groups.get()
         self._active_machines = 0
         self.num_machines = 0
-        self._max_idle_time = max_idle_time
         self._auto_terminate_ts = auto_terminate_ts
         self._custom_vm_image = None
 
@@ -122,6 +123,12 @@ class BaseMachineGroup(ABC):
         # to the backend.
         self._api = compute_api.ComputeApi(api.get_client())
         self._estimated_cost = None
+        self._max_idle_time = max_idle_time
+
+        if isinstance(max_idle_time, int):
+            if max_idle_time <= 0:
+                raise ValueError("`max_idle_time` must be positive.")
+            self._max_idle_time = datetime.timedelta(minutes=max_idle_time)
 
     @property
     def id(self):
@@ -151,7 +158,7 @@ class BaseMachineGroup(ABC):
     @property
     def available_vcpus(self):
         """Returns the maximum number of vCPUs that can be used on a task.
-        
+
         On a machine group with 2 machines, each with 4 vCPUs, this will return
         4.
         On an elastic machine group, this will also return 4.
@@ -193,8 +200,7 @@ class BaseMachineGroup(ABC):
     def _seconds_to_timedelta(
             value: Optional[float] = None) -> Optional[datetime.timedelta]:
         """Converts seconds to a timedelta object."""
-        return datetime.timedelta(
-            seconds=float(value)) if value is not None else None
+        return datetime.timedelta(seconds=float(value)) if value else None
 
     @staticmethod
     def _convert_auto_terminate_ts(
@@ -228,8 +234,11 @@ class BaseMachineGroup(ABC):
             timestamp: Optional[str]) -> Optional[datetime.datetime]:
         """Converts an ISO format string back to a datetime object. It ensures
         the datetime is timezone aware."""
-        if timestamp is not None:
+        if timestamp:
             dt = datetime.datetime.fromisoformat(str(timestamp))
+            if dt.year == 9999:
+                return None
+
             if dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None:
                 raise ValueError("The datetime string must be timezone aware.")
             return dt
@@ -273,6 +282,12 @@ class BaseMachineGroup(ABC):
         self._auto_terminate_ts = self._iso_to_datetime(
             body.get("auto_terminate_ts"))
         self.total_ram_gb = body.get("total_ram_gb")
+        self._cost_per_hour = body.get("cost_per_hour")
+
+        dynamic_disk_resize_config = body.get(
+            "dynamic_disk_resize_config") or {}
+        self.auto_resize_disk_max_gb = dynamic_disk_resize_config.get(
+            "max_disk_size_gb")
         self._log_machine_group_info()
 
     @abstractmethod
@@ -320,18 +335,22 @@ class BaseMachineGroup(ABC):
         quotas = users.get_quotas()
 
         cost_in_use = quotas["max_price_hour"]["in_use"]
-        cost_max = quotas["max_price_hour"]["max_allowed"]
+        cost_max = math.inf if quotas["max_price_hour"][
+            "max_allowed"] is None else quotas["max_price_hour"]["max_allowed"]
         estimated_cost = cost_in_use + self.estimate_cloud_cost(verbose=False)
         is_cost_ok = estimated_cost <= cost_max
 
         vcpu_in_use = quotas["max_vcpus"]["in_use"]
-        vcpu_max = quotas["max_vcpus"]["max_allowed"]
+        vcpu_max = math.inf if quotas["max_vcpus"][
+            "max_allowed"] is None else quotas["max_vcpus"]["max_allowed"]
         current_vcpu = self.n_vcpus.total
         estimated_vcpu_usage = vcpu_in_use + current_vcpu
         is_vcpu_ok = estimated_vcpu_usage <= vcpu_max
 
         machines_in_use = quotas["max_instances"]["in_use"]
-        machines_max = quotas["max_instances"]["max_allowed"]
+        machines_max = math.inf if quotas["max_instances"][
+            "max_allowed"] is None else quotas["max_instances"]["max_allowed"]
+
         estimated_machine_usage = machines_in_use + self.num_machines
         is_instance_ok = estimated_machine_usage <= machines_max
 
@@ -447,6 +466,14 @@ class BaseMachineGroup(ABC):
             lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
         ]
 
+        def _format_float(x):
+            return f"{x:.3f}" if isinstance(x, float) else str(x)
+
+        formatters = {
+            column: [_format_float] for column in
+            [resource_usage_header, "current usage", "max allowed"]
+        }
+
         for name, value in self.quota_usage.items():
             max_allowed = quotas.get(name, {}).get("max_allowed", "n/a")
             full_name = quotas.get(name, {}).get("label", "n/a")
@@ -459,6 +486,7 @@ class BaseMachineGroup(ABC):
 
         table_str = format_utils.get_tabular_str(
             table,
+            formatters=formatters,
             header_formatters=header_formatters,
         )
 
@@ -510,6 +538,11 @@ class BaseMachineGroup(ABC):
         logging.info("\t· Name:                       %s", self.name)
         logging.info("\t· Machine Type:               %s", self.machine_type)
         logging.info("\t· Data disk size:             %s GB", self.data_disk_gb)
+
+        if self.auto_resize_disk_max_gb:
+            logging.info("\t· Auto resize disk max size:  %s GB",
+                         self.auto_resize_disk_max_gb)
+
         logging.info("\t· Total memory (RAM):         %s GB", self.total_ram_gb)
 
         # Log max idle time
@@ -522,3 +555,35 @@ class BaseMachineGroup(ABC):
             "%Y/%m/%d %H:%M:%S"
         ) if self.auto_terminate_ts is not None else "N/A"
         logging.info("\t· Auto terminate timestamp:   %s", value_str)
+
+    def estimate_cloud_cost(self, verbose: bool = True):
+        """Estimates a cost per hour of min and max machines in US dollars.
+
+        these are the estimted costs of having minimum and the
+        maximum number of machines up in the cloud. The final cost will vary
+        depending on the total usage of the machines."""
+
+        min_cost_per_hour = self._cost_per_hour.get("min")
+        max_cost_per_hour = self._cost_per_hour.get("max")
+
+        if not verbose:
+            return max_cost_per_hour
+
+        if min_cost_per_hour == max_cost_per_hour:
+            logging.info(
+                "\t· Estimated cloud cost of machine group: %.3f $/h",
+                max_cost_per_hour,
+            )
+        else:
+            min_reason = self._cost_per_hour.get("min_reason").rstrip(".")
+            max_reason = self._cost_per_hour.get("max_reason").rstrip(".")
+
+            logging.info("\t· Estimated cloud cost of machine group:")
+            logging.info("\t\t· Minimum: %.3f $/h (%s)", min_cost_per_hour,
+                         min_reason)
+            logging.info("\t\t· Maximum: %.3f $/h (%s)", max_cost_per_hour,
+                         max_reason)
+
+        self._log_estimated_spot_vm_savings()
+
+        return max_cost_per_hour

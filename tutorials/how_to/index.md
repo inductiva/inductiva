@@ -15,6 +15,7 @@ manage_tasks
 run-parallel_simulations
 set-up-elastic-machine-group
 set-up-mpi-cluster
-reuse-input-files
+reuse-files
 run-benchmarks
+use-local-task-runner
 ```

@@ -84,7 +84,7 @@ class SWAN(simulators.Simulator):
 
             machinefile_command = Command(
                 "dd if=/dev/stdin of=machinefile",
-                f"localhostsdasda slots={on.available_vcpus}")
+                f"localhost slots={on.available_vcpus}")
 
             commands.append(machinefile_command)
 
@@ -98,12 +98,12 @@ class SWAN(simulators.Simulator):
         # works with clusters
         elif command == "swan.exe":
 
-            kwargs = {}
+            mpi_kwargs = {}
             if n_vcpus is not None:
-                kwargs["np"] = n_vcpus
-            kwargs["use_hwthread_cpus"] = use_hwthread
+                mpi_kwargs["np"] = n_vcpus
+            mpi_kwargs["use_hwthread_cpus"] = use_hwthread
 
-            mpi_config = MPIConfig(version="4.1.6", **kwargs)
+            mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
             swan_exe_command = Command(f"swan.exe {sim_config_filename}",
                                        mpi_config=mpi_config)
             commands.append(swan_exe_command)

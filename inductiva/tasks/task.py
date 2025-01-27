@@ -16,6 +16,7 @@ from dataclasses import dataclass
 from ..localization import translator as __
 
 import inductiva
+from inductiva import storage
 from inductiva import constants
 from inductiva.client import exceptions, models
 from inductiva import api
@@ -90,6 +91,8 @@ class TaskInfo:
         self.status_alias = None
         self.simulator = None
         self.storage_path = None
+        self.storage_input_path = None
+        self.storage_output_path = None
         self.container_image = None
         self.project = None
         self.create_time = None
@@ -1106,7 +1109,8 @@ class Task:
             download_partial_files=data.download_partial_inputs,
         )
 
-    async def _file_operation(self, operation: Operations, **kwargs) -> str:
+    async def _file_operation(self, operation: Operations, formatter: Callable,
+                              **kwargs) -> str:
         """Perform file operations on the task that is currently running.
 
         Args:
@@ -1122,17 +1126,31 @@ class Task:
             return "Failed to connect to the task."
         message = await future_message
         await file_tracker.cleanup()
-        return message
 
-    async def list_files(self) -> str:
+        if message["status"] != "success":
+            return message["message"]
+
+        return formatter(message["message"])
+
+    async def _list_files(self) -> str:
         """List the files in the task's working directory."""
-        message = await self._file_operation(Operations.LIST)
-        return self._format_directory_listing(message)
+        return await self._file_operation(
+            Operations.LIST, formatter=self._format_directory_listing)
 
-    async def tail_file(self, filename: str) -> str:
-        """Get the last 10 lines of a file in the task's working directory."""
-        message = await self._file_operation(Operations.TAIL, filename=filename)
-        return self._format_list_of_lines(message, filename, sep="\n", endl="")
+    async def _tail_file(self, filename: str, n_lines: int = 10) -> str:
+        """Get the last n_lines lines of a 
+        file in the task's working directory."""
+
+        def formatter(message):
+            return self._format_list_of_lines(message,
+                                              filename,
+                                              sep="\n",
+                                              endl="\n")
+
+        return await self._file_operation(Operations.TAIL,
+                                          formatter=formatter,
+                                          filename=filename,
+                                          lines=n_lines)
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""
@@ -1229,7 +1247,7 @@ class Task:
 
     def remove_remote_files(self, verbose: bool = True) -> bool:
         """Removes all files associated with the task from remote storage.
-        
+
         Returns:
             True if the files were removed successfully, False otherwise.
         """
@@ -1271,3 +1289,27 @@ class Task:
 
     def print_summary(self, fhandle=sys.stdout):
         print(self._get_summary(), file=fhandle)
+
+    def export_output(
+        self,
+        dest_url: str,
+        wait: bool = True,
+    ) -> storage.StorageOperation:
+        """Export the output files ZIP of the task to a remote storage location.
+
+        Args:
+            dest_url: URL to upload the output files. The output ZIP will be
+                uploaded via an HTTP PUT request.
+            wait: Whether to wait for the operation to complete.
+        """
+        output_path = self.get_info().storage_output_path
+        if output_path is None:
+            raise RuntimeError(
+                "Can't determine the path to the output files to export task.")
+
+        operation = inductiva.storage.export(output_path, dest_url)
+
+        if wait:
+            operation.wait()
+
+        return operation
