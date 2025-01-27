@@ -1,6 +1,6 @@
+"""Tests for machine_types functions"""
 from unittest import mock
 
-import pytest
 import inductiva
 import json
 
@@ -32,7 +32,8 @@ RESPONSE = [{
 
 
 def test_get_available_machine_types():
-    mock_compute_api_path = "inductiva.resources.machine_types.compute_api.ComputeApi"
+    mock_compute_api_path =\
+        "inductiva.resources.machine_types.compute_api.ComputeApi"
     with mock.patch(mock_compute_api_path) as mock_compute_api:
         mock_inner_response = mock.MagicMock()
         mock_inner_response.data = mock.MagicMock()
@@ -43,7 +44,8 @@ def test_get_available_machine_types():
 
         mock_list_available_machine_types = mock.MagicMock(
             return_value=mock_response)
-        mock_compute_api.return_value.list_available_machine_types = mock_list_available_machine_types
+        (mock_compute_api.return_value.list_available_machine_types
+        ) = mock_list_available_machine_types
 
         result = inductiva.resources.machine_types.get_available_machine_types(
             provider="GCP")
