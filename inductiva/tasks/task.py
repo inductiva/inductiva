@@ -550,7 +550,10 @@ class Task:
 
         return "".join(new_lst)
 
-    def _format_directory_listing(self, directories: list, indent=0) -> str:
+    def _format_directory_listing(self,
+                                  directories,
+                                  current_path="",
+                                  indent=0) -> str:
         """Formats a dictionary with directory information.
 
         This method formats a dictionary with directory information and
@@ -558,22 +561,33 @@ class Task:
 
         Args:
             directories: A dictionary with directory information.
+            current_path: The current path of the search.
+            indent: The current indentation level.
         """
-        color_code = "\033[34m"
-        reset_color = "\033[0m"
-        contents = (f"{color_code}Directory contents:{reset_color}\n"
-                    if indent == 0 else "")
 
-        for item in directories:
+        def build_prefix(indent, is_last):
+            """Creates the correct prefix for the current level."""
+            color_code = "\033[34m" if inductiva.ansi_enabled else ""
+            reset_color = "\033[0m" if inductiva.ansi_enabled else ""
+            if indent == 0:
+                return ""
+            branch = "└── " if is_last else "├── "
+            return color_code + "│   " * (indent - 1) + branch + reset_color
+
+        contents = ""
+        for index, item in enumerate(directories):
+            is_last_item = index == len(directories) - 1
+            prefix = build_prefix(indent, is_last_item)
+
             if isinstance(item, dict):
                 for dir_name, dir_contents in item.items():
-                    contents += ("  " * indent +
-                                 f"{color_code}[DIR]{reset_color} {dir_name}\n")
+                    folder_path = f"{current_path}/{dir_name}".strip("/")
+                    contents += f"{prefix}{folder_path}/\n"
                     contents += self._format_directory_listing(
-                        dir_contents, indent + 1)
+                        dir_contents, folder_path, indent + 1)
             else:
-                contents += ("  " * indent +
-                             f"{color_code}[FILE]{reset_color} {item}\n")
+                file_path = f"{current_path}/{item}".strip("/")
+                contents += f"{prefix}{file_path}\n"
 
         return contents
 
