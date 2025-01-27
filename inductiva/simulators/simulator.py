@@ -155,6 +155,13 @@ class Simulator(ABC):
                 "run-parallel_simulations.html "
                 "to learn how to create your own computational resource.")
 
+        if not on.started:
+            logging.info("")
+            logging.info(
+                "■ The computational resource is not started. Starting it now.")
+            logging.info("")
+            on.start()
+
         self.validate_computational_resources(on)
 
         if "commands" in kwargs:
