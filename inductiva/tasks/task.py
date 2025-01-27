@@ -510,8 +510,8 @@ class Task:
     def _format_list_of_lines(self,
                               lines: List[str],
                               file: str,
-                              sep: Optional[str] = "",
-                              endl: Optional[str] = "\n") -> str:
+                              endl: Optional[str] = "",
+                              header: Optional[bool] = True) -> str:
         """Formats a list of lines with color.
 
         This method formats a list of lines with a color and adds a header and
@@ -541,13 +541,14 @@ class Task:
 
         n = len(lines)
 
-        new_lst = [f"{color_code}│{reset_color}{line}" for line in lines]
+        new_lst = [f"{color_code}│{reset_color}{line}{endl}" for line in lines]
 
-        new_lst.insert(
-            0, f"{color_code}┌ (last {n} lines from {file}){reset_color}{endl}")
-        new_lst.append(f"{color_code}└{reset_color}{endl}")
+        if header:
+            new_lst.insert(
+                0, f"{color_code}┌ (last {n} lines from {file}){reset_color}\n")
+            new_lst.append(f"{color_code}└{reset_color}\n")
 
-        return sep.join(new_lst)
+        return "".join(new_lst)
 
     def _format_directory_listing(self, directories: list, indent=0) -> str:
         """Formats a dictionary with directory information.
@@ -1117,8 +1118,11 @@ class Task:
             download_partial_files=data.download_partial_inputs,
         )
 
-    async def _file_operation(self, operation: Operations, formatter: Callable,
-                              **kwargs) -> str:
+    async def _file_operation(self,
+                              operation: Operations,
+                              formatter: Callable,
+                              follow: bool = False,
+                              **kwargs):
         """Perform file operations on the task that is currently running.
 
         Args:
@@ -1128,37 +1132,56 @@ class Task:
         Returns:
             The result of the operation.
         """
-        file_tracker = FileTracker()
-        future_message = await file_tracker.setup_channel(operation, **kwargs)
-        if not await file_tracker.connect_to_task(self._api, self.id):
-            return "Failed to connect to the task."
-        message = await future_message
-        await file_tracker.cleanup()
+        self.file_tracker = FileTracker()
+        message_queue, end_event = await self.file_tracker.setup_channel(
+            operation, follow=follow, **kwargs)
+        if not await self.file_tracker.connect_to_task(self._api, self.id):
+            yield "Failed to connect to the task."
+            return
+        while not end_event.is_set():
+            message = await message_queue.get()
 
-        if message["status"] != "success":
-            return message["message"]
+            if message is None:
+                return
+            elif message["status"] != "success":
+                await self.file_tracker.cleanup()
+                yield message["message"]
+                return
 
-        return formatter(message["message"])
+            yield formatter(message["message"])
+
+        await self.file_tracker.cleanup()
+
+    async def close_stream(self):
+        """Close the stream to the task."""
+        if self.file_tracker is not None:
+            await self.file_tracker.cleanup()
 
     async def _list_files(self) -> str:
         """List the files in the task's working directory."""
-        return await self._file_operation(
-            Operations.LIST, formatter=self._format_directory_listing)
 
-    async def _tail_file(self, filename: str, n_lines: int = 10) -> str:
+        directory = [
+            files async for files in self._file_operation(
+                Operations.LIST, formatter=self._format_directory_listing)
+        ]
+        return directory[0]
+
+    async def _tail_file(self, filename: str, n_lines: int = 10, follow=False):
         """Get the last n_lines lines of a 
         file in the task's working directory."""
 
         def formatter(message):
             return self._format_list_of_lines(message,
                                               filename,
-                                              sep="\n",
-                                              endl="\n")
+                                              endl="\n",
+                                              header=not follow)
 
-        return await self._file_operation(Operations.TAIL,
-                                          formatter=formatter,
-                                          filename=filename,
-                                          lines=n_lines)
+        async for lines in self._file_operation(Operations.TAIL,
+                                                formatter=formatter,
+                                                filename=filename,
+                                                lines=n_lines,
+                                                follow=follow):
+            yield lines
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""
