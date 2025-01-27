@@ -155,7 +155,7 @@ class Simulator(ABC):
                 "run-parallel_simulations.html "
                 "to learn how to create your own computational resource.")
 
-        if not on.started:
+        if on.allow_auto_start and not on.started:
             logging.info("\n■ The computational resource is not started."
                          " Starting it now.\n")
             on.start()
