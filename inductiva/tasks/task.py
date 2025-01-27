@@ -675,6 +675,7 @@ class Task:
             self.id, self.id)
 
         requires_newline = False
+        previous_duration_l = 0
 
         while True:
             # status = self.get_status()
@@ -699,7 +700,14 @@ class Task:
             # Print timer
             elif (status != models.TaskStatusCode.SUBMITTED and
                   not task_info.is_terminal):
-                print(f"Duration: {duration}", end="\r")
+
+                #clear precious line
+                print(" " * previous_duration_l, end="\r")
+
+                duration = f"Duration: {duration}"
+                print(duration, end="\r")
+
+                previous_duration_l = len(duration)
 
             prev_status = status
 
