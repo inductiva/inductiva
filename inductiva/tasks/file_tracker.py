@@ -37,26 +37,29 @@ class FileTracker:
 
         self.pc = aiortc.RTCPeerConnection(
             aiortc.RTCConfiguration(iceServers=ICE_SERVERS))
-        self._message = None
 
-    async def setup_channel(self, operation, **kwargs):
+    async def setup_channel(self, operation, follow=False, **kwargs):
         channel = self.pc.createDataChannel("file_transfer")
-        fut = asyncio.Future()
+        queue = asyncio.Queue()
+        end_event = asyncio.Event()
 
         @channel.on("open")
         def on_open():
-            request = operation.value
-            if kwargs:
-                kwarg_str = map(str, kwargs.values())
-                request += ":" + ",".join(kwarg_str)
-            channel.send(request)
+            request = {"type": operation.value, "follow": follow}
+            request["args"] = kwargs
+            channel.send(json.dumps(request))
 
         @channel.on("message")
-        def on_message(message):
-            self._message = json.loads(message)
-            fut.set_result(self._message)
+        async def on_message(message):
+            await queue.put(json.loads(message))
+            if not follow:
+                end_event.set()
 
-        return fut
+        @channel.on("close")
+        async def on_close():
+            await queue.put(None)
+
+        return queue, end_event
 
     async def connect_to_task(self, api, task_id):
         connection_id = str(uuid.uuid4())

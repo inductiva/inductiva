@@ -23,4 +23,5 @@ def register(root_parser):
     loader.load_commands(subparsers,
                          os.path.dirname(__file__),
                          package=__name__,
-                         ignores_prefix=constants.LOADER_IGNORE_PREFIX)
+                         ignores_prefix=constants.LOADER_IGNORE_PREFIX,
+                         hides_prefix=constants.LOADER_HIDE_PREFIX)
