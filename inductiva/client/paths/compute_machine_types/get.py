@@ -248,62 +248,6 @@ class SpotSchema(
         )
 
 
-class GpusRangeSchema(schemas.ListSchema):
-
-    class MetaOapg:
-        max_items = 2
-        min_items = 2
-        items = schemas.IntSchema
-
-    def __new__(
-        cls,
-        _arg: typing.Union[typing.Tuple[typing.Union[
-            MetaOapg.items,
-            decimal.Decimal,
-            int,
-        ]], typing.List[typing.Union[
-            MetaOapg.items,
-            decimal.Decimal,
-            int,
-        ]]],
-        _configuration: typing.Optional[schemas.Configuration] = None,
-    ) -> 'GpusRangeSchema':
-        return super().__new__(
-            cls,
-            _arg,
-            _configuration=_configuration,
-        )
-
-    def __getitem__(self, i: int) -> MetaOapg.items:
-        return super().__getitem__(i)
-
-
-class GpuNamesSchema(schemas.ListSchema):
-
-    class MetaOapg:
-        items = schemas.StrSchema
-
-    def __new__(
-        cls,
-        _arg: typing.Union[typing.Tuple[typing.Union[
-            MetaOapg.items,
-            str,
-        ]], typing.List[typing.Union[
-            MetaOapg.items,
-            str,
-        ]]],
-        _configuration: typing.Optional[schemas.Configuration] = None,
-    ) -> 'GpuNamesSchema':
-        return super().__new__(
-            cls,
-            _arg,
-            _configuration=_configuration,
-        )
-
-    def __getitem__(self, i: int) -> MetaOapg.items:
-        return super().__getitem__(i)
-
-
 ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
@@ -359,18 +303,6 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
                 io.FileIO,
                 io.BufferedReader,
             ],
-        'gpus_range':
-            typing.Union[
-                GpusRangeSchema,
-                list,
-                tuple,
-            ],
-        'gpu_names':
-            typing.Union[
-                GpuNamesSchema,
-                list,
-                tuple,
-            ],
         'provider_id':
             typing.Union[
                 ProviderIdSchema,
@@ -418,18 +350,6 @@ request_query_spot = api_client.QueryParameter(
     name="spot",
     style=api_client.ParameterStyle.FORM,
     schema=SpotSchema,
-    explode=True,
-)
-request_query_gpus_range = api_client.QueryParameter(
-    name="gpus_range",
-    style=api_client.ParameterStyle.FORM,
-    schema=GpusRangeSchema,
-    explode=True,
-)
-request_query_gpu_names = api_client.QueryParameter(
-    name="gpu_names",
-    style=api_client.ParameterStyle.FORM,
-    schema=GpuNamesSchema,
     explode=True,
 )
 request_query_provider_id = api_client.QueryParameter(
@@ -576,8 +496,6 @@ class BaseApi(api_client.Api):
                 request_query_memory_range,
                 request_query_price_range,
                 request_query_spot,
-                request_query_gpus_range,
-                request_query_gpu_names,
                 request_query_provider_id,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
