@@ -3,7 +3,6 @@ import inductiva
 
 # Instantiate machine group
 machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
 
 # Download example configuration files from Inductiva storage
 input_dir = inductiva.utils.download_from_url(
