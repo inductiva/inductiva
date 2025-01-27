@@ -152,7 +152,7 @@ def export_to_aws_s3(path_to_export, min_part_size_mb, filename, bucket_name):
         return
     try:
         boto3.client("sts").get_caller_identity()
-    except Exception:  # noqa: E722
+    except Exception:  # pylint: disable=broad-exception-caught
         print("AWS credentials not found. "
               "Please set your AWS credentials with 'aws configure'")
         return
