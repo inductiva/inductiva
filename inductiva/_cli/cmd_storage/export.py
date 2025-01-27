@@ -11,7 +11,8 @@ import logging
 _boto3_imported = True
 try:
     import boto3
-    logging.getLogger('botocore').setLevel(logging.WARNING)
+
+    logging.getLogger("botocore").setLevel(logging.WARNING)
 except ImportError:
     _boto3_imported = False
 
@@ -27,7 +28,7 @@ def initiate_multipart_upload(filename, bucket_name):
     """
     Initiate a multipart upload on S3 and return the UploadId.
     """
-    s3_client = boto3.client('s3')
+    s3_client = boto3.client("s3")
     response = s3_client.create_multipart_upload(
         Bucket=bucket_name,
         Key=filename,
@@ -37,9 +38,9 @@ def initiate_multipart_upload(filename, bucket_name):
 
 def generate_presigned_url(upload_id, part_number, filename, bucket_name):
     """
-    Generate a presigned URL for a specific part using AWS S3's generate_presigned_url.
+    Generate a presigned URL for uploading a part to S3.
     """
-    s3_client = boto3.client('s3')
+    s3_client = boto3.client("s3")
     method_parameters = {
         "Bucket": bucket_name,
         "Key": filename,
@@ -62,16 +63,17 @@ def generate_complete_multipart_upload_signed_url(
     """
     Generate a presigned URL for completing the multipart upload.
     """
-    s3_client = boto3.client('s3')
+    s3_client = boto3.client("s3")
 
     signed_url = s3_client.generate_presigned_url(
-        ClientMethod='complete_multipart_upload',
+        ClientMethod="complete_multipart_upload",
         Params={
-            'Bucket': bucket_name,
-            'Key': filename,
-            'UploadId': upload_id
+            "Bucket": bucket_name,
+            "Key": filename,
+            "UploadId": upload_id
         },
-        HttpMethod='POST')
+        HttpMethod="POST",
+    )
 
     return signed_url
 
@@ -92,17 +94,16 @@ def get_file_size(file_path):
 
 def get_multipart_parts(size, min_part_size=50 * 1024 * 1024):
     """
-    Calculate the size of each part and the total number of parts for a multipart upload.
-    
-    The goal is to divide the data into parts of at least `min_part_size` each, but ensure that:
+    Calculate the size of each part and the total number of parts
+
+    The goal is to divide the data into parts `min_part_size` each:
     1. No more than 10,000 parts are created (maximum parts allowed by S3).
-    2. If necessary, the part size is increased to avoid exceeding the 10,000-part limit.
-    3. If the file size is smaller than `min_part_size`, the part size will equal the file size.
-    
+    2. The part size might be increased to avoid exceeding the part limit.
+
     Args:
         size (int): The total size of the file to be uploaded, in bytes.
         min_part_size (int): The minimum size of each part, in bytes.
-    
+
     Returns:
         tuple: (part_size, part_count)
             - part_size (int): The size of each part in bytes.
@@ -110,7 +111,6 @@ def get_multipart_parts(size, min_part_size=50 * 1024 * 1024):
     """
     max_parts = 10000
 
-    # For files smaller than or equal to `min_part_size`, the entire file is one part
     if size <= min_part_size:
         return size, 1
 
@@ -151,8 +151,8 @@ def export_to_aws_s3(path_to_export, min_part_size_mb, filename, bucket_name):
               "'pip install inductiva[aws]' to install it.")
         return
     try:
-        boto3.client('sts').get_caller_identity()
-    except Exception as e:  # noqa: BLE001
+        boto3.client("sts").get_caller_identity()
+    except Exception:  # noqa: BLE001
         print("AWS credentials not found. "
               "Please set your AWS credentials with 'aws configure'")
         return
@@ -219,30 +219,38 @@ def register(parser):
     subparser = parser.add_parser(
         "export",
         help="Export the user's remote storage to another cloud.",
-        formatter_class=argparse.RawTextHelpFormatter)
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
 
     subparser.description = (
         "The `export` command allows you to export your data to another cloud, "
         "such as AWS S3.")
-    subparser.add_argument("path_to_export",
-                           type=str,
-                           help="Specify the path of the file to export.")
-    subparser.add_argument("--export-to",
-                           default=ExportDestination.AWS_S3,
-                           type=ExportDestination,
-                           choices=list(ExportDestination),
-                           help="Specify the export destination: aws-s3.")
+    subparser.add_argument(
+        "path_to_export",
+        type=str,
+        help="Specify the path of the file to export.",
+    )
+    subparser.add_argument(
+        "--export-to",
+        default=ExportDestination.AWS_S3,
+        type=ExportDestination,
+        choices=list(ExportDestination),
+        help="Specify the export destination: aws-s3.",
+    )
 
     subparser.add_argument(
         "--file-name-to-save",
         type=str,
         required=False,
-        help="Specify the name to assign to the file being saved.")
+        help="Specify the name to assign to the file being saved.",
+    )
 
-    subparser.add_argument("--bucket-name",
-                           type=str,
-                           required=True,
-                           help="Bucket name where to save the file.")
+    subparser.add_argument(
+        "--bucket-name",
+        type=str,
+        required=True,
+        help="Bucket name where to save the file.",
+    )
 
     subparser.add_argument(
         "--min-part-size-MB",
@@ -251,6 +259,7 @@ def register(parser):
         default=50,
         help=(
             "Specify the minimum size (in MB) of each part in the multipart "
-            "upload. The default is 50 MB. For example, specify 50 for 50 MB."))
+            "upload. The default is 50 MB. For example, specify 50 for 50 MB."),
+    )
 
     subparser.set_defaults(func=export)
