@@ -701,7 +701,7 @@ class Task:
             elif (status != models.TaskStatusCode.SUBMITTED and
                   not task_info.is_terminal):
 
-                #clear precious line
+                #clear previous line
                 print(" " * previous_duration_l, end="\r")
 
                 duration = f"Duration: {duration}"
