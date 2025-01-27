@@ -5,7 +5,7 @@ This document provides a step-by-step guide on how to monitor and access simulat
 
 ## Start your simulation
 First, you need to start a `Task` using the [Inductiva API](https://inductiva.ai/). If you are not familiar with the API we suggest you follow [this tutorial](https://docs.inductiva.ai/en/latest/intro_to_api/tasks.html) to learn more about launching simulations.
-To show the , we will run the example [DualSPhysics](https://tutorials.inductiva.ai/simulators/DualSPHysics.html) simulation:
+To show the process of accessing simulation output in real-time, we will run the example [DualSPhysics](https://tutorials.inductiva.ai/simulators/DualSPHysics.html) simulation:
 
 ```python
 import inductiva
