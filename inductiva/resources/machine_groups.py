@@ -107,35 +107,3 @@ def get():
         machine_group_list.append(mg_class.from_api_response(mg))
 
     return machine_group_list
-
-
-def get_cheapest_machine_type(num_cpus: int,
-                              ram_gb: Optional[int] = None,
-                              spot: bool = True):
-    """Get the machine type with the lowest price.
-
-    If the machine type with the exact requirements is not found, the closest
-    machine type with higher resources will be returned. For example, if a
-    machine type with 5 CPUs and 20 GB of RAM is requested, but the closest
-    machine type has 8 CPUs and 32 GB of RAM, the latter will be returned.
-
-    Args:
-        num_cpus: The minimum number of CPUs required.
-        ram_gb: The minimum RAM in GB required. If None, the minimum RAM for
-          the given number of CPUs will be used.
-        spot: Whether the machine is spot or not.
-    """
-    spot = "t" if spot else "f"
-    api = compute_api.ComputeApi(inductiva.api.get_client())
-    body = {"num_cpus": num_cpus, "spot": spot}
-    if ram_gb:
-        body["ram_gb"] = ram_gb
-    response = api.get_machine_type(body)
-
-    logging.info("Machine type: %s", response.body["machine_type"])
-    logging.info("CPUs: %s", response.body["num_cpus"])
-    logging.info("RAM in GB: %s", response.body["ram_gb"])
-    logging.info("Estimated cost per hour: %s $/h",
-                 round(response.body["price"], 5))
-
-    return response.body["machine_type"]
