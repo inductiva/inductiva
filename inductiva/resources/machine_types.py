@@ -30,6 +30,8 @@ class MachineTypeInfo:
     region: str
     spot: bool
     zone: str
+    num_gpus: Optional[int]
+    gpu_name: Optional[str]
 
     def __getitem__(self, item):
         return getattr(self, item)

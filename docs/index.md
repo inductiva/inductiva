@@ -35,6 +35,7 @@ caption: Command Line Interface (CLI)
 maxdepth: 1
 hidden: true
 ---
+cli/access_simulation_output
 cli/cli-overview
 cli/managing-resources
 cli/tracking-tasks
