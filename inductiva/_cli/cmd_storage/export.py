@@ -26,7 +26,10 @@ def register(parser):
 
     subparser.description = (
         "The `export` command allows you to export your data to another cloud, "
-        "such as AWS S3.")
+        "such as AWS S3.\n  To export to AWS S3, you need to:\n"
+        "1. Install Inductiva with `pip install inductiva[aws]`.\n"
+        "2. Configure your AWS credentials using `aws configure`.\n"
+        "3. Ensure the target S3 bucket exists and you have write permissions.")
     subparser.add_argument(
         "path_to_export",
         type=str,
