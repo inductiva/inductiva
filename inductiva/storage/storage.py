@@ -1,10 +1,15 @@
 """Methods to interact with the user storage resources."""
-import time
+
 import logging
+import math
 import os
-import tqdm
-from typing import List, Literal, Optional, Tuple
+import pathlib
+import time
 import urllib
+from enum import Enum
+from typing import List, Literal, Optional, Tuple
+
+import tqdm
 
 import inductiva
 from inductiva import constants
@@ -12,6 +17,14 @@ from inductiva.api import methods
 from inductiva.client import exceptions, models
 from inductiva.client.apis.tags import storage_api
 from inductiva.utils import format_utils
+
+_boto3_imported = True
+try:
+    import boto3
+
+    logging.getLogger("botocore").setLevel(logging.WARNING)
+except ImportError:
+    _boto3_imported = False
 
 
 def _print_storage_size_and_cost() -> int:
@@ -208,7 +221,6 @@ def upload(
                    unit="B",
                    unit_scale=True,
                    unit_divisor=1000) as progress_bar:
-
         for response in api_response:
             method = response["method"]
             url = response["url"]
@@ -290,7 +302,6 @@ class StorageOperation():
 
     @classmethod
     def from_api_response(cls, api, response):
-
         op = cls(api, response["id"])
 
         op._update_from_api_response(response,)
@@ -323,24 +334,203 @@ class StorageOperation():
         return self._status
 
 
-def export(path: str, dest_url: str) -> StorageOperation:
-    """Export files from the API's storage to a remote storage location.
+class ExportDestination(Enum):
+    AWS_S3 = "aws-s3"
+
+    def __str__(self):
+        return self.value
+
+
+def initiate_multipart_upload(filename, bucket_name):
+    """
+    Initiate a multipart upload on S3 and return the UploadId.
+    """
+    s3_client = boto3.client("s3")
+    response = s3_client.create_multipart_upload(
+        Bucket=bucket_name,
+        Key=filename,
+    )
+    return response["UploadId"]
+
+
+def generate_presigned_url(upload_id, part_number, filename, bucket_name):
+    """
+    Generate a presigned URL for uploading a part to S3.
+    """
+    s3_client = boto3.client("s3")
+    method_parameters = {
+        "Bucket": bucket_name,
+        "Key": filename,
+        "PartNumber": part_number,
+        "UploadId": upload_id,
+    }
+
+    return s3_client.generate_presigned_url(
+        "upload_part",
+        Params=method_parameters,
+        ExpiresIn=3600,
+    )
+
+
+def generate_complete_multipart_upload_signed_url(
+    upload_id,
+    filename,
+    bucket_name,
+):
+    """
+    Generate a presigned URL for completing the multipart upload.
+    """
+    s3_client = boto3.client("s3")
+
+    signed_url = s3_client.generate_presigned_url(
+        ClientMethod="complete_multipart_upload",
+        Params={
+            "Bucket": bucket_name,
+            "Key": filename,
+            "UploadId": upload_id
+        },
+        HttpMethod="POST",
+    )
+
+    return signed_url
+
+
+def get_file_size(file_path):
+    api = storage_api.StorageApi(inductiva.api.get_client())
+
+    contents = api.list_storage_contents({
+        "path": file_path,
+        "max_results": 2,
+    }).body
+    if len(contents) > 1:
+        raise ValueError(f"Multiple files found at {file_path}. "
+                         "Please specify a single file.")
+
+    return list(contents.values())[0]["size_bytes"]
+
+
+def get_multipart_parts(size, min_part_size=50 * 1024 * 1024):
+    """
+    Calculate the size of each part and the total number of parts
+
+    The goal is to divide the data into parts `min_part_size` each:
+    1. No more than 10,000 parts are created (maximum parts allowed by S3).
+    2. The part size might be increased to avoid exceeding the part limit.
 
     Args:
-        path: Path in the API's remote storage to the files.
-        dest_url: URL to upload the output files.
+        size (int): The total size of the file to be uploaded, in bytes.
+        min_part_size (int): The minimum size of each part, in bytes.
 
     Returns:
-        Instance of StorageOperation. Call `wait` on the resulting object
-        to block until the operation finishes.
+        tuple: (part_size, part_count)
+            - part_size (int): The size of each part in bytes.
+            - part_count (int): The total number of parts.
+    """
+    max_parts = 10000
+
+    if size <= min_part_size:
+        return size, 1
+
+    # Calculate the part size based on the smaller of two values:
+    # - At least `min_part_size`
+    # - Maximum size to ensure no more than 10,000 parts (size // 10000)
+    max_allowed_part_size = size // max_parts
+    part_size = max(min_part_size, max_allowed_part_size)
+
+    part_count = math.ceil(size / part_size)
+
+    return part_size, part_count
+
+
+def multipart_upload(
+    path,
+    parts_size,
+    upload_parts,
+    complete_multipart_url,
+):
+    """
+    Perform the multipart upload using the server.
     """
     api = storage_api.StorageApi(inductiva.api.get_client())
-    resp = api.export_files(body={
-        "path": path,
-        "dest_url": dest_url,
-    })
 
-    logging.info("Started export operation ...")
-    operation = StorageOperation.from_api_response(api, resp.body)
+    api.export_multipart_files(
+        body={
+            "path": path,
+            "parts_size": parts_size,
+            "upload_parts": upload_parts,
+            "complete_multipart_url": complete_multipart_url,
+        })
 
-    return operation
+
+def export_to_aws_s3(path_to_export, min_part_size_mb, filename, bucket_name):
+    if not _boto3_imported:
+        raise ValueError("boto3 is not installed. Please run "
+                         "'pip install inductiva[aws]' to install it.")
+    try:
+        boto3.client("sts").get_caller_identity()
+    except Exception:  # pylint: disable=broad-exception-caught
+        raise (ValueError("AWS credentials not found. Please set your "
+                          "AWS credentials with 'aws configure'."))
+    try:
+        boto3.client("s3").head_bucket(Bucket=bucket_name)
+    except Exception:  # pylint: disable=broad-exception-caught
+        raise ValueError(f"Bucket {bucket_name} not found.")
+
+    # Step 1: Get the file size
+    file_size = get_file_size(path_to_export)
+
+    # Step 2: Calculate the part size and count
+    parts_size, parts_count = get_multipart_parts(
+        file_size,
+        min_part_size=min_part_size_mb * 1024 * 1024,
+    )
+
+    # Step 3: Initiate the multipart upload on aws
+    upload_id = initiate_multipart_upload(filename, bucket_name)
+
+    # Step 4: Generate presigned URLs for each part
+    upload_parts = []
+    for part_number in range(1, parts_count + 1):
+        presigned_url = generate_presigned_url(upload_id, part_number, filename,
+                                               bucket_name)
+        upload_parts.append({
+            "part_number": part_number,
+            "part_url": presigned_url
+        })
+
+    # Step 5: Generate the complete multipart upload signed URL
+    complete_multipart_url = generate_complete_multipart_upload_signed_url(
+        upload_id,
+        filename,
+        bucket_name,
+    )
+
+    # Step 6: Ask the server to perform the multipart upload
+    multipart_upload(
+        path_to_export,
+        parts_size,
+        upload_parts,
+        complete_multipart_url,
+    )
+    print(
+        "Export is being done by inductiva server. You can close the terminal.")
+
+
+def export(
+    path_to_export: str,
+    export_to: ExportDestination,
+    bucket_name: str,
+    file_name_to_save: str = None,
+    min_part_size_MB: int = 50,
+):
+    file_name_to_save = file_name_to_save or pathlib.Path(path_to_export).name
+    if export_to == ExportDestination.AWS_S3:
+        print(f"Exporting {path_to_export} to {bucket_name}...")
+        export_to_aws_s3(
+            path_to_export,
+            min_part_size_MB,
+            file_name_to_save,
+            bucket_name,
+        )
+    else:
+        raise ValueError(f"Unsupported export destination: {export_to}")
