@@ -1,7 +1,5 @@
 """Functions to manage or retrieve user resources."""
-from typing import Optional
 from collections import defaultdict
-import logging
 
 import inductiva
 import inductiva.client
