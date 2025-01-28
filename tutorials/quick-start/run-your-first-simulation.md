@@ -13,7 +13,10 @@ By following this step-by-step guide, you will:
 * Use and select high-performance cloud machines.
 * Access and manage simulation outputs via CLI and our [Web Console](https://console.inductiva.ai/).
 
-🎥 **Prefer a visual guide?** Watch our video walkthrough to follow along step by step and get started in no time!
+<div style="border: 2px solid #007BFF; padding: 15px; background-color: #F0F8FF; border-radius: 8px; margin: 20px 0;">
+  <h3 style="margin-top: 0;">🎥 Prefer a visual guide?</h3>
+  <p>Follow along with our <strong>video walkthrough</strong> led by our CEO, where key details, features, and step-by-step instructions are explained in depth. It's a quick and engaging way to get started in no time!</p>
+</div>
 
 Let’s go!
 
@@ -27,16 +30,39 @@ Before starting, ensure the following:
     - Install the Inductiva library using `pip install inductiva`.
     - Authenticate your API key by [following these instructions](https://docs.inductiva.ai/en/latest/preinstallation/system/system-requirements.html#installing-the-inductiva-python-client-and-authenticating).
 
-* **Simulation Files:**
-    - Locate the necessary input files from the [Galveston Island dataset](https://data.griidc.org/data/HI.x833.000:0001#individual-files).
-    - Under Files >> XBeach_Model_Runs >> Beach_Nourish_Only >> Input, download all files into a a Beach_Nourish_Only folder.
-    - Organize them in a directory structure as shown below.
 
-## Step 1: Set Up Your Environment
+## Step 1: Prepare Your Project Directory
 
-### Folder Structure
+### Get Your Simulation Artifacts
 
-Organize your files as follows:
+1.	**Locate the Input Files**
+   
+    Download the necessary input files from the [Galveston Island dataset](https://data.griidc.org/data/HI.x833.000:0001#individual-files).
+
+2.	**Navigate to the Correct Folder**
+
+    Find the files under: *Files >> XBeach_Model_Runs >> Beach_Nourish_Only >> Input.*
+
+3. Download all the files into a folder named **Beach_Nourish_Only** on your local machine.
+
+### Create the Python Script (run.py)
+
+Open your preferred IDE (e.g., VS Code, PyCharm) and save a new file as `run.py` in your project directory.
+
+<div style="border: 2px solid #28A745; padding: 15px; background-color: #E9FBEA; border-radius: 8px; margin: 20px 0;">
+  <h3 style="margin-top: 0;">💡 Pro Tip: Quick Creation of `run.py`</h3>
+  <p>Instead of creating the file manually, you can use a shortcut:  
+     - On <strong>Mac/Linux</strong>, type:  
+       <code>touch run.py</code>  
+     - On <strong>Windows</strong> (PowerShell), type:  
+       <code>New-Item -ItemType File -Name "run.py"</code>  
+  </p>
+  <p>This will instantly create the `run.py` file in your current directory.</p>
+</div>
+
+### Organise Your Files
+
+Ensure your directory structure looks like this:
 
 ```
 xbeach/
@@ -46,11 +72,11 @@ xbeach/
     |-- bedfricfile.txt
     ...
 |-- run.py
-
 ```
 
-* The `beach_nourish_only` folder contains all simulation artifacts downloaded from [GRIIDC] (https://data.griidc.org/data/HI.x833.000:0001#individual-files).
-* An empty `run.py` file which will contain your script to execute the simulation. *You can create it by saving a new python file using your preferred IDE or simply type `touch run.py` on the command line if on Mac or Linux.*
+* The `beach_nourish_only` folder contains all simulation artifacts.
+
+* The`run.py` file which will contain your script to execute the simulation.
 
 ## Step 2: Write the Python Script
 
@@ -96,18 +122,47 @@ task.print_summary()
 
 ## Step 3: Run the Simulation
 
+### Execute the Script
 
-## Common Issues and Troubleshooting
+Run the script from your terminal:
 
-Problem: Simulation not running?
-Solution: Ensure all input parameters are defined correctly.
+```py
+python3 run.py
+```
 
-Problem: Output looks strange?
-Solution: Check your initial conditions or domain size.
+The script will:
 
-## Next Steps
+- Authenticate your API key.
+- Start the specified cloud machine in spot mode.
+- Zip and upload simulation files to Inductiva servers
+- Execute the simulation on the cloud.
+- Wait for completion and terminate the machine.
 
-Check out these resources:
+### Monitor the Simulation
 
-- Inductiva Documentation
-- Simulation Gallery
+**Command Line:** Use the inductiva logs command to view simulation logs:
+
+```py
+inductiva logs <TASK_ID>
+```
+
+**Web Console:** Log in to the Inductiva Console to track simulation progress and view outputs.
+
+## Step 4: Accessing Outputs
+
+- Download outputs via the Web Console or CLI.
+- Partial outputs are saved if the simulation is interrupted.
+- Use the outputs as inputs for subsequent simulations if needed.
+
+## Good to Know! 
+
+### Cost Management
+
+- Spot mode significantly reduces costs (~85 cents for this example).
+- Idle machines are automatically shut down after 30 minutes to prevent unexpected charges.
+
+## Conclusion
+
+By completing this tutorial, you’ve successfully run an advanced XBeach simulation using the Inductiva API. Explore other use cases and simulators available on the Inductiva Tutorials Page. If you encounter issues, refer to the documentation or contact support.
+
+Happy simulating!
