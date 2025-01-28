@@ -468,13 +468,13 @@ def export_to_aws_s3(path_to_export, min_part_size_mb, filename, bucket_name):
                          "'pip install inductiva[aws]' to install it.")
     try:
         boto3.client("sts").get_caller_identity()
-    except Exception:  # pylint: disable=broad-exception-caught
+    except Exception as e:  # pylint: disable=broad-exception-caught
         raise (ValueError("AWS credentials not found. Please set your "
-                          "AWS credentials with 'aws configure'."))
+                          "AWS credentials with 'aws configure'.")) from e
     try:
         boto3.client("s3").head_bucket(Bucket=bucket_name)
-    except Exception:  # pylint: disable=broad-exception-caught
-        raise ValueError(f"Bucket {bucket_name} not found.")
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        raise ValueError(f"Bucket {bucket_name} not found.") from e
 
     # Step 1: Get the file size
     file_size = get_file_size(path_to_export)
@@ -521,14 +521,14 @@ def export(
     export_to: ExportDestination,
     bucket_name: str,
     file_name_to_save: str = None,
-    min_part_size_MB: int = 50,
+    min_part_size_mb: int = 50,
 ):
     file_name_to_save = file_name_to_save or pathlib.Path(path_to_export).name
     if export_to == ExportDestination.AWS_S3:
         print(f"Exporting {path_to_export} to {bucket_name}...")
         export_to_aws_s3(
             path_to_export,
-            min_part_size_MB,
+            min_part_size_mb,
             file_name_to_save,
             bucket_name,
         )

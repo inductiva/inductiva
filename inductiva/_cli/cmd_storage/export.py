@@ -1,7 +1,6 @@
 """Export the user's remote storage to another cloud."""
 
 import argparse
-from enum import Enum
 from inductiva.storage import storage
 
 
@@ -12,7 +11,7 @@ def export(args):
         export_to=args.export_to,
         bucket_name=args.bucket_name,
         file_name_to_save=args.file_name_to_save,
-        min_part_size_MB=args.min_part_size_MB,
+        min_part_size_mb=args.min_part_size_MB,
     )
 
 
