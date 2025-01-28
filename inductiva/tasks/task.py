@@ -16,7 +16,6 @@ from dataclasses import dataclass
 from ..localization import translator as __
 
 import inductiva
-from inductiva import storage
 from inductiva import constants
 from inductiva.client import exceptions, models
 from inductiva import api
