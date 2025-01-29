@@ -13,6 +13,7 @@ from inductiva.client.api_client import ApiClient
 from inductiva.api.methods import get_client
 
 from . import constants
+from . import benchmarks
 from . import simulators
 from . import resources
 from . import projects
