@@ -44,6 +44,7 @@ class BaseMachineGroup(ABC):
         max_idle_time: Optional[Union[datetime.timedelta, int]] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
         register: bool = True,
+        allow_auto_start: bool = True,
     ) -> None:
         """Create a BaseMachineGroup object.
 
@@ -78,6 +79,10 @@ class BaseMachineGroup(ABC):
                 already registered machine groups that can be started, for
                 example, when retrieving with the `machines_groups.get` method.
                 Users should not set this argument in anyway.
+            allow_auto_start: Bool that indicates if a machine group can be
+                started automatically. This will be used when running a task.
+                If a resourced is passed to tun a task and it is not started,
+                the task will start the resource before running the task.
         """
 
         provider = machine_types.ProviderType(provider)
@@ -124,6 +129,7 @@ class BaseMachineGroup(ABC):
         self._api = compute_api.ComputeApi(api.get_client())
         self._estimated_cost = None
         self._max_idle_time = max_idle_time
+        self.allow_auto_start = allow_auto_start
 
         if isinstance(max_idle_time, int):
             if max_idle_time <= 0:
