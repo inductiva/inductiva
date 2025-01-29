@@ -33,7 +33,7 @@ class FileTracker:
 
     def __init__(self):
         if not aiortc_imported:
-            raise NotImplementedError("Feature not available for this version.")
+            raise NotImplementedError("This feature is only available in Python 3.9 and later.")
 
         self.pc = aiortc.RTCPeerConnection(
             aiortc.RTCConfiguration(iceServers=ICE_SERVERS))
