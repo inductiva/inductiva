@@ -86,12 +86,12 @@ In order to read the last lines of an output file, we introduce the tail command
 
 For example 
 ```bash
-$ inductiva tasks tail jjqwbn2yi5kwk5rv6qs2nth21 flow_cylinder/Run.out
+$ inductiva tasks tail jjqwbn2yi5kwk5rv6qs2nth21 config_out/Run.out
 ```
-Prints out the last 10 lines of the `flow_cylinder/Run.outflow_cylinder/Run.out` file:
+Prints out the last 10 lines of the `config_out/Run.out` file:
 
 ```bash
-┌ (last 10 lines from flow_cylinder/Run.out)
+┌ (last 10 lines from config_out/Run.out)
 │Part_0024      0.600229          1535       63      87.02  16-12-2024 16:48:49
 │  Particles new: 99 (total new: 3762)  -  Current np: 13599
 │  Particles out: 9  (total out: 264)
@@ -110,13 +110,13 @@ If you wish to configure the number of lines of the output you can use the argum
 
 The command:
 ```bash
-$ inductiva tasks tail jjqwbn2yi5kwk5rv6qs2nth21 flow_cylinder/Run.out --lines 20
+$ inductiva tasks tail jjqwbn2yi5kwk5rv6qs2nth21 config_out/Run.out --lines 20
 ```
 
 Prints out the last 20 lines of the file:
 
 ```bash
-┌ (last 20 lines from flow_cylinder/Run.out)
+┌ (last 20 lines from config_out/Run.out)
 
 │  Particles out: 11  (total out: 577)
 │Part_0073      1.825354          4537       60      27.15  23-12-2024 10:47:12
@@ -143,7 +143,7 @@ Prints out the last 20 lines of the file:
 
 To monitor file updates in real-time, use the -f argument. Run the following command:
 ```bash
-$ inductiva tasks tail jjqwbn2yi5kwk5rv6qs2nth21 flow_cylinder/Run.out -f
+$ inductiva tasks tail jjqwbn2yi5kwk5rv6qs2nth21 config_out/Run.out -f
 ```
 To stop monitoring, press `Ctrl+C`
 

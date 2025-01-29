@@ -456,11 +456,11 @@ stdout.txt
 <h2>Tail specific file<a class="headerlink" href="#tail-specific-file" title="Link to this heading">#</a></h2>
 <p>In order to read the last lines of an output file, we introduce the tail command, <code class="docutils literal notranslate"><span class="pre">inductiva</span> <span class="pre">task</span> <span class="pre">tail</span> <span class="pre">&lt;task_id&gt;</span> <span class="pre">&lt;filename&gt;</span></code>. This command allows you to track updates as they are written to a file: Make sure that the file you are trying to tail is a text file.</p>
 <p>For example</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> </span>tail<span class="w"> </span>jjqwbn2yi5kwk5rv6qs2nth21<span class="w"> </span>flow_cylinder/Run.out
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> </span>tail<span class="w"> </span>jjqwbn2yi5kwk5rv6qs2nth21<span class="w"> </span>config_out/Run.out
 </pre></div>
 </div>
-<p>Prints out the last 10 lines of the <code class="docutils literal notranslate"><span class="pre">flow_cylinder/Run.outflow_cylinder/Run.out</span></code> file:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>┌<span class="w"> </span><span class="o">(</span>last<span class="w"> </span><span class="m">10</span><span class="w"> </span>lines<span class="w"> </span>from<span class="w"> </span>flow_cylinder/Run.out<span class="o">)</span>
+<p>Prints out the last 10 lines of the <code class="docutils literal notranslate"><span class="pre">config_out/Run.out</span></code> file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>┌<span class="w"> </span><span class="o">(</span>last<span class="w"> </span><span class="m">10</span><span class="w"> </span>lines<span class="w"> </span>from<span class="w"> </span>config_out/Run.out<span class="o">)</span>
 │Part_0024<span class="w">      </span><span class="m">0</span>.600229<span class="w">          </span><span class="m">1535</span><span class="w">       </span><span class="m">63</span><span class="w">      </span><span class="m">87</span>.02<span class="w">  </span><span class="m">16</span>-12-2024<span class="w"> </span><span class="m">16</span>:48:49
 │<span class="w">  </span>Particles<span class="w"> </span>new:<span class="w"> </span><span class="m">99</span><span class="w"> </span><span class="o">(</span>total<span class="w"> </span>new:<span class="w"> </span><span class="m">3762</span><span class="o">)</span><span class="w">  </span>-<span class="w">  </span>Current<span class="w"> </span>np:<span class="w"> </span><span class="m">13599</span>
 │<span class="w">  </span>Particles<span class="w"> </span>out:<span class="w"> </span><span class="m">9</span><span class="w">  </span><span class="o">(</span>total<span class="w"> </span>out:<span class="w"> </span><span class="m">264</span><span class="o">)</span>
@@ -476,11 +476,11 @@ stdout.txt
 </div>
 <p>If you wish to configure the number of lines of the output you can use the argument <code class="docutils literal notranslate"><span class="pre">--lines</span></code>.</p>
 <p>The command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> </span>tail<span class="w"> </span>jjqwbn2yi5kwk5rv6qs2nth21<span class="w"> </span>flow_cylinder/Run.out<span class="w"> </span>--lines<span class="w"> </span><span class="m">20</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> </span>tail<span class="w"> </span>jjqwbn2yi5kwk5rv6qs2nth21<span class="w"> </span>config_out/Run.out<span class="w"> </span>--lines<span class="w"> </span><span class="m">20</span>
 </pre></div>
 </div>
 <p>Prints out the last 20 lines of the file:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>┌<span class="w"> </span><span class="o">(</span>last<span class="w"> </span><span class="m">20</span><span class="w"> </span>lines<span class="w"> </span>from<span class="w"> </span>flow_cylinder/Run.out<span class="o">)</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>┌<span class="w"> </span><span class="o">(</span>last<span class="w"> </span><span class="m">20</span><span class="w"> </span>lines<span class="w"> </span>from<span class="w"> </span>config_out/Run.out<span class="o">)</span>
 
 │<span class="w">  </span>Particles<span class="w"> </span>out:<span class="w"> </span><span class="m">11</span><span class="w">  </span><span class="o">(</span>total<span class="w"> </span>out:<span class="w"> </span><span class="m">577</span><span class="o">)</span>
 │Part_0073<span class="w">      </span><span class="m">1</span>.825354<span class="w">          </span><span class="m">4537</span><span class="w">       </span><span class="m">60</span><span class="w">      </span><span class="m">27</span>.15<span class="w">  </span><span class="m">23</span>-12-2024<span class="w"> </span><span class="m">10</span>:47:12
@@ -506,7 +506,7 @@ stdout.txt
 </pre></div>
 </div>
 <p>To monitor file updates in real-time, use the -f argument. Run the following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> </span>tail<span class="w"> </span>jjqwbn2yi5kwk5rv6qs2nth21<span class="w"> </span>flow_cylinder/Run.out<span class="w"> </span>-f
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> </span>tail<span class="w"> </span>jjqwbn2yi5kwk5rv6qs2nth21<span class="w"> </span>config_out/Run.out<span class="w"> </span>-f
 </pre></div>
 </div>
 <p>To stop monitoring, press <code class="docutils literal notranslate"><span class="pre">Ctrl+C</span></code></p>
