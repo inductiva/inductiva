@@ -381,17 +381,6 @@ class BaseMachineGroup(ABC):
                          "`register=False`.")
             return
 
-        request_body = \
-            inductiva.client.models.VMGroupConfig(
-                id=self.id,
-                name=self.name,
-                machine_type=self.machine_type,
-                provider_id=self.provider,
-                threads_per_core=self.threads_per_core,
-                disk_size_gb=self.data_disk_gb,
-                **kwargs,
-            )
-
         logging.info(
             "Starting %s. This may take a few minutes.\n"
             "Note that stopping this local process will not interrupt "
@@ -405,7 +394,7 @@ class BaseMachineGroup(ABC):
             while not self.can_start_resource():
                 time.sleep(self.QUOTAS_EXCEEDED_SLEEP_SECONDS)
 
-        self._api.start_vm_group(body=request_body)
+        self._api.start_vm_group(query_params={"machine_group_id": self.id})
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
         quota_usage_table_str = self.quota_usage_table_str("used by resource")
@@ -423,18 +412,7 @@ class BaseMachineGroup(ABC):
             return
 
         try:
-            request_body = \
-                inductiva.client.models.VMGroupConfig(
-                    id=self.id,
-                    name=self.name,
-                    machine_type=self.machine_type,
-                    provider_id=self.provider,
-                    threads_per_core=self.threads_per_core,
-                    disk_size_gb=self.data_disk_gb,
-                    **kwargs,
-                )
-
-            self._api.delete_vm_group(body=request_body)
+            self._api.delete_vm_group(query_params={"machine_group_id": self.id})
             if verbose:
                 logging.info("Successfully requested termination of %s.",
                              repr(self))
