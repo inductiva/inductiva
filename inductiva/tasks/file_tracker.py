@@ -4,11 +4,14 @@ import json
 import uuid
 import enum
 import logging
+import warnings
 
 aiortc_imported = True
 
 try:
-    import aiortc
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        import aiortc
 except ImportError:
     aiortc_imported = False
 
