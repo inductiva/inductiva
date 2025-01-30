@@ -18,3 +18,4 @@ from .swash import SWASH
 from .cans import CaNS
 from .swan import SWAN
 from .fds import FDS
+from .gx import Gx
