@@ -220,11 +220,26 @@ You can retrieve your results via:
 
 - Idle machines are automatically shut down after 30 minutes to prevent unexpected charges.
 
-## Happy Simulating
+## Happy Simulating!
 
 By completing this tutorial, you’ve successfully run an advanced XBeach simulation using the Inductiva API. 
 
-Explore other use cases and simulators available on the [Inductiva Tutorials Page](https://tutorials.inductiva.ai/index.html). 
+Now that your simulation is complete, you can choose any visualization tool to process, analyze, and present your results.
+
+
+### What's Next?
+
+🔹 Discover More Use Cases
+
+Explore other use cases available on the [Inductiva Tutorials Page](https://tutorials.inductiva.ai/index.html). 
+
+🔹 Explore Other Simulators
+
+Inductiva provides a **growing range of simulators** built into the API, covering **coastal dynamics**, **fluid simulations**, **physics-based modeling, and more**. Check out our [Simulators Page](https://inductiva.ai/simulators) to discover more options.
+
+🔹 Browse Powerful Computational Resources
+
+Inductiva gives you access to **high-performance cloud computing** with optimized machine configurations for various simulation workloads. Explore [available computational resources](https://github.com/inductiva/inductiva/releases#listmachines) to find the best setup for your needs.
 
 If you encounter issues, refer to the [documentation](https://docs.inductiva.ai/en/latest/) or contact support at support@inductiva.ai.
 
