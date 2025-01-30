@@ -68,7 +68,6 @@ simulators/DualSPHysics
 simulators/FDS
 simulators/FVCOM
 simulators/GROMACS
-simulators/Gx
 simulators/NWChem
 simulators/OpenFOAM
 simulators/OpenFAST
