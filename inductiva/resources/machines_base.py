@@ -362,7 +362,7 @@ class BaseMachineGroup(ABC):
 
         return is_cost_ok and is_vcpu_ok and is_instance_ok
 
-    def start(self, wait_for_quotas: bool = False, **kwargs):
+    def start(self, wait_for_quotas: bool = False):
         """Starts a machine group.
 
         Args:
@@ -391,8 +391,7 @@ class BaseMachineGroup(ABC):
             while not self.can_start_resource():
                 time.sleep(self.QUOTAS_EXCEEDED_SLEEP_SECONDS)
 
-        self._api.start_vm_group(query_params={
-            "machine_group_id": self.id})
+        self._api.start_vm_group(query_params={"machine_group_id": self.id})
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
         quota_usage_table_str = self.quota_usage_table_str("used by resource")
@@ -410,7 +409,8 @@ class BaseMachineGroup(ABC):
             return
 
         try:
-            self._api.delete_vm_group(query_params={"machine_group_id": self.id})
+            self._api.delete_vm_group(
+                query_params={"machine_group_id": self.id})
             if verbose:
                 logging.info("Successfully requested termination of %s.",
                              repr(self))

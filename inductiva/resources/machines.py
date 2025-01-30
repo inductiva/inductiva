@@ -118,19 +118,11 @@ class MachineGroup(machines_base.BaseMachineGroup):
               become available before starting the resource.
         """
 
-        return super().start(
-            wait_for_quotas=wait_for_quotas,
-            is_elastic=self.__is_elastic,
-            num_vms=self.num_machines,
-            spot=self.spot,
-        )
+        return super().start(wait_for_quotas=wait_for_quotas,)
 
     def terminate(self, verbose: bool = True):
         """Terminates all machines of the machine group."""
-        return super().terminate(num_vms=self.num_machines,
-                                 is_elastic=self.__is_elastic,
-                                 verbose=verbose,
-                                 spot=self.spot)
+        return super().terminate()
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
@@ -268,23 +260,11 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
               become available before starting the resource.
         """
 
-        return super().start(
-            wait_for_quotas=wait_for_quotas,
-            is_elastic=self.__is_elastic,
-            num_vms=self.min_machines,
-            min_vms=self.min_machines,
-            max_vms=self.max_machines,
-            spot=self.spot,
-        )
+        return super().start(wait_for_quotas=wait_for_quotas,)
 
     def terminate(self, verbose: bool = True):
         """Terminates all machines of the machine group."""
-        return super().terminate(num_vms=self.min_machines,
-                                 min_vms=self.min_machines,
-                                 max_vms=self.max_machines,
-                                 is_elastic=self.__is_elastic,
-                                 verbose=verbose,
-                                 spot=self.spot)
+        return super().terminate()
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()

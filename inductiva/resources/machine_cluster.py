@@ -108,20 +108,11 @@ class MPICluster(machines_base.BaseMachineGroup):
             wait_for_quotas: If True, the method will wait for quotas to
               become available before starting the resource.
         """
-        return super().start(
-            wait_for_quotas=wait_for_quotas,
-            is_elastic=self.__is_elastic,
-            num_vms=self.num_machines,
-            spot=self.__spot,
-            type=self.__type,
-        )
+        return super().start(wait_for_quotas=wait_for_quotas,)
 
     def terminate(self, verbose: bool = True):
         """Terminates the MPI Cluster."""
-        return super().terminate(num_vms=self.num_machines,
-                                 is_elastic=self.__is_elastic,
-                                 spot=self.__spot,
-                                 verbose=verbose)
+        return super().terminate()
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
