@@ -5,26 +5,23 @@ import inductiva
 machine_group = inductiva.resources.MachineGroup("c3d-standard-90")
 
 
-# Set simulation input directory
-input_dir = "/Path/to/My/Snl-Swan/Files"
-
 # Initialize the Simulator
 snl_swan = inductiva.simulators.SnlSwan()
 
 # Run simulation with config files in the input directory
 # Uses swanrun by default
-task = snl_swan.run(input_dir=input_dir,
+task = snl_swan.run(input_dir="/Path/to/My/Snl-Swan/Files",
                 sim_config_filename="INPUT.swn",
                 on=machine_group)
 
 # Uses swanrun
-# task = snl_swan.run(input_dir=input_dir,
+# task = snl_swan.run(input_dir="/Path/to/My/Snl-Swan/Files",
 #                 sim_config_filename="INPUT.swn",
 #                 command="swanrun",
 #                 on=machine_group)
 
 # Uses swan.exe. Note: the simulation file must be called INPUT
-# task = snl_swan.run(input_dir=input_dir,
+# task = snl_swan.run(input_dir="/Path/to/My/Snl-Swan/Files",
 #                 command="swan.exe",
 #                 on=machine_group)
 
