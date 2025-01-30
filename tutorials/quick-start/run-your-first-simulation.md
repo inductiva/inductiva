@@ -63,11 +63,9 @@ Open your preferred IDE (e.g., VS Code, PyCharm) and save a new file as `run.py`
 
 <div style="border: 2px solid #28A745; padding: 15px; background-color: #E9FBEA; border-radius: 8px; margin: 20px 0;">
   <h3 style="margin-top: 0;">💡 Pro Tip: Quick Creation of `run.py`</h3>
-  <p>Instead of creating the file manually, you can use a shortcut:  
-     - On <strong>Mac/Linux</strong>, type:  
+  <p>Instead of creating the file manually, you can use a shortcut on <strong>Mac/Linux</strong>, type:  
        <code>touch run.py</code>  
-     - On <strong>Windows</strong> (PowerShell), type:  
-       <code>New-Item -ItemType File -Name "run.py"</code>  
+     </code>  
   </p>
   <p>This will instantly create the `run.py` file in your current directory.</p>
 </div>
