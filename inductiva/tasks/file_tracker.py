@@ -5,7 +5,8 @@ import uuid
 import enum
 import logging
 import warnings
-with warnings.catch_warnings(action="ignore"):
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
     import aiortc
 
 # STUN/TURN server configuration
