@@ -1,4 +1,4 @@
-"""SWAN module of the API."""
+""" SNL SWAN module of the API."""
 from typing import List, Optional
 from pathlib import Path
 
