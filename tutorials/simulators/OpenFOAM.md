@@ -39,7 +39,7 @@ are good to go.
 In this example, we demonstrate how to run the [motorbike tutorial](https://github.com/OpenFOAM/OpenFOAM-8/tree/master/tutorials/incompressible/simpleFoam/motorBike) 
 tutorial using the OpenFOAM Foundation distribution.
 
-```{literalinclude} ../../examples/openfoam_foundation/openfoam_foundation.py
+```{literalinclude} ../../inductiva/tests/test_simulators/openfoam_foundation/openfoam_foundation.py
 :language: python
 ```
 

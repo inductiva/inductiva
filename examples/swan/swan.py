@@ -5,7 +5,7 @@ import inductiva
 machine_group = inductiva.resources.MachineGroup("c3d-standard-90")
 
 # Initialize the Simulator
-swan = inductiva.simulators.SWAN()
+swan = inductiva.simulators.SWAN(version="41.45")
 
 # Run simulation
 task = swan.run(input_dir="/path/to/my/swan/files",

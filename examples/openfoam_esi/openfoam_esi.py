@@ -5,7 +5,7 @@ import inductiva
 machine_group = inductiva.resources.MachineGroup("c3d-standard-90")
 
 # Initialize the Simulator
-openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
+openfoam = inductiva.simulators.OpenFOAM(distribution="esi", version="2412")
 
 # Run simulation with config files in the input directory
 task = openfoam.run(input_dir="/path/to/my/openfoam/files",

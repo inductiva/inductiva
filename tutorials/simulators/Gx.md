@@ -24,6 +24,6 @@ We currently have the following Gx version available:
 
 ## Example Code
 
-```{literalinclude} ../../examples/gx/gx.py
+```{literalinclude} ../../inductiva/tests/test_simulators/gx/gx.py
 :language: python
 ```

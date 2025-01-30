@@ -5,7 +5,7 @@ import inductiva
 machine_group = inductiva.resources.MachineGroup("c3d-standard-90")
 
 # Initialize the Simulator
-xbeach = inductiva.simulators.XBeach()
+xbeach = inductiva.simulators.XBeach(version="1.24")
 
 # Run simulation with configuration files in the input directory
 task = xbeach.run(input_dir="/path/to/my/xbeach/files",
