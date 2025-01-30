@@ -4,8 +4,9 @@ import json
 import uuid
 import enum
 import logging
-import aiortc
-
+import warnings
+with warnings.catch_warnings(action="ignore"):
+    import aiortc
 
 # STUN/TURN server configuration
 ICE_SERVERS = [
