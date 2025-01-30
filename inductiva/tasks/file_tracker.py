@@ -4,20 +4,14 @@ import json
 import uuid
 import enum
 import logging
+import aiortc
 
-aiortc_imported = True
-
-try:
-    import aiortc
-except ImportError:
-    aiortc_imported = False
 
 # STUN/TURN server configuration
-if aiortc_imported:
-    ICE_SERVERS = [
-        aiortc.RTCIceServer("stun:webrtc.inductiva.ai:3478"),
-        aiortc.RTCIceServer("turn:webrtc.inductiva.ai:3478")
-    ]
+ICE_SERVERS = [
+    aiortc.RTCIceServer("stun:webrtc.inductiva.ai:3478"),
+    aiortc.RTCIceServer("turn:webrtc.inductiva.ai:3478")
+]
 
 aiortc_logger = logging.getLogger("aioice")
 aiortc_logger.setLevel(logging.WARNING)
@@ -32,9 +26,6 @@ class FileTracker:
     """File Tracker class for connecting to a running task via WebRTC."""
 
     def __init__(self):
-        if not aiortc_imported:
-            raise NotImplementedError("This feature is only available in Python 3.9 and later.")
-
         self.pc = aiortc.RTCPeerConnection(
             aiortc.RTCConfiguration(iceServers=ICE_SERVERS))
 
