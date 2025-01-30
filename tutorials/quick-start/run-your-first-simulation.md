@@ -24,7 +24,7 @@ Let’s go!
 
 Before starting, ensure the following:
 
-* **Python Installed:** Make sure Python (>=3.8) is installed on your system.
+* **Python Installed:** Make sure Python (>=3.8) is installed on your system. Check our [System Prep guide](https://docs.inductiva.ai/en/latest/preinstallation/system/system-requirements.html#select-your-os) for more information.
 * **Inductiva API Setup:** 
 
     - Install the Inductiva library using `pip install inductiva`.
@@ -44,6 +44,18 @@ Before starting, ensure the following:
     Find the files under: *Files >> XBeach_Model_Runs >> Beach_Nourish_Only >> Input.*
 
 3. Download all the files into a folder named **Beach_Nourish_Only** on your local machine.
+
+### Adjust Simulation Parameters
+
+1. **Open `params.txt`and modify the parameters**
+
+    Ensure compatibility with XBeach v10+ by adding the following line after the header:
+
+    `single_dir = 0`
+
+    Reduce simulation time by changing the tstop value:
+
+    `tstop = 34560`
 
 ### Create the Python Script (run.py)
 
@@ -126,9 +138,10 @@ task.print_summary()
 
 Run the script from your terminal:
 
-```py
+```bash
 python3 run.py
 ```
+![Live simulation progress](../_static/simulation_progress.gif "Live simulation progress displayed in the terminal, showing machine setup, file uploads, and real-time updates. You can monitor the logs here or follow along with our video walkthrough for a detailed breakdown.")
 
 The script will:
 
@@ -142,7 +155,7 @@ The script will:
 
 **Command Line:** Use the inductiva logs command to view simulation logs:
 
-```py
+```bash
 inductiva logs <TASK_ID>
 ```
 
