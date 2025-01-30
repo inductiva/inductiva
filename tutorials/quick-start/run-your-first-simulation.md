@@ -224,8 +224,13 @@ You can retrieve your results via:
 
 By completing this tutorial, you’ve successfully run an advanced XBeach simulation using the Inductiva API. 
 
-Now that your simulation is complete, you can choose any visualization tool to process, analyze, and present your results.
+<h3>🌊 XBeach Simulation Visualization</h3>
+<p align="center">
+  <img src="../_static/xbeach_animated.gif" alt="XBeach Simulation Results" width="700">
+</p>
+<p align="center"><i>3D visualization of the XBeach simulation results, showcasing coastal dynamics and seabed changes over time.</i></p>
 
+Now that your simulation is complete, you can choose any visualization tool to process, analyze, and present your results. For our demo, we used [ParaView](https://www.paraview.org/) to generate a 3D visualization of the XBeach simulation results.
 
 ### What's Next?
 
