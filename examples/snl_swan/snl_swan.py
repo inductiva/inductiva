@@ -8,8 +8,8 @@ snl_swan = inductiva.simulators.SnlSwan()
 
 # Run simulation with config files in the input directory
 task = snl_swan.run(input_dir="/Path/to/My/Snl-Swan/Files",
-                sim_config_filename="input.swn",
-                on=machine_group)
+                    sim_config_filename="input.swn",
+                    on=machine_group)
 
 # Wait for the simulation to finish and download the results
 task.wait()

@@ -25,6 +25,7 @@ class SnlSwan(simulators.Simulator):
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "snlswan"
         self.container_image = self._get_image_uri()
+
     @property
     def name(self):
         """Get the name of the this simulator."""
