@@ -151,31 +151,81 @@ The script will:
 - Execute the simulation on the cloud.
 - Wait for completion and terminate the machine.
 
-### Monitor the Simulation
+### View Task Details
 
-**Command Line:** Use the inductiva logs command to view simulation logs:
+#### **In the Command Line** 
+
+Use the inductiva logs command to view simulation logs:
 
 ```bash
 inductiva logs <TASK_ID>
 ```
+<div style="border: 2px solid #FFA500; padding: 15px; background-color: #FFF3CD; border-radius: 8px; margin: 20px 0;">
+  <h3 style="margin-top: 0;">🔎 Understanding the Task ID</h3>
+  <p>Each simulation you run is assigned a unique <strong>Task ID</strong>.  
+  This is the long alphanumeric sequence visible in the command line output when starting a simulation.</p>
+  <p>You’ll need this ID to check logs, monitor progress, or retrieve results using the Inductiva API.</p>
+</div>
 
-**Web Console:** Log in to the Inductiva Console to track simulation progress and view outputs.
+#### **In the Web Console** 
 
-## Step 4: Accessing Outputs
+In the [Inductiva Web Console](https://console.inductiva.ai/), the [Tasks](https://console.inductiva.ai/tasks) section provides a complete overview of your simulation runs.
 
-- Download outputs via the Web Console or CLI.
-- Partial outputs are saved if the simulation is interrupted.
-- Use the outputs as inputs for subsequent simulations if needed.
+![Task Details in Inductiva Console](../_static/console-walkthrough-task.gif "Navigate through the Inductiva Web Console to track your simulations effortlessly. View task details, monitor progress, check logs, download results, and share task links with collaborators—all in one place!")
 
-## Good to Know! 
+🔹 Task Overview
+* See a list of all your simulation tasks, including their status.
+* Click on any task to access its Task ID and execution details.
+
+🔹 Detailed Task Insights
+* Simulation duration, cost breakdown, machine group details, and much more.
+* Step-by-step timeline of the task lifecycle, from start to completion, with timestamps.
+
+🔹 Task Logs & Debugging
+* Real-time logs to track simulation progress.
+* View error messages for troubleshooting if anything goes wrong.
+
+<div style="border: 2px solid #17A2B8; padding: 15px; background-color: #E8F8FC; border-radius: 8px; margin: 20px 0;">
+  <h3 style="margin-top: 0;">ℹ️ Good to Know</h3>
+  <ul>
+    <li>The <strong>Auto-Refresh</strong> feature updates the simulation status every <strong>15 seconds</strong>, ensuring you always have the latest progress.</li>
+    <li>You can <strong>terminate a running simulation</strong> directly from the Web Console if needed—no need to switch back to the command line.</li>
+  </ul>
+</div>
+
+## Step 4: Access Your Simulation Outputs
+
+All simulation output files are securely stored in your exclusive folder on Inductiva’s cloud platform. If the simulation is interrupted, all progress up to that point is saved, so you can still access and use partial results.
+
+✅ Private & Secure – Only you have access to your simulation results.
+
+✅ Available Anytime – Download your files whenever you need them.
+
+You can retrieve your results via:
+
+- **[Web Console](https://console.inductiva.ai/)** → Navigate to your task and download the output files.
+- **Command Line** → Use Inductiva’s CLI to fetch results directly.
+
+<div style="border: 2px solid #17A2B8; padding: 15px; background-color: #E8F8FC; border-radius: 8px; margin: 20px 0;">
+  <h3 style="margin-top: 0;">ℹ️ Good To Know</h3>
+  <ul>
+    <li>🔁 <strong>Reusing Outputs</strong> – You can use the results of one simulation as inputs for another, enabling iterative workflows.</li>
+  </ul>
+  <p>Learn more in our <a href="https://tutorials.inductiva.ai/how_to/reuse-files.html">documentation</a> on chaining simulations.</p>
+</div>
 
 ### Cost Management
 
 - Spot mode significantly reduces costs (~85 cents for this example).
+
 - Idle machines are automatically shut down after 30 minutes to prevent unexpected charges.
 
-## Conclusion
+## Happy Simulating
 
-By completing this tutorial, you’ve successfully run an advanced XBeach simulation using the Inductiva API. Explore other use cases and simulators available on the Inductiva Tutorials Page. If you encounter issues, refer to the documentation or contact support.
+By completing this tutorial, you’ve successfully run an advanced XBeach simulation using the Inductiva API. 
+
+Explore other use cases and simulators available on the [Inductiva Tutorials Page](https://tutorials.inductiva.ai/index.html). 
+
+If you encounter issues, refer to the [documentation](https://docs.inductiva.ai/en/latest/) or contact support at support@inductiva.ai.
 
 Happy simulating!
