@@ -7,8 +7,7 @@ machine_group = inductiva.resources.MachineGroup("c3d-standard-90")
 # Initialize the Simulator
 swan = inductiva.simulators.SWAN()
 
-# Run simulation with config files in the input directory
-# Uses swanrun by default
+# Run simulation
 task = swan.run(input_dir="/path/to/my/swan/files",
                 sim_config_filename="a11refr.swn",
                 on=machine_group)

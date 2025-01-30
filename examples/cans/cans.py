@@ -11,7 +11,7 @@ cans = inductiva.simulators.CaNS()
 task = cans.run(input_dir="path/to/my/cans/files",
                 sim_config_filename="input.nml",
                 on=machine_group,
-                n_vcpus=4)
+                n_vcpus=90)
 
 task.wait()
 machine_group.terminate()

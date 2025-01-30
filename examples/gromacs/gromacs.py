@@ -19,6 +19,7 @@ commands = [
      "-g eql.log"),
 ]
 
+# Initialize the Simulator
 gromacs = inductiva.simulators.GROMACS()
 
 task = gromacs.run(input_dir="path/to/my/gromacs/files",

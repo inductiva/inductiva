@@ -4,9 +4,10 @@ import inductiva
 # Instantiate machine group
 machine_group = inductiva.resources.MachineGroup("c3d-standard-90")
 
-# Set simulation input directory
+# Initialize the Simulator
 splishsplash = inductiva.simulators.SplishSplash()
 
+# Run simulation
 task = splishsplash.run(input_dir="/path/to/my/splishsplash/files",
                         sim_config_filename="config.json",
                         on=machine_group)

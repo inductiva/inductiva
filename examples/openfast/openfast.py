@@ -4,15 +4,12 @@ import inductiva
 # Instantiate machine group
 machine_group = inductiva.resources.MachineGroup("c3d-standard-90")
 
-# List of commands to run
-commands = ["openfast IEA-15-240-RWT-Monopile.fst"]
-
 # Initialize OpenFAST simulator
 openfast = inductiva.simulators.OpenFAST()
 
 # Run simulation
 task = openfast.run(input_dir="/path/to/my/openfast/files",
-                    commands=commands,
+                    commands=["openfast IEA-15-240-RWT-Monopile.fst"],
                     on=machine_group)
 
 task.wait()

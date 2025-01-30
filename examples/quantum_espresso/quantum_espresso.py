@@ -4,15 +4,12 @@ import inductiva
 # Instantiate machine group
 machine_group = inductiva.resources.MachineGroup("c3d-standard-90")
 
-# List of commands to run
-commands = ["pw_openmp.x -i Al_qe_pseudo.in"]
-
 # Initialize QuantumEspresso simulator
 qe = inductiva.simulators.QuantumEspresso()
 
 # Run simulation
 task = qe.run(input_dir="/path/to/my/quantumEspresso/files",
-              commands=commands,
+              commands=["pw_openmp.x -i Al_qe_pseudo.in"],
               on=machine_group)
 
 task.wait()

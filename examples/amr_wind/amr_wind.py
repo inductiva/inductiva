@@ -11,7 +11,7 @@ amr_wind = inductiva.simulators.AmrWind()
 task = amr_wind.run(input_dir="path/to/my/amr-wind/files",
                     sim_config_filename="abl_amd_wenoz.inp",
                     on=machine_group,
-                    n_vcpus=4)
+                    n_vcpus=90)
 
 task.wait()
 machine_group.terminate()

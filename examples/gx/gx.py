@@ -4,6 +4,7 @@ import inductiva
 # Instantiate machine group
 machine_group = inductiva.resources.MachineGroup("c3d-standard-90")
 
+# Initialize the Simulator
 gx = inductiva.simulators.Gx()
 
 task = gx.run(input_dir="/path/to/my/gx/files",
