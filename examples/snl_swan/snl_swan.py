@@ -14,7 +14,7 @@ task = snl_swan.run(input_dir="/Path/to/My/Snl-Swan/Files",
                 sim_config_filename="INPUT.swn",
                 on=machine_group)
 
-# Uses swanrun
+# Uses swanrun .
 # task = snl_swan.run(input_dir="/Path/to/My/Snl-Swan/Files",
 #                 sim_config_filename="INPUT.swn",
 #                 command="swanrun",
