@@ -367,10 +367,7 @@ class BaseMachineGroup(ABC):
 
         Args:
             wait_for_quotas: If True, the method will wait for quotas to
-              become available before starting the resource.
-            **kwargs: Depending on the type of machine group to be started,
-              this can be num_machines, max_machines, min_machines,
-              and is_elastic."""
+              become available before starting the resource."""
         if self._started:
             logging.info("Attempting to start a machine group already started.")
             return
@@ -394,7 +391,8 @@ class BaseMachineGroup(ABC):
             while not self.can_start_resource():
                 time.sleep(self.QUOTAS_EXCEEDED_SLEEP_SECONDS)
 
-        self._api.start_vm_group(query_params={"machine_group_id": self.id})
+        self._api.start_vm_group(query_params={
+            "machine_group_id": self.id})
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
         quota_usage_table_str = self.quota_usage_table_str("used by resource")
@@ -404,7 +402,7 @@ class BaseMachineGroup(ABC):
             "%s", self, creation_time, quota_usage_table_str)
         return True
 
-    def terminate(self, verbose: bool = True, **kwargs):
+    def terminate(self, verbose: bool = True):
         """Terminates a machine group."""
         if not self._started or self.id is None or self.name is None:
             logging.warning(
