@@ -18,7 +18,6 @@ flexibility and accuracy in plasma turbulence simulations.
 
 
 We currently have the following GX version available:
-
 - v11-2024 : This represents the source code from the GX repository as of November 2024.
 
 > **Note**: The GX simulator only runs on VM's with a GPU available (e.g., `g2-standard-4`).
