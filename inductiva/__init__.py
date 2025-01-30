@@ -145,9 +145,9 @@ def compare_client_and_backend_versions(client_version: str):
                     "Please run the following command to upgrade the Python "
                     "package:\n\n\tpip install --upgrade inductiva\n")
 
-                raise VersionError(error_message)
+                raise VersionError(error_message) from e
             else:
-                raise e
+                raise RuntimeError(str(e)) from e
 
         except Exception as e:
             raise RuntimeError(
