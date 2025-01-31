@@ -9,7 +9,7 @@ xbeach = inductiva.simulators.XBeach(version="1.24")
 
 # Run simulation with configuration files in the input directory
 task = xbeach.run(input_dir="/path/to/my/xbeach/files",
-                  sim_config_filename="params.txt",
+                  sim_config_filename="my_config_file.txt",
                   on=machine_group)
 
 task.wait()

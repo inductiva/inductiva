@@ -9,7 +9,7 @@ input_dir = inductiva.utils.download_from_url(
     "gromacs-input-example.zip",
     unzip=True)
 
-gx = inductiva.simulators.Gx()
+gx = inductiva.simulators.GX()
 
 task = gx.run(input_dir=input_dir,
               sim_config_filename="itg_w7x_adiabatic_electrons.in",

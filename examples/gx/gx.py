@@ -2,12 +2,12 @@
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c3d-standard-90")
+machine_group = inductiva.resources.MachineGroup("g2-standard-24")
 
 gx = inductiva.simulators.GX()
 
 task = gx.run(input_dir="/Path/to/My/GX/Files",
-              sim_config_filename="itg_w7x_adiabatic_electrons.in",
+              sim_config_filename="my_config_file.in",
               on=machine_group)
 
 task.wait()

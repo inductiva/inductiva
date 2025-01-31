@@ -7,7 +7,7 @@ machine_group = inductiva.resources.MachineGroup("c3d-standard-90")
 fds = inductiva.simulators.FDS()
 
 task = fds.run(input_dir="path/to/my/fds/files",
-               sim_config_filename="mccaffrey.fds",
+               sim_config_filename="my_config_file.fds",
                n_vcpus=90,
                on=machine_group)
 

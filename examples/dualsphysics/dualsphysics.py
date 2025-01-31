@@ -9,7 +9,7 @@ dualsphysics = inductiva.simulators.DualSPHysics()
 
 # Run simulation with config files in the input directory
 task = dualsphysics.run(input_dir="path/to/my/DualSPHysics/files",
-                        shell_script="run.sh",
+                        shell_script="my_config_file.sh",
                         on=machine_group)
 
 task.wait()

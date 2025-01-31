@@ -9,7 +9,7 @@ amr_wind = inductiva.simulators.AmrWind()
 
 # Run simulation with config files in the input directory
 task = amr_wind.run(input_dir="path/to/my/amr-wind/files",
-                    sim_config_filename="abl_amd_wenoz.inp",
+                    sim_config_filename="my_config_file.inp",
                     on=machine_group,
                     n_vcpus=90)
 

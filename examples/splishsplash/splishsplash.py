@@ -9,7 +9,7 @@ splishsplash = inductiva.simulators.SplishSplash()
 
 # Run simulation
 task = splishsplash.run(input_dir="/path/to/my/splishsplash/files",
-                        sim_config_filename="config.json",
+                        sim_config_filename="my_config_file.json",
                         on=machine_group)
 
 task.wait()

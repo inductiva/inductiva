@@ -9,7 +9,7 @@ swash = inductiva.simulators.SWASH(version="10.05")
 
 # Run simulation with config files in the input directory
 task = swash.run(input_dir="/path/to/my/swash/files",
-                 sim_config_filename="input.sws",
+                 sim_config_filename="my_config_file.sws",
                  on=machine_group)
 
 task.wait()

@@ -10,7 +10,7 @@ fvcom = inductiva.simulators.FVCOM()
 # Run simulation with config files in the input directory
 task = fvcom.run(input_dir="path/to/my/fvcom/files",
                  working_dir="run/",
-                 case_name="test",
+                 case_name="my_case_name",
                  n_vcpus=90,
                  debug=7,
                  on=machine_group)
