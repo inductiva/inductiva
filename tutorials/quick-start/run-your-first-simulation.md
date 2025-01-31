@@ -14,14 +14,16 @@ By following this step-by-step guide, you will:
 * Access and manage simulation outputs via CLI and our [Web Console](https://console.inductiva.ai/).
 
 <div style="
-  border: 2px solid var(--color-primary, #007BFF); 
+  border: 2px solid #007BFF; 
+  background-color: rgba(0, 123, 255, 0.1); 
   padding: 15px; 
-  background-color: var(--color-background-secondary, #F0F8FF); 
   border-radius: 8px; 
   margin: 20px 0;
-  color: var(--color-foreground-primary, #000);
+  color: inherit;
 ">
-  <h3 style="margin-top: 0;">🎥 Prefer a visual guide?</h3>
+  <h3 style="margin-top: 0; color: #ffffff; font-weight: bold;">
+    🎥 Prefer a Visual Guide?
+  </h3>
   <p>Follow along with our <strong>video walkthrough</strong> led by our CEO, where key details, features, and step-by-step instructions are explained in depth. It's a quick and engaging way to get started in no time!</p>
 </div>
 
@@ -68,13 +70,23 @@ Before starting, ensure the following:
 
 Open your preferred IDE (e.g., VS Code, PyCharm) and save a new file as `run.py` in your project directory.
 
-<div style="border: 2px solid #28A745; padding: 15px; background-color: #E9FBEA; border-radius: 8px; margin: 20px 0;">
-  <h3 style="margin-top: 0;">💡 Pro Tip: Quick Creation of `run.py`</h3>
-  <p>Instead of creating the file manually, you can use a shortcut on <strong>Mac/Linux</strong>, type:  
-       <code>touch run.py</code>  
-     </code>  
-  </p>
-  <p>This will instantly create the `run.py` file in your current directory.</p>
+<div style="
+  border: 2px solid #28A745; 
+  padding: 15px; 
+  background-color: rgba(40, 167, 69, 0.1); 
+  border-radius: 8px; 
+  margin: 20px 0;
+  color: inherit;
+">
+  <h3 style="margin-top: 0; color: #ffffff; font-weight: bold;">
+    💡 Pro Tip: Quick Creation of <code>run.py</code>
+  </h3>
+  <p>Instead of creating the file manually, you can use a shortcut:</p>
+  <ul>
+    <li>On <strong>Mac/Linux</strong>, type:  
+      <code>touch run.py</code></li>
+  </ul>
+  <p>This will instantly create the <code>run.py</code> file in your current directory.</p>
 </div>
 
 ### Organise Your Files
@@ -166,16 +178,17 @@ Use the inductiva logs command to view simulation logs:
 ```bash
 inductiva logs <TASK_ID>
 ```
-
 <div style="
-  border: 2px solid var(--color-warning, #FFA500); 
+  border: 2px solid #FFA500; 
+  background-color: rgba(255, 165, 0, 0.1); 
   padding: 15px; 
-  background-color: var(--color-background-warning, #FFF3CD); 
   border-radius: 8px; 
   margin: 20px 0;
-  color: var(--color-foreground-primary, #000);
+  color: inherit;
 ">
-  <h3 style="margin-top: 0;">🔎 Understanding the Task ID</h3>
+  <h3 style="margin-top: 0; color: #ffffff; font-weight: bold;">
+    🔎 Understanding the Task ID
+  </h3>
   <p>Each simulation you run is assigned a unique <strong>Task ID</strong>.</p>
   <p>This is the long alphanumeric sequence visible in the command line output when starting a simulation.</p>
   <p>You’ll need this ID to check logs, monitor progress, or retrieve results using the Inductiva API.</p>
@@ -200,14 +213,16 @@ In the [Inductiva Web Console](https://console.inductiva.ai/), the [Tasks](https
 * View error messages for troubleshooting if anything goes wrong.
 
 <div style="
-  border: 2px solid var(--color-info, #17A2B8); 
+  border: 2px solid #17A2B8; 
+  background-color: rgba(23, 162, 184, 0.1); 
   padding: 15px; 
-  background-color: var(--color-background-info, #E8F8FC); 
   border-radius: 8px; 
   margin: 20px 0;
-  color: var(--color-foreground-primary, #000);
+  color: inherit;
 ">
-  <h3 style="margin-top: 0;">ℹ️ Good to Know</h3>
+  <h3 style="margin-top: 0; color: #ffffff; font-weight: bold;">
+    ℹ️ Good to Know
+  </h3>
   <ul>
     <li>The <strong>Auto-Refresh</strong> feature updates the simulation status every <strong>15 seconds</strong>, ensuring you always have the latest progress.</li>
     <li>You can <strong>terminate a running simulation</strong> directly from the Web Console if needed—no need to switch back to the command line.</li>
@@ -228,18 +243,20 @@ You can retrieve your results via:
 - **Command Line** → Use Inductiva’s CLI to fetch results directly.
 
 <div style="
-  border: 2px solid var(--color-info, #17A2B8); 
+  border: 2px solid #17A2B8; 
+  background-color: rgba(23, 162, 184, 0.1); 
   padding: 15px; 
-  background-color: var(--color-background-info, #E8F8FC); 
   border-radius: 8px; 
   margin: 20px 0;
-  color: var(--color-foreground-primary, #000);
+  color: inherit;
 ">
-  <h3 style="margin-top: 0;">ℹ️ Good To Know</h3>
+  <h3 style="margin-top: 0; color: #ffffff; font-weight: bold;">
+    ℹ️ Good To Know
+  </h3>
   <ul>
     <li>🔁 <strong>Reusing Outputs</strong> – You can use the results of one simulation as inputs for another, enabling iterative workflows.</li>
   </ul>
-  <p>Learn more in our <a href="https://tutorials.inductiva.ai/how_to/reuse-files.html" style="color: var(--color-link, #007BFF);">documentation</a> on chaining simulations.</p>
+  <p>Learn more in our <a href="https://tutorials.inductiva.ai/how_to/reuse-files.html" style="color: #007BFF;">documentation</a> on chaining simulations.</p>
 </div>
 
 ### Cost Management
