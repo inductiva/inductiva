@@ -2,6 +2,7 @@
 from unittest import mock
 import inductiva
 import json
+
 RESPONSE = [{
     "machine_type": "c2-standard-4",
     "num_cpus": 4,
@@ -27,6 +28,8 @@ RESPONSE = [{
     "num_gpus": 1,
     "gpu_name": "nvidia-l4",
 }]
+
+
 def test_get_available_machine_types():
     mock_compute_api_path =\
         "inductiva.resources.machine_types.compute_api.ComputeApi"
