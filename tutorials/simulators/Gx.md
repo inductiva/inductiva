@@ -1,10 +1,7 @@
 In this guide, we will walk you through setting up and running GX simulations
 using the Inductiva API.
 
-We will cover:
-
-- Configuring GX simulations with the appropriate input directories.
-- Example code to help you get started with your simulations.
+We will cover an example code to help you get started with simulations.
 
 # GX
 
