@@ -1,15 +1,15 @@
-"""Gx module of the API for numerical simulations."""
+"""GX module of the API for numerical simulations."""
 from typing import List, Optional
 
 from inductiva import types, tasks, simulators
 
 
-class Gx(simulators.Simulator):
-    """Class to invoke a generic Gx simulation on the API.
+class GX(simulators.Simulator):
+    """Class to invoke a generic GX simulation on the API.
     """
 
     def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
-        """Initialize the Gx simulator.
+        """Initialize the GX simulator.
 
         Args:
             version (str): The version of the simulator to use. If None, the
