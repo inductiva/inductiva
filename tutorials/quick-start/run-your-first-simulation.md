@@ -3,9 +3,9 @@
 Welcome to Inductiva! Now that you’ve completed the [onboarding process](https://console.inductiva.ai/), 
 it’s time to dive in and see how easy it is to run your first simulation!
 
-This tutorial demonstrates how to run a simulation using the XBeach simulator 
-through the Inductiva API. We will use a real-world dataset from the Galveston Island, Texas 
-study on beach and dune enhancement scenarios [(dataset available here)](https://data.griidc.org/data/HI.x833.000:0001). 
+In this tutorial, we’ll run a real-world simulation using the XBeach simulator through the Inductiva API. The use case is a study on beach and dune enhancement scenarios for Galveston Island, Texas.
+
+All required input data for this simulation is [available here](https://data.griidc.org/data/HI.x833.000:0001).
 
 By following this step-by-step guide, you will:
 
@@ -13,7 +13,14 @@ By following this step-by-step guide, you will:
 * Use and select high-performance cloud machines.
 * Access and manage simulation outputs via CLI and our [Web Console](https://console.inductiva.ai/).
 
-<div style="border: 2px solid #007BFF; padding: 15px; background-color: #F0F8FF; border-radius: 8px; margin: 20px 0;">
+<div style="
+  border: 2px solid var(--color-primary, #007BFF); 
+  padding: 15px; 
+  background-color: var(--color-background-secondary, #F0F8FF); 
+  border-radius: 8px; 
+  margin: 20px 0;
+  color: var(--color-foreground-primary, #000);
+">
   <h3 style="margin-top: 0;">🎥 Prefer a visual guide?</h3>
   <p>Follow along with our <strong>video walkthrough</strong> led by our CEO, where key details, features, and step-by-step instructions are explained in depth. It's a quick and engaging way to get started in no time!</p>
 </div>
@@ -24,7 +31,7 @@ Let’s go!
 
 Before starting, ensure the following:
 
-* **Python Installed:** Make sure Python (>=3.8) is installed on your system. Check our [System Prep guide](https://docs.inductiva.ai/en/latest/preinstallation/system/system-requirements.html#select-your-os) for more information.
+* **Python Installed:** Make sure Python (>=3.9) is installed on your system. Check our [System Prep guide](https://docs.inductiva.ai/en/latest/preinstallation/system/system-requirements.html#select-your-os) for more information.
 * **Inductiva API Setup:** 
 
     - Install the Inductiva library using `pip install inductiva`.
@@ -101,7 +108,6 @@ machine_group = inductiva.resources.MachineGroup(
     machine_type="c3d-highcpu-90",
     spot=True, # Enables cost-saving spot mode
     data_disk_gb=20) 
-machine_group.start() # Start the machine group
 
 # Specify the input directory
 input_dir = "Beach_Nourish_Only"
@@ -116,19 +122,21 @@ task = xbeach.run(
     n_vcpus=90,
     on=machine_group)
 
-# task.wait() is a blocking call and will only return when the simulation
-# ends. However, you can close your terminal without interrupting the 
-# simulation and use Inductiva CLI (Command Line Interface) tools to
-# check the status of the simulation from another terminal.
 task.wait()
 
 # Clean up resources after the simulation
 machine_group.terminate()
 
-# Let's get a small summary of the run.
+# Get a small summary of the run
 task.print_summary()
 
 ```
+`The task.wait()` command blocks execution and will only return once the simulation is complete.
+
+However, you don’t need to keep your terminal open the entire time!
+
+- You **can safely close your terminal**, and the simulation will continue running in the cloud.
+- To check the simulation status from another terminal, use the Inductiva CLI (Command Line Interface) tools.
 
 ## Step 3: Run the Simulation
 
@@ -147,7 +155,7 @@ The script will:
 - Start the specified cloud machine in spot mode.
 - Zip and upload simulation files to Inductiva servers
 - Execute the simulation on the cloud.
-- Wait for completion and terminate the machine.
+- Terminate the machine once the simulation completes.
 
 ### View Task Details
 
@@ -158,10 +166,18 @@ Use the inductiva logs command to view simulation logs:
 ```bash
 inductiva logs <TASK_ID>
 ```
-<div style="border: 2px solid #FFA500; padding: 15px; background-color: #FFF3CD; border-radius: 8px; margin: 20px 0;">
+
+<div style="
+  border: 2px solid var(--color-warning, #FFA500); 
+  padding: 15px; 
+  background-color: var(--color-background-warning, #FFF3CD); 
+  border-radius: 8px; 
+  margin: 20px 0;
+  color: var(--color-foreground-primary, #000);
+">
   <h3 style="margin-top: 0;">🔎 Understanding the Task ID</h3>
-  <p>Each simulation you run is assigned a unique <strong>Task ID</strong>.  
-  This is the long alphanumeric sequence visible in the command line output when starting a simulation.</p>
+  <p>Each simulation you run is assigned a unique <strong>Task ID</strong>.</p>
+  <p>This is the long alphanumeric sequence visible in the command line output when starting a simulation.</p>
   <p>You’ll need this ID to check logs, monitor progress, or retrieve results using the Inductiva API.</p>
 </div>
 
@@ -183,7 +199,14 @@ In the [Inductiva Web Console](https://console.inductiva.ai/), the [Tasks](https
 * Real-time logs to track simulation progress.
 * View error messages for troubleshooting if anything goes wrong.
 
-<div style="border: 2px solid #17A2B8; padding: 15px; background-color: #E8F8FC; border-radius: 8px; margin: 20px 0;">
+<div style="
+  border: 2px solid var(--color-info, #17A2B8); 
+  padding: 15px; 
+  background-color: var(--color-background-info, #E8F8FC); 
+  border-radius: 8px; 
+  margin: 20px 0;
+  color: var(--color-foreground-primary, #000);
+">
   <h3 style="margin-top: 0;">ℹ️ Good to Know</h3>
   <ul>
     <li>The <strong>Auto-Refresh</strong> feature updates the simulation status every <strong>15 seconds</strong>, ensuring you always have the latest progress.</li>
@@ -204,12 +227,19 @@ You can retrieve your results via:
 - **[Web Console](https://console.inductiva.ai/)** → Navigate to your task and download the output files.
 - **Command Line** → Use Inductiva’s CLI to fetch results directly.
 
-<div style="border: 2px solid #17A2B8; padding: 15px; background-color: #E8F8FC; border-radius: 8px; margin: 20px 0;">
+<div style="
+  border: 2px solid var(--color-info, #17A2B8); 
+  padding: 15px; 
+  background-color: var(--color-background-info, #E8F8FC); 
+  border-radius: 8px; 
+  margin: 20px 0;
+  color: var(--color-foreground-primary, #000);
+">
   <h3 style="margin-top: 0;">ℹ️ Good To Know</h3>
   <ul>
     <li>🔁 <strong>Reusing Outputs</strong> – You can use the results of one simulation as inputs for another, enabling iterative workflows.</li>
   </ul>
-  <p>Learn more in our <a href="https://tutorials.inductiva.ai/how_to/reuse-files.html">documentation</a> on chaining simulations.</p>
+  <p>Learn more in our <a href="https://tutorials.inductiva.ai/how_to/reuse-files.html" style="color: var(--color-link, #007BFF);">documentation</a> on chaining simulations.</p>
 </div>
 
 ### Cost Management
