@@ -21,7 +21,13 @@ By following this step-by-step guide, you will:
   margin: 20px 0;
   color: inherit;
 ">
-  <h3 style="margin-top: 0; color: #ffffff; font-weight: bold;">
+  <h3 style="
+    margin-top: 0; 
+    background-color: #007BFF; 
+    color: #ffffff; 
+    padding: 10px; 
+    border-radius: 5px 5px 0 0;
+  ">
     🎥 Prefer a Visual Guide?
   </h3>
   <p>Follow along with our <strong>video walkthrough</strong> led by our CEO, where key details, features, and step-by-step instructions are explained in depth. It's a quick and engaging way to get started in no time!</p>
@@ -72,13 +78,19 @@ Open your preferred IDE (e.g., VS Code, PyCharm) and save a new file as `run.py`
 
 <div style="
   border: 2px solid #28A745; 
-  padding: 15px; 
   background-color: rgba(40, 167, 69, 0.1); 
+  padding: 15px; 
   border-radius: 8px; 
   margin: 20px 0;
   color: inherit;
 ">
-  <h3 style="margin-top: 0; color: #ffffff; font-weight: bold;">
+  <h3 style="
+    margin-top: 0; 
+    background-color: #28A745; 
+    color: #ffffff; 
+    padding: 10px; 
+    border-radius: 5px 5px 0 0;
+  ">
     💡 Pro Tip: Quick Creation of <code>run.py</code>
   </h3>
   <p>Instead of creating the file manually, you can use a shortcut:</p>
@@ -186,7 +198,13 @@ inductiva logs <TASK_ID>
   margin: 20px 0;
   color: inherit;
 ">
-  <h3 style="margin-top: 0; color: #ffffff; font-weight: bold;">
+  <h3 style="
+    margin-top: 0; 
+    background-color: #FFA500; 
+    color: #ffffff; 
+    padding: 10px; 
+    border-radius: 5px 5px 0 0;
+  ">
     🔎 Understanding the Task ID
   </h3>
   <p>Each simulation you run is assigned a unique <strong>Task ID</strong>.</p>
@@ -220,7 +238,13 @@ In the [Inductiva Web Console](https://console.inductiva.ai/), the [Tasks](https
   margin: 20px 0;
   color: inherit;
 ">
-  <h3 style="margin-top: 0; color: #ffffff; font-weight: bold;">
+  <h3 style="
+    margin-top: 0; 
+    background-color: #17A2B8; 
+    color: #ffffff; 
+    padding: 10px; 
+    border-radius: 5px 5px 0 0;
+  ">
     ℹ️ Good to Know
   </h3>
   <ul>
@@ -250,7 +274,13 @@ You can retrieve your results via:
   margin: 20px 0;
   color: inherit;
 ">
-  <h3 style="margin-top: 0; color: #ffffff; font-weight: bold;">
+  <h3 style="
+    margin-top: 0; 
+    background-color: #17A2B8; 
+    color: #ffffff; 
+    padding: 10px; 
+    border-radius: 5px 5px 0 0;
+  ">
     ℹ️ Good To Know
   </h3>
   <ul>
