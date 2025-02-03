@@ -2,7 +2,7 @@
 import inductiva
 
 # Instantiate machine group
-gpu_machine_group = inductiva.resources.MachineGroup("g2-standard-24")
+gpu_machine_group = inductiva.resources.MachineGroup("g2-standard-96")
 
 gx = inductiva.simulators.GX()
 
