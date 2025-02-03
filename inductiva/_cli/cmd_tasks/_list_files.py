@@ -5,11 +5,16 @@ import sys
 import asyncio
 
 from inductiva import _cli, tasks
+from inductiva._cli.cmd_tasks import task_utils
 
 
 def list_files(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
+    valid, err_msg = task_utils.validate_task_computation_started(task)
+    if not valid:
+        print(err_msg, file=sys.stderr)
+        return 1
     directories = asyncio.run(task._list_files())  # pylint: disable=protected-access
     print(directories, file=fout)
     return 0
