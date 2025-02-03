@@ -23,7 +23,7 @@ class AmrWind(simulators.Simulator):
         super().__init__(version=version, use_dev=use_dev)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "amrwind"
-        self.container_image = self._get_image_uri()
+        
 
     @property
     def name(self):

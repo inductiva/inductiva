@@ -25,7 +25,7 @@ class CaNS(simulators.Simulator):
         super().__init__(version=version, use_dev=use_dev)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "cans"
-        self.container_image = self._get_image_uri()
+        
 
     def run(self,
             input_dir: Optional[str],
