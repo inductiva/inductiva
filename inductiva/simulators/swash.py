@@ -24,7 +24,6 @@ class SWASH(simulators.Simulator):
         super().__init__(version=version, use_dev=use_dev)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "swash"
-        
 
     def run(self,
             input_dir: Optional[str],

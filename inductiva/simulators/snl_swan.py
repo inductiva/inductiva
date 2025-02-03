@@ -24,7 +24,6 @@ class SnlSwan(simulators.Simulator):
         super().__init__(version=version, use_dev=use_dev)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "snlswan"
-        
 
     @property
     def name(self):
