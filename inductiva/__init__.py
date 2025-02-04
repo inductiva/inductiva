@@ -42,7 +42,7 @@ _api_key = contextvars.ContextVar("INDUCTIVA_API_KEY",
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.13.0"
+__version__ = "0.13.1"
 
 
 def set_output_dir(new_output_dir):
@@ -101,6 +101,10 @@ def get_api_agent():
     return f"Client/{__version__}/python"
 
 
+class VersionError(Exception):
+    pass
+
+
 def compare_client_and_backend_versions(client_version: str):
     """ Compares the provided client version 7with the backend API version.
 
@@ -135,11 +139,15 @@ def compare_client_and_backend_versions(client_version: str):
 
         except ApiException as e:
             if e.status == 406:
-                raise RuntimeError(
-                    f"Client version {client_version} is not compatible "
-                    f"with API version {e.headers['version']}.\n"
-                    "Please update the client version.") from e
-            raise RuntimeError(e) from e
+                error_message = (
+                    f"inductiva package (version {client_version}) is "
+                    "outdated and is not compatible with the backend.\n"
+                    "Please run the following command to upgrade the Python "
+                    "package:\n\n\tpip install --upgrade inductiva\n")
+
+                raise VersionError(error_message) from e
+            else:
+                raise RuntimeError(str(e)) from e
 
         except Exception as e:
             raise RuntimeError(

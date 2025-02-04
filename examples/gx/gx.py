@@ -1,14 +1,14 @@
-"""Gx example."""
+"""GX example."""
 import inductiva
 
 # Instantiate machine group
 machine_group = inductiva.resources.MachineGroup("g2-standard-4")
 
-gx = inductiva.simulators.Gx()
+gx = inductiva.simulators.GX()
 
-task = gx.run(input_dir="/Path/to/My/Gx/Files",
-                   sim_config_filename="itg_w7x_adiabatic_electrons.in",
-                   on=machine_group)
+task = gx.run(input_dir="/Path/to/My/GX/Files",
+              sim_config_filename="itg_w7x_adiabatic_electrons.in",
+              on=machine_group)
 
 task.wait()
 machine_group.terminate()

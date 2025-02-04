@@ -92,6 +92,7 @@ def list_machine_types_available(args):
             machines_dict[family][memory][config] = {"vcpus": []}
 
         if vcpus is not None:
+            # Sorted insertion of vcpus
             if int(vcpus) not in machines_dict[family][memory][config]["vcpus"]:
                 bisect.insort(machines_dict[family][memory][config]["vcpus"],
                               int(vcpus))
