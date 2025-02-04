@@ -5,7 +5,7 @@ import uuid
 import enum
 import logging
 import warnings
-import constants
+from inductiva import constants
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     import aiortc
