@@ -80,6 +80,11 @@ class SnlSwan(simulators.Simulator):
         commands = []
 
         path_config_filename = Path(sim_config_filename)
+
+        if path_config_filename.is_absolute():
+            raise ValueError("sim_config_filename must be a path relative to "
+                             "the input directory.")
+
         working_dir = path_config_filename.parent
         config_file_only = path_config_filename.name
 
