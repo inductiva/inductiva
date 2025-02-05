@@ -31,20 +31,20 @@ jobs:
             export INDUCTIVA_API_KEY=${{ secrets.API_DEV_TEST_KEY }}
             export INDUCTIVA_API_URL=https://api-dev.inductiva.ai
             fi
-            python inductiva/tests/amr_wind/amr_wind.py
-            python inductiva/tests/cans/cans.py
-            python inductiva/tests/dualsphysics/dualsphysics.py
-            python inductiva/tests/fds/fds.py
-            python inductiva/tests/fvcom/fvcom.py
-            python inductiva/tests/gromacs/gromacs.py
-            python inductiva/tests/nwchem/nwchem.py
-            python inductiva/tests/openfast/openfast.py
-            python inductiva/tests/openfoam_esi/openfoam_esi.py
-            python inductiva/tests/openfoam_foundation/openfoam_foundation.py
-            python inductiva/tests/quantum_espresso/quantum_espresso.py
-            python inductiva/tests/reef3d/reef3d.py
-            python inductiva/tests/schism/schism.py
-            python inductiva/tests/splishsplash/splishsplash.py
-            python inductiva/tests/swan/swan.py
-            python inductiva/tests/swash/swash.py
-            python inductiva/tests/xbeach/xbeach.py
+            python inductiva/tests/test_simulators/amr_wind/amr_wind.py
+            python inductiva/tests/test_simulators/cans/cans.py
+            python inductiva/tests/test_simulators/dualsphysics/dualsphysics.py
+            python inductiva/tests/test_simulators/fds/fds.py
+            python inductiva/tests/test_simulators/fvcom/fvcom.py
+            python inductiva/tests/test_simulators/gromacs/gromacs.py
+            python inductiva/tests/test_simulators/nwchem/nwchem.py
+            python inductiva/tests/test_simulators/openfast/openfast.py
+            python inductiva/tests/test_simulators/openfoam_esi/openfoam_esi.py
+            python inductiva/tests/test_simulators/openfoam_foundation/openfoam_foundation.py
+            python inductiva/tests/test_simulators/quantum_espresso/quantum_espresso.py
+            python inductiva/tests/test_simulators/reef3d/reef3d.py
+            python inductiva/tests/test_simulators/schism/schism.py
+            python inductiva/tests/test_simulators/splishsplash/splishsplash.py
+            python inductiva/tests/test_simulators/swan/swan.py
+            python inductiva/tests/test_simulators/swash/swash.py
+            python inductiva/tests/test_simulators/xbeach/xbeach.py
