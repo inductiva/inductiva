@@ -1,5 +1,6 @@
 """Base class for machine groups."""
 from collections import defaultdict, namedtuple
+from dataclasses import KW_ONLY, dataclass
 from typing import Optional, Union
 from abc import abstractmethod
 from abc import ABC
@@ -29,112 +30,94 @@ class ResourceType(enum.Enum):
     MPI = "mpi"
 
 
+@dataclass
 class BaseMachineGroup(ABC):
-    """Base class to manage Google Cloud resources."""
-
     QUOTAS_EXCEEDED_SLEEP_SECONDS = 60
 
-    def __init__(
-        self,
-        machine_type: str,
-        provider: Union[machine_types.ProviderType, str] = "GCP",
-        threads_per_core: int = 2,
-        data_disk_gb: int = 10,
-        auto_resize_disk_max_gb: int = 500,
-        max_idle_time: Optional[Union[datetime.timedelta, int]] = None,
-        auto_terminate_ts: Optional[datetime.datetime] = None,
-        register: bool = True,
-        allow_auto_start: bool = True,
-    ) -> None:
-        """Create a BaseMachineGroup object.
+    """Base class to manage Google Cloud resources.
 
-        Args:
-            machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
-              Check https://cloud.google.com/compute/docs/machine-resource for
-              more information about machine types.
-            provider: The cloud provider of the machine group.
-            threads_per_core: The number of threads per core (1 or 2).
-            data_disk_gb: The size of the disk for user data (in GB).
-            auto_resize_disk_max_gb: The maximum size in GB that the hard disk
-                of the cloud VM can reach. If set, the disk will be
-                automatically resized, during the execution of a task, when the
-                free space falls below a certain threshold. This mechanism helps
-                prevent "out of space" errors, that can occur when a task
-                generates a quantity of output files that exceeds the size of
-                the local storage. Increasing disk size during task execution
-                increases the cost of local storage associated with the VM,
-                therefore the user must set an upper limit to the disk size, to
-                prevent uncontrolled costs. Once that limit is reached, the disk
-                is no longer automatically resized, and if the task continues to
-                output files, it will fail.
-            max_idle_time: Time without executing any task, after which the
-              resource will be terminated. Can be an exact timedelta or an int
-                representing the number of minutes.
-            auto_terminate_ts: Moment in which the resource will be
-              automatically terminated.
-            register: Bool that indicates if a machine group should be register
-                or if it was already registered. If set to False by users on
-                initialization, then, the machine group will not be able to be
-                started. This serves has an helper argument for retrieving
-                already registered machine groups that can be started, for
-                example, when retrieving with the `machines_groups.get` method.
-                Users should not set this argument in anyway.
-            allow_auto_start: Bool that indicates if a machine group can be
-                started automatically. This will be used when running a task.
-                If a resourced is passed to tun a task and it is not started,
-                the task will start the resource before running the task.
-        """
+    The register argument is used to indicate if the machine group should
+    be registered or if it was already registered. If set as False on
+    initialization, then, the machine group is not registered and it
+    can not be started in the cloud. This serves has an helper argument for
+    retrieving already registered machine groups that can be started, for
+    example, when retrieving with the `machines_groups.get` method.
+    Users should not set this argument.
 
-        provider = machine_types.ProviderType(provider)
+    Args:
+        machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
+          Check https://cloud.google.com/compute/docs/machine-resource for
+          more information about machine types.
+        threads_per_core: The number of threads per core (1 or 2).
+        data_disk_gb: The size of the disk for user data (in GB).
+        max_idle_time: Time without executing any task, after which the
+          resource will be terminated. Can be an exact timedelta or an int
+            representing the number of minutes.
+        auto_terminate_ts: Moment in which the resource will be
+          automatically terminated.
+        register: Bool that indicates if a machine group should be register
+            or if it was already registered. If set as False by users on
+            initialization, then, the machine group will not be able to be
+            started. This serves has an helper argument for retrieving
+            already registered machine groups that can be started, for
+            example, when retrieving with the `machines_groups.get` method.
+            Users should not set this argument in anyway.
+    """
+    machine_type: str
+    threads_per_core: int = 2
+    data_disk_gb: int = 10
+    max_idle_time: Optional[Union[datetime.timedelta, int]] = None
+    auto_terminate_ts: Optional[datetime.datetime] = None
+    register: bool = True
+    
+    provider = "GCP"
+    _free_space_threshold_gb = 5
+    _size_increment_gb = 10
+    _id = None
+    _name = None
+    create_time = None
+    _started = False
+    #Number of active machines at the time of
+    #the request machine_groups.get()
+    _active_machines = 0
+    num_machines = 0
+    _custom_vm_image = None
+    _estimated_cost = None
+    _idle_seconds = None
+    quota_usage = {}
+    total_ram_gb = None
+    _cost_per_hour = {}
+
+    def __post_init__(self):
+        """Validate inputs and initialize additional attributes after dataclass initialization."""
+        provider = machine_types.ProviderType(self.provider)
         self.provider = provider.value
-        self._free_space_threshold_gb = 5
-        self._size_increment_gb = 10
-
-        if data_disk_gb <= 0:
-            raise ValueError("`data_disk_gb` must be positive.")
-
-        if auto_resize_disk_max_gb is not None:
-            if not isinstance(auto_resize_disk_max_gb,
-                              int) or auto_resize_disk_max_gb <= 0:
-                raise ValueError(
-                    "`auto_resize_disk_max_gb` must be a positive integer.")
-
-            if auto_resize_disk_max_gb < data_disk_gb + self._size_increment_gb:
-                raise ValueError("`auto_resize_disk_max_gb` must be greater "
-                                 "than or equal to `data_disk_gb + "
-                                 f"{self._size_increment_gb}GB`.")
-
-        if threads_per_core not in [1, 2]:
-            raise ValueError("`threads_per_core` must be either 1 or 2.")
-
-        self.machine_type = machine_type
-        self.provider = provider.value
-        self.threads_per_core = threads_per_core
-        self.data_disk_gb = data_disk_gb
-        self.auto_resize_disk_max_gb = auto_resize_disk_max_gb
-        self._id = None
-        self._name = None
-        self.create_time = None
-        self._started = False
-        self.register = register
-        #Number of active machines at the time of
-        #the request machine_groups.get()
-        self._active_machines = 0
-        self.num_machines = 0
-        self._auto_terminate_ts = auto_terminate_ts
-        self._custom_vm_image = None
 
         # Set the API configuration that carries the information from the client
         # to the backend.
         self._api = compute_api.ComputeApi(api.get_client())
-        self._estimated_cost = None
-        self._max_idle_time = max_idle_time
-        self.allow_auto_start = allow_auto_start
 
-        if isinstance(max_idle_time, int):
-            if max_idle_time <= 0:
+        if self.data_disk_gb <= 0:
+            raise ValueError("`data_disk_gb` must be positive.")
+
+        if self.auto_resize_disk_max_gb is not None:
+            if not isinstance(self.auto_resize_disk_max_gb, int) or self.auto_resize_disk_max_gb <= 0:
+                raise ValueError("`auto_resize_disk_max_gb` must be a positive integer.")
+
+            if self.auto_resize_disk_max_gb < self.data_disk_gb + self._size_increment_gb:
+                raise ValueError(
+                    "`auto_resize_disk_max_gb` must be greater than or equal to "
+                    f"`data_disk_gb + {self._size_increment_gb}GB`."
+                )
+
+        if self.threads_per_core not in [1, 2]:
+            raise ValueError("`threads_per_core` must be either 1 or 2.")
+
+        if isinstance(self.max_idle_time, int):
+            if self.max_idle_time <= 0:
                 raise ValueError("`max_idle_time` must be positive.")
-            self._max_idle_time = datetime.timedelta(minutes=max_idle_time)
+            self.max_idle_time = datetime.timedelta(minutes=self.max_idle_time)
+
 
     @property
     def id(self):
@@ -180,14 +163,6 @@ class BaseMachineGroup(ABC):
     @property
     def started(self):
         return self._started
-
-    @property
-    def max_idle_time(self) -> datetime.timedelta:
-        return self._max_idle_time
-
-    @property
-    def auto_terminate_ts(self):
-        return self._auto_terminate_ts
 
     @property
     def idle_time(self) -> datetime.timedelta:
@@ -296,9 +271,9 @@ class BaseMachineGroup(ABC):
             "max_disk_size_gb")
         self._log_machine_group_info()
 
-    @abstractmethod
     def __repr__(self):
-        pass
+        class_name = self.__class__.__name__
+        return f"{class_name}(name=\"{self.name}\")"
 
     def active_machines_to_str(self) -> str:
         """Return the number of machines currently running.
