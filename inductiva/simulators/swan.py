@@ -74,6 +74,11 @@ class SWAN(simulators.Simulator):
         commands = []
 
         path_config_filename = Path(sim_config_filename)
+
+        if path_config_filename.is_absolute():
+            raise ValueError("sim_config_filename must be a path relative to "
+                             "the input directory.")
+
         working_dir = path_config_filename.parent
         config_file_only = path_config_filename.name
 
@@ -106,7 +111,6 @@ class SWAN(simulators.Simulator):
             swan_exe_command = Command(f"swan.exe {sim_config_filename}",
                                        mpi_config=mpi_config)
             commands.append(swan_exe_command)
-
         return super().run(input_dir,
                            on=on,
                            storage_dir=storage_dir,
