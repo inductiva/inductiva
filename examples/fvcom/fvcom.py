@@ -11,8 +11,6 @@ fvcom = inductiva.simulators.FVCOM()
 task = fvcom.run(input_dir="path/to/my/fvcom/files",
                  working_dir="run/",
                  case_name="my_case_name",
-                 n_vcpus=90,
-                 debug=7,
                  on=machine_group)
 
 # Wait for the simulation to finish and download the results
