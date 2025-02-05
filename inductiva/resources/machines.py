@@ -50,17 +50,16 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def __post_init__(self):
         """Validate inputs and initialize additional attributes after dataclass initialization."""
         if self.num_machines < 1:
-            raise ValueError("`num_machines` should be a number greater than 0.")
+            raise ValueError(
+                "`num_machines` should be a number greater than 0.")
 
         super().__post_init__()
 
         if self.register:
             logging.info("■ Registering MachineGroup configurations:")
-            self._register_machine_group(
-                num_vms=self.num_machines,
-                spot=self.spot,
-                is_elastic=self.__is_elastic
-            )
+            self._register_machine_group(num_vms=self.num_machines,
+                                         spot=self.spot,
+                                         is_elastic=self.__is_elastic)
 
     @classmethod
     def from_api_response(cls, resp: dict):
@@ -139,8 +138,10 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         if self.min_machines >= self.max_machines:
             raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
-        
+
         super().__post_init__()
+
+        self._active_machines = self.min_machines
 
         if self.register:
             logging.info("■ Registering ElasticMachineGroup configurations:")

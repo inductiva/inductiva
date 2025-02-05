@@ -33,7 +33,6 @@ class ResourceType(enum.Enum):
 @dataclass
 class BaseMachineGroup(ABC):
     QUOTAS_EXCEEDED_SLEEP_SECONDS = 60
-
     """Base class to manage Google Cloud resources.
 
     The register argument is used to indicate if the machine group should
@@ -69,7 +68,7 @@ class BaseMachineGroup(ABC):
     max_idle_time: Optional[Union[datetime.timedelta, int]] = None
     auto_terminate_ts: Optional[datetime.datetime] = None
     register: bool = True
-    
+
     provider = "GCP"
     _free_space_threshold_gb = 5
     _size_increment_gb = 10
@@ -101,14 +100,15 @@ class BaseMachineGroup(ABC):
             raise ValueError("`data_disk_gb` must be positive.")
 
         if self.auto_resize_disk_max_gb is not None:
-            if not isinstance(self.auto_resize_disk_max_gb, int) or self.auto_resize_disk_max_gb <= 0:
-                raise ValueError("`auto_resize_disk_max_gb` must be a positive integer.")
+            if not isinstance(self.auto_resize_disk_max_gb,
+                              int) or self.auto_resize_disk_max_gb <= 0:
+                raise ValueError(
+                    "`auto_resize_disk_max_gb` must be a positive integer.")
 
             if self.auto_resize_disk_max_gb < self.data_disk_gb + self._size_increment_gb:
                 raise ValueError(
                     "`auto_resize_disk_max_gb` must be greater than or equal to "
-                    f"`data_disk_gb + {self._size_increment_gb}GB`."
-                )
+                    f"`data_disk_gb + {self._size_increment_gb}GB`.")
 
         if self.threads_per_core not in [1, 2]:
             raise ValueError("`threads_per_core` must be either 1 or 2.")
@@ -117,7 +117,6 @@ class BaseMachineGroup(ABC):
             if self.max_idle_time <= 0:
                 raise ValueError("`max_idle_time` must be positive.")
             self.max_idle_time = datetime.timedelta(minutes=self.max_idle_time)
-
 
     @property
     def id(self):
