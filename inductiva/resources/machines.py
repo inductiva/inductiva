@@ -45,7 +45,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
     auto_resize_disk_max_gb: Optional[int] = None
     num_machines: int = 1
     spot: bool = True
-    __is_elastic = False
+    _is_elastic = False
 
     def __post_init__(self):
         """Validate inputs and initialize additional attributes after dataclass initialization."""
@@ -59,7 +59,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
             logging.info("■ Registering MachineGroup configurations:")
             self._register_machine_group(num_vms=self.num_machines,
                                          spot=self.spot,
-                                         is_elastic=self.__is_elastic)
+                                         is_elastic=self._is_elastic)
 
     @classmethod
     def from_api_response(cls, resp: dict):
@@ -127,7 +127,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
     min_machines: int = 1
     max_machines: int = 2
     spot: bool = True
-    __is_elastic = True
+    _is_elastic = True
 
     def __post_init__(self):
         """Validate inputs and initialize additional attributes after dataclass initialization."""
@@ -147,7 +147,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             logging.info("■ Registering ElasticMachineGroup configurations:")
             self._register_machine_group(min_vms=self.min_machines,
                                          max_vms=self.max_machines,
-                                         is_elastic=self.__is_elastic,
+                                         is_elastic=self._is_elastic,
                                          num_vms=self._active_machines,
                                          spot=self.spot)
 
@@ -202,9 +202,9 @@ class MPICluster(machines_base.BaseMachineGroup):
     """
     num_machines: int = 2
     auto_resize_disk_max_gb = 500
-    __type = machines_base.ResourceType.MPI.value
-    __is_elastic = False
-    __spot = False
+    _type = machines_base.ResourceType.MPI.value
+    _is_elastic = False
+    _spot = False
 
     def __post_init__(self):
         if self.num_machines < 1:
@@ -216,9 +216,9 @@ class MPICluster(machines_base.BaseMachineGroup):
         if self.register:
             logging.info("■ Registering MPICluster configurations:")
             self._register_machine_group(num_vms=self.num_machines,
-                                         is_elastic=self.__is_elastic,
-                                         spot=self.__spot,
-                                         type=self.__type)
+                                         is_elastic=self._is_elastic,
+                                         spot=self._spot,
+                                         type=self._type)
 
     @property
     def available_vcpus(self):

@@ -1,8 +1,7 @@
 """Base class for machine groups."""
 from collections import defaultdict, namedtuple
-from dataclasses import KW_ONLY, dataclass
+from dataclasses import dataclass
 from typing import Optional, Union
-from abc import abstractmethod
 from abc import ABC
 import datetime
 import time
