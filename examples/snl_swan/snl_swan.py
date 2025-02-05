@@ -1,8 +1,9 @@
 """ SNL SWAN example."""
 import inductiva
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c3d-standard-90")
+# Allocate machine
+machine_group = inductiva.resources.MachineGroup("c3d-standard-180")
+
 # Initialize the Simulator
 snl_swan = inductiva.simulators.SnlSwan()
 
@@ -16,5 +17,3 @@ task.wait()
 machine_group.terminate()
 
 task.download_outputs()
-
-task.print_summary()

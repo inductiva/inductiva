@@ -1,14 +1,14 @@
 """OpenFAST example."""
 import inductiva
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c3d-standard-90")
+# Allocate machine
+machine_group = inductiva.resources.MachineGroup("c3d-standard-180")
 
-# Initialize OpenFAST simulator
+# Initialize the Simulator
 openfast = inductiva.simulators.OpenFAST()
 
 my_openfast_command = [
-    # here you list the openfast command you wish to execute
+    # List the OpenFAST commands you wish to execute
 ]
 
 # Run simulation
@@ -16,9 +16,8 @@ task = openfast.run(input_dir="/path/to/my/openfast/files",
                     commands=my_openfast_command,
                     on=machine_group)
 
+# Wait for the simulation to finish and download the results
 task.wait()
 machine_group.terminate()
 
 task.download_outputs()
-
-task.print_summary()

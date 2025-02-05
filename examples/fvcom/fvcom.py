@@ -1,8 +1,8 @@
 """FVCOM example"""
 import inductiva
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c3d-standard-90")
+# Allocate machine
+machine_group = inductiva.resources.MachineGroup("c3d-standard-180")
 
 # Initialize the Simulator
 fvcom = inductiva.simulators.FVCOM()
@@ -15,9 +15,8 @@ task = fvcom.run(input_dir="path/to/my/fvcom/files",
                  debug=7,
                  on=machine_group)
 
+# Wait for the simulation to finish and download the results
 task.wait()
 machine_group.terminate()
 
 task.download_outputs()
-
-task.print_summary()
