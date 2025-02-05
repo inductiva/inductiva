@@ -5,14 +5,15 @@ import uuid
 import enum
 import logging
 import warnings
+from inductiva import constants
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     import aiortc
 
 # STUN/TURN server configuration
 ICE_SERVERS = [
-    aiortc.RTCIceServer("stun:webrtc.inductiva.ai:3478"),
-    aiortc.RTCIceServer("turn:webrtc.inductiva.ai:3478")
+    aiortc.RTCIceServer("stun:" + constants.TURN_SERVER_URL),
+    aiortc.RTCIceServer("turn:" + constants.TURN_SERVER_URL)
 ]
 
 aiortc_logger = logging.getLogger("aioice")

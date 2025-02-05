@@ -4,6 +4,7 @@ import argparse
 import threading
 import sys
 import os
+import platform
 from inductiva import _cli, constants, _api_key, api_url
 
 _docker_imported = True
@@ -155,7 +156,7 @@ def register(parser):
     subparser.add_argument("--hostname",
                            "-ho",
                            type=str,
-                           default=os.uname().nodename,
+                           default=platform.uname().node,
                            help="Hostname of the Task-Runner.")
 
     subparser.add_argument("--detach",
