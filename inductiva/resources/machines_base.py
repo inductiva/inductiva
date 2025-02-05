@@ -31,7 +31,6 @@ class ResourceType(enum.Enum):
 
 @dataclass
 class BaseMachineGroup(ABC):
-    QUOTAS_EXCEEDED_SLEEP_SECONDS = 60
     """Base class to manage Google Cloud resources.
 
     The register argument is used to indicate if the machine group should
@@ -61,6 +60,7 @@ class BaseMachineGroup(ABC):
             example, when retrieving with the `machines_groups.get` method.
             Users should not set this argument in anyway.
     """
+    # __init__ arguments
     machine_type: str
     threads_per_core: int = 2
     data_disk_gb: int = 10
@@ -68,6 +68,7 @@ class BaseMachineGroup(ABC):
     auto_terminate_ts: Optional[datetime.datetime] = None
     register: bool = True
 
+    # Internal arguments
     provider = "GCP"
     _free_space_threshold_gb = 5
     _size_increment_gb = 10
@@ -85,6 +86,8 @@ class BaseMachineGroup(ABC):
     quota_usage = {}
     total_ram_gb = None
     _cost_per_hour = {}
+
+    QUOTAS_EXCEEDED_SLEEP_SECONDS = 60
 
     def __post_init__(self):
         """Validate inputs and initialize additional attributes after
@@ -105,8 +108,8 @@ class BaseMachineGroup(ABC):
                 raise ValueError(
                     "`auto_resize_disk_max_gb` must be a positive integer.")
 
-            if self.auto_resize_disk_max_gb < (
-                self.data_disk_gb + self._size_increment_gb):
+            if self.auto_resize_disk_max_gb < (self.data_disk_gb +
+                                               self._size_increment_gb):
                 raise ValueError(
                     "`auto_resize_disk_max_gb` must be greater than or equal to "
                     f"`data_disk_gb + {self._size_increment_gb}GB`.")

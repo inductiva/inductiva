@@ -41,10 +41,13 @@ class MachineGroup(machines_base.BaseMachineGroup):
         num_machines: The number of virtual machines to launch.
         spot: Whether to use spot machines.
     """
+    # __init__ arguments
     provider: Union[machine_types.ProviderType, str] = "GCP"
     auto_resize_disk_max_gb: Optional[int] = None
     num_machines: int = 1
     spot: bool = True
+
+    # Internal arguments
     _is_elastic = False
 
     def __post_init__(self):
@@ -124,10 +127,13 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             can scale up to.
         spot: Whether to use spot machines.
     """
+    # __init__ arguments
     auto_resize_disk_max_gb: Optional[int] = None
     min_machines: int = 1
     max_machines: int = 2
     spot: bool = True
+
+    # Internal arguments
     _is_elastic = True
 
     def __post_init__(self):
@@ -202,7 +208,10 @@ class MPICluster(machines_base.BaseMachineGroup):
             automatically terminated.
         num_machines: The number of virtual machines to launch.
     """
+    # __init__ arguments
     num_machines: int = 2
+
+    # Internal arguments
     auto_resize_disk_max_gb = 500
     _type = machines_base.ResourceType.MPI.value
     _is_elastic = False
