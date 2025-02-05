@@ -40,10 +40,69 @@ class VersionComparisonResult(schemas.DictSchema):
             is_valid = schemas.BoolSchema
             client_version = schemas.StrSchema
             server_version = schemas.StrSchema
+
+            class min_supported_client_version(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'min_supported_client_version':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             __annotations__ = {
                 "is_valid": is_valid,
                 "client_version": client_version,
                 "server_version": server_version,
+                "min_supported_client_version": min_supported_client_version,
             }
 
     is_valid: MetaOapg.properties.is_valid
@@ -69,6 +128,12 @@ class VersionComparisonResult(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["min_supported_client_version"]
+    ) -> MetaOapg.properties.min_supported_client_version:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -76,6 +141,7 @@ class VersionComparisonResult(schemas.DictSchema):
         "is_valid",
         "client_version",
         "server_version",
+        "min_supported_client_version",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -100,6 +166,13 @@ class VersionComparisonResult(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["min_supported_client_version"]
+    ) -> typing.Union[MetaOapg.properties.min_supported_client_version,
+                      schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -108,6 +181,7 @@ class VersionComparisonResult(schemas.DictSchema):
         "is_valid",
         "client_version",
         "server_version",
+        "min_supported_client_version",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -129,6 +203,11 @@ class VersionComparisonResult(schemas.DictSchema):
             MetaOapg.properties.server_version,
             str,
         ],
+        min_supported_client_version: typing.Union[
+            MetaOapg.properties.min_supported_client_version, dict,
+            frozendict.frozendict, str, date, datetime, uuid.UUID, int, float,
+            decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO,
+            io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -141,6 +220,7 @@ class VersionComparisonResult(schemas.DictSchema):
             is_valid=is_valid,
             client_version=client_version,
             server_version=server_version,
+            min_supported_client_version=min_supported_client_version,
             _configuration=_configuration,
             **kwargs,
         )

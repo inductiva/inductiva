@@ -1,27 +1,19 @@
 """AMR-Wind example"""
 import inductiva
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-
-# Set simulation input directory
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "amr-wind-input-example.zip",
-    unzip=True)
+# Allocate machine
+machine_group = inductiva.resources.MachineGroup("c3d-standard-180")
 
 # Initialize the Simulator
 amr_wind = inductiva.simulators.AmrWind()
 
 # Run simulation with config files in the input directory
-task = amr_wind.run(input_dir=input_dir,
-                    sim_config_filename="abl_amd_wenoz.inp",
-                    on=machine_group,
-                    n_vcpus=4)
+task = amr_wind.run(input_dir="path/to/my/amr-wind/files",
+                    sim_config_filename="my_config_file.inp",
+                    on=machine_group)
 
+# Wait for the simulation to finish and download the results
 task.wait()
 machine_group.terminate()
 
 task.download_outputs()
-
-task.print_summary()

@@ -6,7 +6,7 @@ from .dualsphysics import DualSPHysics
 from .custom_image import CustomImage
 from .openfoam import OpenFOAM
 from .openfast import OpenFAST
-from .snl_swan import SnlSwan
+from .snl_swan import SNLSWAN
 from .amr_wind import AmrWind
 from .gromacs import GROMACS
 from .fenicsx import FEniCSx
@@ -19,4 +19,4 @@ from .swash import SWASH
 from .cans import CaNS
 from .swan import SWAN
 from .fds import FDS
-from .gx import Gx
+from .gx import GX

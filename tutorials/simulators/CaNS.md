@@ -21,7 +21,7 @@ enhance performance.
 
 ## Example Code
 
-```{literalinclude} ../../examples/cans/cans.py
+```{literalinclude} ../../inductiva/tests/test_simulators/cans/cans.py
 :language: python
 ```
 

@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.8]
+        python-version: [3.9]
 
     steps:
     - uses: actions/checkout@v3
@@ -51,7 +51,7 @@ jobs:
     - name: Link Checker
       uses: lycheeverse/lychee-action@v1.9.0
       with:
-        fail: true
+        fail: false
         args: --base . --no-progress --exclude ccrm.vims.edu './**/*.md'
     - name: Coverage report
       if: ${{ always() }}

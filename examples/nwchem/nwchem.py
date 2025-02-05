@@ -1,24 +1,19 @@
 """NWChem example."""
 import inductiva
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+# Allocate machine
+machine_group = inductiva.resources.MachineGroup("c3d-standard-180")
 
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "nwchem-input-example.zip",
-    unzip=True)
-
+# Initialize the Simulator
 nwchem = inductiva.simulators.NWChem()
 
-task = nwchem.run(input_dir=input_dir,
-                  sim_config_filename="h2o_sp_scf.nw",
-                  n_vcpus=1,
+# Run simulation with config files in the input directory
+task = nwchem.run(input_dir="/path/to/my/nwchem/files",
+                  sim_config_filename="my_config_file.nw",
                   on=machine_group)
 
+# Wait for the simulation to finish and download the results
 task.wait()
 machine_group.terminate()
 
 task.download_outputs()
-
-task.print_summary()

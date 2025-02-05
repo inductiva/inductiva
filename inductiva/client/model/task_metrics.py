@@ -147,6 +147,63 @@ class TaskMetrics(schemas.DictSchema):
                         **kwargs,
                     )
 
+            class container_image_size_bytes(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.IntSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'container_image_size_bytes':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             class queue_time_seconds(
                     schemas.ComposedSchema,):
 
@@ -836,6 +893,8 @@ class TaskMetrics(schemas.DictSchema):
                     total_seconds,
                 "container_image_download_seconds":
                     container_image_download_seconds,
+                "container_image_size_bytes":
+                    container_image_size_bytes,
                 "queue_time_seconds":
                     queue_time_seconds,
                 "computation_seconds":
@@ -873,6 +932,12 @@ class TaskMetrics(schemas.DictSchema):
         self,
         name: typing_extensions.Literal["container_image_download_seconds"]
     ) -> MetaOapg.properties.container_image_download_seconds:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["container_image_size_bytes"]
+    ) -> MetaOapg.properties.container_image_size_bytes:
         ...
 
     @typing.overload
@@ -954,6 +1019,7 @@ class TaskMetrics(schemas.DictSchema):
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "total_seconds",
         "container_image_download_seconds",
+        "container_image_size_bytes",
         "queue_time_seconds",
         "computation_seconds",
         "input_upload_seconds",
@@ -981,6 +1047,13 @@ class TaskMetrics(schemas.DictSchema):
         self,
         name: typing_extensions.Literal["container_image_download_seconds"]
     ) -> typing.Union[MetaOapg.properties.container_image_download_seconds,
+                      schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["container_image_size_bytes"]
+    ) -> typing.Union[MetaOapg.properties.container_image_size_bytes,
                       schemas.Unset]:
         ...
 
@@ -1070,6 +1143,7 @@ class TaskMetrics(schemas.DictSchema):
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "total_seconds",
         "container_image_download_seconds",
+        "container_image_size_bytes",
         "queue_time_seconds",
         "computation_seconds",
         "input_upload_seconds",
@@ -1099,6 +1173,11 @@ class TaskMetrics(schemas.DictSchema):
                                     schemas.Unset] = schemas.unset,
         container_image_download_seconds: typing.Union[
             MetaOapg.properties.container_image_download_seconds, dict,
+            frozendict.frozendict, str, date, datetime, uuid.UUID, int, float,
+            decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO,
+            io.BufferedReader, schemas.Unset] = schemas.unset,
+        container_image_size_bytes: typing.Union[
+            MetaOapg.properties.container_image_size_bytes, dict,
             frozendict.frozendict, str, date, datetime, uuid.UUID, int, float,
             decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO,
             io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -1180,6 +1259,7 @@ class TaskMetrics(schemas.DictSchema):
             *_args,
             total_seconds=total_seconds,
             container_image_download_seconds=container_image_download_seconds,
+            container_image_size_bytes=container_image_size_bytes,
             queue_time_seconds=queue_time_seconds,
             computation_seconds=computation_seconds,
             input_upload_seconds=input_upload_seconds,

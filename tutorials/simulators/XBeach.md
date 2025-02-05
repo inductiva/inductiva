@@ -32,7 +32,7 @@ CPU cores.
 Below is an example of running a basic XBeach simulation via the Inductiva 
 API:
 
-```{literalinclude} ../../examples/xbeach/xbeach.py
+```{literalinclude} ../../inductiva/tests/test_simulators/xbeach/xbeach.py
 :language: python
 ```
 

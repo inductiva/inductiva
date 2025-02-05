@@ -13,6 +13,7 @@ from inductiva.client.api_client import ApiClient
 from inductiva.api.methods import get_client
 
 from . import constants
+from . import benchmarks
 from . import simulators
 from . import resources
 from . import projects
@@ -41,7 +42,7 @@ _api_key = contextvars.ContextVar("INDUCTIVA_API_KEY",
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.13.1"
+__version__ = "0.13.2"
 
 
 def set_output_dir(new_output_dir):

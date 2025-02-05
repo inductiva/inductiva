@@ -1,0 +1,24 @@
+"""SPlisHSPlasH example."""
+import inductiva
+
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "splishsplash-input-example.zip",
+    unzip=True)
+
+# Set simulation input directory
+splishsplash = inductiva.simulators.SplishSplash()
+
+task = splishsplash.run(input_dir=input_dir,
+                        sim_config_filename="config.json",
+                        on=machine_group)
+
+task.wait()
+machine_group.terminate()
+
+task.download_outputs()
+
+task.print_summary()

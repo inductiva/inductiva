@@ -6,6 +6,9 @@ import platform
 LOGS_WEBSOCKET_URL = os.environ.get("INDUCTIVA_TASK_LOGS_URL",
                                     "wss://logs.inductiva.ai")
 
+TURN_SERVER_URL = os.environ.get("INDUCTIVA_TURN_SERVER_URL",
+                                 "webrtc.inductiva.ai:3478")
+
 TASK_RUNNER_IMAGE = os.environ.get("INDUCTIVA_TASK_RUNNER_IMAGE",
                                    "inductiva/task-runner:main")
 
@@ -22,7 +25,9 @@ MAX_CONFIRMATION_LINES = 5
 
 LOADER_COMMAND_PREFIX = "cmd_"
 
-LOADER_IGNORE_PREFIX = "_"
+LOADER_IGNORE_PREFIX = "__"
+
+LOADER_HIDE_PREFIX = "_"
 
 # when printing the stack trace, how many lines to show
 EXCEPTIONS_MAX_TRACEBACK_DEPTH = 2

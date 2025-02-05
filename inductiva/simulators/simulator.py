@@ -44,6 +44,7 @@ class Simulator(ABC):
         self._version = version
         self._use_dev = bool(use_dev)
         self._image_uri = self._get_image_uri()
+        self.container_image = self._image_uri
         self._logger.info("")
 
     @property
@@ -155,11 +156,9 @@ class Simulator(ABC):
                 "run-parallel_simulations.html "
                 "to learn how to create your own computational resource.")
 
-        if not on.started:
-            logging.info("")
-            logging.info(
-                "■ The computational resource is not started. Starting it now.")
-            logging.info("")
+        if on.allow_auto_start and not on.started:
+            logging.info("\n■ The computational resource is not started."
+                         " Starting it now.\n")
             on.start()
 
         self.validate_computational_resources(on)
