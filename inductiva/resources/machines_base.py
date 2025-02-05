@@ -87,7 +87,8 @@ class BaseMachineGroup(ABC):
     _cost_per_hour = {}
 
     def __post_init__(self):
-        """Validate inputs and initialize additional attributes after dataclass initialization."""
+        """Validate inputs and initialize additional attributes after
+        dataclass initialization."""
         provider = machine_types.ProviderType(self.provider)
         self.provider = provider.value
 
@@ -104,7 +105,8 @@ class BaseMachineGroup(ABC):
                 raise ValueError(
                     "`auto_resize_disk_max_gb` must be a positive integer.")
 
-            if self.auto_resize_disk_max_gb < self.data_disk_gb + self._size_increment_gb:
+            if self.auto_resize_disk_max_gb < (
+                self.data_disk_gb + self._size_increment_gb):
                 raise ValueError(
                     "`auto_resize_disk_max_gb` must be greater than or equal to "
                     f"`data_disk_gb + {self._size_increment_gb}GB`.")

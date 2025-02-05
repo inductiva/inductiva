@@ -48,7 +48,8 @@ class MachineGroup(machines_base.BaseMachineGroup):
     _is_elastic = False
 
     def __post_init__(self):
-        """Validate inputs and initialize additional attributes after dataclass initialization."""
+        """Validate inputs and initialize additional attributes after
+        dataclass initialization."""
         if self.num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
@@ -130,7 +131,8 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
     _is_elastic = True
 
     def __post_init__(self):
-        """Validate inputs and initialize additional attributes after dataclass initialization."""
+        """Validate inputs and initialize additional attributes after
+        dataclass initialization."""
         if self.min_machines < 0:
             raise ValueError(
                 "`min_machines` should be a number equal or greater than 0.")
@@ -207,6 +209,8 @@ class MPICluster(machines_base.BaseMachineGroup):
     _spot = False
 
     def __post_init__(self):
+        """Validate inputs and initialize additional attributes after
+        dataclass initialization."""
         if self.num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
