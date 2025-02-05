@@ -12,17 +12,25 @@ def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
     valid, err_msg = task_utils.validate_task_computation_started(task)
+    valid = True
     if not valid:
         print(err_msg, file=sys.stderr)
         return 1
-    asyncio.run(consume(task, args, fout))
+    asyncio.run(gather_tasks(task, args, fout))
     return 0
 
+async def gather_tasks(task: tasks.Task, args: argparse.Namespace, fout: TextIO):
+    tail_tasks = [
+        asyncio.create_task(consume(task, filename, args, fout)) 
+        for filename in args.filename
+    ]
+    await asyncio.gather(*tail_tasks)
 
-async def consume(task: tasks.Task, args: argparse.Namespace, fout: TextIO):
+
+async def consume(task: tasks.Task, filename: str, args: argparse.Namespace, fout: TextIO):
     try:
         async for lines in task._tail_file(  # pylint: disable=protected-access
-                args.filename, args.lines, args.follow):
+                filename, args.lines, args.follow):
             print(lines, file=fout, end="", flush=True)
     except asyncio.CancelledError:
         await task.close_stream()
@@ -41,7 +49,7 @@ def register(parser):
     subparser.add_argument("id",
                            type=str,
                            help="ID of the task to list directories.")
-    subparser.add_argument("filename", type=str, help="File to tail.")
+    subparser.add_argument("filename", type=str, nargs="+", help="File to tail.")
     subparser.add_argument("--lines",
                            "-l",
                            type=int,
