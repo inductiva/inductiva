@@ -11,6 +11,7 @@ my_gmx_command = [
 # Initialize the Simulator
 gromacs = inductiva.simulators.GROMACS()
 
+# Run simulation
 task = gromacs.run(input_dir="path/to/my/gromacs/files",
                    commands=my_gmx_command,
                    on=machine_group)
