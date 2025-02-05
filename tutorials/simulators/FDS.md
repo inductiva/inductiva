@@ -37,6 +37,6 @@ cores, so it’s important to configure this step manually.
 
 ## Example Code
 
-```{literalinclude} ../../examples/fds/fds.py
+```{literalinclude} ../../inductiva/tests/test_simulators/fds/fds.py
 :language: python
 ```

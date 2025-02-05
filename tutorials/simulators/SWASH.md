@@ -24,7 +24,7 @@ simulation.
 
 Below is an example of running a SWASH simulation via the Inductiva API:
 
-```{literalinclude} ../../examples/swash/swash.py
+```{literalinclude} ../../inductiva/tests/test_simulators/swash/swash.py
 :language: python
 ```
 

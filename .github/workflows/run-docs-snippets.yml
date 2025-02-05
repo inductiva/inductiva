@@ -31,20 +31,20 @@ jobs:
             export INDUCTIVA_API_KEY=${{ secrets.API_DEV_TEST_KEY }}
             export INDUCTIVA_API_URL=https://api-dev.inductiva.ai
             fi
-            python examples/amr_wind/amr_wind.py
-            python examples/cans/cans.py
-            python examples/dualsphysics/dualsphysics.py
-            python examples/fds/fds.py
-            python examples/fvcom/fvcom.py
-            python examples/gromacs/gromacs.py
-            python examples/nwchem/nwchem.py
-            python examples/openfast/openfast.py
-            python examples/openfoam_esi/openfoam_esi.py
-            python examples/openfoam_foundation/openfoam_foundation.py
-            python examples/quantum_espresso/quantum_espresso.py
-            python examples/reef3d/reef3d.py
-            python examples/schism/schism.py
-            python examples/splishsplash/splishsplash.py
-            python examples/swan/swan.py
-            python examples/swash/swash.py
-            python examples/xbeach/xbeach.py
+            python inductiva/tests/amr_wind/amr_wind.py
+            python inductiva/tests/cans/cans.py
+            python inductiva/tests/dualsphysics/dualsphysics.py
+            python inductiva/tests/fds/fds.py
+            python inductiva/tests/fvcom/fvcom.py
+            python inductiva/tests/gromacs/gromacs.py
+            python inductiva/tests/nwchem/nwchem.py
+            python inductiva/tests/openfast/openfast.py
+            python inductiva/tests/openfoam_esi/openfoam_esi.py
+            python inductiva/tests/openfoam_foundation/openfoam_foundation.py
+            python inductiva/tests/quantum_espresso/quantum_espresso.py
+            python inductiva/tests/reef3d/reef3d.py
+            python inductiva/tests/schism/schism.py
+            python inductiva/tests/splishsplash/splishsplash.py
+            python inductiva/tests/swan/swan.py
+            python inductiva/tests/swash/swash.py
+            python inductiva/tests/xbeach/xbeach.py
