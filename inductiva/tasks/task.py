@@ -510,8 +510,8 @@ class Task:
     def _format_list_of_lines(self,
                               lines: List[str],
                               file: str,
-                              sep: Optional[str] = "",
-                              endl: Optional[str] = "\n") -> str:
+                              endl: Optional[str] = "",
+                              header: Optional[bool] = True) -> str:
         """Formats a list of lines with color.
 
         This method formats a list of lines with a color and adds a header and
@@ -541,15 +541,19 @@ class Task:
 
         n = len(lines)
 
-        new_lst = [f"{color_code}│{reset_color}{line}" for line in lines]
+        new_lst = [f"{color_code}│{reset_color}{line}{endl}" for line in lines]
 
-        new_lst.insert(
-            0, f"{color_code}┌ (last {n} lines from {file}){reset_color}{endl}")
-        new_lst.append(f"{color_code}└{reset_color}{endl}")
+        if header:
+            new_lst.insert(
+                0, f"{color_code}┌ (last {n} lines from {file}){reset_color}\n")
+            new_lst.append(f"{color_code}└{reset_color}\n")
 
-        return sep.join(new_lst)
+        return "".join(new_lst)
 
-    def _format_directory_listing(self, directories: list, indent=0) -> str:
+    def _format_directory_listing(self,
+                                  directories,
+                                  current_path="",
+                                  indent=0) -> str:
         """Formats a dictionary with directory information.
 
         This method formats a dictionary with directory information and
@@ -557,22 +561,33 @@ class Task:
 
         Args:
             directories: A dictionary with directory information.
+            current_path: The current path of the search.
+            indent: The current indentation level.
         """
-        color_code = "\033[34m"
-        reset_color = "\033[0m"
-        contents = (f"{color_code}Directory contents:{reset_color}\n"
-                    if indent == 0 else "")
 
-        for item in directories:
+        def build_prefix(indent, is_last):
+            """Creates the correct prefix for the current level."""
+            color_code = "\033[34m" if inductiva.ansi_enabled else ""
+            reset_color = "\033[0m" if inductiva.ansi_enabled else ""
+            if indent == 0:
+                return ""
+            branch = "└── " if is_last else "├── "
+            return color_code + "│   " * (indent - 1) + branch + reset_color
+
+        contents = ""
+        for index, item in enumerate(directories):
+            is_last_item = index == len(directories) - 1
+            prefix = build_prefix(indent, is_last_item)
+
             if isinstance(item, dict):
                 for dir_name, dir_contents in item.items():
-                    contents += ("  " * indent +
-                                 f"{color_code}[DIR]{reset_color} {dir_name}\n")
+                    folder_path = f"{current_path}/{dir_name}".strip("/")
+                    contents += f"{prefix}{folder_path}/\n"
                     contents += self._format_directory_listing(
-                        dir_contents, indent + 1)
+                        dir_contents, folder_path, indent + 1)
             else:
-                contents += ("  " * indent +
-                             f"{color_code}[FILE]{reset_color} {item}\n")
+                file_path = f"{current_path}/{item}".strip("/")
+                contents += f"{prefix}{file_path}\n"
 
         return contents
 
@@ -675,6 +690,7 @@ class Task:
             self.id, self.id)
 
         requires_newline = False
+        previous_duration_l = 0
 
         while True:
             # status = self.get_status()
@@ -699,7 +715,14 @@ class Task:
             # Print timer
             elif (status != models.TaskStatusCode.SUBMITTED and
                   not task_info.is_terminal):
-                print(f"Duration: {duration}", end="\r")
+
+                #clear previous line
+                print(" " * previous_duration_l, end="\r")
+
+                duration = f"Duration: {duration}"
+                print(duration, end="\r")
+
+                previous_duration_l = len(duration)
 
             prev_status = status
 
@@ -1109,8 +1132,11 @@ class Task:
             download_partial_files=data.download_partial_inputs,
         )
 
-    async def _file_operation(self, operation: Operations, formatter: Callable,
-                              **kwargs) -> str:
+    async def _file_operation(self,
+                              operation: Operations,
+                              formatter: Callable,
+                              follow: bool = False,
+                              **kwargs):
         """Perform file operations on the task that is currently running.
 
         Args:
@@ -1120,37 +1146,56 @@ class Task:
         Returns:
             The result of the operation.
         """
-        file_tracker = FileTracker()
-        future_message = await file_tracker.setup_channel(operation, **kwargs)
-        if not await file_tracker.connect_to_task(self._api, self.id):
-            return "Failed to connect to the task."
-        message = await future_message
-        await file_tracker.cleanup()
+        self.file_tracker = FileTracker()
+        message_queue, end_event = await self.file_tracker.setup_channel(
+            operation, follow=follow, **kwargs)
+        if not await self.file_tracker.connect_to_task(self._api, self.id):
+            yield "Failed to connect to the task."
+            return
+        while not end_event.is_set():
+            message = await message_queue.get()
 
-        if message["status"] != "success":
-            return message["message"]
+            if message is None:
+                return
+            elif message["status"] != "success":
+                await self.file_tracker.cleanup()
+                yield message["message"]
+                return
 
-        return formatter(message["message"])
+            yield formatter(message["message"])
+
+        await self.file_tracker.cleanup()
+
+    async def close_stream(self):
+        """Close the stream to the task."""
+        if self.file_tracker is not None:
+            await self.file_tracker.cleanup()
 
     async def _list_files(self) -> str:
         """List the files in the task's working directory."""
-        return await self._file_operation(
-            Operations.LIST, formatter=self._format_directory_listing)
 
-    async def _tail_file(self, filename: str, n_lines: int = 10) -> str:
+        directory = [
+            files async for files in self._file_operation(
+                Operations.LIST, formatter=self._format_directory_listing)
+        ]
+        return directory[0]
+
+    async def _tail_file(self, filename: str, n_lines: int = 10, follow=False):
         """Get the last n_lines lines of a 
         file in the task's working directory."""
 
         def formatter(message):
             return self._format_list_of_lines(message,
                                               filename,
-                                              sep="\n",
-                                              endl="\n")
+                                              endl="\n",
+                                              header=not follow)
 
-        return await self._file_operation(Operations.TAIL,
-                                          formatter=formatter,
-                                          filename=filename,
-                                          lines=n_lines)
+        async for lines in self._file_operation(Operations.TAIL,
+                                                formatter=formatter,
+                                                filename=filename,
+                                                lines=n_lines,
+                                                follow=follow):
+            yield lines
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""

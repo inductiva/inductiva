@@ -24,126 +24,54 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.operation_type import OperationType
 from inductiva.client.model.providers import Providers
 from inductiva.client.model.http_validation_error import HTTPValidationError
-from inductiva.client.model.machine_type import MachineType
 
 # Query params
-NumCpusSchema = schemas.IntSchema
 
 
-class SpotSchema(
-        schemas.ComposedSchema,):
+class PathsSchema(schemas.ListSchema):
 
     class MetaOapg:
-
-        class any_of_0(schemas.EnumBase, schemas.StrSchema):
-
-            @schemas.classproperty
-            def T(cls):
-                return cls("t")
-
-            @schemas.classproperty
-            def F(cls):
-                return cls("f")
-
-        class any_of_1(schemas.EnumBase, schemas.BoolSchema):
-
-            @schemas.classproperty
-            def TRUE(cls):
-                return cls(True)
-
-            @schemas.classproperty
-            def FALSE(cls):
-                return cls(False)
-
-        @classmethod
-        @functools.lru_cache()
-        def any_of(cls):
-            # we need this here to make our import statements work
-            # we must store _composed_schemas in here so the code is only run
-            # when we invoke this method. If we kept this at the class
-            # level we would get an error because the class level
-            # code would be run when this module is imported, and these composed
-            # classes don't exist yet because their module has not finished
-            # loading
-            return [
-                cls.any_of_0,
-                cls.any_of_1,
-            ]
+        items = schemas.StrSchema
 
     def __new__(
         cls,
-        *_args: typing.Union[
-            dict,
-            frozendict.frozendict,
+        _arg: typing.Union[typing.Tuple[typing.Union[
+            MetaOapg.items,
             str,
-            date,
-            datetime,
-            uuid.UUID,
-            int,
-            float,
-            decimal.Decimal,
-            bool,
-            None,
-            list,
-            tuple,
-            bytes,
-            io.FileIO,
-            io.BufferedReader,
-        ],
+        ]], typing.List[typing.Union[
+            MetaOapg.items,
+            str,
+        ]]],
         _configuration: typing.Optional[schemas.Configuration] = None,
-        **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
-                               frozendict.frozendict, str, date, datetime,
-                               uuid.UUID, int, float, decimal.Decimal, None,
-                               list, tuple, bytes],
-    ) -> 'SpotSchema':
+    ) -> 'PathsSchema':
         return super().__new__(
             cls,
-            *_args,
+            _arg,
             _configuration=_configuration,
-            **kwargs,
         )
 
+    def __getitem__(self, i: int) -> MetaOapg.items:
+        return super().__getitem__(i)
 
-RamGbSchema = schemas.IntSchema
+
+OperationSchema = OperationType
 ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {
-        'num_cpus':
-            typing.Union[
-                NumCpusSchema,
-                decimal.Decimal,
-                int,
-            ],
-        'spot':
-            typing.Union[
-                SpotSchema,
-                dict,
-                frozendict.frozendict,
-                str,
-                date,
-                datetime,
-                uuid.UUID,
-                int,
-                float,
-                decimal.Decimal,
-                bool,
-                None,
-                list,
-                tuple,
-                bytes,
-                io.FileIO,
-                io.BufferedReader,
-            ],
+        'paths': typing.Union[
+            PathsSchema,
+            list,
+            tuple,
+        ],
+        'operation': typing.Union[
+            OperationSchema,
+        ],
     })
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams', {
-        'ram_gb': typing.Union[
-            RamGbSchema,
-            decimal.Decimal,
-            int,
-        ],
         'provider_id': typing.Union[
             ProviderIdSchema,
         ],
@@ -156,24 +84,18 @@ class RequestQueryParams(RequestRequiredQueryParams,
     pass
 
 
-request_query_num_cpus = api_client.QueryParameter(
-    name="num_cpus",
+request_query_paths = api_client.QueryParameter(
+    name="paths",
     style=api_client.ParameterStyle.FORM,
-    schema=NumCpusSchema,
+    schema=PathsSchema,
     required=True,
     explode=True,
 )
-request_query_spot = api_client.QueryParameter(
-    name="spot",
+request_query_operation = api_client.QueryParameter(
+    name="operation",
     style=api_client.ParameterStyle.FORM,
-    schema=SpotSchema,
+    schema=OperationSchema,
     required=True,
-    explode=True,
-)
-request_query_ram_gb = api_client.QueryParameter(
-    name="ram_gb",
-    style=api_client.ParameterStyle.FORM,
-    schema=RamGbSchema,
     explode=True,
 )
 request_query_provider_id = api_client.QueryParameter(
@@ -182,7 +104,32 @@ request_query_provider_id = api_client.QueryParameter(
     schema=ProviderIdSchema,
     explode=True,
 )
-SchemaFor200ResponseBodyApplicationJson = MachineType
+
+
+class SchemaFor200ResponseBodyApplicationJson(schemas.ListSchema):
+
+    class MetaOapg:
+        items = schemas.StrSchema
+
+    def __new__(
+        cls,
+        _arg: typing.Union[typing.Tuple[typing.Union[
+            MetaOapg.items,
+            str,
+        ]], typing.List[typing.Union[
+            MetaOapg.items,
+            str,
+        ]]],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+    ) -> 'SchemaFor200ResponseBodyApplicationJson':
+        return super().__new__(
+            cls,
+            _arg,
+            _configuration=_configuration,
+        )
+
+    def __getitem__(self, i: int) -> MetaOapg.items:
+        return super().__getitem__(i)
 
 
 @dataclass
@@ -228,7 +175,7 @@ _all_accept_content_types = ('application/json',)
 class BaseApi(api_client.Api):
 
     @typing.overload
-    def _get_machine_type_oapg(
+    def _get_signed_urls_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -241,7 +188,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _get_machine_type_oapg(
+    def _get_signed_urls_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -252,7 +199,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _get_machine_type_oapg(
+    def _get_signed_urls_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -265,7 +212,7 @@ class BaseApi(api_client.Api):
     ]:
         ...
 
-    def _get_machine_type_oapg(
+    def _get_signed_urls_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -274,7 +221,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Get Machine Type
+        Get Signed Urls
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -284,9 +231,8 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-                request_query_num_cpus,
-                request_query_spot,
-                request_query_ram_gb,
+                request_query_paths,
+                request_query_operation,
                 request_query_provider_id,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
@@ -336,11 +282,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class GetMachineType(BaseApi):
+class GetSignedUrls(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def get_machine_type(
+    def get_signed_urls(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -353,7 +299,7 @@ class GetMachineType(BaseApi):
         ...
 
     @typing.overload
-    def get_machine_type(
+    def get_signed_urls(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -364,7 +310,7 @@ class GetMachineType(BaseApi):
         ...
 
     @typing.overload
-    def get_machine_type(
+    def get_signed_urls(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -377,7 +323,7 @@ class GetMachineType(BaseApi):
     ]:
         ...
 
-    def get_machine_type(
+    def get_signed_urls(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -385,7 +331,7 @@ class GetMachineType(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_machine_type_oapg(
+        return self._get_signed_urls_oapg(
             query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
@@ -442,7 +388,7 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_machine_type_oapg(
+        return self._get_signed_urls_oapg(
             query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,

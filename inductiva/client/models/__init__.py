@@ -47,6 +47,7 @@ from inductiva.client.model.machine_type import MachineType
 from inductiva.client.model.operation_end import OperationEnd
 from inductiva.client.model.operation_start import OperationStart
 from inductiva.client.model.operation_status import OperationStatus
+from inductiva.client.model.operation_type import OperationType
 from inductiva.client.model.order import Order
 from inductiva.client.model.org_status import OrgStatus
 from inductiva.client.model.organization_cost_components import OrganizationCostComponents

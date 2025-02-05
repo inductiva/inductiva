@@ -38,6 +38,7 @@ from inductiva.client.apis.paths.admin_organizations_organization_id import Admi
 from inductiva.client.apis.paths.admin_organizations_costs import AdminOrganizationsCosts
 from inductiva.client.apis.paths.admin_tiers import AdminTiers
 from inductiva.client.apis.paths.admin_terminate_machine_groups_credits_exhausted import AdminTerminateMachineGroupsCreditsExhausted
+from inductiva.client.apis.paths.admin_import_provider_costs import AdminImportProviderCosts
 from inductiva.client.apis.paths.task_runner_register import TaskRunnerRegister
 from inductiva.client.apis.paths.task_runner_machine_id import TaskRunnerMachineId
 from inductiva.client.apis.paths.task_runner_machine_id_task import TaskRunnerMachineIdTask
@@ -53,7 +54,6 @@ from inductiva.client.apis.paths.task_runner_machine_id_resize_disk import TaskR
 from inductiva.client.apis.paths.task_runner_machine_id_resize_disk_done import TaskRunnerMachineIdResizeDiskDone
 from inductiva.client.apis.paths.task_runner_machine_id_download_urls import TaskRunnerMachineIdDownloadUrls
 from inductiva.client.apis.paths.compute_group import ComputeGroup
-from inductiva.client.apis.paths.compute_type import ComputeType
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
 from inductiva.client.apis.paths.compute_price import ComputePrice
 from inductiva.client.apis.paths.compute_groups import ComputeGroups
@@ -65,6 +65,7 @@ from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_cost import StorageCost
 from inductiva.client.apis.paths.storage_contents import StorageContents
 from inductiva.client.apis.paths.storage_input_url import StorageInputUrl
+from inductiva.client.apis.paths.storage_signed_urls import StorageSignedUrls
 from inductiva.client.apis.paths.storage_input_notify import StorageInputNotify
 from inductiva.client.apis.paths.storage_input_remote import StorageInputRemote
 from inductiva.client.apis.paths.storage_ import Storage
@@ -165,6 +166,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminTiers,
         PathValues.ADMIN_TERMINATE_MACHINE_GROUPS_CREDITS_EXHAUSTED:
             AdminTerminateMachineGroupsCreditsExhausted,
+        PathValues.ADMIN_IMPORT_PROVIDER_COSTS:
+            AdminImportProviderCosts,
         PathValues.TASKRUNNER_REGISTER:
             TaskRunnerRegister,
         PathValues.TASKRUNNER_MACHINE_ID:
@@ -195,8 +198,6 @@ PathToApi = typing_extensions.TypedDict(
             TaskRunnerMachineIdDownloadUrls,
         PathValues.COMPUTE_GROUP:
             ComputeGroup,
-        PathValues.COMPUTE_TYPE:
-            ComputeType,
         PathValues.COMPUTE_GROUP_START:
             ComputeGroupStart,
         PathValues.COMPUTE_PRICE:
@@ -219,6 +220,8 @@ PathToApi = typing_extensions.TypedDict(
             StorageContents,
         PathValues.STORAGE_INPUT_URL:
             StorageInputUrl,
+        PathValues.STORAGE_SIGNEDURLS:
+            StorageSignedUrls,
         PathValues.STORAGE_INPUT_NOTIFY:
             StorageInputNotify,
         PathValues.STORAGE_INPUT_REMOTE:
@@ -342,6 +345,8 @@ path_to_api = PathToApi({
         AdminTiers,
     PathValues.ADMIN_TERMINATE_MACHINE_GROUPS_CREDITS_EXHAUSTED:
         AdminTerminateMachineGroupsCreditsExhausted,
+    PathValues.ADMIN_IMPORT_PROVIDER_COSTS:
+        AdminImportProviderCosts,
     PathValues.TASKRUNNER_REGISTER:
         TaskRunnerRegister,
     PathValues.TASKRUNNER_MACHINE_ID:
@@ -372,8 +377,6 @@ path_to_api = PathToApi({
         TaskRunnerMachineIdDownloadUrls,
     PathValues.COMPUTE_GROUP:
         ComputeGroup,
-    PathValues.COMPUTE_TYPE:
-        ComputeType,
     PathValues.COMPUTE_GROUP_START:
         ComputeGroupStart,
     PathValues.COMPUTE_PRICE:
@@ -396,6 +399,8 @@ path_to_api = PathToApi({
         StorageContents,
     PathValues.STORAGE_INPUT_URL:
         StorageInputUrl,
+    PathValues.STORAGE_SIGNEDURLS:
+        StorageSignedUrls,
     PathValues.STORAGE_INPUT_NOTIFY:
         StorageInputNotify,
     PathValues.STORAGE_INPUT_REMOTE:
