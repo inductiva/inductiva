@@ -8,7 +8,7 @@ from inductiva.commands.mpiconfig import MPIConfig
 
 
 @simulators.simulator.mpi_enabled
-class SnlSwan(simulators.Simulator):
+class SNLSWAN(simulators.Simulator):
     """Class to invoke a generic SNL SWAN simulation on the API."""
 
     def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
