@@ -111,7 +111,8 @@ class BaseMachineGroup(ABC):
             if self.auto_resize_disk_max_gb < (self.data_disk_gb +
                                                self._size_increment_gb):
                 raise ValueError(
-                    "`auto_resize_disk_max_gb` must be greater than or equal to "
+                    "`auto_resize_disk_max_gb` must be greater than \
+                    or equal to "
                     f"`data_disk_gb + {self._size_increment_gb}GB`.")
 
         if self.threads_per_core not in [1, 2]:
