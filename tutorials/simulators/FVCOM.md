@@ -9,7 +9,7 @@ We will cover:
 
 # FVCOM
 
-[FVCOM](https://www.fvcom.org/) (Finite Volume Community Ocean Model)
+FVCOM (Finite Volume Community Ocean Model)
 is a 3D hydrodynamic model specifically designed for simulating coastal 
 and ocean dynamics. It uses an unstructured grid and finite-volume methods, 
 making it highly adaptable for modeling complex coastlines, estuaries, 
