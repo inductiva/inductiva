@@ -24,16 +24,16 @@ async def gather_tasks(task: tasks.Task, args: argparse.Namespace, fout: TextIO)
         asyncio.create_task(consume(task, filename, args, fout)) 
         for filename in args.filename
     ]
-    await asyncio.gather(*tail_tasks)
+    try:
+        await asyncio.gather(*tail_tasks)
+    except asyncio.CancelledError:
+        await task.close_stream()
 
 
 async def consume(task: tasks.Task, filename: str, args: argparse.Namespace, fout: TextIO):
-    try:
-        async for lines in task._tail_file(  # pylint: disable=protected-access
-                filename, args.lines, args.follow):
-            print(lines, file=fout, end="", flush=True)
-    except asyncio.CancelledError:
-        await task.close_stream()
+    async for lines in task._tail_file(  # pylint: disable=protected-access
+            filename, args.lines, args.follow):
+        print(lines, file=fout, end="", flush=True)
 
 
 def register(parser):
