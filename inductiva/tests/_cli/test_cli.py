@@ -8,29 +8,23 @@ API_KEY = os.environ["INDUCTIVA_API_KEY"]
 
 # ([command], user_input)
 CLI_COMMANDS = [
+    # Don't run commands that create/destroy resources
     (["inductiva"], None),
     (["inductiva", "auth"], None),
     (["inductiva", "auth", "login"], API_KEY),
     (["inductiva", "auth", "logout"], None),
-
     #cant test inductiva logs
-    #(["inductiva", "logs"], None, True),
     (["inductiva", "projects"], None),
     (["inductiva", "projects", "ls"], None),
     (["inductiva", "quotas"], None),
     (["inductiva", "quotas", "list"], None),
     (["inductiva", "resources"], None),
-    ([
-        "inductiva",
-        "resources",
-        "start",
-        "c2-standard-4",
-    ], None),
     (["inductiva", "resources", "cost", "c2-standard-4"], None),
     #cant test inductiva resources info
     (["inductiva", "resources", "available"], None),
     (["inductiva", "resources", "ls"], None),
-    (["inductiva", "resources", "terminate", "--all"], "yes"),
+    # Can't test resources terminate --all because it will terminate all
+    # resources. This user is used by the end-to-end tests.
     (["inductiva", "simulators"], None),
     (["inductiva", "simulators", "list"], None),
     (["inductiva", "storage"], None),
