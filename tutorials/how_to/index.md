@@ -16,6 +16,7 @@ run-parallel_simulations
 set-up-elastic-machine-group
 set-up-mpi-cluster
 reuse-files
+export-files-aws
 run-benchmarks
 use-local-task-runner
 ```
