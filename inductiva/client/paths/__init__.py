@@ -84,6 +84,7 @@ class PathValues(str, enum.Enum):
     USERS_CAPABILITIES = "/users/capabilities"
     USERS_COSTS = "/users/costs"
     USERS_ORGANIZATION_COSTS = "/users/organization/costs"
+    USERS_TOPUPS = "/users/top-ups"
     PROJECTS = "/projects"
     PROJECTS_NAME = "/projects/{name}"
     METRICS_USERS_USERNAME_ACTIVITY = "/metrics/users/{username}/activity"
