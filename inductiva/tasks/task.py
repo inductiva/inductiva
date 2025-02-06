@@ -339,6 +339,7 @@ class Task:
         """Initialize the instance from a task ID."""
         self.id = task_id
         self._api = tasks_api.TasksApi(api.get_client())
+        self.file_tracker = FileTracker()
         self._info = None
         self._status = None
         self._tasks_ahead: Optional[int] = None
@@ -1146,10 +1147,10 @@ class Task:
         Returns:
             The result of the operation.
         """
-        self.file_tracker = FileTracker()
-        message_queue, end_event = await self.file_tracker.setup_channel(
+        pc = self.file_tracker.create_peer_connection()
+        message_queue, end_event = await self.file_tracker.setup_channel(pc,
             operation, follow=follow, **kwargs)
-        if not await self.file_tracker.connect_to_task(self._api, self.id):
+        if not await self.file_tracker.connect_to_task(self._api, pc, self.id):
             yield "Failed to connect to the task."
             return
         while not end_event.is_set():
@@ -1164,14 +1165,14 @@ class Task:
 
             yield formatter(message["message"])
 
-        await self.file_tracker.cleanup()
+        await pc.close()
 
     async def close_stream(self):
         """Close the stream to the task."""
         if self.file_tracker is not None:
             await self.file_tracker.cleanup()
 
-    async def _list_files(self) -> str:
+    async def list_files(self) -> str:
         """List the files in the task's working directory."""
 
         directory = [
@@ -1180,7 +1181,7 @@ class Task:
         ]
         return directory[0]
 
-    async def _tail_file(self, filename: str, n_lines: int = 10, follow=False):
+    async def tail_file(self, filename: str, n_lines: int = 10, follow=False):
         """Get the last n_lines lines of a 
         file in the task's working directory."""
 
