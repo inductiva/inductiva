@@ -1,9 +1,9 @@
 """Classes to manage different Google Cloud machine group types."""
 from dataclasses import dataclass
 import logging
-from typing import Optional, Union
+from typing import Optional
 
-from inductiva.resources import machine_types, machines_base
+from inductiva.resources import machines_base
 
 
 @dataclass
@@ -19,6 +19,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
           Check https://cloud.google.com/compute/docs/machine-resource for
           information about machine types.
+        provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
         max_idle_time: Time without executing any task, after which the
@@ -42,7 +43,6 @@ class MachineGroup(machines_base.BaseMachineGroup):
         spot: Whether to use spot machines.
     """
     # __init__ arguments
-    provider: Union[machine_types.ProviderType, str] = "GCP"
     auto_resize_disk_max_gb: Optional[int] = None
     num_machines: int = 1
     spot: bool = True
@@ -102,6 +102,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
             Check https://cloud.google.com/compute/docs/machine-resource for
         more information about machine types.
+        provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
         max_idle_time: Time without executing any task, after which the
@@ -200,6 +201,7 @@ class MPICluster(machines_base.BaseMachineGroup):
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
             Check https://cloud.google.com/compute/docs/machine-resource for
             information about machine types.
+        provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
         max_idle_time: Time without executing any task, after which the
@@ -212,7 +214,7 @@ class MPICluster(machines_base.BaseMachineGroup):
     num_machines: int = 2
 
     # Internal arguments
-    auto_resize_disk_max_gb = 500
+    auto_resize_disk_max_gb = None
     _type = machines_base.ResourceType.MPI.value
     _is_elastic = False
     _spot = False

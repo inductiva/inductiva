@@ -45,6 +45,7 @@ class BaseMachineGroup(ABC):
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
           Check https://cloud.google.com/compute/docs/machine-resource for
           more information about machine types.
+        provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
         max_idle_time: Time without executing any task, after which the
@@ -62,6 +63,7 @@ class BaseMachineGroup(ABC):
     """
     # __init__ arguments
     machine_type: str
+    provider: Union[machine_types.ProviderType, str] = "GCP"
     threads_per_core: int = 2
     data_disk_gb: int = 10
     max_idle_time: Optional[Union[datetime.timedelta, int]] = None
@@ -69,7 +71,6 @@ class BaseMachineGroup(ABC):
     register: bool = True
 
     # Internal arguments
-    provider = "GCP"
     _free_space_threshold_gb = 5
     _size_increment_gb = 10
     _id = None
