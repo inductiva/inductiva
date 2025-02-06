@@ -1,9 +1,10 @@
 name: Run Docs Snippets
 
 on:
+  push:
+    branches: [main]
   pull_request:
-    branches:
-      - main  # Only trigger when the target branch is main
+
 
 jobs:
   run_docs_snippets:
