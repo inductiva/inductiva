@@ -47,17 +47,16 @@ CLI_COMMANDS = [
 
 @pytest.mark.parametrize("command, user_input", CLI_COMMANDS)
 def test_cli(command, user_input):
-    process = subprocess.Popen(command,
-                               stdin=subprocess.PIPE,
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE,
-                               text=True)
+    with subprocess.Popen(command,
+                          stdin=subprocess.PIPE,
+                          stdout=subprocess.PIPE,
+                          stderr=subprocess.PIPE,
+                          text=True) as process:
 
-    # Send user input if needed
+        # Send user input if needed
+        stdout, stderr = process.communicate(input=user_input, timeout=120)
+        print("STDOUT: ", stdout)
+        print("STDERR: ", stderr)
+        print("#####################")
 
-    stdout, stderr = process.communicate(input=user_input, timeout=120)
-    print("STDOUT: ", stdout)
-    print("STDERR: ", stderr)
-    print("#####################")
-
-    assert process.returncode == 0
+        assert process.returncode == 0
