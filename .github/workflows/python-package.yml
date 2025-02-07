@@ -62,7 +62,13 @@ jobs:
     - name: Coverage report
       if: ${{ always() }}
       run: | # conftest crashes with coverage due to markdown-docs
-        coverage run --source=./inductiva --omit=*/_cli/*,*/client/*,*/tests/*,inductiva/tests/_cli/test_cli.py -m pytest --noconftest
+        if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+        export INDUCTIVA_API_KEY=${{ secrets.API_TEST_KEY }}
+        else
+        export INDUCTIVA_API_KEY=${{ secrets.API_DEV_TEST_KEY }}
+        export INDUCTIVA_API_URL=https://api-dev.inductiva.ai
+        fi
+        coverage run --source=./inductiva --omit=*/_cli/*,*/client/*,*/tests/* -m pytest --noconftest
         coverage report -m
     - name: Generate badge
       if: github.ref == 'refs/heads/main'
