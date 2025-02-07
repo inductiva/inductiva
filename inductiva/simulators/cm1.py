@@ -10,15 +10,10 @@ from inductiva.commands.mpiconfig import MPIConfig
 class CM1(simulators.Simulator):
     """Class to invoke a generic CM1 simulation on the API."""
 
-    def __init__(self,
-                 /,
-                 mode: str = "mpi",
-                 version: Optional[str] = None,
-                 use_dev: bool = False):
+    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
         """Initialize the CM1 simulator.
 
         Args:
-            mode (str): The execution mode, either 'mpi' or 'openmp'.
             version (str): The version of the simulator to use. If None, the
                 latest available version in the platform is used.
             use_dev (bool): Request use of the development version of
@@ -28,12 +23,12 @@ class CM1(simulators.Simulator):
         super().__init__(version=version, use_dev=use_dev)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "cm1"
-        self.mode = mode.lower()
 
     def run(self,
             input_dir: Optional[str],
             *,
             on: types.ComputationalResources,
+            mode: str = "mpi",
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
             sim_config_filename: Optional[str] = None,
@@ -45,6 +40,7 @@ class CM1(simulators.Simulator):
 
         Args:
             input_dir: Path to the directory of the simulation input files.
+            mode (str): The execution mode, either 'mpi' or 'openmp'.
             on: The computational resource to launch the simulation on.
             sim_config_filename: Name of the simulation configuration file.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
@@ -61,17 +57,19 @@ class CM1(simulators.Simulator):
                 the simulation directory.
             other arguments: See the documentation of the base class.
         """
+        mode = mode.lower()
+        executables = {"mpi": "cm1.exe", "openmp": "cm1_openmp.exe"}
+        if mode not in executables:
+            raise ValueError("Invalid mode. Choose 'mpi' or 'openmp'.")
+
+        executable = executables[mode]
+        mpi_config = None
+
         if self.mode == "mpi":
-            executable = "cm1.exe"
             mpi_kwargs = {"use_hwthread_cpus": use_hwthread}
             if n_vcpus is not None:
                 mpi_kwargs["np"] = n_vcpus
             mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
-        elif self.mode == "openmp":
-            executable = "cm1_openmp.exe"
-            mpi_config = None
-        else:
-            raise ValueError("Invalid mode. Choose 'mpi' or 'openmp'.")
 
         commands = [
             Command(f"{executable} {sim_config_filename}",
