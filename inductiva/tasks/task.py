@@ -1148,8 +1148,8 @@ class Task:
             The result of the operation.
         """
         pc = self.file_tracker.create_peer_connection()
-        message_queue, end_event = await self.file_tracker.setup_channel(pc,
-            operation, follow=follow, **kwargs)
+        message_queue, end_event = await self.file_tracker.setup_channel(
+            pc, operation, follow=follow, **kwargs)
         if not await self.file_tracker.connect_to_task(self._api, pc, self.id):
             yield "Failed to connect to the task."
             return

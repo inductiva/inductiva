@@ -53,7 +53,7 @@ class FileTracker:
             await queue.put(None)
 
         return queue, end_event
-    
+
     def create_peer_connection(self):
         pc = aiortc.RTCPeerConnection(
             aiortc.RTCConfiguration(iceServers=ICE_SERVERS))
