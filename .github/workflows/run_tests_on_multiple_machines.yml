@@ -22,9 +22,9 @@ jobs:
           run: |
             sudo apt-get install -y libglu1-mesa ca-certificates
             python -m pip install --upgrade pip setuptools wheel
-            python -m pip install pytest pytest-custom_exit_code toml
+            python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
             if [[ -f requirements.txt ]]; then python -m pip install -r requirements.txt; fi
-        - name: Test code snipets
+        - name: Test with pytest
           run: |
             if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             export INDUCTIVA_API_KEY=${{ secrets.API_TEST_KEY }}
@@ -48,9 +48,9 @@ jobs:
           run: |
             sudo apt-get install -y libglu1-mesa ca-certificates
             python -m pip install --upgrade pip setuptools wheel
-            python -m pip install pytest pytest-custom_exit_code toml
+            python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
             if [[ -f requirements.txt ]]; then python -m pip install -r requirements.txt; fi
-        - name: Test code snipets
+        - name: Test with pytest
           run: |
             if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             export INDUCTIVA_API_KEY=${{ secrets.API_TEST_KEY }}
@@ -74,9 +74,9 @@ jobs:
           run: |
             sudo apt-get install -y libglu1-mesa ca-certificates
             python -m pip install --upgrade pip setuptools wheel
-            python -m pip install pytest pytest-custom_exit_code toml
+            python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
             if [[ -f requirements.txt ]]; then python -m pip install -r requirements.txt; fi
-        - name: Test code snipets
+        - name: Test with pytest
           run: |
             if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             export INDUCTIVA_API_KEY=${{ secrets.API_TEST_KEY }}
