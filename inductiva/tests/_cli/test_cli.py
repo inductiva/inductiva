@@ -3,7 +3,7 @@ import subprocess
 import pytest
 import os
 
-#read INDUCTIVA_API_KEY from os env vars
+#read INDUCTIVA_API_KEY from os environment variables
 API_KEY = os.getenv("INDUCTIVA_API_KEY", "123")
 
 # ([command], user_input)
