@@ -21,4 +21,5 @@ from .cans import CaNS
 from .cp2k import CP2K
 from .swan import SWAN
 from .fds import FDS
+from .cm1 import CM1
 from .gx import GX
