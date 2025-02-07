@@ -9,7 +9,7 @@ cm1 = inductiva.simulators.CM1(mode="mpi")
 
 # Run simulation with config files in the input directory
 task = cm1.run(input_dir="/Path/to/My/cm1/Files",
-               sim_config_filename="my_config_file.inp",
+               sim_config_filename="namelist.input",
                on=machine_group)
 
 # Wait for the simulation to finish and download the results
