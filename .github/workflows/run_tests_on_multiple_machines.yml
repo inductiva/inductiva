@@ -45,8 +45,8 @@ jobs:
         - name: Verify Python Installation
           shell: powershell
           run: |
-            Write-Output "Python version:"
-            & "${{ steps.setup-python.outputs.python-path }}" --version
+            python --version
+            where python  # Confirm Python's path
         - name: Install dependencies
           env:
             BOT_REPO_ACCESS: ${{ secrets.BOT_REPO_ACCESS }}
