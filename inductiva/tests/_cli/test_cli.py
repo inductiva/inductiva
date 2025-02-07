@@ -4,7 +4,7 @@ import pytest
 import os
 
 #read INDUCTIVA_API_KEY from os env vars
-API_KEY = os.environ["INDUCTIVA_API_KEY"]
+API_KEY = os.environ["INDUCTIVA_API_KEY"] # pragma: no cover
 
 # ([command], user_input)
 CLI_COMMANDS = [

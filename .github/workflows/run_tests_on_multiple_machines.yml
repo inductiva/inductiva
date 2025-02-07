@@ -1,4 +1,4 @@
-name: Run Docs Snippets
+name: Run Tests on Multiple Machines
 
 on:
   push:
