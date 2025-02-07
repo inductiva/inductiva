@@ -1,3 +1,4 @@
+"""CM1 module of the API."""
 from typing import List, Optional
 
 from inductiva import types, tasks, simulators
