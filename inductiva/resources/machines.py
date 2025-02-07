@@ -9,11 +9,14 @@ from inductiva.resources import machines_base
 @dataclass
 class MachineGroup(machines_base.BaseMachineGroup):
     """Create a MachineGroup object.
-
-    A machine group is a collection of homogenous machines with given the
-    configurations that are launched in Google Cloud.
-    Note: The machine group will be available only after calling 'start' method.
-    The billing will start only after the machines are started.
+    
+    The register argument is used to indicate if the machine group should
+    be registered or if it was already registered. If set as False on
+    initialization, then, the machine group is not registered and it
+    can not be started in the cloud. This serves has an helper argument for
+    retrieving already registered machine groups that can be started, for
+    example, when retrieving with the `machines_groups.get` method.
+    Users should not set this argument.
 
     Args:
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
@@ -26,7 +29,6 @@ class MachineGroup(machines_base.BaseMachineGroup):
           resource will be terminated.
         auto_terminate_ts: Moment in which the resource will be
           automatically terminated.
-        provider: The cloud provider of the machine group.
         auto_resize_disk_max_gb: The maximum size in GB that the hard disk
             of the cloud VM can reach. If set, the disk will be
             automatically resized, during the execution of a task, when the
@@ -42,7 +44,14 @@ class MachineGroup(machines_base.BaseMachineGroup):
         num_machines: The number of virtual machines to launch.
         spot: Whether to use spot machines.
     """
-    # __init__ arguments
+    """
+    A machine group is a collection of homogenous machines with given the
+    configurations that are launched in Google Cloud.
+    
+    Note: The machine group will be available only after calling 'start' method.
+    The billing will start only after the machines are started.
+    """
+    # Construtor arguments
     auto_resize_disk_max_gb: Optional[int] = None
     num_machines: int = 1
     spot: bool = True
@@ -90,14 +99,14 @@ class MachineGroup(machines_base.BaseMachineGroup):
 class ElasticMachineGroup(machines_base.BaseMachineGroup):
     """Create an ElasticMachineGroup object.
 
-    An ElasticMachineGroup is a set of identical machines that can
-    automatically scale based on CPU load. The group starts with a
-    minimum number of machines and adjusts its size as needed scaling
-    to the maximum number of machines, ensuring both optimal performance
-    and cost efficiency.
+    The register argument is used to indicate if the machine group should
+    be registered or if it was already registered. If set as False on
+    initialization, then, the machine group is not registered and it
+    can not be started in the cloud. This serves has an helper argument for
+    retrieving already registered machine groups that can be started, for
+    example, when retrieving with the `machines_groups.get` method.
+    Users should not set this argument.
 
-    Note: The machine group becomes active after calling the 'start' method,
-    and billing commences once the machines are initiated.
     Args:
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
             Check https://cloud.google.com/compute/docs/machine-resource for
@@ -128,7 +137,17 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             can scale up to.
         spot: Whether to use spot machines.
     """
-    # __init__ arguments
+    """
+    An ElasticMachineGroup is a set of identical machines that can
+    automatically scale based on CPU load. The group starts with a
+    minimum number of machines and adjusts its size as needed scaling
+    to the maximum number of machines, ensuring both optimal performance
+    and cost efficiency.
+
+    Note: The machine group becomes active after calling the 'start' method,
+    and billing commences once the machines are initiated.
+    """
+    # Construtor arguments
     auto_resize_disk_max_gb: Optional[int] = None
     min_machines: int = 1
     max_machines: int = 2
@@ -192,10 +211,13 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
 class MPICluster(machines_base.BaseMachineGroup):
     """Create a MPICluster object.
 
-    A MPI cluster is a collection of homogenous machines all working together on
-    a common task given the configurations that are launched in Google Cloud.
-    Note: The cluster will be available only after calling 'start' method.
-    The billing will start only after the machines are started.
+    The register argument is used to indicate if the machine group should
+    be registered or if it was already registered. If set as False on
+    initialization, then, the machine group is not registered and it
+    can not be started in the cloud. This serves has an helper argument for
+    retrieving already registered machine groups that can be started, for
+    example, when retrieving with the `machines_groups.get` method.
+    Users should not set this argument.
 
     Args:
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
@@ -210,7 +232,14 @@ class MPICluster(machines_base.BaseMachineGroup):
             automatically terminated.
         num_machines: The number of virtual machines to launch.
     """
-    # __init__ arguments
+    """
+    A MPI cluster is a collection of homogenous machines all working together on
+    a common task given the configurations that are launched in Google Cloud.
+    
+    Note: The cluster will be available only after calling 'start' method.
+    The billing will start only after the machines are started.
+    """
+    # Construtor arguments
     num_machines: int = 2
 
     # Internal arguments
