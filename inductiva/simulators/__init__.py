@@ -19,6 +19,5 @@ from .fvcom import FVCOM
 from .swash import SWASH
 from .cans import CaNS
 from .swan import SWAN
-from .cp2k import CP2K
 from .fds import FDS
 from .gx import GX
