@@ -58,11 +58,7 @@ class CM1(simulators.Simulator):
             other arguments: See the documentation of the base class.
         """
         mode = mode.lower()
-        executables = {"mpi": "cm1.exe", "openmp": "cm1_openmp.exe"}
-        if mode not in executables:
-            raise ValueError("Invalid mode. Choose 'mpi' or 'openmp'.")
-
-        executable = executables[mode]
+        executable = "cm1.exe" if mode == "mpi" else "cm1_openmp.exe"
         mpi_config = None
 
         if self.mode == "mpi":
