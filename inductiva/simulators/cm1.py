@@ -74,6 +74,7 @@ class CM1(simulators.Simulator):
 
         return super().run(input_dir,
                            on=on,
+                           mode=mode,
                            commands=commands,
                            storage_dir=storage_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
