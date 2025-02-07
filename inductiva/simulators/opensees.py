@@ -1,4 +1,4 @@
-"""OPENSEES module of the API."""
+"""OpenSees module of the API."""
 from typing import List, Optional
 
 from inductiva import types, tasks, simulators
@@ -7,8 +7,8 @@ from inductiva.commands.mpiconfig import MPIConfig
 
 
 @simulators.simulator.mpi_enabled
-class OPENSEES(simulators.Simulator):
-    """Class to invoke a generic OPENSEES simulation on the API."""
+class OpenSees(simulators.Simulator):
+    """Class to invoke a generic OpenSees simulation on the API."""
 
     def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
         """Initialize the OPENSEES simulator.

@@ -1,11 +1,11 @@
-""" OPENSEES example."""
+""" OpenSees example."""
 import inductiva
 
 # Allocate machine
 machine_group = inductiva.resources.MachineGroup("c3d-standard-180")
 
 # Initialize the Simulator
-opensees = inductiva.simulators.OPENSEES()
+opensees = inductiva.simulators.OpenSees()
 
 # Run simulation with config files in the input directory
 task = opensees.run(input_dir="/Path/to/My/OpenSees/Files",

@@ -5,7 +5,7 @@ from .splishsplash import SplishSplash
 from .dualsphysics import DualSPHysics
 from .custom_image import CustomImage
 from .openfoam import OpenFOAM
-from .opensees import OPENSEES
+from .opensees import OpenSees
 from .openfast import OpenFAST
 from .snl_swan import SNLSWAN
 from .amr_wind import AmrWind
