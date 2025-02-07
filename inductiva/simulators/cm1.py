@@ -61,7 +61,7 @@ class CM1(simulators.Simulator):
         executable = "cm1.exe" if mode == "mpi" else "cm1_openmp.exe"
         mpi_config = None
 
-        if self.mode == "mpi":
+        if mode == "mpi":
             mpi_kwargs = {"use_hwthread_cpus": use_hwthread}
             if n_vcpus is not None:
                 mpi_kwargs["np"] = n_vcpus
