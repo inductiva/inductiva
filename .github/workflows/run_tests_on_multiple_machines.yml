@@ -42,14 +42,20 @@ jobs:
           uses: actions/setup-python@v3
           with:
             python-version: ${{ matrix.python-version }}
+        - name: Verify Python Installation
+          shell: powershell
+          run: |
+            Write-Output "Python version:"
+            & "${{ steps.setup-python.outputs.python-path }}" --version
         - name: Install dependencies
           env:
             BOT_REPO_ACCESS: ${{ secrets.BOT_REPO_ACCESS }}
           shell: powershell
           run: |
-            python -m pip install --upgrade pip setuptools wheel
-            python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
-            if (Test-Path "requirements.txt") { python -m pip install -r requirements.txt }
+            $python = "${{ steps.setup-python.outputs.python-path }}"
+            & $python -m pip install --upgrade pip setuptools wheel
+            & $python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
+            if (Test-Path "requirements.txt") { & $python -m pip install -r requirements.txt }
         - name: Test with pytest
           shell: powershell
           run: |
@@ -59,7 +65,7 @@ jobs:
               $env:INDUCTIVA_API_KEY = "${{ secrets.API_DEV_TEST_KEY }}"
               $env:INDUCTIVA_API_URL = "https://api-dev.inductiva.ai"
             }
-            pytest --suppress-no-test-exit-code
+            & python -m pytest --suppress-no-test-exit-code
   run_on_windows_x64:
     runs-on: Windows_x64_8cores
 
@@ -69,14 +75,20 @@ jobs:
           uses: actions/setup-python@v3
           with:
             python-version: ${{ matrix.python-version }}
+        - name: Verify Python Installation
+          shell: powershell
+          run: |
+            Write-Output "Python version:"
+            & "${{ steps.setup-python.outputs.python-path }}" --version
         - name: Install dependencies
           env:
             BOT_REPO_ACCESS: ${{ secrets.BOT_REPO_ACCESS }}
           shell: powershell
           run: |
-            python -m pip install --upgrade pip setuptools wheel
-            python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
-            if (Test-Path "requirements.txt") { python -m pip install -r requirements.txt }
+            $python = "${{ steps.setup-python.outputs.python-path }}"
+            & $python -m pip install --upgrade pip setuptools wheel
+            & $python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
+            if (Test-Path "requirements.txt") { & $python -m pip install -r requirements.txt }
         - name: Test with pytest
           shell: powershell
           run: |
@@ -86,4 +98,4 @@ jobs:
               $env:INDUCTIVA_API_KEY = "${{ secrets.API_DEV_TEST_KEY }}"
               $env:INDUCTIVA_API_URL = "https://api-dev.inductiva.ai"
             }
-            pytest --suppress-no-test-exit-code
+            & python -m pytest --suppress-no-test-exit-code
