@@ -41,13 +41,9 @@ jobs:
         - name: Set up Python ${{ matrix.python-version }}
           uses: actions/setup-python@v4
           with:
-            python-version: ${{ matrix.python-version }}
+            python-version: 3.11
         - name: Verify Python Installation
           run: |
-            Set-ExecutionPolicy AllSigned
-            Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-            choco install python311 -y
-
             python --version
         - name: Install dependencies
           env:
