@@ -38,14 +38,14 @@ jobs:
 
     steps:
         - uses: actions/checkout@v3
-        - name: Install Python
-          shell: powershell
+        - name: Set up Python ${{ matrix.python-version }}
+          uses: actions/setup-python@v4
+          with:
+            python-version: ${{ matrix.python-version }}
+        - name: Verify Python Installation
           run: |
-            Set-ExecutionPolicy AllSigned
-            Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-            choco install python311 -y
             python.exe --version
-            pip --version
+            python --version
         - name: Install dependencies
           env:
             BOT_REPO_ACCESS: ${{ secrets.BOT_REPO_ACCESS }}
