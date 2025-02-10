@@ -217,26 +217,19 @@ def upload(
 
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
-    api_response = methods.get_upload_url(
-        api_instance.get_upload_url,
-        query_params={"paths": remote_file_paths},
-    )
+    urls = get_signed_urls(paths=remote_file_paths, operation="upload")
 
     with tqdm.tqdm(total=total_size,
                    unit="B",
                    unit_scale=True,
                    unit_divisor=1000) as progress_bar:
 
-        for response in api_response:
-            method = response["method"]
-            url = response["url"]
-            remote_file_path = response["file_path"]
-
+        for url, remote_file_path in zip(urls, remote_file_paths):
             file_path = remote_file_path.removeprefix(f"{remote_dir}/")
             local_file_path = os.path.join(local_dir, file_path)
 
             try:
-                methods.upload_file(api_instance, local_file_path, method, url,
+                methods.upload_file(api_instance, local_file_path, "PUT", url,
                                     progress_bar)
 
                 methods.notify_upload_complete(
