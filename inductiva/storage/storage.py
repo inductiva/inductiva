@@ -341,7 +341,7 @@ class ExportDestination(Enum):
         return self.value
 
 
-def initiate_multipart_upload(filename, bucket_name):
+def _initiate_multipart_upload(filename, bucket_name):
     """
     Initiate a multipart upload on S3 and return the UploadId.
     """
@@ -353,7 +353,7 @@ def initiate_multipart_upload(filename, bucket_name):
     return response["UploadId"]
 
 
-def generate_presigned_url(upload_id, part_number, filename, bucket_name):
+def _generate_presigned_url(upload_id, part_number, filename, bucket_name):
     """
     Generate a presigned URL for uploading a part to S3.
     """
@@ -372,7 +372,7 @@ def generate_presigned_url(upload_id, part_number, filename, bucket_name):
     )
 
 
-def generate_complete_multipart_upload_signed_url(
+def _generate_complete_multipart_upload_signed_url(
     upload_id,
     filename,
     bucket_name,
@@ -395,7 +395,7 @@ def generate_complete_multipart_upload_signed_url(
     return signed_url
 
 
-def get_file_size(file_path):
+def _get_file_size(file_path):
     api = storage_api.StorageApi(inductiva.api.get_client())
 
     contents = api.list_storage_contents({
@@ -409,7 +409,7 @@ def get_file_size(file_path):
     return list(contents.values())[0]["size_bytes"]
 
 
-def get_multipart_parts(size, min_part_size=50 * 1024 * 1024):
+def _get_multipart_parts(size, min_part_size=50 * 1024 * 1024):
     """
     Calculate the size of each part and the total number of parts
 
@@ -477,29 +477,29 @@ def export_to_aws_s3(path_to_export, min_part_size_mb, filename, bucket_name):
         raise ValueError(f"Bucket {bucket_name} not found.") from e
 
     # Step 1: Get the file size
-    file_size = get_file_size(path_to_export)
+    file_size = _get_file_size(path_to_export)
 
     # Step 2: Calculate the part size and count
-    parts_size, parts_count = get_multipart_parts(
+    parts_size, parts_count = _get_multipart_parts(
         file_size,
         min_part_size=min_part_size_mb * 1024 * 1024,
     )
 
     # Step 3: Initiate the multipart upload on aws
-    upload_id = initiate_multipart_upload(filename, bucket_name)
+    upload_id = _initiate_multipart_upload(filename, bucket_name)
 
     # Step 4: Generate presigned URLs for each part
     upload_parts = []
     for part_number in range(1, parts_count + 1):
-        presigned_url = generate_presigned_url(upload_id, part_number, filename,
-                                               bucket_name)
+        presigned_url = _generate_presigned_url(upload_id, part_number,
+                                                filename, bucket_name)
         upload_parts.append({
             "part_number": part_number,
             "part_url": presigned_url
         })
 
     # Step 5: Generate the complete multipart upload signed URL
-    complete_multipart_url = generate_complete_multipart_upload_signed_url(
+    complete_multipart_url = _generate_complete_multipart_upload_signed_url(
         upload_id,
         filename,
         bucket_name,
