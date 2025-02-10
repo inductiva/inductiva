@@ -10,13 +10,10 @@ from inductiva.resources import machines_base
 class MachineGroup(machines_base.BaseMachineGroup):
     """Create a MachineGroup object.
     
-    The register argument is used to indicate if the machine group should
-    be registered or if it was already registered. If set as False on
-    initialization, then, the machine group is not registered and it
-    can not be started in the cloud. This serves has an helper argument for
-    retrieving already registered machine groups that can be started, for
-    example, when retrieving with the `machines_groups.get` method.
-    Users should not set this argument.
+    A machine group is a collection of homogenous machines with given the
+    configurations that are launched in Google Cloud.
+    Note: The machine group will be available only after calling 'start' method.
+    The billing will start only after the machines are started.
 
     Args:
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
@@ -44,13 +41,6 @@ class MachineGroup(machines_base.BaseMachineGroup):
         num_machines: The number of virtual machines to launch.
         spot: Whether to use spot machines.
     """
-    """
-    A machine group is a collection of homogenous machines with given the
-    configurations that are launched in Google Cloud.
-    
-    Note: The machine group will be available only after calling 'start' method.
-    The billing will start only after the machines are started.
-    """
     # Construtor arguments
     auto_resize_disk_max_gb: Optional[int] = None
     num_machines: int = 1
@@ -62,17 +52,21 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def __post_init__(self):
         """Validate inputs and initialize additional attributes after
         dataclass initialization."""
+        super().__post_init__()
+
+        self._register_machine_group(num_vms=self.num_machines,
+                                     spot=self.spot,
+                                     is_elastic=self._is_elastic)
+    
+    def _validate_inputs(self):
+        super()._validate_inputs()
         if self.num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
-
-        super().__post_init__()
-
-        if self.register:
-            logging.info("■ Registering MachineGroup configurations:")
-            self._register_machine_group(num_vms=self.num_machines,
-                                         spot=self.spot,
-                                         is_elastic=self._is_elastic)
+        
+    @property
+    def short_name(self) -> str:
+        return "MachineGroup"
 
     @classmethod
     def from_api_response(cls, resp: dict):
@@ -95,13 +89,13 @@ class MachineGroup(machines_base.BaseMachineGroup):
 class ElasticMachineGroup(machines_base.BaseMachineGroup):
     """Create an ElasticMachineGroup object.
 
-    The register argument is used to indicate if the machine group should
-    be registered or if it was already registered. If set as False on
-    initialization, then, the machine group is not registered and it
-    can not be started in the cloud. This serves has an helper argument for
-    retrieving already registered machine groups that can be started, for
-    example, when retrieving with the `machines_groups.get` method.
-    Users should not set this argument.
+    An ElasticMachineGroup is a set of identical machines that can
+    automatically scale based on CPU load. The group starts with a
+    minimum number of machines and adjusts its size as needed scaling
+    to the maximum number of machines, ensuring both optimal performance
+    and cost efficiency.
+    Note: The machine group becomes active after calling the 'start' method,
+    and billing commences once the machines are initiated.
 
     Args:
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
@@ -133,16 +127,6 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             can scale up to.
         spot: Whether to use spot machines.
     """
-    """
-    An ElasticMachineGroup is a set of identical machines that can
-    automatically scale based on CPU load. The group starts with a
-    minimum number of machines and adjusts its size as needed scaling
-    to the maximum number of machines, ensuring both optimal performance
-    and cost efficiency.
-
-    Note: The machine group becomes active after calling the 'start' method,
-    and billing commences once the machines are initiated.
-    """
     # Construtor arguments
     auto_resize_disk_max_gb: Optional[int] = None
     min_machines: int = 1
@@ -155,6 +139,18 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
     def __post_init__(self):
         """Validate inputs and initialize additional attributes after
         dataclass initialization."""
+        super().__post_init__()
+
+        self._active_machines = self.min_machines
+
+        self._register_machine_group(min_vms=self.min_machines,
+                                     max_vms=self.max_machines,
+                                     is_elastic=self._is_elastic,
+                                     num_vms=self._active_machines,
+                                     spot=self.spot)
+    
+    def _validate_inputs(self):
+        super()._validate_inputs()
         if self.min_machines < 0:
             raise ValueError(
                 "`min_machines` should be a number equal or greater than 0.")
@@ -162,18 +158,10 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         if self.min_machines >= self.max_machines:
             raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
-
-        super().__post_init__()
-
-        self._active_machines = self.min_machines
-
-        if self.register:
-            logging.info("■ Registering ElasticMachineGroup configurations:")
-            self._register_machine_group(min_vms=self.min_machines,
-                                         max_vms=self.max_machines,
-                                         is_elastic=self._is_elastic,
-                                         num_vms=self._active_machines,
-                                         spot=self.spot)
+    
+    @property
+    def short_name(self) -> str:
+        return "ElasticMachineGroup"
 
     @classmethod
     def from_api_response(cls, resp: dict):
@@ -205,13 +193,10 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
 class MPICluster(machines_base.BaseMachineGroup):
     """Create a MPICluster object.
 
-    The register argument is used to indicate if the machine group should
-    be registered or if it was already registered. If set as False on
-    initialization, then, the machine group is not registered and it
-    can not be started in the cloud. This serves has an helper argument for
-    retrieving already registered machine groups that can be started, for
-    example, when retrieving with the `machines_groups.get` method.
-    Users should not set this argument.
+   A MPI cluster is a collection of homogenous machines all working together on
+    a common task given the configurations that are launched in Google Cloud.
+    Note: The cluster will be available only after calling 'start' method.
+    The billing will start only after the machines are started.
 
     Args:
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
@@ -226,13 +211,6 @@ class MPICluster(machines_base.BaseMachineGroup):
             automatically terminated.
         num_machines: The number of virtual machines to launch.
     """
-    """
-    A MPI cluster is a collection of homogenous machines all working together on
-    a common task given the configurations that are launched in Google Cloud.
-    
-    Note: The cluster will be available only after calling 'start' method.
-    The billing will start only after the machines are started.
-    """
     # Construtor arguments
     num_machines: int = 2
 
@@ -245,18 +223,18 @@ class MPICluster(machines_base.BaseMachineGroup):
     def __post_init__(self):
         """Validate inputs and initialize additional attributes after
         dataclass initialization."""
+        super().__post_init__()
+
+        self._register_machine_group(num_vms=self.num_machines,
+                                     is_elastic=self._is_elastic,
+                                     spot=self._spot,
+                                     type=self._type)
+    
+    def _validate_inputs(self):
+        super()._validate_inputs()
         if self.num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
-
-        super().__post_init__()
-
-        if self.register:
-            logging.info("■ Registering MPICluster configurations:")
-            self._register_machine_group(num_vms=self.num_machines,
-                                         is_elastic=self._is_elastic,
-                                         spot=self._spot,
-                                         type=self._type)
 
     @property
     def available_vcpus(self):
@@ -267,6 +245,10 @@ class MPICluster(machines_base.BaseMachineGroup):
         """
 
         return self.n_vcpus.total
+    
+    @property
+    def short_name(self) -> str:
+        return "MPICluster"
 
     @classmethod
     def from_api_response(cls, resp: dict):

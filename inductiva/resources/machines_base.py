@@ -45,13 +45,6 @@ class BaseMachineGroup(ABC):
             representing the number of minutes.
         auto_terminate_ts: Moment in which the resource will be
           automatically terminated.
-        register: Bool that indicates if a machine group should be register
-            or if it was already registered. If set as False by users on
-            initialization, then, the machine group will not be able to be
-            started. This serves has an helper argument for retrieving
-            already registered machine groups that can be started, for
-            example, when retrieving with the `machines_groups.get` method.
-            Users should not set this argument in anyway.
     """
     # Construtor arguments
     machine_type: str
@@ -60,7 +53,6 @@ class BaseMachineGroup(ABC):
     data_disk_gb: int = 10
     max_idle_time: Optional[Union[datetime.timedelta, int]] = None
     auto_terminate_ts: Optional[datetime.datetime] = None
-    register: bool = True
 
     # Internal arguments
     _free_space_threshold_gb = 5
@@ -79,6 +71,7 @@ class BaseMachineGroup(ABC):
     quota_usage = {}
     total_ram_gb = None
     _cost_per_hour = {}
+    allow_auto_start = True
 
     QUOTAS_EXCEEDED_SLEEP_SECONDS = 60
 
@@ -92,6 +85,10 @@ class BaseMachineGroup(ABC):
         # to the backend.
         self._api = compute_api.ComputeApi(api.get_client())
 
+        self._validate_inputs()
+    
+    def _validate_inputs(self):
+        """Validate initialization inputs."""
         if self.data_disk_gb <= 0:
             raise ValueError("`data_disk_gb` must be positive.")
 
@@ -226,7 +223,8 @@ class BaseMachineGroup(ABC):
         """Register machine group configuration in API.
 
         Returns:
-            The unique ID and name identifying the machine on the API."""
+            The unique ID and name identifying the machine on the API."""             
+        logging.info(f"■ Registering {self.short_name} configurations:")
 
         instance_group_config = inductiva.client.models.VMGroupConfig(
             machine_type=self.machine_type,
@@ -250,7 +248,6 @@ class BaseMachineGroup(ABC):
         self._id = body["id"]
         self._name = body["name"]
         self.quota_usage = body.get("quota_usage") or {}
-        self.register = False
         # Lifecycle configuration parameters are updated with default values
         # from the API response if they were not provided by the user
         self._max_idle_time = self._seconds_to_timedelta(
@@ -281,11 +278,11 @@ class BaseMachineGroup(ABC):
     def from_api_response(cls, resp: dict):
         """Creates a MachineGroup object from an API response."""
 
-        machine_group = cls(
-            machine_type=resp["machine_type"],
-            data_disk_gb=resp["disk_size_gb"],
-            register=False,
-        )
+        # Do not call __init__ to prevent registration of the machine group
+        machine_group = cls.__new__(cls)
+        machine_group._api = compute_api.ComputeApi(api.get_client())
+        machine_group.machine_type = resp["machine_type"]
+        machine_group.data_disk_gb = resp["disk_size_gb"]
         machine_group._id = resp["id"]
         machine_group.provider = resp["provider_id"]
         machine_group._name = resp["name"]
@@ -349,8 +346,7 @@ class BaseMachineGroup(ABC):
 
         if self.id is None or self.name is None:
             logging.info("Attempting to start an unregistered machine group. "
-                         "Make sure you have called the constructor without "
-                         "`register=False`.")
+                         "Make sure you have called the constructor.")
             return
 
         logging.info(
