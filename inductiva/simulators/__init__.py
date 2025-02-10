@@ -5,6 +5,7 @@ from .splishsplash import SplishSplash
 from .dualsphysics import DualSPHysics
 from .custom_image import CustomImage
 from .openfoam import OpenFOAM
+from .opensees import OpenSees
 from .openfast import OpenFAST
 from .snl_swan import SNLSWAN
 from .amr_wind import AmrWind
@@ -17,6 +18,8 @@ from .nwchem import NWChem
 from .fvcom import FVCOM
 from .swash import SWASH
 from .cans import CaNS
+from .cp2k import CP2K
 from .swan import SWAN
 from .fds import FDS
+from .cm1 import CM1
 from .gx import GX
