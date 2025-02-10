@@ -178,7 +178,6 @@ def upload_from_url(
     api_instance.upload_from_url(query_params={
         "url": url,
         "path": remote_path,
-        "unzip": "f",
     },)
     logging.info("File is being uploaded...")
     logging.info("You can use 'inductiva storage ls' to check the status.")
