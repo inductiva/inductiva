@@ -56,7 +56,7 @@ jobs:
             choco install python --version=3.12.0 --yes
             
             echo "Verifying Python installation..."
-            C:\ProgramData\chocolatey\lib\python3 --version
+            C:\ProgramData\chocolatey\bin\python3.12.exe --version
             python3 --version
 
             python -m pip install --upgrade pip setuptools wheel
