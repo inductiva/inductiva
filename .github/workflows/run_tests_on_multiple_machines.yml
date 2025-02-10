@@ -49,8 +49,11 @@ jobs:
           env:
             BOT_REPO_ACCESS: ${{ secrets.BOT_REPO_ACCESS }}
           run: |
+            Set-ExecutionPolicy Bypass -Scope Process
+            Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))\
+            choco install visualstudio2022buildtools --yes --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools"
             python -m pip install --upgrade pip setuptools wheel
-            python -m pip install --only-binary=:all: cffi pytest pytest-custom_exit_code toml pytest-markdown-docs
+            python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
             if (Test-Path "requirements.txt") { python -m pip install -r requirements.txt }
         - name: Test with pytest
           run: |
