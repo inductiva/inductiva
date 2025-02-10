@@ -86,6 +86,7 @@ from inductiva.client.model.task_with_status_history import TaskWithStatusHistor
 from inductiva.client.model.terms_and_conditions import TermsAndConditions
 from inductiva.client.model.tier_full_info import TierFullInfo
 from inductiva.client.model.tier_quota_detail import TierQuotaDetail
+from inductiva.client.model.transaction import Transaction
 from inductiva.client.model.update_capabilities_actions import UpdateCapabilitiesActions
 from inductiva.client.model.update_capabilities_request import UpdateCapabilitiesRequest
 from inductiva.client.model.usage_statistics import UsageStatistics

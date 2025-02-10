@@ -79,6 +79,7 @@ from inductiva.client.apis.paths.users_info import UsersInfo
 from inductiva.client.apis.paths.users_capabilities import UsersCapabilities
 from inductiva.client.apis.paths.users_costs import UsersCosts
 from inductiva.client.apis.paths.users_organization_costs import UsersOrganizationCosts
+from inductiva.client.apis.paths.users_top_ups import UsersTopUps
 from inductiva.client.apis.paths.projects import Projects
 from inductiva.client.apis.paths.projects_name import ProjectsName
 from inductiva.client.apis.paths.metrics_users_username_activity import MetricsUsersUsernameActivity
@@ -248,6 +249,8 @@ PathToApi = typing_extensions.TypedDict(
             UsersCosts,
         PathValues.USERS_ORGANIZATION_COSTS:
             UsersOrganizationCosts,
+        PathValues.USERS_TOPUPS:
+            UsersTopUps,
         PathValues.PROJECTS:
             Projects,
         PathValues.PROJECTS_NAME:
@@ -427,6 +430,8 @@ path_to_api = PathToApi({
         UsersCosts,
     PathValues.USERS_ORGANIZATION_COSTS:
         UsersOrganizationCosts,
+    PathValues.USERS_TOPUPS:
+        UsersTopUps,
     PathValues.PROJECTS:
         Projects,
     PathValues.PROJECTS_NAME:
