@@ -45,15 +45,16 @@ jobs:
         - name: Verify Python Installation
           run: |
             python --version
-        - name: Install Choco
+        - name: Install Choco and update visual studio build tools
           run: |
               Set-ExecutionPolicy Bypass -Scope Process
               Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+              choco install visualstudio2019buildtools --yes --force
         - name: Install dependencies
           env:
             BOT_REPO_ACCESS: ${{ secrets.BOT_REPO_ACCESS }}
           run: |
-            choco install visualstudio2019buildtools --yes --force
             
             python -m pip install --upgrade pip setuptools wheel
             python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
