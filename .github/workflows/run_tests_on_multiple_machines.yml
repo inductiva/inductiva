@@ -55,7 +55,8 @@ jobs:
 
             choco install python --version=3.12.0 --yes
             
-            echo "C:\ProgramData\chocolatey\bin" >> $Env:PATH
+            $env:PATH += ";C:\ProgramData\chocolatey\bin"
+
             echo "Verifying Python installation..."
             C:\ProgramData\chocolatey\bin\python3.12.exe --version
             python3 --version
