@@ -38,27 +38,19 @@ jobs:
 
     steps:
         - uses: actions/checkout@v3
-        - name: Set up Python ${{ matrix.python-version }}
-          uses: actions/setup-python@v4
-          with:
-            python-version: 3.11
-        - name: Verify Python Installation
-          run: |
-            python --version
-        - name: Install dependencies
+        - name: Install dependencies and run tests
           env:
             BOT_REPO_ACCESS: ${{ secrets.BOT_REPO_ACCESS }}
           run: |
             Set-ExecutionPolicy Bypass -Scope Process
             Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+            
             choco install visualstudio2022buildtools --yes --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools"
-
             choco install python --version=3.12.0 --yes
             
             Set-Alias python "C:\ProgramData\chocolatey\bin\python3.12.exe"
 
             echo "Verifying Python installation..."
-            C:\ProgramData\chocolatey\bin\python3.12.exe --version
             python --version
 
             $env:Path += ";c:\python312\Scripts"
@@ -67,8 +59,6 @@ jobs:
             python -m pip install --upgrade pip setuptools wheel
             python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
             if (Test-Path "requirements.txt") { python -m pip install -r requirements.txt }
-
-            inductiva.exe
 
             if ("${{ github.ref }}" -eq "refs/heads/main") {
               $env:INDUCTIVA_API_KEY = "${{ secrets.API_TEST_KEY }}"
