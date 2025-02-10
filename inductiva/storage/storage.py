@@ -144,7 +144,7 @@ def get_signed_urls(
 
 def get_zip_contents(path: str) -> List[models.ZipArchiveInfo]:
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
-    return api_instance.get_zip_contents(query_params={"path": path})
+    return api_instance.get_zip_contents(query_params={"path": path}).body
 
 
 def upload_from_url(
