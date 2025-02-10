@@ -54,7 +54,7 @@ jobs:
             choco install visualstudio2022buildtools --yes --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools"
 
             choco install python --version=3.12.0 --yes
-            
+            echo "C:\ProgramData\chocolatey\bin" | Out-File -Append -FilePath $env:GITHUB_PATH
             echo "Verifying Python installation..."
             C:\ProgramData\chocolatey\bin\python3.12.exe --version
             python3 --version
