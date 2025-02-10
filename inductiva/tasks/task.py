@@ -868,10 +868,8 @@ class Task:
             each file (name, size, compressed size). It can also be used to
             print that information in a formatted way.
         """
-        api_response = self._api.get_outputs_list(
-            path_params=self._get_path_params())
-
-        archive_info = api_response.body
+        # TODO: the output filename shouldn't be hardcoded
+        archive_info = storage.get_zip_contents(path=f"{self.id}/output.zip")
 
         output_files = [
             output_info.FileInfo(
