@@ -8,8 +8,9 @@ import inductiva
 def test_download_from_url():
     # Disable SSL verification.
     # Had to do this for tests to pass on windows.
+    #pylint: disable=protected-access
     ssl._create_default_https_context = ssl._create_unverified_context
-    
+
     url = "https://storage.googleapis.com/inductiva-api-demo-files/" \
           "openfoam-input-example.zip"
 

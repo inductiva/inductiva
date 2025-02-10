@@ -101,7 +101,10 @@ def test_get_validate_request_params():
     original_params = {"param1": "value1", "param2": pathlib.Path("/some/path")}
     type_annotations = {"param1": str, "param2": pathlib.Path}
 
-    expected_params = {"param1": "value1", "param2": str(pathlib.Path("/some/path"))}
+    expected_params = {
+        "param1": "value1",
+        "param2": str(pathlib.Path("/some/path"))
+    }
 
     validated_params = data.get_validate_request_params(original_params,
                                                         type_annotations)
