@@ -21,10 +21,6 @@ from inductiva import constants
 from inductiva.client import exceptions, models
 from inductiva import api
 from inductiva.client.apis.tags import tasks_api
-from inductiva.client.paths.tasks_task_id_download_output_url import get \
-    as get_tasks_task_id_download_output_url
-from inductiva.client.paths.tasks_task_id_download_input_url import get \
-    as get_tasks_task_id_download_input_url
 from inductiva.utils import files, format_utils, data
 from inductiva.tasks import output_info
 from inductiva.tasks.file_tracker import Operations, FileTracker
@@ -901,13 +897,11 @@ class Task:
         return all(
             file.name in self.STANDARD_OUTPUT_FILES for file in output_files)
 
-    def _request_download_output_url(
-        self
-    ) -> Optional[get_tasks_task_id_download_output_url.
-                  SchemaFor200ResponseBodyApplicationJson]:
+    def _request_download_output_url(self) -> Optional[str]:
         try:
-            api_response = self._api.get_output_download_url(
-                path_params=self._get_path_params(),)
+            # TODO: the output filename shouldn't be hardcoded
+            url = storage.get_signed_urls(
+                [f"{self.id}/output.zip"], "download")[0]
         except exceptions.ApiException as e:
             if not self._called_from_wait:
 
@@ -927,7 +921,7 @@ class Task:
             # Reset internal state
             self._called_from_wait = False
 
-        return api_response.body
+        return url
 
     def _request_download_input_url(self) -> str:
         # TODO: the input filename shouldn't be hardcoded
@@ -940,14 +934,9 @@ class Task:
             The URL to download the output files of the task, or None
             if the
         """
-        response_body = self._request_download_output_url()
-        if not response_body:
+        download_url = self._request_download_output_url()
+        if not download_url:
             return None
-
-        download_url = response_body.get("url")
-        if download_url is None:
-            raise RuntimeError(
-                "The API did not return a download URL for the task outputs.")
 
         logging.info("■ Use the following URL to download the output "
                      "files of you simulation:")
