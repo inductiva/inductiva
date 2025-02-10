@@ -20,7 +20,8 @@ def register(parser):
 
     subparser = parser.add_parser(
         "export",
-        help="Export the user's remote storage to another cloud.",
+        help=("Copy files from Inductiva's storage to an external cloud "
+              "bucket (e.g. AWS S3)."),
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
