@@ -64,7 +64,11 @@ jobs:
             python -m pip install --upgrade pip setuptools wheel
             python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
             if (Test-Path "requirements.txt") { python -m pip install -r requirements.txt }
-            
+
+            set PATH=%PATH%;c:\python312\Scripts
+
+            inductiva.exe
+
             if ("${{ github.ref }}" -eq "refs/heads/main") {
               $env:INDUCTIVA_API_KEY = "${{ secrets.API_TEST_KEY }}"
             } else {
