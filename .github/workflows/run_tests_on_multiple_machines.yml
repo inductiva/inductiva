@@ -55,11 +55,11 @@ jobs:
 
             choco install python --version=3.12.0 --yes
             
-            $env:PATH += ";C:\ProgramData\chocolatey\bin"
+            Set-Alias python "C:\ProgramData\chocolatey\bin\python3.12.exe"
 
             echo "Verifying Python installation..."
             C:\ProgramData\chocolatey\bin\python3.12.exe --version
-            python3 --version
+            python --version
 
             python -m pip install --upgrade pip setuptools wheel
             python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
