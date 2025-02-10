@@ -138,7 +138,7 @@ def get_signed_urls(
     signed_urls = api_instance.get_signed_urls(query_params={
         "paths": paths,
         "operation": operation,
-    })
+    }).body
     return signed_urls
 
 
