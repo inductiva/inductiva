@@ -52,8 +52,13 @@ jobs:
             Set-ExecutionPolicy Bypass -Scope Process
             Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
             choco install visualstudio2022buildtools --yes --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools"
-            python3 -m pip install --upgrade pip setuptools wheel
-            python3 -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
+
+            echo "${{ runner.tool_cache }}/Python/3.11.*/x64" >> $GITHUB_PATH
+            echo "Verifying Python installation..."
+            python --version
+
+            python -m pip install --upgrade pip setuptools wheel
+            python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
             if (Test-Path "requirements.txt") { python -m pip install -r requirements.txt }
         - name: Test with pytest
           run: |
