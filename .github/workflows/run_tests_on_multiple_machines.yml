@@ -49,8 +49,6 @@ jobs:
           env:
             BOT_REPO_ACCESS: ${{ secrets.BOT_REPO_ACCESS }}
           run: |
-            Start-Process -FilePath "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vs_installer.exe" -ArgumentList "--update" -NoNewWindow -Wait
-            
             python -m pip install --upgrade pip setuptools wheel
             python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
             if (Test-Path "requirements.txt") { python -m pip install -r requirements.txt }
