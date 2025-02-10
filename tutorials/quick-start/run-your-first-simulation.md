@@ -31,7 +31,7 @@ By following this step-by-step guide, you will:
     🎥 Prefer a Visual Guide?
   </h3>
   <div class="align-center">
-    **Watch [Part 1](https://www.youtube.com/watch?v=X2F5O4e6XPo) and [Part 2](https://www.youtube.com/watch?v=SDnFWtRTISw)**
+    <strong>Watch [Part 1](https://www.youtube.com/watch?v=X2F5O4e6XPo) and [Part 2](https://www.youtube.com/watch?v=SDnFWtRTISw)</strong>
   </div>
 
   <p>Follow along with our <strong>video walkthrough</strong> led by our CEO, where key details, features, and step-by-step instructions are explained in depth. It's a quick and engaging way to get started in no time!</p>
