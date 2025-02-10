@@ -57,13 +57,13 @@ class MachineGroup(machines_base.BaseMachineGroup):
         self._register_machine_group(num_vms=self.num_machines,
                                      spot=self.spot,
                                      is_elastic=self._is_elastic)
-    
+
     def _validate_inputs(self):
         super()._validate_inputs()
         if self.num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
-        
+
     @property
     def short_name(self) -> str:
         return "MachineGroup"
@@ -148,7 +148,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
                                      is_elastic=self._is_elastic,
                                      num_vms=self._active_machines,
                                      spot=self.spot)
-    
+
     def _validate_inputs(self):
         super()._validate_inputs()
         if self.min_machines < 0:
@@ -158,7 +158,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         if self.min_machines >= self.max_machines:
             raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
-    
+
     @property
     def short_name(self) -> str:
         return "ElasticMachineGroup"
@@ -229,7 +229,7 @@ class MPICluster(machines_base.BaseMachineGroup):
                                      is_elastic=self._is_elastic,
                                      spot=self._spot,
                                      type=self._type)
-    
+
     def _validate_inputs(self):
         super()._validate_inputs()
         if self.num_machines < 1:
@@ -245,7 +245,7 @@ class MPICluster(machines_base.BaseMachineGroup):
         """
 
         return self.n_vcpus.total
-    
+
     @property
     def short_name(self) -> str:
         return "MPICluster"

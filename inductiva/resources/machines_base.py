@@ -86,7 +86,7 @@ class BaseMachineGroup(ABC):
         self._api = compute_api.ComputeApi(api.get_client())
 
         self._validate_inputs()
-    
+
     def _validate_inputs(self):
         """Validate initialization inputs."""
         if self.data_disk_gb <= 0:
@@ -223,8 +223,8 @@ class BaseMachineGroup(ABC):
         """Register machine group configuration in API.
 
         Returns:
-            The unique ID and name identifying the machine on the API."""             
-        logging.info(f"■ Registering {self.short_name} configurations:")
+            The unique ID and name identifying the machine on the API."""
+        logging.info("■ Registering %s configurations:", self.short_name)
 
         instance_group_config = inductiva.client.models.VMGroupConfig(
             machine_type=self.machine_type,
