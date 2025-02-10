@@ -73,28 +73,33 @@ jobs:
 
     steps:
         - uses: actions/checkout@v3
-        - name: Set up Python ${{ matrix.python-version }}
-          uses: actions/setup-python@v3
-          with:
-            python-version: ${{ matrix.python-version }}
-        - name: Verify Python Installation
-          run: |
-            Write-Output "Python version:"
-            & "${{ steps.setup-python.outputs.python-path }}" --version
-        - name: Install dependencies
+        - name: Install dependencies and run tests
           env:
             BOT_REPO_ACCESS: ${{ secrets.BOT_REPO_ACCESS }}
           run: |
-            $python = "${{ steps.setup-python.outputs.python-path }}"
-            & $python -m pip install --upgrade pip setuptools wheel
-            & $python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
-            if (Test-Path "requirements.txt") { & $python -m pip install -r requirements.txt }
-        - name: Test with pytest
-          run: |
+            Set-ExecutionPolicy Bypass -Scope Process
+            Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+            
+            choco install visualstudio2022buildtools --yes --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools"
+            choco install python --version=3.12.0 --yes
+            
+            Set-Alias python "C:\ProgramData\chocolatey\bin\python3.12.exe"
+
+            echo "Verifying Python installation..."
+            python --version
+
+            $env:Path += ";c:\python312\Scripts"
+
+            $env:PYTHONUTF8 = 1
+          
+            python -m pip install --upgrade pip setuptools wheel
+            python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
+            if (Test-Path "requirements.txt") { python -m pip install -r requirements.txt }
+
             if ("${{ github.ref }}" -eq "refs/heads/main") {
               $env:INDUCTIVA_API_KEY = "${{ secrets.API_TEST_KEY }}"
             } else {
               $env:INDUCTIVA_API_KEY = "${{ secrets.API_DEV_TEST_KEY }}"
               $env:INDUCTIVA_API_URL = "https://api-dev.inductiva.ai"
             }
-            & python -m pytest --suppress-no-test-exit-code
+            python -m pytest --suppress-no-test-exit-code
