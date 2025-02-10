@@ -131,16 +131,14 @@ def _print_contents_table(contents):
 
 
 def get_signed_urls(
-   paths: List[str],
-   operation: Literal["upload", "download"],     
+    paths: List[str],
+    operation: Literal["upload", "download"],
 ) -> List[str]:
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
-    signed_urls = api_instance.get_signed_urls(
-        query_params={
-            "paths": paths,
-            "operation": operation,
-        }
-    )
+    signed_urls = api_instance.get_signed_urls(query_params={
+        "paths": paths,
+        "operation": operation,
+    })
     return signed_urls
 
 

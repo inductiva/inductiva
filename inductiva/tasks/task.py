@@ -898,8 +898,8 @@ class Task:
     def _request_download_output_url(self) -> Optional[str]:
         try:
             # TODO: the output filename shouldn't be hardcoded
-            url = storage.get_signed_urls(
-                [f"{self.id}/output.zip"], "download")[0]
+            url = storage.get_signed_urls([f"{self.id}/output.zip"],
+                                          "download")[0]
         except exceptions.ApiException as e:
             if not self._called_from_wait:
 

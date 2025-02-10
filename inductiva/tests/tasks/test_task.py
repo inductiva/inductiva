@@ -185,7 +185,8 @@ def test__get_output_info(mock_get_zip_contents):
     Check if the output info is correctly returned.
     """
     mock_get_zip_contents.return_value = {
-        "size": 320,
+        "size":
+            320,
         "contents": [
             {
                 "name": "file1.txt",
