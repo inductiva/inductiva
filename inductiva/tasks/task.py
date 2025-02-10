@@ -929,13 +929,9 @@ class Task:
 
         return api_response.body
 
-    def _request_download_input_url(
-        self
-    ) -> get_tasks_task_id_download_input_url.\
-         SchemaFor200ResponseBodyApplicationJson:
-        api_response = self._api.get_input_download_url(
-            path_params=self._get_path_params(),)
-        return api_response.body
+    def _request_download_input_url(self) -> str:
+        # TODO: the input filename shouldn't be hardcoded
+        return storage.get_signed_urls([f"{self.id}/input.zip"], "download")[0]
 
     def get_output_url(self) -> Optional[str]:
         """Get a public URL to download the output files of the task.
@@ -965,8 +961,7 @@ class Task:
         Returns:
             The URL to download the input files of the task, or None
         """
-        response_body = self._request_download_input_url()
-        download_url = response_body.get("url")
+        download_url = self._request_download_input_url()
         if download_url is None:
             raise RuntimeError(
                 "The API did not return a download URL for the task inputs.")
