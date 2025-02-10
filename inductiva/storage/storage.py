@@ -1,10 +1,11 @@
 """Methods to interact with the user storage resources."""
-import time
-import logging
 import os
+import time
 import tqdm
-from typing import List, Literal, Optional, Tuple
 import urllib
+import logging
+import pathlib
+from typing import List, Literal, Optional, Tuple
 
 import inductiva
 from inductiva import constants
@@ -71,6 +72,10 @@ def listdir(path="/",
     anymore and further inspect task outputs and logs using the Task
     class.
     """
+    # Convert to path and back to string to normalize the path for Windows and
+    # Unix systems
+    path = pathlib.Path(path)
+    path = str(path)
 
     api = storage_api.StorageApi(inductiva.api.get_client())
 
