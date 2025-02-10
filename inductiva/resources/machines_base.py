@@ -29,7 +29,7 @@ class ResourceType(enum.Enum):
     MPI = "mpi"
 
 
-@dataclass
+@dataclass(repr=False)
 class BaseMachineGroup(ABC):
     """Base class to manage Google Cloud resources.
 
@@ -298,6 +298,9 @@ class BaseMachineGroup(ABC):
             resp.get("idle_seconds"))
         machine_group._auto_terminate_ts = cls._iso_to_datetime(
             resp.get("auto_terminate_ts"))
+        machine_group.provider = resp["provider_id"]
+        machine_group.__dict__["machines"] = resp["machines"]
+        machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
 
         return machine_group
 
