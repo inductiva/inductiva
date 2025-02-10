@@ -4,7 +4,6 @@ import time
 import tqdm
 import urllib
 import logging
-import pathlib
 from typing import List, Literal, Optional, Tuple
 
 import inductiva
