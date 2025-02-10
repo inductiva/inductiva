@@ -25,14 +25,14 @@ def test_get_timestamped_path_with_ext(tmp_path: pathlib.Path):
 
 def test_get_timestamp_path(tmp_path: pathlib.Path):
     """Check if multiple dirs are created with different names."""
-    n = 10
+    # 10 was failing on Windows, due to path being too long
+    n = 3
 
     path = tmp_path / "output"
 
     for _ in range(n):
         path = files.get_timestamped_path(str(path))
         path.mkdir()
-
     assert len(glob.glob(str(path.parent / "output-*"))) == n
 
 
@@ -101,7 +101,7 @@ def test_get_validate_request_params():
     original_params = {"param1": "value1", "param2": pathlib.Path("/some/path")}
     type_annotations = {"param1": str, "param2": pathlib.Path}
 
-    expected_params = {"param1": "value1", "param2": "/some/path"}
+    expected_params = {"param1": "value1", "param2": str(pathlib.Path("/some/path"))}
 
     validated_params = data.get_validate_request_params(original_params,
                                                         type_annotations)
