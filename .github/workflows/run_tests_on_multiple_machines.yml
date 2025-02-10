@@ -53,7 +53,8 @@ jobs:
             Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
             choco install visualstudio2022buildtools --yes --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools"
 
-            echo "${{ runner.tool_cache }}/Python/3.11.*/x64" >> $GITHUB_PATH
+            choco install python --version=3.12.0 --yes
+            
             echo "Verifying Python installation..."
             python --version
 
