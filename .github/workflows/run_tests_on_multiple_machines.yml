@@ -54,7 +54,10 @@ jobs:
             python --version
 
             $env:Path += ";c:\python312\Scripts"
-            [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+            
+            python -m ensurepip --default-pip
+            python -m pip install --upgrade pip certifi
+
 
             python -m pip install --upgrade pip setuptools wheel
             python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
