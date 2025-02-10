@@ -1286,7 +1286,10 @@ class Task:
                 self.id,
             )
         try:
-            self._api.delete_task_files(path_params=self._get_path_params())
+            # TODO: rename the function to a more generic name
+            # TODO: the input/output filenames shouldn't be hardcoded
+            storage.remove_workspace(f"{self.id}/input.zip")
+            storage.remove_workspace(f"{self.id}/output.zip")
             if verbose:
                 logging.info("Remote task files removed successfully.")
         except exceptions.ApiException as e:
