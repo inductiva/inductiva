@@ -61,11 +61,12 @@ jobs:
             C:\ProgramData\chocolatey\bin\python3.12.exe --version
             python --version
 
+            $env:Path += ";c:\python312\Scripts"
+            chcp 65001
+
             python -m pip install --upgrade pip setuptools wheel
             python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
             if (Test-Path "requirements.txt") { python -m pip install -r requirements.txt }
-            
-            $env:Path += ";c:\python312\Scripts"
 
             inductiva.exe
 
