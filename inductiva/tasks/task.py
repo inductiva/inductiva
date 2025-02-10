@@ -973,14 +973,9 @@ class Task:
     ) -> pathlib.Path:
         self._status = self.get_status()
 
-        response_body = request_download_url()
-        if not response_body:
+        download_url = request_download_url()
+        if not download_url:
             return None
-
-        download_url = response_body.get("url")
-        if download_url is None:
-            raise RuntimeError(
-                "The API did not return a download URL for the task files.")
 
         logging.debug("\nDownload URL: %s\n", download_url)
 
