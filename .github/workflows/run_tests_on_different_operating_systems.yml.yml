@@ -1,9 +1,10 @@
-name: Run Tests on Multiple Machines
+name: Run Tests On Different Operating Systems
 
 on:
-  push:
-    branches: [main]
   pull_request:
+    branches: [main]
+  push:
+    branches: [dev]
 
 
 jobs:
