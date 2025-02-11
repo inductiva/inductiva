@@ -1,8 +1,10 @@
 """NWChem example."""
 import inductiva
 
-# Allocate machine
-machine_group = inductiva.resources.MachineGroup("c3d-standard-180")
+# Allocate Google cloud machine
+cloud_machine = inductiva.resources.MachineGroup( \
+    machine_type="c3d-standard-180",
+    provider="GCP")
 
 # Initialize the Simulator
 nwchem = inductiva.simulators.NWChem()
@@ -10,10 +12,10 @@ nwchem = inductiva.simulators.NWChem()
 # Run simulation with config files in the input directory
 task = nwchem.run(input_dir="/path/to/my/nwchem/files",
                   sim_config_filename="my_config_file.nw",
-                  on=machine_group)
+                  on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()

@@ -1,8 +1,10 @@
 """SWASH example."""
 import inductiva
 
-# Allocate machine
-machine_group = inductiva.resources.MachineGroup("c3d-standard-180")
+# Allocate Google cloud machine
+cloud_machine = inductiva.resources.MachineGroup( \
+    machine_type="c3d-standard-180",
+    provider="GCP")
 
 # Initialize the Simulator
 swash = inductiva.simulators.SWASH(version="10.05")
@@ -10,10 +12,10 @@ swash = inductiva.simulators.SWASH(version="10.05")
 # Run simulation with config files in the input directory
 task = swash.run(input_dir="/path/to/my/swash/files",
                  sim_config_filename="my_config_file.sws",
-                 on=machine_group)
+                 on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()

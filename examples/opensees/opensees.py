@@ -1,9 +1,10 @@
 """ OpenSees example."""
 import inductiva
 
-# Allocate machine
-cloud_machine = inductiva.resources.MachineGroup(
-    machine_type="c3d-standard-180", provider="GCP")
+# Allocate Google cloud machine
+cloud_machine = inductiva.resources.MachineGroup( \
+    machine_type="c3d-standard-180",
+    provider="GCP")
 
 # Initialize the Simulator
 opensees = inductiva.simulators.OpenSees()
