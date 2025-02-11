@@ -112,7 +112,7 @@ With this feature, you can seamlessly copy your files to your AWS S3 bucket with
 
 6. Can I use AWS credentials with access limited to a specific bucket?
 
-    Yes, you can configure the AWS credentials to provide restricted access to a specific S3 bucket. To do this, create an IAM policy that grants the `s3:PutObject` permission (for uploading files) specifically for that bucket. 
+    Yes, you can configure the AWS credentials to provide restricted access to a specific S3 bucket. To do this, create an IAM policy that grants the `s3:PutObject` and `s3:ListBucket` permission (for uploading files) specifically for that bucket. 
 
 7. How much does exporting to AWS S3 cost?
 
