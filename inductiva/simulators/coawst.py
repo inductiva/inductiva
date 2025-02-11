@@ -107,13 +107,15 @@ class COAWST(simulators.Simulator):
             raise ValueError(
                 "The number of virtual cpus asked surpasses the"
                 " available virtual cpus for the selected resource.")
+        #This will fail if we use remote files and local files (our build can be on the remote)
+        # we need the new storage endpoins that allow to check if a file exists
+        if input_dir is not None:
+            self._input_files_exist(input_dir=input_dir,
+                                    sim_config_filename=sim_config_filename,
+                                    build_coawst_script=build_coawst_script)
 
-        self._input_files_exist(input_dir=input_dir,
-                                sim_config_filename=sim_config_filename,
-                                build_coawst_script=build_coawst_script)
-
-        build_script = os.path.join(input_dir, build_coawst_script)
-        self._validate_build_script(build_script=str(build_script))
+            build_script = os.path.join(input_dir, build_coawst_script)
+            self._validate_build_script(build_script=str(build_script))
 
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
