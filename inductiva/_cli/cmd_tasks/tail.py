@@ -1,5 +1,5 @@
 """Tail command for task files."""
-from typing import TextIO
+from typing import TextIO, AsyncGenerator
 import argparse
 import sys
 import asyncio
@@ -15,17 +15,34 @@ def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
     if not valid:
         print(err_msg, file=sys.stderr)
         return 1
-    asyncio.run(consume(task, args, fout))
+    asyncio.run(gather_tasks(task, args, fout))
     return 0
 
 
-async def consume(task: tasks.Task, args: argparse.Namespace, fout: TextIO):
+async def gather_tasks(task: tasks.Task, args: argparse.Namespace,
+                       fout: TextIO):
+    generators = [
+        task.tail_file(filename, args.lines, args.follow)
+        for filename in args.filename
+    ]
+    tail_tasks = [
+        asyncio.create_task(consume(generator, fout))
+        for generator in generators
+    ]
     try:
-        async for lines in task._tail_file(  # pylint: disable=protected-access
-                args.filename, args.lines, args.follow):
+        await asyncio.gather(*tail_tasks)
+    except asyncio.CancelledError:
+        for tail_task in tail_tasks:
+            tail_task.cancel()
+        await task.close_stream()
+
+
+async def consume(generator: AsyncGenerator, fout: TextIO):
+    try:
+        async for lines in generator:
             print(lines, file=fout, end="", flush=True)
     except asyncio.CancelledError:
-        await task.close_stream()
+        pass
 
 
 def register(parser):
@@ -41,7 +58,10 @@ def register(parser):
     subparser.add_argument("id",
                            type=str,
                            help="ID of the task to list directories.")
-    subparser.add_argument("filename", type=str, help="File to tail.")
+    subparser.add_argument("filename",
+                           type=str,
+                           nargs="+",
+                           help="File to tail.")
     subparser.add_argument("--lines",
                            "-l",
                            type=int,
