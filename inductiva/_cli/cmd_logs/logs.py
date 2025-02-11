@@ -1,12 +1,14 @@
 """CLI for logs."""
 import re
 import sys
+import argparse
 from time import sleep
 from typing import Tuple
 
 from inductiva import constants
 
 from .. import utils as cli_utils
+from ..cmd_tasks.tail import tail
 from ... import tasks
 
 
@@ -102,6 +104,21 @@ def stream_task_logs(args):
     consumer.run_forever()
     return 0
 
+def stream_task_logs_tail(args):
+    files = []
+    if args.stdout:
+        files.append("stdout")
+    if args.stderr:
+        files.append("stderr")
+
+    new_args = argparse.Namespace(
+        id=args.id,
+        filename=files,
+        follow=True,
+    )
+
+    return tail(new_args)
+
 
 def register(parser):
     cli_utils.show_help_msg(parser)
@@ -136,4 +153,4 @@ def register(parser):
               "Without this flag, the logs will be consumed immediately\nor "
               "returns an error if the task is not running."))
     # Register function to call when this subcommand is used
-    parser.set_defaults(func=stream_task_logs)
+    parser.set_defaults(func=stream_task_logs_tail)
