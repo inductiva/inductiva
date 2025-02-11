@@ -30,7 +30,7 @@ All available commands are listed in the [table below](#list-of-allowed-commands
 
 ## Example
 
-```{literalinclude} ../../examples/quantum_espresso/quantum_espresso.py
+```{literalinclude} ../../inductiva/tests/test_simulators/quantum_espresso/quantum_espresso.py
 :language: python
 ```
 

@@ -22,7 +22,7 @@ required in some cases.
 Below is an example of running a simple SPlisHSPlasH simulation via the 
 Inductiva API:
 
-```{literalinclude} ../../examples/splishsplash/splishsplash.py
+```{literalinclude} ../../inductiva/tests/test_simulators/splishsplash/splishsplash.py
 :language: python
 ```
 

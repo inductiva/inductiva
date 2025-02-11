@@ -64,7 +64,7 @@ lowercase, and we will handle the rest for you!
 
 In this example, we run a classical CFD case of a flow over a cylinder. 
 
-```{literalinclude} ../../examples/dualsphysics/dualsphysics.py
+```{literalinclude} ../../inductiva/tests/test_simulators/dualsphysics/dualsphysics.py
 :language: python
 ```
 

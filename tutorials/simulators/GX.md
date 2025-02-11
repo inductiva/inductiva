@@ -25,7 +25,7 @@ calculation using W7-X stellarator geometry and adiabatic electrons.
 This use case is presented in the official GX [documentation](https://gx.readthedocs.io/en/latest/index.html),
 which you can visit for more details on the simulator's features and configurations.
 
-```{literalinclude} ../../examples/gx/gx.py
+```{literalinclude} ../../inductiva/tests/test_simulators/gx/gx.py
 :language: python
 ```
 

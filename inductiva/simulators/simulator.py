@@ -44,6 +44,7 @@ class Simulator(ABC):
         self._version = version
         self._use_dev = bool(use_dev)
         self._image_uri = self._get_image_uri()
+        self.container_image = self._image_uri
         self._logger.info("")
 
     @property

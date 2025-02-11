@@ -41,7 +41,7 @@ executable to run. The available commands are:
 ## Example Code
 Below is an example of running a SWAN simulation via the Inductiva API:
 
-```{literalinclude} ../../examples/swan/swan.py
+```{literalinclude} ../../inductiva/tests/test_simulators/swan/swan.py
 :language: python
 ```
 

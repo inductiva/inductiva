@@ -24,7 +24,6 @@ class SWASH(simulators.Simulator):
         super().__init__(version=version, use_dev=use_dev)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "swash"
-        self.container_image = self._get_image_uri()
 
     def run(self,
             input_dir: Optional[str],
@@ -72,6 +71,11 @@ class SWASH(simulators.Simulator):
         commands = []
 
         path_config_filename = Path(sim_config_filename)
+
+        if path_config_filename.is_absolute():
+            raise ValueError("sim_config_filename must be a path relative to "
+                             "the input directory.")
+
         working_dir = path_config_filename.parent
         config_file_only = path_config_filename.name
 
