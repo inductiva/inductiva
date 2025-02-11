@@ -104,12 +104,13 @@ def stream_task_logs(args):
     consumer.run_forever()
     return 0
 
+
 def stream_task_logs_tail(args):
     files = []
     if args.stdout:
-        files.append("stdout")
+        files.append("stdout.txt")
     if args.stderr:
-        files.append("stderr")
+        files.append("stderr.txt")
 
     new_args = argparse.Namespace(
         id=args.id,
