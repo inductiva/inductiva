@@ -24,9 +24,9 @@ With this feature, you can seamlessly copy your files to your AWS S3 bucket with
 
     For more details see [FAQ #5](#faqs).
 
-3. Export Files to AWS S3
+3. Export Files to AWS S3 using Inductiva CLI
 
-    Use the export command to transfer files from Inductiva’s storage to AWS S3:
+    Use the export command to transfer files from Inductiva’s storage to AWS S3 using `inductiva CLI`:
 
     `inductiva storage export <file_path> --bucket-name <bucket_name> --export-to aws-s3`
 
@@ -35,6 +35,23 @@ With this feature, you can seamlessly copy your files to your AWS S3 bucket with
     `inductiva storage export <task_id>/output.zip --bucket-name my-s3-bucket --export-to aws-s3`
 
     This command uploads the output of the task to `my-s3-bucket` in AWS S3.
+
+4. Export File to AWS S3 using Inductiva API
+
+    You can also export files from Inductiva’s storage to AWS S3 programmatically using the Inductiva API. Below is a Python example demonstrating how to achieve this:
+
+    ```python
+    import inductiva
+
+    inductiva.storage.export(
+        path_to_export="<file_path>",
+        export_to=inductiva.storage.ExportDestination.AWS_S3,
+        bucket_name="my-s3-bucket",
+    )
+    ```
+
+    This snippet uploads `<file_path>` which can be either a Task File or a [Remote File](https://tutorials.inductiva.ai/how_to/reuse-files.html) to `my-s3-bucket` in AWS S3.
+
 
 ## Advanced Options
 
