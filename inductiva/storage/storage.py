@@ -144,6 +144,23 @@ def _print_contents_table(contents):
     )
 
 
+def get_signed_urls(
+    paths: List[str],
+    operation: Literal["upload", "download"],
+) -> List[str]:
+    api_instance = storage_api.StorageApi(inductiva.api.get_client())
+    signed_urls = api_instance.get_signed_urls(query_params={
+        "paths": paths,
+        "operation": operation,
+    }).body
+    return signed_urls
+
+
+def get_zip_contents(path: str) -> List[models.ZipArchiveInfo]:
+    api_instance = storage_api.StorageApi(inductiva.api.get_client())
+    return api_instance.get_zip_contents(query_params={"path": path}).body
+
+
 def upload_from_url(
     url: str,
     remote_dir: str,
@@ -173,7 +190,6 @@ def upload_from_url(
     api_instance.upload_from_url(query_params={
         "url": url,
         "path": remote_path,
-        "unzip": "f",
     },)
     logging.info("File is being uploaded...")
     logging.info("You can use 'inductiva storage ls' to check the status.")
@@ -213,25 +229,19 @@ def upload(
 
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
-    api_response = methods.get_upload_url(
-        api_instance.get_upload_url,
-        query_params={"paths": remote_file_paths},
-    )
+    urls = get_signed_urls(paths=remote_file_paths, operation="upload")
 
     with tqdm.tqdm(total=total_size,
                    unit="B",
                    unit_scale=True,
                    unit_divisor=1000) as progress_bar:
-        for response in api_response:
-            method = response["method"]
-            url = response["url"]
-            remote_file_path = response["file_path"]
 
+        for url, remote_file_path in zip(urls, remote_file_paths):
             file_path = remote_file_path.removeprefix(f"{remote_dir}/")
             local_file_path = os.path.join(local_dir, file_path)
 
             try:
-                methods.upload_file(api_instance, local_file_path, method, url,
+                methods.upload_file(api_instance, local_file_path, "PUT", url,
                                     progress_bar)
 
                 methods.notify_upload_complete(
@@ -411,8 +421,7 @@ def _get_file_size(file_path):
 
 
 def _get_multipart_parts(size: int,
-                         part_size: int = 50 * MB
-                        ) -> Tuple[int, int]:
+                         part_size: int = 50 * MB) -> Tuple[int, int]:
     """
     Calculate the size of each part and the total number of parts
 
@@ -431,7 +440,7 @@ def _get_multipart_parts(size: int,
         - part_count: The total number of parts.
     """
     max_parts = 10000
-    min_allowed_part_size = 5 * MB # 5MB
+    min_allowed_part_size = 5 * MB  # 5MB
 
     # Ensure part_size is at least 5MB
     part_size = max(part_size, min_allowed_part_size)

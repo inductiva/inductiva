@@ -23,6 +23,6 @@ out each step.
 In the following example, we run a basic molecular dynamics simulation 
 of water molecules in a small box:
 
-```{literalinclude} ../../examples/gromacs/gromacs.py
+```{literalinclude} ../../inductiva/tests/test_simulators/gromacs/gromacs.py
 :language: python
 ```

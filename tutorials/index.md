@@ -57,6 +57,15 @@ complex geometries and varying initial/boundary conditions;
 
 ```{toctree}
 ---
+caption: Quick Start
+maxdepth: 1
+hidden: true
+---
+quick-start/run-your-first-simulation
+```
+
+```{toctree}
+---
 caption: Built-in Simulators
 maxdepth: 1
 hidden: true
@@ -68,6 +77,7 @@ simulators/DualSPHysics
 simulators/FDS
 simulators/FVCOM
 simulators/GROMACS
+simulators/GX
 simulators/NWChem
 simulators/OpenFOAM
 simulators/OpenFAST

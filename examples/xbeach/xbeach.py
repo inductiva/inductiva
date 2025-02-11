@@ -1,27 +1,19 @@
 """XBeach example."""
 import inductiva
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
-
-# Download example configuration files from Inductiva storage
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "xbeach-input-example.zip",
-    unzip=True)
+# Allocate machine
+machine_group = inductiva.resources.MachineGroup("c3d-standard-180")
 
 # Initialize the Simulator
-xbeach = inductiva.simulators.XBeach()
+xbeach = inductiva.simulators.XBeach(version="1.24")
 
 # Run simulation with configuration files in the input directory
-task = xbeach.run(input_dir=input_dir,
-                  sim_config_filename="params.txt",
+task = xbeach.run(input_dir="/path/to/my/xbeach/files",
+                  sim_config_filename="my_config_file.txt",
                   on=machine_group)
 
+# Wait for the simulation to finish and download the results
 task.wait()
 machine_group.terminate()
 
 task.download_outputs()
-
-task.print_summary()

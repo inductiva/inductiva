@@ -3,18 +3,13 @@ import typing_extensions
 from inductiva.client.paths import PathValues
 from inductiva.client.apis.paths.tasks_auth import TasksAuth
 from inductiva.client.apis.paths.tasks_submit import TasksSubmit
-from inductiva.client.apis.paths.tasks_task_id_input_upload_url import TasksTaskIdInputUploadUrl
 from inductiva.client.apis.paths.tasks_task_id_input_uploaded import TasksTaskIdInputUploaded
 from inductiva.client.apis.paths.tasks_task_id import TasksTaskId
 from inductiva.client.apis.paths.tasks import Tasks
 from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
-from inductiva.client.apis.paths.tasks_task_id_output_list import TasksTaskIdOutputList
-from inductiva.client.apis.paths.tasks_task_id_download_input_url import TasksTaskIdDownloadInputUrl
-from inductiva.client.apis.paths.tasks_task_id_download_output_url import TasksTaskIdDownloadOutputUrl
 from inductiva.client.apis.paths.tasks_task_id_resubmit import TasksTaskIdResubmit
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDisableLogs
-from inductiva.client.apis.paths.tasks_task_id_files import TasksTaskIdFiles
 from inductiva.client.apis.paths.tasks_task_id_register import TasksTaskIdRegister
 from inductiva.client.apis.paths.tasks_task_id_offer import TasksTaskIdOffer
 from inductiva.client.apis.paths.tasks_task_id_message import TasksTaskIdMessage
@@ -38,6 +33,7 @@ from inductiva.client.apis.paths.admin_organizations_organization_id import Admi
 from inductiva.client.apis.paths.admin_organizations_costs import AdminOrganizationsCosts
 from inductiva.client.apis.paths.admin_tiers import AdminTiers
 from inductiva.client.apis.paths.admin_terminate_machine_groups_credits_exhausted import AdminTerminateMachineGroupsCreditsExhausted
+from inductiva.client.apis.paths.admin_import_provider_costs import AdminImportProviderCosts
 from inductiva.client.apis.paths.task_runner_register import TaskRunnerRegister
 from inductiva.client.apis.paths.task_runner_machine_id import TaskRunnerMachineId
 from inductiva.client.apis.paths.task_runner_machine_id_task import TaskRunnerMachineIdTask
@@ -63,7 +59,7 @@ from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
 from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_cost import StorageCost
 from inductiva.client.apis.paths.storage_contents import StorageContents
-from inductiva.client.apis.paths.storage_input_url import StorageInputUrl
+from inductiva.client.apis.paths.storage_zip_contents import StorageZipContents
 from inductiva.client.apis.paths.storage_signed_urls import StorageSignedUrls
 from inductiva.client.apis.paths.storage_input_notify import StorageInputNotify
 from inductiva.client.apis.paths.storage_input_remote import StorageInputRemote
@@ -78,6 +74,7 @@ from inductiva.client.apis.paths.users_info import UsersInfo
 from inductiva.client.apis.paths.users_capabilities import UsersCapabilities
 from inductiva.client.apis.paths.users_costs import UsersCosts
 from inductiva.client.apis.paths.users_organization_costs import UsersOrganizationCosts
+from inductiva.client.apis.paths.users_top_ups import UsersTopUps
 from inductiva.client.apis.paths.projects import Projects
 from inductiva.client.apis.paths.projects_name import ProjectsName
 from inductiva.client.apis.paths.metrics_users_username_activity import MetricsUsersUsernameActivity
@@ -95,8 +92,6 @@ PathToApi = typing_extensions.TypedDict(
             TasksAuth,
         PathValues.TASKS_SUBMIT:
             TasksSubmit,
-        PathValues.TASKS_TASK_ID_INPUT_UPLOAD_URL:
-            TasksTaskIdInputUploadUrl,
         PathValues.TASKS_TASK_ID_INPUT_UPLOADED:
             TasksTaskIdInputUploaded,
         PathValues.TASKS_TASK_ID:
@@ -105,20 +100,12 @@ PathToApi = typing_extensions.TypedDict(
             Tasks,
         PathValues.TASKS_TASK_ID_STATUS:
             TasksTaskIdStatus,
-        PathValues.TASKS_TASK_ID_OUTPUT_LIST:
-            TasksTaskIdOutputList,
-        PathValues.TASKS_TASK_ID_DOWNLOAD_INPUT_URL:
-            TasksTaskIdDownloadInputUrl,
-        PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:
-            TasksTaskIdDownloadOutputUrl,
         PathValues.TASKS_TASK_ID_RESUBMIT:
             TasksTaskIdResubmit,
         PathValues.TASKS_TASK_ID_KILL:
             TasksTaskIdKill,
         PathValues.TASKS_TASK_ID_DISABLE_LOGS:
             TasksTaskIdDisableLogs,
-        PathValues.TASKS_TASK_ID_FILES:
-            TasksTaskIdFiles,
         PathValues.TASKS_TASK_ID_REGISTER:
             TasksTaskIdRegister,
         PathValues.TASKS_TASK_ID_OFFER:
@@ -165,6 +152,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminTiers,
         PathValues.ADMIN_TERMINATE_MACHINE_GROUPS_CREDITS_EXHAUSTED:
             AdminTerminateMachineGroupsCreditsExhausted,
+        PathValues.ADMIN_IMPORT_PROVIDER_COSTS:
+            AdminImportProviderCosts,
         PathValues.TASKRUNNER_REGISTER:
             TaskRunnerRegister,
         PathValues.TASKRUNNER_MACHINE_ID:
@@ -215,8 +204,8 @@ PathToApi = typing_extensions.TypedDict(
             StorageCost,
         PathValues.STORAGE_CONTENTS:
             StorageContents,
-        PathValues.STORAGE_INPUT_URL:
-            StorageInputUrl,
+        PathValues.STORAGE_ZIPCONTENTS:
+            StorageZipContents,
         PathValues.STORAGE_SIGNEDURLS:
             StorageSignedUrls,
         PathValues.STORAGE_INPUT_NOTIFY:
@@ -245,6 +234,8 @@ PathToApi = typing_extensions.TypedDict(
             UsersCosts,
         PathValues.USERS_ORGANIZATION_COSTS:
             UsersOrganizationCosts,
+        PathValues.USERS_TOPUPS:
+            UsersTopUps,
         PathValues.PROJECTS:
             Projects,
         PathValues.PROJECTS_NAME:
@@ -272,8 +263,6 @@ path_to_api = PathToApi({
         TasksAuth,
     PathValues.TASKS_SUBMIT:
         TasksSubmit,
-    PathValues.TASKS_TASK_ID_INPUT_UPLOAD_URL:
-        TasksTaskIdInputUploadUrl,
     PathValues.TASKS_TASK_ID_INPUT_UPLOADED:
         TasksTaskIdInputUploaded,
     PathValues.TASKS_TASK_ID:
@@ -282,20 +271,12 @@ path_to_api = PathToApi({
         Tasks,
     PathValues.TASKS_TASK_ID_STATUS:
         TasksTaskIdStatus,
-    PathValues.TASKS_TASK_ID_OUTPUT_LIST:
-        TasksTaskIdOutputList,
-    PathValues.TASKS_TASK_ID_DOWNLOAD_INPUT_URL:
-        TasksTaskIdDownloadInputUrl,
-    PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:
-        TasksTaskIdDownloadOutputUrl,
     PathValues.TASKS_TASK_ID_RESUBMIT:
         TasksTaskIdResubmit,
     PathValues.TASKS_TASK_ID_KILL:
         TasksTaskIdKill,
     PathValues.TASKS_TASK_ID_DISABLE_LOGS:
         TasksTaskIdDisableLogs,
-    PathValues.TASKS_TASK_ID_FILES:
-        TasksTaskIdFiles,
     PathValues.TASKS_TASK_ID_REGISTER:
         TasksTaskIdRegister,
     PathValues.TASKS_TASK_ID_OFFER:
@@ -342,6 +323,8 @@ path_to_api = PathToApi({
         AdminTiers,
     PathValues.ADMIN_TERMINATE_MACHINE_GROUPS_CREDITS_EXHAUSTED:
         AdminTerminateMachineGroupsCreditsExhausted,
+    PathValues.ADMIN_IMPORT_PROVIDER_COSTS:
+        AdminImportProviderCosts,
     PathValues.TASKRUNNER_REGISTER:
         TaskRunnerRegister,
     PathValues.TASKRUNNER_MACHINE_ID:
@@ -392,8 +375,8 @@ path_to_api = PathToApi({
         StorageCost,
     PathValues.STORAGE_CONTENTS:
         StorageContents,
-    PathValues.STORAGE_INPUT_URL:
-        StorageInputUrl,
+    PathValues.STORAGE_ZIPCONTENTS:
+        StorageZipContents,
     PathValues.STORAGE_SIGNEDURLS:
         StorageSignedUrls,
     PathValues.STORAGE_INPUT_NOTIFY:
@@ -422,6 +405,8 @@ path_to_api = PathToApi({
         UsersCosts,
     PathValues.USERS_ORGANIZATION_COSTS:
         UsersOrganizationCosts,
+    PathValues.USERS_TOPUPS:
+        UsersTopUps,
     PathValues.PROJECTS:
         Projects,
     PathValues.PROJECTS_NAME:

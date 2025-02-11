@@ -1,27 +1,19 @@
 """DualSPHysics example."""
 import inductiva
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
-
-# Download the configuration files into a folder
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "dualsphysics-input-example.zip",
-    unzip=True)
+# Allocate machine
+machine_group = inductiva.resources.MachineGroup("a3-highgpu-8g")
 
 # Initialize the Simulator
 dualsphysics = inductiva.simulators.DualSPHysics()
 
 # Run simulation with config files in the input directory
-task = dualsphysics.run(input_dir=input_dir,
-                        shell_script="run.sh",
+task = dualsphysics.run(input_dir="path/to/my/DualSPHysics/files",
+                        shell_script="my_config_file.sh",
                         on=machine_group)
 
+# Wait for the simulation to finish and download the results
 task.wait()
 machine_group.terminate()
 
 task.download_outputs()
-
-task.print_summary()

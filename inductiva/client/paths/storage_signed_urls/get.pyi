@@ -29,6 +29,7 @@ from inductiva.client.model.providers import Providers
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
+OperationSchema = OperationType
 
 
 class PathsSchema(schemas.ListSchema):
@@ -57,17 +58,16 @@ class PathsSchema(schemas.ListSchema):
         return super().__getitem__(i)
 
 
-OperationSchema = OperationType
 ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {
+        'operation': typing.Union[
+            OperationSchema,
+        ],
         'paths': typing.Union[
             PathsSchema,
             list,
             tuple,
-        ],
-        'operation': typing.Union[
-            OperationSchema,
         ],
     })
 RequestOptionalQueryParams = typing_extensions.TypedDict(
@@ -84,17 +84,17 @@ class RequestQueryParams(RequestRequiredQueryParams,
     pass
 
 
-request_query_paths = api_client.QueryParameter(
-    name="paths",
-    style=api_client.ParameterStyle.FORM,
-    schema=PathsSchema,
-    required=True,
-    explode=True,
-)
 request_query_operation = api_client.QueryParameter(
     name="operation",
     style=api_client.ParameterStyle.FORM,
     schema=OperationSchema,
+    required=True,
+    explode=True,
+)
+request_query_paths = api_client.QueryParameter(
+    name="paths",
+    style=api_client.ParameterStyle.FORM,
+    schema=PathsSchema,
     required=True,
     explode=True,
 )
@@ -231,8 +231,8 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-                request_query_paths,
                 request_query_operation,
+                request_query_paths,
                 request_query_provider_id,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)

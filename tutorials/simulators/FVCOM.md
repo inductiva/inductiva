@@ -66,7 +66,7 @@ task.download_outputs()
 Below is an example where we run a simple FVCOM test scenario to verify 
 that the simulator is working correctly, using **1 MPI process** and a **debug level of 7**:
 
-```{literalinclude} ../../examples/fvcom/fvcom.py
+```{literalinclude} ../../inductiva/tests/test_simulators/fvcom/fvcom.py
 :language: python
 ```
 

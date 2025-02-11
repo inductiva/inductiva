@@ -1,29 +1,19 @@
 """SWASH example."""
 import inductiva
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
-
-# Set simulation input directory
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "swash-input-example.zip",
-    unzip=True)
+# Allocate machine
+machine_group = inductiva.resources.MachineGroup("c3d-standard-180")
 
 # Initialize the Simulator
-swash = inductiva.simulators.SWASH()
-# or alternatively, to use a specific version of SWASH:
-# swash = inductiva.simulators.SWASH(version="10.05")
+swash = inductiva.simulators.SWASH(version="10.05")
 
 # Run simulation with config files in the input directory
-task = swash.run(input_dir=input_dir,
-                 sim_config_filename="input.sws",
+task = swash.run(input_dir="/path/to/my/swash/files",
+                 sim_config_filename="my_config_file.sws",
                  on=machine_group)
 
+# Wait for the simulation to finish and download the results
 task.wait()
 machine_group.terminate()
 
 task.download_outputs()
-
-task.print_summary()

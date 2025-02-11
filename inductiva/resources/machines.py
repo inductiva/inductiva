@@ -110,28 +110,6 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def __str__(self):
         return f"Machine Group {self.name} with {self.machine_type} machines"
 
-    def start(self, wait_for_quotas: bool = False):
-        """Start the machine group.
-
-        Args:
-            wait_for_quotas: If True, the method will wait for quotas to
-              become available before starting the resource.
-        """
-
-        return super().start(
-            wait_for_quotas=wait_for_quotas,
-            is_elastic=self.__is_elastic,
-            num_vms=self.num_machines,
-            spot=self.spot,
-        )
-
-    def terminate(self, verbose: bool = True):
-        """Terminates all machines of the machine group."""
-        return super().terminate(num_vms=self.num_machines,
-                                 is_elastic=self.__is_elastic,
-                                 verbose=verbose,
-                                 spot=self.spot)
-
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
         logging.info("\t· Number of machines:         %s", self.num_machines)
@@ -259,32 +237,6 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
     def __str__(self):
         return f"Elastic Machine Group {self.name} with {self.machine_type} " \
              "machines"
-
-    def start(self, wait_for_quotas: bool = False):
-        """Start the elastic machine group.
-
-        Args:
-            wait_for_quotas: If True, the method will wait for quotas to
-              become available before starting the resource.
-        """
-
-        return super().start(
-            wait_for_quotas=wait_for_quotas,
-            is_elastic=self.__is_elastic,
-            num_vms=self.min_machines,
-            min_vms=self.min_machines,
-            max_vms=self.max_machines,
-            spot=self.spot,
-        )
-
-    def terminate(self, verbose: bool = True):
-        """Terminates all machines of the machine group."""
-        return super().terminate(num_vms=self.min_machines,
-                                 min_vms=self.min_machines,
-                                 max_vms=self.max_machines,
-                                 is_elastic=self.__is_elastic,
-                                 verbose=verbose,
-                                 spot=self.spot)
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()

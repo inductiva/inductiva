@@ -29,16 +29,39 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 
 from . import path
 
+# Query params
+MachineGroupIdSchema = schemas.UUIDSchema
+RequestRequiredQueryParams = typing_extensions.TypedDict(
+    'RequestRequiredQueryParams', {})
+RequestOptionalQueryParams = typing_extensions.TypedDict(
+    'RequestOptionalQueryParams', {
+        'machine_group_id': typing.Union[
+            MachineGroupIdSchema,
+            str,
+            uuid.UUID,
+        ],
+    },
+    total=False)
+
+
+class RequestQueryParams(RequestRequiredQueryParams,
+                         RequestOptionalQueryParams):
+    pass
+
+
+request_query_machine_group_id = api_client.QueryParameter(
+    name="machine_group_id",
+    style=api_client.ParameterStyle.FORM,
+    schema=MachineGroupIdSchema,
+    explode=True,
+)
 # body param
 SchemaForRequestBodyApplicationJson = VMGroupConfig
 
-request_body_vm_group_config = api_client.RequestBody(
-    content={
-        'application/json':
-            api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
-    },
-    required=True,
-)
+request_body_vm_group_config = api_client.RequestBody(content={
+    'application/json':
+        api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
+},)
 _auth = [
     'APIKeyHeader',
 ]
@@ -94,10 +117,10 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _delete_vm_group_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         content_type: typing_extensions.Literal["application/json"] = ...,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,
+                           schemas.Unset] = schemas.unset,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -110,10 +133,10 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _delete_vm_group_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         content_type: str = ...,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,
+                           schemas.Unset] = schemas.unset,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -126,11 +149,11 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _delete_vm_group_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,
+                           schemas.Unset] = schemas.unset,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -140,10 +163,10 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _delete_vm_group_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         content_type: str = ...,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,
+                           schemas.Unset] = schemas.unset,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -156,10 +179,10 @@ class BaseApi(api_client.Api):
 
     def _delete_vm_group_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         content_type: str = 'application/json',
+        body: typing.Union[SchemaForRequestBodyApplicationJson,
+                           schemas.Unset] = schemas.unset,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -171,7 +194,21 @@ class BaseApi(api_client.Api):
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
+        self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
         used_path = path.value
+
+        prefix_separator_iterator = None
+        for parameter in (request_query_machine_group_id,):
+            parameter_data = query_params.get(parameter.name, schemas.unset)
+            if parameter_data is schemas.unset:
+                continue
+            if prefix_separator_iterator is None:
+                prefix_separator_iterator = parameter.get_prefix_separator_iterator(
+                )
+            serialized_data = parameter.serialize(parameter_data,
+                                                  prefix_separator_iterator)
+            for serialized_value in serialized_data.values():
+                used_path += serialized_value
 
         _headers = HTTPHeaderDict()
         # TODO add cookie handling
@@ -179,19 +216,16 @@ class BaseApi(api_client.Api):
             for accept_content_type in accept_content_types:
                 _headers.add('Accept', accept_content_type)
 
-        if body is schemas.unset:
-            raise exceptions.ApiValueError(
-                'The required body parameter has an invalid value of: unset. Set a valid value instead'
-            )
         _fields = None
         _body = None
-        serialized_data = request_body_vm_group_config.serialize(
-            body, content_type)
-        _headers.add('Content-Type', content_type)
-        if 'fields' in serialized_data:
-            _fields = serialized_data['fields']
-        elif 'body' in serialized_data:
-            _body = serialized_data['body']
+        if body is not schemas.unset:
+            serialized_data = request_body_vm_group_config.serialize(
+                body, content_type)
+            _headers.add('Content-Type', content_type)
+            if 'fields' in serialized_data:
+                _fields = serialized_data['fields']
+            elif 'body' in serialized_data:
+                _body = serialized_data['body']
         response = self.api_client.call_api(
             resource_path=used_path,
             method='delete'.upper(),
@@ -230,10 +264,10 @@ class DeleteVmGroup(BaseApi):
     @typing.overload
     def delete_vm_group(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         content_type: typing_extensions.Literal["application/json"] = ...,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,
+                           schemas.Unset] = schemas.unset,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -246,10 +280,10 @@ class DeleteVmGroup(BaseApi):
     @typing.overload
     def delete_vm_group(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         content_type: str = ...,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,
+                           schemas.Unset] = schemas.unset,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -262,11 +296,11 @@ class DeleteVmGroup(BaseApi):
     @typing.overload
     def delete_vm_group(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,
+                           schemas.Unset] = schemas.unset,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -276,10 +310,10 @@ class DeleteVmGroup(BaseApi):
     @typing.overload
     def delete_vm_group(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         content_type: str = ...,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,
+                           schemas.Unset] = schemas.unset,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -292,10 +326,10 @@ class DeleteVmGroup(BaseApi):
 
     def delete_vm_group(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         content_type: str = 'application/json',
+        body: typing.Union[SchemaForRequestBodyApplicationJson,
+                           schemas.Unset] = schemas.unset,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -303,6 +337,7 @@ class DeleteVmGroup(BaseApi):
     ):
         return self._delete_vm_group_oapg(
             body=body,
+            query_params=query_params,
             content_type=content_type,
             accept_content_types=accept_content_types,
             stream=stream,
@@ -316,10 +351,10 @@ class ApiFordelete(BaseApi):
     @typing.overload
     def delete(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         content_type: typing_extensions.Literal["application/json"] = ...,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,
+                           schemas.Unset] = schemas.unset,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -332,10 +367,10 @@ class ApiFordelete(BaseApi):
     @typing.overload
     def delete(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         content_type: str = ...,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,
+                           schemas.Unset] = schemas.unset,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -348,11 +383,11 @@ class ApiFordelete(BaseApi):
     @typing.overload
     def delete(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,
+                           schemas.Unset] = schemas.unset,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -362,10 +397,10 @@ class ApiFordelete(BaseApi):
     @typing.overload
     def delete(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         content_type: str = ...,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,
+                           schemas.Unset] = schemas.unset,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -378,10 +413,10 @@ class ApiFordelete(BaseApi):
 
     def delete(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         content_type: str = 'application/json',
+        body: typing.Union[SchemaForRequestBodyApplicationJson,
+                           schemas.Unset] = schemas.unset,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -389,6 +424,7 @@ class ApiFordelete(BaseApi):
     ):
         return self._delete_vm_group_oapg(
             body=body,
+            query_params=query_params,
             content_type=content_type,
             accept_content_types=accept_content_types,
             stream=stream,

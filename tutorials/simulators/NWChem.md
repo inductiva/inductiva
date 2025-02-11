@@ -24,6 +24,6 @@ and post-Hartree-Fock approaches.
 
 In this example, we run a simple quantum mechanical simulation using NWChem:
 
-```{literalinclude} ../../examples/nwchem/nwchem.py
+```{literalinclude} ../../inductiva/tests/test_simulators/nwchem/nwchem.py
 :language: python
 ```

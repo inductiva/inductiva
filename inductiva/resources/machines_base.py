@@ -44,6 +44,7 @@ class BaseMachineGroup(ABC):
         max_idle_time: Optional[Union[datetime.timedelta, int]] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
         register: bool = True,
+        allow_auto_start: bool = True,
     ) -> None:
         """Create a BaseMachineGroup object.
 
@@ -78,6 +79,10 @@ class BaseMachineGroup(ABC):
                 already registered machine groups that can be started, for
                 example, when retrieving with the `machines_groups.get` method.
                 Users should not set this argument in anyway.
+            allow_auto_start: Bool that indicates if a machine group can be
+                started automatically. This will be used when running a task.
+                If a resourced is passed to tun a task and it is not started,
+                the task will start the resource before running the task.
         """
 
         provider = machine_types.ProviderType(provider)
@@ -124,6 +129,7 @@ class BaseMachineGroup(ABC):
         self._api = compute_api.ComputeApi(api.get_client())
         self._estimated_cost = None
         self._max_idle_time = max_idle_time
+        self.allow_auto_start = allow_auto_start
 
         if isinstance(max_idle_time, int):
             if max_idle_time <= 0:
@@ -356,15 +362,12 @@ class BaseMachineGroup(ABC):
 
         return is_cost_ok and is_vcpu_ok and is_instance_ok
 
-    def start(self, wait_for_quotas: bool = False, **kwargs):
+    def start(self, wait_for_quotas: bool = False):
         """Starts a machine group.
 
         Args:
             wait_for_quotas: If True, the method will wait for quotas to
-              become available before starting the resource.
-            **kwargs: Depending on the type of machine group to be started,
-              this can be num_machines, max_machines, min_machines,
-              and is_elastic."""
+              become available before starting the resource."""
         if self._started:
             logging.info("Attempting to start a machine group already started.")
             return
@@ -374,17 +377,6 @@ class BaseMachineGroup(ABC):
                          "Make sure you have called the constructor without "
                          "`register=False`.")
             return
-
-        request_body = \
-            inductiva.client.models.VMGroupConfig(
-                id=self.id,
-                name=self.name,
-                machine_type=self.machine_type,
-                provider_id=self.provider,
-                threads_per_core=self.threads_per_core,
-                disk_size_gb=self.data_disk_gb,
-                **kwargs,
-            )
 
         logging.info(
             "Starting %s. This may take a few minutes.\n"
@@ -399,7 +391,7 @@ class BaseMachineGroup(ABC):
             while not self.can_start_resource():
                 time.sleep(self.QUOTAS_EXCEEDED_SLEEP_SECONDS)
 
-        self._api.start_vm_group(body=request_body)
+        self._api.start_vm_group(query_params={"machine_group_id": self.id})
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
         quota_usage_table_str = self.quota_usage_table_str("used by resource")
@@ -409,7 +401,7 @@ class BaseMachineGroup(ABC):
             "%s", self, creation_time, quota_usage_table_str)
         return True
 
-    def terminate(self, verbose: bool = True, **kwargs):
+    def terminate(self, verbose: bool = True):
         """Terminates a machine group."""
         if not self._started or self.id is None or self.name is None:
             logging.warning(
@@ -417,18 +409,8 @@ class BaseMachineGroup(ABC):
             return
 
         try:
-            request_body = \
-                inductiva.client.models.VMGroupConfig(
-                    id=self.id,
-                    name=self.name,
-                    machine_type=self.machine_type,
-                    provider_id=self.provider,
-                    threads_per_core=self.threads_per_core,
-                    disk_size_gb=self.data_disk_gb,
-                    **kwargs,
-                )
-
-            self._api.delete_vm_group(body=request_body)
+            self._api.delete_vm_group(
+                query_params={"machine_group_id": self.id})
             if verbose:
                 logging.info("Successfully requested termination of %s.",
                              repr(self))
