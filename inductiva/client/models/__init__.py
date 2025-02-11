@@ -26,7 +26,6 @@ from inductiva.client.model.export_operation import ExportOperation
 from inductiva.client.model.file_download_details import FileDownloadDetails
 from inductiva.client.model.file_download_url import FileDownloadUrl
 from inductiva.client.model.file_info import FileInfo
-from inductiva.client.model.file_upload_details import FileUploadDetails
 from inductiva.client.model.file_upload_url import FileUploadUrl
 from inductiva.client.model.http_validation_error import HTTPValidationError
 from inductiva.client.model.machine_group_cost_per_hour import MachineGroupCostPerHour
@@ -55,7 +54,6 @@ from inductiva.client.model.organization_costs import OrganizationCosts
 from inductiva.client.model.organization_create import OrganizationCreate
 from inductiva.client.model.organization_update import OrganizationUpdate
 from inductiva.client.model.organization_users import OrganizationUsers
-from inductiva.client.model.output_archive_info import OutputArchiveInfo
 from inductiva.client.model.project import Project
 from inductiva.client.model.project_create import ProjectCreate
 from inductiva.client.model.providers import Providers
@@ -86,6 +84,7 @@ from inductiva.client.model.task_with_status_history import TaskWithStatusHistor
 from inductiva.client.model.terms_and_conditions import TermsAndConditions
 from inductiva.client.model.tier_full_info import TierFullInfo
 from inductiva.client.model.tier_quota_detail import TierQuotaDetail
+from inductiva.client.model.transaction import Transaction
 from inductiva.client.model.update_capabilities_actions import UpdateCapabilitiesActions
 from inductiva.client.model.update_capabilities_request import UpdateCapabilitiesRequest
 from inductiva.client.model.usage_statistics import UsageStatistics
@@ -109,3 +108,4 @@ from inductiva.client.model.user_update_terms_and_conditions import UserUpdateTe
 from inductiva.client.model.vm_group_config import VMGroupConfig
 from inductiva.client.model.validation_error import ValidationError
 from inductiva.client.model.version_comparison_result import VersionComparisonResult
+from inductiva.client.model.zip_archive_info import ZipArchiveInfo

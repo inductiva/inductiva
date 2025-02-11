@@ -1,0 +1,21 @@
+"""Reef3D example."""
+import inductiva
+
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "reef3d-input-example.zip",
+    unzip=True)
+
+reef3d = inductiva.simulators.REEF3D()
+
+task = reef3d.run(input_dir=input_dir, on=machine_group)
+
+task.wait()
+machine_group.terminate()
+
+task.download_outputs()
+
+task.print_summary()
