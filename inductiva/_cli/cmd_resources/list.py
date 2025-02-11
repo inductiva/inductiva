@@ -20,7 +20,7 @@ def pretty_print_machines_info(machines_dict):
     print()
     for family, family_details in machines_dict.items():
         print(f"CPU family: {family}")
-        final_table = {"Machine Type": [], "Supported vCPUs": [], "Config": []}
+        final_table = {"Machine Type": [], "Supported vCPUs": [], "Supported GPUs": [], "GPU type": [], "Config": []}
         first_line = True
         for machine_type, details in family_details.items():
             # Used to determine if we write the machine type name
@@ -31,10 +31,12 @@ def pretty_print_machines_info(machines_dict):
                 # Add's an empty line between the machine types
                 final_table["Machine Type"].append("")
                 final_table["Supported vCPUs"].append("")
+                final_table["Supported GPUs"].append("")
+                final_table["GPU type"].append("")
                 final_table["Config"].append("")
             first_line = False
 
-            for config, vcpus in details.items():
+            for config, info in details.items():
                 if first_time_type:
                     final_table["Machine Type"].append(machine_type)
                     # The first time we add the machine type, we don't want to
@@ -45,9 +47,13 @@ def pretty_print_machines_info(machines_dict):
                     # we dont want to repeat the machine type name
                     # (ex c3 standard)
                     final_table["Machine Type"].append("")
-                str_vcpus = "n/a" if not vcpus["vcpus"] else ", ".join(
-                    str(v) for v in vcpus["vcpus"])
+                str_vcpus = "n/a" if not info["vcpus"] else ", ".join(
+                    str(v) for v in info["vcpus"])
                 final_table["Supported vCPUs"].append(str_vcpus)
+                str_gpus = "n/a" if not info["gpus"] else ", ".join(
+                    str(v) for v in info["gpus"])
+                final_table["Supported GPUs"].append(str_gpus)
+                final_table["GPU type"].append(info["gpu_name"])
                 final_table["Config"].append(config)
 
         res_table = format_utils.get_tabular_str(
@@ -82,6 +88,8 @@ def list_machine_types_available(args):
         family = machine_info[0]
         memory = machine_info[1]
         vcpus = machine.num_cpus
+        gpus = machine.num_gpus if machine.num_gpus else None
+        gpu_name = machine.gpu_name if machine.gpu_name else None
         config = machine_info[3] if len(machine_info) > 3 else None
 
         if family not in machines_dict:
@@ -89,13 +97,18 @@ def list_machine_types_available(args):
         if memory not in machines_dict[family]:
             machines_dict[family][memory] = {}
         if config not in machines_dict[family][memory]:
-            machines_dict[family][memory][config] = {"vcpus": []}
+            machines_dict[family][memory][config] = {"vcpus": [], "gpus": [], "gpu_name": gpu_name}
 
         if vcpus is not None:
             # Sorted insertion of vcpus
             if int(vcpus) not in machines_dict[family][memory][config]["vcpus"]:
                 bisect.insort(machines_dict[family][memory][config]["vcpus"],
                               int(vcpus))
+        if gpus is not None:
+            # Sorted insertion of vcpus
+            if int(gpus) not in machines_dict[family][memory][config]["gpus"]:
+                bisect.insort(machines_dict[family][memory][config]["gpus"],
+                              int(gpus))
     pretty_print_machines_info(machines_dict)
 
 
