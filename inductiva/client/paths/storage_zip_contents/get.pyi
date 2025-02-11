@@ -24,18 +24,26 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.output_archive_info import OutputArchiveInfo
+from inductiva.client.model.zip_archive_info import ZipArchiveInfo
 from inductiva.client.model.providers import Providers
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
-from . import path
-
 # Query params
+ZipRelativePathSchema = schemas.StrSchema
+PathSchema = schemas.StrSchema
 ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams', {
+        'zip_relative_path': typing.Union[
+            ZipRelativePathSchema,
+            str,
+        ],
+        'path': typing.Union[
+            PathSchema,
+            str,
+        ],
         'provider_id': typing.Union[
             ProviderIdSchema,
         ],
@@ -48,39 +56,25 @@ class RequestQueryParams(RequestRequiredQueryParams,
     pass
 
 
+request_query_zip_relative_path = api_client.QueryParameter(
+    name="zip_relative_path",
+    style=api_client.ParameterStyle.FORM,
+    schema=ZipRelativePathSchema,
+    explode=True,
+)
+request_query_path = api_client.QueryParameter(
+    name="path",
+    style=api_client.ParameterStyle.FORM,
+    schema=PathSchema,
+    explode=True,
+)
 request_query_provider_id = api_client.QueryParameter(
     name="provider_id",
     style=api_client.ParameterStyle.FORM,
     schema=ProviderIdSchema,
     explode=True,
 )
-# Path params
-TaskIdSchema = schemas.StrSchema
-RequestRequiredPathParams = typing_extensions.TypedDict(
-    'RequestRequiredPathParams', {
-        'task_id': typing.Union[
-            TaskIdSchema,
-            str,
-        ],
-    })
-RequestOptionalPathParams = typing_extensions.TypedDict(
-    'RequestOptionalPathParams', {}, total=False)
-
-
-class RequestPathParams(RequestRequiredPathParams, RequestOptionalPathParams):
-    pass
-
-
-request_path_task_id = api_client.PathParameter(
-    name="task_id",
-    style=api_client.ParameterStyle.SIMPLE,
-    schema=TaskIdSchema,
-    required=True,
-)
-_auth = [
-    'APIKeyHeader',
-]
-SchemaFor200ResponseBodyApplicationJson = OutputArchiveInfo
+SchemaFor200ResponseBodyApplicationJson = ZipArchiveInfo
 
 
 @dataclass
@@ -120,20 +114,15 @@ _response_for_422 = api_client.OpenApiResponse(
                                 ),
     },
 )
-_status_code_to_response = {
-    '200': _response_for_200,
-    '422': _response_for_422,
-}
 _all_accept_content_types = ('application/json',)
 
 
 class BaseApi(api_client.Api):
 
     @typing.overload
-    def _get_outputs_list_oapg(
+    def _get_zip_contents_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -144,11 +133,10 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _get_outputs_list_oapg(
+    def _get_zip_contents_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -156,10 +144,9 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _get_outputs_list_oapg(
+    def _get_zip_contents_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -170,38 +157,29 @@ class BaseApi(api_client.Api):
     ]:
         ...
 
-    def _get_outputs_list_oapg(
+    def _get_zip_contents_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         """
-        Get Outputs List
+        Get Zip Contents
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
         self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
-        self._verify_typed_dict_inputs_oapg(RequestPathParams, path_params)
         used_path = path.value
 
-        _path_params = {}
-        for parameter in (request_path_task_id,):
-            parameter_data = path_params.get(parameter.name, schemas.unset)
-            if parameter_data is schemas.unset:
-                continue
-            serialized_data = parameter.serialize(parameter_data)
-            _path_params.update(serialized_data)
-
-        for k, v in _path_params.items():
-            used_path = used_path.replace('{%s}' % k, v)
-
         prefix_separator_iterator = None
-        for parameter in (request_query_provider_id,):
+        for parameter in (
+                request_query_zip_relative_path,
+                request_query_path,
+                request_query_provider_id,
+        ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
                 continue
@@ -249,14 +227,13 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class GetOutputsList(BaseApi):
+class GetZipContents(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def get_outputs_list(
+    def get_zip_contents(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -267,11 +244,10 @@ class GetOutputsList(BaseApi):
         ...
 
     @typing.overload
-    def get_outputs_list(
+    def get_zip_contents(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -279,10 +255,9 @@ class GetOutputsList(BaseApi):
         ...
 
     @typing.overload
-    def get_outputs_list(
+    def get_zip_contents(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -293,18 +268,16 @@ class GetOutputsList(BaseApi):
     ]:
         ...
 
-    def get_outputs_list(
+    def get_zip_contents(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_outputs_list_oapg(
+        return self._get_zip_contents_oapg(
             query_params=query_params,
-            path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
@@ -318,7 +291,6 @@ class ApiForget(BaseApi):
     def get(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -333,7 +305,6 @@ class ApiForget(BaseApi):
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -344,7 +315,6 @@ class ApiForget(BaseApi):
     def get(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -358,15 +328,13 @@ class ApiForget(BaseApi):
     def get(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_outputs_list_oapg(
+        return self._get_zip_contents_oapg(
             query_params=query_params,
-            path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
