@@ -11,7 +11,6 @@ import inductiva.client.paths
 
 import inductiva.client.paths.tasks_task_id_kill
 import inductiva.client.paths.tasks_task_id_kill.post
-import inductiva.client.paths.tasks_task_id_output_list.get as output_list_get
 
 
 def test_task_kill__string_timeout__typeerror_exception():
@@ -180,45 +179,30 @@ def test__check_if_pending_kill__wait_timeout_positive__success_status(
         assert success == expected_success and status == status_code
 
 
-def test__get_output_info():
+@patch("inductiva.storage.get_zip_contents")
+def test__get_output_info(mock_get_zip_contents):
     """
     Check if the output info is correctly returned.
     """
+    mock_get_zip_contents.return_value = {
+        "size":
+            320,
+        "contents": [
+            {
+                "name": "file1.txt",
+                "size": 100,
+                "compressed_size": 50
+            },
+            {
+                "name": "file2.txt",
+                "size": 200,
+                "compressed_size": 100
+            },
+        ]
+    }
+    task = inductiva.tasks.Task("123")
+    output_info = task.get_output_info()
 
-    # Some Mock classes
-    class TaskApiMock:
-        """Some Mock Class"""
-
-        def __init__(self, *_args, **_kwargs):
-            pass
-
-        def get_outputs_list(self, *_args, **_kwargs):
-            body = output_list_get.SchemaFor200ResponseBodyApplicationJson(
-                size=320,
-                contents=[
-                    {
-                        "name": "file1.txt",
-                        "size": 100,
-                        "compressed_size": 50
-                    },
-                    {
-                        "name": "file2.txt",
-                        "size": 200,
-                        "compressed_size": 100
-                    },
-                ],
-            )
-            return output_list_get.ApiResponseFor200(
-                response=Mock(),
-                body=body,
-            )
-
-    with patch("inductiva.tasks.task.tasks_api") as mock_api:
-        mock_api.TasksApi = TaskApiMock
-
-        task = inductiva.tasks.Task("123")
-        output_info = task.get_output_info()
-
-        assert output_info.n_files == 2
-        assert output_info.total_size_bytes == 320
-        assert output_info.total_compressed_size_bytes == 150
+    assert output_info.n_files == 2
+    assert output_info.total_size_bytes == 320
+    assert output_info.total_compressed_size_bytes == 150
