@@ -8,7 +8,7 @@ def start_machine_group(args):
     """Start a resource."""
     machine_type = args.machine_type
     num_machines = args.num_machines
-    data_disk_gb = args.disk_size
+    data_disk_gb = args.data_disk_gb
     spot = args.spot
 
     machine = resources.MachineGroup(machine_type=machine_type,
