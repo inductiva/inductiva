@@ -22,7 +22,7 @@ def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
 async def gather_tasks(task: tasks.Task, args: argparse.Namespace,
                        fout: TextIO):
     generators = [
-        task.tail_file(filename, args.lines, args.follow)  # pylint: disable=protected-access
+        task.tail_file(filename, args.lines, args.follow)
         for filename in args.filename
     ]
     tail_tasks = [
