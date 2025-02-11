@@ -480,7 +480,8 @@ def export_to_aws_s3(path_to_export, min_part_size_mb, filename, bucket_name):
     try:
         boto3.client("s3").head_bucket(Bucket=bucket_name)
     except Exception as e:  # pylint: disable=broad-exception-caught
-        raise ValueError(f"Bucket {bucket_name} not found.") from e
+        raise ValueError(f"Bucket {bucket_name} not found. "
+                         "Make sure you have the correct permissions") from e
 
     # Step 1: Get the file size
     file_size = _get_file_size(path_to_export)
