@@ -53,31 +53,6 @@ With this feature, you can seamlessly copy your files to your AWS S3 bucket with
     This snippet uploads `<file_path>` which can be either a Task File or a [Remote File](https://tutorials.inductiva.ai/how_to/reuse-files.html) to `my-s3-bucket` in AWS S3.
 
 
-## Advanced Options
-
-- Rename the exported file in the AWS destination
-
-    To save the file on AWS S3 with a different name while exporting:
-
-    `inductiva storage export <file_path> --bucket-name <bucket_name> --file-name-to-save <new_file_name>`
-
-    Example:
-
-    `inductiva storage export simulation_results.tar.gz --bucket-name my-s3-bucket --file-name-to-save results_backup.tar.gz`
-
-- Optimize Upload with Chunking size
-
-    The export commands uploads files in chunks. You can specify the minimum part size (in MB) to potentially upload multiple parts in parallel:
-
-    `inductiva storage export <file_path> --bucket-name <bucket_name> --min-part-size-MB <size>`
-
-    Example:
-
-    `inductiva storage export large_dataset.csv --bucket-name my-s3-bucket --min-part-size-MB 100`
-
-    This configures each chunk to be at least 100MB, optimizing for large file transfers.
-
-
 ## FAQs
 
 
@@ -125,3 +100,28 @@ With this feature, you can seamlessly copy your files to your AWS S3 bucket with
 8. Can I export files to cloud providers other than AWS?
 
     At the moment, only AWS S3 is supported.
+
+
+## Advanced Options
+
+- Rename the exported file in the AWS destination
+
+    To save the file on AWS S3 with a different name while exporting:
+
+    `inductiva storage export <file_path> --bucket-name <bucket_name> --file-name-to-save <new_file_name>`
+
+    Example:
+
+    `inductiva storage export simulation_results.tar.gz --bucket-name my-s3-bucket --file-name-to-save results_backup.tar.gz`
+
+- Optimize Upload with Chunking size
+
+    The export commands uploads files in chunks. You can specify the minimum part size (in MB) to potentially upload multiple parts in parallel:
+
+    `inductiva storage export <file_path> --bucket-name <bucket_name> --min-part-size-MB <size>`
+
+    Example:
+
+    `inductiva storage export large_dataset.csv --bucket-name my-s3-bucket --min-part-size-MB 100`
+
+    This configures each chunk to be at least 100MB, optimizing for large file transfers.
