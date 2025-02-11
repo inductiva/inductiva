@@ -2,7 +2,9 @@
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c2-standard-4")
 
 # Set simulation input directory
 input_dir = inductiva.utils.files.download_from_url(
@@ -16,10 +18,10 @@ schism = inductiva.simulators.SCHISM()
 task = schism.run(input_dir=input_dir,
                   n_vcpus=3,
                   num_scribes=2,
-                  on=machine_group)
+                  on=cloud_machine)
 
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
 

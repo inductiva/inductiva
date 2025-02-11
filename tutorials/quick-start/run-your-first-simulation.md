@@ -128,7 +128,8 @@ In the empty `run.py` file you've created, add the following code, save, and clo
 import inductiva
 
 # Define the machine group
-machine_group = inductiva.resources.MachineGroup(
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP"
     machine_type="c3d-highcpu-90",
     spot=True, # Enables cost-saving spot mode
     data_disk_gb=20) 
@@ -144,12 +145,12 @@ task = xbeach.run(
     input_dir=input_dir,
     sim_config_filename="params.txt",
     n_vcpus=90,
-    on=machine_group)
+    on=cloud_machine)
 
 task.wait()
 
 # Clean up resources after the simulation
-machine_group.terminate()
+cloud_machine.terminate()
 
 # Get a small summary of the run
 task.print_summary()

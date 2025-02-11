@@ -11,8 +11,9 @@ To show the process of accessing simulation output in real-time, we will run the
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2-standard-4")
 
 # Download the configuration files into a folder
 input_dir = inductiva.utils.download_from_url(
@@ -26,10 +27,10 @@ dualsphysics = inductiva.simulators.DualSPHysics()
 # Run simulation with config files in the input directory
 task = dualsphysics.run(input_dir=input_dir,
                         shell_script="run.sh",
-                        on=machine_group)
+                        on=cloud_machine)
 
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
 

@@ -2,7 +2,9 @@
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c2-standard-4")
 
 # Set simulation input directory
 input_dir = inductiva.utils.files.download_from_url(
@@ -16,22 +18,22 @@ swan = inductiva.simulators.SWAN()
 # Uses swanrun by default
 task = swan.run(input_dir=input_dir,
                 sim_config_filename="a11refr.swn",
-                on=machine_group)
+                on=cloud_machine)
 
 # Uses swanrun
 # task = swan.run(input_dir=input_dir,
 #                 sim_config_filename="a11refr.swn",
 #                 command="swanrun",
-#                 on=machine_group)
+#                 on=cloud_machine)
 
 # Uses swan.exe. Note: the simulation file must be called INPUT
 # task = swan.run(input_dir=input_dir,
 #                 command="swan.exe",
-#                 on=machine_group)
+#                 on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
 

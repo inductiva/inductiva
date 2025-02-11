@@ -2,7 +2,9 @@
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c2-standard-4")
 
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
@@ -19,10 +21,10 @@ task = fvcom.run(input_dir=input_dir,
                  case_name="tst",
                  n_vcpus=1,
                  debug=7,
-                 on=machine_group)
+                 on=cloud_machine)
 
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
 
