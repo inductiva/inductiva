@@ -99,7 +99,8 @@ Code Example:
 import inductiva
 
 # Specify the machine group
-machine_group = inductiva.resources.machine_groups.get_by_name("<machine-group-name>")
+machine_group = inductiva.resources.machine_groups.get_by_name(
+    machine_name="<machine-group-name>")
 
 # Download the input files
 input_dir = inductiva.utils.download_from_url(

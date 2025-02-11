@@ -94,9 +94,9 @@ This can easily be achieved with just a few extra lines of code:
 import inductiva
 
 # Configure and start a dedicated machine group
-my_machine_group = inductiva.resources.MachineGroup(
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
     machine_type="c2-standard-60")
-my_machine_group.start()
 
 input_dir = "splishsplash-base-dir"
 
@@ -105,12 +105,12 @@ splishsplash = inductiva.simulators.SplishSplash()
 
 task = splishsplash.run(input_dir=input_dir,
                         sim_config_filename="config.json",
-                        on=my_machine_group)
+                        on=cloud_machine)
 
 task.wait()
 
 # Terminate the machine group
-my_machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
 ```
@@ -121,7 +121,8 @@ We can enhance the performance further by choosing even more powerful machines. 
 
 ```python
 # Configure a dedicated machine from the c3 family boasting 88 vCPUs
-my_machine_group = inductiva.resources.MachineGroup(
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
     machine_type="c3-standard-88")
 ```
 

@@ -98,15 +98,15 @@ Here is the overview of the code for this simulation:
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup(
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
     machine_type="n2d-highcpu-64",
     spot=True,
     data_disk_gb=200)
-machine_group.start()
+cloud_machine.start()
 
 # Download the configuration files into a folder
 input_dir = "/Path/to/09_Turbine"
-
 
 # Initialize the Simulator
 dualsphysics = inductiva.simulators.DualSPHysics()
@@ -114,12 +114,12 @@ dualsphysics = inductiva.simulators.DualSPHysics()
 # Run simulation with config files in the input directory
 task = dualsphysics.run(input_dir=input_dir,
                         shell_script="xCaseTurbine_linux64_CPU.sh",
-                        on=machine_group)
+                        on=cloud_machine)
 
 task.wait()
 task.download_outputs()
 
-machine_group.terminate()
+cloud_machine.terminate()
 ```
 
 ### Step 1: Adjust Simulation Script
@@ -158,12 +158,13 @@ machine to reduce the cost of the simulation.
 ```python
 import inductiva
 
-machine_group = inductiva.resources.MachineGroup(
+cloud_machine = inductiva.resources.MachineGroup(
+      provider="GCP",
       machine_type="n2d-highcpu-64",
       spot=True,
       data_disk_gb=20)
 
-machine_group.start()
+cloud_machine.start()
 ```
 
 #### b. Simulation inputs
@@ -188,7 +189,7 @@ machine_group.start()
    task = dualsphysics.run(
        input_dir=input_dir,
        shell_script="xCaseTurbine_linux64_CPU.sh",
-       on=machine_group)
+       on=cloud_machine)
    ```
 
 2. **Wait**:
@@ -203,7 +204,7 @@ machine_group.start()
 3. **Terminate Machine**:
    After the simulation completes, terminate the machine group:
    ```python
-   machine_group.terminate()
+   cloud_machine.terminate()
    ```
 
 4. **Check your simulation summary**:

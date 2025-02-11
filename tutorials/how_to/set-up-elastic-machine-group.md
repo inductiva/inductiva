@@ -22,8 +22,11 @@ import inductiva
 # Configure an elastic machine group to start with a minimum of 1 machine up to a
 # maximum of 3, each with a data disk of 30 Gb.
 elastic_machine_group = inductiva.resources.ElasticMachineGroup(
-    machine_type="c2-standard-30", min_machines=1,
-    max_machines=3, data_disk_gb=30)
+    provider="GCP",
+    machine_type="c2-standard-30",
+    min_machines=1,
+    max_machines=3,
+    data_disk_gb=30)
 
 # Launch the Elastic machine group to make it available to run simulations:
 elastic_machine_group.start()

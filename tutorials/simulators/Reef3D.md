@@ -171,13 +171,14 @@ in the upcoming steps.
 ```python
 import inductiva
 
-machine_group = inductiva.resources.MachineGroup(
-					machine_type="c2d-highcpu-112",
-					spot=True,
-					data_disk_gb=20,
-					auto_resize_disk_max_gb=100)
+cloud_machine = inductiva.resources.MachineGroup(
+	provider="GCP",
+	machine_type="c2d-highcpu-112",
+	spot=True,
+	data_disk_gb=20,
+	auto_resize_disk_max_gb=100)
 
-machine_group.start()
+cloud_machine.start()
 
 input_dir = "path/to/10_2 3D Dam Break with Obstacle"
 
@@ -186,13 +187,13 @@ reef3d = inductiva.simulators.REEF3D()
 
 task = reef3d.run(
 	input_dir=input_dir,
-	on=machine_group,
+	on=cloud_machine,
 	n_vcpus=56,
 	use_hwthread=False,
 	storage_dir="3D_dam_break_with_obstacle")
 
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 ```
 
 ### Step 1: Adjust Simulation Parameters
@@ -219,18 +220,19 @@ it to *25 seconds*. Additionally, we’ll generate a Paraview output every *0.01
 
 	```python
 	import inductiva
-	machine_group = inductiva.resources.MachineGroup(
-						machine_type="c2d-highcpu-112",
-						spot=True,
-						data_disk_gb=20,
-						auto_resize_disk_max_gb=100)
+	cloud_machine = inductiva.resources.MachineGroup(
+		provider="GCP",
+		machine_type="c2d-highcpu-112",
+		spot=True,
+		data_disk_gb=20,
+		auto_resize_disk_max_gb=100)
 	```
 	**Note**: `spot` machines are a lot cheaper but can be terminated by the
 	provider if needed.
 
 2. **Start your machine**
 	```python
-	machine_group.start()
+	cloud_machine.start()
 	```
 
 #### b. Define Simulation Inputs
@@ -253,7 +255,7 @@ it to *25 seconds*. Additionally, we’ll generate a Paraview output every *0.01
 
 	task = reef3d.run(
 		input_dir=input_dir,
-		on=machine_group,
+		on=cloud_machine,
 		n_vcpus=56,
 		use_hwthread=False,
 		storage_dir="3D_dam_break_with_obstacle")
@@ -291,7 +293,7 @@ it to *25 seconds*. Additionally, we’ll generate a Paraview output every *0.01
 
 
 	```python
-	machine_group.terminate()
+	cloud_machine.terminate()
 	```
 
 4. **Check your simulation summary**:
@@ -309,9 +311,10 @@ we can change our machine configuration to an **MPI cluster** with two machines:
 
 ```python
 mpi_cluster = inductiva.resources.MPICluster(
-                  machine_type="c2d-highcpu-56",
-                  data_disk_gb=100,
-                  num_machines=2)
+	provider="GCP",
+	machine_type="c2d-highcpu-56",
+	data_disk_gb=100,
+	num_machines=2)
 mpi_cluster.start()
 
 # Re-run the simulation with adjusted `n_vcpus`

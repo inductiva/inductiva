@@ -131,10 +131,11 @@ in the upcoming steps.
 ```python
 import inductiva
 
-machine_group = inductiva.resources.MachineGroup(
+cloud_machine = inductiva.resources.MachineGroup(
+            provider="GCP",
             machine_type="c3d-highcpu-360",
             spot=True)
-machine_group.start()
+cloud_machine.start()
 
 input_dir = "/path/to/highLiftConfiguration"
 
@@ -146,10 +147,10 @@ task = openfoam.run(
             shell_script="./Allrun",
             n_vcpus=180,
             use_hwthread=True,
-            on=machine_group)
+            on=cloud_machine)
 
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 task.download_outputs()
 
 task.print_summary()
@@ -172,7 +173,8 @@ file (`system/include/caseDefinition`):
 1. **Pick your machine**:
     ```python
     import inductiva
-    machine_group = inductiva.resources.MachineGroup(
+    cloud_machine = inductiva.resources.MachineGroup(
+            provider="GCP",
             machine_type="c3d-highcpu-360",
             spot=True)
     ```
@@ -181,7 +183,7 @@ file (`system/include/caseDefinition`):
 
 2. **Start your machine**
     ```python
-    machine_group.start()
+    cloud_machine.start()
     ```
 
 #### b. Simulation inputs
@@ -210,7 +212,7 @@ We now have all we need to run our simulation.
    task = openfoam.run(
                input_dir=input_dir,
                shell_script="./Allrun",
-               on=machine_group)
+               on=cloud_machine)
    ```
 
 2. **Wait**:
@@ -227,7 +229,7 @@ is automatically terminated if no simulation runs on it for 30 minutes,
 but you can set a different time interval if you wish.  
 
    ```python
-   machine_group.terminate()
+   cloud_machine.terminate()
    task.download_outputs()
    ```
 
@@ -285,7 +287,7 @@ commands_single_machine = [
 task = openfoam.run(
             input_dir=input_dir,
             commands=commands_single_machine,
-            on=machine_group)
+            on=cloud_machine)
 ```
 
 For more details on commands and MPI configuration, refer to the
