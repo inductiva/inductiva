@@ -20,7 +20,13 @@ def pretty_print_machines_info(machines_dict):
     print()
     for family, family_details in machines_dict.items():
         print(f"CPU family: {family}")
-        final_table = {"Machine Type": [], "Supported vCPUs": [], "Supported GPUs": [], "GPU type": [], "Config": []}
+        final_table = {
+            "Machine Type": [],
+            "Supported vCPUs": [],
+            "Supported GPUs": [],
+            "GPU type": [],
+            "Config": []
+        }
         first_line = True
         for machine_type, details in family_details.items():
             # Used to determine if we write the machine type name
@@ -97,7 +103,11 @@ def list_machine_types_available(args):
         if memory not in machines_dict[family]:
             machines_dict[family][memory] = {}
         if config not in machines_dict[family][memory]:
-            machines_dict[family][memory][config] = {"vcpus": [], "gpus": [], "gpu_name": gpu_name}
+            machines_dict[family][memory][config] = {
+                "vcpus": [],
+                "gpus": [],
+                "gpu_name": gpu_name
+            }
 
         if vcpus is not None:
             # Sorted insertion of vcpus
