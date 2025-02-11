@@ -416,6 +416,8 @@ def _get_multipart_parts(size, min_part_size=50 * 1024 * 1024):
     The goal is to divide the data into parts `min_part_size` each:
     1. No more than 10,000 parts are created (maximum parts allowed by S3).
     2. The part size might be increased to avoid exceeding the part limit.
+    3. The part size cannot be lower than 5MB.
+
 
     Args:
         size (int): The total size of the file to be uploaded, in bytes.
@@ -427,6 +429,10 @@ def _get_multipart_parts(size, min_part_size=50 * 1024 * 1024):
             - part_count (int): The total number of parts.
     """
     max_parts = 10000
+    min_allowed_part_size = 5 * 1024 * 1024  # 5MB
+
+    # Ensure min_part_size is at least 5MB
+    min_part_size = max(min_part_size, min_allowed_part_size)
 
     if size <= min_part_size:
         return size, 1
