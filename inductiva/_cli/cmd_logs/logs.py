@@ -107,7 +107,8 @@ def stream_task_logs(args):
 
 def stream_task_logs_tail(args):
     filename = "stdout.txt" if args.stdout else "stderr.txt"
-    files = ["stdout.txt", "stderr.txt"] if args.stdout == args.stderr else [filename]
+    files = ["stdout.txt", "stderr.txt"
+            ] if args.stdout == args.stderr else [filename]
 
     new_args = argparse.Namespace(
         id=args.mode.lower(),
