@@ -2,6 +2,7 @@
 from typing import List, Optional
 from abc import ABC
 import logging
+import os
 
 import pathlib
 
@@ -66,12 +67,25 @@ class Simulator(ABC):
     def image_uri(self):
         """Get the image URI for this simulator."""
         return self._image_uri
-    
-    def _validate_input_files(self, input_dir, **kwargs):
+
+    def _input_files_exist(self, input_dir, **kwargs):
         """
         Checks if all the files in kwargs are present in the input_dir.
         """
-        #TODO
+        missing_files = []
+
+        for _, file_path in kwargs.items():
+            # Get the full file path by joining the input directory with the file path in kwargs
+            full_file_path = os.path.join(input_dir, file_path)
+
+            # Check if the file exists
+            if not os.path.isfile(full_file_path):
+                missing_files.append(file_path)
+
+        if missing_files:
+            raise FileNotFoundError(
+                "The following files are missing from your input directory:\n"
+                f"{", ".join(missing_files)}")
 
     def _get_image_uri(self):
         """Get the appropriate image name for this simulator."""

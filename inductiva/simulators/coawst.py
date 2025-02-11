@@ -108,17 +108,11 @@ class COAWST(simulators.Simulator):
                 "The number of virtual cpus asked surpasses the"
                 " available virtual cpus for the selected resource.")
 
+        self._input_files_exist(input_dir=input_dir,
+                                sim_config_filename=sim_config_filename,
+                                build_coawst_script=build_coawst_script)
+
         build_script = os.path.join(input_dir, build_coawst_script)
-
-        if input_dir is not None:
-            config_filename = os.path.join(input_dir, sim_config_filename)
-            if not os.path.isfile(config_filename):
-                raise ValueError("The provided sim_config_filename is not "
-                                 "present in your input directory.")
-            if not os.path.isfile(build_script):
-                raise ValueError("The provided build_coawst_script is not "
-                                 "present in your input directory.")
-
         self._validate_build_script(build_script=str(build_script))
 
         mpi_kwargs = {}
