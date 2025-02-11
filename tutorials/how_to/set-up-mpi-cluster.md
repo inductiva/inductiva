@@ -23,24 +23,25 @@ import inductiva
 
 # Download the input files for the SWASH simulation
 input_dir = inductiva.utils.download_from_url(
-   "https://storage.googleapis.com/inductiva-api-demo-files/"
-   "swash-resources-example.zip", unzip=True)
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "swash-resources-example.zip", unzip=True)
 
 # Instantiate a MPICluster object with 4 machine of type c2-standard-30 and 
 # start it immediately. This accounts for 120 vCPUs.
 mpi_cluster = inductiva.resources.MPICluster(
-   provider="GCP",
-   machine_type="c2-standard-30",
-   num_machines=4)
+    provider="GCP",
+    machine_type="c2-standard-30",
+    num_machines=4)
 mpi_cluster.start()
 
 # Initialize the SWASH simulator and run the simulation
 # in your just launched dedicated MPICluster
 swash = inductiva.simulators.SWASH()
 
-task = swash.run(input_dir=input_dir,
-                sim_config_filename="input.sws",
-                on=mpi_cluster)
+task = swash.run(
+    input_dir=input_dir,
+    sim_config_filename="input.sws",
+    on=mpi_cluster)
 
 # Wait for the task to finish and download the outputs
 task.wait()

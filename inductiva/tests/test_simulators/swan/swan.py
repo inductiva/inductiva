@@ -16,9 +16,10 @@ swan = inductiva.simulators.SWAN()
 
 # Run simulation with config files in the input directory
 # Uses swanrun by default
-task = swan.run(input_dir=input_dir,
-                sim_config_filename="a11refr.swn",
-                on=cloud_machine)
+task = swan.run( \
+    input_dir=input_dir,
+    sim_config_filename="a11refr.swn",
+    on=cloud_machine)
 
 # Uses swanrun
 # task = swan.run(input_dir=input_dir,

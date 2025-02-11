@@ -13,10 +13,11 @@ input_dir = inductiva.utils.download_from_url(
 
 nwchem = inductiva.simulators.NWChem()
 
-task = nwchem.run(input_dir=input_dir,
-                  sim_config_filename="h2o_sp_scf.nw",
-                  n_vcpus=1,
-                  on=cloud_machine)
+task = nwchem.run( \
+    input_dir=input_dir,
+    sim_config_filename="h2o_sp_scf.nw",
+    n_vcpus=1,
+    on=cloud_machine)
 
 task.wait()
 cloud_machine.terminate()

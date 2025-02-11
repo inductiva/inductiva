@@ -122,7 +122,10 @@ commands = [
 
 # Initialize the GROMACS simulator and run the simulation
 gromacs = inductiva.simulators.GROMACS()
-task = gromacs.run(input_dir=input_dir, commands=commands, on=machine_group)
+task = gromacs.run(
+    input_dir=input_dir,
+    commands=commands,
+    on=machine_group)
 
 # Wait for the task to complete
 task.wait()

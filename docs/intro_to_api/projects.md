@@ -125,16 +125,18 @@ project.open() # <-- open the project for task submission
 simulator = inductiva.simulators.XBeach()
 
 # add a task to the "my_xbeach_project" project
-task1 = simulator.run(input_dir=input_dir,
-                      sim_config_filename="params.txt",
-                      on=cloud_machine)
+task1 = simulator.run(
+    input_dir=input_dir,
+    sim_config_filename="params.txt",
+    on=cloud_machine)
 
 project.close() # <-- close the project
 
 # task2 will be added to the default project
-task2 = simulator.run(input_dir=input_dir,
-                      sim_config_filename="params.txt",
-                      on=cloud_machine)
+task2 = simulator.run(
+    input_dir=input_dir,
+    sim_config_filename="params.txt",
+    on=cloud_machine)
 
 print(task1.get_info().project) # "my_xbeach_project"
 print(task2.get_info().project) # "userab1cdef2" (default project)
@@ -170,14 +172,16 @@ with inductiva.projects.Project("my_xbeach_project", append=True) as project:
     simulator = inductiva.simulators.XBeach()
 
     # add a task to the "my_xbeach_project" project
-    task1 = simulator.run(input_dir=input_dir,
-                          sim_config_filename="params.txt",
-                          on=cloud_machine)
+    task1 = simulator.run(
+        input_dir=input_dir,
+        sim_config_filename="params.txt",
+        on=cloud_machine)
 
 # task2 will be added to the default project
-task2 = simulator.run(input_dir=input_dir,
-                      sim_config_filename="params.txt",
-                      on=cloud_machine)
+task2 = simulator.run(
+    input_dir=input_dir,
+    sim_config_filename="params.txt",
+    on=cloud_machine)
 
 print(task1.get_info().project) # "my_xbeach_project"
 print(task2.get_info().project) # "userab1cdef2" (default project)

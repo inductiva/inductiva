@@ -28,7 +28,10 @@ commands = [
 
 gromacs = inductiva.simulators.GROMACS()
 
-task = gromacs.run(input_dir=input_dir, commands=commands, on=cloud_machine)
+task = gromacs.run( \
+    input_dir=input_dir,
+    commands=commands,
+    on=cloud_machine)
 
 task.wait()
 cloud_machine.terminate()

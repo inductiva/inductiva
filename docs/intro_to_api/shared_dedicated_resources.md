@@ -61,9 +61,10 @@ cloud_machine.start()
 # Initialize the SWASH simulator and run the simulation
 # in your just launched dedicated MachineGroup
 swash = inductiva.simulators.SWASH()
-task = swash.run(input_dir=input_dir,
-                 sim_config_filename="input.sws",
-                 on=cloud_machine)
+task = swash.run(
+    input_dir=input_dir,
+    sim_config_filename="input.sws",
+    on=cloud_machine)
 
 # Wait for the task to finish and download the outputs
 task.wait()

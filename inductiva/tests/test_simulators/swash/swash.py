@@ -16,9 +16,10 @@ input_dir = inductiva.utils.download_from_url(
 swash = inductiva.simulators.SWASH(version="10.05")
 
 # Run simulation with config files in the input directory
-task = swash.run(input_dir=input_dir,
-                 sim_config_filename="input.sws",
-                 on=cloud_machine)
+task = swash.run( \
+    input_dir=input_dir,
+    sim_config_filename="input.sws",
+    on=cloud_machine)
 
 task.wait()
 cloud_machine.terminate()

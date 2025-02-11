@@ -48,8 +48,8 @@ import inductiva
 
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup
-       provider="GCP",
-       machine_type="c2-standard-4")
+    provider="GCP",
+    machine_type="c2-standard-4")
 
 # Initialize the simulator object
 simulator = inductiva.simulators.REEF3D()
@@ -57,8 +57,8 @@ simulator = inductiva.simulators.REEF3D()
 # Invoke the run() method of the simulator object. 
 # This will trigger the packing and uploading the data
 task = simulator.run(
-       input_dir="my_input_data_dir",
-       on=cloud_machine)
+    input_dir="my_input_data_dir",
+    on=cloud_machine)
 
 # Terminate the machine group
 cloud_machine.terminate()

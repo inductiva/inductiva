@@ -16,9 +16,10 @@ input_dir = inductiva.utils.download_from_url(
 xbeach = inductiva.simulators.XBeach()
 
 # Run simulation with configuration files in the input directory
-task = xbeach.run(input_dir=input_dir,
-                  sim_config_filename="params.txt",
-                  on=cloud_machine)
+task = xbeach.run( \
+    input_dir=input_dir,
+    sim_config_filename="params.txt",
+    on=cloud_machine)
 
 task.wait()
 cloud_machine.terminate()

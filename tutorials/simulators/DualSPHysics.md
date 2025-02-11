@@ -112,9 +112,10 @@ input_dir = "/Path/to/09_Turbine"
 dualsphysics = inductiva.simulators.DualSPHysics()
 
 # Run simulation with config files in the input directory
-task = dualsphysics.run(input_dir=input_dir,
-                        shell_script="xCaseTurbine_linux64_CPU.sh",
-                        on=cloud_machine)
+task = dualsphysics.run(
+    input_dir=input_dir,
+    shell_script="xCaseTurbine_linux64_CPU.sh",
+    on=cloud_machine)
 
 task.wait()
 task.download_outputs()
@@ -159,10 +160,10 @@ machine to reduce the cost of the simulation.
 import inductiva
 
 cloud_machine = inductiva.resources.MachineGroup(
-      provider="GCP",
-      machine_type="n2d-highcpu-64",
-      spot=True,
-      data_disk_gb=20)
+    provider="GCP",
+    machine_type="n2d-highcpu-64",
+    spot=True,
+    data_disk_gb=20)
 
 cloud_machine.start()
 ```

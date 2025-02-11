@@ -34,7 +34,7 @@ custom_simulator = inductiva.simulators.CustomImage(
 	container_image="docker://inductiva/kutu:fds_v6.8")
 
 task = custom_simulator.run(
-	input_dir=input_dir,
+    input_dir=input_dir,
 	commands=["fds mccaffrey.fds"],
     on=cloud_machine)
 

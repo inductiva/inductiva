@@ -132,9 +132,9 @@ in the upcoming steps.
 import inductiva
 
 cloud_machine = inductiva.resources.MachineGroup(
-            provider="GCP",
-            machine_type="c3d-highcpu-360",
-            spot=True)
+    provider="GCP",
+    machine_type="c3d-highcpu-360",
+    spot=True)
 cloud_machine.start()
 
 input_dir = "/path/to/highLiftConfiguration"
@@ -143,11 +143,11 @@ input_dir = "/path/to/highLiftConfiguration"
 openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
 
 task = openfoam.run(
-            input_dir=input_dir,
-            shell_script="./Allrun",
-            n_vcpus=180,
-            use_hwthread=True,
-            on=cloud_machine)
+    input_dir=input_dir,
+    shell_script="./Allrun",
+    n_vcpus=180,
+    use_hwthread=True,
+    on=cloud_machine)
 
 task.wait()
 cloud_machine.terminate()
@@ -174,9 +174,9 @@ file (`system/include/caseDefinition`):
     ```python
     import inductiva
     cloud_machine = inductiva.resources.MachineGroup(
-            provider="GCP",
-            machine_type="c3d-highcpu-360",
-            spot=True)
+        provider="GCP",
+        machine_type="c3d-highcpu-360",
+        spot=True)
     ```
     **Note**: `spot` machines are a lot cheaper but can be terminated by the
     provider if needed.
@@ -210,9 +210,9 @@ We now have all we need to run our simulation.
    openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
 
    task = openfoam.run(
-               input_dir=input_dir,
-               shell_script="./Allrun",
-               on=cloud_machine)
+       input_dir=input_dir,
+       shell_script="./Allrun",
+       on=cloud_machine)
    ```
 
 2. **Wait**:
@@ -285,9 +285,9 @@ commands_single_machine = [
 ]
 
 task = openfoam.run(
-            input_dir=input_dir,
-            commands=commands_single_machine,
-            on=cloud_machine)
+    input_dir=input_dir,
+    commands=commands_single_machine,
+    on=cloud_machine)
 ```
 
 For more details on commands and MPI configuration, refer to the

@@ -59,9 +59,10 @@ for i, water_level in enumerate(water_levels_list):
                             overwrite=False)
 
     # Run the simulation on the dedicated MachineGroup
-    task = swash.run(input_dir=target_dir,
-                    sim_config_filename="input.sws",
-                    on=could_machine)
+    task = swash.run(
+        input_dir=target_dir,
+        sim_config_filename="input.sws",
+        on=could_machine)
 ```
 
 ## 4. Monitoring Simulations

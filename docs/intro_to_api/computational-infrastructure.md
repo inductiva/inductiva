@@ -75,8 +75,7 @@ import inductiva
 cloud_machine = inductiva.resources.MachineGroup(
     provider="GCP",
     machine_type="c3d-standard-60",
-    num_machines=2,
-)
+    num_machines=2)
 
 # Start the MachineGroup
 cloud_machine.start()

@@ -27,15 +27,15 @@ import inductiva
 
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup(
-       provider="GCP",
-       machine_type="c2-standard-4")
+    provider="GCP",
+    machine_type="c2-standard-4")
 cloud_machine.start()
 
 simulator = inductiva.simulators.REEF3D()
 
 task = simulator.run(
-       input_dir="path-to-directory-with-input-files-for-reef3d",
-       on=cloud_machine)
+    input_dir="path-to-directory-with-input-files-for-reef3d",
+    on=cloud_machine)
 print(task.id)  # will print i4ir3kvv62odsfrhko4y8w2an
 
 # Terminate the machine group
@@ -59,8 +59,8 @@ simulator:
 
 ```python
 task = simulator.run(
-       input_dir="path-to-directory-with-input-files-for-reef3d"
-       storage_dir="my_reef3d_simulation")
+    input_dir="path-to-directory-with-input-files-for-reef3d"
+    storage_dir="my_reef3d_simulation")
 ```
 
 Again, using the CLI, the user can now confirm that the directory
@@ -81,9 +81,9 @@ accomplished programmatically using the `inductiva.storage.listdir` function:
 ```python
 >>> import inductiva
 inductiva.storage.listdir(
-       max_results=10,
-       order_by="creation_time",
-       sort_order="desc")
+    max_results=10,
+    order_by="creation_time",
+    sort_order="desc")
 ```
 
 Refer to the [Storage how-to documentation](manage-remote-storage.md) for more information

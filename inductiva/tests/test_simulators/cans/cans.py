@@ -16,10 +16,11 @@ input_dir = inductiva.utils.download_from_url(
 cans = inductiva.simulators.CaNS()
 
 # Run simulation with config files in the input directory
-task = cans.run(input_dir=input_dir,
-                sim_config_filename="input.nml",
-                on=cloud_machine,
-                n_vcpus=4)
+task = cans.run( \
+    input_dir=input_dir,
+    sim_config_filename="input.nml",
+    on=cloud_machine,
+    n_vcpus=4)
 
 task.wait()
 cloud_machine.terminate()

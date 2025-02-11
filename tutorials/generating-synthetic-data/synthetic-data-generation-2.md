@@ -112,9 +112,10 @@ input_dir = "splishsplash-base-dir"
 splishsplash = inductiva.simulators.SplishSplash()
 
 # Run the simulation task with the parameters defined in the .json file
-task = splishsplash.run(input_dir=input_dir,
-                        sim_config_filename="config.json",
-                        on=cloud_machine)
+task = splishsplash.run(
+    input_dir=input_dir,
+    sim_config_filename="config.json",
+    on=cloud_machine)
 
 # Wait for the simulation to complete and download the outputs
 task.wait()

@@ -61,9 +61,10 @@ input_dir = inductiva.utils.download_from_url(
 swash_simulator = inductiva.simulators.SWASH()
 
 # Input directory contains the .sws config file, a bathymetry file and other files.
-task = swash_simulator.run(input_dir=input_dir,
-                           sim_config_filename="input.sws",
-                           on=cloud_machine)
+task = swash_simulator.run(
+    input_dir=input_dir,
+    sim_config_filename="input.sws",
+    on=cloud_machine)
 
 # Terminate the machine group
 cloud_machine.terminate()
@@ -89,9 +90,10 @@ input_dir = inductiva.utils.download_from_url(
 splishsplash_simulator = inductiva.simulators.SplishSplash()
 
 # Input directory contains the .json config file and a .obj file for the domain.
-task = splishsplash_simulator.run(input_dir=input_dir,
-                                  sim_config_filename="config.json",
-                                  on=cloud_machine)
+task = splishsplash_simulator.run(
+    input_dir=input_dir,
+    sim_config_filename="config.json",
+    on=cloud_machine)
 
 # Terminate the machine group
 cloud_machine.terminate()
@@ -136,8 +138,9 @@ input_dir = inductiva.utils.download_from_url(
 reef3d_simulator = inductiva.simulators.REEF3D()
 
 # The files for the simulation are in the input directory.
-task = reef3d_simulator.run(input_dir=input_dir,
-                            on=cloud_machine)
+task = reef3d_simulator.run(
+    input_dir=input_dir,
+    on=cloud_machine)
 
 # Terminate the machine group
 cloud_machine.terminate()

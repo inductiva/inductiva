@@ -63,9 +63,10 @@ for i, water_level in enumerate(water_levels_list):
                             overwrite=False)
 
     # Run the simulation on the dedicated MachineGroup
-    task = swash.run(input_dir=target_dir,
-                    sim_config_filename="input.sws",
-                    on=elastic_machine_group)
+    task = swash.run(
+        input_dir=target_dir,
+        sim_config_filename="input.sws",
+        on=elastic_machine_group)
 ```
 
 As our simulations are submitted to the queue of the elastic machine group, we

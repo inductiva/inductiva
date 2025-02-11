@@ -16,10 +16,11 @@ input_dir = inductiva.utils.download_from_url(
 amr_wind = inductiva.simulators.AmrWind()
 
 # Run simulation with config files in the input directory
-task = amr_wind.run(input_dir=input_dir,
-                    sim_config_filename="abl_amd_wenoz.inp",
-                    on=cloud_machine,
-                    n_vcpus=4)
+task = amr_wind.run( \
+    input_dir=input_dir,
+    sim_config_filename="abl_amd_wenoz.inp",
+    on=cloud_machine,
+    n_vcpus=4)
 
 task.wait()
 cloud_machine.terminate()

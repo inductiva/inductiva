@@ -16,12 +16,13 @@ input_dir = inductiva.utils.download_from_url(
 fvcom = inductiva.simulators.FVCOM()
 
 # Run simulation with config files in the input directory
-task = fvcom.run(input_dir=input_dir,
-                 working_dir="run/",
-                 case_name="tst",
-                 n_vcpus=1,
-                 debug=7,
-                 on=cloud_machine)
+task = fvcom.run( \
+    input_dir=input_dir,
+    working_dir="run/",
+    case_name="tst",
+    n_vcpus=1,
+    debug=7,
+    on=cloud_machine)
 
 task.wait()
 cloud_machine.terminate()

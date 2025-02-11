@@ -15,10 +15,11 @@ input_dir = inductiva.utils.files.download_from_url(
 schism = inductiva.simulators.SCHISM()
 
 # Run simulation with config files in the input directory
-task = schism.run(input_dir=input_dir,
-                  n_vcpus=3,
-                  num_scribes=2,
-                  on=cloud_machine)
+task = schism.run( \
+    input_dir=input_dir,
+    n_vcpus=3,
+    num_scribes=2,
+    on=cloud_machine)
 
 task.wait()
 cloud_machine.terminate()

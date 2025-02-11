@@ -25,9 +25,10 @@ input_dir = inductiva.utils.download_from_url(
 dualsphysics = inductiva.simulators.DualSPHysics()
 
 # Run simulation with config files in the input directory
-task = dualsphysics.run(input_dir=input_dir,
-                        shell_script="run.sh",
-                        on=cloud_machine)
+task = dualsphysics.run(
+    input_dir=input_dir,
+    shell_script="run.sh",
+    on=cloud_machine)
 
 task.wait()
 cloud_machine.terminate()

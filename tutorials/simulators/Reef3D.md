@@ -172,7 +172,7 @@ in the upcoming steps.
 import inductiva
 
 cloud_machine = inductiva.resources.MachineGroup(
-	provider="GCP",
+    provider="GCP",
 	machine_type="c2d-highcpu-112",
 	spot=True,
 	data_disk_gb=20,
@@ -186,7 +186,7 @@ input_dir = "path/to/10_2 3D Dam Break with Obstacle"
 reef3d = inductiva.simulators.REEF3D()
 
 task = reef3d.run(
-	input_dir=input_dir,
+    input_dir=input_dir,
 	on=cloud_machine,
 	n_vcpus=56,
 	use_hwthread=False,
@@ -319,11 +319,11 @@ mpi_cluster.start()
 
 # Re-run the simulation with adjusted `n_vcpus`
 task = reef3d.run(
-		input_dir=input_dir,
-		on=mpi_cluster,
-		n_vcpus=56,
-		use_hwthread=True,
-		storage_dir="3D_dam_break_with_obstacle_cluster")
+    input_dir=input_dir,
+	on=mpi_cluster,
+	n_vcpus=56,
+	use_hwthread=True,
+	storage_dir="3D_dam_break_with_obstacle_cluster")
 ```
 
 As you can see, scaling up (or down) is easy—just select a new resource. 

@@ -13,9 +13,10 @@ input_dir = inductiva.utils.download_from_url(
 
 gx = inductiva.simulators.GX()
 
-task = gx.run(input_dir=input_dir,
-              sim_config_filename="itg_w7x_adiabatic_electrons.in",
-              on=gpu_cloud_machine)
+task = gx.run( \
+    input_dir=input_dir,
+    sim_config_filename="itg_w7x_adiabatic_electrons.in",
+    on=gpu_cloud_machine)
 
 task.wait()
 gpu_cloud_machine.terminate()

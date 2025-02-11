@@ -16,9 +16,10 @@ input_dir = inductiva.utils.download_from_url(
 openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
 
 # Run simulation with config files in the input directory
-task = openfoam.run(input_dir=input_dir,
-                    shell_script="./Allrun",
-                    on=cloud_machine)
+task = openfoam.run( \
+    input_dir=input_dir,
+    shell_script="./Allrun",
+    on=cloud_machine)
 
 task.wait()
 cloud_machine.terminate()
