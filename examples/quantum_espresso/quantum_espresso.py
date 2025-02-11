@@ -3,8 +3,8 @@ import inductiva
 
 # Allocate Google cloud machine
 cloud_machine = inductiva.resources.MachineGroup( \
-    machine_type="c3d-standard-180",
-    provider="GCP")
+    provider="GCP",
+    machine_type="c3d-standard-180")
 
 # Initialize QuantumEspresso simulator
 qe = inductiva.simulators.QuantumEspresso()

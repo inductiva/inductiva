@@ -3,8 +3,8 @@ import inductiva
 
 # Allocate Google cloud machine
 cloud_machine = inductiva.resources.MachineGroup( \
-    machine_type="c4-standard-4",
-    provider="GCP")
+    provider="GCP",
+    machine_type="c4-standard-4")
 
 # Initialize the Simulator
 openfast = inductiva.simulators.OpenFAST()

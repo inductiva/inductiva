@@ -3,8 +3,8 @@ import inductiva
 
 # Allocate Google cloud machine
 cloud_machine = inductiva.resources.MachineGroup( \
-    machine_type="c3d-standard-180",
-    provider="GCP")
+    provider="GCP",
+    machine_type="c3d-standard-180")
 
 my_gmx_command = [
     # List the GROMACS commands you wish to execute

@@ -3,8 +3,8 @@ import inductiva
 
 # Allocate Google cloud machine
 cloud_machine_gpu = inductiva.resources.MachineGroup( \
-    machine_type="a3-highgpu-8g",
-    provider="GCP")
+    provider="GCP",
+    machine_type="a3-highgpu-8g")
 
 # Initialize the Simulator
 dualsphysics = inductiva.simulators.DualSPHysics()
