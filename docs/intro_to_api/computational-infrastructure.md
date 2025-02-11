@@ -72,13 +72,14 @@ general machines:
 import inductiva
 
 # Initialize a MachineGroup with two "c3d-standard-60" machines
-machine = inductiva.resources.MachineGroup(
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
     machine_type="c3d-standard-60",
     num_machines=2,
 )
 
 # Start the MachineGroup
-machine.start()
+cloud_machine.start()
 ```
 Naturally, the cost associated with each machine type varies, and it’s possible 
 to accrue significant expenses if a large number of VMs are initiated! To protect 
