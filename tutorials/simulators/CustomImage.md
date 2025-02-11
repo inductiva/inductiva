@@ -22,19 +22,24 @@ Here’s an example of how to use the `CustomImage` simulator:
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c3d-standard-90")
-machine_group.start()
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c3d-standard-90")
 
 input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/fds-input-example.zip", unzip=True)
+    "https://storage.googleapis.com/inductiva-api-demo-files/fds-input-example.zip",
+	unzip=True)
 
-custom_simulator = inductiva.simulators.CustomImage(container_image="docker://inductiva/kutu:fds_v6.8")
+custom_simulator = inductiva.simulators.CustomImage(
+	container_image="docker://inductiva/kutu:fds_v6.8")
 
-task = custom_simulator.run(input_dir=input_dir, commands=["fds mccaffrey.fds"],
-                            on=machine_group)
+task = custom_simulator.run(
+	input_dir=input_dir,
+	commands=["fds mccaffrey.fds"],
+    on=cloud_machine)
 
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
 ```
@@ -55,22 +60,33 @@ example:
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
+cloud_machine = inductiva.resources.MachineGroup(
+	provider="GCP",
+	machine_type="c2-standard-4")
 
 input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/fds-input-example.zip", unzip=True)
+    "https://storage.googleapis.com/inductiva-api-demo-files/fds-input-example.zip",
+	unzip=True)
 
-custom_simulator = inductiva.simulators.CustomImage(container_image="docker://inductiva/kutu:fds_v6.8")
+custom_simulator = inductiva.simulators.CustomImage(
+	container_image="docker://inductiva/kutu:fds_v6.8")
 
-mpi_config = inductiva.commands.MPIConfig("4.1.6", np=4, use_hwthread_cpus=True)
-command = inductiva.commands.Command("fds mccaffrey.fds", mpi_config=mpi_config)
+mpi_config = inductiva.commands.MPIConfig(
+	version="4.1.6",
+	np=4,
+	use_hwthread_cpus=True)
 
-task = custom_simulator.run(input_dir=input_dir, commands=[command],
-                            on=machine_group)
+command = inductiva.commands.Command(
+	"fds mccaffrey.fds",
+	mpi_config=mpi_config)
+
+task = custom_simulator.run(
+	input_dir=input_dir,
+	commands=[command],
+    on=cloud_machine)
 
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
 ```
@@ -88,21 +104,27 @@ Alternatively, you can run MPI directly inside your container with:
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
+cloud_machine = inductiva.resources.MachineGroup(
+	provider="GCP",
+	machine_type="c2-standard-4")
 
 input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/fds-input-example.zip", unzip=True)
+    "https://storage.googleapis.com/inductiva-api-demo-files/fds-input-example.zip",
+	unzip=True)
 
-custom_simulator = inductiva.simulators.CustomImage(container_image="docker://inductiva/kutu:fds_v6.8")
+custom_simulator = inductiva.simulators.CustomImage(
+	container_image="docker://inductiva/kutu:fds_v6.8")
 
-command = inductiva.commands.Command("mpirun -np 4 --use-hwthread-cpus fds mccaffrey.fds")
+command = inductiva.commands.Command(
+	"mpirun -np 4 --use-hwthread-cpus fds mccaffrey.fds")
 
-task = custom_simulator.run(input_dir=input_dir, commands=[command],
-                            on=machine_group)
+task = custom_simulator.run(
+	input_dir=input_dir,
+	commands=[command],
+    on=cloud_machine)
 
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
 ```
@@ -197,13 +219,13 @@ in the upcoming steps.
 ```python
 import inductiva
 
-machine_group = inductiva.resources.MachineGroup(
-					machine_type="c2d-highcpu-112",
-					spot=True,
-					data_disk_gb=20,
-					auto_resize_disk_max_gb=250)
-
-machine_group.start()
+cloud_machine = inductiva.resources.MachineGroup(
+	provider="GCP",
+	machine_type="c2d-highcpu-112",
+	spot=True,
+	data_disk_gb=20,
+	auto_resize_disk_max_gb=250)
+cloud_machine.start()
 
 input_dir = "path/to/10_2 3D Dam Break with Obstacle"
 
@@ -212,10 +234,15 @@ customImage = inductiva.simulators.CustomImage(
     container_image="docker://inductiva/kutu:reef3d_v24.02")
 
 # Define the MPI configuration
-mpi_config = inductiva.commands.MPIConfig("4.1.6", np=56, use_hwthread_cpus=False)
+mpi_config = inductiva.commands.MPIConfig(
+	version="4.1.6",
+	np=56,
+	use_hwthread_cpus=False)
 
 # Define the commands to run with the MPI configuration
-command = inductiva.commands.Command("/REEF3D/bin/REEF3D", mpi_config=mpi_config)
+command = inductiva.commands.Command(
+	"/REEF3D/bin/REEF3D",
+	mpi_config=mpi_config)
 
 # List of commands to run our simulation
 commands = [
@@ -226,13 +253,13 @@ commands = [
 task = customImage.run(
 	input_dir=input_dir,
     commands=commands,
-	on=machine_group,
+	on=cloud_machine,
 	n_vcpus=56,
 	use_hwthread=False,
 	storage_dir="3D_dam_break_with_obstacle")
 
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.print_summary()
 ```
@@ -257,18 +284,19 @@ For a faster simulation, modify the following parameters in both files:
 
 	```python
 	import inductiva
-	machine_group = inductiva.resources.MachineGroup(
-						machine_type="c2d-highcpu-112",
-						spot=True,
-						data_disk_gb=20,
-						auto_resize_disk_max_gb=250)
+	cloud_machine = inductiva.resources.MachineGroup(
+		provider="GCP",
+		machine_type="c2d-highcpu-112",
+		spot=True,
+		data_disk_gb=20,
+		auto_resize_disk_max_gb=250)
 	```
 	**Note**: `spot` machines are a lot cheaper but can be terminated by the
 	provider if needed.
 
 2. **Start your machine**
 	```python
-	machine_group.start()
+	cloud_machine.start()
 	```
 
 #### b. Define Simulation Inputs
@@ -299,10 +327,15 @@ customImage = inductiva.simulators.CustomImage(
 
     ```python
     # Define the MPI configuration
-    mpi_config = inductiva.commands.MPIConfig("4.1.6", np=56, use_hwthread_cpus=False)
+    mpi_config = inductiva.commands.MPIConfig(
+		version="4.1.6",
+		np=56,
+		use_hwthread_cpus=False)
 
     # Define the commands to run with the MPI configuration
-    command = inductiva.commands.Command("/REEF3D/bin/REEF3D", mpi_config=mpi_config)
+    command = inductiva.commands.Command(
+		"/REEF3D/bin/REEF3D",
+		mpi_config=mpi_config)
 
     # List of commands to run our simulation
     commands = [
@@ -327,7 +360,7 @@ customImage = inductiva.simulators.CustomImage(
 	task = customImage.run(
         input_dir=input_dir,
         commands=commands,
-        on=machine_group,
+        on=cloud_machine,
         n_vcpus=56,
         use_hwthread=False,
         storage_dir="3D_dam_break_with_obstacle")
@@ -354,7 +387,7 @@ customImage = inductiva.simulators.CustomImage(
 
 
 	```python
-	machine_group.terminate()
+	cloud_machine.terminate()
 	```
 
 4. **Check your simulation summary**:

@@ -52,22 +52,24 @@ input_dir = inductiva.utils.download_from_url(
 
 # Instantiate a MachineGroup object with 1 preemptible machine of type
 # c2-standard-30 and start it immediately
-machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-30", spot=True)
-machine_group.start()
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2-standard-30",
+    spot=True)
+cloud_machine.start()
 
 # Initialize the SWASH simulator and run the simulation
 # in your just launched dedicated MachineGroup
 swash = inductiva.simulators.SWASH()
 task = swash.run(input_dir=input_dir,
                  sim_config_filename="input.sws",
-                 on=machine_group)
+                 on=cloud_machine)
 
 # Wait for the task to finish and download the outputs
 task.wait()
 
 # Terminate your dedicated MachineGroup at the end of the simulation.
-machine_group.terminate()
+cloud_machine.terminate()
 ```
 
 Running the simulation on a [dedicated machine group](#dedicated-resources) with
