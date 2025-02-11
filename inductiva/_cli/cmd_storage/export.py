@@ -10,8 +10,8 @@ def export(args):
         path_to_export=args.path_to_export,
         export_to=args.export_to,
         bucket_name=args.bucket_name,
-        file_name_to_save=args.file_name_to_save,
-        min_part_size_mb=args.min_part_size_MB,
+        file_name=args.file_name,
+        part_size=args.part_size,
     )
 
 
@@ -45,7 +45,7 @@ def register(parser):
     )
 
     subparser.add_argument(
-        "--file-name-to-save",
+        "--file-name",
         type=str,
         required=False,
         help="Specify the name to assign to the file being saved.",
@@ -59,12 +59,12 @@ def register(parser):
     )
 
     subparser.add_argument(
-        "--min-part-size-MB",
+        "--part-size",
         type=int,
         required=False,
         default=50,
         help=(
-            "Specify the minimum size (in MB) of each part in the multipart "
+            "Specify the size (in MB) of each part in the multipart "
             "upload. The default is 50 MB. For example, specify 50 for 50 MB."),
     )
 

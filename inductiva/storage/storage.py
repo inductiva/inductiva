@@ -18,6 +18,7 @@ from inductiva.client import exceptions, models
 from inductiva.client.apis.tags import storage_api
 from inductiva.utils import format_utils
 
+MB = 1024 * 1024
 _boto3_imported = True
 try:
     import boto3
@@ -409,39 +410,40 @@ def _get_file_size(file_path):
     return list(contents.values())[0]["size_bytes"]
 
 
-def _get_multipart_parts(size, min_part_size=50 * 1024 * 1024):
+def _get_multipart_parts(size: int,
+                         part_size: int = 50 * MB
+                        ) -> Tuple[int, int]:
     """
     Calculate the size of each part and the total number of parts
 
-    The goal is to divide the data into parts `min_part_size` each:
+    The goal is to divide the data into parts `part_size` each:
     1. No more than 10,000 parts are created (maximum parts allowed by S3).
     2. The part size might be increased to avoid exceeding the part limit.
     3. The part size cannot be lower than 5MB.
 
 
     Args:
-        size (int): The total size of the file to be uploaded, in bytes.
-        min_part_size (int): The minimum size of each part, in bytes.
+        size: The total size of the file to be uploaded, in bytes.
+        part_size: The minimum size of each part, in bytes.
 
     Returns:
-        tuple: (part_size, part_count)
-            - part_size (int): The size of each part in bytes.
-            - part_count (int): The total number of parts.
+        - part_size: The size of each part in bytes.
+        - part_count: The total number of parts.
     """
     max_parts = 10000
-    min_allowed_part_size = 5 * 1024 * 1024  # 5MB
+    min_allowed_part_size = 5 * MB # 5MB
 
-    # Ensure min_part_size is at least 5MB
-    min_part_size = max(min_part_size, min_allowed_part_size)
+    # Ensure part_size is at least 5MB
+    part_size = max(part_size, min_allowed_part_size)
 
-    if size <= min_part_size:
+    if size <= part_size:
         return size, 1
 
     # Calculate the part size based on the smaller of two values:
-    # - At least `min_part_size`
+    # - At least `part_size`
     # - Maximum size to ensure no more than 10,000 parts (size // 10000)
     max_allowed_part_size = size // max_parts
-    part_size = max(min_part_size, max_allowed_part_size)
+    part_size = max(part_size, max_allowed_part_size)
 
     part_count = math.ceil(size / part_size)
 
@@ -468,7 +470,7 @@ def multipart_upload(
         })
 
 
-def export_to_aws_s3(path_to_export, min_part_size_mb, filename, bucket_name):
+def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):
     if not _boto3_imported:
         print("boto3 is not installed. Please run "
               "'pip install inductiva[aws]' to install it.")
@@ -482,8 +484,9 @@ def export_to_aws_s3(path_to_export, min_part_size_mb, filename, bucket_name):
     try:
         boto3.client("s3").head_bucket(Bucket=bucket_name)
     except Exception:  # pylint: disable=broad-exception-caught
-        print(f"Bucket {bucket_name} not found. "
-              "Make sure you have the correct permissions")
+        print(f"Bucket {bucket_name} not found. Make sure the bucket exists "
+              "and you have the correct permissions: "
+              "https://tutorials.inductiva.ai/how_to/export-files-aws.html")
         return
 
     # Step 1: Get the file size
@@ -492,7 +495,7 @@ def export_to_aws_s3(path_to_export, min_part_size_mb, filename, bucket_name):
     # Step 2: Calculate the part size and count
     parts_size, parts_count = _get_multipart_parts(
         file_size,
-        min_part_size=min_part_size_mb * 1024 * 1024,
+        part_size=part_size * MB,
     )
 
     # Step 3: Initiate the multipart upload on aws
@@ -530,16 +533,16 @@ def export(
     path_to_export: str,
     export_to: ExportDestination,
     bucket_name: str,
-    file_name_to_save: str = None,
-    min_part_size_mb: int = 50,
+    file_name: Optional[str] = None,
+    part_size: int = 50,
 ):
-    file_name_to_save = file_name_to_save or pathlib.Path(path_to_export).name
+    file_name = file_name or pathlib.Path(path_to_export).name
     if export_to == ExportDestination.AWS_S3:
         print(f"Exporting {path_to_export} to {bucket_name}...")
         export_to_aws_s3(
             path_to_export,
-            min_part_size_mb,
-            file_name_to_save,
+            part_size,
+            file_name,
             bucket_name,
         )
     else:
