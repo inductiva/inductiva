@@ -108,20 +108,20 @@ With this feature, you can seamlessly copy your files to your AWS S3 bucket with
 
     To save the file on AWS S3 with a different name while exporting:
 
-    `inductiva storage export <file_path> --bucket-name <bucket_name> --file-name-to-save <new_file_name>`
+    `inductiva storage export <file_path> --bucket-name <bucket_name> --file-name <new_file_name>`
 
     Example:
 
-    `inductiva storage export simulation_results.tar.gz --bucket-name my-s3-bucket --file-name-to-save results_backup.tar.gz`
+    `inductiva storage export simulation_results.tar.gz --bucket-name my-s3-bucket --file-name results_backup.tar.gz`
 
 - Optimize Upload with Chunking size
 
     The export commands uploads files in chunks. You can specify the minimum part size (in MB) to potentially upload multiple parts in parallel:
 
-    `inductiva storage export <file_path> --bucket-name <bucket_name> --min-part-size-MB <size>`
+    `inductiva storage export <file_path> --bucket-name <bucket_name> --part-size <size>`
 
     Example:
 
-    `inductiva storage export large_dataset.csv --bucket-name my-s3-bucket --min-part-size-MB 100`
+    `inductiva storage export large_dataset.csv --bucket-name my-s3-bucket --part-size-MB 100`
 
     This configures each chunk to be at least 100MB, optimizing for large file transfers.
