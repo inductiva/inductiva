@@ -66,6 +66,12 @@ class Simulator(ABC):
     def image_uri(self):
         """Get the image URI for this simulator."""
         return self._image_uri
+    
+    def _validate_input_files(self, input_dir, **kwargs):
+        """
+        Checks if all the files in kwargs are present in the input_dir.
+        """
+        #TODO
 
     def _get_image_uri(self):
         """Get the appropriate image name for this simulator."""
