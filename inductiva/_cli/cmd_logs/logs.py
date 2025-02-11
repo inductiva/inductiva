@@ -106,15 +106,13 @@ def stream_task_logs(args):
 
 
 def stream_task_logs_tail(args):
-    files = []
-    if args.stdout:
-        files.append("stdout.txt")
-    if args.stderr:
-        files.append("stderr.txt")
+    filename = "stdout.txt" if args.stdout else "stderr.txt"
+    files = ["stdout.txt", "stderr.txt"] if args.stdout == args.stderr else [filename]
 
     new_args = argparse.Namespace(
-        id=args.id,
+        id=args.mode.lower(),
         filename=files,
+        lines=10,
         follow=True,
     )
 
