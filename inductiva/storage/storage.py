@@ -470,18 +470,21 @@ def multipart_upload(
 
 def export_to_aws_s3(path_to_export, min_part_size_mb, filename, bucket_name):
     if not _boto3_imported:
-        raise ValueError("boto3 is not installed. Please run "
-                         "'pip install inductiva[aws]' to install it.")
+        print("boto3 is not installed. Please run "
+              "'pip install inductiva[aws]' to install it.")
+        return
     try:
         boto3.client("sts").get_caller_identity()
-    except Exception as e:  # pylint: disable=broad-exception-caught
-        raise (ValueError("AWS credentials not found. Please set your "
-                          "AWS credentials with 'aws configure'.")) from e
+    except Exception:  # pylint: disable=broad-exception-caught
+        print("AWS credentials not found. Please set your "
+              "AWS credentials with 'aws configure'.")
+        return
     try:
         boto3.client("s3").head_bucket(Bucket=bucket_name)
-    except Exception as e:  # pylint: disable=broad-exception-caught
-        raise ValueError(f"Bucket {bucket_name} not found. "
-                         "Make sure you have the correct permissions") from e
+    except Exception:  # pylint: disable=broad-exception-caught
+        print(f"Bucket {bucket_name} not found. "
+              "Make sure you have the correct permissions")
+        return
 
     # Step 1: Get the file size
     file_size = _get_file_size(path_to_export)
