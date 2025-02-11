@@ -2,7 +2,8 @@
 import inductiva
 
 # Allocate machine
-machine_group = inductiva.resources.MachineGroup("c3d-standard-180")
+cloud_machine = inductiva.resources.MachineGroup(
+    machine_type="c3d-standard-180", provider="GCP")
 
 # Initialize the Simulator
 opensees = inductiva.simulators.OpenSees()
@@ -10,10 +11,10 @@ opensees = inductiva.simulators.OpenSees()
 # Run simulation with config files in the input directory
 task = opensees.run(input_dir="/Path/to/My/OpenSees/Files",
                     sim_config_filename="my_config_file.tcl",
-                    on=machine_group)
+                    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
