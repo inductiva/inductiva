@@ -11,7 +11,7 @@ input_dir = inductiva.utils.download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-cans = inductiva.simulators.CaNS()
+cans = inductiva.simulators.CaNS(version="2.3.4")
 
 # Run simulation with config files in the input directory
 task = cans.run(input_dir=input_dir,
