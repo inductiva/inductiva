@@ -562,7 +562,6 @@ def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):
         print("AWS region not found. Please set your AWS region with "
               "'aws configure'.")
         return
-    print(f"Exporting to {region_name}")
 
     # Step 1: Get the file size
     file_size = _get_file_size(path_to_export)
