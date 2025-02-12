@@ -19,7 +19,10 @@ def pretty_print_machines_info(machines_dict):
     ]
     print()
     for family, family_details in machines_dict.items():
-        print(f"CPU family: {family}")
+        if family not in ["a3", "g2"]:
+            print(f"CPU family: {family}")
+        else:
+            print(f"GPU family: {family}")
         final_table = {
             "Machine Type": [],
             "Suffix": [],
@@ -43,21 +46,26 @@ def pretty_print_machines_info(machines_dict):
             for config, info in details.items():
                 if family == "a3":
                     for i, gpu in enumerate(info["gpus"]):
-                        final_table["Machine Type"].append(machine_type if first_entry else "")
+                        final_table["Machine Type"].append(
+                            machine_type if first_entry else "")
                         final_table["Suffix"].append(f"{gpu}g")
                         final_table["Supported vCPUs"].append(info["vcpus"][i])
                         final_table["Supported GPUs"].append(gpu)
                         final_table["Config"].append(config)
+                        first_entry = False
                 else:
                     for i, vcpu in enumerate(info["vcpus"]):
-                        final_table["Machine Type"].append(machine_type if first_entry else "")
+                        final_table["Machine Type"].append(
+                            machine_type if first_entry else "")
                         final_table["Suffix"].append(vcpu)
                         final_table["Supported vCPUs"].append(vcpu)
                         if info["gpus"]:
-                            final_table["Supported GPUs"].append(info["gpus"][i])
+                            final_table["Supported GPUs"].append(
+                                info["gpus"][i])
                         else:
                             final_table["Supported GPUs"].append("n/a")
                         final_table["Config"].append(config)
+                        first_entry = False
 
         res_table = format_utils.get_tabular_str(
             final_table,
@@ -109,11 +117,11 @@ def list_machine_types_available(args):
         if vcpus is not None:
             # Sorted insertion of vcpus
             bisect.insort(machines_dict[family][memory][config]["vcpus"],
-                              int(vcpus))
+                          int(vcpus))
         if gpus is not None:
             # Sorted insertion of vcpus
             bisect.insort(machines_dict[family][memory][config]["gpus"],
-                              int(gpus))
+                          int(gpus))
     pretty_print_machines_info(machines_dict)
 
 
