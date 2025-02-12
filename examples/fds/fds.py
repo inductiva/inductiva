@@ -1,24 +1,21 @@
 """FDS example."""
 import inductiva
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+# Allocate Google cloud machine
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c3d-standard-180")
 
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "fds-input-example.zip",
-    unzip=True)
-
+# Initialize the Simulator
 fds = inductiva.simulators.FDS()
 
-task = fds.run(input_dir=input_dir,
-               sim_config_filename="mccaffrey.fds",
-               n_vcpus=1,
-               on=machine_group)
+# Run simulation with config files in the input directory
+task = fds.run(input_dir="path/to/my/fds/files",
+               sim_config_filename="my_config_file.fds",
+               on=cloud_machine)
 
+# Wait for the simulation to finish and download the results
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
-
-task.print_summary()

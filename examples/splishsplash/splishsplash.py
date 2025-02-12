@@ -1,24 +1,21 @@
 """SPlisHSPlasH example."""
 import inductiva
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+# Allocate Google cloud machine
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c3d-standard-180")
 
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "splishsplash-input-example.zip",
-    unzip=True)
-
-# Set simulation input directory
+# Initialize the Simulator
 splishsplash = inductiva.simulators.SplishSplash()
 
-task = splishsplash.run(input_dir=input_dir,
-                        sim_config_filename="config.json",
-                        on=machine_group)
+# RRun simulation with config files in the input directory
+task = splishsplash.run(input_dir="/path/to/my/splishsplash/files",
+                        sim_config_filename="my_config_file.json",
+                        on=cloud_machine)
 
+# Wait for the simulation to finish and download the results
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
-
-task.print_summary()

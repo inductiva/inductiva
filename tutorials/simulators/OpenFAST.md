@@ -60,7 +60,7 @@ turbine interactions, wake effects, and turbulence.
 In the following example, we demonstrate how to run an OpenFAST simulation 
 using Inductiva’s cloud infrastructure. 
 
-```{literalinclude} ../../examples/openfast/openfast.py
+```{literalinclude} ../../inductiva/tests/test_simulators/openfast/openfast.py
 :language: python
 ```
 

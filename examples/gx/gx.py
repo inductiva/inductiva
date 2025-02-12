@@ -1,18 +1,21 @@
 """GX example."""
 import inductiva
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("g2-standard-4")
+# Allocate Google cloud machine
+cloud_machine_gpu = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="a3-highgpu-8g")
 
+# Initialize the Simulator
 gx = inductiva.simulators.GX()
 
+# Run simulation with config files in the input directory
 task = gx.run(input_dir="/Path/to/My/GX/Files",
-              sim_config_filename="itg_w7x_adiabatic_electrons.in",
-              on=machine_group)
+              sim_config_filename="my_config_file.in",
+              on=cloud_machine_gpu)
 
+# Wait for the simulation to finish and download the results
 task.wait()
-machine_group.terminate()
+cloud_machine_gpu.terminate()
 
 task.download_outputs()
-
-task.print_summary()

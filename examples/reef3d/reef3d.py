@@ -1,21 +1,19 @@
 """Reef3D example."""
 import inductiva
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+# Allocate Google cloud machine
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c3d-standard-180")
 
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "reef3d-input-example.zip",
-    unzip=True)
-
+# Initialize simulator
 reef3d = inductiva.simulators.REEF3D()
 
-task = reef3d.run(input_dir=input_dir, on=machine_group)
+# Run simulation
+task = reef3d.run(input_dir="/path/to/my/reef3d/files", on=cloud_machine)
 
+# Wait for the simulation to finish and download the results
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
-
-task.print_summary()

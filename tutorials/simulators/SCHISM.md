@@ -20,7 +20,7 @@ research.
 
 Below is an example of running a SCHISM simulation via the Inductiva API:
 
-```{literalinclude} ../../examples/schism/schism.py
+```{literalinclude} ../../inductiva/tests/test_simulators/schism/schism.py
 :language: python
 ```
 

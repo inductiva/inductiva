@@ -1,27 +1,25 @@
 """OpenFAST example."""
 import inductiva
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+# Allocate Google cloud machine
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c4-standard-4")
 
-# Set simulation input directory
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "openfast-input-example.zip",
-    unzip=True)
-
-# List of commands to run
-commands = ["openfast IEA-15-240-RWT-Monopile.fst"]
-
-# Initialize OpenFAST simulator
+# Initialize the Simulator
 openfast = inductiva.simulators.OpenFAST()
 
-# Run simulation
-task = openfast.run(input_dir=input_dir, commands=commands, on=machine_group)
+my_openfast_command = [
+    # List the OpenFAST commands you wish to execute
+]
 
+# Run simulation
+task = openfast.run(input_dir="/path/to/my/openfast/files",
+                    commands=my_openfast_command,
+                    on=cloud_machine)
+
+# Wait for the simulation to finish and download the results
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
-
-task.print_summary()

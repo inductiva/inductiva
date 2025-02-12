@@ -1,26 +1,21 @@
 """SCHISM example."""
 import inductiva
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-
-# Set simulation input directory
-input_dir = inductiva.utils.files.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "schism-input-example.zip", True)
+# Allocate Google cloud machine
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c3d-standard-180")
 
 # Initialize the Simulator
 schism = inductiva.simulators.SCHISM()
 
 # Run simulation with config files in the input directory
-task = schism.run(input_dir=input_dir,
-                  n_vcpus=3,
+task = schism.run(input_dir="/path/to/my/schism/files",
                   num_scribes=2,
-                  on=machine_group)
+                  on=cloud_machine)
 
+# Wait for the simulation to finish and download the results
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
-
-task.print_summary()

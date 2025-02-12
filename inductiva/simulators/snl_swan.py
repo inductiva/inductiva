@@ -8,7 +8,7 @@ from inductiva.commands.mpiconfig import MPIConfig
 
 
 @simulators.simulator.mpi_enabled
-class SnlSwan(simulators.Simulator):
+class SNLSWAN(simulators.Simulator):
     """Class to invoke a generic SNL SWAN simulation on the API."""
 
     def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
@@ -24,7 +24,6 @@ class SnlSwan(simulators.Simulator):
         super().__init__(version=version, use_dev=use_dev)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "snlswan"
-        self.container_image = self._get_image_uri()
 
     @property
     def name(self):
@@ -80,6 +79,11 @@ class SnlSwan(simulators.Simulator):
         commands = []
 
         path_config_filename = Path(sim_config_filename)
+
+        if path_config_filename.is_absolute():
+            raise ValueError("sim_config_filename must be a path relative to "
+                             "the input directory.")
+
         working_dir = path_config_filename.parent
         config_file_only = path_config_filename.name
 
