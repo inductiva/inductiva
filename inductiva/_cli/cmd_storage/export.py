@@ -62,10 +62,10 @@ def register(parser):
         "--part-size",
         type=int,
         required=False,
-        default=50,
+        default=128,
         help=(
-            "Specify the size (in MB) of each part in the multipart "
-            "upload. The default is 50 MB. For example, specify 50 for 50 MB."),
+            "Specify the size (in MB) of each part in the multipartupload."
+            "The default is 128 MB. For example, specify 50 for 50 MB."),
     )
 
     subparser.set_defaults(func=export)

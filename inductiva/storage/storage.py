@@ -358,7 +358,8 @@ def _initiate_multipart_upload(filename, bucket_name, region_name):
     """
     s3_client = boto3.client("s3",
                              region_name=region_name,
-                             config=Config(signature_version="v4"))
+                             config=Config(region_name=region_name,
+                                           signature_version="v4"))
     response = s3_client.create_multipart_upload(
         Bucket=bucket_name,
         Key=filename,
@@ -377,6 +378,7 @@ def _generate_presigned_url(
     Generate a presigned URL for uploading a part to S3.
     """
     s3_client = boto3.client("s3",
+                             region_name=region_name,
                              config=Config(region_name=region_name,
                                            signature_version="v4"))
     method_parameters = {
@@ -405,6 +407,7 @@ def _generate_complete_multipart_upload_signed_url(
     Generate a presigned URL for completing the multipart upload.
     """
     s3_client = boto3.client("s3",
+                             region_name=region_name,
                              config=Config(region_name=region_name,
                                            signature_version="v4"))
 
@@ -436,7 +439,7 @@ def _get_file_size(file_path):
 
 
 def _get_multipart_parts(size: int,
-                         part_size: int = 50 * MB) -> Tuple[int, int]:
+                         part_size: int = 128 * MB) -> Tuple[int, int]:
     """
     Calculate the size of each part and the total number of parts
 
@@ -460,6 +463,7 @@ def _get_multipart_parts(size: int,
     # Ensure part_size is at least 5MB
     part_size = max(part_size, min_allowed_part_size)
 
+    print(size, part_size)
     if size <= part_size:
         return size, 1
 
@@ -518,6 +522,7 @@ def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):
         print("AWS region not found. Please set your AWS region with "
               "'aws configure'.")
         return
+    print(f"Exporting to {region_name}")
 
     # Step 1: Get the file size
     file_size = _get_file_size(path_to_export)
@@ -527,7 +532,7 @@ def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):
         file_size,
         part_size=part_size * MB,
     )
-
+    print(part_size, parts_count)
     # Step 3: Initiate the multipart upload on aws
     upload_id = _initiate_multipart_upload(filename, bucket_name, region_name)
 
@@ -562,7 +567,7 @@ def export(
     export_to: ExportDestination,
     bucket_name: str,
     file_name: Optional[str] = None,
-    part_size: int = 50,
+    part_size: int = 128,
 ):
     file_name = file_name or pathlib.Path(path_to_export).name
     if export_to == ExportDestination.AWS_S3:
