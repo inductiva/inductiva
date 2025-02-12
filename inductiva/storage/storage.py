@@ -504,7 +504,6 @@ def _get_multipart_parts(size: int,
     # Ensure part_size is at least 5MB
     part_size = max(part_size, min_allowed_part_size)
 
-    print(size, part_size)
     if size <= part_size:
         return size, 1
 
