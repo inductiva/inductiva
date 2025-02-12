@@ -562,7 +562,6 @@ def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):
         print("AWS region not found. Please set your AWS region with "
               "'aws configure'.")
         return
-    print(f"Exporting to {region_name}")
 
     # Step 1: Get the file size
     file_size = _get_file_size(path_to_export)
@@ -572,7 +571,7 @@ def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):
         file_size,
         part_size=part_size * MB,
     )
-    print(part_size, parts_count)
+
     # Step 3: Initiate the multipart upload on aws
     upload_id = _initiate_multipart_upload(filename, bucket_name, region_name)
 
