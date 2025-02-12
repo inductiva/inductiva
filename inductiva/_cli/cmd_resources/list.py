@@ -19,12 +19,15 @@ def pretty_print_machines_info(machines_dict):
     ]
     print()
     for family, family_details in machines_dict.items():
-        print(f"CPU family: {family}")
+        if family not in ("g2", "a3"):
+            print(f"CPU family: {family}")
+        else:
+            print(f"GPU family: {family}")
         final_table = {
             "Machine Type": [],
+            "Suffix": [],
             "Supported vCPUs": [],
             "Supported GPUs": [],
-            "GPU type": [],
             "Config": []
         }
         first_line = True
@@ -36,9 +39,9 @@ def pretty_print_machines_info(machines_dict):
             if not first_line:
                 # Add's an empty line between the machine types
                 final_table["Machine Type"].append("")
+                final_table["Suffix"].append("")
                 final_table["Supported vCPUs"].append("")
                 final_table["Supported GPUs"].append("")
-                final_table["GPU type"].append("")
                 final_table["Config"].append("")
             first_line = False
 
@@ -59,8 +62,15 @@ def pretty_print_machines_info(machines_dict):
                 str_gpus = "n/a" if not info["gpus"] else ", ".join(
                     str(v) for v in info["gpus"])
                 final_table["Supported GPUs"].append(str_gpus)
-                final_table["GPU type"].append(info["gpu_name"])
                 final_table["Config"].append(config)
+                if family not in ("g2", "a3"):
+                    final_table["Suffix"].append(str_vcpus)
+                else:
+                    if family == "a3":
+                        suffix = ", ".join(str(v) + "g" for v in info["gpus"])
+                        final_table["Suffix"].append(suffix)
+                    if family == "g2":
+                        final_table["Suffix"].append(str_vcpus)
 
         res_table = format_utils.get_tabular_str(
             final_table,
@@ -68,8 +78,10 @@ def pretty_print_machines_info(machines_dict):
             indentation_level=4)
         print(res_table)
 
-    print("Ex:\tc3d-highcpu-4")
-    print("\tc3d-highcpu-8-lssd")
+    print("Pattern: family-machine type-suffix-config")
+    print("Ex:\t c3d-highcpu-4")
+    print("\t c3d-highcpu-8-lssd")
+    print("\t a3-highgpu-1g")
 
 
 def list_machine_types_available(args):
