@@ -1,2 +1,2 @@
 """Storage related functions."""
-from .storage import get_space_used, listdir, upload, upload_from_url, remove_workspace, export, StorageOperation, get_signed_urls, get_zip_contents
+from .storage import get_space_used, listdir, upload, upload_from_url, remove_workspace, export, StorageOperation, get_signed_urls, get_zip_contents, ZipArchiveInfo, ZipFileInfo

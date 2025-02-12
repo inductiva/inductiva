@@ -870,18 +870,19 @@ class Task:
             print that information in a formatted way.
         """
         # TODO: the output filename shouldn't be hardcoded
-        archive_info = storage.get_zip_contents(path=f"{self.id}/output.zip")
+        archive_info = storage.get_zip_contents(path=f"{self.id}/output.zip",
+                                                zip_relative_path="artifacts/")
 
         output_files = [
             output_info.FileInfo(
-                name=file_info["name"],
-                size=int(file_info["size"]),
-                compressed_size=int(file_info["compressed_size"]),
-            ) for file_info in archive_info["contents"]
+                name=file_info.name,
+                size=file_info.size,
+                compressed_size=file_info.compressed_size,
+            ) for file_info in archive_info.files
         ]
 
         return output_info.TaskOutputInfo(
-            total_size_bytes=int(archive_info["size"]),
+            total_size_bytes=archive_info.size,
             files=output_files,
         )
 
