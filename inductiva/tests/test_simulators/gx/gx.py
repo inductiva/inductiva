@@ -6,7 +6,7 @@ gpu_machine_group = inductiva.resources.MachineGroup("g2-standard-4")
 
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "gromacs-input-example.zip",
+    "gx-input-example.zip",
     unzip=True)
 
 gx = inductiva.simulators.GX()
