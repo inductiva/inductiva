@@ -1,11 +1,11 @@
 """Methods to interact with the user storage resources."""
-from dataclasses import dataclass
-import time
-import logging
 import os
+import time
 import tqdm
-from typing import List, Literal, Optional, Tuple
 import urllib
+import logging
+from dataclasses import dataclass
+from typing import List, Literal, Optional, Tuple
 
 import inductiva
 from inductiva import constants
@@ -76,8 +76,8 @@ def listdir(path="/",
     api = storage_api.StorageApi(inductiva.api.get_client())
 
     # This is valid for single files and directories
-    if len(path.split(os.sep)) < 2:
-        path += os.sep
+    if len(path.split("/")) < 2:
+        path += "/"
 
     contents = api.list_storage_contents({
         "path": path,
