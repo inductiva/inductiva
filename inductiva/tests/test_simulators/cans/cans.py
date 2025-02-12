@@ -7,7 +7,7 @@ machine_group = inductiva.resources.MachineGroup("c2-standard-4")
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "cans-input-example.zip",
+    "cansv2.4.0-input-example.zip",
     unzip=True)
 
 # Initialize the Simulator

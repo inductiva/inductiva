@@ -19,7 +19,7 @@ import inductiva
 from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.models import TaskRequest, TaskStatus, TaskSubmittedInfo
-from inductiva import types, constants
+from inductiva import types, constants, storage
 from inductiva.utils.data import (get_validate_request_params, pack_input)
 from inductiva.utils import format_utils, files
 
@@ -93,23 +93,6 @@ def prepare_input(task_id, original_params, type_annotations):
     return input_zip_path, zip_file_size
 
 
-def get_upload_url(
-    api_endpoint,
-    query_params: Dict[str, str] = None,
-    path_params: Dict[str, str] = None,
-):
-    """
-    Fetches the upload URL using the specified method.
-    """
-    params = {}
-    if query_params is not None:
-        params["query_params"] = query_params
-    if path_params is not None:
-        params["path_params"] = path_params
-
-    return api_endpoint(**params).body
-
-
 def upload_file(api_instance: ApiClient, input_path: str, method: str, url: str,
                 progress_bar: tqdm):
     """
@@ -159,21 +142,14 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
     input_zip_path, zip_file_size = prepare_input(task_id, original_params,
                                                   type_annotations)
 
-    api_response = get_upload_url(
-        api_instance.get_input_upload_url,
-        path_params={"task_id": task_id},
-    )
+    # TODO: the input filename shouldn't be hardcoded
+    url = storage.get_signed_urls([f"{task_id}/input.zip"], "upload")[0]
 
     with tqdm.tqdm(total=zip_file_size,
                    unit="B",
                    unit_scale=True,
                    unit_divisor=1000) as progress_bar:
-
-        method = api_response["method"]
-        url = api_response["url"]
-
-        upload_file(api_instance, input_zip_path, method, url, progress_bar)
-
+        upload_file(api_instance, input_zip_path, "PUT", url, progress_bar)
         notify_upload_complete(
             api_instance.notify_input_uploaded,
             path_params={"task_id": task_id},

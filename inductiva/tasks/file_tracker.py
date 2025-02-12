@@ -29,11 +29,10 @@ class FileTracker:
     """File Tracker class for connecting to a running task via WebRTC."""
 
     def __init__(self):
-        self.pc = aiortc.RTCPeerConnection(
-            aiortc.RTCConfiguration(iceServers=ICE_SERVERS))
+        self.peer_connections = []
 
-    async def setup_channel(self, operation, follow=False, **kwargs):
-        channel = self.pc.createDataChannel("file_transfer")
+    async def setup_channel(self, pc, operation, follow=False, **kwargs):
+        channel = pc.createDataChannel("file_transfer")
         queue = asyncio.Queue()
         end_event = asyncio.Event()
 
@@ -55,20 +54,26 @@ class FileTracker:
 
         return queue, end_event
 
-    async def connect_to_task(self, api, task_id):
+    def create_peer_connection(self):
+        pc = aiortc.RTCPeerConnection(
+            aiortc.RTCConfiguration(iceServers=ICE_SERVERS))
+        self.peer_connections.append(pc)
+        return pc
+
+    async def connect_to_task(self, api, pc, task_id):
         connection_id = str(uuid.uuid4())
         path_params = {"task_id": task_id}
         api.register_task(body={"sender_id": connection_id},
                           path_params=path_params)
 
-        offer = await self.pc.createOffer()
-        await self.pc.setLocalDescription(offer)
+        offer = await pc.createOffer()
+        await pc.setLocalDescription(offer)
 
         api.offer_task(body={
             "sender_id": connection_id,
             "receiver_id": task_id,
             "type": "offer",
-            "sdp": self.pc.localDescription.sdp
+            "sdp": pc.localDescription.sdp
         },
                        path_params=path_params)
 
@@ -80,11 +85,12 @@ class FileTracker:
 
         data = resp.body
         if data["type"] == "answer":
-            await self.pc.setRemoteDescription(
+            await pc.setRemoteDescription(
                 aiortc.RTCSessionDescription(sdp=data["sdp"],
                                              type=data["type"]))
 
         return True
 
     async def cleanup(self):
-        await self.pc.close()
+        for pc in self.peer_connections:
+            await pc.close()
