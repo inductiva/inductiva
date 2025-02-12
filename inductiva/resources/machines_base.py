@@ -2,7 +2,7 @@
 from collections import defaultdict, namedtuple
 from dataclasses import dataclass
 from typing import Optional, Union
-from abc import ABC
+from abc import ABC, abstractmethod
 import datetime
 import time
 import enum
@@ -164,6 +164,10 @@ class BaseMachineGroup(ABC):
         Resource idle time in seconds.
         """
         return self._idle_seconds
+
+    @abstractmethod
+    def short_name(self) -> str:
+        pass
 
     @staticmethod
     def _timedelta_to_seconds(
