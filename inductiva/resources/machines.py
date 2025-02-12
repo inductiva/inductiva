@@ -64,7 +64,6 @@ class MachineGroup(machines_base.BaseMachineGroup):
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
 
-    @property
     def short_name(self) -> str:
         return "MachineGroup"
 
@@ -159,7 +158,6 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
 
-    @property
     def short_name(self) -> str:
         return "ElasticMachineGroup"
 
@@ -246,7 +244,6 @@ class MPICluster(machines_base.BaseMachineGroup):
 
         return self.n_vcpus.total
 
-    @property
     def short_name(self) -> str:
         return "MPICluster"
 
