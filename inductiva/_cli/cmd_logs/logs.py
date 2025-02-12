@@ -107,7 +107,7 @@ def stream_task_logs(args):
 
 def stream_task_logs_tail(args):
     task_id = args.mode.lower()
-    task = tasks.Task(data)
+    task = tasks.Task(task_id)
 
     result, data = _check_if_task_is_running(task, wait=args.wait)
     if not result:
