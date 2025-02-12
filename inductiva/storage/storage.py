@@ -142,12 +142,14 @@ def get_signed_urls(
     }).body
     return signed_urls
 
+
 @dataclass
 class ZipFileInfo:
     """Represents information about a file within a ZIP archive."""
     name: str
     size: int
     compressed_size: int
+
 
 @dataclass
 class ZipArchiveInfo:
