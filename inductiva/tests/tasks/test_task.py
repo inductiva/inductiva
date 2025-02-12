@@ -2,7 +2,7 @@
 import inductiva
 import pytest
 from unittest.mock import Mock, patch
-from inductiva import constants
+from inductiva import constants, storage
 from inductiva.client import exceptions
 import inductiva.client
 from inductiva.client.model.task_status_code import TaskStatusCode
@@ -184,25 +184,15 @@ def test__get_output_info(mock_get_zip_contents):
     """
     Check if the output info is correctly returned.
     """
-    mock_get_zip_contents.return_value = {
-        "size":
-            320,
-        "contents": [
-            {
-                "name": "file1.txt",
-                "size": 100,
-                "compressed_size": 50
-            },
-            {
-                "name": "file2.txt",
-                "size": 200,
-                "compressed_size": 100
-            },
+    mock_get_zip_contents.return_value = storage.ZipArchiveInfo(
+        size=320,
+        files=[
+            storage.ZipFileInfo(name="file1.txt", size=100, compressed_size=50),
+            storage.ZipFileInfo(name="file2.txt", size=200, compressed_size=100)
         ]
-    }
+    )
     task = inductiva.tasks.Task("123")
     output_info = task.get_output_info()
-
     assert output_info.n_files == 2
     assert output_info.total_size_bytes == 320
     assert output_info.total_compressed_size_bytes == 150
