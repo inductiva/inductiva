@@ -14,7 +14,7 @@ input_dir = inductiva.utils.download_from_url(
 commands = ["openfast IEA-15-240-RWT-Monopile.fst"]
 
 # Initialize OpenFAST simulator
-openfast = inductiva.simulators.OpenFAST(
+openfast = inductiva.simulators.OpenFAST( \
     version="4.0.2")
 
 # Run simulation
