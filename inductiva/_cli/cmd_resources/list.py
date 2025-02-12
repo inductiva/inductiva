@@ -44,19 +44,12 @@ def pretty_print_machines_info(machines_dict):
 
             first_entry = True
             for config, info in details.items():
-                if family == "a3":
-                    for i, gpu in enumerate(info["gpus"]):
-                        final_table["Machine Type"].append(
-                            machine_type if first_entry else "")
-                        final_table["Suffix"].append(f"{gpu}g")
-                        final_table["Supported vCPUs"].append(info["vcpus"][i])
-                        final_table["Supported GPUs"].append(gpu)
-                        final_table["Config"].append(config)
-                        first_entry = False
-                else:
-                    for i, vcpu in enumerate(info["vcpus"]):
-                        final_table["Machine Type"].append(
-                            machine_type if first_entry else "")
+                for i, vcpu in enumerate(info["vcpus"]):
+                    if family == "a3":
+                        final_table["Suffix"].append(f"{info['gpus'][i]}g")
+                        final_table["Supported vCPUs"].append(vcpu)
+                        final_table["Supported GPUs"].append(info["gpus"][i])
+                    else:
                         final_table["Suffix"].append(vcpu)
                         final_table["Supported vCPUs"].append(vcpu)
                         if info["gpus"]:
@@ -64,8 +57,10 @@ def pretty_print_machines_info(machines_dict):
                                 info["gpus"][i])
                         else:
                             final_table["Supported GPUs"].append("n/a")
-                        final_table["Config"].append(config)
-                        first_entry = False
+                final_table["Machine Type"].append(
+                            machine_type if first_entry else "")
+                final_table["Config"].append(config)
+                first_entry = False
 
         res_table = format_utils.get_tabular_str(
             final_table,
