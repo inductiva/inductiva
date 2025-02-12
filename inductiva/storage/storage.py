@@ -22,7 +22,7 @@ MB = 1024 * 1024
 _boto3_imported = True
 try:
     import boto3
-
+    from botocore.config import Config
     logging.getLogger("botocore").setLevel(logging.WARNING)
 except ImportError:
     _boto3_imported = False
@@ -352,11 +352,13 @@ class ExportDestination(Enum):
         return self.value
 
 
-def _initiate_multipart_upload(filename, bucket_name):
+def _initiate_multipart_upload(filename, bucket_name, region_name):
     """
     Initiate a multipart upload on S3 and return the UploadId.
     """
-    s3_client = boto3.client("s3")
+    s3_client = boto3.client("s3",
+                             region_name=region_name,
+                             config=Config(signature_version="v4"))
     response = s3_client.create_multipart_upload(
         Bucket=bucket_name,
         Key=filename,
@@ -364,11 +366,19 @@ def _initiate_multipart_upload(filename, bucket_name):
     return response["UploadId"]
 
 
-def _generate_presigned_url(upload_id, part_number, filename, bucket_name):
+def _generate_presigned_url(
+    upload_id,
+    part_number,
+    filename,
+    bucket_name,
+    region_name,
+):
     """
     Generate a presigned URL for uploading a part to S3.
     """
-    s3_client = boto3.client("s3")
+    s3_client = boto3.client("s3",
+                             config=Config(region_name=region_name,
+                                           signature_version="v4"))
     method_parameters = {
         "Bucket": bucket_name,
         "Key": filename,
@@ -376,22 +386,27 @@ def _generate_presigned_url(upload_id, part_number, filename, bucket_name):
         "UploadId": upload_id,
     }
 
-    return s3_client.generate_presigned_url(
+    signed_url = s3_client.generate_presigned_url(
         "upload_part",
         Params=method_parameters,
         ExpiresIn=3600,
     )
+
+    return signed_url
 
 
 def _generate_complete_multipart_upload_signed_url(
     upload_id,
     filename,
     bucket_name,
+    region_name,
 ):
     """
     Generate a presigned URL for completing the multipart upload.
     """
-    s3_client = boto3.client("s3")
+    s3_client = boto3.client("s3",
+                             config=Config(region_name=region_name,
+                                           signature_version="v4"))
 
     signed_url = s3_client.generate_presigned_url(
         ClientMethod="complete_multipart_upload",
@@ -498,6 +513,12 @@ def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):
               "https://tutorials.inductiva.ai/how_to/export-files-aws.html")
         return
 
+    region_name = boto3.Session().region_name
+    if not region_name:
+        print("AWS region not found. Please set your AWS region with "
+              "'aws configure'.")
+        return
+
     # Step 1: Get the file size
     file_size = _get_file_size(path_to_export)
 
@@ -508,13 +529,14 @@ def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):
     )
 
     # Step 3: Initiate the multipart upload on aws
-    upload_id = _initiate_multipart_upload(filename, bucket_name)
+    upload_id = _initiate_multipart_upload(filename, bucket_name, region_name)
 
     # Step 4: Generate presigned URLs for each part
     upload_parts = []
     for part_number in range(1, parts_count + 1):
         presigned_url = _generate_presigned_url(upload_id, part_number,
-                                                filename, bucket_name)
+                                                filename, bucket_name,
+                                                region_name)
         upload_parts.append({
             "part_number": part_number,
             "part_url": presigned_url
@@ -522,10 +544,7 @@ def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):
 
     # Step 5: Generate the complete multipart upload signed URL
     complete_multipart_url = _generate_complete_multipart_upload_signed_url(
-        upload_id,
-        filename,
-        bucket_name,
-    )
+        upload_id, filename, bucket_name, region_name)
 
     # Step 6: Ask the server to perform the multipart upload
     multipart_upload(
