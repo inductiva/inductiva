@@ -106,12 +106,20 @@ def stream_task_logs(args):
 
 
 def stream_task_logs_tail(args):
+    task_id = args.mode.lower()
+    task = tasks.Task(task_id)
+
+    result, data = _check_if_task_is_running(task, wait=args.wait)
+    if not result:
+        print(data, file=sys.stderr)
+        return 1
+
     filename = "stdout.txt" if args.stdout else "stderr.txt"
     files = ["stdout.txt", "stderr.txt"
             ] if args.stdout == args.stderr else [filename]
 
     new_args = argparse.Namespace(
-        id=args.mode.lower(),
+        id=task_id,
         filename=files,
         lines=10,
         follow=True,
