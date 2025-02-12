@@ -1,3 +1,6 @@
+---
+orphan: true
+---
 # Advanced Tutorial: 5MW_OC4Semi_WSt_WavesWN
 
 In this tutorial, we are going to show you how you can
