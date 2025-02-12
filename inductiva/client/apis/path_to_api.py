@@ -64,9 +64,10 @@ from inductiva.client.apis.paths.storage_signed_urls import StorageSignedUrls
 from inductiva.client.apis.paths.storage_input_notify import StorageInputNotify
 from inductiva.client.apis.paths.storage_input_remote import StorageInputRemote
 from inductiva.client.apis.paths.storage_ import Storage
-from inductiva.client.apis.paths.storage_export import StorageExport
 from inductiva.client.apis.paths.storage_operations_operation_id import StorageOperationsOperationId
 from inductiva.client.apis.paths.storage_operations import StorageOperations
+from inductiva.client.apis.paths.storage_export_multipart import StorageExportMultipart
+from inductiva.client.apis.paths.storage_update_operation_status import StorageUpdateOperationStatus
 from inductiva.client.apis.paths.version import Version
 from inductiva.client.apis.paths.version_check import VersionCheck
 from inductiva.client.apis.paths.users_quotas import UsersQuotas
@@ -214,12 +215,14 @@ PathToApi = typing_extensions.TypedDict(
             StorageInputRemote,
         PathValues.STORAGE_:
             Storage,
-        PathValues.STORAGE_EXPORT:
-            StorageExport,
         PathValues.STORAGE_OPERATIONS_OPERATION_ID:
             StorageOperationsOperationId,
         PathValues.STORAGE_OPERATIONS:
             StorageOperations,
+        PathValues.STORAGE_EXPORT_MULTIPART:
+            StorageExportMultipart,
+        PathValues.STORAGE_UPDATE_OPERATION_STATUS:
+            StorageUpdateOperationStatus,
         PathValues.VERSION:
             Version,
         PathValues.VERSIONCHECK:
@@ -385,12 +388,14 @@ path_to_api = PathToApi({
         StorageInputRemote,
     PathValues.STORAGE_:
         Storage,
-    PathValues.STORAGE_EXPORT:
-        StorageExport,
     PathValues.STORAGE_OPERATIONS_OPERATION_ID:
         StorageOperationsOperationId,
     PathValues.STORAGE_OPERATIONS:
         StorageOperations,
+    PathValues.STORAGE_EXPORT_MULTIPART:
+        StorageExportMultipart,
+    PathValues.STORAGE_UPDATE_OPERATION_STATUS:
+        StorageUpdateOperationStatus,
     PathValues.VERSION:
         Version,
     PathValues.VERSIONCHECK:
