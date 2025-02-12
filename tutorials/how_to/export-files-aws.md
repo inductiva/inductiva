@@ -122,6 +122,6 @@ With this feature, you can seamlessly copy your files to your AWS S3 bucket with
 
     Example:
 
-    `inductiva storage export large_dataset.csv --bucket-name my-s3-bucket --part-size-MB 100`
+    `inductiva storage export large_dataset.csv --bucket-name my-s3-bucket --part-size 100`
 
     This configures each chunk to be at least 100MB, optimizing for large file transfers.
