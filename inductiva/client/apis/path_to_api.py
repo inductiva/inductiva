@@ -3,18 +3,13 @@ import typing_extensions
 from inductiva.client.paths import PathValues
 from inductiva.client.apis.paths.tasks_auth import TasksAuth
 from inductiva.client.apis.paths.tasks_submit import TasksSubmit
-from inductiva.client.apis.paths.tasks_task_id_input_upload_url import TasksTaskIdInputUploadUrl
 from inductiva.client.apis.paths.tasks_task_id_input_uploaded import TasksTaskIdInputUploaded
 from inductiva.client.apis.paths.tasks_task_id import TasksTaskId
 from inductiva.client.apis.paths.tasks import Tasks
 from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
-from inductiva.client.apis.paths.tasks_task_id_output_list import TasksTaskIdOutputList
-from inductiva.client.apis.paths.tasks_task_id_download_input_url import TasksTaskIdDownloadInputUrl
-from inductiva.client.apis.paths.tasks_task_id_download_output_url import TasksTaskIdDownloadOutputUrl
 from inductiva.client.apis.paths.tasks_task_id_resubmit import TasksTaskIdResubmit
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDisableLogs
-from inductiva.client.apis.paths.tasks_task_id_files import TasksTaskIdFiles
 from inductiva.client.apis.paths.tasks_task_id_register import TasksTaskIdRegister
 from inductiva.client.apis.paths.tasks_task_id_offer import TasksTaskIdOffer
 from inductiva.client.apis.paths.tasks_task_id_message import TasksTaskIdMessage
@@ -64,14 +59,15 @@ from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
 from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_cost import StorageCost
 from inductiva.client.apis.paths.storage_contents import StorageContents
-from inductiva.client.apis.paths.storage_input_url import StorageInputUrl
+from inductiva.client.apis.paths.storage_zip_contents import StorageZipContents
 from inductiva.client.apis.paths.storage_signed_urls import StorageSignedUrls
 from inductiva.client.apis.paths.storage_input_notify import StorageInputNotify
 from inductiva.client.apis.paths.storage_input_remote import StorageInputRemote
 from inductiva.client.apis.paths.storage_ import Storage
-from inductiva.client.apis.paths.storage_export import StorageExport
 from inductiva.client.apis.paths.storage_operations_operation_id import StorageOperationsOperationId
 from inductiva.client.apis.paths.storage_operations import StorageOperations
+from inductiva.client.apis.paths.storage_export_multipart import StorageExportMultipart
+from inductiva.client.apis.paths.storage_update_operation_status import StorageUpdateOperationStatus
 from inductiva.client.apis.paths.version import Version
 from inductiva.client.apis.paths.version_check import VersionCheck
 from inductiva.client.apis.paths.users_quotas import UsersQuotas
@@ -97,8 +93,6 @@ PathToApi = typing_extensions.TypedDict(
             TasksAuth,
         PathValues.TASKS_SUBMIT:
             TasksSubmit,
-        PathValues.TASKS_TASK_ID_INPUT_UPLOAD_URL:
-            TasksTaskIdInputUploadUrl,
         PathValues.TASKS_TASK_ID_INPUT_UPLOADED:
             TasksTaskIdInputUploaded,
         PathValues.TASKS_TASK_ID:
@@ -107,20 +101,12 @@ PathToApi = typing_extensions.TypedDict(
             Tasks,
         PathValues.TASKS_TASK_ID_STATUS:
             TasksTaskIdStatus,
-        PathValues.TASKS_TASK_ID_OUTPUT_LIST:
-            TasksTaskIdOutputList,
-        PathValues.TASKS_TASK_ID_DOWNLOAD_INPUT_URL:
-            TasksTaskIdDownloadInputUrl,
-        PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:
-            TasksTaskIdDownloadOutputUrl,
         PathValues.TASKS_TASK_ID_RESUBMIT:
             TasksTaskIdResubmit,
         PathValues.TASKS_TASK_ID_KILL:
             TasksTaskIdKill,
         PathValues.TASKS_TASK_ID_DISABLE_LOGS:
             TasksTaskIdDisableLogs,
-        PathValues.TASKS_TASK_ID_FILES:
-            TasksTaskIdFiles,
         PathValues.TASKS_TASK_ID_REGISTER:
             TasksTaskIdRegister,
         PathValues.TASKS_TASK_ID_OFFER:
@@ -219,8 +205,8 @@ PathToApi = typing_extensions.TypedDict(
             StorageCost,
         PathValues.STORAGE_CONTENTS:
             StorageContents,
-        PathValues.STORAGE_INPUT_URL:
-            StorageInputUrl,
+        PathValues.STORAGE_ZIPCONTENTS:
+            StorageZipContents,
         PathValues.STORAGE_SIGNEDURLS:
             StorageSignedUrls,
         PathValues.STORAGE_INPUT_NOTIFY:
@@ -229,12 +215,14 @@ PathToApi = typing_extensions.TypedDict(
             StorageInputRemote,
         PathValues.STORAGE_:
             Storage,
-        PathValues.STORAGE_EXPORT:
-            StorageExport,
         PathValues.STORAGE_OPERATIONS_OPERATION_ID:
             StorageOperationsOperationId,
         PathValues.STORAGE_OPERATIONS:
             StorageOperations,
+        PathValues.STORAGE_EXPORT_MULTIPART:
+            StorageExportMultipart,
+        PathValues.STORAGE_UPDATE_OPERATION_STATUS:
+            StorageUpdateOperationStatus,
         PathValues.VERSION:
             Version,
         PathValues.VERSIONCHECK:
@@ -278,8 +266,6 @@ path_to_api = PathToApi({
         TasksAuth,
     PathValues.TASKS_SUBMIT:
         TasksSubmit,
-    PathValues.TASKS_TASK_ID_INPUT_UPLOAD_URL:
-        TasksTaskIdInputUploadUrl,
     PathValues.TASKS_TASK_ID_INPUT_UPLOADED:
         TasksTaskIdInputUploaded,
     PathValues.TASKS_TASK_ID:
@@ -288,20 +274,12 @@ path_to_api = PathToApi({
         Tasks,
     PathValues.TASKS_TASK_ID_STATUS:
         TasksTaskIdStatus,
-    PathValues.TASKS_TASK_ID_OUTPUT_LIST:
-        TasksTaskIdOutputList,
-    PathValues.TASKS_TASK_ID_DOWNLOAD_INPUT_URL:
-        TasksTaskIdDownloadInputUrl,
-    PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:
-        TasksTaskIdDownloadOutputUrl,
     PathValues.TASKS_TASK_ID_RESUBMIT:
         TasksTaskIdResubmit,
     PathValues.TASKS_TASK_ID_KILL:
         TasksTaskIdKill,
     PathValues.TASKS_TASK_ID_DISABLE_LOGS:
         TasksTaskIdDisableLogs,
-    PathValues.TASKS_TASK_ID_FILES:
-        TasksTaskIdFiles,
     PathValues.TASKS_TASK_ID_REGISTER:
         TasksTaskIdRegister,
     PathValues.TASKS_TASK_ID_OFFER:
@@ -400,8 +378,8 @@ path_to_api = PathToApi({
         StorageCost,
     PathValues.STORAGE_CONTENTS:
         StorageContents,
-    PathValues.STORAGE_INPUT_URL:
-        StorageInputUrl,
+    PathValues.STORAGE_ZIPCONTENTS:
+        StorageZipContents,
     PathValues.STORAGE_SIGNEDURLS:
         StorageSignedUrls,
     PathValues.STORAGE_INPUT_NOTIFY:
@@ -410,12 +388,14 @@ path_to_api = PathToApi({
         StorageInputRemote,
     PathValues.STORAGE_:
         Storage,
-    PathValues.STORAGE_EXPORT:
-        StorageExport,
     PathValues.STORAGE_OPERATIONS_OPERATION_ID:
         StorageOperationsOperationId,
     PathValues.STORAGE_OPERATIONS:
         StorageOperations,
+    PathValues.STORAGE_EXPORT_MULTIPART:
+        StorageExportMultipart,
+    PathValues.STORAGE_UPDATE_OPERATION_STATUS:
+        StorageUpdateOperationStatus,
     PathValues.VERSION:
         Version,
     PathValues.VERSIONCHECK:

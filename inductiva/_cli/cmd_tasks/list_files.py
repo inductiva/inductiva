@@ -15,7 +15,7 @@ def list_files(args: argparse.Namespace, fout: TextIO = sys.stdout):
     if not valid:
         print(err_msg, file=sys.stderr)
         return 1
-    directories = asyncio.run(task._list_files())  # pylint: disable=protected-access
+    directories = asyncio.run(task.list_files())  # pylint: disable=protected-access
     print(directories, file=fout)
     return 0
 

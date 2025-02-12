@@ -1,4 +1,7 @@
 """Methods to interact with the user storage resources."""
+from dataclasses import dataclass
+import time
+import logging
 import os
 import time
 import tqdm
@@ -130,6 +133,64 @@ def _print_contents_table(contents):
     )
 
 
+def get_signed_urls(
+    paths: List[str],
+    operation: Literal["upload", "download"],
+) -> List[str]:
+    api_instance = storage_api.StorageApi(inductiva.api.get_client())
+    signed_urls = api_instance.get_signed_urls(query_params={
+        "paths": paths,
+        "operation": operation,
+    }).body
+    return signed_urls
+
+
+@dataclass
+class ZipFileInfo:
+    """Represents information about a file within a ZIP archive."""
+    name: str
+    size: int
+    compressed_size: int
+
+
+@dataclass
+class ZipArchiveInfo:
+    """Represents the total ZIP size and file contents of a ZIP archive."""
+    size: int
+    files: List[ZipFileInfo]
+
+
+def get_zip_contents(
+    path: str,
+    zip_relative_path: str = "",
+) -> ZipArchiveInfo:
+    """
+    Retrieve the contents of a ZIP archive from a given path.
+
+    Args:
+        path (str): The full path to the ZIP archive.
+        zip_relative_path (str, optional): A relative path inside the ZIP 
+            archive to filter the contents. Defaults to an empty string, 
+            which lists all files within the archive.
+
+    Returns:
+        ZipArchiveInfo: An object containing the total size of the ZIP archive
+            and a list of `ZipFileInfo` objects representing the files 
+            within the specified ZIP archive.
+    """
+    api_instance = storage_api.StorageApi(inductiva.api.get_client())
+    query_params = {"path": path, "zip_relative_path": zip_relative_path}
+    response_body = api_instance.get_zip_contents(query_params).body
+    files = [ZipFileInfo(
+        name=str(file["name"]),
+        size=int(file["size"]) \
+            if file["size"] else None,
+        compressed_size=int(file["compressed_size"]) \
+            if file["compressed_size"] else None,
+    ) for file in response_body["contents"]]
+    return ZipArchiveInfo(size=int(response_body["size"]), files=files)
+
+
 def upload_from_url(
     url: str,
     remote_dir: str,
@@ -159,7 +220,6 @@ def upload_from_url(
     api_instance.upload_from_url(query_params={
         "url": url,
         "path": remote_path,
-        "unzip": "f",
     },)
     logging.info("File is being uploaded...")
     logging.info("You can use 'inductiva storage ls' to check the status.")
@@ -199,26 +259,19 @@ def upload(
 
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
-    api_response = methods.get_upload_url(
-        api_instance.get_upload_url,
-        query_params={"paths": remote_file_paths},
-    )
+    urls = get_signed_urls(paths=remote_file_paths, operation="upload")
 
     with tqdm.tqdm(total=total_size,
                    unit="B",
                    unit_scale=True,
                    unit_divisor=1000) as progress_bar:
 
-        for response in api_response:
-            method = response["method"]
-            url = response["url"]
-            remote_file_path = response["file_path"]
-
+        for url, remote_file_path in zip(urls, remote_file_paths):
             file_path = remote_file_path.removeprefix(f"{remote_dir}/")
             local_file_path = os.path.join(local_dir, file_path)
 
             try:
-                methods.upload_file(api_instance, local_file_path, method, url,
+                methods.upload_file(api_instance, local_file_path, "PUT", url,
                                     progress_bar)
 
                 methods.notify_upload_complete(

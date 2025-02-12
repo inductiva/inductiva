@@ -24,21 +24,30 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.providers import Providers
-from inductiva.client.model.file_upload_url import FileUploadUrl
+from inductiva.client.model.operation_status import OperationStatus
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
-ProviderIdSchema = Providers
+OperationIdSchema = schemas.UUIDSchema
+StatusSchema = OperationStatus
+ErrorMessageSchema = schemas.StrSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
-    'RequestRequiredQueryParams', {})
-RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams', {
-        'provider_id': typing.Union[
-            ProviderIdSchema,
+    'RequestRequiredQueryParams', {
+        'operation_id': typing.Union[
+            OperationIdSchema,
+            str,
+            uuid.UUID,
         ],
-    },
-    total=False)
+        'status': typing.Union[
+            StatusSchema,
+        ],
+        'error_message': typing.Union[
+            ErrorMessageSchema,
+            str,
+        ],
+    })
+RequestOptionalQueryParams = typing_extensions.TypedDict(
+    'RequestOptionalQueryParams', {}, total=False)
 
 
 class RequestQueryParams(RequestRequiredQueryParams,
@@ -46,36 +55,28 @@ class RequestQueryParams(RequestRequiredQueryParams,
     pass
 
 
-request_query_provider_id = api_client.QueryParameter(
-    name="provider_id",
+request_query_operation_id = api_client.QueryParameter(
+    name="operation_id",
     style=api_client.ParameterStyle.FORM,
-    schema=ProviderIdSchema,
+    schema=OperationIdSchema,
+    required=True,
     explode=True,
 )
-# Path params
-TaskIdSchema = schemas.StrSchema
-RequestRequiredPathParams = typing_extensions.TypedDict(
-    'RequestRequiredPathParams', {
-        'task_id': typing.Union[
-            TaskIdSchema,
-            str,
-        ],
-    })
-RequestOptionalPathParams = typing_extensions.TypedDict(
-    'RequestOptionalPathParams', {}, total=False)
-
-
-class RequestPathParams(RequestRequiredPathParams, RequestOptionalPathParams):
-    pass
-
-
-request_path_task_id = api_client.PathParameter(
-    name="task_id",
-    style=api_client.ParameterStyle.SIMPLE,
-    schema=TaskIdSchema,
+request_query_status = api_client.QueryParameter(
+    name="status",
+    style=api_client.ParameterStyle.FORM,
+    schema=StatusSchema,
     required=True,
+    explode=True,
 )
-SchemaFor200ResponseBodyApplicationJson = FileUploadUrl
+request_query_error_message = api_client.QueryParameter(
+    name="error_message",
+    style=api_client.ParameterStyle.FORM,
+    schema=ErrorMessageSchema,
+    required=True,
+    explode=True,
+)
+SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
 @dataclass
@@ -121,10 +122,9 @@ _all_accept_content_types = ('application/json',)
 class BaseApi(api_client.Api):
 
     @typing.overload
-    def _get_input_upload_url_oapg(
+    def _update_export_operation_status_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -135,11 +135,10 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _get_input_upload_url_oapg(
+    def _update_export_operation_status_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -147,10 +146,9 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _get_input_upload_url_oapg(
+    def _update_export_operation_status_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -161,38 +159,29 @@ class BaseApi(api_client.Api):
     ]:
         ...
 
-    def _get_input_upload_url_oapg(
+    def _update_export_operation_status_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         """
-        Get Input Upload Url
+        Update Export Operation Status
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
         self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
-        self._verify_typed_dict_inputs_oapg(RequestPathParams, path_params)
         used_path = path.value
 
-        _path_params = {}
-        for parameter in (request_path_task_id,):
-            parameter_data = path_params.get(parameter.name, schemas.unset)
-            if parameter_data is schemas.unset:
-                continue
-            serialized_data = parameter.serialize(parameter_data)
-            _path_params.update(serialized_data)
-
-        for k, v in _path_params.items():
-            used_path = used_path.replace('{%s}' % k, v)
-
         prefix_separator_iterator = None
-        for parameter in (request_query_provider_id,):
+        for parameter in (
+                request_query_operation_id,
+                request_query_status,
+                request_query_error_message,
+        ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
                 continue
@@ -212,8 +201,9 @@ class BaseApi(api_client.Api):
 
         response = self.api_client.call_api(
             resource_path=used_path,
-            method='get'.upper(),
+            method='post'.upper(),
             headers=_headers,
+            auth_settings=_auth,
             stream=stream,
             timeout=timeout,
         )
@@ -239,14 +229,13 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class GetInputUploadUrl(BaseApi):
+class UpdateExportOperationStatus(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def get_input_upload_url(
+    def update_export_operation_status(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -257,11 +246,10 @@ class GetInputUploadUrl(BaseApi):
         ...
 
     @typing.overload
-    def get_input_upload_url(
+    def update_export_operation_status(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -269,10 +257,9 @@ class GetInputUploadUrl(BaseApi):
         ...
 
     @typing.overload
-    def get_input_upload_url(
+    def update_export_operation_status(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -283,32 +270,29 @@ class GetInputUploadUrl(BaseApi):
     ]:
         ...
 
-    def get_input_upload_url(
+    def update_export_operation_status(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_input_upload_url_oapg(
+        return self._update_export_operation_status_oapg(
             query_params=query_params,
-            path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
             skip_deserialization=skip_deserialization)
 
 
-class ApiForget(BaseApi):
+class ApiForpost(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names
 
     @typing.overload
-    def get(
+    def post(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -319,11 +303,10 @@ class ApiForget(BaseApi):
         ...
 
     @typing.overload
-    def get(
+    def post(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -331,10 +314,9 @@ class ApiForget(BaseApi):
         ...
 
     @typing.overload
-    def get(
+    def post(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -345,18 +327,16 @@ class ApiForget(BaseApi):
     ]:
         ...
 
-    def get(
+    def post(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_input_upload_url_oapg(
+        return self._update_export_operation_status_oapg(
             query_params=query_params,
-            path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,

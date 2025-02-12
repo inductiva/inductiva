@@ -1,8 +1,10 @@
 """CaNS example"""
 import inductiva
 
-# Allocate machine
-machine_group = inductiva.resources.MachineGroup("c3d-standard-180")
+# Allocate Google cloud machine
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c3d-standard-180")
 
 # Initialize the Simulator
 cans = inductiva.simulators.CaNS()
@@ -10,10 +12,10 @@ cans = inductiva.simulators.CaNS()
 # Run simulation with config files in the input directory
 task = cans.run(input_dir="path/to/my/cans/files",
                 sim_config_filename="my_config_file.nml",
-                on=machine_group)
+                on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
