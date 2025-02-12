@@ -46,7 +46,7 @@ class BaseMachineGroup(ABC):
         auto_terminate_ts: Moment in which the resource will be
           automatically terminated.
     """
-    # Construtor arguments
+    # Constructor arguments
     machine_type: str
     provider: Union[machine_types.ProviderType, str] = "GCP"
     threads_per_core: int = 2
@@ -54,7 +54,7 @@ class BaseMachineGroup(ABC):
     max_idle_time: Optional[Union[datetime.timedelta, int]] = None
     auto_terminate_ts: Optional[datetime.datetime] = None
 
-    # Internal arguments
+    # Internal attributes
     _free_space_threshold_gb = 5
     _size_increment_gb = 10
     _id = None
@@ -250,11 +250,11 @@ class BaseMachineGroup(ABC):
         self.quota_usage = body.get("quota_usage") or {}
         # Lifecycle configuration parameters are updated with default values
         # from the API response if they were not provided by the user
-        self._max_idle_time = self._seconds_to_timedelta(
+        self.max_idle_time = self._seconds_to_timedelta(
             body.get("max_idle_time"))
         self._idle_seconds = self._seconds_to_timedelta(
             body.get("idle_seconds"))
-        self._auto_terminate_ts = self._iso_to_datetime(
+        self.auto_terminate_ts = self._iso_to_datetime(
             body.get("auto_terminate_ts"))
         self.total_ram_gb = body.get("total_ram_gb")
         self._cost_per_hour = body.get("cost_per_hour")

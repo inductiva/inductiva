@@ -41,12 +41,12 @@ class MachineGroup(machines_base.BaseMachineGroup):
         num_machines: The number of virtual machines to launch.
         spot: Whether to use spot machines.
     """
-    # Construtor arguments
+    # Constructor arguments
     auto_resize_disk_max_gb: Optional[int] = None
     num_machines: int = 1
     spot: bool = True
 
-    # Internal arguments
+    # Internal attributes
     _is_elastic = False
 
     def __post_init__(self):
@@ -127,13 +127,13 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             can scale up to.
         spot: Whether to use spot machines.
     """
-    # Construtor arguments
+    # Constructor arguments
     auto_resize_disk_max_gb: Optional[int] = None
     min_machines: int = 1
     max_machines: int = 2
     spot: bool = True
 
-    # Internal arguments
+    # Internal attributes
     _is_elastic = True
 
     def __post_init__(self):
@@ -211,10 +211,10 @@ class MPICluster(machines_base.BaseMachineGroup):
             automatically terminated.
         num_machines: The number of virtual machines to launch.
     """
-    # Construtor arguments
+    # Constructor arguments
     num_machines: int = 2
 
-    # Internal arguments
+    # Internal attributes
     auto_resize_disk_max_gb = None
     _type = machines_base.ResourceType.MPI.value
     _is_elastic = False
