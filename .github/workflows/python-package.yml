@@ -44,15 +44,18 @@ jobs:
       if: ${{ always() }}
       run: # We exclude the auto-generated Python client folder from pylint validation
         find . -type f -not -path "./inductiva/client/*" -name '*.py' | xargs pylint
-    - name: Test with pytest
+    - name: Set env variables
       if: ${{ always() }}
       run: |
         if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-        export INDUCTIVA_API_KEY=${{ secrets.API_TEST_KEY }}
+        echo "INDUCTIVA_API_KEY=${{ secrets.API_TEST_KEY }}" >> $GITHUB_ENV
         else
-        export INDUCTIVA_API_KEY=${{ secrets.API_DEV_TEST_KEY }}
-        export INDUCTIVA_API_URL=https://api-dev.inductiva.ai
-        fi
+        echo "INDUCTIVA_API_KEY=${{ secrets.API_DEV_TEST_KEY }}" >> $GITHUB_ENV
+        echo "INDUCTIVA_API_URL=https://api-dev.inductiva.ai" >> $GITHUB_ENV
+        fi  
+    - name: Test with pytest
+      if: ${{ always() }}
+      run: |
         pytest --suppress-no-test-exit-code
     - name: Link Checker
       uses: lycheeverse/lychee-action@v1.9.0
@@ -62,12 +65,6 @@ jobs:
     - name: Coverage report
       if: ${{ always() }}
       run: | # conftest crashes with coverage due to markdown-docs
-        if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-        export INDUCTIVA_API_KEY=${{ secrets.API_TEST_KEY }}
-        else
-        export INDUCTIVA_API_KEY=${{ secrets.API_DEV_TEST_KEY }}
-        export INDUCTIVA_API_URL=https://api-dev.inductiva.ai
-        fi
         coverage run --source=./inductiva --omit=*/_cli/*,*/client/*,*/tests/* -m pytest --noconftest
         coverage report -m
     - name: Generate badge
