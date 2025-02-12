@@ -11,7 +11,8 @@ input_dir = inductiva.utils.download_from_url(
     unzip=True)
 
 # List of commands to run
-commands = ["openfast 5MW_OC4Semi_WSt_WavesWN.fst"]
+commands = ["openfast 5MW_OC4Semi_WSt_WavesWN/"
+            "5MW_OC4Semi_WSt_WavesWN.fst"]
 
 # Initialize OpenFAST simulator
 openfast = inductiva.simulators.OpenFAST( \
