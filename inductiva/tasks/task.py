@@ -335,6 +335,7 @@ class Task:
         """Initialize the instance from a task ID."""
         self.id = task_id
         self._api = tasks_api.TasksApi(api.get_client())
+        self.file_tracker = FileTracker()
         self._info = None
         self._status = None
         self._tasks_ahead: Optional[int] = None
@@ -869,18 +870,19 @@ class Task:
             print that information in a formatted way.
         """
         # TODO: the output filename shouldn't be hardcoded
-        archive_info = storage.get_zip_contents(path=f"{self.id}/output.zip")
+        archive_info = storage.get_zip_contents(path=f"{self.id}/output.zip",
+                                                zip_relative_path="artifacts/")
 
         output_files = [
             output_info.FileInfo(
-                name=file_info["name"],
-                size=int(file_info["size"]),
-                compressed_size=int(file_info["compressed_size"]),
-            ) for file_info in archive_info["contents"]
+                name=file_info.name,
+                size=file_info.size,
+                compressed_size=file_info.compressed_size,
+            ) for file_info in archive_info.files
         ]
 
         return output_info.TaskOutputInfo(
-            total_size_bytes=int(archive_info["size"]),
+            total_size_bytes=archive_info.size,
             files=output_files,
         )
 
@@ -1123,10 +1125,10 @@ class Task:
         Returns:
             The result of the operation.
         """
-        self.file_tracker = FileTracker()
+        pc = self.file_tracker.create_peer_connection()
         message_queue, end_event = await self.file_tracker.setup_channel(
-            operation, follow=follow, **kwargs)
-        if not await self.file_tracker.connect_to_task(self._api, self.id):
+            pc, operation, follow=follow, **kwargs)
+        if not await self.file_tracker.connect_to_task(self._api, pc, self.id):
             yield "Failed to connect to the task."
             return
         while not end_event.is_set():
@@ -1141,14 +1143,14 @@ class Task:
 
             yield formatter(message["message"])
 
-        await self.file_tracker.cleanup()
+        await pc.close()
 
     async def close_stream(self):
         """Close the stream to the task."""
         if self.file_tracker is not None:
             await self.file_tracker.cleanup()
 
-    async def _list_files(self) -> str:
+    async def list_files(self) -> str:
         """List the files in the task's working directory."""
 
         directory = [
@@ -1157,7 +1159,7 @@ class Task:
         ]
         return directory[0]
 
-    async def _tail_file(self, filename: str, n_lines: int = 10, follow=False):
+    async def tail_file(self, filename: str, n_lines: int = 10, follow=False):
         """Get the last n_lines lines of a 
         file in the task's working directory."""
 

@@ -1,8 +1,10 @@
 """Quantum ESPRESSO example."""
 import inductiva
 
-# Allocate machine
-machine_group = inductiva.resources.MachineGroup("c3d-standard-180")
+# Allocate Google cloud machine
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c3d-standard-180")
 
 # Initialize QuantumEspresso simulator
 qe = inductiva.simulators.QuantumEspresso()
@@ -14,10 +16,10 @@ my_qe_command = [
 # Run simulation
 task = qe.run(input_dir="/path/to/my/quantumEspresso/files",
               commands=my_qe_command,
-              on=machine_group)
+              on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()

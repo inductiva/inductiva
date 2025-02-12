@@ -1,8 +1,10 @@
 """GROMACS example."""
 import inductiva
 
-# Allocate machine
-machine_group = inductiva.resources.MachineGroup("c3d-standard-180")
+# Allocate Google cloud machine
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c3d-standard-180")
 
 my_gmx_command = [
     # List the GROMACS commands you wish to execute
@@ -14,10 +16,10 @@ gromacs = inductiva.simulators.GROMACS()
 # Run simulation with config files in the input directory
 task = gromacs.run(input_dir="path/to/my/gromacs/files",
                    commands=my_gmx_command,
-                   on=machine_group)
+                   on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()

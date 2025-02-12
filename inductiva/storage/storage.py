@@ -1,5 +1,6 @@
 """Methods to interact with the user storage resources."""
-
+from dataclasses import dataclass
+import time
 import logging
 import math
 import os
@@ -156,9 +157,50 @@ def get_signed_urls(
     return signed_urls
 
 
-def get_zip_contents(path: str) -> List[models.ZipArchiveInfo]:
+@dataclass
+class ZipFileInfo:
+    """Represents information about a file within a ZIP archive."""
+    name: str
+    size: int
+    compressed_size: int
+
+
+@dataclass
+class ZipArchiveInfo:
+    """Represents the total ZIP size and file contents of a ZIP archive."""
+    size: int
+    files: List[ZipFileInfo]
+
+
+def get_zip_contents(
+    path: str,
+    zip_relative_path: str = "",
+) -> ZipArchiveInfo:
+    """
+    Retrieve the contents of a ZIP archive from a given path.
+
+    Args:
+        path (str): The full path to the ZIP archive.
+        zip_relative_path (str, optional): A relative path inside the ZIP 
+            archive to filter the contents. Defaults to an empty string, 
+            which lists all files within the archive.
+
+    Returns:
+        ZipArchiveInfo: An object containing the total size of the ZIP archive
+            and a list of `ZipFileInfo` objects representing the files 
+            within the specified ZIP archive.
+    """
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
-    return api_instance.get_zip_contents(query_params={"path": path}).body
+    query_params = {"path": path, "zip_relative_path": zip_relative_path}
+    response_body = api_instance.get_zip_contents(query_params).body
+    files = [ZipFileInfo(
+        name=str(file["name"]),
+        size=int(file["size"]) \
+            if file["size"] else None,
+        compressed_size=int(file["compressed_size"]) \
+            if file["compressed_size"] else None,
+    ) for file in response_body["contents"]]
+    return ZipArchiveInfo(size=int(response_body["size"]), files=files)
 
 
 def upload_from_url(

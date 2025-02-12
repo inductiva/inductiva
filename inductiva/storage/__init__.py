@@ -10,4 +10,6 @@ from .storage import (
     remove_workspace,
     upload,
     upload_from_url,
+    ZipArchiveInfo,
+    ZipFileInfo,
 )
