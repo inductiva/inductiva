@@ -107,7 +107,6 @@ def list_machine_types_available(args):
         memory = machine_info[1]
         vcpus = machine.num_cpus
         gpus = machine.num_gpus if machine.num_gpus else None
-        gpu_name = machine.gpu_name if machine.gpu_name else None
         config = machine_info[3] if len(machine_info) > 3 else None
 
         if family not in machines_dict:
@@ -118,7 +117,6 @@ def list_machine_types_available(args):
             machines_dict[family][memory][config] = {
                 "vcpus": [],
                 "gpus": [],
-                "gpu_name": gpu_name
             }
 
         if vcpus is not None:
