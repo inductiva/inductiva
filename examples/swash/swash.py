@@ -10,9 +10,10 @@ cloud_machine = inductiva.resources.MachineGroup( \
 swash = inductiva.simulators.SWASH(version="10.05")
 
 # Run simulation with config files in the input directory
-task = swash.run(input_dir="/path/to/my/swash/files",
-                 sim_config_filename="my_config_file.sws",
-                 on=cloud_machine)
+task = swash.run( \
+    input_dir="/path/to/my/swash/files",
+    sim_config_filename="my_config_file.sws",
+    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()

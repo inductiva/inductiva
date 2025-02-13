@@ -14,9 +14,10 @@ my_gmx_command = [
 gromacs = inductiva.simulators.GROMACS()
 
 # Run simulation with config files in the input directory
-task = gromacs.run(input_dir="path/to/my/gromacs/files",
-                   commands=my_gmx_command,
-                   on=cloud_machine)
+task = gromacs.run( \
+    input_dir="path/to/my/gromacs/files",
+    commands=my_gmx_command,
+    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()

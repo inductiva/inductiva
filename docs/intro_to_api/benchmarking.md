@@ -191,10 +191,15 @@ benchmark.terminate()
 
 ```py
 # Export the benchmark results in CSV format
-benchmark.export(fmt="csv", filename="benchmark_results.csv")
+benchmark.export(
+    fmt="csv",
+    filename="benchmark_results.csv")
 
 # Export only distinct data for successfull tasks in JSON format
-benchmark.export(fmt="json", select="distinct", status="success")
+benchmark.export(
+    fmt="json",
+    select="distinct",
+    status="success")
 ```
 
 ---
