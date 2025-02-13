@@ -17,7 +17,6 @@ def pretty_print_machines_info(machines_dict):
     header_formatters = [
         lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
     ]
-    print()
 
     final_table = {
             "Machine Type": [],
@@ -26,15 +25,23 @@ def pretty_print_machines_info(machines_dict):
             "Memory (GB)": [],
             "Price/Hour": [],
         }
+    first_line = True
     for machine_type, details in machines_dict.items():
+        if not first_line:
+            # Add's an empty line between the machine types
+            final_table["Machine Type"].append("")
+            final_table["vCPUS"].append("")
+            final_table["GPUS"].append("")
+            final_table["Memory (GB)"].append("")
+            final_table["Price/Hour"].append("")
+        first_line = False
+
         final_table["Machine Type"].append(machine_type)
         for i, vcpu in enumerate(details["vcpus"]):
             final_table["vCPUS"].append(vcpu)
             final_table["GPUS"].append(details["gpus"][i] if details["gpus"] else "n/a")
             final_table["Memory (GB)"].append(details["memory"])
             final_table["Price/Hour"].append(details["price"])
-    
-    print(final_table)
 
     res_table = format_utils.get_tabular_str(
         final_table,
