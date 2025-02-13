@@ -23,7 +23,7 @@ def pretty_print_machines_info(machines_dict):
         "vCPUS": [],
         "GPUS": [],
         "Memory (GB)": [],
-        "Price/Hour": [],
+        "Price/Hour (USD)": [],
     }
     first_line = True
     for machine_type, details in machines_dict.items():
@@ -33,7 +33,7 @@ def pretty_print_machines_info(machines_dict):
             final_table["vCPUS"].append("")
             final_table["GPUS"].append("")
             final_table["Memory (GB)"].append("")
-            final_table["Price/Hour"].append("")
+            final_table["Price/Hour (USD)"].append("")
         first_line = False
 
         final_table["Machine Type"].append(machine_type)
@@ -42,7 +42,7 @@ def pretty_print_machines_info(machines_dict):
             final_table["GPUS"].append(
                 details["gpus"][i] if details["gpus"] else "n/a")
             final_table["Memory (GB)"].append(details["memory"])
-            final_table["Price/Hour"].append(details["price"])
+            final_table["Price/Hour (USD)"].append(details["price"])
 
     res_table = format_utils.get_tabular_str(
         final_table, header_formatters=header_formatters, indentation_level=4)
@@ -57,7 +57,7 @@ def list_machine_types_available(args):
 
     resources_available = resources.machine_types.get_available_machine_types(
         provider, machine_family)
-    resources_available.sort(key=lambda x: x.machine_type)
+    resources_available.sort(key=lambda x: (x.machine_type.split("-")[:-1], x.num_cpus))
 
     machines_dict = {}
 
@@ -80,12 +80,9 @@ def list_machine_types_available(args):
             "price": price
         }
 
-        if vcpus is not None:
-            # Sorted insertion of vcpus
-            bisect.insort(machines_dict[machine_type]["vcpus"], int(vcpus))
+        machines_dict[machine_type]["vcpus"].append(int(vcpus))
         if gpus is not None:
-            # Sorted insertion of vcpus
-            bisect.insort(machines_dict[machine_type]["gpus"], int(gpus))
+            machines_dict[machine_type]["gpus"].append(int(gpus))
     pretty_print_machines_info(machines_dict)
 
 
