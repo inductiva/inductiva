@@ -58,7 +58,7 @@ def list_machine_types_available(args):
     resources_available = resources.machine_types.get_available_machine_types(
         provider, machine_family)
     resources_available.sort(key=lambda x: x.machine_type)
-    
+
     machines_dict = {}
 
     for machine in resources_available:
