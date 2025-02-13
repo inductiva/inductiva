@@ -588,10 +588,15 @@ runs, including specifying simulation parameters, running simulations, and expor
 <section id="example-4-exporting-benchmark-results">
 <h3>Example 4: Exporting Benchmark Results<a class="headerlink" href="#example-4-exporting-benchmark-results" title="Link to this heading">#</a></h3>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="c1"># Export the benchmark results in CSV format</span>
-<span class="n">benchmark</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;csv&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;benchmark_results.csv&quot;</span><span class="p">)</span>
+<span class="n">benchmark</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;csv&quot;</span><span class="p">,</span>
+    <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;benchmark_results.csv&quot;</span><span class="p">)</span>
 
 <span class="c1"># Export only distinct data for successfull tasks in JSON format</span>
-<span class="n">benchmark</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="s2">&quot;distinct&quot;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s2">&quot;success&quot;</span><span class="p">)</span>
+<span class="n">benchmark</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">,</span>
+    <span class="n">select</span><span class="o">=</span><span class="s2">&quot;distinct&quot;</span><span class="p">,</span>
+    <span class="n">status</span><span class="o">=</span><span class="s2">&quot;success&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <hr class="docutils" />

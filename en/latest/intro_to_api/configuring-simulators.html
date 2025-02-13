@@ -416,24 +416,27 @@ referred. Below we present the case of two simulators that follow this pattern:<
 <span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
 
 <span class="c1"># Instantiate machine group</span>
-<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">)</span>
-<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">cloud_machine</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;GCP&quot;</span><span class="p">,</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">)</span>
 
 <span class="c1"># Set simulation input directory</span>
 <span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
     <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
-    <span class="s2">&quot;swash-input-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="s2">&quot;swash-input-example.zip&quot;</span><span class="p">,</span>
+    <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Instantiate the simulator</span>
 <span class="n">swash_simulator</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">SWASH</span><span class="p">()</span>
 
 <span class="c1"># Input directory contains the .sws config file, a bathymetry file and other files.</span>
-<span class="n">task</span> <span class="o">=</span> <span class="n">swash_simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
-                           <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;input.sws&quot;</span><span class="p">,</span>
-                           <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">swash_simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
+    <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;input.sws&quot;</span><span class="p">,</span>
+    <span class="n">on</span><span class="o">=</span><span class="n">cloud_machine</span><span class="p">)</span>
 
 <span class="c1"># Terminate the machine group</span>
-<span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+<span class="n">cloud_machine</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>SPlisHSPlasH:</strong> The main configuration file is a <code class="docutils literal notranslate"><span class="pre">.json</span></code> file.</p>
@@ -441,24 +444,27 @@ referred. Below we present the case of two simulators that follow this pattern:<
 <span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
 
 <span class="c1"># Instantiate machine group</span>
-<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">)</span>
-<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">cloud_machine</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;GCP&quot;</span><span class="p">,</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">)</span>
 
 <span class="c1"># Set simulation input directory</span>
 <span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
     <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
-    <span class="s2">&quot;splishsplash-input-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="s2">&quot;splishsplash-input-example.zip&quot;</span><span class="p">,</span>
+    <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Instantiate the simulator</span>
 <span class="n">splishsplash_simulator</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">SplishSplash</span><span class="p">()</span>
 
 <span class="c1"># Input directory contains the .json config file and a .obj file for the domain.</span>
-<span class="n">task</span> <span class="o">=</span> <span class="n">splishsplash_simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
-                                  <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">,</span>
-                                  <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">splishsplash_simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
+    <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">,</span>
+    <span class="n">on</span><span class="o">=</span><span class="n">cloud_machine</span><span class="p">)</span>
 
 <span class="c1"># Terminate the machine group</span>
-<span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+<span class="n">cloud_machine</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>As you can see, besides the input directory we pass one additional
@@ -481,24 +487,26 @@ with the configuration files for both commands.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
 
 <span class="c1"># Instantiate machine group</span>
-<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">)</span>
-<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">cloud_machine</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;GCP&quot;</span><span class="p">,</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">)</span>
 
 <span class="c1"># Set simulation input directory</span>
 <span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
     <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
-    <span class="s2">&quot;reef3d-input-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
+    <span class="s2">&quot;reef3d-input-example.zip&quot;</span><span class="p">,</span>
+    <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Instantiate the simulator</span>
 <span class="n">reef3d_simulator</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">REEF3D</span><span class="p">()</span>
 
 <span class="c1"># The files for the simulation are in the input directory.</span>
-<span class="n">task</span> <span class="o">=</span> <span class="n">reef3d_simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
-                            <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">reef3d_simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
+    <span class="n">on</span><span class="o">=</span><span class="n">cloud_machine</span><span class="p">)</span>
 
 <span class="c1"># Terminate the machine group</span>
-<span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+<span class="n">cloud_machine</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>In this specific case, REEF3D uses a pre-defined standard for the naming of the
@@ -523,13 +531,15 @@ list of commands and the input directory to run the respective executables in se
 <span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
 
 <span class="c1"># Instantiate machine group</span>
-<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">)</span>
-<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">cloud_machine</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;GCP&quot;</span><span class="p">,</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">)</span>
 
 <span class="c1"># Set simulation input directory</span>
 <span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
     <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
-    <span class="s2">&quot;openfoam-input-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="s2">&quot;openfoam-input-example.zip&quot;</span><span class="p">,</span>
+    <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Instantiate the simulator</span>
 <span class="n">openfoam_simulator</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">OpenFOAM</span><span class="p">()</span>
@@ -547,10 +557,13 @@ list of commands and the input directory to run the respective executables in se
 <span class="p">]</span>
 
 <span class="c1"># Run the simulation with the given input directory and commands</span>
-<span class="n">task</span> <span class="o">=</span> <span class="n">openfoam_simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="n">commands</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">openfoam_simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
+    <span class="n">commands</span><span class="o">=</span><span class="n">commands</span><span class="p">,</span>
+    <span class="n">on</span><span class="o">=</span><span class="n">cloud_machine</span><span class="p">)</span>
 
 <span class="c1"># Terminate the machine group</span>
-<span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+<span class="n">cloud_machine</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>For this case, the <code class="docutils literal notranslate"><span class="pre">commands</span></code> follow the usual approach used by OpenFOAM

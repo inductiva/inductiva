@@ -415,19 +415,21 @@ machine. The following piece of code illustrates this situation:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
 
 <span class="c1"># Instantiate machine group</span>
-<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">)</span>
-<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">cloud_machine</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span>
+    <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;GCP&quot;</span><span class="p">,</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">)</span>
 
 <span class="c1"># Initialize the simulator object</span>
 <span class="n">simulator</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">REEF3D</span><span class="p">()</span>
 
 <span class="c1"># Invoke the run() method of the simulator object. </span>
 <span class="c1"># This will trigger the packing and uploading the data</span>
-<span class="n">task</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;my_input_data_dir&quot;</span><span class="p">,</span>
-                     <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;my_input_data_dir&quot;</span><span class="p">,</span>
+    <span class="n">on</span><span class="o">=</span><span class="n">cloud_machine</span><span class="p">)</span>
 
 <span class="c1"># Terminate the machine group</span>
-<span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+<span class="n">cloud_machine</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The moment you invoke <code class="docutils literal notranslate"><span class="pre">run()</span></code> you start the uploading process. The folder <code class="docutils literal notranslate"><span class="pre">my_input_data_dir</span></code>

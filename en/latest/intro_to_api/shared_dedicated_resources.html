@@ -424,22 +424,25 @@ as an example.</p>
 
 <span class="c1"># Instantiate a MachineGroup object with 1 preemptible machine of type</span>
 <span class="c1"># c2-standard-30 and start it immediately</span>
-<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
-    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-30&quot;</span><span class="p">,</span> <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">cloud_machine</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="n">provider</span><span class="o">=</span><span class="s2">&quot;GCP&quot;</span><span class="p">,</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-30&quot;</span><span class="p">,</span>
+    <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">cloud_machine</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
 <span class="c1"># Initialize the SWASH simulator and run the simulation</span>
 <span class="c1"># in your just launched dedicated MachineGroup</span>
 <span class="n">swash</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">SWASH</span><span class="p">()</span>
-<span class="n">task</span> <span class="o">=</span> <span class="n">swash</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
-                 <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;input.sws&quot;</span><span class="p">,</span>
-                 <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">swash</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
+    <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;input.sws&quot;</span><span class="p">,</span>
+    <span class="n">on</span><span class="o">=</span><span class="n">cloud_machine</span><span class="p">)</span>
 
 <span class="c1"># Wait for the task to finish and download the outputs</span>
 <span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 
 <span class="c1"># Terminate your dedicated MachineGroup at the end of the simulation.</span>
-<span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+<span class="n">cloud_machine</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Running the simulation on a <a class="reference internal" href="#dedicated-resources">dedicated machine group</a> with

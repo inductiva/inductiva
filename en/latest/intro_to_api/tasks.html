@@ -416,18 +416,20 @@ to the API:</p>
 <span class="n">splishsplash_simulator</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">SplishSplash</span><span class="p">()</span>
 
 <span class="c1"># Run the SPlisHSPlasH simulation with the required .json config file</span>
-<span class="n">task</span> <span class="o">=</span> <span class="n">splishsplash_simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;splishsplash-input-example&quot;</span><span class="p">,</span>
-                                  <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">,</span>
-                                  <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">splishsplash_simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;splishsplash-input-example&quot;</span><span class="p">,</span>
+    <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">,</span>
+    <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 <span class="c1"># Example output: i4ir3kvv62odsfrhko4y8w2an</span>
 </pre></div>
 </div>
 <p>Note that a subsequent call to <code class="docutils literal notranslate"><span class="pre">splishsplash_simulator.run()</span></code> with the same
 input arguments would create a new, distinct task:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">task2</span> <span class="o">=</span> <span class="n">splishsplash_simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;splishsplash-input-example&quot;</span><span class="p">,</span>
-                                  <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">,</span>
-                                  <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">task2</span> <span class="o">=</span> <span class="n">splishsplash_simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;splishsplash-input-example&quot;</span><span class="p">,</span>
+    <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">,</span>
+    <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
 <span class="nb">print</span> <span class="p">(</span><span class="n">task2</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 <span class="c1"># Example output: k9muu1vq1fc6m2oyxm0n3n8y0</span>
 
