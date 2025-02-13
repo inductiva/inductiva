@@ -13,6 +13,7 @@ The simulators available in the current version of the API are:
 - [FDS](../simulators/FDS.md)
 - [FVCOM](../simulators/FVCOM.md)
 - [GROMACS](../simulators/GROMACS.md)
+- [GX](../simulators/GX.md)
 - [NWChem](../simulators/NWChem.md)
 - [OpenFOAM](../simulators/OpenFOAM.md)
 - [OpenFAST](../simulators/OpenFAST.md)

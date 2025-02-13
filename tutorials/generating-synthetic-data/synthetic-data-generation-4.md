@@ -91,8 +91,9 @@ After making these changes in our configuration file, executing our simulation w
 import inductiva
 
 # Launch a machine group with a c3-standard-4
-machine_group = inductiva.resources.MachineGroup("c3-standard-4")
-machine_group.start()
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c3-standard-4")
 
 # Set the path to the local directory where the template folder was downloaded
 template_dir = "./splishsplash-template-dir"
@@ -107,25 +108,27 @@ density = 2500                # A denser fluid compared to water 1000 kg/m^3
 # with the values of the variables defined above.
 rendered_dir = "./splishsplash-viscous-fluid/"
 
-inductiva.TemplateManager.render_dir(source_dir=template_dir,
-                                     target_dir=rendered_dir,
-                                     density=density,
-                                     viscosity=kinematic_viscosity,
-                                     initial_velocity=initial_velocity,
-                                     overwrite=True)
+inductiva.TemplateManager.render_dir(
+    source_dir=template_dir,
+    target_dir=rendered_dir,
+    density=density,
+    viscosity=kinematic_viscosity,
+    initial_velocity=initial_velocity,
+    overwrite=True)
 
 # Initialize the simulator and run the simulation
 SPlisHSPlasH = inductiva.simulators.SplishSplash()
-task = SPlisHSPlasH.run(input_dir=rendered_dir,
-                        sim_config_filename="config.json",
-                        on=machine_group)
+task = SPlisHSPlasH.run(
+    input_dir=rendered_dir,
+    sim_config_filename="config.json",
+    on=cloud_machine)
 
 # Wait for the simulation task to complete and download the results
 task.wait()
 
 # Ensure that the allocated resources are terminated
 # This is crucial to avoid incurring unnecessary costs from lingering resources
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
 ```

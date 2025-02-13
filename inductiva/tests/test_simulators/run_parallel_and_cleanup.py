@@ -88,8 +88,8 @@ def main():
     args = parser.parse_args()
 
     #checks if we are in the examples directory
-    if not os.path.basename(os.getcwd()) == "examples":
-        print("Run this script from the examples directory.")
+    if not os.path.basename(os.getcwd()) == "test_simulators":
+        print("Run this script from the test_simulators directory.")
         sys.exit(1)
 
     max_threads = args.max_threads

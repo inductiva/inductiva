@@ -101,8 +101,9 @@ with just a couple lines of code:
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2-standard-4")
 
 # Set path to the input directory with the SPlisHSPlasH configuration files
 input_dir = "splishsplash-base-dir"
@@ -111,14 +112,15 @@ input_dir = "splishsplash-base-dir"
 splishsplash = inductiva.simulators.SplishSplash()
 
 # Run the simulation task with the parameters defined in the .json file
-task = splishsplash.run(input_dir=input_dir,
-                        sim_config_filename="config.json",
-                        on=machine_group)
+task = splishsplash.run(
+    input_dir=input_dir,
+    sim_config_filename="config.json",
+    on=cloud_machine)
 
 # Wait for the simulation to complete and download the outputs
 task.wait()
 # Terminate the machine group
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
 ```

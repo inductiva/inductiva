@@ -99,7 +99,8 @@ Code Example:
 import inductiva
 
 # Specify the machine group
-machine_group = inductiva.resources.machine_groups.get_by_name("<machine-group-name>")
+machine_group = inductiva.resources.machine_groups.get_by_name(
+    machine_name="<machine-group-name>")
 
 # Download the input files
 input_dir = inductiva.utils.download_from_url(
@@ -121,7 +122,10 @@ commands = [
 
 # Initialize the GROMACS simulator and run the simulation
 gromacs = inductiva.simulators.GROMACS()
-task = gromacs.run(input_dir=input_dir, commands=commands, on=machine_group)
+task = gromacs.run(
+    input_dir=input_dir,
+    commands=commands,
+    on=machine_group)
 
 # Wait for the task to complete
 task.wait()

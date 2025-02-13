@@ -19,9 +19,12 @@ import inductiva
 
 # Instantiate a MachineGroup object with 5 preemptible machines of type
 # c2-standard-30 and start it immediately
-machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-30", num_machines=5, spot=True)
-machine_group.start()
+could_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2-standard-30",
+    num_machines=5,
+    spot=True)
+could_machine.start()
 ```
 
 ## 2. Preparing Simulation Inputs
@@ -31,7 +34,8 @@ Download and prepare the input files for your simulations:
 ```python
 # Download input files for the SWASH simulation
 template_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/swash-template-example.zip", unzip=True)
+    "https://storage.googleapis.com/inductiva-api-demo-files/swash-template-example.zip",
+    unzip=True)
 ```
 ## 3. Running the Simulations
 
@@ -55,9 +59,10 @@ for i, water_level in enumerate(water_levels_list):
                             overwrite=False)
 
     # Run the simulation on the dedicated MachineGroup
-    task = swash.run(input_dir=target_dir,
-                    sim_config_filename="input.sws",
-                    on=machine_group)
+    task = swash.run(
+        input_dir=target_dir,
+        sim_config_filename="input.sws",
+        on=could_machine)
 ```
 
 ## 4. Monitoring Simulations

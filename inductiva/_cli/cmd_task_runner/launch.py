@@ -9,8 +9,7 @@ from inductiva import _cli, constants, _api_key, api_url
 
 _docker_imported = True
 try:
-    import docker
-    from docker.errors import DockerException
+    from udocker.cli import UdockerCLI
 except ImportError:
     _docker_imported = False
 
@@ -44,97 +43,91 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
             file=fout)
         return
 
-    try:
-        client = docker.from_env()
-    except DockerException as e:
-        print(f"Failed to connect to Docker: {e}", file=fout)
-        print(
-            "Please make sure Docker is running "
-            "and you have the necessary permissions.",
-            file=fout)
-        return
 
-    task_runner = client.containers.list(filters={"name": "task-runner"})
-    file_tracker = client.containers.list(filters={"name": "file-tracker"})
+    docker_cli = UdockerCLI()
 
-    if task_runner or file_tracker:
-        print(
-            "Task-Runner already running. "
-            "Please stop it before launching a new one.",
-            file=fout)
-        return
+    #task_runner = client.containers.list(filters={"name": "task-runner"})
+    #file_tracker = client.containers.list(filters={"name": "file-tracker"})
 
-    client.images.pull(constants.FILE_TRACKER_IMAGE, platform="linux/amd64")
-    file_tracker_container = client.containers.run(
-        image=constants.FILE_TRACKER_IMAGE,
-        name="file-tracker",
-        environment={
-            "API_URL": api_url,
-            "USER_API_KEY": _api_key.get(),
-        },
-        volumes={
-            "workdir": {
-                "bind": "/workdir",
-                "mode": "rw"
-            },
-        },
-        network="host",
-        platform="linux/amd64",
-        detach=True,
-        auto_remove=True,
-    )
+    # if task_runner or file_tracker:
+    #     print(
+    #         "Task-Runner already running. "
+    #         "Please stop it before launching a new one.",
+    #         file=fout)
+    #     return
 
-    client.images.pull(constants.TASK_RUNNER_IMAGE, platform="linux/amd64")
+    docker_cli.do_pull({"P1": constants.FILE_TRACKER_IMAGE, "--platform=": "linux/amd64"})
+    # client.images.pull(constants.FILE_TRACKER_IMAGE, platform="linux/amd64")
+    # file_tracker_container = client.containers.run(
+    #     image=constants.FILE_TRACKER_IMAGE,
+    #     name="file-tracker",
+    #     environment={
+    #         "API_URL": api_url,
+    #         "USER_API_KEY": _api_key.get(),
+    #     },
+    #     volumes={
+    #         "workdir": {
+    #             "bind": "/workdir",
+    #             "mode": "rw"
+    #         },
+    #     },
+    #     network="host",
+    #     platform="linux/amd64",
+    #     detach=True,
+    #     auto_remove=True,
+    # )
 
-    apptainer_path = "apptainer"
-    os.makedirs(apptainer_path, exist_ok=True)
-    os.chmod(apptainer_path, 0o777)
-    apptainer_full_path = os.path.abspath(apptainer_path)
+    # client.images.pull(constants.TASK_RUNNER_IMAGE, platform="linux/amd64")
 
-    task_runner_container = client.containers.run(
-        image=constants.TASK_RUNNER_IMAGE,
-        name="task-runner",
-        environment={
-            "USER_API_KEY": _api_key.get(),
-            "API_URL": api_url,
-            "MACHINE_GROUP_NAME": args.machine_group_name,
-            "HOST_NAME": args.hostname,
-        },
-        mounts=[
-            docker.types.Mount(target="/executer-images",
-                               source=apptainer_full_path,
-                               type="bind")
-        ],
-        volumes={
-            "workdir": {
-                "bind": "/workdir",
-                "mode": "rw"
-            },
-        },
-        network="host",
-        privileged=True,
-        platform="linux/amd64",
-        detach=True,
-        auto_remove=True,
-    )
+    # apptainer_path = "apptainer"
+    # os.makedirs(apptainer_path, exist_ok=True)
+    # os.chmod(apptainer_path, 0o777)
+    # apptainer_full_path = os.path.abspath(apptainer_path)
 
-    print(
-        "File-Tracker launched "
-        f"with container ID: {file_tracker_container.short_id}",
-        file=fout)
-    print(
-        "Task-Runner launched "
-        f"with container ID: {task_runner_container.short_id}",
-        file=fout)
+    # task_runner_container = client.containers.run(
+    #     image=constants.TASK_RUNNER_IMAGE,
+    #     name="task-runner",
+    #     environment={
+    #         "USER_API_KEY": _api_key.get(),
+    #         "API_URL": api_url,
+    #         "MACHINE_GROUP_NAME": args.machine_group_name,
+    #         "HOST_NAME": args.hostname,
+    #     },
+    #     mounts=[
+    #         docker.types.Mount(target="/executer-images",
+    #                            source=apptainer_full_path,
+    #                            type="bind")
+    #     ],
+    #     volumes={
+    #         "workdir": {
+    #             "bind": "/workdir",
+    #             "mode": "rw"
+    #         },
+    #     },
+    #     network="host",
+    #     privileged=True,
+    #     platform="linux/amd64",
+    #     detach=True,
+    #     auto_remove=True,
+    # )
 
-    if not args.detach:
-        try:
-            join_container_streams(task_runner_container,
-                                   file_tracker_container)
-        except KeyboardInterrupt:
-            print("Interrupted. Stopping containers...", file=fout)
-            file_tracker_container.stop()
-            task_runner_container.stop()
+    # print(
+    #     "File-Tracker launched "
+    #     f"with container ID: {file_tracker_container.short_id}",
+    #     file=fout)
+    # print(
+    #     "Task-Runner launched "
+    #     f"with container ID: {task_runner_container.short_id}",
+    #     file=fout)
+
+    # if not args.detach:
+    #     try:
+    #         join_container_streams(task_runner_container,
+    #                                file_tracker_container)
+    #     except KeyboardInterrupt:
+    #         print("Interrupted. Stopping containers...", file=fout)
+    #         file_tracker_container.stop()
+    #         task_runner_container.stop()
 
 
 def register(parser):

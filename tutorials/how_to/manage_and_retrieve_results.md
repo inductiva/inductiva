@@ -26,17 +26,20 @@ after the task id. In the following snippet, the outputs of task with id
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2-standard-4")
+cloud_machine.start()
 
 simulator = inductiva.simulators.REEF3D()
 
-task = simulator.run(input_dir="path-to-directory-with-input-files-for-reef3d",
-                     on=machine_group)
+task = simulator.run(
+    input_dir="path-to-directory-with-input-files-for-reef3d",
+    on=cloud_machine)
 print(task.id)  # will print i4ir3kvv62odsfrhko4y8w2an
 
 # Terminate the machine group
-machine_group.terminate()
+cloud_machine.terminate()
 ```
 
 Using the command line interface (CLI), the user can list the contents of his remote
@@ -55,8 +58,9 @@ he can do so by setting the `storage_dir` argument in the `run` method of the
 simulator:
 
 ```python
-task = simulator.run(input_dir="path-to-directory-with-input-files-for-reef3d"
-                     storage_dir="my_reef3d_simulation")
+task = simulator.run(
+    input_dir="path-to-directory-with-input-files-for-reef3d"
+    storage_dir="my_reef3d_simulation")
 ```
 
 Again, using the CLI, the user can now confirm that the directory
@@ -76,7 +80,10 @@ accomplished programmatically using the `inductiva.storage.listdir` function:
 
 ```python
 >>> import inductiva
-inductiva.storage.listdir(max_results=10, order_by="creation_time", sort_order="desc")
+inductiva.storage.listdir(
+    max_results=10,
+    order_by="creation_time",
+    sort_order="desc")
 ```
 
 Refer to the [Storage how-to documentation](manage-remote-storage.md) for more information

@@ -30,9 +30,9 @@ system. Set the `local_path` parameter to the file or directory path you
 want to upload:
 
 ```python
-inductiva.storage.upload(local_path="gromacs-input-example/",
-    remote_dir="my_remote_directory",
-)
+inductiva.storage.upload(
+    local_path="gromacs-input-example/",
+    remote_dir="my_remote_directory")
 ```
 
 ### From a Remote URL
@@ -41,7 +41,8 @@ Use the `upload_from_url` method to upload files directly from a remote
 location. Set the `url` parameter to the remote file’s location:
 
 ```python
-inductiva.storage.upload_from_url(url="https://storage.googleapis.com/inductiva-api-demo-files/test_assets/files.zip",
+inductiva.storage.upload_from_url(
+    url="https://storage.googleapis.com/inductiva-api-demo-files/test_assets/files.zip",
     remote_dir="my_remote_directory",
 )
 ```
@@ -55,7 +56,8 @@ the `remote_assets` parameter in the `simulator.run` method.
 **Example with Gromacs Simulator**
 
 ```python
-inductiva.storage.upload_from_url(url="https://storage.googleapis.com/inductiva-api-demo-files/test_assets/files.zip",
+inductiva.storage.upload_from_url(
+    url="https://storage.googleapis.com/inductiva-api-demo-files/test_assets/files.zip",
     remote_dir="my_remote_directory",
 )
 ```
@@ -79,8 +81,9 @@ multiple remote files or directories:
 ```python
 import inductiva
 
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
+machine_group = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2-standard-4")
 
 commands = [
     "gmx solvate -cs tip4p -box 2.3 -o conf.gro -p topol.top",
@@ -103,7 +106,9 @@ task = gromacs.run(
     input_dir=None,
     commands=commands,
     on=machine_group,
-    remote_assets=["gromacs_bucket/file1.txt", "gromacs_bucket/file2.txt"])
+    remote_assets=[
+        "gromacs_bucket/file1.txt",
+        "gromacs_bucket/file2.txt"])
 ```
 
 ## Maintain and Manage Remote Files
@@ -141,7 +146,9 @@ task = gromacs.run(
     input_dir=None,
     commands=commands,
     on=machine_group,
-    remote_assets=[previous_task_1.info.storage_path, previous_task_2.info.storage_path])
+    remote_assets=[
+        previous_task_1.info.storage_path,
+        previous_task_2.info.storage_path])
 ```
 
 All task output files are stored in the <task_id> path. For example, if you want 

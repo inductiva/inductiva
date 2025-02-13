@@ -2,21 +2,24 @@
 import inductiva
 
 # Instantiate machine group
-gpu_machine_group = inductiva.resources.MachineGroup("g2-standard-4")
+gpu_cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="g2-standard-4")
 
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "gromacs-input-example.zip",
+    "gx-input-example.zip",
     unzip=True)
 
 gx = inductiva.simulators.GX()
 
-task = gx.run(input_dir=input_dir,
-              sim_config_filename="itg_w7x_adiabatic_electrons.in",
-              on=gpu_machine_group)
+task = gx.run( \
+    input_dir=input_dir,
+    sim_config_filename="itg_w7x_adiabatic_electrons.in",
+    on=gpu_cloud_machine)
 
 task.wait()
-gpu_machine_group.terminate()
+gpu_cloud_machine.terminate()
 
 task.download_outputs()
 

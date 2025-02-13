@@ -75,11 +75,12 @@ in the upcoming steps.
 ```python
 import inductiva
 
-machine_group = inductiva.resources.MachineGroup(
+cloud_machine = inductiva.resources.MachineGroup(
+	provider="GCP",
     machine_type="c3d-highcpu-90",
     spot=True,
     data_disk_gb=20)
-machine_group.start()
+cloud_machine.start()
 
 input_dir = "Beach_Nourish_Only"
 
@@ -91,7 +92,7 @@ task = xbeach.run(
     input_dir=input_dir,
     sim_config_filename="params.txt",
     n_vcpus=90,
-    on=machine_group)
+    on=cloud_machine)
 
 # task.wait() is a blocking call and will only return when the simulation
 # ends. However, you can close your terminal without interrupting the 
@@ -100,7 +101,7 @@ task = xbeach.run(
 task.wait()
 
 # Terminate your dedicated MachineGroup at then end of the simulation.
-machine_group.terminate()
+cloud_machine.terminate()
 
 # Let's get a small summary of the run.
 task.print_summary()
@@ -124,7 +125,8 @@ For a faster simulation, modify the `params.txt` file:
 
 	```python
 	import inductiva
-	machine_group = inductiva.resources.MachineGroup(
+	cloud_machine = inductiva.resources.MachineGroup(
+		provider="GCP",
 		machine_type="c3d-highcpu-90",
 		spot=True,
 		data_disk_gb=20)
@@ -134,7 +136,7 @@ For a faster simulation, modify the `params.txt` file:
 
 2. **Start your machine**
 	```python
-	machine_group.start()
+	cloud_machine.start()
 	```
 
 #### b. Define Simulation Inputs
@@ -160,7 +162,7 @@ For a faster simulation, modify the `params.txt` file:
 		input_dir=input_dir,
 		sim_config_filename="params.txt",
 		n_vcpus=90,
-		on=machine_group)
+		on=cloud_machine)
 	```
 
 	In this snippet, two arguments might need clarification:
@@ -187,7 +189,7 @@ For a faster simulation, modify the `params.txt` file:
 
 
 	```python
-	machine_group.terminate()
+	cloud_machine.terminate()
 	```
 
 4. **Check your simulation summary**:

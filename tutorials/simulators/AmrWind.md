@@ -28,5 +28,3 @@ Below is an example of running an Amr-Wind simulation via the Inductiva API:
 ```{literalinclude} ../../inductiva/tests/test_simulators/amr_wind/amr_wind.py
 :language: python
 ```
-
-```

@@ -24,7 +24,6 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.vm_group_config import VMGroupConfig
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 from . import path
@@ -32,16 +31,15 @@ from . import path
 # Query params
 MachineGroupIdSchema = schemas.UUIDSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
-    'RequestRequiredQueryParams', {})
-RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams', {
+    'RequestRequiredQueryParams', {
         'machine_group_id': typing.Union[
             MachineGroupIdSchema,
             str,
             uuid.UUID,
         ],
-    },
-    total=False)
+    })
+RequestOptionalQueryParams = typing_extensions.TypedDict(
+    'RequestOptionalQueryParams', {}, total=False)
 
 
 class RequestQueryParams(RequestRequiredQueryParams,
@@ -53,15 +51,9 @@ request_query_machine_group_id = api_client.QueryParameter(
     name="machine_group_id",
     style=api_client.ParameterStyle.FORM,
     schema=MachineGroupIdSchema,
+    required=True,
     explode=True,
 )
-# body param
-SchemaForRequestBodyApplicationJson = VMGroupConfig
-
-request_body_vm_group_config = api_client.RequestBody(content={
-    'application/json':
-        api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
-},)
 _auth = [
     'APIKeyHeader',
 ]
@@ -117,25 +109,6 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _start_vm_group_oapg(
         self,
-        content_type: typing_extensions.Literal["application/json"] = ...,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,
-                           schemas.Unset] = schemas.unset,
-        query_params: RequestQueryParams = frozendict.frozendict(),
-        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
-        stream: bool = False,
-        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-        skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
-
-    @typing.overload
-    def _start_vm_group_oapg(
-        self,
-        content_type: str = ...,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,
-                           schemas.Unset] = schemas.unset,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -150,9 +123,6 @@ class BaseApi(api_client.Api):
     def _start_vm_group_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        content_type: str = ...,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,
-                           schemas.Unset] = schemas.unset,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -163,9 +133,6 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _start_vm_group_oapg(
         self,
-        content_type: str = ...,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,
-                           schemas.Unset] = schemas.unset,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -179,9 +146,6 @@ class BaseApi(api_client.Api):
 
     def _start_vm_group_oapg(
         self,
-        content_type: str = 'application/json',
-        body: typing.Union[SchemaForRequestBodyApplicationJson,
-                           schemas.Unset] = schemas.unset,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -216,22 +180,10 @@ class BaseApi(api_client.Api):
             for accept_content_type in accept_content_types:
                 _headers.add('Accept', accept_content_type)
 
-        _fields = None
-        _body = None
-        if body is not schemas.unset:
-            serialized_data = request_body_vm_group_config.serialize(
-                body, content_type)
-            _headers.add('Content-Type', content_type)
-            if 'fields' in serialized_data:
-                _fields = serialized_data['fields']
-            elif 'body' in serialized_data:
-                _body = serialized_data['body']
         response = self.api_client.call_api(
             resource_path=used_path,
             method='post'.upper(),
             headers=_headers,
-            fields=_fields,
-            body=_body,
             auth_settings=_auth,
             stream=stream,
             timeout=timeout,
@@ -264,25 +216,6 @@ class StartVmGroup(BaseApi):
     @typing.overload
     def start_vm_group(
         self,
-        content_type: typing_extensions.Literal["application/json"] = ...,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,
-                           schemas.Unset] = schemas.unset,
-        query_params: RequestQueryParams = frozendict.frozendict(),
-        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
-        stream: bool = False,
-        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-        skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
-
-    @typing.overload
-    def start_vm_group(
-        self,
-        content_type: str = ...,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,
-                           schemas.Unset] = schemas.unset,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -297,9 +230,6 @@ class StartVmGroup(BaseApi):
     def start_vm_group(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        content_type: str = ...,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,
-                           schemas.Unset] = schemas.unset,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -310,9 +240,6 @@ class StartVmGroup(BaseApi):
     @typing.overload
     def start_vm_group(
         self,
-        content_type: str = ...,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,
-                           schemas.Unset] = schemas.unset,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -326,9 +253,6 @@ class StartVmGroup(BaseApi):
 
     def start_vm_group(
         self,
-        content_type: str = 'application/json',
-        body: typing.Union[SchemaForRequestBodyApplicationJson,
-                           schemas.Unset] = schemas.unset,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -336,9 +260,7 @@ class StartVmGroup(BaseApi):
         skip_deserialization: bool = False,
     ):
         return self._start_vm_group_oapg(
-            body=body,
             query_params=query_params,
-            content_type=content_type,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
@@ -351,25 +273,6 @@ class ApiForpost(BaseApi):
     @typing.overload
     def post(
         self,
-        content_type: typing_extensions.Literal["application/json"] = ...,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,
-                           schemas.Unset] = schemas.unset,
-        query_params: RequestQueryParams = frozendict.frozendict(),
-        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
-        stream: bool = False,
-        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-        skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
-
-    @typing.overload
-    def post(
-        self,
-        content_type: str = ...,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,
-                           schemas.Unset] = schemas.unset,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -384,9 +287,6 @@ class ApiForpost(BaseApi):
     def post(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        content_type: str = ...,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,
-                           schemas.Unset] = schemas.unset,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -397,9 +297,6 @@ class ApiForpost(BaseApi):
     @typing.overload
     def post(
         self,
-        content_type: str = ...,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,
-                           schemas.Unset] = schemas.unset,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -413,9 +310,6 @@ class ApiForpost(BaseApi):
 
     def post(
         self,
-        content_type: str = 'application/json',
-        body: typing.Union[SchemaForRequestBodyApplicationJson,
-                           schemas.Unset] = schemas.unset,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -423,9 +317,7 @@ class ApiForpost(BaseApi):
         skip_deserialization: bool = False,
     ):
         return self._start_vm_group_oapg(
-            body=body,
             query_params=query_params,
-            content_type=content_type,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,

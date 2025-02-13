@@ -47,24 +47,27 @@ referred. Below we present the case of two simulators that follow this pattern:
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2-standard-4")
 
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "swash-input-example.zip", unzip=True)
+    "swash-input-example.zip",
+    unzip=True)
 
 # Instantiate the simulator
 swash_simulator = inductiva.simulators.SWASH()
 
 # Input directory contains the .sws config file, a bathymetry file and other files.
-task = swash_simulator.run(input_dir=input_dir,
-                           sim_config_filename="input.sws",
-                           on=machine_group)
+task = swash_simulator.run(
+    input_dir=input_dir,
+    sim_config_filename="input.sws",
+    on=cloud_machine)
 
 # Terminate the machine group
-machine_group.terminate()
+cloud_machine.terminate()
 ```
 
 **SPlisHSPlasH:** The main configuration file is a `.json` file.
@@ -73,24 +76,27 @@ machine_group.terminate()
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2-standard-4")
 
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "splishsplash-input-example.zip", unzip=True)
+    "splishsplash-input-example.zip",
+    unzip=True)
 
 # Instantiate the simulator
 splishsplash_simulator = inductiva.simulators.SplishSplash()
 
 # Input directory contains the .json config file and a .obj file for the domain.
-task = splishsplash_simulator.run(input_dir=input_dir,
-                                  sim_config_filename="config.json",
-                                  on=machine_group)
+task = splishsplash_simulator.run(
+    input_dir=input_dir,
+    sim_config_filename="config.json",
+    on=cloud_machine)
 
 # Terminate the machine group
-machine_group.terminate()
+cloud_machine.terminate()
 ```
 
 As you can see, besides the input directory we pass one additional
@@ -118,24 +124,26 @@ with the configuration files for both commands.
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2-standard-4")
 
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "reef3d-input-example.zip", unzip=True
-)
+    "reef3d-input-example.zip",
+    unzip=True)
 
 # Instantiate the simulator
 reef3d_simulator = inductiva.simulators.REEF3D()
 
 # The files for the simulation are in the input directory.
-task = reef3d_simulator.run(input_dir=input_dir,
-                            on=machine_group)
+task = reef3d_simulator.run(
+    input_dir=input_dir,
+    on=cloud_machine)
 
 # Terminate the machine group
-machine_group.terminate()
+cloud_machine.terminate()
 ```
 
 In this specific case, REEF3D uses a pre-defined standard for the naming of the
@@ -165,13 +173,15 @@ Below, an example with OpenFOAM is given.
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2-standard-4")
 
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "openfoam-input-example.zip", unzip=True)
+    "openfoam-input-example.zip",
+    unzip=True)
 
 # Instantiate the simulator
 openfoam_simulator = inductiva.simulators.OpenFOAM()
@@ -189,10 +199,13 @@ commands = [
 ]
 
 # Run the simulation with the given input directory and commands
-task = openfoam_simulator.run(input_dir=input_dir, commands=commands,on=machine_group)
+task = openfoam_simulator.run(
+    input_dir=input_dir,
+    commands=commands,
+    on=cloud_machine)
 
 # Terminate the machine group
-machine_group.terminate()
+cloud_machine.terminate()
 ```
 
 For this case, the `commands` follow the usual approach used by OpenFOAM

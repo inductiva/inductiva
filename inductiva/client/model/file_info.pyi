@@ -31,23 +31,132 @@ class FileInfo(schemas.DictSchema):
 
     class MetaOapg:
         required = {
-            "size",
-            "compressed_size",
             "name",
         }
 
         class properties:
             name = schemas.StrSchema
-            size = schemas.IntSchema
-            compressed_size = schemas.IntSchema
+
+            class size(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.IntSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'size':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
+            class compressed_size(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.IntSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'compressed_size':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             __annotations__ = {
                 "name": name,
                 "size": size,
                 "compressed_size": compressed_size,
             }
 
-    size: MetaOapg.properties.size
-    compressed_size: MetaOapg.properties.compressed_size
     name: MetaOapg.properties.name
 
     @typing.overload
@@ -88,14 +197,14 @@ class FileInfo(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-            self, name: typing_extensions.Literal["size"]
-    ) -> MetaOapg.properties.size:
+        self, name: typing_extensions.Literal["size"]
+    ) -> typing.Union[MetaOapg.properties.size, schemas.Unset]:
         ...
 
     @typing.overload
     def get_item_oapg(
         self, name: typing_extensions.Literal["compressed_size"]
-    ) -> MetaOapg.properties.compressed_size:
+    ) -> typing.Union[MetaOapg.properties.compressed_size, schemas.Unset]:
         ...
 
     @typing.overload
@@ -117,20 +226,21 @@ class FileInfo(schemas.DictSchema):
             dict,
             frozendict.frozendict,
         ],
-        size: typing.Union[
-            MetaOapg.properties.size,
-            decimal.Decimal,
-            int,
-        ],
-        compressed_size: typing.Union[
-            MetaOapg.properties.compressed_size,
-            decimal.Decimal,
-            int,
-        ],
         name: typing.Union[
             MetaOapg.properties.name,
             str,
         ],
+        size: typing.Union[MetaOapg.properties.size, dict,
+                           frozendict.frozendict, str, date, datetime,
+                           uuid.UUID, int, float, decimal.Decimal, bool, None,
+                           list, tuple, bytes, io.FileIO, io.BufferedReader,
+                           schemas.Unset] = schemas.unset,
+        compressed_size: typing.Union[MetaOapg.properties.compressed_size, dict,
+                                      frozendict.frozendict, str, date,
+                                      datetime, uuid.UUID, int, float,
+                                      decimal.Decimal, bool, None, list, tuple,
+                                      bytes, io.FileIO, io.BufferedReader,
+                                      schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -140,9 +250,9 @@ class FileInfo(schemas.DictSchema):
         return super().__new__(
             cls,
             *_args,
+            name=name,
             size=size,
             compressed_size=compressed_size,
-            name=name,
             _configuration=_configuration,
             **kwargs,
         )
