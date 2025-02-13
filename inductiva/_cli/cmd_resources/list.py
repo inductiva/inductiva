@@ -18,57 +18,29 @@ def pretty_print_machines_info(machines_dict):
         lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
     ]
     print()
-    for family, family_details in machines_dict.items():
-        if family not in ["a3", "g2"]:
-            print(f"CPU family: {family}")
-        else:
-            print(f"GPU family: {family}")
-        final_table = {
+
+    final_table = {
             "Machine Type": [],
-            "Suffix": [],
-            "Supported vCPUs": [],
-            "Supported GPUs": [],
-            "Config": []
+            "vCPUS": [],
+            "GPUS": [],
+            "Memory (GB)": [],
+            "Price/Hour": [],
         }
-        first_line = True
-        for machine_type, details in family_details.items():
-            # Don't want to add an empty line before the first machine type
-            if not first_line:
-                # Add's an empty line between the machine types
-                final_table["Machine Type"].append("")
-                final_table["Suffix"].append("")
-                final_table["Supported vCPUs"].append("")
-                final_table["Supported GPUs"].append("")
-                final_table["Config"].append("")
-            first_line = False
+    for machine_type, details in machines_dict.items():
+        final_table["Machine Type"].append(machine_type)
+        for i, vcpu in enumerate(details["vcpus"]):
+            final_table["vCPUS"].append(vcpu)
+            final_table["GPUS"].append(details["gpus"][i] if details["gpus"] else "n/a")
+            final_table["Memory (GB)"].append(details["memory"])
+            final_table["Price/Hour"].append(details["price"])
+    
+    print(final_table)
 
-            first_entry = True
-            for config, info in details.items():
-                for i, vcpu in enumerate(info["vcpus"]):
-                    final_table["Machine Type"].append(
-                        machine_type if first_entry else "")
-                    if family == "a3":
-                        final_table["Suffix"].append(f"{info['gpus'][i]}g")
-                    else:
-                        final_table["Suffix"].append(vcpu)
-                    final_table["Supported vCPUs"].append(vcpu)
-                    if info["gpus"]:
-                        final_table["Supported GPUs"].append(info["gpus"][i])
-                    else:
-                        final_table["Supported GPUs"].append("n/a")
-                    final_table["Config"].append(config)
-                    first_entry = False
-
-        res_table = format_utils.get_tabular_str(
-            final_table,
-            header_formatters=header_formatters,
-            indentation_level=4)
-        print(res_table)
-
-    print("Pattern: family-machine type-suffix-config")
-    print("Ex:\t c3d-highcpu-4")
-    print("\t c3d-highcpu-8-lssd")
-    print("\t a3-highgpu-1g")
+    res_table = format_utils.get_tabular_str(
+        final_table,
+        header_formatters=header_formatters,
+        indentation_level=4)
+    print(res_table)
 
 
 def list_machine_types_available(args):
@@ -88,31 +60,26 @@ def list_machine_types_available(args):
             continue
 
         machine_type = machine["machine_type"]
-        machine_info = machine_type.split("-")
 
-        family = machine_info[0]
-        memory = machine_info[1]
+        memory = machine.ram_gb
+        price = machine.price
         vcpus = machine.num_cpus
         gpus = machine.num_gpus if machine.num_gpus else None
-        config = machine_info[3] if len(machine_info) > 3 else None
 
-        if family not in machines_dict:
-            machines_dict[family] = {}
-        if memory not in machines_dict[family]:
-            machines_dict[family][memory] = {}
-        if config not in machines_dict[family][memory]:
-            machines_dict[family][memory][config] = {
-                "vcpus": [],
-                "gpus": [],
-            }
+        machines_dict[machine_type] = {
+            "vcpus": [],
+            "gpus": [],
+            "memory": memory,
+            "price": price
+        }
 
         if vcpus is not None:
             # Sorted insertion of vcpus
-            bisect.insort(machines_dict[family][memory][config]["vcpus"],
+            bisect.insort(machines_dict[machine_type]["vcpus"],
                           int(vcpus))
         if gpus is not None:
             # Sorted insertion of vcpus
-            bisect.insort(machines_dict[family][memory][config]["gpus"],
+            bisect.insort(machines_dict[machine_type]["gpus"],
                           int(gpus))
     pretty_print_machines_info(machines_dict)
 
