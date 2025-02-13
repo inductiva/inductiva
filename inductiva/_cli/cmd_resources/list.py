@@ -19,12 +19,12 @@ def pretty_print_machines_info(machines_dict):
     ]
 
     final_table = {
-            "Machine Type": [],
-            "vCPUS": [],
-            "GPUS": [],
-            "Memory (GB)": [],
-            "Price/Hour": [],
-        }
+        "Machine Type": [],
+        "vCPUS": [],
+        "GPUS": [],
+        "Memory (GB)": [],
+        "Price/Hour": [],
+    }
     first_line = True
     for machine_type, details in machines_dict.items():
         if not first_line:
@@ -39,14 +39,13 @@ def pretty_print_machines_info(machines_dict):
         final_table["Machine Type"].append(machine_type)
         for i, vcpu in enumerate(details["vcpus"]):
             final_table["vCPUS"].append(vcpu)
-            final_table["GPUS"].append(details["gpus"][i] if details["gpus"] else "n/a")
+            final_table["GPUS"].append(
+                details["gpus"][i] if details["gpus"] else "n/a")
             final_table["Memory (GB)"].append(details["memory"])
             final_table["Price/Hour"].append(details["price"])
 
     res_table = format_utils.get_tabular_str(
-        final_table,
-        header_formatters=header_formatters,
-        indentation_level=4)
+        final_table, header_formatters=header_formatters, indentation_level=4)
     print(res_table)
 
 
@@ -82,12 +81,10 @@ def list_machine_types_available(args):
 
         if vcpus is not None:
             # Sorted insertion of vcpus
-            bisect.insort(machines_dict[machine_type]["vcpus"],
-                          int(vcpus))
+            bisect.insort(machines_dict[machine_type]["vcpus"], int(vcpus))
         if gpus is not None:
             # Sorted insertion of vcpus
-            bisect.insort(machines_dict[machine_type]["gpus"],
-                          int(gpus))
+            bisect.insort(machines_dict[machine_type]["gpus"], int(gpus))
     pretty_print_machines_info(machines_dict)
 
 
