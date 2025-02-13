@@ -264,7 +264,7 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
                               headers=headers,
                               missingval="n/a",
                               numalign="left",
-                              tablefmt="plain")
+                              tablefmt="inductiva")
     if indentation_level is not None:
         table = _table_indenter(table, indentation_level)
 
