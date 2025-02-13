@@ -2,7 +2,6 @@
 
 from typing import TextIO
 import argparse
-import bisect
 import sys
 
 from inductiva.resources.machine_types import ProviderType
@@ -57,7 +56,8 @@ def list_machine_types_available(args):
 
     resources_available = resources.machine_types.get_available_machine_types(
         provider, machine_family)
-    resources_available.sort(key=lambda x: (x.machine_type.split("-")[:-1], x.num_cpus))
+    resources_available.sort(
+        key=lambda x: (x.machine_type.split("-")[:-1], x.num_cpus))
 
     machines_dict = {}
 
