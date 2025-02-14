@@ -132,7 +132,7 @@ import inductiva
 
 # Define the machine group
 cloud_machine = inductiva.resources.MachineGroup(
-    provider="GCP"
+    provider="GCP",
     machine_type="c3d-highcpu-90",
     spot=True, # Enables cost-saving spot mode
     data_disk_gb=20) 
