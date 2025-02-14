@@ -24,57 +24,18 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.operation_status import OperationStatus
+from inductiva.client.model.update_operation_status import UpdateOperationStatus
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
-# Query params
-OperationIdSchema = schemas.UUIDSchema
-StatusSchema = OperationStatus
-ErrorMessageSchema = schemas.StrSchema
-RequestRequiredQueryParams = typing_extensions.TypedDict(
-    'RequestRequiredQueryParams', {
-        'operation_id': typing.Union[
-            OperationIdSchema,
-            str,
-            uuid.UUID,
-        ],
-        'status': typing.Union[
-            StatusSchema,
-        ],
-        'error_message': typing.Union[
-            ErrorMessageSchema,
-            str,
-        ],
-    })
-RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams', {}, total=False)
+# body param
+SchemaForRequestBodyApplicationJson = UpdateOperationStatus
 
-
-class RequestQueryParams(RequestRequiredQueryParams,
-                         RequestOptionalQueryParams):
-    pass
-
-
-request_query_operation_id = api_client.QueryParameter(
-    name="operation_id",
-    style=api_client.ParameterStyle.FORM,
-    schema=OperationIdSchema,
+request_body_update_operation_status = api_client.RequestBody(
+    content={
+        'application/json':
+            api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
+    },
     required=True,
-    explode=True,
-)
-request_query_status = api_client.QueryParameter(
-    name="status",
-    style=api_client.ParameterStyle.FORM,
-    schema=StatusSchema,
-    required=True,
-    explode=True,
-)
-request_query_error_message = api_client.QueryParameter(
-    name="error_message",
-    style=api_client.ParameterStyle.FORM,
-    schema=ErrorMessageSchema,
-    required=True,
-    explode=True,
 )
 SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
@@ -124,7 +85,10 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _update_export_operation_status_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
+        content_type: typing_extensions.Literal["application/json"] = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -137,8 +101,27 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _update_export_operation_status_oapg(
         self,
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
+        content_type: str = ...,
+        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
+        stream: bool = False,
+        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
+        skip_deserialization: typing_extensions.Literal[False] = ...,
+    ) -> typing.Union[
+            ApiResponseFor200,
+    ]:
+        ...
+
+    @typing.overload
+    def _update_export_operation_status_oapg(
+        self,
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -148,7 +131,10 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _update_export_operation_status_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
+        content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -161,7 +147,10 @@ class BaseApi(api_client.Api):
 
     def _update_export_operation_status_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
+        content_type: str = 'application/json',
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -173,25 +162,7 @@ class BaseApi(api_client.Api):
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
-        self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
         used_path = path.value
-
-        prefix_separator_iterator = None
-        for parameter in (
-                request_query_operation_id,
-                request_query_status,
-                request_query_error_message,
-        ):
-            parameter_data = query_params.get(parameter.name, schemas.unset)
-            if parameter_data is schemas.unset:
-                continue
-            if prefix_separator_iterator is None:
-                prefix_separator_iterator = parameter.get_prefix_separator_iterator(
-                )
-            serialized_data = parameter.serialize(parameter_data,
-                                                  prefix_separator_iterator)
-            for serialized_value in serialized_data.values():
-                used_path += serialized_value
 
         _headers = HTTPHeaderDict()
         # TODO add cookie handling
@@ -199,10 +170,25 @@ class BaseApi(api_client.Api):
             for accept_content_type in accept_content_types:
                 _headers.add('Accept', accept_content_type)
 
+        if body is schemas.unset:
+            raise exceptions.ApiValueError(
+                'The required body parameter has an invalid value of: unset. Set a valid value instead'
+            )
+        _fields = None
+        _body = None
+        serialized_data = request_body_update_operation_status.serialize(
+            body, content_type)
+        _headers.add('Content-Type', content_type)
+        if 'fields' in serialized_data:
+            _fields = serialized_data['fields']
+        elif 'body' in serialized_data:
+            _body = serialized_data['body']
         response = self.api_client.call_api(
             resource_path=used_path,
             method='post'.upper(),
             headers=_headers,
+            fields=_fields,
+            body=_body,
             auth_settings=_auth,
             stream=stream,
             timeout=timeout,
@@ -235,7 +221,10 @@ class UpdateExportOperationStatus(BaseApi):
     @typing.overload
     def update_export_operation_status(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
+        content_type: typing_extensions.Literal["application/json"] = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -248,8 +237,27 @@ class UpdateExportOperationStatus(BaseApi):
     @typing.overload
     def update_export_operation_status(
         self,
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
+        content_type: str = ...,
+        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
+        stream: bool = False,
+        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
+        skip_deserialization: typing_extensions.Literal[False] = ...,
+    ) -> typing.Union[
+            ApiResponseFor200,
+    ]:
+        ...
+
+    @typing.overload
+    def update_export_operation_status(
+        self,
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -259,7 +267,10 @@ class UpdateExportOperationStatus(BaseApi):
     @typing.overload
     def update_export_operation_status(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
+        content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -272,14 +283,18 @@ class UpdateExportOperationStatus(BaseApi):
 
     def update_export_operation_status(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
+        content_type: str = 'application/json',
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         return self._update_export_operation_status_oapg(
-            query_params=query_params,
+            body=body,
+            content_type=content_type,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
@@ -292,7 +307,10 @@ class ApiForpost(BaseApi):
     @typing.overload
     def post(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
+        content_type: typing_extensions.Literal["application/json"] = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -305,8 +323,27 @@ class ApiForpost(BaseApi):
     @typing.overload
     def post(
         self,
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
+        content_type: str = ...,
+        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
+        stream: bool = False,
+        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
+        skip_deserialization: typing_extensions.Literal[False] = ...,
+    ) -> typing.Union[
+            ApiResponseFor200,
+    ]:
+        ...
+
+    @typing.overload
+    def post(
+        self,
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -316,7 +353,10 @@ class ApiForpost(BaseApi):
     @typing.overload
     def post(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
+        content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -329,14 +369,18 @@ class ApiForpost(BaseApi):
 
     def post(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
+        content_type: str = 'application/json',
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         return self._update_export_operation_status_oapg(
-            query_params=query_params,
+            body=body,
+            content_type=content_type,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
