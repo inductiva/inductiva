@@ -34,6 +34,7 @@ def pretty_print_machines_info(machines_dict):
             final_table["Memory (GB)"].append("")
             final_table["Price/Hour (USD)"].append("")
         first_line = False
+
         final_table["Machine Type"].append(machine_type)
         for i, vcpu in enumerate(details["vcpus"]):
             final_table["vCPUS"].append(vcpu)
