@@ -56,6 +56,7 @@ from inductiva.client.apis.paths.compute_groups_history import ComputeGroupsHist
 from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
 from inductiva.client.apis.paths.compute_machine_types import ComputeMachineTypes
 from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
+from inductiva.client.apis.paths.compute_group_machine_group_id_sharing import ComputeGroupMachineGroupIdSharing
 from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_cost import StorageCost
 from inductiva.client.apis.paths.storage_contents import StorageContents
@@ -199,6 +200,8 @@ PathToApi = typing_extensions.TypedDict(
             ComputeMachineTypes,
         PathValues.COMPUTE_GROUP_NAME:
             ComputeGroupName,
+        PathValues.COMPUTE_GROUP_MACHINE_GROUP_ID_SHARING:
+            ComputeGroupMachineGroupIdSharing,
         PathValues.STORAGE_SIZE:
             StorageSize,
         PathValues.STORAGE_COST:
@@ -372,6 +375,8 @@ path_to_api = PathToApi({
         ComputeMachineTypes,
     PathValues.COMPUTE_GROUP_NAME:
         ComputeGroupName,
+    PathValues.COMPUTE_GROUP_MACHINE_GROUP_ID_SHARING:
+        ComputeGroupMachineGroupIdSharing,
     PathValues.STORAGE_SIZE:
         StorageSize,
     PathValues.STORAGE_COST:
