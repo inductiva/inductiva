@@ -93,7 +93,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
     """Returns a string representation of a list of machine groups."""
     columns = [
         "Name", "Machine Type", "Elastic", "Type", "# machines",
-        "Data Size in GB", "Spot", "Started at (UTC)", "Idle Time",
+        "Data Size in GB", "Spot", "Created at (UTC)", "Idle Time",
         "Max Cost ($/hour)"
     ]
     rows = []
