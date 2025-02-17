@@ -39,7 +39,8 @@ def pretty_print_machines_info(machines_dict):
         for i, vcpu in enumerate(details["vcpus"]):
             final_table["vCPUS"].append(vcpu)
             final_table["GPUS"].append(
-                details["gpus"][i] if details["gpus"] else "n/a")
+                f"{details['gpus'][i]} x {details['gpu_name']}"
+                if details["gpus"] else "n/a")
             final_table["Memory (GB)"].append(details["memory"])
             final_table["Price/Hour (USD)"].append(details["price"])
 
@@ -72,12 +73,14 @@ def list_machine_types_available(args):
         price = machine.price
         vcpus = machine.num_cpus
         gpus = machine.num_gpus if machine.num_gpus else None
+        gpu_name = machine.gpu_name if machine.num_gpus else None
 
         machines_dict[machine_type] = {
             "vcpus": [],
             "gpus": [],
             "memory": memory,
-            "price": price
+            "price": price,
+            "gpu_name": gpu_name
         }
 
         machines_dict[machine_type]["vcpus"].append(int(vcpus))
@@ -90,7 +93,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
     """Returns a string representation of a list of machine groups."""
     columns = [
         "Name", "Machine Type", "Elastic", "Type", "# machines",
-        "Data Size in GB", "Spot", "Started at (UTC)", "Idle Time",
+        "Data Size in GB", "Spot", "Created at (UTC)", "Idle Time",
         "Max Cost ($/hour)"
     ]
     rows = []

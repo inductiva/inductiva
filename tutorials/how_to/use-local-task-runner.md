@@ -153,3 +153,20 @@ We highlight the main bennefits of the local task-runner as:
 
 
 By following this tutorial, you can efficiently utilize the local task-runner to execute simulations at a small scale while minimizing costs. After you guarentee that your simulation is producing the intended results, you can scale-up to the state-of-the-art [computational resources](https://cloud.google.com/compute/docs/machine-resource) available on the cloud. 
+
+
+### FAQs
+
+**Why do I get a permission error when running the task runner on Ubuntu 24.04?**
+
+Ubuntu 24.04 has a stricter AppArmor policy that restricts unprivileged user namespaces by default. This can cause issues when running the task-runner.
+
+To fix this, run the following command:
+
+```
+sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+```
+
+**What is the recommended Ubuntu version for running the task runner?**
+
+We recommend using Ubuntu 22.04 LTS for the best compatibility and stability. If you are using Ubuntu 24.04, please apply the fix mentioned above.
