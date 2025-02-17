@@ -5,20 +5,21 @@ import threading
 import sys
 import os
 import platform
+import subprocess
+import signal
 from inductiva import _cli, constants, _api_key, api_url
 
 _docker_imported = True
 try:
-    import docker
-    from docker.errors import DockerException
+    import udocker
 except ImportError:
     _docker_imported = False
 
 
 def generator_thread(container, fout: TextIO):
     """Runs a generator in a separate thread."""
-    for line in container.logs(stream=True):
-        print(line.decode("utf-8"), end="", file=fout)
+    for line in container.stdout:
+        print(line, file=fout)
 
 
 def join_container_streams(*containers, fout: TextIO = sys.stdout):
@@ -44,98 +45,145 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
             file=fout)
         return
 
-    try:
-        client = docker.from_env()
-    except DockerException as e:
-        print(f"Failed to connect to Docker: {e}", file=fout)
-        print(
-            "Please make sure Docker is running "
-            "and you have the necessary permissions.",
-            file=fout)
-        return
+    # try:
+    #     client = docker.from_env()
+    # except DockerException as e:
+    #     print(f"Failed to connect to Docker: {e}", file=fout)
+    #     print(
+    #         "Please make sure Docker is running "
+    #         "and you have the necessary permissions.",
+    #         file=fout)
+    #     return
 
-    task_runner = client.containers.list(filters={"name": "task-runner"})
-    file_tracker = client.containers.list(filters={"name": "file-tracker"})
+    # task_runner = client.containers.list(filters={"name": "task-runner"})
+    # file_tracker = client.containers.list(filters={"name": "file-tracker"})
 
-    if task_runner or file_tracker:
-        print(
-            "Task-Runner already running. "
-            "Please stop it before launching a new one.",
-            file=fout)
-        return
+    # if task_runner or file_tracker:
+    #     print(
+    #         "Task-Runner already running. "
+    #         "Please stop it before launching a new one.",
+    #         file=fout)
+    #     return
+    workdir_path = "workdir"
+    os.makedirs(workdir_path, exist_ok=True)
+    workdir_abs_path = os.path.abspath(workdir_path)
 
-    client.images.pull(constants.FILE_TRACKER_IMAGE, platform="linux/amd64")
-    file_tracker_container = client.containers.run(
-        image=constants.FILE_TRACKER_IMAGE,
-        name="file-tracker",
-        environment={
-            "API_URL": api_url,
-            "USER_API_KEY": _api_key.get(),
-        },
-        volumes={
-            "workdir": {
-                "bind": "/workdir",
-                "mode": "rw"
-            },
-        },
-        network="host",
-        platform="linux/amd64",
-        detach=True,
-        auto_remove=True,
-    )
+    subprocess.run(["udocker", "pull", "--platform", "linux/amd64", constants.FILE_TRACKER_IMAGE])
+    subprocess.run(["udocker", "setup", "--execmode=S1", constants.FILE_TRACKER_IMAGE])
 
-    client.images.pull(constants.TASK_RUNNER_IMAGE, platform="linux/amd64")
+    cmd = f"""
+    udocker run \
+    --env='API_URL={api_url}' \
+    --env='USER_API_KEY={_api_key.get()}' \
+    --name=file-tracker \
+    --volume={workdir_abs_path}:/workdir \
+    --platform=linux/amd64 \
+    --rm {constants.FILE_TRACKER_IMAGE}
+    """
 
+    file_tracker = subprocess.Popen(cmd,
+                                    stdout=subprocess.PIPE, shell=True)
+    
+    # client.images.pull(constants.FILE_TRACKER_IMAGE, platform="linux/amd64")
+    # file_tracker_container = client.containers.run(
+    #     image=constants.FILE_TRACKER_IMAGE,
+    #     name="file-tracker",
+    #     environment={
+    #         "API_URL": api_url,
+    #         "USER_API_KEY": _api_key.get(),
+    #     },
+    #     volumes={
+    #         "workdir": {
+    #             "bind": "/workdir",
+    #             "mode": "rw"
+    #         },
+    #     },
+    #     network="host",
+    #     platform="linux/amd64",
+    #     detach=True,
+    #     auto_remove=True,
+    # )
     apptainer_path = "apptainer"
     os.makedirs(apptainer_path, exist_ok=True)
     os.chmod(apptainer_path, 0o777)
     apptainer_full_path = os.path.abspath(apptainer_path)
 
-    task_runner_container = client.containers.run(
-        image=constants.TASK_RUNNER_IMAGE,
-        name="task-runner",
-        environment={
-            "USER_API_KEY": _api_key.get(),
-            "API_URL": api_url,
-            "MACHINE_GROUP_NAME": args.machine_group_name,
-            "HOST_NAME": args.hostname,
-        },
-        mounts=[
-            docker.types.Mount(target="/executer-images",
-                               source=apptainer_full_path,
-                               type="bind")
-        ],
-        volumes={
-            "workdir": {
-                "bind": "/workdir",
-                "mode": "rw"
-            },
-        },
-        network="host",
-        privileged=True,
-        platform="linux/amd64",
-        detach=True,
-        auto_remove=True,
-    )
+    subprocess.run(["udocker", "pull", "--platform", "linux/amd64",  constants.TASK_RUNNER_IMAGE])
+    subprocess.run(["udocker", "setup", "--execmode=S1", constants.TASK_RUNNER_IMAGE])
 
-    print(
-        "File-Tracker launched "
-        f"with container ID: {file_tracker_container.short_id}",
-        file=fout)
-    print(
-        "Task-Runner launched "
-        f"with container ID: {task_runner_container.short_id}",
-        file=fout)
+    cmd = f"""
+    udocker run \
+    --env='API_URL={api_url}' \
+    --env='USER_API_KEY={_api_key.get()}' \
+    --env='MACHINE_GROUP_NAME={args.machine_group_name}' \
+    --env='HOST_NAME={args.hostname}' \
+    --name=task-runner \
+    --volume={workdir_abs_path}:/workdir \
+    --volume={apptainer_full_path}:/executer-images \
+    --volume=/etc/hosts:/etc/hosts \
+    --platform=linux/amd64 \
+    --rm {constants.TASK_RUNNER_IMAGE}
+    """
+                                     
+    task_runner = subprocess.Popen(cmd,
+                                    stdout=subprocess.PIPE, shell=True)
 
-    if not args.detach:
-        try:
-            join_container_streams(task_runner_container,
-                                   file_tracker_container)
-        except KeyboardInterrupt:
-            print("Interrupted. Stopping containers...", file=fout)
-            file_tracker_container.stop()
-            task_runner_container.stop()
+    # client.images.pull(constants.TASK_RUNNER_IMAGE, platform="linux/amd64")
 
+    # task_runner_container = client.containers.run(
+    #     image=constants.TASK_RUNNER_IMAGE,
+    #     name="task-runner",
+    #     environment={
+    #         "USER_API_KEY": _api_key.get(),
+    #         "API_URL": api_url,
+    #         "MACHINE_GROUP_NAME": args.machine_group_name,
+    #         "HOST_NAME": args.hostname,
+    #     },
+    #     mounts=[
+    #         docker.types.Mount(target="/executer-images",
+    #                            source=apptainer_full_path,
+    #                            type="bind")
+    #     ],
+    #     volumes={
+    #         "workdir": {
+    #             "bind": "/workdir",
+    #             "mode": "rw"
+    #         },
+    #     },
+    #     network="host",
+    #     privileged=True,
+    #     platform="linux/amd64",
+    #     detach=True,
+    #     auto_remove=True,
+    # )
+
+    # print(
+    #     "File-Tracker launched "
+    #     f"with container ID: {file_tracker_container.short_id}",
+    #     file=fout)
+    # print(
+    #     "Task-Runner launched "
+    #     f"with container ID: {task_runner_container.short_id}",
+    #     file=fout)
+
+    # if not args.detach:
+    #     try:
+    #         join_container_streams(task_runner_container,
+    #                                file_tracker_container)
+    #     except KeyboardInterrupt:
+    #         print("Interrupted. Stopping containers...", file=fout)
+    #         file_tracker_container.stop()
+    #         task_runner_container.stop()
+
+    try:
+        join_container_streams(task_runner,
+                                file_tracker)
+    except KeyboardInterrupt:
+        print("Interrupted. Stopping containers...", file=fout)
+        os.kill(file_tracker.pid, signal.SIGKILL)
+        os.kill(task_runner.pid, signal.SIGKILL)
+        subprocess.run(["udocker", "rm", "task-runner"])
+        subprocess.run(["udocker", "rm", "file-tracker"])
 
 def register(parser):
     """Register the launch task-runner command."""
