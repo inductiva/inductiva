@@ -6,7 +6,7 @@ orphan: true
 In this tutorial, we are going to show you how you can
 use the Inductiva API to accelerate your OpenFast projects.
 
-## The curious case of OpenFast
+## The peculiar case of OpenFast
 
 OpenFast is a pretty peculiar piece of software because
 it runs only on a single thread. That means that OpenFast
@@ -34,7 +34,7 @@ would be impossible to cool down.
 
 So, if that is the case, why would you even bother using
 Inductiva to run your OpenFast simulation? What advantage
-could you possibly have if you decied to send your OpenFast
+could you possibly have if you decide to send your OpenFast
 simulation to a cloud machine using Inductiva? 
 
 And the answer is: **hundreds of advantages!**
@@ -61,9 +61,9 @@ let's get started.
 
 ## Running the baseline use case
 
-<div align="center">
-<img src="openfastAdvanced_static/single_turbine.jpg" width="200" height="200">
-</div>
+<p align="center">
+  <img src="./openfastAdvanced_static/single_turbine.jpg" alt="Openfast Simulation" width="300">
+</p>
 
 ### Step 1: Downloading you simulation files
 
