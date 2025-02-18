@@ -45,25 +45,6 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
             file=fout)
         return
 
-    # try:
-    #     client = docker.from_env()
-    # except DockerException as e:
-    #     print(f"Failed to connect to Docker: {e}", file=fout)
-    #     print(
-    #         "Please make sure Docker is running "
-    #         "and you have the necessary permissions.",
-    #         file=fout)
-    #     return
-
-    # task_runner = client.containers.list(filters={"name": "task-runner"})
-    # file_tracker = client.containers.list(filters={"name": "file-tracker"})
-
-    # if task_runner or file_tracker:
-    #     print(
-    #         "Task-Runner already running. "
-    #         "Please stop it before launching a new one.",
-    #         file=fout)
-    #     return
     workdir_path = "workdir"
     os.makedirs(workdir_path, exist_ok=True)
     workdir_abs_path = os.path.abspath(workdir_path)
@@ -83,33 +64,13 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
 
     file_tracker = subprocess.Popen(cmd,
                                     stdout=subprocess.PIPE, shell=True)
-    
-    # client.images.pull(constants.FILE_TRACKER_IMAGE, platform="linux/amd64")
-    # file_tracker_container = client.containers.run(
-    #     image=constants.FILE_TRACKER_IMAGE,
-    #     name="file-tracker",
-    #     environment={
-    #         "API_URL": api_url,
-    #         "USER_API_KEY": _api_key.get(),
-    #     },
-    #     volumes={
-    #         "workdir": {
-    #             "bind": "/workdir",
-    #             "mode": "rw"
-    #         },
-    #     },
-    #     network="host",
-    #     platform="linux/amd64",
-    #     detach=True,
-    #     auto_remove=True,
-    # )
+
     apptainer_path = "apptainer"
     os.makedirs(apptainer_path, exist_ok=True)
     os.chmod(apptainer_path, 0o777)
     apptainer_full_path = os.path.abspath(apptainer_path)
 
     subprocess.run(["udocker", "pull", "--platform", "linux/amd64",  constants.TASK_RUNNER_IMAGE])
-    subprocess.run(["udocker", "setup", "--execmode=S1", constants.TASK_RUNNER_IMAGE])
 
     cmd = f"""
     udocker run \
@@ -127,53 +88,6 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
                                      
     task_runner = subprocess.Popen(cmd,
                                     stdout=subprocess.PIPE, shell=True)
-
-    # client.images.pull(constants.TASK_RUNNER_IMAGE, platform="linux/amd64")
-
-    # task_runner_container = client.containers.run(
-    #     image=constants.TASK_RUNNER_IMAGE,
-    #     name="task-runner",
-    #     environment={
-    #         "USER_API_KEY": _api_key.get(),
-    #         "API_URL": api_url,
-    #         "MACHINE_GROUP_NAME": args.machine_group_name,
-    #         "HOST_NAME": args.hostname,
-    #     },
-    #     mounts=[
-    #         docker.types.Mount(target="/executer-images",
-    #                            source=apptainer_full_path,
-    #                            type="bind")
-    #     ],
-    #     volumes={
-    #         "workdir": {
-    #             "bind": "/workdir",
-    #             "mode": "rw"
-    #         },
-    #     },
-    #     network="host",
-    #     privileged=True,
-    #     platform="linux/amd64",
-    #     detach=True,
-    #     auto_remove=True,
-    # )
-
-    # print(
-    #     "File-Tracker launched "
-    #     f"with container ID: {file_tracker_container.short_id}",
-    #     file=fout)
-    # print(
-    #     "Task-Runner launched "
-    #     f"with container ID: {task_runner_container.short_id}",
-    #     file=fout)
-
-    # if not args.detach:
-    #     try:
-    #         join_container_streams(task_runner_container,
-    #                                file_tracker_container)
-    #     except KeyboardInterrupt:
-    #         print("Interrupted. Stopping containers...", file=fout)
-    #         file_tracker_container.stop()
-    #         task_runner_container.stop()
 
     try:
         join_container_streams(task_runner,
