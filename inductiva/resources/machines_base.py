@@ -54,24 +54,25 @@ class BaseMachineGroup(ABC):
     max_idle_time: Optional[Union[datetime.timedelta, int]] = None
     auto_terminate_ts: Optional[datetime.datetime] = None
 
+    create_time = None
+    num_machines = 0
+    quota_usage = {}
+    allow_auto_start = True
+
     # Internal attributes
     _free_space_threshold_gb = 5
     _size_increment_gb = 10
     _id = None
     _name = None
-    create_time = None
     _started = False
     #Number of active machines at the time of
     #the request machine_groups.get()
     _active_machines = 0
-    num_machines = 0
     _custom_vm_image = None
     _estimated_cost = None
     _idle_seconds = None
-    quota_usage = {}
-    total_ram_gb = None
     _cost_per_hour = {}
-    allow_auto_start = True
+    _total_ram_gb = None
 
     QUOTAS_EXCEEDED_SLEEP_SECONDS = 60
 
@@ -164,6 +165,10 @@ class BaseMachineGroup(ABC):
         Resource idle time in seconds.
         """
         return self._idle_seconds
+
+    @property
+    def total_ram_gb(self):
+        return self._total_ram_gb
 
     @abstractmethod
     def short_name(self) -> str:
@@ -260,7 +265,7 @@ class BaseMachineGroup(ABC):
             body.get("idle_seconds"))
         self.auto_terminate_ts = self._iso_to_datetime(
             body.get("auto_terminate_ts"))
-        self.total_ram_gb = body.get("total_ram_gb")
+        self._total_ram_gb = body.get("total_ram_gb")
         self._cost_per_hour = body.get("cost_per_hour")
 
         dynamic_disk_resize_config = body.get(
