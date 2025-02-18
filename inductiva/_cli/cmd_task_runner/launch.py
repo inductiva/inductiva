@@ -49,8 +49,12 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
     os.makedirs(workdir_path, exist_ok=True)
     workdir_abs_path = os.path.abspath(workdir_path)
 
-    subprocess.run(["udocker", "pull", "--platform", "linux/amd64", constants.FILE_TRACKER_IMAGE])
-    subprocess.run(["udocker", "setup", "--execmode=S1", constants.FILE_TRACKER_IMAGE])
+    subprocess.run([
+        "udocker", "pull", "--platform", "linux/amd64",
+        constants.FILE_TRACKER_IMAGE
+    ])
+    subprocess.run(
+        ["udocker", "setup", "--execmode=S1", constants.FILE_TRACKER_IMAGE])
 
     cmd = f"""
     udocker run \
@@ -62,15 +66,17 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
     --rm {constants.FILE_TRACKER_IMAGE}
     """
 
-    file_tracker = subprocess.Popen(cmd,
-                                    stdout=subprocess.PIPE, shell=True)
+    file_tracker = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
 
     apptainer_path = "apptainer"
     os.makedirs(apptainer_path, exist_ok=True)
     os.chmod(apptainer_path, 0o777)
     apptainer_full_path = os.path.abspath(apptainer_path)
 
-    subprocess.run(["udocker", "pull", "--platform", "linux/amd64",  constants.TASK_RUNNER_IMAGE])
+    subprocess.run([
+        "udocker", "pull", "--platform", "linux/amd64",
+        constants.TASK_RUNNER_IMAGE
+    ])
 
     cmd = f"""
     udocker run \
@@ -85,19 +91,18 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
     --platform=linux/amd64 \
     --rm {constants.TASK_RUNNER_IMAGE}
     """
-                                     
-    task_runner = subprocess.Popen(cmd,
-                                    stdout=subprocess.PIPE, shell=True)
+
+    task_runner = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
 
     try:
-        join_container_streams(task_runner,
-                                file_tracker)
+        join_container_streams(task_runner, file_tracker)
     except KeyboardInterrupt:
         print("Interrupted. Stopping containers...", file=fout)
         os.kill(file_tracker.pid, signal.SIGKILL)
         os.kill(task_runner.pid, signal.SIGKILL)
         subprocess.run(["udocker", "rm", "task-runner"])
         subprocess.run(["udocker", "rm", "file-tracker"])
+
 
 def register(parser):
     """Register the launch task-runner command."""
