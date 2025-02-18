@@ -10,7 +10,9 @@ cloud_machine = inductiva.resources.MachineGroup( \
 reef3d = inductiva.simulators.REEF3D()
 
 # Run simulation
-task = reef3d.run(input_dir="/path/to/my/reef3d/files", on=cloud_machine)
+task = reef3d.run( \
+    input_dir="/path/to/my/reef3d/files",
+    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()

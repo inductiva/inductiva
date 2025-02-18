@@ -42,8 +42,9 @@ to prepare for running four *parallel* simulation, for four different particle r
 import inductiva
 
 # Launch a machine group with four c3-standard-4
-machine_group = inductiva.resources.MachineGroup("c3-standard-4")
-machine_group.start()
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c3-standard-4")
 
 # Assuming the template folder was downloaded to the local directory,
 # set the path to it.
@@ -59,14 +60,15 @@ for n, radius in enumerate(particle_radii, start=1):
     # with the values of the variables defined below.
     target_dir = f"splishsplash-hyperparameter-search_{n}"
     inductiva.TemplateManager.render_dir(
-                            source_dir=template_dir,
-                            target_dir=target_dir,
-                            particle_radius=radius,
-                            overwrite=False)
+        source_dir=template_dir,
+        target_dir=target_dir,
+        particle_radius=radius,
+        overwrite=False)
     
-    task = SPlisHSPlasH.run(input_dir=target_dir,
-                            sim_config_filename="config.json",
-                            on=machine_group)
+    task = SPlisHSPlasH.run(
+        input_dir=target_dir,
+        sim_config_filename="config.json",
+        on=cloud_machine)
     tasks_list.append(task)
 
 ```

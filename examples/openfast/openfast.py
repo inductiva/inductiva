@@ -9,14 +9,15 @@ cloud_machine = inductiva.resources.MachineGroup( \
 # Initialize the Simulator
 openfast = inductiva.simulators.OpenFAST()
 
-my_openfast_command = [
-    # List the OpenFAST commands you wish to execute
-]
+# Specify the OpenFAST commands you want to run, separated by commas
+# Example using the 'openfast' command
+openfast_commands = ["openfast my_file.fst"]
 
 # Run simulation
-task = openfast.run(input_dir="/path/to/my/openfast/files",
-                    commands=my_openfast_command,
-                    on=cloud_machine)
+task = openfast.run( \
+    input_dir="/path/to/my/openfast/files",
+    commands=openfast_commands,
+    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()

@@ -10,10 +10,11 @@ cloud_machine = inductiva.resources.MachineGroup( \
 fvcom = inductiva.simulators.FVCOM()
 
 # Run simulation with config files in the input directory
-task = fvcom.run(input_dir="path/to/my/fvcom/files",
-                 working_dir="run/",
-                 case_name="my_case_name",
-                 on=cloud_machine)
+task = fvcom.run( \
+    input_dir="path/to/my/fvcom/files",
+    working_dir="run/",
+    case_name="my_case_name",
+    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()

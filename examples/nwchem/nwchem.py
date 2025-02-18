@@ -10,9 +10,10 @@ cloud_machine = inductiva.resources.MachineGroup( \
 nwchem = inductiva.simulators.NWChem()
 
 # Run simulation with config files in the input directory
-task = nwchem.run(input_dir="/path/to/my/nwchem/files",
-                  sim_config_filename="my_config_file.nw",
-                  on=cloud_machine)
+task = nwchem.run( \
+    input_dir="/path/to/my/nwchem/files",
+    sim_config_filename="my_config_file.nw",
+    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()

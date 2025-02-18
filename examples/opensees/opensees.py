@@ -10,9 +10,10 @@ cloud_machine = inductiva.resources.MachineGroup( \
 opensees = inductiva.simulators.OpenSees()
 
 # Run simulation with config files in the input directory
-task = opensees.run(input_dir="/Path/to/My/OpenSees/Files",
-                    sim_config_filename="my_config_file.tcl",
-                    on=cloud_machine)
+task = opensees.run( \
+    input_dir="/Path/to/My/OpenSees/Files",
+    sim_config_filename="my_config_file.tcl",
+    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()

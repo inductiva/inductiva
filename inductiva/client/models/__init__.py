@@ -22,7 +22,6 @@ from inductiva.client.model.currency_code import CurrencyCode
 from inductiva.client.model.disk_resize_request import DiskResizeRequest
 from inductiva.client.model.dynamic_disk_resize_config import DynamicDiskResizeConfig
 from inductiva.client.model.executer import Executer
-from inductiva.client.model.export_operation import ExportOperation
 from inductiva.client.model.file_download_details import FileDownloadDetails
 from inductiva.client.model.file_download_url import FileDownloadUrl
 from inductiva.client.model.file_info import FileInfo
@@ -43,6 +42,7 @@ from inductiva.client.model.machine_info import MachineInfo
 from inductiva.client.model.machine_operation import MachineOperation
 from inductiva.client.model.machine_operation_type import MachineOperationType
 from inductiva.client.model.machine_type import MachineType
+from inductiva.client.model.multi_part_export_operation import MultiPartExportOperation
 from inductiva.client.model.operation_end import OperationEnd
 from inductiva.client.model.operation_start import OperationStart
 from inductiva.client.model.operation_status import OperationStatus
@@ -59,6 +59,7 @@ from inductiva.client.model.project_create import ProjectCreate
 from inductiva.client.model.providers import Providers
 from inductiva.client.model.quota import Quota
 from inductiva.client.model.quota_scope import QuotaScope
+from inductiva.client.model.sharing_level import SharingLevel
 from inductiva.client.model.storage_cost import StorageCost
 from inductiva.client.model.storage_file_info import StorageFileInfo
 from inductiva.client.model.storage_operation import StorageOperation
@@ -87,6 +88,8 @@ from inductiva.client.model.tier_quota_detail import TierQuotaDetail
 from inductiva.client.model.transaction import Transaction
 from inductiva.client.model.update_capabilities_actions import UpdateCapabilitiesActions
 from inductiva.client.model.update_capabilities_request import UpdateCapabilitiesRequest
+from inductiva.client.model.update_operation_status import UpdateOperationStatus
+from inductiva.client.model.upload_part import UploadPart
 from inductiva.client.model.usage_statistics import UsageStatistics
 from inductiva.client.model.user import User
 from inductiva.client.model.user_activity import UserActivity

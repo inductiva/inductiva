@@ -14,9 +14,10 @@ my_qe_command = [
 ]
 
 # Run simulation
-task = qe.run(input_dir="/path/to/my/quantumEspresso/files",
-              commands=my_qe_command,
-              on=cloud_machine)
+task = qe.run( \
+    input_dir="/path/to/my/quantumEspresso/files",
+    commands=my_qe_command,
+    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()

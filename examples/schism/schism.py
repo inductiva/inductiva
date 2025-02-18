@@ -10,9 +10,10 @@ cloud_machine = inductiva.resources.MachineGroup( \
 schism = inductiva.simulators.SCHISM()
 
 # Run simulation with config files in the input directory
-task = schism.run(input_dir="/path/to/my/schism/files",
-                  num_scribes=2,
-                  on=cloud_machine)
+task = schism.run( \
+    input_dir="/path/to/my/schism/files",
+    num_scribes=2,
+    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()
