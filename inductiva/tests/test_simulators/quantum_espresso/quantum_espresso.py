@@ -3,7 +3,9 @@ import inductiva
 from inductiva.commands import MPIConfig, Command
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c2-standard-4")
 
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
@@ -11,7 +13,10 @@ input_dir = inductiva.utils.download_from_url(
     "qe-input-example.zip",
     unzip=True)
 
-mpi_config = MPIConfig(version="4.1.6", np=2, use_hwthread_cpus=False)
+mpi_config = MPIConfig( \
+    version="4.1.6",
+    np=2,
+    use_hwthread_cpus=False)
 
 # List of commands to run
 commands = [
@@ -24,10 +29,13 @@ commands = [
 qe = inductiva.simulators.QuantumEspresso()
 
 # Run simulation
-task = qe.run(input_dir, commands=commands, on=machine_group)
+task = qe.run( \
+    input_dir,
+    commands=commands,
+    on=cloud_machine)
 
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
 
