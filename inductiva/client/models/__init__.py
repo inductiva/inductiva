@@ -59,6 +59,7 @@ from inductiva.client.model.project_create import ProjectCreate
 from inductiva.client.model.providers import Providers
 from inductiva.client.model.quota import Quota
 from inductiva.client.model.quota_scope import QuotaScope
+from inductiva.client.model.sharing_level import SharingLevel
 from inductiva.client.model.storage_cost import StorageCost
 from inductiva.client.model.storage_file_info import StorageFileInfo
 from inductiva.client.model.storage_operation import StorageOperation
@@ -87,6 +88,7 @@ from inductiva.client.model.tier_quota_detail import TierQuotaDetail
 from inductiva.client.model.transaction import Transaction
 from inductiva.client.model.update_capabilities_actions import UpdateCapabilitiesActions
 from inductiva.client.model.update_capabilities_request import UpdateCapabilitiesRequest
+from inductiva.client.model.update_operation_status import UpdateOperationStatus
 from inductiva.client.model.upload_part import UploadPart
 from inductiva.client.model.usage_statistics import UsageStatistics
 from inductiva.client.model.user import User

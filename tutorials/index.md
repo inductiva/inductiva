@@ -105,6 +105,7 @@ how_to/manage-remote-storage
 how_to/manage_tasks
 how_to/manage_and_retrieve_results
 how_to/reuse-files
+how_to/export-files-aws
 how_to/run-benchmarks
 how_to/use-local-task-runner
 ```

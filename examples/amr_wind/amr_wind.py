@@ -10,9 +10,10 @@ cloud_machine = inductiva.resources.MachineGroup( \
 amr_wind = inductiva.simulators.AmrWind()
 
 # Run simulation with config files in the input directory
-task = amr_wind.run(input_dir="path/to/my/amr-wind/files",
-                    sim_config_filename="my_config_file.inp",
-                    on=cloud_machine)
+task = amr_wind.run( \
+    input_dir="path/to/my/amr-wind/files",
+    sim_config_filename="my_config_file.inp",
+    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()

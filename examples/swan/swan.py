@@ -10,9 +10,10 @@ cloud_machine = inductiva.resources.MachineGroup( \
 swan = inductiva.simulators.SWAN(version="41.45")
 
 # Run simulation with config files in the input directory
-task = swan.run(input_dir="/path/to/my/swan/files",
-                sim_config_filename="my_config_file.swn",
-                on=cloud_machine)
+task = swan.run( \
+    input_dir="/path/to/my/swan/files",
+    sim_config_filename="my_config_file.swn",
+    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()

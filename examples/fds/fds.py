@@ -10,9 +10,10 @@ cloud_machine = inductiva.resources.MachineGroup( \
 fds = inductiva.simulators.FDS()
 
 # Run simulation with config files in the input directory
-task = fds.run(input_dir="path/to/my/fds/files",
-               sim_config_filename="my_config_file.fds",
-               on=cloud_machine)
+task = fds.run( \
+    input_dir="path/to/my/fds/files",
+    sim_config_filename="my_config_file.fds",
+    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()

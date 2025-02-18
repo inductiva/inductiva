@@ -30,7 +30,10 @@ By following this step-by-step guide, you will:
   ">
     🎥 Prefer a Visual Guide?
   </h3>
-  <p>Follow along with our <strong>video walkthrough</strong> led by our CEO, where key details, features, and step-by-step instructions are explained in depth. It's a quick and engaging way to get started in no time!</p>
+  <p class="align-center">
+    <strong>Watch <a href="https://www.youtube.com/watch?v=X2F5O4e6XPo">Part 1</a> and <a href="https://www.youtube.com/watch?v=SDnFWtRTISw">Part 2</a></strong>
+  </p>
+  <p style="margin-top: 10px;">Follow along with our <strong>video walkthrough</strong> led by our CEO, where key details, features, and step-by-step instructions are explained in depth. It's a quick and engaging way to get started in no time!</p>
 </div>
 
 Let’s go!
@@ -128,7 +131,8 @@ In the empty `run.py` file you've created, add the following code, save, and clo
 import inductiva
 
 # Define the machine group
-machine_group = inductiva.resources.MachineGroup(
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
     machine_type="c3d-highcpu-90",
     spot=True, # Enables cost-saving spot mode
     data_disk_gb=20) 
@@ -144,12 +148,12 @@ task = xbeach.run(
     input_dir=input_dir,
     sim_config_filename="params.txt",
     n_vcpus=90,
-    on=machine_group)
+    on=cloud_machine)
 
 task.wait()
 
 # Clean up resources after the simulation
-machine_group.terminate()
+cloud_machine.terminate()
 
 # Get a small summary of the run
 task.print_summary()

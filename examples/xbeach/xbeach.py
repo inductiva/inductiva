@@ -10,9 +10,10 @@ cloud_machine = inductiva.resources.MachineGroup( \
 xbeach = inductiva.simulators.XBeach(version="1.24")
 
 # Run simulation with configuration files in the input directory
-task = xbeach.run(input_dir="/path/to/my/xbeach/files",
-                  sim_config_filename="my_config_file.txt",
-                  on=cloud_machine)
+task = xbeach.run( \
+    input_dir="/path/to/my/xbeach/files",
+    sim_config_filename="my_config_file.txt",
+    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()
