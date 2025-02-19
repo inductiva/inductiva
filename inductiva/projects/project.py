@@ -270,16 +270,14 @@ class Project:
                 total_duration += duration_task
 
         # get start/end time
-        start_project_time = min([
+        start_project_time = min(
             datetime.datetime.fromisoformat(task.info.start_time)
             for task in list_of_tasks
-            if task.info.start_time
-        ])
-        end_project_time = max([
+            if task.info.start_time)
+        end_project_time = max(
             datetime.datetime.fromisoformat(task.info.end_time)
             for task in list_of_tasks
-            if task.info.end_time
-        ])
+            if task.info.end_time)
 
         duration = end_project_time - start_project_time
 
