@@ -317,11 +317,11 @@ class Project:
                   last_n: int = -1,
                   force_update=False,
                   status: Optional[Union[str, models.TaskStatusCode]] = None):
-        """Get the last N submitted tasks to this project.
+        """Get the the tasks of this project.
 
-        Get the last N submitted tasks that belong to this project,
-        eventually filtered by status. By default, only the last 5
-        submitted tasks are returned, irrespectively of their status.
+        Get the tasks that belong to this project,
+        eventually filtered by status. By default, it will return all the tasks,
+        irrespectively of their status.
         This method will only do a request to the back end if the list of
         tasks is None (never requested the list of tasks) or if `force_update`
         is passed as True.
