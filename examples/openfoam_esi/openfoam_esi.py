@@ -10,9 +10,10 @@ cloud_machine = inductiva.resources.MachineGroup( \
 openfoam = inductiva.simulators.OpenFOAM(distribution="esi", version="2412")
 
 # Run simulation with config files in the input directory
-task = openfoam.run(input_dir="/path/to/my/openfoam/files",
-                    shell_script="./Allrun",
-                    on=cloud_machine)
+task = openfoam.run( \
+    input_dir="/path/to/my/openfoam/files",
+    shell_script="./Allrun",
+    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()

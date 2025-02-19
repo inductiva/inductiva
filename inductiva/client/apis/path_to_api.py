@@ -56,6 +56,7 @@ from inductiva.client.apis.paths.compute_groups_history import ComputeGroupsHist
 from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
 from inductiva.client.apis.paths.compute_machine_types import ComputeMachineTypes
 from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
+from inductiva.client.apis.paths.compute_group_machine_group_id_sharing import ComputeGroupMachineGroupIdSharing
 from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_cost import StorageCost
 from inductiva.client.apis.paths.storage_contents import StorageContents
@@ -64,9 +65,10 @@ from inductiva.client.apis.paths.storage_signed_urls import StorageSignedUrls
 from inductiva.client.apis.paths.storage_input_notify import StorageInputNotify
 from inductiva.client.apis.paths.storage_input_remote import StorageInputRemote
 from inductiva.client.apis.paths.storage_ import Storage
-from inductiva.client.apis.paths.storage_export import StorageExport
 from inductiva.client.apis.paths.storage_operations_operation_id import StorageOperationsOperationId
 from inductiva.client.apis.paths.storage_operations import StorageOperations
+from inductiva.client.apis.paths.storage_export_multipart import StorageExportMultipart
+from inductiva.client.apis.paths.storage_update_operation_status import StorageUpdateOperationStatus
 from inductiva.client.apis.paths.version import Version
 from inductiva.client.apis.paths.version_check import VersionCheck
 from inductiva.client.apis.paths.users_quotas import UsersQuotas
@@ -198,6 +200,8 @@ PathToApi = typing_extensions.TypedDict(
             ComputeMachineTypes,
         PathValues.COMPUTE_GROUP_NAME:
             ComputeGroupName,
+        PathValues.COMPUTE_GROUP_MACHINE_GROUP_ID_SHARING:
+            ComputeGroupMachineGroupIdSharing,
         PathValues.STORAGE_SIZE:
             StorageSize,
         PathValues.STORAGE_COST:
@@ -214,12 +218,14 @@ PathToApi = typing_extensions.TypedDict(
             StorageInputRemote,
         PathValues.STORAGE_:
             Storage,
-        PathValues.STORAGE_EXPORT:
-            StorageExport,
         PathValues.STORAGE_OPERATIONS_OPERATION_ID:
             StorageOperationsOperationId,
         PathValues.STORAGE_OPERATIONS:
             StorageOperations,
+        PathValues.STORAGE_EXPORT_MULTIPART:
+            StorageExportMultipart,
+        PathValues.STORAGE_UPDATE_OPERATION_STATUS:
+            StorageUpdateOperationStatus,
         PathValues.VERSION:
             Version,
         PathValues.VERSIONCHECK:
@@ -369,6 +375,8 @@ path_to_api = PathToApi({
         ComputeMachineTypes,
     PathValues.COMPUTE_GROUP_NAME:
         ComputeGroupName,
+    PathValues.COMPUTE_GROUP_MACHINE_GROUP_ID_SHARING:
+        ComputeGroupMachineGroupIdSharing,
     PathValues.STORAGE_SIZE:
         StorageSize,
     PathValues.STORAGE_COST:
@@ -385,12 +393,14 @@ path_to_api = PathToApi({
         StorageInputRemote,
     PathValues.STORAGE_:
         Storage,
-    PathValues.STORAGE_EXPORT:
-        StorageExport,
     PathValues.STORAGE_OPERATIONS_OPERATION_ID:
         StorageOperationsOperationId,
     PathValues.STORAGE_OPERATIONS:
         StorageOperations,
+    PathValues.STORAGE_EXPORT_MULTIPART:
+        StorageExportMultipart,
+    PathValues.STORAGE_UPDATE_OPERATION_STATUS:
+        StorageUpdateOperationStatus,
     PathValues.VERSION:
         Version,
     PathValues.VERSIONCHECK:

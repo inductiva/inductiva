@@ -2,7 +2,9 @@
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c2-standard-4")
 
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
@@ -14,12 +16,13 @@ input_dir = inductiva.utils.download_from_url(
 openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
 
 # Run simulation with config files in the input directory
-task = openfoam.run(input_dir=input_dir,
-                    shell_script="./Allrun",
-                    on=machine_group)
+task = openfoam.run( \
+    input_dir=input_dir,
+    shell_script="./Allrun",
+    on=cloud_machine)
 
 task.wait()
-machine_group.terminate()
+cloud_machine.terminate()
 
 task.download_outputs()
 

@@ -1,10 +1,15 @@
 """Methods to interact with the user storage resources."""
-import time
 import logging
+import math
 import os
-import tqdm
-from typing import List, Literal, Optional, Tuple
+import pathlib
+import time
 import urllib
+from dataclasses import dataclass
+from enum import Enum
+from typing import List, Literal, Optional, Tuple
+
+import tqdm
 
 import inductiva
 from inductiva import constants
@@ -12,6 +17,15 @@ from inductiva.api import methods
 from inductiva.client import exceptions, models
 from inductiva.client.apis.tags import storage_api
 from inductiva.utils import format_utils
+
+MB = 1024 * 1024
+_boto3_imported = True
+try:
+    import boto3
+    from botocore.config import Config
+    logging.getLogger("botocore").setLevel(logging.WARNING)
+except ImportError:
+    _boto3_imported = False
 
 
 def _print_storage_size_and_cost() -> int:
@@ -75,8 +89,8 @@ def listdir(path="/",
     api = storage_api.StorageApi(inductiva.api.get_client())
 
     # This is valid for single files and directories
-    if len(path.split(os.sep)) < 2:
-        path += os.sep
+    if len(path.split("/")) < 2:
+        path += "/"
 
     contents = api.list_storage_contents({
         "path": path,
@@ -142,9 +156,50 @@ def get_signed_urls(
     return signed_urls
 
 
-def get_zip_contents(path: str) -> List[models.ZipArchiveInfo]:
+@dataclass
+class ZipFileInfo:
+    """Represents information about a file within a ZIP archive."""
+    name: str
+    size: int
+    compressed_size: int
+
+
+@dataclass
+class ZipArchiveInfo:
+    """Represents the total ZIP size and file contents of a ZIP archive."""
+    size: int
+    files: List[ZipFileInfo]
+
+
+def get_zip_contents(
+    path: str,
+    zip_relative_path: str = "",
+) -> ZipArchiveInfo:
+    """
+    Retrieve the contents of a ZIP archive from a given path.
+
+    Args:
+        path (str): The full path to the ZIP archive.
+        zip_relative_path (str, optional): A relative path inside the ZIP 
+            archive to filter the contents. Defaults to an empty string, 
+            which lists all files within the archive.
+
+    Returns:
+        ZipArchiveInfo: An object containing the total size of the ZIP archive
+            and a list of `ZipFileInfo` objects representing the files 
+            within the specified ZIP archive.
+    """
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
-    return api_instance.get_zip_contents(query_params={"path": path}).body
+    query_params = {"path": path, "zip_relative_path": zip_relative_path}
+    response_body = api_instance.get_zip_contents(query_params).body
+    files = [ZipFileInfo(
+        name=str(file["name"]),
+        size=int(file["size"]) \
+            if file["size"] else None,
+        compressed_size=int(file["compressed_size"]) \
+            if file["compressed_size"] else None,
+    ) for file in response_body["contents"]]
+    return ZipArchiveInfo(size=int(response_body["size"]), files=files)
 
 
 def upload_from_url(
@@ -299,7 +354,6 @@ class StorageOperation():
 
     @classmethod
     def from_api_response(cls, api, response):
-
         op = cls(api, response["id"])
 
         op._update_from_api_response(response,)
@@ -332,24 +386,236 @@ class StorageOperation():
         return self._status
 
 
-def export(path: str, dest_url: str) -> StorageOperation:
-    """Export files from the API's storage to a remote storage location.
+class ExportDestination(Enum):
+    AWS_S3 = "aws-s3"
+
+    def __str__(self):
+        return self.value
+
+
+def _initiate_multipart_upload(filename, bucket_name, region_name):
+    """
+    Initiate a multipart upload on S3 and return the UploadId.
+    """
+    s3_client = boto3.client("s3",
+                             region_name=region_name,
+                             config=Config(region_name=region_name,
+                                           signature_version="v4"))
+    response = s3_client.create_multipart_upload(
+        Bucket=bucket_name,
+        Key=filename,
+    )
+    return response["UploadId"]
+
+
+def _generate_presigned_url(
+    upload_id,
+    part_number,
+    filename,
+    bucket_name,
+    region_name,
+):
+    """
+    Generate a presigned URL for uploading a part to S3.
+    """
+    s3_client = boto3.client("s3",
+                             region_name=region_name,
+                             config=Config(region_name=region_name,
+                                           signature_version="v4"))
+    method_parameters = {
+        "Bucket": bucket_name,
+        "Key": filename,
+        "PartNumber": part_number,
+        "UploadId": upload_id,
+    }
+
+    signed_url = s3_client.generate_presigned_url(
+        "upload_part",
+        Params=method_parameters,
+        ExpiresIn=3600,
+    )
+
+    return signed_url
+
+
+def _generate_complete_multipart_upload_signed_url(
+    upload_id,
+    filename,
+    bucket_name,
+    region_name,
+):
+    """
+    Generate a presigned URL for completing the multipart upload.
+    """
+    s3_client = boto3.client("s3",
+                             region_name=region_name,
+                             config=Config(region_name=region_name,
+                                           signature_version="v4"))
+
+    signed_url = s3_client.generate_presigned_url(
+        ClientMethod="complete_multipart_upload",
+        Params={
+            "Bucket": bucket_name,
+            "Key": filename,
+            "UploadId": upload_id
+        },
+        HttpMethod="POST",
+    )
+
+    return signed_url
+
+
+def _get_file_size(file_path):
+    api = storage_api.StorageApi(inductiva.api.get_client())
+
+    contents = api.list_storage_contents({
+        "path": file_path,
+        "max_results": 2,
+    }).body
+    if len(contents) > 1:
+        raise ValueError(f"Multiple files found at {file_path}. "
+                         "Please specify a single file.")
+
+    return list(contents.values())[0]["size_bytes"]
+
+
+def _get_multipart_parts(size: int,
+                         part_size: int = 128 * MB) -> Tuple[int, int]:
+    """
+    Calculate the size of each part and the total number of parts
+
+    The goal is to divide the data into parts `part_size` each:
+    1. No more than 10,000 parts are created (maximum parts allowed by S3).
+    2. The part size might be increased to avoid exceeding the part limit.
+    3. The part size cannot be lower than 5MB.
+
 
     Args:
-        path: Path in the API's remote storage to the files.
-        dest_url: URL to upload the output files.
+        size: The total size of the file to be uploaded, in bytes.
+        part_size: The minimum size of each part, in bytes.
 
     Returns:
-        Instance of StorageOperation. Call `wait` on the resulting object
-        to block until the operation finishes.
+        - part_size: The size of each part in bytes.
+        - part_count: The total number of parts.
+    """
+    max_parts = 10000
+    min_allowed_part_size = 5 * MB  # 5MB
+
+    # Ensure part_size is at least 5MB
+    part_size = max(part_size, min_allowed_part_size)
+
+    if size <= part_size:
+        return size, 1
+
+    # Calculate the part size based on the smaller of two values:
+    # - At least `part_size`
+    # - Maximum size to ensure no more than 10,000 parts (size // 10000)
+    max_allowed_part_size = size // max_parts
+    part_size = max(part_size, max_allowed_part_size)
+
+    part_count = math.ceil(size / part_size)
+
+    return part_size, part_count
+
+
+def multipart_upload(
+    path,
+    parts_size,
+    upload_parts,
+    complete_multipart_url,
+):
+    """
+    Perform the multipart upload using the server.
     """
     api = storage_api.StorageApi(inductiva.api.get_client())
-    resp = api.export_files(body={
-        "path": path,
-        "dest_url": dest_url,
-    })
 
-    logging.info("Started export operation ...")
-    operation = StorageOperation.from_api_response(api, resp.body)
+    api.export_multipart_files(
+        body={
+            "path": path,
+            "parts_size": parts_size,
+            "upload_parts": upload_parts,
+            "complete_multipart_url": complete_multipart_url,
+        })
 
-    return operation
+
+def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):
+    if not _boto3_imported:
+        print("boto3 is not installed. Please run "
+              "'pip install inductiva[aws]' to install it.")
+        return
+    try:
+        boto3.client("sts").get_caller_identity()
+    except Exception:  # pylint: disable=broad-exception-caught
+        print("AWS credentials not found. Please set your "
+              "AWS credentials with 'aws configure'.")
+        return
+    try:
+        boto3.client("s3").head_bucket(Bucket=bucket_name)
+    except Exception:  # pylint: disable=broad-exception-caught
+        print(f"Bucket {bucket_name} not found. Make sure the bucket exists "
+              "and you have the correct permissions: "
+              "https://tutorials.inductiva.ai/how_to/export-files-aws.html")
+        return
+
+    region_name = boto3.Session().region_name
+    if not region_name:
+        print("AWS region not found. Please set your AWS region with "
+              "'aws configure'.")
+        return
+
+    # Step 1: Get the file size
+    file_size = _get_file_size(path_to_export)
+
+    # Step 2: Calculate the part size and count
+    parts_size, parts_count = _get_multipart_parts(
+        file_size,
+        part_size=part_size * MB,
+    )
+
+    # Step 3: Initiate the multipart upload on aws
+    upload_id = _initiate_multipart_upload(filename, bucket_name, region_name)
+
+    # Step 4: Generate presigned URLs for each part
+    upload_parts = []
+    for part_number in range(1, parts_count + 1):
+        presigned_url = _generate_presigned_url(upload_id, part_number,
+                                                filename, bucket_name,
+                                                region_name)
+        upload_parts.append({
+            "part_number": part_number,
+            "part_url": presigned_url
+        })
+
+    # Step 5: Generate the complete multipart upload signed URL
+    complete_multipart_url = _generate_complete_multipart_upload_signed_url(
+        upload_id, filename, bucket_name, region_name)
+
+    # Step 6: Ask the server to perform the multipart upload
+    multipart_upload(
+        path_to_export,
+        parts_size,
+        upload_parts,
+        complete_multipart_url,
+    )
+    print(
+        "Export is being done by inductiva server. You can close the terminal.")
+
+
+def export(
+    path_to_export: str,
+    export_to: ExportDestination,
+    bucket_name: str,
+    file_name: Optional[str] = None,
+    part_size: int = 128,
+):
+    file_name = file_name or pathlib.Path(path_to_export).name
+    if export_to == ExportDestination.AWS_S3:
+        print(f"Exporting {path_to_export} to {bucket_name}...")
+        export_to_aws_s3(
+            path_to_export,
+            part_size,
+            file_name,
+            bucket_name,
+        )
+    else:
+        raise ValueError(f"Unsupported export destination: {export_to}")

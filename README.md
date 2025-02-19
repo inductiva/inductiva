@@ -20,7 +20,7 @@ time and energy on what matters: running simulations that solve real problems.
 
 # System Requirements
 
-- Python 3.x interpreter
+- Python >= 3.9 
 - pip (or pip3) to install the inductiva package
   
 # Getting started

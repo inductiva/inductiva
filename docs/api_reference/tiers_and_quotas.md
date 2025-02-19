@@ -70,7 +70,6 @@ in each tier:
 | Maximum time a machine group can stay up before automatic termination | hour | instance | Maximum time that an allocated machine group is allowed to stay active (even if it’s running a task), after which it will be automatically terminated | 36 | 168 | inf |
 | Maximum time a task can stay running before automatic termination | hour | instance | Maximum time that a task can stay running, after which it will be automatically terminated | 8 | 16 | inf |
 | Maximum disk size | GB | instance | Maximum size of the disk that can be assigned to each individual machine in a machine group | 100 | 2000 | inf |
-| Maximum amount of RAM per VCPU | GB | instance | Maximum amount of RAM per individual VCPU that can be used. Even though RAM is not specifiable per se, this quota constrains the machine types that can be requested | 4 | 6 | 8 |
 
 ***NOTE:** _global_ quotas are applied to the user account and will encompass all
 machine groups and tasks submitted by the user.
@@ -126,7 +125,6 @@ Username: <username here>
                                                                                           MAX ALLOWED
  Maximum time a machine group can stay up before automatic termination                    168 hour
  Maximum disk size                                                                        2000 GB
- Maximum amount of RAM per VCPU                                                           6 GB
 
 ```
 

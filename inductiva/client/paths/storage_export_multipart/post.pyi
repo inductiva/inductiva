@@ -25,8 +25,8 @@ import frozendict  # noqa: F401
 from inductiva.client import schemas  # noqa: F401
 
 from inductiva.client.model.providers import Providers
+from inductiva.client.model.multi_part_export_operation import MultiPartExportOperation
 from inductiva.client.model.http_validation_error import HTTPValidationError
-from inductiva.client.model.export_operation import ExportOperation
 
 # Query params
 ProviderIdSchema = Providers
@@ -53,9 +53,9 @@ request_query_provider_id = api_client.QueryParameter(
     explode=True,
 )
 # body param
-SchemaForRequestBodyApplicationJson = ExportOperation
+SchemaForRequestBodyApplicationJson = MultiPartExportOperation
 
-request_body_export_operation = api_client.RequestBody(
+request_body_multi_part_export_operation = api_client.RequestBody(
     content={
         'application/json':
             api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
@@ -108,7 +108,7 @@ _all_accept_content_types = ('application/json',)
 class BaseApi(api_client.Api):
 
     @typing.overload
-    def _export_files_oapg(
+    def _export_multipart_files_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -125,7 +125,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _export_files_oapg(
+    def _export_multipart_files_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -142,7 +142,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _export_files_oapg(
+    def _export_multipart_files_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -157,7 +157,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _export_files_oapg(
+    def _export_multipart_files_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -174,7 +174,7 @@ class BaseApi(api_client.Api):
     ]:
         ...
 
-    def _export_files_oapg(
+    def _export_multipart_files_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -187,7 +187,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Export Files
+        Export Multipart Files
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -220,7 +220,7 @@ class BaseApi(api_client.Api):
             )
         _fields = None
         _body = None
-        serialized_data = request_body_export_operation.serialize(
+        serialized_data = request_body_multi_part_export_operation.serialize(
             body, content_type)
         _headers.add('Content-Type', content_type)
         if 'fields' in serialized_data:
@@ -259,11 +259,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class ExportFiles(BaseApi):
+class ExportMultipartFiles(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def export_files(
+    def export_multipart_files(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -280,7 +280,7 @@ class ExportFiles(BaseApi):
         ...
 
     @typing.overload
-    def export_files(
+    def export_multipart_files(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -297,7 +297,7 @@ class ExportFiles(BaseApi):
         ...
 
     @typing.overload
-    def export_files(
+    def export_multipart_files(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -312,7 +312,7 @@ class ExportFiles(BaseApi):
         ...
 
     @typing.overload
-    def export_files(
+    def export_multipart_files(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -329,7 +329,7 @@ class ExportFiles(BaseApi):
     ]:
         ...
 
-    def export_files(
+    def export_multipart_files(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -341,7 +341,7 @@ class ExportFiles(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._export_files_oapg(
+        return self._export_multipart_files_oapg(
             body=body,
             query_params=query_params,
             content_type=content_type,
@@ -433,7 +433,7 @@ class ApiForpost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._export_files_oapg(
+        return self._export_multipart_files_oapg(
             body=body,
             query_params=query_params,
             content_type=content_type,
