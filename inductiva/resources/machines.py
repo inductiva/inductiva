@@ -148,6 +148,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         auto_terminate_ts: Optional[datetime.datetime] = None,
         auto_terminate_minutes: Optional[int] = None,
         register: bool = True,
+        provider: Union[str, machine_types.ProviderType] = "GCP",
     ) -> None:
         """Create an ElasticMachineGroup object.
 
@@ -190,6 +191,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             auto_terminate_minutes: Duration, in minutes, the machine will be
                 kept alive. After auto_terminate_minutes minutes the machine
                 will be terminated.
+            provider: The cloud provider of the machine group.
         """
         if min_machines < 0:
             raise ValueError(
@@ -201,6 +203,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
 
         super().__init__(
             register=register,
+            provider=provider,
             data_disk_gb=data_disk_gb,
             machine_type=machine_type,
             max_idle_time=max_idle_time,

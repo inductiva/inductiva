@@ -88,6 +88,10 @@ class BaseMachineGroup(ABC):
                 If a resourced is passed to tun a task and it is not started,
                 the task will start the resource before running the task.
         """
+        if auto_terminate_ts is not None:
+            logging.warning("You are using `auto_terminate_ts`. This argument"
+                            "will be deprecated in the future. Please use"
+                            "`auto_terminate_minutes` instead.")
 
         provider = machine_types.ProviderType(provider)
         self.provider = provider.value
@@ -139,7 +143,7 @@ class BaseMachineGroup(ABC):
             time_delta_minutes = datetime.timedelta(
                 minutes=auto_terminate_minutes)
             self._auto_terminate_ts = datetime.datetime.now(
-            ) + time_delta_minutes
+                tz=datetime.timezone.utc) + time_delta_minutes
 
         if isinstance(max_idle_time, int):
             if max_idle_time <= 0:
