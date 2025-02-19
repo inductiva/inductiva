@@ -25,6 +25,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         auto_resize_disk_max_gb: Optional[int] = None,
         max_idle_time: Optional[datetime.timedelta] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
+        auto_terminate_minutes: Optional[int] = None,
         register: bool = True,
     ) -> None:
         """Create a MachineGroup object.
@@ -62,6 +63,9 @@ class MachineGroup(machines_base.BaseMachineGroup):
               resource will be terminated.
             auto_terminate_ts: Moment in which the resource will be
               automatically terminated.
+            auto_terminate_minutes: Duration, in minutes, the machine will be
+                kept alive. After auto_terminate_minutes minutes the machine
+                will be terminated.
         """
         if num_machines < 1:
             raise ValueError(
@@ -75,6 +79,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
             max_idle_time=max_idle_time,
             threads_per_core=threads_per_core,
             auto_terminate_ts=auto_terminate_ts,
+            auto_terminate_minutes=auto_terminate_minutes,
             auto_resize_disk_max_gb=auto_resize_disk_max_gb,
         )
 
@@ -141,6 +146,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         auto_resize_disk_max_gb: Optional[int] = None,
         max_idle_time: Optional[datetime.timedelta] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
+        auto_terminate_minutes: Optional[int] = None,
         register: bool = True,
     ) -> None:
         """Create an ElasticMachineGroup object.
@@ -181,6 +187,9 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
               resource will be terminated.
             auto_terminate_ts: Moment in which the resource will be
               automatically terminated.
+            auto_terminate_minutes: Duration, in minutes, the machine will be
+                kept alive. After auto_terminate_minutes minutes the machine
+                will be terminated.
         """
         if min_machines < 0:
             raise ValueError(
@@ -197,6 +206,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             max_idle_time=max_idle_time,
             threads_per_core=threads_per_core,
             auto_terminate_ts=auto_terminate_ts,
+            auto_terminate_minutes=auto_terminate_minutes,
             auto_resize_disk_max_gb=auto_resize_disk_max_gb,
         )
 
