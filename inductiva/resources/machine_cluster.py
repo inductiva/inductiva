@@ -48,7 +48,8 @@ class MPICluster(machines_base.BaseMachineGroup):
               automatically terminated.
             auto_terminate_minutes: Duration, in minutes, the machine will be
                 kept alive. After auto_terminate_minutes minutes the machine
-                will be terminated.
+                will be terminated. This time will start counting after calling
+                this method.
             
         """
         if num_machines < 1:
