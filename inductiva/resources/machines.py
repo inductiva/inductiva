@@ -63,8 +63,8 @@ class MachineGroup(machines_base.BaseMachineGroup):
               resource will be terminated.
             auto_terminate_ts: Moment in which the resource will be
               automatically terminated.
-            auto_terminate_minutes: Duration, in minutes, the machine will be
-                kept alive. After auto_terminate_minutes minutes the machine
+            auto_terminate_minutes: Duration, in minutes, the MachineGroup will
+                be kept alive. After auto_terminate_minutes minutes the machine
                 will be terminated. This time will start counting after calling
                 this method.
         """
@@ -189,10 +189,10 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
               resource will be terminated.
             auto_terminate_ts: Moment in which the resource will be
               automatically terminated.
-            auto_terminate_minutes: Duration, in minutes, the machine will be
-                kept alive. After auto_terminate_minutes minutes the machine
-                will be terminated. This time will start counting after calling
-                this method.
+            auto_terminate_minutes: Duration, in minutes, the
+                ElasticMachineGroup will be kept alive. After
+                auto_terminate_minutes minutes the machine will be terminated.
+                This time will start counting after calling this method.
             provider: The cloud provider of the machine group.
         """
         if min_machines < 0:

@@ -46,7 +46,7 @@ class MPICluster(machines_base.BaseMachineGroup):
               resource will be terminated.
             auto_terminate_ts: Moment in which the resource will be
               automatically terminated.
-            auto_terminate_minutes: Duration, in minutes, the machine will be
+            auto_terminate_minutes: Duration, in minutes, the MPICluster will be
                 kept alive. After auto_terminate_minutes minutes the machine
                 will be terminated. This time will start counting after calling
                 this method.
