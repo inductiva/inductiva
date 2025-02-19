@@ -85,6 +85,7 @@ class Project:
         """
         self.append = append
         self._token = None
+        self._list_of_tasks = None
 
         model = self._get_model(name)
         if model is None:
@@ -314,23 +315,33 @@ class Project:
 
     def get_tasks(self,
                   last_n: int = -1,
+                  force_update=False,
                   status: Optional[Union[str, models.TaskStatusCode]] = None):
         """Get the last N submitted tasks to this project.
 
         Get the last N submitted tasks that belong to this project,
         eventually filtered by status. By default, only the last 5
         submitted tasks are returned, irrespectively of their status.
+        This method will only do a request to the back end if the list of
+        tasks is None (never requested the list of tasks) or if `force_update`
+        is passed as True.
 
         Args:
             last_n (int): The number of tasks with repect to the submission
                 time to fectch. If `last_n<=0` we fetch all tasks submitted
                 to the project.
+            force_update (bool): Forces the request to the back end, even if we
+                already have a list of tasks associated with this project.
             status: Status of the tasks to get. If `None`, tasks with any
                 status will be returned.
         """
-        return inductiva.tasks.get_tasks(last_n=last_n,
-                                         project=self,
-                                         status=status)
+        if self._list_of_tasks is None or force_update is True:
+            list_of_tasks = inductiva.tasks.get_tasks(last_n=last_n,
+                                                      project=self,
+                                                      status=status)
+
+            self._list_of_tasks = list_of_tasks
+        return self._list_of_tasks
 
     def __enter__(self):
         self.open()
