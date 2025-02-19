@@ -1,5 +1,6 @@
 """Project class"""
 import contextvars
+import datetime
 import logging
 from typing import Optional, Union
 
@@ -8,6 +9,7 @@ from inductiva.client import ApiException
 from inductiva.client import models
 from inductiva.client.apis.tags import projects_api
 from inductiva.client.model.project import Project as ProjectModel
+from inductiva.utils.format_utils import bytes_formatter, currency_formatter, timedelta_formatter
 
 _logger = logging.getLogger(__name__)
 
@@ -234,9 +236,70 @@ class Project:
         self._update_from_api_response(model)
         return self._info
 
+    def _get_project_cost(self):
+        """Returns the estimated project cost.
+
+        The estimated project cost is the combination of the cost of all tasks.
+        """
+        list_of_tasks = self.get_tasks()
+        total_cost = 0.0
+        for task in list_of_tasks:
+            total_cost += task.info.estimated_computation_cost
+        return total_cost
+
     def __str__(self) -> str:
+        project_cost = currency_formatter(self._get_project_cost())
+
+        #Count status
+        status_counts = {}
+        total_files = 0
+        total_size = 0
+
+        list_of_tasks = self.get_tasks()
+        total_duration = datetime.timedelta()
+
+        for task in list_of_tasks:
+            status_counts[task.get_status()] = status_counts.get(
+                task.get_status(), 0) + 1
+            total_files += task.info.data_metrics.output_total_files.value
+            total_size += task.info.data_metrics.output_size_bytes.value
+            if task.info.start_time and task.info.end_time:
+                start = datetime.datetime.fromisoformat(task.info.start_time)
+                end = datetime.datetime.fromisoformat(task.info.end_time)
+                duration_task = end - start
+                total_duration += duration_task
+
+        # get start/end time
+        start_project_time = min([
+            datetime.datetime.fromisoformat(task.info.start_time)
+            for task in list_of_tasks
+            if task.info.start_time
+        ])
+        end_project_time = max([
+            datetime.datetime.fromisoformat(task.info.end_time)
+            for task in list_of_tasks
+            if task.info.end_time
+        ])
+
+        duration = end_project_time - start_project_time
+
+        total_size = bytes_formatter(total_size)
+        duration = timedelta_formatter(duration)
+        total_duration = timedelta_formatter(total_duration)
+
+        status_report = ""
+        for status, count in status_counts.items():
+            status_report += f"{status}: {count}\n"
+
         return f"Project '{self._name}' with "\
-               f"{self.num_tasks} tasks (id={self.id})"
+               f"{self.num_tasks} tasks (id={self.id}).\n"\
+               "\nTasks status:\n"\
+               f"{status_report}"\
+               f"\nTotal number of output files: {total_files}\n"\
+               f"Total size of output: {total_size}\n"\
+               f"\nProject duration: {duration}\n"\
+               f"Project total simulated time: {total_duration}\n"\
+               f"\nEstimated project cost: {project_cost}"
 
     def describe(self) -> str:
         """Generates a string description of the object
