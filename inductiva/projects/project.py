@@ -2,6 +2,7 @@
 import contextvars
 import datetime
 import logging
+import time
 from typing import Optional, Union
 
 import inductiva
@@ -342,6 +343,25 @@ class Project:
 
             self._list_of_tasks = list_of_tasks
         return self._list_of_tasks
+
+    def wait(self):
+        """ Wait for all the tasks in a project to complete."""
+        all_tasks = self.get_tasks(force_update=True)
+        print("Waiting for ALL tasks to finish")
+        while (not all([x.is_terminal() for x in all_tasks])):
+            finished = sum([x.is_terminal() for x in all_tasks])
+            print(f"Finished: {finished} Total: {len(all_tasks)}", end="\r")
+            time.sleep(5)
+
+    def download_outputs(self):
+        """ Downloads all the outputs for all the tasks in the project.
+        
+        All the files will be stored inside inductiva_output/<task_id's>.
+        """
+        list_of_tasks = self.get_tasks()
+
+        for task in list_of_tasks:
+            task.download_outputs()
 
     def __enter__(self):
         self.open()
