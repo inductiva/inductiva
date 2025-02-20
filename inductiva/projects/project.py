@@ -259,7 +259,7 @@ class Project:
 
         list_of_tasks = self.get_tasks()
         total_duration = datetime.timedelta()
-
+        running_tasks_warning = ""
         for task in list_of_tasks:
             status_counts[task.get_status()] = status_counts.get(
                 task.get_status(), 0) + 1
@@ -270,6 +270,10 @@ class Project:
                 end = datetime.datetime.fromisoformat(task.info.end_time)
                 duration_task = end - start
                 total_duration += duration_task
+            else:
+                running_tasks_warning = (
+                    "Warning: Some tasks may not be finished "
+                    "yet. The values ​​presented may change as a result.")
 
         # get start/end time
         start_project_time = min(
@@ -299,7 +303,8 @@ class Project:
                f"Total size of output: {total_size}\n"\
                f"\nProject duration: {duration}\n"\
                f"Project total simulated time: {total_duration}\n"\
-               f"\nEstimated project cost: {project_cost}"
+               f"\nEstimated project cost: {project_cost}\n"\
+               f"{running_tasks_warning}"
 
     def describe(self) -> str:
         """Generates a string description of the object
@@ -318,6 +323,34 @@ class Project:
                   last_n: int = -1,
                   force_update=False,
                   status: Optional[Union[str, models.TaskStatusCode]] = None):
+        """Get the the tasks of this project.
+
+        Get the tasks that belong to this project,
+        eventually filtered by status. By default, it will return all the tasks,
+        irrespectively of their status.
+        This method will only do a request to the back end if the list of
+        tasks is None (never requested the list of tasks) or if `force_update`
+        is passed as True.
+
+        Args:
+            last_n (int): The number of tasks with repect to the submission
+                time to fectch. If `last_n<=0` we fetch all tasks submitted
+                to the project.
+            force_update (bool): Forces the request to the back end, even if we
+                already have a list of tasks associated with this project.
+            status: Status of the tasks to get. If `None`, tasks with any
+                status will be returned.
+        """
+        logging.warning("Method `get_tasks` from projects is deprecated.\n"
+                        "Use `list` instead.")
+        return self.list(last_n=last_n,
+                         force_update=force_update,
+                         status=status)
+
+    def list(self,
+             last_n: int = -1,
+             force_update=False,
+             status: Optional[Union[str, models.TaskStatusCode]] = None):
         """Get the the tasks of this project.
 
         Get the tasks that belong to this project,
