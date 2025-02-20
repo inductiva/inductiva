@@ -3,11 +3,12 @@ import contextvars
 import datetime
 import logging
 import time
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 import inductiva
 from inductiva.client import ApiException
 from inductiva.client import models
+from inductiva.client.apis.paths.tasks import Tasks
 from inductiva.client.apis.tags import projects_api
 from inductiva.client.model.project import Project as ProjectModel
 from inductiva.utils.format_utils import bytes_formatter, currency_formatter, timedelta_formatter
@@ -319,10 +320,12 @@ class Project:
             f"  {k}: {v}" for k, v in self._info.task_by_status.items())
         return header + summary
 
-    def get_tasks(self,
-                  last_n: int = -1,
-                  force_update=False,
-                  status: Optional[Union[str, models.TaskStatusCode]] = None):
+    def get_tasks(
+        self,
+        last_n: int = -1,
+        force_update=False,
+        status: Optional[Union[str,
+                               models.TaskStatusCode]] = None) -> List[Tasks]:
         """Get the the tasks of this project.
 
         Get the tasks that belong to this project,
@@ -347,10 +350,12 @@ class Project:
                          force_update=force_update,
                          status=status)
 
-    def list(self,
-             last_n: int = -1,
-             force_update=False,
-             status: Optional[Union[str, models.TaskStatusCode]] = None):
+    def list(
+        self,
+        last_n: int = -1,
+        force_update=False,
+        status: Optional[Union[str,
+                               models.TaskStatusCode]] = None) -> List[Tasks]:
         """Get the the tasks of this project.
 
         Get the tasks that belong to this project,
