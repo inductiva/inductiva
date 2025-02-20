@@ -45,6 +45,10 @@ class BaseMachineGroup(ABC):
             representing the number of minutes.
         auto_terminate_ts: Moment in which the resource will be
           automatically terminated.
+        auto_terminate_minutes: Duration, in minutes, the MPICluster will be
+                kept alive. After auto_terminate_minutes minutes the machine
+                will be terminated. This time will start counting after calling
+                this method.
     """
     # Constructor arguments
     machine_type: str
@@ -53,6 +57,7 @@ class BaseMachineGroup(ABC):
     data_disk_gb: int = 10
     max_idle_time: Optional[Union[datetime.timedelta, int]] = None
     auto_terminate_ts: Optional[datetime.datetime] = None
+    auto_terminate_minutes: Optional[int] = None
 
     create_time = None
     num_machines = 0
@@ -113,6 +118,18 @@ class BaseMachineGroup(ABC):
             if self.max_idle_time <= 0:
                 raise ValueError("`max_idle_time` must be positive.")
             self._max_idle_time = datetime.timedelta(minutes=self.max_idle_time)
+        
+        if self.auto_terminate_ts is not None:
+            logging.warning("You are using `auto_terminate_ts`. This argument"
+                            "will be deprecated in the future. Please use"
+                            "`auto_terminate_minutes` instead.")
+        
+        if isinstance(self.auto_terminate_minutes, int):
+            time_delta_minutes = datetime.timedelta(
+                minutes=self.auto_terminate_minutes)
+            self._auto_terminate_ts = datetime.datetime.now(
+                tz=datetime.timezone.utc) + time_delta_minutes
+
 
     @property
     def id(self):

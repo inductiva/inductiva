@@ -26,6 +26,10 @@ class MachineGroup(machines_base.BaseMachineGroup):
           resource will be terminated.
         auto_terminate_ts: Moment in which the resource will be
           automatically terminated.
+        auto_terminate_minutes: Duration, in minutes, the MPICluster will be
+                kept alive. After auto_terminate_minutes minutes the machine
+                will be terminated. This time will start counting after calling
+                this method.
         auto_resize_disk_max_gb: The maximum size in GB that the hard disk
             of the cloud VM can reach. If set, the disk will be
             automatically resized, during the execution of a task, when the
@@ -119,6 +123,10 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             prevent uncontrolled costs. Once that limit is reached, the disk
             is no longer automatically resized, and if the task continues to
             output files, it will fail.
+        auto_terminate_minutes: Duration, in minutes, the MPICluster will be
+                kept alive. After auto_terminate_minutes minutes the machine
+                will be terminated. This time will start counting after calling
+                this method.
         min_machines: The minimum number of available machines. This is
             a quantity of machines that will be started initially and the
             minimum available machines, even in cases of low CPU load.
@@ -205,6 +213,10 @@ class MPICluster(machines_base.BaseMachineGroup):
         data_disk_gb: The size of the disk for user data (in GB).
         max_idle_time: Time without executing any task, after which the
             resource will be terminated.
+        auto_terminate_minutes: Duration, in minutes, the MPICluster will be
+                kept alive. After auto_terminate_minutes minutes the machine
+                will be terminated. This time will start counting after calling
+                this method.
         auto_terminate_ts: Moment in which the resource will be
             automatically terminated.
         num_machines: The number of virtual machines to launch.
