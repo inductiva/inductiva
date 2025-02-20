@@ -352,6 +352,7 @@ class Project:
             finished = sum([x.is_terminal() for x in all_tasks])
             print(f"Finished: {finished} Total: {len(all_tasks)}", end="\r")
             time.sleep(5)
+        print("All tasks in the project terminated.")
 
     def download_outputs(self):
         """ Downloads all the outputs for all the tasks in the project.
