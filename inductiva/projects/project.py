@@ -273,7 +273,7 @@ class Project:
             else:
                 running_tasks_warning = (
                     "Warning: Some tasks may not be finished "
-                    "yet. The values ​​presented may change as a result.")
+                    "yet. The values presented may change as a result.")
 
         # get start/end time
         start_project_time = min(
