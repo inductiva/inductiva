@@ -1,4 +1,4 @@
-# Advanced OpenFAST Tutorial
+# OpenFAST Tutorial (Advanced)
 
 In this tutorial, we are going to show you how you can
 use the Inductiva API to accelerate your OpenFast projects.
