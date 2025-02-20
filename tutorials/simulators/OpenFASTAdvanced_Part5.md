@@ -2,137 +2,23 @@
 orphan: true
 ---
 
-# Advanced OpenFAST Tutorial: Part 2
+# Running 40 Simulations
 
-## Recap: Running a Single OpenFAST Simulation  
+In the previous tutorial, we set up a templating system that allows us to
+modify the `WtrDpth` parameter in the OpenFAST input file programmatically.
+This enables us to, easly, generate multiple simulation configurations with different
+water depths.
 
-In the first part of this tutorial, we explored how to set up and run a single
-OpenFAST simulation using Inductiva. We covered the necessary file preparations,
-built the required DLL, and executed the simulation on a cost-effective cloud
-machine. While running a single case on the cloud may not always be the best
-option due to CPU clock speed limitations, the real advantage of Inductiva lies
-in its ability to scale simulations effortlessly. Now, in Part 2, we’ll leverage
-this power to run hundreds of OpenFAST simulations in parallel, drastically
-reducing total computation time.
+Now, we will take the next step and use a for loop to automate the process,
+launching 40 simulations in parallel. This approach demonstrates the true power
+of Inductiva: scaling simulations efficiently to save computation time.
 
-## From 1 to 100
-Inductiva does not help run one OpenFast simulation faster, but
-it helps you run many simulations in parallel. So, let's assume
-that you need to study the impact of changing a certain 
-input paramter of your simulation. For the sake of demonstration,
-let us assume that we want to study what happens when the off-shore
-turbine of this example is installed in locations with different 
-water depths. 
+Let's dive in!
 
-In the "Enviromental Conditions" section of the `5MW_OC4Semi_WSt_WavesWN.fst`
-parameter file one can see that parameter WtrDpth has been set to 200 m:
+## Writing a "for loop" and adding more machines
 
 
-```
----------------------- ENVIRONMENTAL CONDITIONS --------------------------------
-    9.80665   Gravity         - Gravitational acceleration (m/s^2)
-      1.225   AirDens         - Air density (kg/m^3)
-       1025   WtrDens         - Water density (kg/m^3)
-  1.464E-05   KinVisc         - Kinematic viscosity of working fluid (m^2/s)
-        335   SpdSound        - Speed of sound in working fluid (m/s)
-     103500   Patm            - Atmospheric pressure (Pa) [used only for an MHK turbine cavitation check]
-       1700   Pvap            - Vapour pressure of working fluid (Pa) [used only for an MHK turbine cavitation check]
-        200   WtrDpth         - Water depth (m)
-          0   MSL2SWL         - Offset between still-water level and mean sea level (m) [positive upward]
-```
-
-We are going to use Inductiva API to run variations of this
-base simulation where we set the WtrDpth from 180 to 220 meter,
-at 1 meter steps. This means we are going to run 40 simulations.
-But we are going to run these 40 simulation in parallel.
-
-### Step 1: Parametrize the input file `5MW_OC4Semi_WSt_WavesWN.fst`
-
-Inductiva lets you transform fixed parameters in your simulation
-configuration files into variables that you can set programmatically
-via Python scripting. That is, we will be able to change the `WtrDpth`
-defined in the `5MW_OC4Semi_WSt_WavesWN.fst` input file.
-
-To do that you need to edit your `5MW_OC4Semi_WSt_WavesWN.fst` from this:
-
-```
----------------------- ENVIRONMENTAL CONDITIONS --------------------------------
-...
-        200   WtrDpth         - Water depth (m)
-...
-```
-
-To this:
-
-```
----------------------- ENVIRONMENTAL CONDITIONS --------------------------------
-...
-        {{ water_depth }}   WtrDpth         - Water depth (m)
-...
-```
-
-After doing this small edit you will have to save your input file with the
-following name `5MW_OC4Semi_WSt_WavesWN.fst.jinja`
-(watch the ".jinja" extension). This will let Inductiva's templating 
-engine know that a Python variable named "water_depth" should be 
-used to set the right scalar value in `5MW_OC4Semi_WSt_WavesWN.fst`.
-
-How is this done in practice? It's very easy. The script below
-shows how we can now set the value of the WtrDpth parameter from
-Python, and run a variation of the original simulation for a 
-water depth of 190 meters, instaed of 200 meters:
-
-```python
-import inductiva
-
-# Allocate cloud machine
-cloud_machine = inductiva.resources.MachineGroup(
-    provider="GCP",
-    machine_type="n2-highcpu-2",
-    spot=True
-)
-
-water_depth = 190
-
-print(f"Preparing files for depth = {water_depth}")
-target_dir = f"variations/params_for_depth_{water_depth}"
-
-# This is where we make the substitution and set
-# the value of WtrDpth in the modified config file
-# 5MW_OC4Semi_WSt_WavesWN.fst.jinja
-inductiva.TemplateManager.render_dir(
-    source_dir="openfast-5MW_OC4Semi_WSt_WavesWN",
-    target_dir=target_dir,
-    overwrite=True,
-    water_depth=water_depth)
-
-# Initialize OpenFAST simulator
-openfast = inductiva.simulators.OpenFAST(
-    version="4.0.2")
-
-task = openfast.run(
-    input_dir=target_dir,
-    commands=[
-        "openfast 5MW_OC4Semi_WSt_WavesWN/"
-        "5MW_OC4Semi_WSt_WavesWN.fst"],
-    on=cloud_machine)
-
-task.wait()
-
-cloud_machine.terminate()
-```
-
-That's it!
-
-Now, the good thing about Inductiva API is that it is a
-Python API, so you can literally just do a for loop to
-iterate over all the range of values for WtrDpth. That's 
-what we are going to do next.
-
-### Step 2: Writing a "for loop" and adding more machines
-
-
-#### Overview
+### Overview
 Here is the code to run all the simulations in parallel.
 
 ```python
@@ -178,18 +64,14 @@ for depth in range(180, 220):
 
     my_tasks.append(task)
 
-while(not all([x.is_terminal() for x in my_tasks])):
-    print("Waiting for ALL tasks to finish")
-    print(f"Finished: {sum([x.is_terminal() for x in my_tasks])}")
-    time.sleep(5)
-
+openfast_project.wait()
 openfast_project.close()
 cloud_machine.terminate()
 ```
 
 Let's now break this script into parts.
 
-#### Allocating the Cloud Machine Group  
+### Allocating the Cloud Machine Group  
 
 We are allocating an elastic machine group to run our simulations. This group
 has a minimum number of machines active and a maximum capacity. Machines are
@@ -211,7 +93,7 @@ cloud_machine = inductiva.resources.ElasticMachineGroup(
     num_machines=40)
 ```
 
-#### Setting Up Our Project  
+### Setting Up Our Project  
 
 To keep our simulations organized, we use a project-based approach. Setting up
 a project is straightforward: we create it with **append mode enabled**, which
@@ -230,7 +112,7 @@ openfast_project.open()
 This ensures that all simulations remain structured and easily accessible
 within the project.
 
-#### Preparing and Running the Simulation  
+### Preparing and Running the Simulation  
 
 We now enter a loop responsible for generating new input files and running each
 simulation.  
@@ -278,17 +160,14 @@ for depth in range(180, 220):
     my_tasks.append(task)
 ```
 
-#### Waiting for the simulations to finish
+### Waiting for the simulations to finish
 
 In this last part of the code we are just waiting for all the tasks to finish.
 
 Once all tasks are done we close our project and turn off our cloud machines.
 
 ```python
-while(not all([x.is_terminal() for x in my_tasks])):
-    print("Waiting for ALL tasks to finish")
-    print(f"Finished: {sum([x.is_terminal() for x in my_tasks])}")
-    time.sleep(5)
+openfast_project.wait()
 
 openfast_project.close()
 cloud_machine.terminate()
@@ -357,3 +236,5 @@ large-scale studies.
 
 With just a few lines of Python, you can scale your OpenFAST projects
 effortlessly—saving time, optimizing resources, and accelerating your research. 🚀
+
+[Downloading The Results](OpenFASTAdvanced_Part6.md)

@@ -243,7 +243,7 @@ class Project:
 
         The estimated project cost is the combination of the cost of all tasks.
         """
-        list_of_tasks = self.get_tasks()
+        list_of_tasks = self.list()
         total_cost = 0.0
         for task in list_of_tasks:
             total_cost += task.info.estimated_computation_cost
@@ -257,7 +257,7 @@ class Project:
         total_files = 0
         total_size = 0
 
-        list_of_tasks = self.get_tasks()
+        list_of_tasks = self.list()
         total_duration = datetime.timedelta()
         running_tasks_warning = ""
         for task in list_of_tasks:
@@ -379,7 +379,7 @@ class Project:
 
     def wait(self):
         """ Wait for all the tasks in a project to complete."""
-        all_tasks = self.get_tasks(force_update=True)
+        all_tasks = self.list(force_update=True)
         print("Waiting for ALL tasks to finish")
         while (not all(x.is_terminal() for x in all_tasks)):
             finished = sum(x.is_terminal() for x in all_tasks)
@@ -392,7 +392,7 @@ class Project:
         
         All the files will be stored inside inductiva_output/<task_id's>.
         """
-        list_of_tasks = self.get_tasks()
+        list_of_tasks = self.list()
 
         for task in list_of_tasks:
             task.download_outputs()

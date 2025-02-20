@@ -72,3 +72,5 @@ We should now have our input directory looking like this:
 Don't forget to paste this file in the 5MW_Baseline/ServoData folder.
 
 You now have all the necessary files to run your simulation.
+
+[Running our simulation](OpenFASTAdvanced_Part3.md)
