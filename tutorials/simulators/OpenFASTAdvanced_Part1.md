@@ -1,7 +1,4 @@
----
-orphan: true
----
-# Advanced OpenFAST Tutorial: Part 1
+# Advanced OpenFAST Tutorial
 
 In this tutorial, we are going to show you how you can
 use the Inductiva API to accelerate your OpenFast projects.
@@ -47,6 +44,11 @@ Inductiva to spin up hundreds of very cheap cloud machines to
 run all those simulations in parallel instead of having to run
 them sequentially in your machine! This will be hundreds of times
 faster. And it is super easy (and cost-effective) with Inductiva
+
+<h3>🌊 OpenFAST Simulation Visualization</h3>
+<p align="center">
+  <img src="../_static/openfast_animation_30_fps.gif" alt="OpenFAST simulation visualization" width="700">
+</p>
 
 ## Our use case: 5MW_OC4Semi_WSt_WavesWN
 
