@@ -348,8 +348,8 @@ class Project:
         """ Wait for all the tasks in a project to complete."""
         all_tasks = self.get_tasks(force_update=True)
         print("Waiting for ALL tasks to finish")
-        while (not all([x.is_terminal() for x in all_tasks])):
-            finished = sum([x.is_terminal() for x in all_tasks])
+        while (not all(x.is_terminal() for x in all_tasks)):
+            finished = sum(x.is_terminal() for x in all_tasks)
             print(f"Finished: {finished} Total: {len(all_tasks)}", end="\r")
             time.sleep(5)
         print("All tasks in the project terminated.")
