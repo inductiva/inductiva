@@ -130,7 +130,6 @@ class BaseMachineGroup(ABC):
             self._auto_terminate_ts = datetime.datetime.now(
                 tz=datetime.timezone.utc) + time_delta_minutes
 
-
     @property
     def id(self):
         return self._id
