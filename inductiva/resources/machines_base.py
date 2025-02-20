@@ -498,6 +498,7 @@ class BaseMachineGroup(ABC):
         """Logs the machine group info."""
 
         logging.info("\t· Name:                       %s", self.name)
+        logging.info("\t· Provider:                   %s", self.provider)
         logging.info("\t· Machine Type:               %s", self.machine_type)
         logging.info("\t· Data disk size:             %s GB", self.data_disk_gb)
 
