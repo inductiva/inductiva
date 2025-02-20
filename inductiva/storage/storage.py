@@ -89,8 +89,8 @@ def listdir(path="/",
     api = storage_api.StorageApi(inductiva.api.get_client())
 
     # This is valid for single files and directories
-    if len(path.split(os.sep)) < 2:
-        path += os.sep
+    if len(path.split("/")) < 2:
+        path += "/"
 
     contents = api.list_storage_contents({
         "path": path,

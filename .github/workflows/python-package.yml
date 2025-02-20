@@ -44,6 +44,15 @@ jobs:
       if: ${{ always() }}
       run: # We exclude the auto-generated Python client folder from pylint validation
         find . -type f -not -path "./inductiva/client/*" -name '*.py' | xargs pylint
+    - name: Set env variables
+      if: ${{ always() }}
+      run: |
+        if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+        echo "INDUCTIVA_API_KEY=${{ secrets.API_TEST_KEY }}" >> $GITHUB_ENV
+        else
+        echo "INDUCTIVA_API_KEY=${{ secrets.API_DEV_TEST_KEY }}" >> $GITHUB_ENV
+        echo "INDUCTIVA_API_URL=https://api-dev.inductiva.ai" >> $GITHUB_ENV
+        fi  
     - name: Test with pytest
       if: ${{ always() }}
       run: |
@@ -56,7 +65,7 @@ jobs:
     - name: Coverage report
       if: ${{ always() }}
       run: | # conftest crashes with coverage due to markdown-docs
-        coverage run --source=./inductiva --omit="*/_cli/*,*/client/*,*/tests/*" -m pytest --noconftest
+        coverage run --source=./inductiva --omit=*/_cli/*,*/client/*,*/tests/* -m pytest --noconftest
         coverage report -m
     - name: Generate badge
       if: github.ref == 'refs/heads/main'
