@@ -118,12 +118,12 @@ class BaseMachineGroup(ABC):
             if self.max_idle_time <= 0:
                 raise ValueError("`max_idle_time` must be positive.")
             self._max_idle_time = datetime.timedelta(minutes=self.max_idle_time)
-        
+
         if self.auto_terminate_ts is not None:
             logging.warning("You are using `auto_terminate_ts`. This argument"
                             "will be deprecated in the future. Please use"
                             "`auto_terminate_minutes` instead.")
-        
+
         if isinstance(self.auto_terminate_minutes, int):
             time_delta_minutes = datetime.timedelta(
                 minutes=self.auto_terminate_minutes)
