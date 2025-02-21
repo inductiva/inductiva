@@ -25,13 +25,11 @@ import frozendict  # noqa: F401
 from inductiva.client import schemas  # noqa: F401
 
 from inductiva.client.model.zip_archive_info import ZipArchiveInfo
-from inductiva.client.model.providers import Providers
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
 ZipRelativePathSchema = schemas.StrSchema
 PathSchema = schemas.StrSchema
-ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
@@ -43,9 +41,6 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
         'path': typing.Union[
             PathSchema,
             str,
-        ],
-        'provider_id': typing.Union[
-            ProviderIdSchema,
         ],
     },
     total=False)
@@ -66,12 +61,6 @@ request_query_path = api_client.QueryParameter(
     name="path",
     style=api_client.ParameterStyle.FORM,
     schema=PathSchema,
-    explode=True,
-)
-request_query_provider_id = api_client.QueryParameter(
-    name="provider_id",
-    style=api_client.ParameterStyle.FORM,
-    schema=ProviderIdSchema,
     explode=True,
 )
 SchemaFor200ResponseBodyApplicationJson = ZipArchiveInfo
@@ -178,7 +167,6 @@ class BaseApi(api_client.Api):
         for parameter in (
                 request_query_zip_relative_path,
                 request_query_path,
-                request_query_provider_id,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
