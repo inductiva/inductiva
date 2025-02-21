@@ -16,7 +16,7 @@ this power to run hundreds of OpenFAST simulations in parallel, drastically
 reducing total computation time.
 
 ## From 1 to 50
-Inductiva does not help run one OpenFast simulation faster, but
+Inductiva does not help run one OpenFAST simulation faster, but
 it helps you run many simulations in parallel. So, let's assume
 that you need to study the impact of changing a certain 
 input paramter of your simulation. For the sake of demonstration,

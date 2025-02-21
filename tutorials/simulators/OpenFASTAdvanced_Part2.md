@@ -4,14 +4,14 @@ orphan: true
 
 # Preparation
 
-Before running a simulation in OpenFAST, it’s crucial to ensure that all
+Before running a simulation in OpenFAST, it's crucial to ensure that all
 necessary files are properly set up. Here we will guide you through the preparation
 process. We will walk you through downloading the required input files, and
 generating any additional components needed, such as the `DISCON_OC3Hywind.dll`
-file. By the end of this section, you’ll have everything in place to proceed
+file. By the end of this section, you'll have everything in place to proceed
 with running the simulation.
 
-Let’s get started!
+Let's get started!
 
 ## Preparation Step 1: Downloading your simulation files
 
