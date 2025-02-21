@@ -84,6 +84,7 @@ same simulation on a set of better machines and here are the results:
 
 | Machine       | Number of VCPUs | Execution time | Cost |
 |---------------|-----------------|----------------|------|
+| n2-highcpu-2  | 2               |34.123 seconds  |0.00013 US$|
 | n2-highcpu-4  | 4               |34.972 seconds  |0.00031 US$|
 | n2-highcpu-8  | 8               |30.368 seconds  |0.00034 US$|
 | n2-highcpu-16 | 16              |30.9 seconds    |0.00065 US$|
