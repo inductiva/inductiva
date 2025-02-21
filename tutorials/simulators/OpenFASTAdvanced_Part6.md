@@ -11,8 +11,8 @@ time to retrieve all the results and analyze the data to extract meaningful
 insights from our simulations.
 
 | Simulation with water depth of 180 | Simulation with water depth of 219 |
-|---------------|-----------------|
-| <p align="center"><img src="../_static/openfast_animation_30_fps_180.gif" alt="OpenFAST simulation visualization"></p> |<p align="center"><img src="../_static/openfast_animation_30_fps_220.gif" alt="OpenFAST simulation visualization"></p>|
+|:---------------:|:-----------------:|
+| <img src="../_static/openfast_animation_30_fps_180.gif" alt="OpenFAST simulation visualization"> |<img src="../_static/openfast_animation_30_fps_220.gif" alt="OpenFAST simulation visualization">|
 
 ## Project summary and download outputs
 
