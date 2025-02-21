@@ -43,7 +43,7 @@ parameter file one can see that parameter WtrDpth has been set to 200 m:
 
 We are going to use Inductiva API to run variations of this
 base simulation where we set the WtrDpth from 100 to 200 meter,
-at 1 meter steps. This means we are going to run 50 simulations.
+at 2 meter steps. This means we are going to run 50 simulations.
 But we are going to run these 50 simulation in parallel.
 
 ### Parametrize the input file `5MW_OC4Semi_WSt_WavesWN.fst`
@@ -81,7 +81,7 @@ used to set the right scalar value in `5MW_OC4Semi_WSt_WavesWN.fst`.
 How is this done in practice? It's very easy. The script below
 shows how we can now set the value of the WtrDpth parameter from
 Python, and run a variation of the original simulation for a 
-water depth of 190 meters, instaed of 200 meters:
+water depth of 190 meters, instead of 200 meters:
 
 ```python
 import inductiva

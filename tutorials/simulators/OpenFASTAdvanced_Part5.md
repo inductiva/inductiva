@@ -4,10 +4,10 @@ orphan: true
 
 # Running 50 Simulations
 
-In the previous tutorial, we set up a templating system that allows us to
-modify the `WtrDpth` parameter in the OpenFAST input file programmatically.
-This enables us to, easly, generate multiple simulation configurations with different
-water depths.
+In the [previous part of this tutorial](OpenFASTAdvanced_Part4.md), we set up a
+templating system that allows us to modify the `WtrDpth` parameter in the
+OpenFAST input file programmatically. This enables us to, easly, generate
+multiple simulation configurations with different water depths.
 
 Now, we will take the next step and use a for loop to automate the process,
 launching 50 simulations in parallel. This approach demonstrates the true power
@@ -19,13 +19,17 @@ Let's dive in!
 
 
 ### Overview
-Here is the code to run all the simulations in parallel.
+
+We are going to show all the code first, and then we will be analysing it
+step by step. Each of the blocks is easy to understand and it all builds on
+top of the examples we showed in the previous parts of this tutorial.
 
 ```python
 import inductiva
 import time
 
-# Allocate cloud machine
+# Allocate 50 cloud machines
+# Note that we are using an ElasticMachineGroup
 cloud_machine = inductiva.resources.ElasticMachineGroup(
     provider="GCP",
     machine_type="n2-highcpu-2",
@@ -43,6 +47,8 @@ for depth in range(100, 200, 2):
     print(f"Preparing files for depth = {depth}")
     target_dir = f"variations/params_for_depth_{depth}"
 
+    # This is where we instantiate the configuration
+    # files with the specific values
     inductiva.TemplateManager.render_dir(
         source_dir="input_files",
         target_dir=target_dir,
@@ -51,8 +57,7 @@ for depth in range(100, 200, 2):
 
     # Initialize OpenFAST simulator
     openfast = inductiva.simulators.OpenFAST(
-        version="4.0.2",
-        use_dev=True)
+        version="4.0.2"
 
     task = openfast.run(
         input_dir=target_dir,
@@ -68,7 +73,7 @@ cloud_machine.terminate()
 
 Let's now break this script into parts.
 
-### Allocating the Cloud Machine Group  
+### Code Section 1: Allocating the Cloud Machine Group  
 
 We are allocating an elastic machine group to run our simulations. This group
 has a minimum number of machines active and a maximum capacity. Machines are
@@ -91,7 +96,7 @@ cloud_machine = inductiva.resources.ElasticMachineGroup(
     max_machines=50)
 ```
 
-### Setting Up Our Project  
+### Code Section 2: Setting Up Our Project  
 
 To keep our simulations organized, we use a project-based approach. Setting up
 a project is straightforward: we create it with **append mode enabled**, which
@@ -110,7 +115,7 @@ openfast_project.open()
 This ensures that all simulations remain structured and easily accessible
 within the project.
 
-### Preparing and Running the Simulation  
+### Code Section 3: Looping over parameters assignment and starting the simulation
 
 We now enter a loop responsible for generating new input files and running each
 simulation.  
@@ -155,7 +160,7 @@ for depth in range(100, 200, 2):
     )
 ```
 
-### Waiting for the simulations to finish
+### Code Section 4: Waiting for the simulations to finish
 
 In this last part of the code we are just waiting for all the tasks to finish.
 
@@ -186,7 +191,7 @@ Showing tasks for project: Openfast_WavesWN.
 To see more details about a task, use `inductiva tasks info <task_id>`.
 ```
 
-## Conclusion  
+## Summary  
 
 Previously, we demonstrated how to leverage Inductiva to efficiently run
 multiple OpenFAST simulations in parallel. While a single OpenFAST simulation

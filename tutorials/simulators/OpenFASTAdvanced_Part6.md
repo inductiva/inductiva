@@ -79,6 +79,17 @@ In conclusion, leveraging cloud computing for large-scale simulations not only
 enhances efficiency but also significantly reduces computational time and costs.
 By running 50 simulations in parallel, we managed to work around one of OpenFAST
 limitations, witch is the fact that it does not scale with multiples CPU cores.
-This was just a small example, and the same could be done to hundreds of simulations.
 
-Inductiva can streamline research, making high-performance computing more accessible and cost-effective.
+Inductiva makes it possible and convenient to run hundreds thousands of
+simulations. For example, you could now change the code for:
+
+1. Covering a design space with many more parameters;
+2. Adding a black box optimizer, such as [Vizier](https://github.com/google/vizier),
+on top of the loop and adding a evaluation function to analyze the result of
+each simulation that finishes, and perform an intelligent exploration of the
+design space.
+3. Building a really large dataset of example simulations to later train a
+surrogate model;
+
+Inductiva can streamline research, making high-performance computing more
+accessible and cost-effective.

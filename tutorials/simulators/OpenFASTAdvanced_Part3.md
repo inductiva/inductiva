@@ -27,6 +27,7 @@ cloud_machine = inductiva.resources.MachineGroup(
     spot=True)
 
 # Initialize OpenFAST simulator
+# Versions available: 3.5.2 and 4.0.2 
 openfast = inductiva.simulators.OpenFAST(
     version="4.0.2")
 
