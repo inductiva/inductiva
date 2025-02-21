@@ -2,7 +2,7 @@
 orphan: true
 ---
 
-# Running 40 Simulations - Templating
+# Running 40 Simulations in parallel - Templating
 
 ## Recap: Running a Single OpenFAST Simulation  
 
@@ -11,7 +11,7 @@ OpenFAST simulation using Inductiva. We covered the necessary file preparations,
 built the required DLL, and executed the simulation on a cost-effective cloud
 machine. While running a single case on the cloud may not always be the best
 option due to CPU clock speed limitations, the real advantage of Inductiva lies
-in its ability to scale simulations effortlessly. Now, in Part 2, we’ll leverage
+in its ability to scale simulations effortlessly. Now, we'll leverage
 this power to run hundreds of OpenFAST simulations in parallel, drastically
 reducing total computation time.
 
@@ -51,7 +51,8 @@ But we are going to run these 40 simulation in parallel.
 Inductiva lets you transform fixed parameters in your simulation
 configuration files into variables that you can set programmatically
 via Python scripting. That is, we will be able to change the `WtrDpth`
-defined in the `5MW_OC4Semi_WSt_WavesWN.fst` input file.
+defined in the `5MW_OC4Semi_WSt_WavesWN.fst` input file from a Python script
+before starting the simulation.
 
 To do that you need to edit your `5MW_OC4Semi_WSt_WavesWN.fst` from this:
 

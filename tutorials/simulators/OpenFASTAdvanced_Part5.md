@@ -38,7 +38,6 @@ openfast_project = inductiva.projects.Project(
     append=True)
 openfast_project.open()
 
-my_tasks = []
 for depth in range(180, 220):
 
     print(f"Preparing files for depth = {depth}")
@@ -61,8 +60,6 @@ for depth in range(180, 220):
         "openfast 5MW_OC4Semi_WSt_WavesWN/"
         "5MW_OC4Semi_WSt_WavesWN.fst"],
         on=cloud_machine)
-
-    my_tasks.append(task)
 
 openfast_project.wait()
 openfast_project.close()
@@ -155,9 +152,6 @@ for depth in range(180, 220):
         ],
         on=cloud_machine
     )
-
-    # Store the task for later synchronization
-    my_tasks.append(task)
 ```
 
 ### Waiting for the simulations to finish
@@ -226,7 +220,7 @@ To see more details about a task, use `inductiva tasks info <task_id>`.
 
 ## Conclusion  
 
-In this tutorial, we demonstrated how to leverage Inductiva to efficiently run
+Previously, we demonstrated how to leverage Inductiva to efficiently run
 multiple OpenFAST simulations in parallel. While a single OpenFAST simulation
 may run faster on a high-frequency local machine, scaling up to dozens or
 hundreds of simulations is where Inductiva truly shines. By automating input

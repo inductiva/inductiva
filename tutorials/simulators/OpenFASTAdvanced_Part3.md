@@ -2,7 +2,7 @@
 orphan: true
 ---
 
-# Running our Simulation
+# Running the Simulation using Inductiva API
 
 Now that you have all the necessary files set up from the previous section,
 you're ready to run your first simulation. In this part of the tutorial, we will
@@ -79,33 +79,17 @@ core). This is one of the cheapest options on Google Cloud, costing just
 0.0081 US$/hour in spot mode.
 
 To verify that OpenFAST does not scale with the number of cores, we also ran the
-same simulation on a n2-highcpu-8 VM with 8 virtual CPUs:
+same simulation on a set of better machines and here are the results:
 
-```
-inductiva tasks info s3mph8i4cbq0ute0011nqisfe
+| Machine       | Number of VCPUs | Execution time | Cost |
+|---------------|-----------------|----------------|------|
+| n2-highcpu-4  | 4               |34.972 seconds  |0.00031 US$|
+| n2-highcpu-8  | 8               |30.368 seconds  |0.00034 US$|
+| n2-highcpu-16 | 16              |30.9 seconds    |0.00065 US$|
+| n2-highcpu-32 | 32              |30.176 seconds  |0.0012 US$|
 
-Task status: Success
-
-Timeline:
-	Waiting for Input         at 20/02, 14:25:15      7.525 s
-	In Queue                  at 20/02, 14:25:23      4.923 s
-	Preparing to Compute      at 20/02, 14:25:28      1.831 s
-	In Progress               at 20/02, 14:25:29      30.409 s
-		└> 30.274 s        openfast 5MW_OC4Semi_WSt_WavesWN/5MW_OC4Semi_WSt_WavesWN.fst
-	Finalizing                at 20/02, 14:26:00      1.12 s
-	Success                   at 20/02, 14:26:01      
-
-Data:
-	Size of zipped output:    16.20 MB
-	Size of unzipped output:  32.71 MB
-	Number of output files:   83
-
-Estimated computation cost (US$): 0.00035 US$
-```
-
-The results confirm what we knew to be true: the execution time (In Progress
-duration) remains nearly the same on a machine with four times the number of
-virtual CPUs.
+The results confirm what we knew to be true: the execution time remains nearly
+the same on all machines regardless of the number of virtual CPUs.
 
 Furthermore, running the simulation on the n2-highcpu-2 VM proves to be
 extremely cost-efficient, with a total cost of just 0.00013 US$.
@@ -114,4 +98,4 @@ In the next part of this tutorial, we'll take things to the next level by
 running dozens of OpenFAST simulations in parallel using Inductiva,
 demonstrating the true power of cloud-based scalability. Stay tuned!
 
-[Running 40 Simulations - Templating](OpenFASTAdvanced_Part4.md)
+[Running 40 Simulations in parallel - Templating](OpenFASTAdvanced_Part4.md)

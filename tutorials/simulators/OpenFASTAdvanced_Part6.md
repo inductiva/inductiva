@@ -10,6 +10,10 @@ cloud resources to scale up computational experiments efficiently. Now, it's
 time to retrieve all the results and analyze the data to extract meaningful
 insights from our simulations.
 
+| |  |
+|---------------|-----------------|
+| <p align="center"><img src="../_static/openfast_animation_30_fps_180.gif" alt="OpenFAST simulation visualization" width="700"></p> |<p align="center"><img src="../_static/openfast_animation_30_fps_220.gif" alt="OpenFAST simulation visualization" width="700"></p>|
+
 ## Project summary and download outputs
 
 Using the Inductiva package, obtaining a project summary and downloading all
