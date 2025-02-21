@@ -4,6 +4,8 @@ In this tutorial, we are going to show you how you can
 use the Inductiva API to accelerate your OpenFast projects, by showing how to
 run dozens of simulations in parallel.
 
+<p align="center"><img src="../_static/openfast_animation_30_fps.gif" alt="OpenFAST simulation visualization" width="700"></p>
+
 ## The curious case of OpenFast
 
 OpenFast is a pretty peculiar piece of software because
@@ -53,8 +55,6 @@ faster. And it is super easy (and cost-effective) with Inductiva.
 In this tutorial, we will show you how to do this using the 
 "5MW_OC4Semi_WSt_WavesWN" example, available from the OpenFast 
 [GitHub](https://github.com/OpenFAST/r-test/tree/v4.0.2/glue-codes/openfast/5MW_OC4Semi_WSt_WavesWN) page.
-
-<p align="center"><img src="../_static/openfast_animation_30_fps.gif" alt="OpenFAST simulation visualization" width="700"></p>
  
 This example is an extension of the reference case described in 
 ["Definition of a 5-MW Reference Wind Turbine for Offshore
