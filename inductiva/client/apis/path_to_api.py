@@ -7,7 +7,6 @@ from inductiva.client.apis.paths.tasks_task_id_input_uploaded import TasksTaskId
 from inductiva.client.apis.paths.tasks_task_id import TasksTaskId
 from inductiva.client.apis.paths.tasks import Tasks
 from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
-from inductiva.client.apis.paths.tasks_task_id_resubmit import TasksTaskIdResubmit
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDisableLogs
 from inductiva.client.apis.paths.tasks_task_id_register import TasksTaskIdRegister
@@ -34,6 +33,7 @@ from inductiva.client.apis.paths.admin_organizations_costs import AdminOrganizat
 from inductiva.client.apis.paths.admin_tiers import AdminTiers
 from inductiva.client.apis.paths.admin_terminate_machine_groups_credits_exhausted import AdminTerminateMachineGroupsCreditsExhausted
 from inductiva.client.apis.paths.admin_import_provider_costs import AdminImportProviderCosts
+from inductiva.client.apis.paths.admin_machine_id_event import AdminMachineIdEvent
 from inductiva.client.apis.paths.task_runner_register import TaskRunnerRegister
 from inductiva.client.apis.paths.task_runner_machine_id import TaskRunnerMachineId
 from inductiva.client.apis.paths.task_runner_machine_id_task import TaskRunnerMachineIdTask
@@ -42,12 +42,9 @@ from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_message_unb
 from inductiva.client.apis.paths.task_runner_machine_id_event import TaskRunnerMachineIdEvent
 from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_operation import TaskRunnerMachineIdTaskTaskIdOperation
 from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_operation_operation_id_done import TaskRunnerMachineIdTaskTaskIdOperationOperationIdDone
-from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_download_input_url import TaskRunnerMachineIdTaskTaskIdDownloadInputUrl
-from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_upload_output_url import TaskRunnerMachineIdTaskTaskIdUploadOutputUrl
 from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_metric import TaskRunnerMachineIdTaskTaskIdMetric
 from inductiva.client.apis.paths.task_runner_machine_id_resize_disk import TaskRunnerMachineIdResizeDisk
 from inductiva.client.apis.paths.task_runner_machine_id_resize_disk_done import TaskRunnerMachineIdResizeDiskDone
-from inductiva.client.apis.paths.task_runner_machine_id_download_urls import TaskRunnerMachineIdDownloadUrls
 from inductiva.client.apis.paths.compute_group import ComputeGroup
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
 from inductiva.client.apis.paths.compute_price import ComputePrice
@@ -102,8 +99,6 @@ PathToApi = typing_extensions.TypedDict(
             Tasks,
         PathValues.TASKS_TASK_ID_STATUS:
             TasksTaskIdStatus,
-        PathValues.TASKS_TASK_ID_RESUBMIT:
-            TasksTaskIdResubmit,
         PathValues.TASKS_TASK_ID_KILL:
             TasksTaskIdKill,
         PathValues.TASKS_TASK_ID_DISABLE_LOGS:
@@ -156,6 +151,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminTerminateMachineGroupsCreditsExhausted,
         PathValues.ADMIN_IMPORT_PROVIDER_COSTS:
             AdminImportProviderCosts,
+        PathValues.ADMIN_MACHINE_ID_EVENT:
+            AdminMachineIdEvent,
         PathValues.TASKRUNNER_REGISTER:
             TaskRunnerRegister,
         PathValues.TASKRUNNER_MACHINE_ID:
@@ -172,18 +169,12 @@ PathToApi = typing_extensions.TypedDict(
             TaskRunnerMachineIdTaskTaskIdOperation,
         PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_OPERATION_OPERATION_ID_DONE:
             TaskRunnerMachineIdTaskTaskIdOperationOperationIdDone,
-        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_DOWNLOAD_INPUT_URL:
-            TaskRunnerMachineIdTaskTaskIdDownloadInputUrl,
-        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_UPLOAD_OUTPUT_URL:
-            TaskRunnerMachineIdTaskTaskIdUploadOutputUrl,
         PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_METRIC:
             TaskRunnerMachineIdTaskTaskIdMetric,
         PathValues.TASKRUNNER_MACHINE_ID_RESIZE_DISK:
             TaskRunnerMachineIdResizeDisk,
         PathValues.TASKRUNNER_MACHINE_ID_RESIZE_DISK_DONE:
             TaskRunnerMachineIdResizeDiskDone,
-        PathValues.TASKRUNNER_MACHINE_ID_DOWNLOAD_URLS:
-            TaskRunnerMachineIdDownloadUrls,
         PathValues.COMPUTE_GROUP:
             ComputeGroup,
         PathValues.COMPUTE_GROUP_START:
@@ -277,8 +268,6 @@ path_to_api = PathToApi({
         Tasks,
     PathValues.TASKS_TASK_ID_STATUS:
         TasksTaskIdStatus,
-    PathValues.TASKS_TASK_ID_RESUBMIT:
-        TasksTaskIdResubmit,
     PathValues.TASKS_TASK_ID_KILL:
         TasksTaskIdKill,
     PathValues.TASKS_TASK_ID_DISABLE_LOGS:
@@ -331,6 +320,8 @@ path_to_api = PathToApi({
         AdminTerminateMachineGroupsCreditsExhausted,
     PathValues.ADMIN_IMPORT_PROVIDER_COSTS:
         AdminImportProviderCosts,
+    PathValues.ADMIN_MACHINE_ID_EVENT:
+        AdminMachineIdEvent,
     PathValues.TASKRUNNER_REGISTER:
         TaskRunnerRegister,
     PathValues.TASKRUNNER_MACHINE_ID:
@@ -347,18 +338,12 @@ path_to_api = PathToApi({
         TaskRunnerMachineIdTaskTaskIdOperation,
     PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_OPERATION_OPERATION_ID_DONE:
         TaskRunnerMachineIdTaskTaskIdOperationOperationIdDone,
-    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_DOWNLOAD_INPUT_URL:
-        TaskRunnerMachineIdTaskTaskIdDownloadInputUrl,
-    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_UPLOAD_OUTPUT_URL:
-        TaskRunnerMachineIdTaskTaskIdUploadOutputUrl,
     PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_METRIC:
         TaskRunnerMachineIdTaskTaskIdMetric,
     PathValues.TASKRUNNER_MACHINE_ID_RESIZE_DISK:
         TaskRunnerMachineIdResizeDisk,
     PathValues.TASKRUNNER_MACHINE_ID_RESIZE_DISK_DONE:
         TaskRunnerMachineIdResizeDiskDone,
-    PathValues.TASKRUNNER_MACHINE_ID_DOWNLOAD_URLS:
-        TaskRunnerMachineIdDownloadUrls,
     PathValues.COMPUTE_GROUP:
         ComputeGroup,
     PathValues.COMPUTE_GROUP_START:
