@@ -53,32 +53,31 @@ faster. And it is super easy (and cost-effective) with Inductiva.
 ## Our use case: 5MW_OC4Semi_WSt_WavesWN
 
 In this tutorial, we will show you how to do this using the 
-"5MW_OC4Semi_WSt_WavesWN" example, available from the OpenFAST 
+"5MW_OC4Semi_WSt_WavesWN" example, available on the OpenFAST 
 [GitHub](https://github.com/OpenFAST/r-test/tree/v4.0.2/glue-codes/openfast/5MW_OC4Semi_WSt_WavesWN) page.
  
 This example is an extension of the reference case described in 
 ["Definition of a 5-MW Reference Wind Turbine for Offshore
 System Development"](https://www.nrel.gov/docs/fy09osti/38060.pdf).
 
-All files needed are available from OpenFAST GitHub so
-let's get started.
+All the necessary files are available from the OpenFAST GitHub, so let's get
+started.
 
-At the top of this page, you can find a visualization of the results of the
-simulation.
+At the top of this page you will find a visualization of the simulation results.
 
-In the pages to come you can see the following topics:
+In the following pages you will see the following topics:
 - [Preparation](OpenFASTAdvanced_Part2.md):
-    Download and prepare all files needed to run our simulations.
-- [Running the Simulation using Inductiva API](OpenFASTAdvanced_Part3.md):
-    Run two simulations and compare results bwetween them.
+    Download and prepare all the files needed to run our simulations.
+- [Running the Simulation using Inductiva's API](OpenFASTAdvanced_Part3.md):
+    Run two simulations and compare the results.
 - [Running 50 Simulations in parallel - Templating](OpenFASTAdvanced_Part4.md):
-    Change our input files to support our templating system, for easy
+    Modify our input files to support our templating system, for easy
     parameterization of some simulation variables.
 - [Running 50 Simulations](OpenFASTAdvanced_Part5.md):
     Run 50 simulations in parallel.
 - [Downloading The Results](OpenFASTAdvanced_Part6.md):
-    Go over the simulations statuses and we also show how you can
-    download the files from all 50 simulations to a specific folder so you can
-    later execute post-processing on your local machine.
+    Go through the simulation statuses and we also show you how to download the
+    files of all 50 simulations to a specific folder for later post-processing
+    on your local machine.
 
 [Preparation](OpenFASTAdvanced_Part2.md)
