@@ -71,13 +71,13 @@ In the pages to come you can see the following topics:
     Where we download and prepare all files needed to run our simulations.
 - [Running the Simulation using Inductiva API](OpenFASTAdvanced_Part3.md):
     Where we run two simulations and compare results bwetween them.
-- [Running 40 Simulations in parallel - Templating](OpenFASTAdvanced_Part4.md):
+- [Running 50 Simulations in parallel - Templating](OpenFASTAdvanced_Part4.md):
     Where we change our input files to support our templating system, for easy
     parameterization of some simulation variables.
-- [Running 40 Simulations](OpenFASTAdvanced_Part5.md):
-    Where we run 40 simulations in parallel.
+- [Running 50 Simulations](OpenFASTAdvanced_Part5.md):
+    Where we run 50 simulations in parallel.
 - [Downloading The Results](OpenFASTAdvanced_Part6.md):
     Where we go over the simulations statuses and we also show how you can
-    download the files from all 40 simulations.
+    download the files from all 50 simulations.
 
 [Preparation](OpenFASTAdvanced_Part2.md)

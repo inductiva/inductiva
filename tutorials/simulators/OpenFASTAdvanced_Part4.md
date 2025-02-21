@@ -2,7 +2,7 @@
 orphan: true
 ---
 
-# Running 40 Simulations in parallel - Templating
+# Running 50 Simulations in parallel - Templating
 
 ## Recap: Running a Single OpenFAST Simulation  
 
@@ -15,7 +15,7 @@ in its ability to scale simulations effortlessly. Now, we'll leverage
 this power to run hundreds of OpenFAST simulations in parallel, drastically
 reducing total computation time.
 
-## From 1 to 40
+## From 1 to 50
 Inductiva does not help run one OpenFast simulation faster, but
 it helps you run many simulations in parallel. So, let's assume
 that you need to study the impact of changing a certain 
@@ -42,9 +42,9 @@ parameter file one can see that parameter WtrDpth has been set to 200 m:
 ```
 
 We are going to use Inductiva API to run variations of this
-base simulation where we set the WtrDpth from 180 to 220 meter,
-at 1 meter steps. This means we are going to run 40 simulations.
-But we are going to run these 40 simulation in parallel.
+base simulation where we set the WtrDpth from 100 to 200 meter,
+at 1 meter steps. This means we are going to run 50 simulations.
+But we are going to run these 50 simulation in parallel.
 
 ### Parametrize the input file `5MW_OC4Semi_WSt_WavesWN.fst`
 
@@ -130,4 +130,4 @@ Python API, so you can literally just do a for loop to
 iterate over all the range of values for WtrDpth. That's 
 what we are going to do next.
 
-[Running 40 Simulations](OpenFASTAdvanced_Part5.md)
+[Running 50 Simulations](OpenFASTAdvanced_Part5.md)

@@ -2,7 +2,7 @@
 orphan: true
 ---
 
-# Running 40 Simulations
+# Running 50 Simulations
 
 In the previous tutorial, we set up a templating system that allows us to
 modify the `WtrDpth` parameter in the OpenFAST input file programmatically.
@@ -10,7 +10,7 @@ This enables us to, easly, generate multiple simulation configurations with diff
 water depths.
 
 Now, we will take the next step and use a for loop to automate the process,
-launching 40 simulations in parallel. This approach demonstrates the true power
+launching 50 simulations in parallel. This approach demonstrates the true power
 of Inductiva: scaling simulations efficiently to save computation time.
 
 Let's dive in!
@@ -31,14 +31,14 @@ cloud_machine = inductiva.resources.ElasticMachineGroup(
     machine_type="n2-highcpu-2",
     spot=True,
     min_machines=1,
-    max_machines=40)
+    max_machines=50)
 
 openfast_project = inductiva.projects.Project(
     name="Openfast_WavesWN",
     append=True)
 openfast_project.open()
 
-for depth in range(180, 220):
+for depth in range(100, 200, 2):
 
     print(f"Preparing files for depth = {depth}")
     target_dir = f"variations/params_for_depth_{depth}"
@@ -87,7 +87,8 @@ cloud_machine = inductiva.resources.ElasticMachineGroup(
     provider="GCP",
     machine_type="n2-highcpu-2",
     spot=True,
-    num_machines=40)
+    min_machines=1,
+    max_machines=50)
 ```
 
 ### Setting Up Our Project  
@@ -125,7 +126,7 @@ newly created input directory. Each simulation task is stored in a list,
 allowing us to track and wait for all tasks to complete.  
 
 ```python
-for depth in range(180, 220):
+for depth in range(100, 200, 2):
 
     print(f"Preparing files for depth = {depth}")
     target_dir = f"variations/params_for_depth_{depth}"
@@ -168,7 +169,7 @@ cloud_machine.terminate()
 ```
 
 >Note: You can list all the tasks from this project by running this command on
-your command line interface `inductiva tasks list -p Openfast_WavesWN -n 40`
+your command line interface `inductiva tasks list -p Openfast_WavesWN -n 50`
 
 ```
 Showing tasks for project: Openfast_WavesWN.
@@ -177,40 +178,7 @@ Showing tasks for project: Openfast_WavesWN.
  9ousr15npia4f9fphfjm1rmrn   openfast      Success    12/02, 15:25:00   12/02, 15:25:00   0:00:34              GCP n2-highcpu-2
  pt3i70i4hmzn740og3ber5yvs   openfast      Success    12/02, 15:24:54   12/02, 15:24:54   0:00:32              GCP n2-highcpu-2
  60ygm64qsd56fmcjxgytq93pr   openfast      Success    12/02, 15:24:47   12/02, 15:24:47   0:00:35              GCP n2-highcpu-2
- sy2a5r3cby0in6151ze06y29g   openfast      Success    12/02, 15:24:39   12/02, 15:24:39   0:00:35              GCP n2-highcpu-2
- snj7xr01k099qbh9ytf97qtbd   openfast      Success    12/02, 15:24:32   12/02, 15:24:32   0:00:37              GCP n2-highcpu-2
- h4qtfsq43si18a6oyvj74qrce   openfast      Success    12/02, 15:24:27   12/02, 15:24:27   0:00:35              GCP n2-highcpu-2
- j85bg918c1i0obj1izumtwwzw   openfast      Success    12/02, 15:24:19   12/02, 15:24:19   0:00:32              GCP n2-highcpu-2
- jxn9a281jkyi4f62n4w80a1yp   openfast      Success    12/02, 15:24:15   12/02, 15:24:15   0:00:31              GCP n2-highcpu-2
- tyqb7rnsyzi94wqgcn58cc2y6   openfast      Success    12/02, 15:24:08   12/02, 15:24:08   0:00:35              GCP n2-highcpu-2
- 1d61519z29drg2jp4nhknauoo   openfast      Success    12/02, 15:24:00   12/02, 15:24:00   0:00:30              GCP n2-highcpu-2
- 68ksaoricizknyhyg65r6cuqo   openfast      Success    12/02, 15:23:55   12/02, 15:23:55   0:00:35              GCP n2-highcpu-2
- 3qoor8iooxtmmm5dozs0o40px   openfast      Success    12/02, 15:23:48   12/02, 15:23:48   0:00:32              GCP n2-highcpu-2
- fr286c6cfrmcus12nh4n37m78   openfast      Success    12/02, 15:23:42   12/02, 15:23:42   0:00:34              GCP n2-highcpu-2
- b0mhrbzy9fwrfuj3f84q8ou75   openfast      Success    12/02, 15:23:35   12/02, 15:23:35   0:00:32              GCP n2-highcpu-2
- n0jb7r2rpuyik5xr7e96d024r   openfast      Success    12/02, 15:23:27   12/02, 15:23:27   0:00:36              GCP n2-highcpu-2
- d6ght4mi7u10mzkstm33fpvty   openfast      Success    12/02, 15:23:20   12/02, 15:23:20   0:00:33              GCP n2-highcpu-2
- pqv4qmy2so820yoqm6dj51na0   openfast      Success    12/02, 15:23:13   12/02, 15:23:13   0:00:30              GCP n2-highcpu-2
- eyw55mcvecqhjxnwncpy6wqkm   openfast      Success    12/02, 15:23:05   12/02, 15:23:05   0:00:35              GCP n2-highcpu-2
- t98ihj29ieep26ndstns63u9r   openfast      Success    12/02, 15:22:57   12/02, 15:22:57   0:00:35              GCP n2-highcpu-2
- qgehpoemdijghnu27hqjed813   openfast      Success    12/02, 15:22:49   12/02, 15:22:49   0:00:31              GCP n2-highcpu-2
- bfn4ok5cwy93bmi1hg6vvk0rs   openfast      Success    12/02, 15:22:44   12/02, 15:22:44   0:00:32              GCP n2-highcpu-2
- 4jho5mrt1dvr1c4wcsq9hje2z   openfast      Success    12/02, 15:22:37   12/02, 15:22:37   0:00:35              GCP n2-highcpu-2
- r1kqwy76fvus9zaevv9xzzc02   openfast      Success    12/02, 15:22:30   12/02, 15:22:30   0:00:33              GCP n2-highcpu-2
- tif6v2qugbkcjcum2hna5ttow   openfast      Success    12/02, 15:22:21   12/02, 15:22:21   0:00:37              GCP n2-highcpu-2
- smnphh002n0pxqnte7r6ihekg   openfast      Success    12/02, 15:22:14   12/02, 15:22:14   0:00:33              GCP n2-highcpu-2
- hmf133908834ms1hg9oh49q4e   openfast      Success    12/02, 15:22:06   12/02, 15:22:06   0:00:33              GCP n2-highcpu-2
- k6xoup4jqczhjuwmiig4c7eo9   openfast      Success    12/02, 15:22:02   12/02, 15:22:02   0:00:33              GCP n2-highcpu-2
- u3my9tc6deh72xan9j7kn0syj   openfast      Success    12/02, 15:21:55   12/02, 15:21:55   0:00:35              GCP n2-highcpu-2
- 4rzzrir5dmhu4g49ft2t8dmw0   openfast      Success    12/02, 15:21:46   12/02, 15:21:46   0:00:32              GCP n2-highcpu-2
- 7jkebn05rfsfcprto45k8nb4h   openfast      Success    12/02, 15:21:39   12/02, 15:21:39   0:00:33              GCP n2-highcpu-2
- 4vocm7rjiehyiyb05mmnpxw0u   openfast      Success    12/02, 15:21:31   12/02, 15:21:31   0:00:33              GCP n2-highcpu-2
- kndw77s3jzumypsnssszp4m4h   openfast      Success    12/02, 15:21:23   12/02, 15:21:23   0:00:34              GCP n2-highcpu-2
- btctwrbp2z69db7w5rbdyuatm   openfast      Success    12/02, 15:21:17   12/02, 15:21:17   0:00:33              GCP n2-highcpu-2
- bzhd49wxjkroc30f4vgs8u4o8   openfast      Success    12/02, 15:21:09   12/02, 15:21:09   0:00:33              GCP n2-highcpu-2
- qfrv5vkims0zqbv7gevviiofg   openfast      Success    12/02, 15:21:02   12/02, 15:21:02   0:00:30              GCP n2-highcpu-2
- 691acms5avqwvpcqf8kvecw33   openfast      Success    12/02, 15:20:54   12/02, 15:20:54   0:00:35              GCP n2-highcpu-2
- 5m9nnjw28h31puxybbzk1mq6h   openfast      Success    12/02, 15:20:47   12/02, 15:20:47   0:00:31              GCP n2-highcpu-2
+ ...
  8gvt5i0x0qeaj2x7ftf7pwxyd   openfast      Success    12/02, 15:20:37   12/02, 15:20:37   0:00:31              GCP n2-highcpu-2
  gnq3smc96ht404hz4ucvoovw6   openfast      Success    12/02, 15:20:14   12/02, 15:20:19   0:00:33              GCP n2-highcpu-2
  iox5b1040tagfnwi9a3j26axr   openfast      Success    12/02, 15:20:07   12/02, 15:20:19   0:00:31              GCP n2-highcpu-2

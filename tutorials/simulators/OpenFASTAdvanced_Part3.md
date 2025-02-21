@@ -98,4 +98,4 @@ In the next part of this tutorial, we'll take things to the next level by
 running dozens of OpenFAST simulations in parallel using Inductiva,
 demonstrating the true power of cloud-based scalability. Stay tuned!
 
-[Running 40 Simulations in parallel - Templating](OpenFASTAdvanced_Part4.md)
+[Running 50 Simulations in parallel - Templating](OpenFASTAdvanced_Part4.md)
