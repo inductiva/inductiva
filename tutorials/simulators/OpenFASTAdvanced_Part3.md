@@ -84,11 +84,11 @@ same simulation on a set of better machines and here are the results:
 
 | Machine       | Number of VCPUs | Execution time | Cost |
 |---------------|-----------------|----------------|------|
-| n2-highcpu-2  | 2               |34.123 seconds  |0.00013 US$|
-| n2-highcpu-4  | 4               |34.972 seconds  |0.00031 US$|
-| n2-highcpu-8  | 8               |30.368 seconds  |0.00034 US$|
+| n2-highcpu-2  | 2               |34.1 seconds  |0.00013 US$|
+| n2-highcpu-4  | 4               |35.0 seconds  |0.00031 US$|
+| n2-highcpu-8  | 8               |30.4 seconds  |0.00034 US$|
 | n2-highcpu-16 | 16              |30.9 seconds    |0.00065 US$|
-| n2-highcpu-32 | 32              |30.176 seconds  |0.0012 US$|
+| n2-highcpu-32 | 32              |30.2 seconds  |0.0012 US$|
 
 The results confirm what we knew to be true: the execution time remains nearly
 the same on all machines regardless of the number of virtual CPUs.
