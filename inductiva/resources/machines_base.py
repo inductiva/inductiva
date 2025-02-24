@@ -495,21 +495,6 @@ class BaseMachineGroup(ABC):
             )
         logging.info("")
 
-    def status(self):
-        """Returns the status of a machine group if it exists.
-
-        Otherwise returns None"""
-        if self.name is None:
-            logging.info(
-                "Attempting to get the status of an unregistered machine group."
-            )
-            return
-
-        response = self._api.get_group_status({"name": self.name})
-        if response.body == "notFound":
-            logging.info("Machine group does not exist: %s.", self.name)
-        return response.body
-
     def _log_machine_group_info(self):
         """Logs the machine group info."""
 
