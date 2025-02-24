@@ -3,6 +3,7 @@ import contextvars
 import datetime
 import logging
 import time
+import os
 from typing import Optional, Union
 
 import inductiva
@@ -390,12 +391,19 @@ class Project:
     def download_outputs(self):
         """ Downloads all the outputs for all the tasks in the project.
         
-        All the files will be stored inside inductiva_output/<task_id's>.
+        All the files will be stored inside
+        `inductiva_output/<project_name>/<task_id's>`.
         """
         list_of_tasks = self.list()
 
+        # Set the new output dir based on the old one + project name
+        old_out_dir = inductiva.get_output_dir()
+        inductiva.set_output_dir(os.path.join(old_out_dir, self.name))
+
         for task in list_of_tasks:
             task.download_outputs()
+        # Restaure ols output dir
+        inductiva.set_output_dir(old_out_dir)
 
     def __enter__(self):
         self.open()
