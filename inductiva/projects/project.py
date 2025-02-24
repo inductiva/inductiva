@@ -402,7 +402,7 @@ class Project:
 
         for task in list_of_tasks:
             task.download_outputs()
-        # Restaure ols output dir
+        # Restore ols output dir
         inductiva.set_output_dir(old_out_dir)
 
     def __enter__(self):
