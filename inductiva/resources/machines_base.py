@@ -73,10 +73,15 @@ class BaseMachineGroup(ABC):
                 representing the number of minutes.
             auto_terminate_ts: Moment in which the resource will be
               automatically terminated.
-            auto_terminate_minutes: Duration, in minutes, the machine will be
-                kept alive. After auto_terminate_minutes minutes the machine
-                will be terminated.  This time will start counting after calling
-                this method.
+            auto_terminate_minutes: Duration, in minutes, the Machine will be
+                kept alive. After auto_terminate_minutes minutes the Machine
+                will be terminated. This time will start counting after calling
+                this method (regardless if you started the resource or not).
+                This differs from `max_idle_time`, which terminates the Machine
+                only after it has been idle for a specified duration.  
+                Use `auto_terminate_minutes` to enforce a strict time limit,
+                while `max_idle_time` is better suited for terminating  
+                the Machine when it is no longer actively processing tasks.  
             register: Bool that indicates if a machine group should be register
                 or if it was already registered. If set to False by users on
                 initialization, then, the machine group will not be able to be
