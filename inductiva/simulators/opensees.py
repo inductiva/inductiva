@@ -78,50 +78,43 @@ class OpenSees(simulators.Simulator):
                 the simulation directory.
             other arguments: See the documentation of the base class.
         """
-        
+
         if self._version == "2.5.0":
             logging.warning(
                 "Opensees version 2.5.0 does not support parallel execution."
                 "Changing to `n_vcpus` to 1.")
-            n_vcpus=1
+            n_vcpus = 1
             if self._interface == "python":
                 logging.warning(
-                "Opensees version 2.5.0 does not support `python` as"
-                " an interface. Changing to `tcl`.")
+                    "Opensees version 2.5.0 does not support `python` as"
+                    " an interface. Changing to `tcl`.")
 
-        if n_vcpus > on.
+        if n_vcpus > on.n_vcpus.total:
+            raise ValueError(
+                "The number of virtual cpus asked surpasses the"
+                " available virtual cpus for the selected resource.")
+
+        mpi_config = MPIConfig(version="4.1.6",
+                               use_hwthread_cpus=use_hwthread,
+                               **({
+                                   "np": n_vcpus
+                               } if n_vcpus is not None else {}))
 
         if self._interface == "python":
-
-            commands = [f"python {sim_config_filename}"]
-
-            #If we use any mpi flag we will use mpi (otherwise run python only)
-            if n_vcpus is not None or use_hwthread is True:
-                logging.info("\nMPI flag detected (n_vcpus or use_hwthread).\n"
-                             "We are going to run your python file with mpirun "
+            if n_vcpus or use_hwthread:
+                logging.info("\nMPI flag detected (n_vcpus or use_hwthread)."
+                             "\nRunning the Python file with mpirun "
                              "(Parallel Execution).")
-                mpi_config = MPIConfig(version="4.1.6",
-                                       use_hwthread_cpus=use_hwthread,
-                                       **({
-                                           "np": n_vcpus
-                                       } if n_vcpus is not None else {}))
-
                 commands = [
                     Command(f"python {sim_config_filename}",
                             mpi_config=mpi_config)
                 ]
             else:
                 logging.info(
-                    "\nNo MPI flag detected (n_vcpus or use_hwthread).\n"
-                    "We are going to run your python file with python "
-                    "(Sequential Execution).")
+                    "\nNo MPI flag detected (n_vcpus or use_hwthread)."
+                    "\nRunning the Python file sequentially with python.")
+                commands = [f"python {sim_config_filename}"]
         else:
-            mpi_config = MPIConfig(version="4.1.6",
-                                   use_hwthread_cpus=use_hwthread,
-                                   **({
-                                       "np": n_vcpus
-                                   } if n_vcpus is not None else {}))
-
             commands = [
                 Command(f"OpenSeesMP {sim_config_filename}",
                         mpi_config=mpi_config)
