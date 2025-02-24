@@ -49,7 +49,6 @@ from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
 from inductiva.client.apis.paths.compute_price import ComputePrice
 from inductiva.client.apis.paths.compute_groups import ComputeGroups
 from inductiva.client.apis.paths.compute_groups_history import ComputeGroupsHistory
-from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
 from inductiva.client.apis.paths.compute_machine_types import ComputeMachineTypes
 from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
 from inductiva.client.apis.paths.compute_group_machine_group_id_sharing import ComputeGroupMachineGroupIdSharing
@@ -182,8 +181,6 @@ PathToApi = typing_extensions.TypedDict(
             ComputeGroups,
         PathValues.COMPUTE_GROUPS_HISTORY:
             ComputeGroupsHistory,
-        PathValues.COMPUTE_GROUP_STATUS:
-            ComputeGroupStatus,
         PathValues.COMPUTE_MACHINE_TYPES:
             ComputeMachineTypes,
         PathValues.COMPUTE_GROUP_NAME:
@@ -349,8 +346,6 @@ path_to_api = PathToApi({
         ComputeGroups,
     PathValues.COMPUTE_GROUPS_HISTORY:
         ComputeGroupsHistory,
-    PathValues.COMPUTE_GROUP_STATUS:
-        ComputeGroupStatus,
     PathValues.COMPUTE_MACHINE_TYPES:
         ComputeMachineTypes,
     PathValues.COMPUTE_GROUP_NAME:
