@@ -9,7 +9,6 @@
 """
 
 from inductiva.client.paths.compute_group.delete import DeleteVmGroup
-from inductiva.client.paths.compute_group_status.get import GetGroupStatus
 from inductiva.client.paths.compute_price.get import GetInstancePrice
 from inductiva.client.paths.compute_group_name.get import GetVmGroupByName
 from inductiva.client.paths.compute_groups.get import ListActiveUserInstanceGroups
@@ -22,7 +21,6 @@ from inductiva.client.paths.compute_group_machine_group_id_sharing.put import Up
 
 class ComputeApi(
         DeleteVmGroup,
-        GetGroupStatus,
         GetInstancePrice,
         GetVmGroupByName,
         ListActiveUserInstanceGroups,

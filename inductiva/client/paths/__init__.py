@@ -54,7 +54,6 @@ class PathValues(str, enum.Enum):
     COMPUTE_PRICE = "/compute/price"
     COMPUTE_GROUPS = "/compute/groups"
     COMPUTE_GROUPS_HISTORY = "/compute/groups/history"
-    COMPUTE_GROUP_STATUS = "/compute/group_status"
     COMPUTE_MACHINE_TYPES = "/compute/machine_types"
     COMPUTE_GROUP_NAME = "/compute/group/{name}"
     COMPUTE_GROUP_MACHINE_GROUP_ID_SHARING = "/compute/group/{machine_group_id}/sharing"
