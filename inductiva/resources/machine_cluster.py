@@ -47,9 +47,14 @@ class MPICluster(machines_base.BaseMachineGroup):
             auto_terminate_ts: Moment in which the resource will be
               automatically terminated.
             auto_terminate_minutes: Duration, in minutes, the MPICluster will be
-                kept alive. After auto_terminate_minutes minutes the machine
+                kept alive. After auto_terminate_minutes minutes the MPICluster
                 will be terminated. This time will start counting after calling
-                this method.
+                this method (regardless if you started the resource or not).
+                This differs from `max_idle_time`, which terminates the cluster
+                only after it has been idle for a specified duration.  
+                Use `auto_terminate_minutes` to enforce a strict time limit,
+                while `max_idle_time` is better suited for terminating  
+                the cluster when it is no longer actively processing tasks.  
             
         """
         if num_machines < 1:
