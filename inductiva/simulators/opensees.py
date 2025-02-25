@@ -1,5 +1,5 @@
 """OpenSees module of the API."""
-from typing import List, Optional
+from typing import List, Literal, Optional
 import logging
 
 from inductiva import types, tasks, simulators
@@ -17,7 +17,7 @@ class OpenSees(simulators.Simulator):
                  /,
                  version: Optional[str] = None,
                  use_dev: bool = False,
-                 interface: str = "python"):
+                 interface: Literal["python", "tcl"] = "python"):
         """Initialize the OpenSees simulator.
 
         Args:
@@ -46,6 +46,27 @@ class OpenSees(simulators.Simulator):
             return "OpenSeesPy"
         else:
             return "OpenSees"
+
+    def _build_commands(self, sim_config_filename, mpi_config):
+        """ Creates the list of commands based on the sim_config_filename and
+        the provided mpi_config.
+        """
+        if self._interface == "python":
+            return [
+                Command(f"python {sim_config_filename}", mpi_config=mpi_config)
+            ]
+        return [
+            Command(f"OpenSeesMP {sim_config_filename}", mpi_config=mpi_config)
+        ]
+
+    def _build_mpi_config(self, n_vcpus: int, use_hwthread: bool) -> MPIConfig:
+        """ Creates an MPIConfig based on n_vcpus and use_hwthread.
+        """
+        return MPIConfig(version="4.1.6",
+                         use_hwthread_cpus=use_hwthread,
+                         **({
+                             "np": n_vcpus
+                         } if n_vcpus is not None else {}))
 
     def run(self,
             input_dir: Optional[str],
@@ -88,37 +109,29 @@ class OpenSees(simulators.Simulator):
                 logging.warning(
                     "Opensees version 2.5.0 does not support `python` as"
                     " an interface. Changing to `tcl`.")
+                self._interface = "tcl"
 
         if n_vcpus and n_vcpus > on.n_vcpus.total:
             raise ValueError(
                 "The number of virtual cpus asked surpasses the"
                 " available virtual cpus for the selected resource.")
 
-        mpi_config = MPIConfig(version="4.1.6",
-                               use_hwthread_cpus=use_hwthread,
-                               **({
-                                   "np": n_vcpus
-                               } if n_vcpus is not None else {}))
+        mpi_config = self._build_mpi_config(n_vcpus, use_hwthread)
 
         if self._interface == "python":
             if n_vcpus or use_hwthread:
                 logging.info("\nMPI flag detected (n_vcpus or use_hwthread)."
-                             "\nRunning the Python file with mpirun "
+                             "\nThe simulation will run with mpirun "
                              "(Parallel Execution).")
-                commands = [
-                    Command(f"python {sim_config_filename}",
-                            mpi_config=mpi_config)
-                ]
+                commands = self._build_commands(sim_config_filename, mpi_config)
             else:
                 logging.info(
                     "\nNo MPI flag detected (n_vcpus or use_hwthread)."
-                    "\nRunning the Python file sequentially with python.")
+                    "\nThe simulation will run sequentially with python.")
                 commands = [f"python {sim_config_filename}"]
         else:
-            commands = [
-                Command(f"OpenSeesMP {sim_config_filename}",
-                        mpi_config=mpi_config)
-            ]
+            commands = self._build_commands(sim_config_filename, mpi_config)
+
         return super().run(input_dir,
                            on=on,
                            commands=commands,
