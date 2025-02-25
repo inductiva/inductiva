@@ -89,7 +89,7 @@ class OpenSees(simulators.Simulator):
                     "Opensees version 2.5.0 does not support `python` as"
                     " an interface. Changing to `tcl`.")
 
-        if n_vcpus > on.n_vcpus.total:
+        if n_vcpus and n_vcpus > on.n_vcpus.total:
             raise ValueError(
                 "The number of virtual cpus asked surpasses the"
                 " available virtual cpus for the selected resource.")
