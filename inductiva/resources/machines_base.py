@@ -251,7 +251,7 @@ class BaseMachineGroup(ABC):
             The unique ID and name identifying the machine on the API."""
         logging.info("■ Registering %s configurations:", self.short_name())
 
-        instance_group_config = inductiva.client.models.VMGroupConfig(
+        instance_group_config = inductiva.client.models.RegisterVMGroupRequest(
             machine_type=self.machine_type,
             provider_id=self.provider,
             threads_per_core=self.threads_per_core,
