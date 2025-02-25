@@ -20,42 +20,27 @@ We currently support the following OpenSees versions:
 - **v2.5.0** – Supports Tcl scripting only.  
 - **v3.7.1** – Supports both Python and Tcl.
 
-## Example Code
+## Example Code - `Tcl` interface
 
-In the following example, we demonstrate how to run an OpenFAST simulation 
-using Inductiva's cloud infrastructure.
+In the following example, we demonstrate how to run an OpenSees simulation 
+using its `tcl` interface.
 
-> Note: The input files for this example have already been prepared. All that's
-needed is to download them and save them in a folder.
+### Running the `SmallMP` Example  
 
-```{literalinclude} ../../inductiva/tests/test_simulators/opensees/opensees.py
-:language: python
-```
-
-The following example demonstrates how to run an OpenSees simulation using MPI and Python.  
-
-To use Tcl instead, simply set the `interface` argument to `tcl`.  
-
-If you want to run a Python simulation without MPI, remove the `n_vcpus` argument
-and explicitly set `use_hwthread=False`. Both of these are MPI-related arguments,
-and specifying any MPI argument will result in the simulation running with MPI.
-
-## Advanced Tutorial: Running the `SmallMP` Example  
-
-### Objective  
+#### Objective  
 
 In this tutorial, you'll learn how to use Inductiva's API to run an OpenSees
 simulation. We'll validate our simulator implementation while demonstrating its
 ability to scale efficiently on more powerful machines.  
 
-### Prerequisites  
+#### Prerequisites  
 
 The requirements for this tutorial are minimal. Simply download the input files
 from [here](https://github.com/OpenSees/OpenSees/tree/master/EXAMPLES/SmallMP).  
 
 Once you have the simulation files, you're ready to scale your simulations to the cloud.  
 
-### Overview
+#### Overview
 
 Here's the code you'll be working on as we progress through the tutorial.
 Don't worry if it doesn't all make sense right now; everything will become
@@ -80,6 +65,7 @@ task = opensees.run( \
     input_dir="/Path/to/SmallMP",
     sim_config_filename="Example.tcl",
     n_vcpus=4,
+    use_hwthread=True,
     on=cloud_machine)
 
 task.wait()
@@ -90,9 +76,9 @@ task.download_outputs()
 task.print_summary()
 ```
 
-### Step 1: Running Your Simulation  
+#### Step 1: Running Your Simulation  
 
-#### Choose the Machine for Your Simulation  
+##### Choose the Machine for Your Simulation  
 
 We have a wide range of machines available, but since this is a validation
 example from the simulator repository and the simulation is relatively short,
@@ -104,7 +90,7 @@ cloud_machine = inductiva.resources.MachineGroup( \
     machine_type="c2-standard-4")
 ```
 
-#### Initialize Your Simulator  
+##### Initialize Your Simulator  
 
 For this OpenSees simulation, we need to select the appropriate OpenSees class.
 This step is straightforward. However, there are a few options to consider.
@@ -119,7 +105,7 @@ opensees = inductiva.simulators.OpenSees( \
     version="3.7.1")
 ```
 
-#### Running the Simulation  
+##### Running the Simulation  
 
 At this point, most of the setup is already complete. Now, we simply need to
 execute the simulation using our input files.  
@@ -138,7 +124,7 @@ In this step, we specify the `sim_config_filename`, which points to the main
 utilizes all available virtual CPUs by setting `n_vcpus=4`.  
 
 
-#### Analyzing the Results  
+##### Analyzing the Results  
 
 Now, it's time to wait for the simulation to complete. As mentioned earlier,
 this simulation should run quickly, as its primary goal is to ensure
@@ -154,7 +140,10 @@ task.print_summary()
 ```
 
 Once the simulation finishes, we terminate the machine, download the results,
-and print a summary of the simulation.  
+and print a summary of the simulation.
+
+> Note: Running the command `inductiva tasks info gafdcf5t0zpkft4sxmubo30q1` on
+your cli will give you the same results as the `task.print_summary()`.
 
 ```
 inductiva tasks info gafdcf5t0zpkft4sxmubo30q1
@@ -189,44 +178,13 @@ Keep reading to discover how easy it is to scale this simulation and cut the
 processing time by more than half.  
 
 
-### Step 2: Scaling Up Your Simulation  
+#### Step 2: Scaling Up Your Simulation  
 
 At Inductiva, we aim to make your life easier. Scaling up your simulation is as
 simple as changing just two lines of code from the previous script.  
 
 1. Update the `machine_type` to `c2-standard-16`  
-2. Increase the number of virtual CPUs to 16  
-
-Your Python script should now look like this:
-
-```python
-"""OpenSees Simulation."""
-import inductiva
-
-# Instantiate machine group
-cloud_machine = inductiva.resources.MachineGroup( \
-    provider="GCP",
-    machine_type="c2-standard-16")
-
-# Initialize the Simulator
-opensees = inductiva.simulators.OpenSees( \
-    interface="tcl",
-    version="3.7.1")
-
-# Run the simulation
-task = opensees.run( \
-    input_dir="/Path/to/SmallMP",
-    sim_config_filename="Example.tcl",
-    n_vcpus=16,
-    on=cloud_machine)
-
-task.wait()
-cloud_machine.terminate()
-
-task.download_outputs()
-
-task.print_summary()
-```
+2. Increase the number of `n_vcpus` to 16  
 
 By changing just these two lines, you're now running your simulation on a much
 more powerful machine.  
@@ -263,3 +221,70 @@ With just a two-line change, we've reduced the process time from 28.2 seconds to
 Are you in the testing phase, unsure if your simulation has errors or will converge?
 No problem! Start with a cost-effective, slower machine. Once you're confident
 in your results, seamlessly scale your simulation to full speed with no friction.
+
+## Example Code - `Python` Interface
+
+In this example, we demonstrate how to run an OpenSees simulation using its
+Python interface. This tutorial shares many similarities with the previous one,
+so we'll skip over some parts and focus on the key differences.
+
+### Running the `ExamplePython` Simulation  
+
+#### Objective  
+
+The goal of this example is to show you how to run your simulations using OpenSees'
+Python interface. We can also scale this simulation with more powerful machines,
+though we won't cover that here, as the process is essentially the same.
+
+#### Prerequisites
+
+Before running the simulation, you'll need to download the input files from
+the [OpenSees official repository](https://github.com/OpenSees/OpenSees/tree/master/EXAMPLES/ExamplePython).
+
+Once you have the simulation files, you're ready to begin running your simulation.  
+
+#### Overview
+
+Here's the code you'll use to run the simulation. In the next step, we'll
+explain the changes compared to the previous example.
+
+```python
+"""OpenSees Simulation."""
+import inductiva
+
+# Instantiate machine group
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c2-standard-4")
+
+# Initialize the Simulator
+opensees = inductiva.simulators.OpenSees( \
+    interface="python",
+    version="3.7.1")
+
+# Run simulation
+task = opensees.run( \
+    input_dir="/Path/to/ExamplePython",
+    sim_config_filename="example_mpi_paralleltruss_explicit.py",
+    n_vcpus=4,
+    use_hwthread=True,
+    on=cloud_machine)
+
+task.wait()
+cloud_machine.terminate()
+
+task.download_outputs()
+
+task.print_summary()
+```
+
+#### What's Changed
+
+The code in this example is largely the same as the previous one, but with two
+key differences:
+
+1. When initializing the simulator, we now specify `interface="python"`.
+2. The `sim_config_filename` now points to a Python file: `example_mpi_paralleltruss_explicit.py`.
+
+That's it! We've designed both interfaces to be as similar as possible, making
+it easy to switch between them without much hassle.
