@@ -7,7 +7,6 @@ from inductiva.client.apis.paths.tasks_task_id import TasksTaskId
 from inductiva.client.apis.paths.tasks import Tasks
 from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
-from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDisableLogs
 from inductiva.client.apis.paths.tasks_task_id_register import TasksTaskIdRegister
 from inductiva.client.apis.paths.tasks_task_id_offer import TasksTaskIdOffer
 from inductiva.client.apis.paths.tasks_task_id_message import TasksTaskIdMessage
@@ -97,8 +96,6 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdStatus,
         PathValues.TASKS_TASK_ID_KILL:
             TasksTaskIdKill,
-        PathValues.TASKS_TASK_ID_DISABLE_LOGS:
-            TasksTaskIdDisableLogs,
         PathValues.TASKS_TASK_ID_REGISTER:
             TasksTaskIdRegister,
         PathValues.TASKS_TASK_ID_OFFER:
@@ -262,8 +259,6 @@ path_to_api = PathToApi({
         TasksTaskIdStatus,
     PathValues.TASKS_TASK_ID_KILL:
         TasksTaskIdKill,
-    PathValues.TASKS_TASK_ID_DISABLE_LOGS:
-        TasksTaskIdDisableLogs,
     PathValues.TASKS_TASK_ID_REGISTER:
         TasksTaskIdRegister,
     PathValues.TASKS_TASK_ID_OFFER:
