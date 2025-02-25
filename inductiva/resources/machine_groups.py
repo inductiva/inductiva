@@ -827,8 +827,8 @@ class MPICluster(BaseMachineGroup):
 def _fetch_machine_groups_from_api():
     """Get all active machine groups of a user from the API."""
     try:
-        api = compute_api.ComputeApi(inductiva.api.get_client())
-        response = api.list_active_user_instance_groups()
+        api_compute = compute_api.ComputeApi(inductiva.api.get_client())
+        response = api_compute.list_active_user_instance_groups()
 
         return response.body
 
@@ -852,8 +852,8 @@ def _get_machine_group_class(machine_type: str, is_elastic: bool):
 def get_by_name(machine_name: str):
     """Returns the machine group corresponding to `machine_name`."""
     try:
-        api = compute_api.ComputeApi(inductiva.api.get_client())
-        response = api.get_vm_group_by_name({"name": machine_name}).body
+        api_compute = compute_api.ComputeApi(inductiva.api.get_client())
+        response = api_compute.get_vm_group_by_name({"name": machine_name}).body
         mg_class = _get_machine_group_class(response["type"],
                                             response["is_elastic"])
         return mg_class.from_api_response(response)
