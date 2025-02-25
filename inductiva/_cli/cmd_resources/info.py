@@ -10,7 +10,7 @@ from inductiva.utils import format_utils
 def machine_group_info(args, fout: TextIO = sys.stdout):
     """Prints a task information."""
     machine_group_name = args.name
-    machine_group = resources.get_by_name(machine_group_name)
+    machine_group = resources.machine_groups.get_by_name(machine_group_name)
     machines = machine_group.__dict__["machines"]
 
     print(f"Showing machines of machine group: {machine_group_name}", file=fout)
