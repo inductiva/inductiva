@@ -11,6 +11,7 @@ from inductiva import resources
 from inductiva.client import ApiException
 from inductiva.utils import format_utils
 
+
 class ProviderType(format_utils.CaseInsensitiveEnum):
     """Enum to represent the provider of the machine to be launched."""
     GCP = "GCP"

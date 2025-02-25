@@ -550,7 +550,7 @@ class BaseMachineGroup(ABC):
         self._log_estimated_spot_vm_savings()
 
         return max_cost_per_hour
-    
+
 
 @dataclass(repr=False)
 class MachineGroup(BaseMachineGroup):
