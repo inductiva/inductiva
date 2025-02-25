@@ -34,7 +34,7 @@ EXPECTED_RESULTS = [
                          zip(RESPONSES, EXPECTED_RESULTS))
 def test_get_by_name(response, expected_result):
     mock_compute_api_path =\
-        "inductiva.resources.machine_groups.compute_api.ComputeApi"
+        "inductiva.resources.utils.compute_api.ComputeApi"
 
     with mock.patch(mock_compute_api_path) as mock_compute_api:
         mock_response = mock.MagicMock()
@@ -44,6 +44,6 @@ def test_get_by_name(response, expected_result):
         (mock_compute_api.return_value.get_vm_group_by_name
         ) = mock_get_vm_group_by_name
 
-        result = inductiva.resources.machine_groups.get_by_name("dummy_name")
+        result = inductiva.resources.get_by_name("dummy_name")
 
     assert isinstance(result, expected_result)
