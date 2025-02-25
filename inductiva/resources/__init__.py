@@ -1,3 +1,3 @@
 #pylint: disable=missing-module-docstring
 from .machine_groups import MachineGroup, ElasticMachineGroup, MPICluster, get
-from .utils import estimate_machine_cost, get_available_machine_types, list_available_machines, get_machine_dict
+from .utils import estimate_machine_cost, get_available_machine_types, list_available_machines

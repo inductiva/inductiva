@@ -15,7 +15,7 @@ def machine_group_info(args, fout: TextIO = sys.stdout):
 
     print(f"Showing machines of machine group: {machine_group_name}", file=fout)
 
-    table_dict = resources.get_machine_dict(machines)
+    table_dict = resources.utils.get_machine_dict(machines)
 
     formatters = {
         "Started": [format_utils.datetime_formatter,],
