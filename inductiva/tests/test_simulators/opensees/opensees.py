@@ -6,7 +6,7 @@ cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
     machine_type="c2-standard-4")
 
-# Set simulation input directory
+# Download input files and store them in a directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "openseespy-input-example.zip",

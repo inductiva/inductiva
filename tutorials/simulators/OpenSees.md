@@ -23,7 +23,10 @@ We currently support the following OpenSees versions:
 ## Example Code
 
 In the following example, we demonstrate how to run an OpenFAST simulation 
-using Inductiva's cloud infrastructure. 
+using Inductiva's cloud infrastructure.
+
+> Note: The input files for this example have already been prepared. All that's
+needed is to download them and save them in a folder.
 
 ```{literalinclude} ../../inductiva/tests/test_simulators/opensees/opensees.py
 :language: python
