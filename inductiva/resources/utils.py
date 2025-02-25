@@ -7,7 +7,6 @@ from typing import List, Optional, Tuple, Union
 import inductiva
 import inductiva.client
 from inductiva.client.apis.tags import compute_api
-from inductiva import resources
 from inductiva.client import ApiException
 from inductiva.utils import format_utils
 

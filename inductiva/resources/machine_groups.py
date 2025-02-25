@@ -822,7 +822,7 @@ class MPICluster(BaseMachineGroup):
 
     def _log_estimated_spot_vm_savings(self) -> None:
         return
-    
+
 
 def _fetch_machine_groups_from_api():
     """Get all active machine groups of a user from the API."""
@@ -834,7 +834,7 @@ def _fetch_machine_groups_from_api():
 
     except inductiva.client.ApiException as api_exception:
         raise api_exception
-    
+
 
 def _get_machine_group_class(machine_type: str, is_elastic: bool):
     """Returns the class of the machine group"""
@@ -847,7 +847,7 @@ def _get_machine_group_class(machine_type: str, is_elastic: bool):
     else:
         raise ValueError("Unknown resource configuration.")
     return mg_class
-    
+
 
 def get_by_name(machine_name: str):
     """Returns the machine group corresponding to `machine_name`."""
