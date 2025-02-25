@@ -12,7 +12,6 @@ class PathValues(str, enum.Enum):
     TASKS = "/tasks"
     TASKS_TASK_ID_STATUS = "/tasks/{task_id}/status"
     TASKS_TASK_ID_KILL = "/tasks/{task_id}/kill"
-    TASKS_TASK_ID_DISABLE_LOGS = "/tasks/{task_id}/disable_logs"
     TASKS_TASK_ID_REGISTER = "/tasks/{task_id}/register"
     TASKS_TASK_ID_OFFER = "/tasks/{task_id}/offer"
     TASKS_TASK_ID_MESSAGE = "/tasks/{task_id}/message"
