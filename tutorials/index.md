@@ -82,6 +82,7 @@ simulators/NWChem
 simulators/OpenFOAM
 simulators/OpenFAST
 simulators/OpenFASTAdvanced_Part1
+simulators/OpenSees
 simulators/QuantumEspresso
 simulators/Reef3D
 simulators/SCHISM
