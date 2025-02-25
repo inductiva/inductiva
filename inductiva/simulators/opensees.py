@@ -26,8 +26,8 @@ class OpenSees(simulators.Simulator):
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
-            interface (str): The interface to use for interacting with the simulator.
-                Can be either "python" (default) or "tcl". 
+            interface (str): The interface to use for interacting with the
+                simulator. Can be either "python" (default) or "tcl". 
         """
         if interface.lower() not in AVAILABLE_OPENSEES_INTERFACES:
             raise ValueError(
