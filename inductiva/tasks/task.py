@@ -870,9 +870,7 @@ class Task:
             print that information in a formatted way.
         """
         archive_info = storage.get_zip_contents(
-            path=self.info.storage_output_path,
-            zip_relative_path="artifacts/"
-        )
+            path=self.info.storage_output_path, zip_relative_path="artifacts/")
 
         output_files = [
             output_info.FileInfo(
@@ -900,10 +898,8 @@ class Task:
 
     def _request_download_output_url(self) -> Optional[str]:
         try:
-            url = storage.get_signed_urls(
-                paths=[self.info.storage_output_path],
-                operation="download"
-            )[0]
+            url = storage.get_signed_urls(paths=[self.info.storage_output_path],
+                                          operation="download")[0]
         except exceptions.ApiException as e:
             if not self._called_from_wait:
 
@@ -926,10 +922,8 @@ class Task:
         return url
 
     def _request_download_input_url(self) -> str:
-        return storage.get_signed_urls(
-            paths=[self.info.storage_input_path],
-            operation="download"
-        )[0]
+        return storage.get_signed_urls(paths=[self.info.storage_input_path],
+                                       operation="download")[0]
 
     def get_output_url(self) -> Optional[str]:
         """Get a public URL to download the output files of the task.
