@@ -103,8 +103,8 @@ Estimated computation cost (US$): 0.00066 US$
 Go to https://console.inductiva.ai/tasks/gafdcf5t0zpkft4sxmubo30q1 for more details.
 ```
 
-As shown here, the core computing time of our simulation took 28.2 seconds, as seen in
-`In Progress               at 25/02, 16:35:58      28.221 s`. This part of the
+As shown here, the core computing time of our simulation took 28.2 seconds, as
+seen at `In Progress   at 25/02, 16:35:58  28.221 s` line. This part of the
 timeline represents the actual running of the simulation.
 
 Although this simulation is short, there's still room for improvement in
