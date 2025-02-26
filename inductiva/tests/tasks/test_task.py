@@ -1,7 +1,7 @@
 """Test file for Tasks class."""
 import inductiva
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, PropertyMock, patch
 from inductiva import constants, storage
 from inductiva.client import exceptions
 import inductiva.client
@@ -191,7 +191,9 @@ def test__get_output_info(mock_get_zip_contents):
             storage.ZipFileInfo(name="file2.txt", size=200, compressed_size=100)
         ])
     task = inductiva.tasks.Task("123")
-    output_info = task.get_output_info()
+    with patch.object(inductiva.tasks.Task, 'info',
+                      new_callable=PropertyMock) as _:
+        output_info = task.get_output_info()
     assert output_info.n_files == 2
     assert output_info.total_size_bytes == 320
     assert output_info.total_compressed_size_bytes == 150
