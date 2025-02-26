@@ -869,9 +869,10 @@ class Task:
             each file (name, size, compressed size). It can also be used to
             print that information in a formatted way.
         """
-        # TODO: the output filename shouldn't be hardcoded
-        archive_info = storage.get_zip_contents(path=f"{self.id}/output.zip",
-                                                zip_relative_path="artifacts/")
+        archive_info = storage.get_zip_contents(
+            path=self.info.storage_output_path,
+            zip_relative_path="artifacts/"
+        )
 
         output_files = [
             output_info.FileInfo(
@@ -899,9 +900,10 @@ class Task:
 
     def _request_download_output_url(self) -> Optional[str]:
         try:
-            # TODO: the output filename shouldn't be hardcoded
-            url = storage.get_signed_urls([f"{self.id}/output.zip"],
-                                          "download")[0]
+            url = storage.get_signed_urls(
+                paths=[self.info.storage_output_path],
+                operation="download"
+            )[0]
         except exceptions.ApiException as e:
             if not self._called_from_wait:
 
@@ -924,8 +926,10 @@ class Task:
         return url
 
     def _request_download_input_url(self) -> str:
-        # TODO: the input filename shouldn't be hardcoded
-        return storage.get_signed_urls([f"{self.id}/input.zip"], "download")[0]
+        return storage.get_signed_urls(
+            paths=[self.info.storage_input_path],
+            operation="download"
+        )[0]
 
     def get_output_url(self) -> Optional[str]:
         """Get a public URL to download the output files of the task.
