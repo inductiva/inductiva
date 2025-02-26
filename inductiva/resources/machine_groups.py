@@ -55,7 +55,7 @@ class BaseMachineGroup(ABC):
     threads_per_core: int = 2
     data_disk_gb: int = 10
     max_idle_time: Union[datetime.timedelta,
-                                  int] = datetime.timedelta(minutes=3)
+                         int] = datetime.timedelta(minutes=3)
     auto_terminate_ts: Optional[datetime.datetime] = None
     auto_terminate_minutes: Optional[int] = None
 
@@ -192,7 +192,8 @@ class BaseMachineGroup(ABC):
 
     @staticmethod
     def _timedelta_to_seconds(
-            value: Optional[datetime.timedelta | int] = None) -> Optional[float]:
+        value: Optional[Union[datetime.timedelta,
+                              int]] = None) -> Optional[float]:
         """Converts a timedelta object to seconds."""
         if isinstance(value, int):
             return value * 60
