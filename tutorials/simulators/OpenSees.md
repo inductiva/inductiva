@@ -104,7 +104,7 @@ Go to https://console.inductiva.ai/tasks/gafdcf5t0zpkft4sxmubo30q1 for more deta
 ```
 
 As shown here, the core computing time of our simulation took 28.2 seconds, as
-seen at `In Progress   at 25/02, 16:35:58  28.221 s` line. This part of the
+seen at the `In Progress   at 25/02, 16:35:58  28.221 s` line. This part of the
 timeline represents the actual running of the simulation.
 
 Although this simulation is short, there's still room for improvement in
