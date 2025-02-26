@@ -46,8 +46,6 @@ the Cloud.
 ### Running Your Simulation
 
 Here is the code required to run an OpenSees simulation using the Inductiva API.
-Don't worry if it doesn't all make sense right now; everything will become
-clearer in the upcoming steps.
 
 ```python
 """OpenSees Simulation."""
