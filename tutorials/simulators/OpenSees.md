@@ -178,7 +178,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-#### What's Changed
+### What's Changed
 
 The code in this example is largely the same as the previous one, but with two
 key differences:
