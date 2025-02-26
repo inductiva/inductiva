@@ -1,46 +1,49 @@
-In this guide, we will walk you through setting up and running OpenSees simulations
-using the Inductiva API.
+This guide will walk you through setting up and running OpenSees simulations
+using the Inductiva API. 
 
-We will cover an example code to help you get started with simulations.
+We will cover two example codes to help you get started with simulations:
+- Running OpenSees scripts written in Tcl
+- Running OpenSees scripts written in Python (OpeenSeesPy)
 
 # OpenSees
 
 [OpenSees (Open System for Earthquake Engineering Simulation)](https://opensees.berkeley.edu/)
-is an open-source software framework for simulating the response of structural
-and geotechnical systems subjected to earthquakes and other dynamic loads.
+is a software framework designed for the development of sequential, parallel
+and grid-enabled finite element applications in earthquake engineering. It
+allows users to simulate the response of structural and geotechnical systems
+subjected to earthquakes and other hazards using scripts written in either Tcl
+or Python.
 
-Developed by the Pacific Earthquake Engineering Research (PEER) Center, OpenSees
-provides a flexible and extensible platform with scripting capabilities in both
-TCL and Python. OpenSees supports nonlinear analysis, finite element modeling, and
-advanced material behavior, making it widely used in academic research and
-engineering practice for performance-based seismic design and analysis.
+The software provides advanced capabilities for modelling and analyzing the
+non-linear response of systems, offering a wide range of material models,
+elements and solution algorithms.
 
-## Supported Versions  
-We currently support the following OpenSees versions:  
-- **v2.5.0** – Supports Tcl scripting only.  
-- **v3.7.1** – Supports Python and Tcl scritping.
+
+## Supported Versions
+We currently support the following OpenSees versions:
+- **v2.5.0** - Supports Tcl scripting only.
+- **v3.7.1** - Supports Python and Tcl scritping.
 
 ## Running OpenSees scripts written in Tcl
 
-In the following example, we demonstrate how to run an OpenSees simulation 
-using its `tcl` interface.
+### Objective
 
-### Running the `SmallMP` Example  
+This tutorial will show you how to run an OpenSees simulation using its Tcl
+interface, using the `SmallMP` use case present in the
+[OpenSees GitHub repository](https://github.com/OpenSees/OpenSees).
 
-#### Objective  
+We will also demonstrate Inductiva's ability to efficiently scale this use case
+on a more powerful machine.
 
-In this tutorial, you'll learn how to use Inductiva's API to run an OpenSees
-simulation. We'll validate our simulator implementation while demonstrating its
-ability to scale efficiently on more powerful machines.  
-
-#### Prerequisites  
+### Prerequisites  
 
 The requirements for this tutorial are minimal. Simply download the input files
 from [here](https://github.com/OpenSees/OpenSees/tree/master/EXAMPLES/SmallMP).  
 
-Once you have the simulation files, you're ready to scale your simulations to the cloud.  
+Once you have the simulation files, you're ready to scale your simulations to
+the cloud.  
 
-#### Running Your Simulation
+### Running Your Simulation
 
 Here's the code you'll be working on as we progress through the tutorial.
 Don't worry if it doesn't all make sense right now; everything will become
@@ -110,7 +113,7 @@ timeline represents the actual running of the simulation.
 Although this simulation is short, there's still room for improvement in
 reducing the processing time.
 
-#### Scaling Up Your Simulation  
+### Scaling Up Your Simulation  
 
 In order to scale your simulation you just need to change a couple of lines on
 your original script.
@@ -186,5 +189,5 @@ key differences:
 1. When initializing the simulator, we now specify `interface="python"`.
 2. The `sim_config_filename` now points to a Python file: `example_mpi_paralleltruss_explicit.py`.
 
-That's it! We've designed both interfaces to be as similar as possible, making
-it easy to switch between them without much hassle.
+That's it! All you have to do is change the `interface` parameter to match the
+file type of your OpenSees use case.
