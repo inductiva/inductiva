@@ -45,7 +45,7 @@ the cloud.
 
 ### Running Your Simulation
 
-Here's the code you'll be working on as we progress through the tutorial.
+Here is the code required to run an OpenSees simulation using the Inductiva API.
 Don't worry if it doesn't all make sense right now; everything will become
 clearer in the upcoming steps.
 
@@ -79,8 +79,12 @@ task.download_outputs()
 task.print_summary()
 ```
 
-Once the simulation finishes, we terminate the machine, download the results,
-and print a summary of the simulation.
+To adapt it for this or any other use case, simply replace `input_dir` with the
+path to your OpenSees files and specify the `sim_config_filename` before running
+it in a Python script.
+
+Once the simulation is complete, we terminate the machine, download the results
+and print a summary of the simulation as shown below.
 
 ```
 inductiva tasks info gafdcf5t0zpkft4sxmubo30q1
@@ -106,26 +110,22 @@ Estimated computation cost (US$): 0.00066 US$
 Go to https://console.inductiva.ai/tasks/gafdcf5t0zpkft4sxmubo30q1 for more details.
 ```
 
-As shown here, the core computing time of our simulation took 28.2 seconds, as
-seen at the `In Progress   at 25/02, 16:35:58  28.221 s` line. This part of the
-timeline represents the actual running of the simulation.
+The core computation time of our simulation was 28.2 seconds, as can be seen in
+the line `In Progress at 25/02, 16:35:58 28.221 s`. This part of the timeline
+represents the actual execution of the simulation.
 
-Although this simulation is short, there's still room for improvement in
-reducing the processing time.
+Although it's short, there's still room for improvement to reduce the processing
+time.
 
 ### Scaling Up Your Simulation  
 
-In order to scale your simulation you just need to change a couple of lines on
-your original script.
+Scaling up your simulation is as simple as changing just two lines of code:
 
-1. Update the `machine_type` to `c2-standard-16`  
-2. Increase the number of `n_vcpus` to 16  
+1. Update the `machine_type` to a 16 vCPU machine (`c2-standard-16`)
+2. Set the number of `n_vcpus` to 16  
 
-By changing just these two lines, you're now running your simulation on a much
-more powerful machine.
-
-With just a two-line change, we've reduced the process time from 28.2 seconds to
-10.2 seconds.
+By increasing the number of vCPUs, we've reduced the processing time from 28.2 
+to 10.2 seconds.
 
 Here are the results of running the same simulation on a few machines:
 
@@ -135,21 +135,21 @@ Here are the results of running the same simulation on a few machines:
 |  c2-standard-8 |       8      | 15.2 seconds | 0.00094 US$    |
 | c2-standard-16 |      16      | 10.2 seconds | 0.0011 US$     |
 
-Are you in the testing phase, unsure if your simulation has errors or will converge?
-No problem! Start with a cost-effective, slower machine. Once you're confident
-in your results, seamlessly scale your simulation to full speed with no friction.
+Still in the testing phase? No problem! Just skip this step for now and start
+with a machine with fewer vCPUs. Once you're satisfied with your results, you
+can seamlessly scale your OpenSees simulation.
 
 ## Running OpenSees scripts written in Python (OpeenSeesPy)
 
-In this example, we demonstrate how to run an OpenSees simulation using its
-Python interface (OpenSeesPy). This tutorial shares many similarities with the
-previous one, so we'll skip over some parts and focus on the key differences.
+This tutorial will show you how to run an OpenSees simulation using its Python
+interface (OpenSeesPy), using one of the Python examples referenced in
+[OpenSees GitHub repository](https://github.com/OpenSees/OpenSees).
 
-Before running the simulation, you'll need to download the `ExamplePython` from
-the [OpenSees official repository](https://github.com/OpenSees/OpenSees/tree/master/EXAMPLES/ExamplePython).
+For the purposes of this tutorial, we decided to download 
+[this input file](https://github.com/OpenSees/OpenSees/blob/master/EXAMPLES/ExamplePython/example_mpi_paralleltruss_explicit.py).
 
-With the simulation files downloaded you can run your simulation with the
-following Python script.
+Once you have downloaded the file, you are ready to execute the code required to
+run an OpenSees simulation.
 
 ```python
 """OpenSees Simulation."""
@@ -181,13 +181,5 @@ task.download_outputs()
 task.print_summary()
 ```
 
-### What's Changed
-
-The code in this example is largely the same as the previous one, but with two
-key differences:
-
-1. When initializing the simulator, we now specify `interface="python"`.
-2. The `sim_config_filename` now points to a Python file: `example_mpi_paralleltruss_explicit.py`.
-
-That's it! All you have to do is change the `interface` parameter to match the
-file type of your OpenSees use case.
+All you need to do is change the `interface` parameter to `python` to match the
+file type of your OpenSeesPy use case. It's that simple!
