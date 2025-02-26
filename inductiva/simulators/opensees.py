@@ -106,10 +106,9 @@ class OpenSees(simulators.Simulator):
                 "Changing to `n_vcpus` to 1.")
             n_vcpus = 1
             if self._interface == "python":
-                logging.warning(
+                raise ValueError(
                     "Opensees version 2.5.0 does not support `python` as"
-                    " an interface. Changing to `tcl`.")
-                self._interface = "tcl"
+                    " an interface. Please use `interface='tcl'`.")
 
         if n_vcpus and n_vcpus > on.n_vcpus.total:
             raise ValueError(
