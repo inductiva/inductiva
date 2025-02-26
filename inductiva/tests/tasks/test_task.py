@@ -191,7 +191,7 @@ def test__get_output_info(mock_get_zip_contents):
             storage.ZipFileInfo(name="file2.txt", size=200, compressed_size=100)
         ])
     task = inductiva.tasks.Task("123")
-    with patch.object(inductiva.tasks.Task, 'info',
+    with patch.object(inductiva.tasks.Task, "info",
                       new_callable=PropertyMock) as _:
         output_info = task.get_output_info()
     assert output_info.n_files == 2
