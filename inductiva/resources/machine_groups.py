@@ -192,8 +192,7 @@ class BaseMachineGroup(ABC):
 
     @staticmethod
     def _timedelta_to_seconds(
-        value: Optional[Union[datetime.timedelta,
-                              int]] = None) -> Optional[float]:
+            value: Union[datetime.timedelta, int] = None) -> Optional[float]:
         """Converts a timedelta object to seconds."""
         if isinstance(value, int):
             return value * 60
