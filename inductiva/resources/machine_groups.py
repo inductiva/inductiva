@@ -54,8 +54,7 @@ class BaseMachineGroup(ABC):
     provider: Union[ProviderType, str] = "GCP"
     threads_per_core: int = 2
     data_disk_gb: int = 10
-    max_idle_time: Union[datetime.timedelta,
-                         int] = datetime.timedelta(minutes=3)
+    max_idle_time: Union[datetime.timedelta, int] = 3
     auto_terminate_ts: Optional[datetime.datetime] = None
     auto_terminate_minutes: Optional[int] = None
 
