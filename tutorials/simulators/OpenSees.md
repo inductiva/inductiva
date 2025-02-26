@@ -41,7 +41,7 @@ The requirements for this tutorial are minimal. Simply download the input files
 from [here](https://github.com/OpenSees/OpenSees/tree/master/EXAMPLES/SmallMP).  
 
 Once you have the simulation files, you're ready to scale your simulations to
-the cloud.  
+the Cloud.
 
 ### Running Your Simulation
 
