@@ -1,12 +1,14 @@
-"""Available machine types and their number of cores."""
+"""Functions to manage or retrieve user resources."""
+from collections import defaultdict
 from dataclasses import dataclass
-from typing import List, Optional, Tuple, Union
 import json
+from typing import List, Optional, Tuple, Union
 
 import inductiva
-from inductiva.utils import format_utils
-from inductiva.client import ApiException
+import inductiva.client
 from inductiva.client.apis.tags import compute_api
+from inductiva.client import ApiException
+from inductiva.utils import format_utils
 
 
 class ProviderType(format_utils.CaseInsensitiveEnum):
@@ -122,3 +124,52 @@ def get_available_machine_types(
         ]
     except ApiException as e:
         raise e
+
+
+def estimate_machine_cost(machine_type: str, spot: bool = False):
+    """Estimate the cloud cost of one machine per hour in US dollars.
+
+    Args:
+        machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
+            Check https://cloud.google.com/compute/docs/machine-resource for
+            more information about machine types.
+        zone: The zone where the machines will be launched.
+        spot: Whether to use spot machines.
+    """
+
+    api = compute_api.ComputeApi(inductiva.api.get_client())
+
+    instance_price = api.get_instance_price({
+        "machine_type": machine_type,
+    })
+
+    if spot:
+        estimated_cost = instance_price.body["preemptible_price"]
+    else:
+        estimated_cost = instance_price.body["on_demand_price"]
+
+    return float(estimated_cost)
+
+
+def get_machine_dict(machines):
+    """Get a dictionary with the information of the machines."""
+    column_names = [
+        "Host Name",
+        "Started",
+        "Status",
+        "Last seen",
+        "Running task",
+    ]
+    table = defaultdict(list, {key: [] for key in column_names})
+    for machine in machines:
+        status = "Off" if isinstance(machine["terminated_at"],
+                                     str) else "Active"
+        task_id = machine["current_task_id"] if isinstance(
+            machine["current_task_id"], str) else None
+        table["Host Name"].append(machine["host_name"])
+        table["Started"].append(machine["started_at"])
+        table["Status"].append(status)
+        table["Last seen"].append(machine["last_seen_at"])
+        table["Running task"].append(task_id)
+
+    return table
