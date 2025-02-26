@@ -74,8 +74,8 @@ def test_mpi_enabled__dummy_simulator():
 
 
 @mark.parametrize("simulator", [
-    simulators.GROMACS, simulators.SplishSplash,
-    simulators.FDS, simulators.DualSPHysics
+    simulators.GROMACS, simulators.SplishSplash, simulators.FDS,
+    simulators.DualSPHysics
 ])
 def test_valid_resources__non_mpi_simulators(simulator):
     """Validate  decorator  in non-MPI simulators.
