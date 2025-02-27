@@ -32,6 +32,8 @@ from inductiva.client.apis.paths.admin_tiers import AdminTiers
 from inductiva.client.apis.paths.admin_terminate_machine_groups_credits_exhausted import AdminTerminateMachineGroupsCreditsExhausted
 from inductiva.client.apis.paths.admin_import_provider_costs import AdminImportProviderCosts
 from inductiva.client.apis.paths.admin_machine_id_event import AdminMachineIdEvent
+from inductiva.client.apis.paths.admin_users_username_costs_fee_percentage import AdminUsersUsernameCostsFeePercentage
+from inductiva.client.apis.paths.admin_organizations_organization_id_costs_fee_percentage import AdminOrganizationsOrganizationIdCostsFeePercentage
 from inductiva.client.apis.paths.task_runner_register import TaskRunnerRegister
 from inductiva.client.apis.paths.task_runner_machine_id import TaskRunnerMachineId
 from inductiva.client.apis.paths.task_runner_machine_id_task import TaskRunnerMachineIdTask
@@ -146,6 +148,10 @@ PathToApi = typing_extensions.TypedDict(
             AdminImportProviderCosts,
         PathValues.ADMIN_MACHINE_ID_EVENT:
             AdminMachineIdEvent,
+        PathValues.ADMIN_USERS_USERNAME_COSTS_FEE_PERCENTAGE:
+            AdminUsersUsernameCostsFeePercentage,
+        PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_COSTS_FEE_PERCENTAGE:
+            AdminOrganizationsOrganizationIdCostsFeePercentage,
         PathValues.TASKRUNNER_REGISTER:
             TaskRunnerRegister,
         PathValues.TASKRUNNER_MACHINE_ID:
@@ -309,6 +315,10 @@ path_to_api = PathToApi({
         AdminImportProviderCosts,
     PathValues.ADMIN_MACHINE_ID_EVENT:
         AdminMachineIdEvent,
+    PathValues.ADMIN_USERS_USERNAME_COSTS_FEE_PERCENTAGE:
+        AdminUsersUsernameCostsFeePercentage,
+    PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_COSTS_FEE_PERCENTAGE:
+        AdminOrganizationsOrganizationIdCostsFeePercentage,
     PathValues.TASKRUNNER_REGISTER:
         TaskRunnerRegister,
     PathValues.TASKRUNNER_MACHINE_ID:
