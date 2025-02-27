@@ -17,6 +17,7 @@ from inductiva.client.model.capability import Capability
 from inductiva.client.model.cost_components import CostComponents
 from inductiva.client.model.cost_detail import CostDetail
 from inductiva.client.model.cost_type import CostType
+from inductiva.client.model.costs_fee_update import CostsFeeUpdate
 from inductiva.client.model.created_user import CreatedUser
 from inductiva.client.model.currency_code import CurrencyCode
 from inductiva.client.model.disk_resize_request import DiskResizeRequest

@@ -30,22 +30,126 @@ class RegisterVMGroupRequest(schemas.DictSchema):
     """
 
     class MetaOapg:
-        required = {
-            "machine_type",
-            "threads_per_core",
-            "spot",
-            "provider_id",
-            "is_elastic",
-            "disk_size_gb",
-        }
 
         class properties:
-            machine_type = schemas.StrSchema
+
+            class machine_type(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'machine_type':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
+            class name(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'name':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             provider_id = schemas.StrSchema
             threads_per_core = schemas.IntSchema
             disk_size_gb = schemas.IntSchema
-            is_elastic = schemas.BoolSchema
-            spot = schemas.BoolSchema
 
             class max_idle_time(
                     schemas.ComposedSchema,):
@@ -503,13 +607,14 @@ class RegisterVMGroupRequest(schemas.DictSchema):
                         **kwargs,
                     )
 
+            is_elastic = schemas.BoolSchema
+            spot = schemas.BoolSchema
             __annotations__ = {
                 "machine_type": machine_type,
+                "name": name,
                 "provider_id": provider_id,
                 "threads_per_core": threads_per_core,
                 "disk_size_gb": disk_size_gb,
-                "is_elastic": is_elastic,
-                "spot": spot,
                 "max_idle_time": max_idle_time,
                 "auto_terminate_ts": auto_terminate_ts,
                 "dynamic_disk_resize_config": dynamic_disk_resize_config,
@@ -518,19 +623,20 @@ class RegisterVMGroupRequest(schemas.DictSchema):
                 "min_vms": min_vms,
                 "max_vms": max_vms,
                 "type": type,
+                "is_elastic": is_elastic,
+                "spot": spot,
             }
-
-    machine_type: MetaOapg.properties.machine_type
-    threads_per_core: MetaOapg.properties.threads_per_core
-    spot: MetaOapg.properties.spot
-    provider_id: MetaOapg.properties.provider_id
-    is_elastic: MetaOapg.properties.is_elastic
-    disk_size_gb: MetaOapg.properties.disk_size_gb
 
     @typing.overload
     def __getitem__(
         self, name: typing_extensions.Literal["machine_type"]
     ) -> MetaOapg.properties.machine_type:
+        ...
+
+    @typing.overload
+    def __getitem__(
+            self, name: typing_extensions.Literal["name"]
+    ) -> MetaOapg.properties.name:
         ...
 
     @typing.overload
@@ -549,18 +655,6 @@ class RegisterVMGroupRequest(schemas.DictSchema):
     def __getitem__(
         self, name: typing_extensions.Literal["disk_size_gb"]
     ) -> MetaOapg.properties.disk_size_gb:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["is_elastic"]
-    ) -> MetaOapg.properties.is_elastic:
-        ...
-
-    @typing.overload
-    def __getitem__(
-            self, name: typing_extensions.Literal["spot"]
-    ) -> MetaOapg.properties.spot:
         ...
 
     @typing.overload
@@ -612,16 +706,27 @@ class RegisterVMGroupRequest(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["is_elastic"]
+    ) -> MetaOapg.properties.is_elastic:
+        ...
+
+    @typing.overload
+    def __getitem__(
+            self, name: typing_extensions.Literal["spot"]
+    ) -> MetaOapg.properties.spot:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "machine_type",
+        "name",
         "provider_id",
         "threads_per_core",
         "disk_size_gb",
-        "is_elastic",
-        "spot",
         "max_idle_time",
         "auto_terminate_ts",
         "dynamic_disk_resize_config",
@@ -630,6 +735,8 @@ class RegisterVMGroupRequest(schemas.DictSchema):
         "min_vms",
         "max_vms",
         "type",
+        "is_elastic",
+        "spot",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -637,37 +744,31 @@ class RegisterVMGroupRequest(schemas.DictSchema):
     @typing.overload
     def get_item_oapg(
         self, name: typing_extensions.Literal["machine_type"]
-    ) -> MetaOapg.properties.machine_type:
+    ) -> typing.Union[MetaOapg.properties.machine_type, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["name"]
+    ) -> typing.Union[MetaOapg.properties.name, schemas.Unset]:
         ...
 
     @typing.overload
     def get_item_oapg(
         self, name: typing_extensions.Literal["provider_id"]
-    ) -> MetaOapg.properties.provider_id:
+    ) -> typing.Union[MetaOapg.properties.provider_id, schemas.Unset]:
         ...
 
     @typing.overload
     def get_item_oapg(
         self, name: typing_extensions.Literal["threads_per_core"]
-    ) -> MetaOapg.properties.threads_per_core:
+    ) -> typing.Union[MetaOapg.properties.threads_per_core, schemas.Unset]:
         ...
 
     @typing.overload
     def get_item_oapg(
         self, name: typing_extensions.Literal["disk_size_gb"]
-    ) -> MetaOapg.properties.disk_size_gb:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["is_elastic"]
-    ) -> MetaOapg.properties.is_elastic:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-            self, name: typing_extensions.Literal["spot"]
-    ) -> MetaOapg.properties.spot:
+    ) -> typing.Union[MetaOapg.properties.disk_size_gb, schemas.Unset]:
         ...
 
     @typing.overload
@@ -721,17 +822,28 @@ class RegisterVMGroupRequest(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["is_elastic"]
+    ) -> typing.Union[MetaOapg.properties.is_elastic, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["spot"]
+    ) -> typing.Union[MetaOapg.properties.spot, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "machine_type",
+        "name",
         "provider_id",
         "threads_per_core",
         "disk_size_gb",
-        "is_elastic",
-        "spot",
         "max_idle_time",
         "auto_terminate_ts",
         "dynamic_disk_resize_config",
@@ -740,6 +852,8 @@ class RegisterVMGroupRequest(schemas.DictSchema):
         "min_vms",
         "max_vms",
         "type",
+        "is_elastic",
+        "spot",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -749,32 +863,25 @@ class RegisterVMGroupRequest(schemas.DictSchema):
             dict,
             frozendict.frozendict,
         ],
-        machine_type: typing.Union[
-            MetaOapg.properties.machine_type,
-            str,
-        ],
-        threads_per_core: typing.Union[
-            MetaOapg.properties.threads_per_core,
-            decimal.Decimal,
-            int,
-        ],
-        spot: typing.Union[
-            MetaOapg.properties.spot,
-            bool,
-        ],
-        provider_id: typing.Union[
-            MetaOapg.properties.provider_id,
-            str,
-        ],
-        is_elastic: typing.Union[
-            MetaOapg.properties.is_elastic,
-            bool,
-        ],
-        disk_size_gb: typing.Union[
-            MetaOapg.properties.disk_size_gb,
-            decimal.Decimal,
-            int,
-        ],
+        machine_type: typing.Union[MetaOapg.properties.machine_type, dict,
+                                   frozendict.frozendict, str, date, datetime,
+                                   uuid.UUID, int, float, decimal.Decimal, bool,
+                                   None, list, tuple, bytes, io.FileIO,
+                                   io.BufferedReader,
+                                   schemas.Unset] = schemas.unset,
+        name: typing.Union[MetaOapg.properties.name, dict,
+                           frozendict.frozendict, str, date, datetime,
+                           uuid.UUID, int, float, decimal.Decimal, bool, None,
+                           list, tuple, bytes, io.FileIO, io.BufferedReader,
+                           schemas.Unset] = schemas.unset,
+        provider_id: typing.Union[MetaOapg.properties.provider_id, str,
+                                  schemas.Unset] = schemas.unset,
+        threads_per_core: typing.Union[MetaOapg.properties.threads_per_core,
+                                       decimal.Decimal, int,
+                                       schemas.Unset] = schemas.unset,
+        disk_size_gb: typing.Union[MetaOapg.properties.disk_size_gb,
+                                   decimal.Decimal, int,
+                                   schemas.Unset] = schemas.unset,
         max_idle_time: typing.Union[MetaOapg.properties.max_idle_time, dict,
                                     frozendict.frozendict, str, date, datetime,
                                     uuid.UUID, int, float, decimal.Decimal,
@@ -819,6 +926,10 @@ class RegisterVMGroupRequest(schemas.DictSchema):
                            uuid.UUID, int, float, decimal.Decimal, bool, None,
                            list, tuple, bytes, io.FileIO, io.BufferedReader,
                            schemas.Unset] = schemas.unset,
+        is_elastic: typing.Union[MetaOapg.properties.is_elastic, bool,
+                                 schemas.Unset] = schemas.unset,
+        spot: typing.Union[MetaOapg.properties.spot, bool,
+                           schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -829,10 +940,9 @@ class RegisterVMGroupRequest(schemas.DictSchema):
             cls,
             *_args,
             machine_type=machine_type,
-            threads_per_core=threads_per_core,
-            spot=spot,
+            name=name,
             provider_id=provider_id,
-            is_elastic=is_elastic,
+            threads_per_core=threads_per_core,
             disk_size_gb=disk_size_gb,
             max_idle_time=max_idle_time,
             auto_terminate_ts=auto_terminate_ts,
@@ -842,6 +952,8 @@ class RegisterVMGroupRequest(schemas.DictSchema):
             min_vms=min_vms,
             max_vms=max_vms,
             type=type,
+            is_elastic=is_elastic,
+            spot=spot,
             _configuration=_configuration,
             **kwargs,
         )
