@@ -3,7 +3,7 @@ from unittest import mock
 import pytest
 
 import inductiva
-from inductiva.resources.machines_base import BaseMachineGroup
+from inductiva.resources.machine_groups import BaseMachineGroup
 
 
 def fake_init(self, machine_type: str, num_machines=1, provider="GCP"):

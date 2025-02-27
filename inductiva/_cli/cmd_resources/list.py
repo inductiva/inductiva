@@ -4,8 +4,8 @@ from typing import TextIO
 import argparse
 import sys
 
-from inductiva.resources.machine_types import ProviderType
-from inductiva.resources import machines_base
+from inductiva.resources.utils import ProviderType
+from inductiva.resources import machine_groups
 from inductiva.utils import format_utils
 from inductiva import resources, _cli
 
@@ -55,7 +55,7 @@ def list_machine_types_available(args):
     provider = args.provider
     machine_family = args.family
 
-    resources_available = resources.machine_types.get_available_machine_types(
+    resources_available = resources.get_available_machine_types(
         provider, machine_family)
     resources_available.sort(
         key=lambda x: (x.machine_type.split("-")[:-1], x.num_cpus))
@@ -100,14 +100,14 @@ def _machine_group_list_to_str(machine_group_list) -> str:
 
     for machine_group in machine_group_list:
         is_elastic = False
-        resource_type = machines_base.ResourceType.STANDARD.value
+        resource_type = machine_groups.ResourceType.STANDARD.value
         spot = machine_group.spot if hasattr(machine_group, "spot") else False
 
         if isinstance(machine_group, resources.ElasticMachineGroup):
             is_elastic = True
         else:
             if isinstance(machine_group, resources.MPICluster):
-                resource_type = machines_base.ResourceType.MPI.value
+                resource_type = machine_groups.ResourceType.MPI.value
         num_active_machines = machine_group.active_machines_to_str()
 
         idle_time = f"{machine_group.idle_time}"
@@ -151,7 +151,7 @@ def list_machine_groups(_, fout: TextIO = sys.stdout):
     """
     # pylint: enable=line-too-long
 
-    machine_group_list = resources.machine_groups.get()
+    machine_group_list = resources.get()
     if len(machine_group_list) != 0:
         print("Active Resources:", file=fout)
         print(_machine_group_list_to_str(machine_group_list), file=fout, end="")

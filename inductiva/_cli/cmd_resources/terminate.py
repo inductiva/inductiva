@@ -23,7 +23,7 @@ def terminate_machine_group(args):
             file=sys.stderr)
         return 1
 
-    active_machines = resources.machine_groups.get()
+    active_machines = resources.get()
 
     if not active_machines:
         print("No active resources to terminate.")
