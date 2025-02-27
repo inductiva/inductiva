@@ -190,12 +190,11 @@ class BaseMachineGroup(ABC):
         pass
 
     @staticmethod
-    def _timedelta_to_seconds(
-            value: Union[datetime.timedelta, int]) -> Optional[float]:
+    def _timedelta_to_seconds(value: Union[datetime.timedelta, int]) -> float:
         """Converts a timedelta object to seconds."""
         if isinstance(value, int):
             return value * 60
-        return value.total_seconds() if value is not None else None
+        return value.total_seconds()
 
     @staticmethod
     def _seconds_to_timedelta(
