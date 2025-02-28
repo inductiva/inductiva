@@ -75,7 +75,8 @@ class Simulator(ABC):
         missing_files = []
 
         for _, file_path in kwargs.items():
-            # Get the full file path by joining the input directory with the file path in kwargs
+            # Get the full file path by joining the input directory with the
+            # file path in kwargs
             full_file_path = os.path.join(input_dir, file_path)
 
             # Check if the file exists

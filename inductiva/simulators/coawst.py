@@ -43,7 +43,8 @@ class COAWST(simulators.Simulator):
 
     def _validate_build_script(self, build_script: str) -> None:
         """
-        Validate the build script by checking if required environment variables are correctly set.
+        Validate the build script by checking if required environment variables
+        are correctly set.
 
         :param build_script: Path to the build script file.
         :raises ValueError: If any required variable is missing or incorrect.
