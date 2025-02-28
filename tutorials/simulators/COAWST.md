@@ -36,9 +36,10 @@ simulation input, in addition to the usual configuration and data files:
 - Any **header files** necessary for compiling COAWST.
 - Any other file that you need for your simulation.
 
-If you are using standard switch and header files provided in the COAWST
+If you are using standard standard files provided in the COAWST
 repository, you don't need to include them manually. Instead, configure your
-build script to point to the correct paths.
+build script to point to the correct paths. Or copy the needed files from the
+COAWST folder to your input files (more about this in the followinf section).
 
 For each simulation, the COAWST directory will be available at:  
 📂 `/workdir/output/artifacts/__COAWST`  
@@ -60,9 +61,8 @@ directory to your working directory.
 ```python
 init_commands = [
     # Copy LANDUSE.TBL for the simulation
+    # . points to /workdir/output/artifacts/
     "cp /workdir/output/artifacts/__COAWST/LANDUSE.TBL ."
-    # Or (same result as the last command)
-    "cp /workdir/output/artifacts/__COAWST/LANDUSE.TBL /workdir/output/artifacts/LANDUSE.TBL"
 ]
 
 # Run simulation
@@ -282,7 +282,7 @@ Go to https://console.inductiva.ai/tasks/6wt3dp49uhy45y708x848eu2y for more deta
 
 The simulation details may seem overwhelming at first, but let's focus on the
 `In Progress` stage, as this is the part unique to your simulation. All other
-steps follow the same process for any simulation run on Inductiva.
+steps are common to every simulation run on Inductiva.
 
 ### Understanding the `In Progress` steps
 
@@ -298,9 +298,11 @@ simulation, along with their durations. Below is a breakdown of the key steps:
   for all COAWST files. We do this because some simulations require specific files
   (e.g., `CAMtr_volume_mixing_ratio`, `LANDUSE.TBL`) to be present in the working
   directory. By creating this symbolic links we avoid having to send all those files
-  in the input files.
+  with the input.
   - If a file with the same name already exists, the link is skipped, allowing
-  you to provide your own version.  
+  you to provide your own version of the file. For example, if you include your
+  own `LANDUSE.TBL` file in the input, it will be used for the simulation instead
+  of the default version from the COAWST folder.
 
 - **`bash build_coawst.sh`**  
   - Runs your provided script to build COAWST.  
@@ -308,8 +310,7 @@ simulation, along with their durations. Below is a breakdown of the key steps:
   located in `/workdir/output/artifacts/__COAWST`.  
 
 - **`coawstM coupling_joe_tc.in`**  
-  - Runs the simulation using `mpirun`, which automatically sets the number of
-  cores based on the `n_vcpus` value used on the python script.
+  - Runs the simulation in parallel.
 
 - **`rm -r __COAWST`**  
   - Cleans up the simulation directory by removing the COAWST folder,
@@ -317,7 +318,7 @@ simulation, along with their durations. Below is a breakdown of the key steps:
 
 With these steps, your COAWST simulation is successfully executed and managed in the cloud. 🚀
 
-## Scaling Up Your Simulation
+### Scaling Up Your Simulation
 
 Looking at the execution times, we can see that the compilation took
 **1,335 seconds** (around **22 minutes**), while the simulation itself ran for
@@ -332,22 +333,22 @@ In this section, we'll explore strategies to **scale up your simulation**,
 in order to reduce the simulation time.
 
 
-### Updating your input files
+#### Updating your input files
 
 As we stated before, the number of virtual CPUs you use for your simulation needs
 to match exctly with the configuration of the input files. So, in order to scale
 up the simulation we need to edit 3 files:
 
 - `coupling_joe_tc.in`
-  - `NnodesATM`: number of virtual CPUs to assinged to the atmospheric model.
-  - `NnodesWAV`: number of virtual CPUs to assinged to the wave model.
-  - `NnodesOCN`: number of virtual CPUs to assinged to the ocean model.
-  - `NnodesATM + NnodesWAV + NnodesOCN` needs to be equal to the `n_vcpus` passed
+  - Change `NnodesATM`: number of virtual CPUs to assinged to the atmospheric model.
+  - Change `NnodesWAV`: number of virtual CPUs to assinged to the wave model.
+  - Change `NnodesOCN`: number of virtual CPUs to assinged to the ocean model.
+  - Restriction: `NnodesATM + NnodesWAV + NnodesOCN` needs to be equal to the `n_vcpus` passed
   in the python script.
 - `ocean_joe_tc_coarse.in`
-  - `NtileI`: I-direction partition.
-  - `NtileJ`: J-direction partition.
-  - `NtileI * NtileJ` needs to be equal to `NnodesOCN` (defined in the `coupling` file).
+  - Change `NtileI`: I-direction partition.
+  - Change `NtileJ`: J-direction partition.
+  - Restriction: `NtileI * NtileJ` needs to be equal to `NnodesOCN` (defined in the `coupling` file).
 - `namelist.input`
   - `nproc_x`
   - `nproc_y`
@@ -356,7 +357,7 @@ up the simulation we need to edit 3 files:
 
   Here is a small list of simulation with the respective configurations and the results:
 
-  |  Machine Type  | Virtual CPUs |   NnodesATM  |  NnodesWAV | NnodesOCN | NtileI | NtileJ | nproc_x | nproc_y |     Execution Time     |   Cost   |
+|  Machine Type  | Virtual CPUs |   NnodesATM  |  NnodesWAV | NnodesOCN | NtileI | NtileJ | nproc_x | nproc_y |     Execution Time     |   Cost   |
 |:--------------:|:------------:|:------------:|:----------:|:---------:|:------:|:------:|:-------:|:-------:|:----------------------:|:--------:|
 |  c2-standard-4 |       4      |       1      |      1     |     1     |    1   |    1   |    1    |    1    | 9 hours and 47 minutes | 0.71 US$ |
 | c2-standard-60 |      60      |      20      |     20     |     20    |    4   |    5   |    4    |    5    |  1 hour and 3 seconds  | 1.37 US$ |
