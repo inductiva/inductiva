@@ -77,6 +77,7 @@ class BaseMachineGroup(ABC):
     _idle_seconds = None
     _cost_per_hour = {}
     _total_ram_gb = None
+    _cpu_info = {}
 
     QUOTAS_EXCEEDED_SLEEP_SECONDS = 60
 
@@ -134,6 +135,7 @@ class BaseMachineGroup(ABC):
         return self._id
 
     @property
+    @abstractmethod
     def n_vcpus(self):
         """Returns the number of vCPUs available in the resource.
 
@@ -143,16 +145,7 @@ class BaseMachineGroup(ABC):
         In a case of an Elastic machine group, the total number of vCPUs is
         the maximum number of vCPUs that can be used at the same time.
         """
-        max_vcpus = int(self.quota_usage["max_vcpus"])
-        max_instances = int(self.quota_usage["max_instances"])
-
-        # if threads per core is 2
-        cores_per_machine = max_vcpus // max_instances
-
-        if self.threads_per_core == 1:
-            cores_per_machine //= 2
-
-        return VCPUCount(cores_per_machine * max_instances, cores_per_machine)
+        pass
 
     @property
     def available_vcpus(self):
@@ -283,6 +276,7 @@ class BaseMachineGroup(ABC):
             body.get("auto_terminate_ts"))
         self._total_ram_gb = body.get("total_ram_gb")
         self._cost_per_hour = body.get("cost_per_hour")
+        self._cpu_info = body.get("cpu_info")
 
         dynamic_disk_resize_config = body.get(
             "dynamic_disk_resize_config") or {}
@@ -614,6 +608,11 @@ class MachineGroup(BaseMachineGroup):
         if self.num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
+    
+    @property
+    def n_vcpus(self):
+        return VCPUCount(self._cpu_info["cpu_count_logical"] * self.num_machines,
+                         self._cpu_info["cpu_count_logical"])
 
     def short_name(self) -> str:
         return "MachineGroup"
@@ -712,6 +711,12 @@ class ElasticMachineGroup(BaseMachineGroup):
         if self.min_machines >= self.max_machines:
             raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
+        
+    @property
+    def n_vcpus(self):
+        return VCPUCount(self._cpu_info["cpu_count_logical"] * self.max_machines,
+                         self._cpu_info["cpu_count_logical"])
+
 
     def short_name(self) -> str:
         return "ElasticMachineGroup"
@@ -792,6 +797,11 @@ class MPICluster(BaseMachineGroup):
         if self.num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
+        
+    @property
+    def n_vcpus(self):
+        return VCPUCount(self._cpu_info["cpu_count_logical"] * self.num_machines,
+                         self._cpu_info["cpu_count_logical"])
 
     @property
     def available_vcpus(self):
