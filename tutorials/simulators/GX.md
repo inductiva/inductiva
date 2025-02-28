@@ -20,14 +20,36 @@ We currently have the following GX version available:
 
 ## Example Code
 
-This example demonstrates how to run a GX simulation using a linear use case available 
-in the official [GX documentation](https://gx.readthedocs.io/en/latest/LinearStell.html). 
-Before you start, download the input files [here](https://bitbucket.org/gyrokinetics/gx/src/gx/benchmarks/linear/ITG_w7x/).
+This example demonstrates how to run a GX simulation using a non-linear use case available 
+in the official [GX documentation](https://gx.readthedocs.io/en/latest/Nonlinear.html). 
+Before you start, download the input files [here](https://bitbucket.org/gyrokinetics/gx/src/gx/benchmarks/nonlinear/cyclone/cyclone_miller_adiabatic_electrons.in).
 
 Here is the code required to run a GX simulation using the Inductiva API:
 
-```{literalinclude} ../../inductiva/tests/test_simulators/gx/gx.py
-:language: python
+```python
+"""GX Simulation."""
+import inductiva
+
+# Instantiate machine group
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="g2-standard-4")
+
+# Initialize the Simulator
+gx = inductiva.simulators.GX()
+
+# Run simulation
+task = opensees.run( \
+    input_dir="/Path/to/NonlinearExample",
+    sim_config_filename="cyclone_miller_adiabatic_electrons.in",
+    on=cloud_machine)
+
+task.wait()
+cloud_machine.terminate()
+
+task.download_outputs()
+
+task.print_summary()
 ```
 
 To adapt it for this or any other use case, simply replace `input_dir` with the path to your GX files and specify the `sim_config_filename` before running it in a Python script.
