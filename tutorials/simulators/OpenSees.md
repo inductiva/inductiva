@@ -7,7 +7,7 @@ We will cover two example codes to help you get started with simulations:
 
 # OpenSees
 
-[OpenSees (Open System for Earthquake Engineering Simulation)](https://opensees.berkeley.edu/)
+[OpenSees](https://opensees.berkeley.edu/) (Open System for Earthquake Engineering Simulation)
 is a software framework designed for the development of sequential, parallel
 and grid-enabled finite element applications in earthquake engineering. It
 allows users to simulate the response of structural and geotechnical systems
@@ -29,7 +29,7 @@ We currently support the following OpenSees versions:
 ### Objective
 
 This tutorial will show you how to run an OpenSees simulation using its Tcl
-interface, using the `SmallMP` use case present in the
+interface, using the `SmallMP` use case available in the
 [OpenSees GitHub repository](https://github.com/OpenSees/OpenSees).
 
 We will also demonstrate Inductiva's ability to efficiently scale this use case
