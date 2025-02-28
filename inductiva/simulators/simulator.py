@@ -88,6 +88,28 @@ class Simulator(ABC):
             raise FileNotFoundError(
                 "The following files are missing from your input directory:\n"
                 f"{missing_files_str}")
+        
+    def _regex_exists_in_file(self, file_path: str, pattern: str) -> bool:
+        """
+        Check if a given regular expression exists in a file.
+        
+        :param file_path: Path to the file.
+        :param pattern: Regular expression pattern to search for.
+        :return: True if the pattern exists, False otherwise.
+        """
+        with open(file_path, "r", encoding="utf-8") as file:
+            for line in file:
+                if re.search(pattern, line):
+                    return True
+        return False
+        
+    def _check_vcpus(self,n_vcpus: Optional[int], machine: types.ComputationalResources,) -> bool:
+            """ Checks if the machine supports the number of n_vcpus passed."""
+            if n_vcpus is not None and n_vcpus > machine.n_vcpus.total:
+                raise ValueError(
+                "The number of virtual cpus asked surpasses the"
+                " available virtual cpus for the selected resource.")
+
 
     def _get_image_uri(self):
         """Get the appropriate image name for this simulator."""

@@ -110,10 +110,7 @@ class OpenSees(simulators.Simulator):
                     "Opensees version 2.5.0 does not support `python` as"
                     " an interface. Please use `interface='tcl'`.")
 
-        if n_vcpus and n_vcpus > on.n_vcpus.total:
-            raise ValueError(
-                "The number of virtual cpus asked surpasses the"
-                " available virtual cpus for the selected resource.")
+        self._check_vcpus(n_vcpus,on)
 
         mpi_config = self._build_mpi_config(n_vcpus, use_hwthread)
 

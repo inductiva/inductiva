@@ -27,23 +27,9 @@ class COAWST(simulators.Simulator):
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "coawst"
 
-    def _regex_exists_in_file(self, file_path: str, pattern: str) -> bool:
-        """
-        Check if a given regular expression exists in a file.
-        
-        :param file_path: Path to the file.
-        :param pattern: Regular expression pattern to search for.
-        :return: True if the pattern exists, False otherwise.
-        """
-        with open(file_path, "r", encoding="utf-8") as file:
-            for line in file:
-                if re.search(pattern, line):
-                    return True
-        return False
-
     def _validate_build_script(self, build_script: str) -> None:
         """
-        Validate the build script by checking if required environment variables
+        Validates the build script by checking if required environment variables
         are correctly set.
 
         :param build_script: Path to the build script file.
@@ -110,10 +96,8 @@ class COAWST(simulators.Simulator):
                 the simulation directory.
         """
 
-        if n_vcpus is not None and n_vcpus > on.n_vcpus.total:
-            raise ValueError(
-                "The number of virtual cpus asked surpasses the"
-                " available virtual cpus for the selected resource.")
+        self._check_vcpus(n_vcpus, on)
+
         #only runs checks if we dont use remote assets
         if remote_assets is None:
             self._input_files_exist(input_dir=input_dir,

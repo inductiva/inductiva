@@ -26,17 +26,18 @@ The Inductiva API currently supports the following COAWST version:
 
 Unlike many other simulators, COAWST requires a compilation specifically for
 each configuration. This means that a single compiled version of
-COAWST cannot be used for all simulations—you must compile it with the
+COAWST cannot be used for all simulations—you must compile COAWST with the
 appropriate settings for your use case.
 
 To simplify this process, we require a few additional files as part of your
 simulation input, in addition to the usual configuration and data files:
 
 - A **COAWST build script**, typically named `build_coawst.sh` or something similar.
-- Any **header files** necessary for compiling COAWST.
-- Any other file that you need for your simulation.
+- The **header files** necessary to compile COAWST.
+- Any other file that you need for your simulation like a custom switch file for
+your simulation.
 
-If you are using standard standard files provided in the COAWST
+If you are using standard files provided in the COAWST
 repository, you don't need to include them manually. Instead, configure your
 build script to point to the correct paths. Or copy the needed files from the
 COAWST folder to your input files (more about this in the followinf section).
@@ -361,7 +362,6 @@ Here is a small list of simulations with the respective results:
 |:---------------:|:------------:|:----------------------:|:--------:|
 |  c2-standard-4  |       4      | 9 hours and 47 minutes | 0.71 US$ |
 |  c2-standard-60 |      60      |  1 hour and 3 seconds  | 1.37 US$ |
-| c2-standard-112 |      112     |                        |          |
 
 For this simulations we devided the number of virtual CPUs each machine has equally
 for all 3 models (1, 20 and 36 respectively). And used values for `Ntile` and
