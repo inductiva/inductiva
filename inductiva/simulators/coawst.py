@@ -110,7 +110,7 @@ class COAWST(simulators.Simulator):
                 the simulation directory.
         """
 
-        if n_vcpus > on.n_vcpus.total:
+        if n_vcpus is not None and n_vcpus > on.n_vcpus.total:
             raise ValueError(
                 "The number of virtual cpus asked surpasses the"
                 " available virtual cpus for the selected resource.")
