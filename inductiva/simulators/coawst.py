@@ -35,7 +35,7 @@ class COAWST(simulators.Simulator):
         :param pattern: Regular expression pattern to search for.
         :return: True if the pattern exists, False otherwise.
         """
-        with open(file_path, 'r', encoding='utf-8') as file:
+        with open(file_path, "r", encoding="utf-8") as file:
             for line in file:
                 if re.search(pattern, line):
                     return True

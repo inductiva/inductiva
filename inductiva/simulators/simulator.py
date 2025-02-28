@@ -83,9 +83,10 @@ class Simulator(ABC):
                 missing_files.append(file_path)
 
         if missing_files:
+            missing_files_str = ", ".join(missing_files)
             raise FileNotFoundError(
                 "The following files are missing from your input directory:\n"
-                f"{", ".join(missing_files)}")
+                f"{missing_files_str}")
 
     def _get_image_uri(self):
         """Get the appropriate image name for this simulator."""
