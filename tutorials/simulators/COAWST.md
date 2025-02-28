@@ -355,14 +355,48 @@ up the simulation we need to edit 3 files:
   - We will make `nproc_x * nproc_y` equal to `NnodesATM` in order to take full
   advantage of the virtual cores assigned to the atmosferic model.
 
-  Here is a small list of simulations with the respective configurations and the results:
+we ran 3 simulations with the following configurations:
+- Machine Type: `c2-standard-4`
+  - `coupling_joe_tc.in`
+    - `NnodesATM` = 1
+    - `NnodesWAV` = 1
+    - `NnodesOCN` = 1
+  - `ocean_joe_tc_coarse.in`
+    - `NtileI` = 1
+    - `NtileJ` = 1
+  - `namelist.input`
+    - `nproc_x` = 1
+    - `nproc_y` = 1
+- Machine Type: `c2-standard-60`
+  - `coupling_joe_tc.in`
+    - `NnodesATM` = 20
+    - `NnodesWAV` = 20
+    - `NnodesOCN` = 20
+  - `ocean_joe_tc_coarse.in`
+    - `NtileI` = 4
+    - `NtileJ` = 5
+  - `namelist.input`
+    - `nproc_x` = 4
+    - `nproc_y` = 5
+- Machine Type: `c2d-standard-112`
+  - `coupling_joe_tc.in`
+    - `NnodesATM` = 36
+    - `NnodesWAV` = 36
+    - `NnodesOCN` = 36
+  - `ocean_joe_tc_coarse.in`
+    - `NtileI` = 6
+    - `NtileJ` = 6
+  - `namelist.input`
+    - `nproc_x` = 6
+    - `nproc_y` = 6
 
-|   Machine Type  | Virtual CPUs | Nnodes ATM WAV OCN | NtileI | NtileJ | nproc_x | nproc_y |     Execution Time     |   Cost   |
-|:---------------:|:------------:|:------------------:|:------:|:------:|:-------:|:-------:|:----------------------:|:--------:|
-|  c2-standard-4  |       4      |          1         |    1   |    1   |    1    |    1    | 9 hrs 47 mins | 0.71 US$ |
-|  c2-standard-60 |      60      |         20         |    4   |    5   |    4    |    5    |  1 hr 3 s  | 1.37 US$ |
-| c2-standard-112 |      112     |         36         |    6   |    6   |    6    |    6    |                        |          |
+Here is a small list of simulations with the respective results:
 
+|   Machine Type  | Virtual CPUs |     Execution Time     |   Cost   |
+|:---------------:|:------------:|:----------------------:|:--------:|
+|  c2-standard-4  |       4      | 9 hours and 47 minutes | 0.71 US$ |
+|  c2-standard-60 |      60      |  1 hour and 3 seconds  | 1.37 US$ |
+| c2-standard-112 |      112     |                        |          |
 
 In this tutorial, we covered the essential steps for setting up and running a
 **COAWST** simulation using the **Inductiva API**. We explored the necessary
