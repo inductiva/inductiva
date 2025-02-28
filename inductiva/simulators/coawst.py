@@ -50,15 +50,15 @@ class COAWST(simulators.Simulator):
         """
         checks = {
             #Check if MY_ROOT_DIR points to the correct folder
-            r"\bexport MY_ROOT_DIR\s*=\s*/workdir/output/artifacts/__COAWST\b":
+            r"export\s+MY_ROOT_DIR\s*=\s*/workdir/output/artifacts/__COAWST":
                 "Wrong value for MY_ROOT_DIR in your build_coawst_script.\n"
                 "MY_ROOT_DIR needs to be /workdir/output/artifacts/__COAWST",
             #Check if USE_MPI is on
-            r"\bexport USE_MPI\s*=\s*on\b":
+            r"export\s+USE_MPI\s*=\s*on":
                 "Wrong value for USE_MPI in your build_coawst_script.\n"
                 "USE_MPI needs to be on",
             #Check if which_MPI is set to openmpi
-            r"^\s*export\s+which_MPI\s*=\s*openmpi\b":
+            r"export\s+which_MPI\s*=\s*openmpi":
                 "Wrong value for which_MPI in your build_coawst_script.\n"
                 "which_MPI needs to be openmpi"
         }
@@ -74,6 +74,7 @@ class COAWST(simulators.Simulator):
             *,
             on: types.ComputationalResources,
             coawst_bin: str = "coawstM",
+            init_commands: Optional[List[str]] = None,
             use_hwthread: bool = True,
             n_vcpus: Optional[int] = None,
             storage_dir: Optional[str] = "",
@@ -89,6 +90,11 @@ class COAWST(simulators.Simulator):
             build_coawst_script: Script used to build the COAWST executable.
             coawst_bin: Name of the COAWST binary to execute (coawstM by
             default).
+            init_commands: List of helper commands to prepare things for your
+                simulation. Used to copy files to and from
+                `/workdir/output/artifacts/__COAWST`. It can also be used
+                to run any helper function present within COAWST, like
+                `scrip_coawst`.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
             (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
@@ -122,15 +128,23 @@ class COAWST(simulators.Simulator):
             mpi_kwargs["np"] = n_vcpus
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
 
+        # 34 selects dmpar for linux when compiling WRF
+        compilation_command = Command(f"bash {build_coawst_script}","34")
+
         commands = [
             #Copy COAWST source code to our input dir
             "cp -r /opt/COAWST /workdir/output/artifacts/__COAWST",
+            "create_all_sim_links",
             #Compile COAWST
-            f"bash {build_coawst_script}",
+            compilation_command,
             Command(f"{coawst_bin} {sim_config_filename}",
                     mpi_config=mpi_config),
             "rm -r  __COAWST",
         ]
+
+        # Add init commands after building and before running the simulation
+        if init_commands is not None:
+            commands = commands[:1] + init_commands + commands[1:]
 
         return super().run(input_dir,
                            on=on,
