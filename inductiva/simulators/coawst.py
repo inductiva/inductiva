@@ -129,7 +129,7 @@ class COAWST(simulators.Simulator):
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
 
         # 34 selects dmpar for linux when compiling WRF
-        compilation_command = Command(f"bash {build_coawst_script}","34")
+        compilation_command = Command(f"bash {build_coawst_script}", "34")
 
         commands = [
             #Copy COAWST source code to our input dir
