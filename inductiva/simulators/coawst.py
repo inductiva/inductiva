@@ -1,7 +1,6 @@
 """COAWST simulator module of the API."""
 
 import os
-import re
 from typing import List, Optional
 
 from inductiva import types, tasks, simulators

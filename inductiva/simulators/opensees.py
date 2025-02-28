@@ -110,7 +110,7 @@ class OpenSees(simulators.Simulator):
                     "Opensees version 2.5.0 does not support `python` as"
                     " an interface. Please use `interface='tcl'`.")
 
-        self._check_vcpus(n_vcpus,on)
+        self._check_vcpus(n_vcpus, on)
 
         mpi_config = self._build_mpi_config(n_vcpus, use_hwthread)
 

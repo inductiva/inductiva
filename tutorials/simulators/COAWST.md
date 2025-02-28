@@ -7,10 +7,10 @@ This tutorial will guide you through the process of setting up and running a
 a powerful numerical simulation framework designed to study coastal and oceanic
 processes. It integrates multiple modeling components, including:
 
-- **ROMS (Regional Ocean Modeling System)** for ocean dynamics  
-- **WRF (Weather Research and Forecasting Model)** for atmospheric processes  
-- **SWAN (Simulating Waves Nearshore)** for wave dynamics  
-- A **sediment transport module** for coastal sediment simulations  
+- **[ROMS](https://www.myroms.org/) (Regional Ocean Modeling System)** for ocean dynamics  
+- **[WRF](https://www.mmm.ucar.edu/models/wrf) (Weather Research and Forecasting Model)** for atmospheric processes  
+- **[SWAN](SWAN.md) (Simulating Waves Nearshore)** for wave dynamics  
+- A **[sediment transport module](https://woodshole.er.usgs.gov/project-pages/sediment-transport/)** for coastal sediment simulations  
 
 By coupling these models, COAWST allows researchers to analyze complex
 interactions between the ocean, atmosphere, and coastal environments. It is
@@ -37,10 +37,11 @@ simulation input, in addition to the usual configuration and data files:
 - Any other file that you need for your simulation like a custom switch file for
 your simulation.
 
-If you are using standard files provided in the COAWST
-repository, you don't need to include them manually. Instead, configure your
-build script to point to the correct paths. Or copy the needed files from the
-COAWST folder to your input files (more about this in the followinf section).
+If you are using any files provided in the COAWST repository, you don't need to
+upload them with your input files. Instead, you only need to configure your build
+script to point to the path where Inductiva will expose those files. Or copy the
+needed files from the exposed COAWST folder to your input files (more about this
+in the following section).
 
 For each simulation, the COAWST directory will be available at:  
 📂 `/workdir/output/artifacts/__COAWST`  
@@ -61,8 +62,8 @@ directory to your working directory.
 
 ```python
 init_commands = [
-    # Copy LANDUSE.TBL for the simulation
-    # . points to /workdir/output/artifacts/
+    # Copy LANDUSE.TBL for the simulation to ".".
+    # Note that "." points to /workdir/output/artifacts/
     "cp /workdir/output/artifacts/__COAWST/LANDUSE.TBL ."
 ]
 
@@ -198,7 +199,7 @@ Lastly, we can update the ocean model file `ocean_joe_tc_coarse.in`:
 ### Running Your Simulation  
 
 Now that you've made all the necessary changes to the input files, it's time to
-run your simulation. Below is the Python code you need to execute:  
+run your simulation. Below is the Python code you need:
 
 ```python
 """COAWST Simulation."""
