@@ -355,13 +355,13 @@ up the simulation we need to edit 3 files:
   - We will make `nproc_x * nproc_y` equal to `NnodesATM` in order to take full
   advantage of the virtual cores assigned to the atmosferic model.
 
-  Here is a small list of simulation with the respective configurations and the results:
+  Here is a small list of simulations with the respective configurations and the results:
 
-|  Machine Type  | Virtual CPUs |   NnodesATM  |  NnodesWAV | NnodesOCN | NtileI | NtileJ | nproc_x | nproc_y |     Execution Time     |   Cost   |
-|:--------------:|:------------:|:------------:|:----------:|:---------:|:------:|:------:|:-------:|:-------:|:----------------------:|:--------:|
-|  c2-standard-4 |       4      |       1      |      1     |     1     |    1   |    1   |    1    |    1    | 9 hours and 47 minutes | 0.71 US$ |
-| c2-standard-60 |      60      |      20      |     20     |     20    |    4   |    5   |    4    |    5    |  1 hour and 3 seconds  | 1.37 US$ |
-| c2-standard-16 |      16      | 10.2 seconds | 0.0011 US$ |           |        |        |         |         |                        |          |
+|   Machine Type  | Virtual CPUs | Nnodes ATM WAV OCN | NtileI | NtileJ | nproc_x | nproc_y |     Execution Time     |   Cost   |
+|:---------------:|:------------:|:------------------:|:------:|:------:|:-------:|:-------:|:----------------------:|:--------:|
+|  c2-standard-4  |       4      |          1         |    1   |    1   |    1    |    1    | 9 hrs 47 mins | 0.71 US$ |
+|  c2-standard-60 |      60      |         20         |    4   |    5   |    4    |    5    |  1 hr 3 s  | 1.37 US$ |
+| c2-standard-112 |      112     |         36         |    6   |    6   |    6    |    6    |                        |          |
 
 
 In this tutorial, we covered the essential steps for setting up and running a
