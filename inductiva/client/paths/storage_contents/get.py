@@ -146,6 +146,7 @@ class OrderSchema(
         )
 
 
+RecursiveSchema = schemas.BoolSchema
 PathSchema = schemas.StrSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
@@ -197,6 +198,11 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
                 io.FileIO,
                 io.BufferedReader,
             ],
+        'recursive':
+            typing.Union[
+                RecursiveSchema,
+                bool,
+            ],
         'path':
             typing.Union[
                 PathSchema,
@@ -227,6 +233,12 @@ request_query_order = api_client.QueryParameter(
     name="order",
     style=api_client.ParameterStyle.FORM,
     schema=OrderSchema,
+    explode=True,
+)
+request_query_recursive = api_client.QueryParameter(
+    name="recursive",
+    style=api_client.ParameterStyle.FORM,
+    schema=RecursiveSchema,
     explode=True,
 )
 request_query_path = api_client.QueryParameter(
@@ -382,6 +394,7 @@ class BaseApi(api_client.Api):
                 request_query_max_results,
                 request_query_sort_by,
                 request_query_order,
+                request_query_recursive,
                 request_query_path,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
