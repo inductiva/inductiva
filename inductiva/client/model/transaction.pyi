@@ -93,10 +93,184 @@ class Transaction(schemas.DictSchema):
                         **kwargs,
                     )
 
+            class fee(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.NumberSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'fee':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
+            class fee_percentage(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.NumberSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'fee_percentage':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
+            class total(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.NumberSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'total':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             __annotations__ = {
                 "amount": amount,
                 "time": time,
                 "currency": currency,
+                "fee": fee,
+                "fee_percentage": fee_percentage,
+                "total": total,
             }
 
     amount: MetaOapg.properties.amount
@@ -121,6 +295,24 @@ class Transaction(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+            self,
+            name: typing_extensions.Literal["fee"]) -> MetaOapg.properties.fee:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["fee_percentage"]
+    ) -> MetaOapg.properties.fee_percentage:
+        ...
+
+    @typing.overload
+    def __getitem__(
+            self, name: typing_extensions.Literal["total"]
+    ) -> MetaOapg.properties.total:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -128,6 +320,9 @@ class Transaction(schemas.DictSchema):
         "amount",
         "time",
         "currency",
+        "fee",
+        "fee_percentage",
+        "total",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -152,6 +347,24 @@ class Transaction(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["fee"]
+    ) -> typing.Union[MetaOapg.properties.fee, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["fee_percentage"]
+    ) -> typing.Union[MetaOapg.properties.fee_percentage, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["total"]
+    ) -> typing.Union[MetaOapg.properties.total, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -160,6 +373,9 @@ class Transaction(schemas.DictSchema):
         "amount",
         "time",
         "currency",
+        "fee",
+        "fee_percentage",
+        "total",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -186,6 +402,22 @@ class Transaction(schemas.DictSchema):
                                None, list, tuple, bytes, io.FileIO,
                                io.BufferedReader,
                                schemas.Unset] = schemas.unset,
+        fee: typing.Union[MetaOapg.properties.fee, dict, frozendict.frozendict,
+                          str, date, datetime, uuid.UUID, int, float,
+                          decimal.Decimal, bool, None, list, tuple, bytes,
+                          io.FileIO, io.BufferedReader,
+                          schemas.Unset] = schemas.unset,
+        fee_percentage: typing.Union[MetaOapg.properties.fee_percentage, dict,
+                                     frozendict.frozendict, str, date, datetime,
+                                     uuid.UUID, int, float, decimal.Decimal,
+                                     bool, None, list, tuple, bytes, io.FileIO,
+                                     io.BufferedReader,
+                                     schemas.Unset] = schemas.unset,
+        total: typing.Union[MetaOapg.properties.total, dict,
+                            frozendict.frozendict, str, date, datetime,
+                            uuid.UUID, int, float, decimal.Decimal, bool, None,
+                            list, tuple, bytes, io.FileIO, io.BufferedReader,
+                            schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -198,6 +430,9 @@ class Transaction(schemas.DictSchema):
             amount=amount,
             time=time,
             currency=currency,
+            fee=fee,
+            fee_percentage=fee_percentage,
+            total=total,
             _configuration=_configuration,
             **kwargs,
         )
