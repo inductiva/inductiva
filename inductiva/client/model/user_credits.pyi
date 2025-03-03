@@ -94,6 +94,8 @@ class UserCredits(schemas.DictSchema):
                         **kwargs,
                     )
 
+            ignore_fees = schemas.BoolSchema
+
             class idempotency_key(
                     schemas.ComposedSchema,):
 
@@ -154,6 +156,7 @@ class UserCredits(schemas.DictSchema):
             __annotations__ = {
                 "amount": amount,
                 "tx_info": tx_info,
+                "ignore_fees": ignore_fees,
                 "idempotency_key": idempotency_key,
             }
 
@@ -173,6 +176,12 @@ class UserCredits(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["ignore_fees"]
+    ) -> MetaOapg.properties.ignore_fees:
+        ...
+
+    @typing.overload
+    def __getitem__(
         self, name: typing_extensions.Literal["idempotency_key"]
     ) -> MetaOapg.properties.idempotency_key:
         ...
@@ -184,6 +193,7 @@ class UserCredits(schemas.DictSchema):
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "amount",
         "tx_info",
+        "ignore_fees",
         "idempotency_key",
     ], str]):
         # dict_instance[name] accessor
@@ -203,6 +213,12 @@ class UserCredits(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["ignore_fees"]
+    ) -> typing.Union[MetaOapg.properties.ignore_fees, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["idempotency_key"]
     ) -> typing.Union[MetaOapg.properties.idempotency_key, schemas.Unset]:
         ...
@@ -216,6 +232,7 @@ class UserCredits(schemas.DictSchema):
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "amount",
         "tx_info",
+        "ignore_fees",
         "idempotency_key",
     ], str]):
         return super().get_item_oapg(name)
@@ -237,6 +254,8 @@ class UserCredits(schemas.DictSchema):
                               uuid.UUID, int, float, decimal.Decimal, bool,
                               None, list, tuple, bytes, io.FileIO,
                               io.BufferedReader, schemas.Unset] = schemas.unset,
+        ignore_fees: typing.Union[MetaOapg.properties.ignore_fees, bool,
+                                  schemas.Unset] = schemas.unset,
         idempotency_key: typing.Union[MetaOapg.properties.idempotency_key, dict,
                                       frozendict.frozendict, str, date,
                                       datetime, uuid.UUID, int, float,
@@ -254,6 +273,7 @@ class UserCredits(schemas.DictSchema):
             *_args,
             amount=amount,
             tx_info=tx_info,
+            ignore_fees=ignore_fees,
             idempotency_key=idempotency_key,
             _configuration=_configuration,
             **kwargs,
