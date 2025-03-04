@@ -13,7 +13,7 @@ in computational chemistry, condensed matter physics, and related fields.
 
 ## Supported Versions
 We currently support the following CP2K version:
-- **v2025.1**
+- **v2025.1** - Compiled with AVX2.
 
 ## Running the CP2K H2O-64 Benchmark
 
