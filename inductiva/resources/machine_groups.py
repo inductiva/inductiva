@@ -612,8 +612,8 @@ class MachineGroup(BaseMachineGroup):
     @property
     def n_vcpus(self):
         return VCPUCount(
-            self._cpu_info["cpu_count_logical"] * self.num_machines,
-            self._cpu_info["cpu_count_logical"])
+            self._cpu_info["cpu_cores_logical"] * self.num_machines,
+            self._cpu_info["cpu_cores_logical"])
 
     def short_name(self) -> str:
         return "MachineGroup"
@@ -716,8 +716,8 @@ class ElasticMachineGroup(BaseMachineGroup):
     @property
     def n_vcpus(self):
         return VCPUCount(
-            self._cpu_info["cpu_count_logical"] * self.max_machines,
-            self._cpu_info["cpu_count_logical"])
+            self._cpu_info["cpu_cores_logical"] * self.max_machines,
+            self._cpu_info["cpu_cores_logical"])
 
     def short_name(self) -> str:
         return "ElasticMachineGroup"
@@ -802,8 +802,8 @@ class MPICluster(BaseMachineGroup):
     @property
     def n_vcpus(self):
         return VCPUCount(
-            self._cpu_info["cpu_count_logical"] * self.num_machines,
-            self._cpu_info["cpu_count_logical"])
+            self._cpu_info["cpu_cores_logical"] * self.num_machines,
+            self._cpu_info["cpu_cores_logical"])
 
     @property
     def available_vcpus(self):
