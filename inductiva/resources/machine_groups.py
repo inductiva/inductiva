@@ -54,7 +54,7 @@ class BaseMachineGroup(ABC):
     provider: Union[ProviderType, str] = "GCP"
     threads_per_core: int = 2
     data_disk_gb: int = 10
-    max_idle_time: Optional[Union[datetime.timedelta, int]] = None
+    max_idle_time: Union[datetime.timedelta, int] = 3
     auto_terminate_ts: Optional[datetime.datetime] = None
     auto_terminate_minutes: Optional[int] = None
 
@@ -190,10 +190,11 @@ class BaseMachineGroup(ABC):
         pass
 
     @staticmethod
-    def _timedelta_to_seconds(
-            value: Optional[datetime.timedelta] = None) -> Optional[float]:
+    def _timedelta_to_seconds(value: Union[datetime.timedelta, int]) -> float:
         """Converts a timedelta object to seconds."""
-        return value.total_seconds() if value is not None else None
+        if isinstance(value, int):
+            return value * 60
+        return value.total_seconds()
 
     @staticmethod
     def _seconds_to_timedelta(
