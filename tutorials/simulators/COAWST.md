@@ -268,7 +268,8 @@ Timeline:
 		├> 1.063 s         create_all_sim_links
 		├> 1335.318 s      bash build_coawst.sh
 		├> 35278.638 s     /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus --np 3 coawstM coupling_joe_tc.in
-		└> 1.234 s         rm -r __COAWST
+		├> 1.234 s         rm -r __COAWST
+    └> 1.065 s         clean_all_sim_links
 	Finalizing                at 28/02, 05:43:05      132.651 s
 	Success                   at 28/02, 05:45:18      
 
@@ -316,7 +317,10 @@ simulation, along with their durations. Below is a breakdown of the key steps:
 
 - **`rm -r __COAWST`**  
   - Cleans up the simulation directory by removing the COAWST folder,
-  keeping the output size minimal.  
+  keeping the output size minimal.
+
+- **`clean_all_sim_links`**
+  - Cleans all symbolic links created with the `create_all_sim_links` commands.
 
 With these steps, your COAWST simulation is successfully executed and managed in the cloud. 🚀
 

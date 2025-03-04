@@ -124,6 +124,7 @@ class COAWST(simulators.Simulator):
             Command(f"{coawst_bin} {sim_config_filename}",
                     mpi_config=mpi_config),
             "rm -r  __COAWST",
+            "clean_all_sim_links"
         ]
 
         # Add init commands after building and before running the simulation
