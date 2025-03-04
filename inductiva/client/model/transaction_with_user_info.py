@@ -32,6 +32,7 @@ class TransactionWithUserInfo(schemas.DictSchema):
     class MetaOapg:
         required = {
             "amount",
+            "top_up_type",
             "organization",
             "organization_id",
             "time",
@@ -41,6 +42,11 @@ class TransactionWithUserInfo(schemas.DictSchema):
         class properties:
             amount = schemas.NumberSchema
             time = schemas.DateTimeSchema
+
+            @staticmethod
+            def top_up_type() -> typing.Type['TopUpType']:
+                return TopUpType
+
             email = schemas.StrSchema
             organization_id = schemas.StrSchema
             organization = schemas.StrSchema
@@ -273,6 +279,7 @@ class TransactionWithUserInfo(schemas.DictSchema):
             __annotations__ = {
                 "amount": amount,
                 "time": time,
+                "top_up_type": top_up_type,
                 "email": email,
                 "organization_id": organization_id,
                 "organization": organization,
@@ -283,6 +290,7 @@ class TransactionWithUserInfo(schemas.DictSchema):
             }
 
     amount: MetaOapg.properties.amount
+    top_up_type: 'TopUpType'
     organization: MetaOapg.properties.organization
     organization_id: MetaOapg.properties.organization_id
     time: MetaOapg.properties.time
@@ -298,6 +306,12 @@ class TransactionWithUserInfo(schemas.DictSchema):
     def __getitem__(
             self, name: typing_extensions.Literal["time"]
     ) -> MetaOapg.properties.time:
+        ...
+
+    @typing.overload
+    def __getitem__(
+            self,
+            name: typing_extensions.Literal["top_up_type"]) -> 'TopUpType':
         ...
 
     @typing.overload
@@ -349,6 +363,7 @@ class TransactionWithUserInfo(schemas.DictSchema):
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "amount",
         "time",
+        "top_up_type",
         "email",
         "organization_id",
         "organization",
@@ -370,6 +385,12 @@ class TransactionWithUserInfo(schemas.DictSchema):
     def get_item_oapg(
             self, name: typing_extensions.Literal["time"]
     ) -> MetaOapg.properties.time:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+            self,
+            name: typing_extensions.Literal["top_up_type"]) -> 'TopUpType':
         ...
 
     @typing.overload
@@ -423,6 +444,7 @@ class TransactionWithUserInfo(schemas.DictSchema):
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "amount",
         "time",
+        "top_up_type",
         "email",
         "organization_id",
         "organization",
@@ -445,6 +467,7 @@ class TransactionWithUserInfo(schemas.DictSchema):
             int,
             float,
         ],
+        top_up_type: 'TopUpType',
         organization: typing.Union[
             MetaOapg.properties.organization,
             str,
@@ -494,6 +517,7 @@ class TransactionWithUserInfo(schemas.DictSchema):
             cls,
             *_args,
             amount=amount,
+            top_up_type=top_up_type,
             organization=organization,
             organization_id=organization_id,
             time=time,
@@ -508,3 +532,4 @@ class TransactionWithUserInfo(schemas.DictSchema):
 
 
 from inductiva.client.model.currency_code import CurrencyCode
+from inductiva.client.model.top_up_type import TopUpType
