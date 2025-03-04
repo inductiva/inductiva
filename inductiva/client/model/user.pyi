@@ -31,6 +31,7 @@ class User(schemas.DictSchema):
 
     class MetaOapg:
         required = {
+            "costs_fee_percentage",
             "terms_and_conditions_decision",
             "tier",
             "total_available_credits",
@@ -53,6 +54,7 @@ class User(schemas.DictSchema):
                 return TermsAndConditions
 
             registration_ts = schemas.DateTimeSchema
+            costs_fee_percentage = schemas.NumberSchema
 
             class name(
                     schemas.ComposedSchema,):
@@ -240,6 +242,8 @@ class User(schemas.DictSchema):
                     terms_and_conditions_decision,
                 "registration_ts":
                     registration_ts,
+                "costs_fee_percentage":
+                    costs_fee_percentage,
                 "name":
                     name,
                 "credits_currency":
@@ -248,6 +252,7 @@ class User(schemas.DictSchema):
                     terms_and_conditions_decision_ts,
             }
 
+    costs_fee_percentage: MetaOapg.properties.costs_fee_percentage
     terms_and_conditions_decision: 'TermsAndConditions'
     tier: MetaOapg.properties.tier
     total_available_credits: MetaOapg.properties.total_available_credits
@@ -300,6 +305,12 @@ class User(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["costs_fee_percentage"]
+    ) -> MetaOapg.properties.costs_fee_percentage:
+        ...
+
+    @typing.overload
+    def __getitem__(
             self, name: typing_extensions.Literal["name"]
     ) -> MetaOapg.properties.name:
         ...
@@ -329,6 +340,7 @@ class User(schemas.DictSchema):
         "total_available_credits",
         "terms_and_conditions_decision",
         "registration_ts",
+        "costs_fee_percentage",
         "name",
         "credits_currency",
         "terms_and_conditions_decision_ts",
@@ -380,6 +392,12 @@ class User(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["costs_fee_percentage"]
+    ) -> MetaOapg.properties.costs_fee_percentage:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["name"]
     ) -> typing.Union[MetaOapg.properties.name, schemas.Unset]:
         ...
@@ -412,6 +430,7 @@ class User(schemas.DictSchema):
         "total_available_credits",
         "terms_and_conditions_decision",
         "registration_ts",
+        "costs_fee_percentage",
         "name",
         "credits_currency",
         "terms_and_conditions_decision_ts",
@@ -423,6 +442,12 @@ class User(schemas.DictSchema):
         *_args: typing.Union[
             dict,
             frozendict.frozendict,
+        ],
+        costs_fee_percentage: typing.Union[
+            MetaOapg.properties.costs_fee_percentage,
+            decimal.Decimal,
+            int,
+            float,
         ],
         terms_and_conditions_decision: 'TermsAndConditions',
         tier: typing.Union[
@@ -477,6 +502,7 @@ class User(schemas.DictSchema):
         return super().__new__(
             cls,
             *_args,
+            costs_fee_percentage=costs_fee_percentage,
             terms_and_conditions_decision=terms_and_conditions_decision,
             tier=tier,
             total_available_credits=total_available_credits,

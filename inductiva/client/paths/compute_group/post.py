@@ -25,14 +25,15 @@ import frozendict  # noqa: F401
 from inductiva.client import schemas  # noqa: F401
 
 from inductiva.client.model.vm_group_config import VMGroupConfig
+from inductiva.client.model.register_vm_group_request import RegisterVMGroupRequest
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 from . import path
 
 # body param
-SchemaForRequestBodyApplicationJson = VMGroupConfig
+SchemaForRequestBodyApplicationJson = RegisterVMGroupRequest
 
-request_body_vm_group_config = api_client.RequestBody(
+request_body_register_vm_group_request = api_client.RequestBody(
     content={
         'application/json':
             api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
@@ -185,7 +186,7 @@ class BaseApi(api_client.Api):
             )
         _fields = None
         _body = None
-        serialized_data = request_body_vm_group_config.serialize(
+        serialized_data = request_body_register_vm_group_request.serialize(
             body, content_type)
         _headers.add('Content-Type', content_type)
         if 'fields' in serialized_data:

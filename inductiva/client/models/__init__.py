@@ -17,15 +17,13 @@ from inductiva.client.model.capability import Capability
 from inductiva.client.model.cost_components import CostComponents
 from inductiva.client.model.cost_detail import CostDetail
 from inductiva.client.model.cost_type import CostType
+from inductiva.client.model.costs_fee_update import CostsFeeUpdate
 from inductiva.client.model.created_user import CreatedUser
 from inductiva.client.model.currency_code import CurrencyCode
 from inductiva.client.model.disk_resize_request import DiskResizeRequest
 from inductiva.client.model.dynamic_disk_resize_config import DynamicDiskResizeConfig
 from inductiva.client.model.executer import Executer
-from inductiva.client.model.file_download_details import FileDownloadDetails
-from inductiva.client.model.file_download_url import FileDownloadUrl
 from inductiva.client.model.file_info import FileInfo
-from inductiva.client.model.file_upload_url import FileUploadUrl
 from inductiva.client.model.http_validation_error import HTTPValidationError
 from inductiva.client.model.machine_group_cost_per_hour import MachineGroupCostPerHour
 from inductiva.client.model.machine_group_costs import MachineGroupCosts
@@ -59,6 +57,7 @@ from inductiva.client.model.project_create import ProjectCreate
 from inductiva.client.model.providers import Providers
 from inductiva.client.model.quota import Quota
 from inductiva.client.model.quota_scope import QuotaScope
+from inductiva.client.model.register_vm_group_request import RegisterVMGroupRequest
 from inductiva.client.model.sharing_level import SharingLevel
 from inductiva.client.model.storage_cost import StorageCost
 from inductiva.client.model.storage_file_info import StorageFileInfo
@@ -85,7 +84,9 @@ from inductiva.client.model.task_with_status_history import TaskWithStatusHistor
 from inductiva.client.model.terms_and_conditions import TermsAndConditions
 from inductiva.client.model.tier_full_info import TierFullInfo
 from inductiva.client.model.tier_quota_detail import TierQuotaDetail
+from inductiva.client.model.top_up_type import TopUpType
 from inductiva.client.model.transaction import Transaction
+from inductiva.client.model.transaction_with_user_info import TransactionWithUserInfo
 from inductiva.client.model.update_capabilities_actions import UpdateCapabilitiesActions
 from inductiva.client.model.update_capabilities_request import UpdateCapabilitiesRequest
 from inductiva.client.model.update_operation_status import UpdateOperationStatus

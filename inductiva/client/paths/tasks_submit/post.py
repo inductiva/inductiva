@@ -25,36 +25,11 @@ import frozendict  # noqa: F401
 from inductiva.client import schemas  # noqa: F401
 
 from inductiva.client.model.task_request import TaskRequest
-from inductiva.client.model.providers import Providers
 from inductiva.client.model.task_submitted_info import TaskSubmittedInfo
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 from . import path
 
-# Query params
-ProviderIdSchema = Providers
-RequestRequiredQueryParams = typing_extensions.TypedDict(
-    'RequestRequiredQueryParams', {})
-RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams', {
-        'provider_id': typing.Union[
-            ProviderIdSchema,
-        ],
-    },
-    total=False)
-
-
-class RequestQueryParams(RequestRequiredQueryParams,
-                         RequestOptionalQueryParams):
-    pass
-
-
-request_query_provider_id = api_client.QueryParameter(
-    name="provider_id",
-    style=api_client.ParameterStyle.FORM,
-    schema=ProviderIdSchema,
-    explode=True,
-)
 # body param
 SchemaForRequestBodyApplicationJson = TaskRequest
 
@@ -124,7 +99,6 @@ class BaseApi(api_client.Api):
             SchemaForRequestBodyApplicationJson,
         ],
         content_type: typing_extensions.Literal["application/json"] = ...,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -141,7 +115,6 @@ class BaseApi(api_client.Api):
             SchemaForRequestBodyApplicationJson,
         ],
         content_type: str = ...,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -159,7 +132,6 @@ class BaseApi(api_client.Api):
         ],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -173,7 +145,6 @@ class BaseApi(api_client.Api):
             SchemaForRequestBodyApplicationJson,
         ],
         content_type: str = ...,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -190,7 +161,6 @@ class BaseApi(api_client.Api):
             SchemaForRequestBodyApplicationJson,
         ],
         content_type: str = 'application/json',
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -202,21 +172,7 @@ class BaseApi(api_client.Api):
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
-        self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
         used_path = path.value
-
-        prefix_separator_iterator = None
-        for parameter in (request_query_provider_id,):
-            parameter_data = query_params.get(parameter.name, schemas.unset)
-            if parameter_data is schemas.unset:
-                continue
-            if prefix_separator_iterator is None:
-                prefix_separator_iterator = parameter.get_prefix_separator_iterator(
-                )
-            serialized_data = parameter.serialize(parameter_data,
-                                                  prefix_separator_iterator)
-            for serialized_value in serialized_data.values():
-                used_path += serialized_value
 
         _headers = HTTPHeaderDict()
         # TODO add cookie handling
@@ -279,7 +235,6 @@ class SubmitTask(BaseApi):
             SchemaForRequestBodyApplicationJson,
         ],
         content_type: typing_extensions.Literal["application/json"] = ...,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -296,7 +251,6 @@ class SubmitTask(BaseApi):
             SchemaForRequestBodyApplicationJson,
         ],
         content_type: str = ...,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -314,7 +268,6 @@ class SubmitTask(BaseApi):
         ],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -328,7 +281,6 @@ class SubmitTask(BaseApi):
             SchemaForRequestBodyApplicationJson,
         ],
         content_type: str = ...,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -345,14 +297,12 @@ class SubmitTask(BaseApi):
             SchemaForRequestBodyApplicationJson,
         ],
         content_type: str = 'application/json',
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         return self._submit_task_oapg(body=body,
-                                      query_params=query_params,
                                       content_type=content_type,
                                       accept_content_types=accept_content_types,
                                       stream=stream,
@@ -370,7 +320,6 @@ class ApiForpost(BaseApi):
             SchemaForRequestBodyApplicationJson,
         ],
         content_type: typing_extensions.Literal["application/json"] = ...,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -387,7 +336,6 @@ class ApiForpost(BaseApi):
             SchemaForRequestBodyApplicationJson,
         ],
         content_type: str = ...,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -405,7 +353,6 @@ class ApiForpost(BaseApi):
         ],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -419,7 +366,6 @@ class ApiForpost(BaseApi):
             SchemaForRequestBodyApplicationJson,
         ],
         content_type: str = ...,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -436,14 +382,12 @@ class ApiForpost(BaseApi):
             SchemaForRequestBodyApplicationJson,
         ],
         content_type: str = 'application/json',
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         return self._submit_task_oapg(body=body,
-                                      query_params=query_params,
                                       content_type=content_type,
                                       accept_content_types=accept_content_types,
                                       stream=stream,
