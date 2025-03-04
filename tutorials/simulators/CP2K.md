@@ -50,7 +50,7 @@ import inductiva
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup( 
     provider="GCP",
-    machine_type="c2-standard-4")
+    machine_type="c2-standard-16")
 
 # Initialize the Simulator
 cp2k = inductiva.simulators.CP2K( 
@@ -60,7 +60,7 @@ cp2k = inductiva.simulators.CP2K(
 task = cp2k.run( 
     input_dir="/Path/to/H2O-64",
     sim_config_filename="H2O-64.inp",
-    n_vcpus=4,
+    n_vcpus=16,
     use_hwthread=True,
     on=cloud_machine)
 
@@ -79,32 +79,32 @@ Once the simulation is complete, we terminate the machine, download the results,
 and print a summary of the simulation as shown below.
 
 ```
-inductiva tasks info 6qcy46uvjdoqyysx8d0zbjv5w
+inductiva tasks info 73bneshwui82w5entxwxjk9j7
 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 03/03, 20:00:16      1.057 s
-	In Queue                  at 03/03, 20:00:17      12.13 s
-	Preparing to Compute      at 03/03, 20:00:29      8.826 s
-	In Progress               at 03/03, 20:00:38      22471.079 s
-		└> 22470.94 s      /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus --np 4 cp2k.psmp H2O-64.inp
-	Finalizing                at 04/03, 02:15:09      0.766 s
-	Success                   at 04/03, 02:15:09      
+	Waiting for Input         at 04/03, 09:21:50      1.032 s
+	In Queue                  at 04/03, 09:21:51      34.652 s
+	Preparing to Compute      at 04/03, 09:22:26      10.603 s
+	In Progress               at 04/03, 09:22:36      6134.309 s
+		└> 6134.176 s      /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus --np 16 cp2k.psmp H2O-64.inp
+	Finalizing                at 04/03, 11:04:51      0.956 s
+	Success                   at 04/03, 11:04:51      
 
 Data:
 	Size of zipped output:    5.33 MB
-	Size of unzipped output:  16.58 MB
+	Size of unzipped output:  16.61 MB
 	Number of output files:   9
 
-Estimated computation cost (US$): 0.44 US$
+Estimated computation cost (US$): 0.46 US$
 
-Go to https://console.inductiva.ai/tasks/6qcy46uvjdoqyysx8d0zbjv5w for more details.
+Go to https://console.inductiva.ai/tasks/73bneshwui82w5entxwxjk9j7 for more details.
 ```
 
-The core computation time for this simulation was approximately 6 hours and 14
-minutes (22471 seconds), as shown in the `In Progress` line. This represents the
-actual execution time of the CP2K benchmark on a 4 virtual CPU machine.
+The core computation time for this simulation was approximately 1 hour and 42
+minutes (6134 seconds), as shown in the `In Progress` line. This represents the
+actual execution time of the CP2K benchmark on a 16 virtual CPU machine.
 
 ### Scaling Up Your Simulation  
 
@@ -117,21 +117,17 @@ Here are the results of running the H2O-64 benchmark on different machines:
 
 |  Machine Type  | Virtual CPUs |     Time     | Estimated Cost |
 |:--------------:|:------------:|:------------:|:--------------:|
-|  Local Ryzen 7 7700X |      16      | ...   | N/A       |
-|  c2-standard-4 |      4      | 6 hours and 14 minutes   | 0.43 US$       |
-|  c2-standard-16 |      16      | N/A  | N/A       |
-|  c2-standard-60 |      60      | 42 minutes and 5 seconds   | 0.69 US$   |
+|  Local Ryzen 7 7700X |      16      | 1 hour and 3 minutes       | N/A       |
+|  Cloud c2-standard-16      |      16      | 1 hour and 42 minutes      | 0.45 US$   |
+|  Cloud c2-standard-60      |      60      | 42 minutes and 5 seconds   | 0.69 US$   |
 
-We also ran the present simulation using GPU capable machines so see what kind
-of speed ups we get compared to running on the CPU only.
+Running the CP2K simulation on a local Ryzen 7 7700X with 16 cores took 1 hour
+and 3 minutes as the baseline. When moving to a similar cloud machine
+(c2-standard-16) with 16 vCPUs, the simulation took longer—1 hour and 42
+minutes—likely due to lower clock speeds, but at a low cost of 0.45 US$.  
 
-|  Machine Type  | Virtual CPUs | GPU          |     Time     | Estimated Cost |
-|:--------------:|:------------:|:------------:|:------------:|:--------------:|
-|  Local RTX 4070|      16      | 1x RTX 4070 | 6 hours and 14 minutes   | N/A |
-|  g2-standard-4 |      4       | 1x NVIDIA L4 | 6 hours and 14 minutes   | 0.43 US$       |
-
-
-
-CP2K simulations can be computationally intensive, but with the right hardware,
-you can significantly speed up your simulations and reduce overall cost.
-
+Scaling up to a more powerful cloud machine (c2-standard-60) with 60 vCPUs
+significantly reduced the simulation time to 42 minutes and 5 seconds while
+increasing the cost to 0.69 US$. This highlights the importance of choosing the
+right machine for your simulation: we more than halved the computation time
+while only increasing the cost by around 1.5 times.
