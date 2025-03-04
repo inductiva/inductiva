@@ -249,6 +249,12 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
                 run_kwargs[resubmit_key] = resubmit_on_preemption
             if sim_name == "OpenFOAM":
                 run_kwargs["commands"] = ["ls"]
+
+            # pass remote_assets to coawst to avoid our internal checks
+            # that check if the input files are present
+            if sim_name == "COAWST":
+                run_kwargs["remote_assets"] = ["temp"]
+
             if sim_name in ("SWAN", "SWASH", "SNLSWAN"):
                 args = ("test_folder",)
 
