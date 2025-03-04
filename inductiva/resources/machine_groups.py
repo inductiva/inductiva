@@ -78,6 +78,7 @@ class BaseMachineGroup(ABC):
     _cost_per_hour = {}
     _total_ram_gb = None
     _cpu_info = {}
+    _gpu_info = {}
 
     QUOTAS_EXCEEDED_SLEEP_SECONDS = 60
 
@@ -277,6 +278,7 @@ class BaseMachineGroup(ABC):
         self._total_ram_gb = body.get("total_ram_gb")
         self._cost_per_hour = body.get("cost_per_hour")
         self._cpu_info = body.get("cpu_info")
+        self._gpu_info = body.get("gpu_info")
 
         dynamic_disk_resize_config = body.get(
             "dynamic_disk_resize_config") or {}
