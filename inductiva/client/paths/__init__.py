@@ -39,6 +39,7 @@ class PathValues(str, enum.Enum):
     ADMIN_MACHINE_ID_EVENT = "/admin/{machine_id}/event"
     ADMIN_USERS_USERNAME_COSTS_FEE_PERCENTAGE = "/admin/users/{username}/costs_fee_percentage"
     ADMIN_ORGANIZATIONS_ORGANIZATION_ID_COSTS_FEE_PERCENTAGE = "/admin/organizations/{organization_id}/costs_fee_percentage"
+    ADMIN_TOPUPS = "/admin/top-ups"
     TASKRUNNER_REGISTER = "/task-runner/register"
     TASKRUNNER_MACHINE_ID = "/task-runner/{machine_id}"
     TASKRUNNER_MACHINE_ID_TASK = "/task-runner/{machine_id}/task"
