@@ -15,7 +15,8 @@ a certain time, for safeguards.
 The janitor follows the following rules before terminating the resources. The
 default values are applied when omitted by the user.
 - **Total time after launch of computational resource**, independent of any
-simulation still running: 7 days
+simulation still running: 36 hours (standard), 7 days (power-user),
+2 years (enterprise)
 - **Total time of inactivity allowed**, starting from the moment no simulations
 are active and resets if any task arrives: 3 minutes
 
