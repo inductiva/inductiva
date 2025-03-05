@@ -24,6 +24,7 @@ from inductiva.client.model.disk_resize_request import DiskResizeRequest
 from inductiva.client.model.dynamic_disk_resize_config import DynamicDiskResizeConfig
 from inductiva.client.model.executer import Executer
 from inductiva.client.model.file_info import FileInfo
+from inductiva.client.model.gpu_info import GPUInfo
 from inductiva.client.model.http_validation_error import HTTPValidationError
 from inductiva.client.model.machine_group_cost_per_hour import MachineGroupCostPerHour
 from inductiva.client.model.machine_group_costs import MachineGroupCosts
