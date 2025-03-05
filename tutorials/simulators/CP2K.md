@@ -21,24 +21,14 @@ We currently support the following CP2K version:
 
 This tutorial will demonstrate how to run a CP2K simulation using the H2O-64
 benchmark, which simulates a system that consists of 64 water molecules in a
-12.4 Å³ cell, with MD running for 1000 steps.
+12.4 Å³ cell, with MD running for 10 steps.
 
 ### Prerequisites  
 
-To follow this tutorial, download the input file for the H2O-64 benchmark from
-[here](https://github.com/cp2k/cp2k/blob/master/benchmarks/QS/H2O-64.inp) and
-place it in a folder called `H2O-64`. Once you have the simulation file, you're
+To follow this tutorial, download the input file for the Fayalite-FIST benchmark from
+[here](https://github.com/cp2k/cp2k/blob/master/benchmarks/Fayalite-FIST) and
+place it in a folder called `Fayalite-FIST`. Once you have the simulation file, you're
 ready to scale your simulations to the Cloud.
-
-### Increasing the simulation time
-
-The H2O-64 benchmark only runs for 10 steps as configured, which corresponds to
-a simulated time of 5 femtoseconds. For the purposes of this tutorial, we
-decided to increase the simulation time by a factor of 100 to 500 femtoseconds.
-This requires increasing the number of MD steps from 10 to 1000 in the CP2K
-input file.
-
-To do this, open the file `H2O-64.inp` and change `STEPS 10` to `STEPS 1000`.
 
 ### Running Your Simulation
 
@@ -51,7 +41,7 @@ import inductiva
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup( 
     provider="GCP",
-    machine_type="c2-standard-16")
+    machine_type="c3d-standard-16")
 
 # Initialize the Simulator
 cp2k = inductiva.simulators.CP2K( 
@@ -59,8 +49,8 @@ cp2k = inductiva.simulators.CP2K(
 
 # Run simulation
 task = cp2k.run( 
-    input_dir="/Path/to/H2O-64",
-    sim_config_filename="H2O-64.inp",
+    input_dir="/Path/to/Fayalite-FIST",
+    sim_config_filename="fayalite.inp",
     n_vcpus=16,
     use_hwthread=True,
     on=cloud_machine)
@@ -114,24 +104,64 @@ Scaling up your CP2K simulation is as simple as changing two parameters:
 1. Modify the `machine_type` to a more powerful machine with more vCPUs.
 2. Adjust the `n_vcpus` accordingly to maximize parallel processing efficiency.
 
-Here are the results of running the H2O-64 benchmark on different machines:
+We ran this simulation with multiple machines and here are the results.
 
-|  Machine Type  | Virtual CPUs |     Time     | Estimated Cost |
-|:--------------:|:------------:|:------------:|:--------------:|
-|  Local Ryzen 7 7700X |      16      | 1 hour and 3 minutes       | N/A       |
-|  Cloud c2-standard-16      |      16      | 1 hour and 42 minutes      | 0.45 US$   |
-|  Cloud c2-standard-60      |      60      | 42 minutes and 5 seconds   | 0.69 US$   |
-|  Cloud c3d-standard-60      |      60      | 32 minutes and 15 seconds   | 0.37 US$   |
-|  Cloud c3d-standard-180      |      180      | 28 minutes and 12 seconds   | 0.96 US$   |
+Starting with a local run on a **Ryzen 7 7700X** with 16 virtual CPUs, the
+simulation completed in **1 hour and 3 minutes**. To compare this with a cloud
+machine of similar specifications, we used a **c2-standard-16** instance, which
+also has 16 vCPUs. However, the cloud machine was slower, taking
+**1 hour and 42 minutes**, while costing **0.45 US$**.
 
-Running the CP2K simulation on a local Ryzen 7 7700X with 16 cores took 1 hour
-and 3 minutes as the baseline. When moving to a similar cloud machine
-(c2-standard-16) with 16 vCPUs, the simulation took longer—1 hour and 42
-minutes—likely due to lower clock speeds, but at a low cost of 0.45 US$.  
+| Machine Type            | Virtual CPUs | Time              | Estimated Cost |
+|-------------------------|--------------|------------------|---------------|
+| **Local Ryzen 7 7700X** | 16           | 1 hour 3 minutes | N/A           |
+| **Cloud c2-standard-16** | 16           | 1 hour 42 minutes | 0.45 US$      |
 
-Scaling up to a more powerful cloud machine (c3d-standard-60) with 60 vCPUs
-significantly reduced the simulation time to 32 minutes and 15 seconds while
-decreasing the cost to 0.37 US$.
+To reduce runtime, we scaled up to a **c2-standard-60** instance with
+**60 vCPUs**. This significantly cut the runtime to **42 minutes and 5 seconds**,
+but the cost increased to **0.69 US$**.
 
-This highlights the importance of choosing the right machine for your simulation:
-we more than halved the computation time while also decreasing the cost of the simulation.
+| Machine Type            | Virtual CPUs | Time              | Estimated Cost |
+|------------------------|--------------|------------------|---------------|
+| **Cloud c2-standard-16** | 16           | 1 hour 42 minutes | 0.45 US$      |
+| **Cloud c2-standard-60** | 60           | 42 minutes 5 seconds | 0.69 US$      |
+
+Instead of just adding more vCPUs, we explored the impact of using newer hardware.
+Switching to a **c3d-standard-60** instance—still with 60 vCPUs—improved
+performance further, reducing runtime to **32 minutes and 15 seconds**, while
+**costing only 0.37 US$**. This highlights that newer hardware can provide better
+performance at a lower cost.
+
+| Machine Type            | Virtual CPUs | Time              | Estimated Cost |
+|------------------------|--------------|------------------|---------------|
+| **Cloud c2-standard-60** | 60           | 42 minutes 5 seconds | 0.69 US$      |
+| **Cloud c3d-standard-60** | 60           | 32 minutes 15 seconds | 0.37 US$      |
+
+Finally, we scaled up even further to a **c3d-standard-180** instance with
+**180 vCPUs**. The runtime improved slightly to **28 minutes and 12 seconds**,
+but the cost rose to **0.96 US$**. While this configuration delivered the best
+performance, the additional vCPUs provided diminishing returns in terms of speed
+improvement.
+
+| Machine Type            | Virtual CPUs | Time              | Estimated Cost |
+|------------------------|--------------|------------------|---------------|
+| **Cloud c3d-standard-60** | 60           | 32 minutes 15 seconds | 0.37 US$      |
+| **Cloud c3d-standard-180** | 180          | 28 minutes 12 seconds | 0.96 US$      |
+
+### **Final Comparison**
+Here's a full overview of all the runs, showing the trade-offs between different setups.
+
+| Machine Type            | Virtual CPUs | Time              | Estimated Cost |
+|-------------------------|--------------|------------------|---------------|
+| **Local Ryzen 7 7700X** | 16           | 1 hour 3 minutes | N/A           |
+| **Cloud c2-standard-16** | 16           | 1 hour 42 minutes | 0.45 US$      |
+| **Cloud c2-standard-60** | 60           | 42 minutes 5 seconds | 0.69 US$      |
+| **Cloud c3d-standard-60** | 60           | 32 minutes 15 seconds | 0.37 US$      |
+| **Cloud c3d-standard-180** | 180          | 28 minutes 12 seconds | 0.96 US$      |
+
+Choosing the right machine for your simulation is crucial to balancing
+performance and cost. As seen in the results, blindly increasing vCPUs does not
+always lead to proportional speed improvements, and newer hardware can sometimes
+provide better efficiency at a lower price. By carefully selecting the right
+instance type and size, you can significantly reduce runtime while optimizing
+costs, ensuring that your simulations run efficiently without unnecessary expenses.
