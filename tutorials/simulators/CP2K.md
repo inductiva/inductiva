@@ -74,31 +74,31 @@ Once the simulation is complete, we terminate the machine, download the results,
 and print a summary of the simulation as shown below.
 
 ```
-inductiva tasks info e4y6p1q5up9g549ris6remoqn
+inductiva tasks info 7y33ri1umg0tsppabxf5jska4
 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 05/03, 15:09:39      1.172 s
-	In Queue                  at 05/03, 15:09:41      30.264 s
-	Preparing to Compute      at 05/03, 15:10:11      16.474 s
-	In Progress               at 05/03, 15:10:27      102.289 s
-		└> 102.168 s       /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus --np 16 cp2k.psmp H2O-64.inp
-	Finalizing                at 05/03, 15:12:10      0.424 s
-	Success                   at 05/03, 15:12:10      
+	Waiting for Input         at 05/03, 16:04:17      1.525 s
+	In Queue                  at 05/03, 16:04:19      21.308 s
+	Preparing to Compute      at 05/03, 16:04:40      8.307 s
+	In Progress               at 05/03, 16:04:48      103.301 s
+		└> 103.177 s       /opt/openmpi/5.0.6/bin/mpirun --use-hwthread-cpus --np 16 cp2k.psmp H2O-64.inp
+	Finalizing                at 05/03, 16:06:32      0.453 s
+	Success                   at 05/03, 16:06:32      
 
 Data:
-	Size of zipped output:    87.66 KB
-	Size of unzipped output:  296.30 KB
+	Size of zipped output:    87.62 KB
+	Size of unzipped output:  296.14 KB
 	Number of output files:   6
 
-Estimated computation cost (US$): 0.0052 US$
+Estimated computation cost (US$): 0.0049 US$
 
-Go to https://console.inductiva.ai/tasks/e4y6p1q5up9g549ris6remoqn for more details.
+Go to https://console.inductiva.ai/tasks/7y33ri1umg0tsppabxf5jska4 for more details.
 ```
 
-The core computation time for this simulation was approximately **1 minute and 42 seconds**
-(102 seconds), as shown in the `In Progress` line. This represents the
+The core computation time for this simulation was approximately **1 minute and 43 seconds**
+(103 seconds), as shown in the `In Progress` line. This represents the
 actual execution time of the CP2K benchmark on a 16 virtual CPU machine.
 
 For comparison, this same simulation takes **1 minute and 15 seconds** on a similar
@@ -124,45 +124,45 @@ We began with a local run on a **Ryzen 7 7700X** with **16 vCPUs**, completing
 the simulation in **1 minute and 15 seconds**. To compare this with a
 cloud-based machine of similar specifications, we used a **c3d-highcpu-16**
 machine, which also has **16 vCPUs**. As expected, the cloud machine was a bit slower,
-taking **1 minute and 42 seconds**, with a cost of **0.0052 US$**.
+taking **1 minute and 43 seconds**, with a cost of **0.0049 US$**.
 
 | Machine Type            | Virtual CPUs | Time              | Estimated Cost |
 |-------------------------|--------------|------------------|---------------|
 | **Local Ryzen 7 7700X** | 16           | 1 minute and 15 seconds | N/A           |
-| **Cloud c3d-highcpu-16** | 16           | 1 minute and 42 seconds | 0.0052 US$      |
+| **Cloud c3d-highcpu-16** | 16           | 1 minute and 43 seconds | 0.0049 US$      |
 
 To improve performance, we scaled up to a **c3d-highcpu-60** machine with
-**60 vCPUs**. This significantly reduced the runtime to **43 seconds**, with the
-cost increasing slightly to **0.0092 US$**.  
+**60 vCPUs**. This significantly reduced the runtime to **38 seconds**, with the
+cost increasing slightly to **0.0077 US$**.  
 
 | Machine Type            | Virtual CPUs | Time              | Estimated Cost |
 |------------------------|--------------|------------------|---------------|
-| **Cloud c3d-highcpu-16** | 16           | 1 minute and 42 seconds | 0.0052 US$      |
-| **Cloud c3d-highcpu-60** | 60           | 43 seconds | 0.0092 US$      |
+| **Cloud c3d-highcpu-16** | 16           | 1 minute and 43 seconds | 0.0049 US$      |
+| **Cloud c3d-highcpu-60** | 60           | 38 seconds | 0.0077 US$      |
 
 ### How much is too much?
 
 To further explore cloud scaling, we tested two additional machines:
 **c3d-highcpu-180** and **c3d-highcpu-360**. However, for a small simulation
 like this, scaling up to such high vCPU counts does not necessarily yield better
-performance. The results show worst results, with runtimes increasing to
-**52 seconds** and **1 minute and 46 seconds**, while costs surged
-to **0.031 US$** and **0.11 US$**, respectively.  
+performance. The results show a slight improvement for the **c3d-highcpu-180** machine,
+with a  time of **33 seconds** and cost of **0.020 US$**, and a slow down for
+the **c3d-highcpu-360** machine, with a time of **34 seconds** and cost of **0.045 US$**.
 
 | Machine Type            | Virtual CPUs | Time              | Estimated Cost |
 |------------------------|--------------|------------------|---------------|
-| **Cloud c3d-highcpu-180** | 180           | 52 seconds | 0.031 US$      |
-| **Cloud c3d-highcpu-360** | 360           | 1 minute and 46 seconds | 0.11 US$      |
+| **Cloud c3d-highcpu-180** | 180           | 33 seconds | 0.020 US$      |
+| **Cloud c3d-highcpu-360** | 360           | 34 seconds | 0.045 US$      |
 
 ### **Final Comparison**  
 
 | Machine Type            | Virtual CPUs | Time              | Estimated Cost |
 |-------------------------|--------------|------------------|---------------|
 | **Local Ryzen 7 7700X** | 16           | 1 minute and 15 seconds | N/A           |
-| **Cloud c3d-highcpu-16** | 16           | 1 minute and 42 seconds | 0.0052 US$      |
-| **Cloud c3d-highcpu-60** | 60           | 43 seconds | 0.0092 US$      |
-| **Cloud c3d-highcpu-180** | 180           | 52 seconds | 0.031 US$      |
-| **Cloud c3d-highcpu-360** | 360           | 1 minute and 46 seconds | 0.11 US$      |
+| **Cloud c3d-highcpu-16** | 16           | 1 minute and 43 seconds | 0.0049 US$      |
+| **Cloud c3d-highcpu-60** | 60           | 38 seconds | 0.0077 US$      |
+| **Cloud c3d-highcpu-180** | 180           | 33 seconds | 0.020 US$      |
+| **Cloud c3d-highcpu-360** | 360           | 34 seconds | 0.045 US$      |
 
 ### **Key Takeaway**  
 
