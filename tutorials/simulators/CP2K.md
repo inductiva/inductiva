@@ -1,12 +1,12 @@
-This guide will walk you through setting up and running CP2K simulations using the Inductiva API.
+This guide will walk you through running your first CP2K simulations using the Inductiva API.
 
 
 # CP2K
 
 [CP2K](https://www.cp2k.org/) is an open-source quantum chemistry and
 solid-state physics software designed for atomistic simulations. It supports a
-wide range of methods, including density functional theory (DFT), semi-empirical
-approaches, and classical force fields, making it suitable for molecular
+wide range of methods, including Density Functional Theory (DFT), semi-empirical
+and classical force fields, making it suitable for molecular
 dynamics, electronic structure calculations, and materials science applications.
 Its flexibility and extensive features make it a powerful tool for researchers
 in computational chemistry, condensed matter physics, and related fields.
@@ -19,9 +19,9 @@ We currently support the following CP2K version:
 
 ### Objective
 
-This tutorial will demonstrate how to run a CP2K simulation using the H2O-64
-benchmark, which simulates a system that consists of 64 water molecules in a
-12.4 Å³ cell, with MD running for 10 steps.
+This tutorial will demonstrate how to run the H2O-64 benchmark, which simulates
+a system that consists of 64 water molecules in a 12.4 Å³ cell, with MD running
+for 10 steps.
 
 ### Prerequisites  
 
@@ -33,7 +33,10 @@ ready to scale your simulations to the Cloud.
 
 ### Running Your Simulation
 
-Here is the code required to run a CP2K simulation using the Inductiva API:
+Here is the code required to run a CP2K simulation using the Inductiva API.
+
+We will be running this simulation on a 16 vCPU virtual machine supported by a
+4th generation AMD EPYC™ (Genoa) processor.
 
 ```python
 """CP2K Simulation."""
@@ -42,7 +45,7 @@ import inductiva
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup( 
     provider="GCP",
-    machine_type="c3d-standard-16")
+    machine_type="c3d-highcpu-16")
 
 # Initialize the Simulator
 cp2k = inductiva.simulators.CP2K( 
@@ -71,32 +74,41 @@ Once the simulation is complete, we terminate the machine, download the results,
 and print a summary of the simulation as shown below.
 
 ```
-inductiva tasks info ngjrax2xsak3yaonirxj1pdcc
+inductiva tasks info e4y6p1q5up9g549ris6remoqn
 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 05/03, 10:28:59      1.193 s
-	In Queue                  at 05/03, 10:29:00      12.325 s
-	Preparing to Compute      at 05/03, 10:29:13      6.645 s
-	In Progress               at 05/03, 10:29:19      103.302 s
-		└> 103.17 s        /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus --np 16 cp2k.psmp H2O-64.inp
-	Finalizing                at 05/03, 10:31:03      0.447 s
-	Success                   at 05/03, 10:31:03      
+	Waiting for Input         at 05/03, 15:09:39      1.172 s
+	In Queue                  at 05/03, 15:09:41      30.264 s
+	Preparing to Compute      at 05/03, 15:10:11      16.474 s
+	In Progress               at 05/03, 15:10:27      102.289 s
+		└> 102.168 s       /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus --np 16 cp2k.psmp H2O-64.inp
+	Finalizing                at 05/03, 15:12:10      0.424 s
+	Success                   at 05/03, 15:12:10      
 
 Data:
-	Size of zipped output:    87.65 KB
+	Size of zipped output:    87.66 KB
 	Size of unzipped output:  296.30 KB
 	Number of output files:   6
 
-Estimated computation cost (US$): 0.0058 US$
+Estimated computation cost (US$): 0.0052 US$
 
-Go to https://console.inductiva.ai/tasks/ngjrax2xsak3yaonirxj1pdcc for more details.
+Go to https://console.inductiva.ai/tasks/e4y6p1q5up9g549ris6remoqn for more details.
 ```
 
-The core computation time for this simulation was approximately 1 minute and 43
-seconds (103 seconds), as shown in the `In Progress` line. This represents the
+The core computation time for this simulation was approximately **1 minute and 42 seconds**
+(102 seconds), as shown in the `In Progress` line. This represents the
 actual execution time of the CP2K benchmark on a 16 virtual CPU machine.
+
+For comparison, this same simulation takes **1 minute and 15 seconds** on a similar
+local machine with a 16 virtual CPUs (Ryzen 7 7700X). This performance
+difference is expected, as cloud CPUs typically have lower clock speeds compared to
+high-performance desktop processors, prioritizing energy efficiency and density
+over raw speed.
+
+The good thing about Inductiva is that you only need to change two lines of code
+to speed up your simulation.
 
 ### Scaling Up Your Simulation  
 
@@ -110,48 +122,47 @@ and cost scale with increasing computational resources.
 
 We began with a local run on a **Ryzen 7 7700X** with **16 vCPUs**, completing
 the simulation in **1 minute and 15 seconds**. To compare this with a
-cloud-based machine of similar specifications, we used a **c3d-standard-16**
-machine, which also has **16 vCPUs**. However, the cloud machine was slower,
-taking **1 minute and 50 seconds**, with a cost of **0.0058 US$**. This
-performance difference is expected, as cloud CPUs typically have lower clock
-speeds compared to high-performance desktop processors, prioritizing energy
-efficiency and density over raw speed.
+cloud-based machine of similar specifications, we used a **c3d-highcpu-16**
+machine, which also has **16 vCPUs**. As expected, the cloud machine was a bit slower,
+taking **1 minute and 42 seconds**, with a cost of **0.0052 US$**.
 
 | Machine Type            | Virtual CPUs | Time              | Estimated Cost |
 |-------------------------|--------------|------------------|---------------|
 | **Local Ryzen 7 7700X** | 16           | 1 minute and 15 seconds | N/A           |
-| **Cloud c3d-standard-16** | 16           | 1 minute and 50 seconds | 0.0058 US$      |
+| **Cloud c3d-highcpu-16** | 16           | 1 minute and 42 seconds | 0.0052 US$      |
 
-To improve performance, we scaled up to a **c3d-standard-60** machine with
-**60 vCPUs**. This significantly reduced the runtime to **51 seconds**, with the
-cost increasing slightly to **0.0098 US$**.  
+To improve performance, we scaled up to a **c3d-highcpu-60** machine with
+**60 vCPUs**. This significantly reduced the runtime to **43 seconds**, with the
+cost increasing slightly to **0.0092 US$**.  
 
 | Machine Type            | Virtual CPUs | Time              | Estimated Cost |
 |------------------------|--------------|------------------|---------------|
-| **Cloud c3d-standard-16** | 16           | 1 minute and 50 seconds | 0.0058 US$      |
-| **Cloud c3d-standard-60** | 60           | 51 seconds | 0.0098 US$      |
+| **Cloud c3d-highcpu-16** | 16           | 1 minute and 42 seconds | 0.0052 US$      |
+| **Cloud c3d-highcpu-60** | 60           | 43 seconds | 0.0092 US$      |
+
+### How much is too much?
 
 To further explore cloud scaling, we tested two additional machines:
-**c3d-standard-180** and **c3d-standard-360**. However, for a small simulation
+**c3d-highcpu-180** and **c3d-highcpu-360**. However, for a small simulation
 like this, scaling up to such high vCPU counts does not necessarily yield better
 performance. The results show worst results, with runtimes increasing to
-**1 minute and 5 seconds** and **1 minute and 48 seconds**, while costs surged
-to **0.037 US$** and **0.12 US$**, respectively.  
+**52 seconds** and **1 minute and 46 seconds**, while costs surged
+to **0.031 US$** and **0.11 US$**, respectively.  
 
 | Machine Type            | Virtual CPUs | Time              | Estimated Cost |
 |------------------------|--------------|------------------|---------------|
-| **Cloud c3d-standard-180** | 180           | 1 minute and 5 seconds | 0.037 US$      |
-| **Cloud c3d-standard-360** | 360           | 1 minute and 48 seconds | 0.12 US$      |
+| **Cloud c3d-highcpu-180** | 180           | 52 seconds | 0.031 US$      |
+| **Cloud c3d-highcpu-360** | 360           | 1 minute and 46 seconds | 0.11 US$      |
 
 ### **Final Comparison**  
 
 | Machine Type            | Virtual CPUs | Time              | Estimated Cost |
 |-------------------------|--------------|------------------|---------------|
 | **Local Ryzen 7 7700X** | 16           | 1 minute and 15 seconds | N/A           |
-| **Cloud c3d-standard-16** | 16           | 1 minute and 50 seconds | 0.0058 US$      |
-| **Cloud c3d-standard-60** | 60           | 51 seconds | 0.0098 US$      |
-| **Cloud c3d-standard-180** | 180           | 1 minute and 5 seconds | 0.037 US$      |
-| **Cloud c3d-standard-360** | 360           | 1 minute and 48 seconds | 0.12 US$      |
+| **Cloud c3d-highcpu-16** | 16           | 1 minute and 42 seconds | 0.0052 US$      |
+| **Cloud c3d-highcpu-60** | 60           | 43 seconds | 0.0092 US$      |
+| **Cloud c3d-highcpu-180** | 180           | 52 seconds | 0.031 US$      |
+| **Cloud c3d-highcpu-360** | 360           | 1 minute and 46 seconds | 0.11 US$      |
 
 ### **Key Takeaway**  
 
