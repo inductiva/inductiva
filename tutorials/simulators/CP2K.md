@@ -115,7 +115,7 @@ over raw speed.
 However, increasing the number of vCPUs on this cloud machine can improve this
 result.
 
-### Scaling Up Your Simulation  
+### Scaling Up Your Simulation
 
 With the Inductiva API, scaling up your CP2K simulation is as simple as changing
 two parameters:
@@ -124,22 +124,12 @@ two parameters:
 2. Adjust the `n_vcpus` accordingly to maximize parallel processing efficiency.
 
 We tested this simulation across multiple machines to analyze how performance
-and cost scale with increasing computational resources.  
+and cost scale with increasing computational resources.
 
-We began with a local run on a **Ryzen 7 7700X** with **16 vCPUs**, completing
-the simulation in **1 minute and 15 seconds**. To compare this with a
-cloud-based machine of similar specifications, we used a **c3d-highcpu-16**
-machine, which also has **16 vCPUs**. As expected, the cloud machine was a bit slower,
-taking **1 minute and 43 seconds**, with a cost of **0.0049 US$**.
-
-| Machine Type            | Virtual CPUs | Time              | Estimated Cost |
-|-------------------------|--------------|------------------|---------------|
-| **Local Ryzen 7 7700X** | 16           | 1 minute and 15 seconds | N/A           |
-| **Cloud c3d-highcpu-16** | 16           | 1 minute and 43 seconds | 0.0049 US$      |
-
-To improve performance, we scaled up to a **c3d-highcpu-60** machine with
-**60 vCPUs**. This significantly reduced the runtime to **38 seconds**, with the
-cost increasing slightly to **0.0077 US$**.  
+As mentioned earlier, running this simulation on a **16 vCPU** cloud machine was
+slower than on a similarly powered local computer. To enhance performance, we
+upgraded to a **c3d-highcpu-60** instance with **60 vCPUs**, reducing the
+runtime to just **38 seconds**—with a slight cost increase to **$0.0077**.
 
 | Machine Type            | Virtual CPUs | Time              | Estimated Cost |
 |------------------------|--------------|------------------|---------------|
