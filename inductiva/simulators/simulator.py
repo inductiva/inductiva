@@ -115,24 +115,6 @@ class Simulator(ABC):
                 "The number of virtual cpus asked surpasses the"
                 " available virtual cpus for the selected resource.")
 
-    def _get_latest_version(self, list_of_versions):
-        """
-        Get the latest version from a list of versions.
-
-        This method will return the latest version, ignoring any suffixes.
-        
-        :param list_of_versions: List of versions.
-        :return: The latest version.
-        """
-
-        new_version_list = []
-
-        for version in list_of_versions:
-            version_split = version.split("_")
-            new_version_list.append(version_split[0])
-
-        return max(new_version_list)
-
     def _get_image_uri(self):
         """Get the appropriate image name for this simulator."""
 
@@ -153,7 +135,7 @@ class Simulator(ABC):
             # kutu does not have a specific tag for the latest version
             # this hack is a workaround to get that version, but it is prone
             # to errors.
-            self._version = self._get_latest_version(listing)
+            self._version = max(self._supported_versions)
 
         if self._version not in self._supported_versions:
             raise ValueError(
@@ -190,38 +172,27 @@ class Simulator(ABC):
                               resource: types.ComputationalResources) -> str:
         """
         Gets the suffixes based on the resource used for the simulation.
-        This method will return the correct suffixes, based on
-        the resource used. For example, if the resource has GPU's we will return
-        `_gpu`.
-
-        Will also take into consideration if we are using dev or not.
 
         :param resource: The resource used for the simulation.
         :return: A string of suffixes.
         """
-        suffixes = ""
-        dev = "_dev" if self._use_dev else ""
+        dev_suffix = "_dev" if self._use_dev else ""
+        gpu_suffix = "_gpu" if resource.has_gpu() else ""
 
-        if resource.has_gpu():
-            suffixes += "_gpu"
-            # Checks if this simulator has a GPU version
-            if (f"{self.version}_gpu{dev}"
-                    not in self._supported_versions_with_suffixes):
-                raise ValueError(
-                    f"The selected resource `{resource.machine_type}` has"
-                    f" GPU(s), but the simulator {self.name} v{self.version} "
-                    "does not have a GPU version available.\n"
-                    "Please select a different resource or simulator.")
-        else:
-            if (f"{self.version}{dev}"
-                    not in self._supported_versions_with_suffixes):
-                raise ValueError(
-                    f"The selected resource `{resource.machine_type}` does not "
-                    f"have GPUs, but the simulator {self.name} v{self.version} "
-                    "does not have a CPU version available.\n"
-                    "Please select a different resource or simulator.")
+        version_with_suffix = f"{self.version}{gpu_suffix}{dev_suffix}"
 
-        return f"{suffixes}{dev}"
+        if version_with_suffix not in self._supported_versions_with_suffixes:
+            raise ValueError(
+                f"The selected resource `{resource.machine_type}` has GPU(s) "
+                f"but the simulator {self.name} v{self.version} does not have"
+                " a GPU version available.\nPlease select a different resource"
+                "or simulator." if resource.has_gpu() else
+                f"The selected resource `{resource.machine_type}` does not "
+                f"have GPUs, but the simulator {self.name} v{self.version} "
+                "does not have a CPU version available.\n"
+                "Please select a different resource or simulator.")
+
+        return version_with_suffix
 
     def run(
         self,
