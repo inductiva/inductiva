@@ -1,4 +1,5 @@
-This guide will walk you through running your first CP2K simulations using the Inductiva API.
+This guide will walk you through setting up and running CP2K simulations using
+the Inductiva API.
 
 
 # CP2K
@@ -19,9 +20,13 @@ We currently support the following CP2K version:
 
 ### Objective
 
-This tutorial will demonstrate how to run the H2O-64 benchmark, which simulates
-a system that consists of 64 water molecules in a 12.4 Å³ cell, with MD running
-for 10 steps.
+This tutorial will show you how to run a CP2K simulation using the H20-64
+benchmark available on the [official CP2K website](https://www.cp2k.org/performance#benchmarks).
+This use case simulates a system containing 64 water molecules (192 atoms,
+512 electrons) in a 12.4 Å³ cell, with MD running for 10 steps.
+
+We will also demonstrate Inductiva's ability to efficiently scale this use case
+on a more powerful machine.
 
 ### Prerequisites  
 
@@ -101,18 +106,19 @@ The core computation time for this simulation was approximately **1 minute and 4
 (103 seconds), as shown in the `In Progress` line. This represents the
 actual execution time of the CP2K benchmark on a 16 virtual CPU machine.
 
-For comparison, this same simulation takes **1 minute and 15 seconds** on a similar
+For comparison, the same simulation takes **1 minute and 15 seconds** on a similar
 local machine with a 16 virtual CPUs (Ryzen 7 7700X). This performance
 difference is expected, as cloud CPUs typically have lower clock speeds compared to
 high-performance desktop processors, prioritizing energy efficiency and density
 over raw speed.
 
-The good thing about Inductiva is that you only need to change two lines of code
-to speed up your simulation.
+However, increasing the number of vCPUs on this cloud machine can improve this
+result.
 
 ### Scaling Up Your Simulation  
 
-Scaling up your CP2K simulation is as simple as changing two parameters:
+With the Inductiva API, scaling up your CP2K simulation is as simple as changing
+two parameters:
 
 1. Modify the `machine_type` to a more powerful machine with more vCPUs.
 2. Adjust the `n_vcpus` accordingly to maximize parallel processing efficiency.
@@ -140,35 +146,14 @@ cost increasing slightly to **0.0077 US$**.
 | **Cloud c3d-highcpu-16** | 16           | 1 minute and 43 seconds | 0.0049 US$      |
 | **Cloud c3d-highcpu-60** | 60           | 38 seconds | 0.0077 US$      |
 
-### How much is too much?
-
-To further explore cloud scaling, we tested two additional machines:
-**c3d-highcpu-180** and **c3d-highcpu-360**. However, for a small simulation
-like this, scaling up to such high vCPU counts does not necessarily yield better
-performance. The results show a slight improvement for the **c3d-highcpu-180** machine,
-with a  time of **33 seconds** and cost of **0.020 US$**, and a slow down for
-the **c3d-highcpu-360** machine, with a time of **34 seconds** and cost of **0.045 US$**.
-
-| Machine Type            | Virtual CPUs | Time              | Estimated Cost |
-|------------------------|--------------|------------------|---------------|
-| **Cloud c3d-highcpu-180** | 180           | 33 seconds | 0.020 US$      |
-| **Cloud c3d-highcpu-360** | 360           | 34 seconds | 0.045 US$      |
-
 ### **Final Comparison**  
 
 | Machine Type            | Virtual CPUs | Time              | Estimated Cost |
 |-------------------------|--------------|------------------|---------------|
 | **Local Ryzen 7 7700X** | 16           | 1 minute and 15 seconds | N/A           |
 | **Cloud c3d-highcpu-16** | 16           | 1 minute and 43 seconds | 0.0049 US$      |
-| **Cloud c3d-highcpu-60** | 60           | 38 seconds | 0.0077 US$      |
-| **Cloud c3d-highcpu-180** | 180           | 33 seconds | 0.020 US$      |
-| **Cloud c3d-highcpu-360** | 360           | 34 seconds | 0.045 US$      |
+| **Cloud c3d-highcpu-60** | 60           | 38 seconds | 0.0077 US$      | 
 
-### **Key Takeaway**  
-
-Selecting the right machine for your simulation is essential for balancing
-performance and cost. As the results show, simply increasing vCPUs does not
-always lead to faster execution, and in some cases, it may even slow down the
-simulation. Ultimately, the best choice depends on your priorities—whether you
-aim for the fastest possible runtime, the lowest cost, or a balanced approach
-that delivers good performance at a reasonable price.
+By leveraging the Inductiva API, you can efficiently scale your CP2K simulations
+to meet your computational needs. Try different machine configurations and
+optimize your workflow for faster and more cost-effective results!
