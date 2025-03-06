@@ -181,7 +181,8 @@ class Simulator(ABC):
 
         suffix = f"{gpu_suffix}"
 
-        if f"{self.version}{suffix}" not in self._supported_versions_with_suffixes:
+        if (f"{self.version}{suffix}"
+                not in self._supported_versions_with_suffixes):
             raise ValueError(
                 f"The selected resource `{resource.machine_type}` has GPU(s) "
                 f"but the simulator {self.name} v{self.version} does not have"

@@ -39,7 +39,8 @@ def run_simulation(
 
     container_image = kwargs.get("container_image", None)
 
-    if computational_resources.allow_auto_start and not computational_resources.started:
+    if (computational_resources.allow_auto_start and
+            not computational_resources.started):
         logging.info("\n■ The computational resource is not started."
                      " Starting it now.\n")
         computational_resources.start()

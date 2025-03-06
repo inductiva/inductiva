@@ -56,7 +56,7 @@ def test_simulator___get_version_suffixes(use_dev, use_gpu):
     #only has cpu versions
     cans = inductiva.simulators.CaNS(use_dev=use_dev)
     #has both cpu and gpu versions
-    gromacs = inductiva.simulators.GROMACS(use_dev=use_dev)
+    gmx = inductiva.simulators.GROMACS(use_dev=use_dev)
 
     mg_gpu = mock.Mock()
     mg_gpu.has_gpu.return_value = True
@@ -65,11 +65,10 @@ def test_simulator___get_version_suffixes(use_dev, use_gpu):
     mg_no_gpu.has_gpu.return_value = False
 
     if use_gpu:
-        # pylint: disable=protected-access
-        suffix = gromacs._get_version_suffixes(mg_gpu)
+        # pylint: disable=W0212
+        suffix = gmx._get_version_suffixes(mg_gpu)
     else:
-        # pylint: disable=protected-access
-        suffix = gromacs._get_version_suffixes(mg_no_gpu)
+        suffix = gmx._get_version_suffixes(mg_no_gpu)  # pylint: disable=W0212
 
     dev_suffix = ""
     gpu_suffix = ""
@@ -82,13 +81,12 @@ def test_simulator___get_version_suffixes(use_dev, use_gpu):
 
     if use_gpu:
         with pytest.raises(ValueError) as excinfo:
-            # pylint: disable=protected-access
+            # pylint: disable=W0212
             suffix = cans._get_version_suffixes(mg_gpu)
         assert "not have a GPU version" in str(excinfo.value)
         return
     else:
-        # pylint: disable=protected-access
-        suffix = cans._get_version_suffixes(mg_no_gpu)
+        suffix = cans._get_version_suffixes(mg_no_gpu)  # pylint: disable=W0212
 
     dev_suffix = ""
     gpu_suffix = ""
