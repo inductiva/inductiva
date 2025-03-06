@@ -39,6 +39,11 @@ def run_simulation(
 
     container_image = kwargs.get("container_image", None)
 
+    if computational_resources.allow_auto_start and not computational_resources.started:
+        logging.info("\n■ The computational resource is not started."
+                     " Starting it now.\n")
+        computational_resources.start()
+
     task_id = api_invoker(simulator,
                           params,
                           type_annotations,
@@ -56,6 +61,9 @@ def run_simulation(
         raise RuntimeError(
             f"Expected result to be a string with task_id, got {type(task_id)}")
     task = tasks.Task(task_id)
+
+    # Save the resource information on the task
+    task.resource = computational_resources
 
     position = task.get_position_in_queue()
     if position is not None:

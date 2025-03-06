@@ -129,6 +129,11 @@ class BaseMachineGroup(ABC):
             self._auto_terminate_ts = datetime.datetime.now(
                 tz=datetime.timezone.utc) + time_delta_minutes
 
+    def has_gpu(self) -> bool:
+        """Check if the machine group has a GPU."""
+        # TODO: update this code to use gpu info
+        return "g2" in self.machine_type
+
     @property
     def id(self):
         return self._id
