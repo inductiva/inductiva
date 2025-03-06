@@ -246,7 +246,7 @@ class Simulator(ABC):
         # use the default image name for the current simulator
         container_image = kwargs.pop("container_image", self._image_uri)
 
-        # CustomImage does not use suffixes. We cann the image as is
+        # CustomImage does not use suffixes. We can the image as is
         if self.__class__.__name__ != "CustomImage":
             suffixes = self._get_version_suffixes(on)
             container_image = f"{container_image}{suffixes}"
