@@ -44,6 +44,62 @@ def new_machine_init(self, machine_type):
     self.machine_type = machine_type
 
 
+def test_simulator__wrong_version__raises_error():
+    with pytest.raises(ValueError) as excinfo:
+        inductiva.simulators.CaNS(version="999")
+    assert "not available" in str(excinfo.value)
+
+
+@mark.parametrize("use_dev,use_gpu", [(True, True), (True, False),
+                                      (False, True), (False, False)])
+def test_simulator___get_version_suffixes(use_dev, use_gpu):
+    #only has cpu versions
+    cans = inductiva.simulators.CaNS(use_dev=use_dev)
+    #has both cpu and gpu versions
+    gromacs = inductiva.simulators.GROMACS(use_dev=use_dev)
+
+    mg_gpu = mock.Mock()
+    mg_gpu.has_gpu.return_value = True
+
+    mg_no_gpu = mock.Mock()
+    mg_no_gpu.has_gpu.return_value = False
+
+    if use_gpu:
+        # pylint: disable=protected-access
+        suffix = gromacs._get_version_suffixes(mg_gpu)
+    else:
+        # pylint: disable=protected-access
+        suffix = gromacs._get_version_suffixes(mg_no_gpu)
+
+    dev_suffix = ""
+    gpu_suffix = ""
+    if use_dev:
+        dev_suffix = "_dev"
+    if use_gpu:
+        gpu_suffix = "_gpu"
+
+    assert suffix == f"{gpu_suffix}{dev_suffix}"
+
+    if use_gpu:
+        with pytest.raises(ValueError) as excinfo:
+            # pylint: disable=protected-access
+            suffix = cans._get_version_suffixes(mg_gpu)
+        assert "not have a GPU version" in str(excinfo.value)
+        return
+    else:
+        # pylint: disable=protected-access
+        suffix = cans._get_version_suffixes(mg_no_gpu)
+
+    dev_suffix = ""
+    gpu_suffix = ""
+    if use_dev:
+        dev_suffix = "_dev"
+    if use_gpu:
+        gpu_suffix = "_gpu"
+
+    assert suffix == f"{gpu_suffix}{dev_suffix}"
+
+
 @mock.patch("inductiva.resources.MPICluster")
 def test_validate_computational_resources__unsupported_resource__raise_error(
         mpi_cluster_mock, list_available_fixture):  # pylint: disable=unused-argument
@@ -208,6 +264,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
 
     mock_mg = mock.Mock()
     mock_mg.id = uuid.uuid4()
+    mock_mg.has_gpu.return_value = False
 
     for sim_name, simcls in sim_classes:
 

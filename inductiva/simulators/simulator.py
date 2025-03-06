@@ -179,9 +179,9 @@ class Simulator(ABC):
         dev_suffix = "_dev" if self._use_dev else ""
         gpu_suffix = "_gpu" if resource.has_gpu() else ""
 
-        version_with_suffix = f"{self.version}{gpu_suffix}{dev_suffix}"
+        suffix = f"{gpu_suffix}"
 
-        if version_with_suffix not in self._supported_versions_with_suffixes:
+        if f"{self.version}{suffix}" not in self._supported_versions_with_suffixes:
             raise ValueError(
                 f"The selected resource `{resource.machine_type}` has GPU(s) "
                 f"but the simulator {self.name} v{self.version} does not have"
@@ -191,8 +191,8 @@ class Simulator(ABC):
                 f"have GPUs, but the simulator {self.name} v{self.version} "
                 "does not have a CPU version available.\n"
                 "Please select a different resource or simulator.")
-
-        return version_with_suffix
+        suffix = f"{suffix}{dev_suffix}"
+        return suffix
 
     def run(
         self,
@@ -245,9 +245,10 @@ class Simulator(ABC):
         # use the default image name for the current simulator
         container_image = kwargs.pop("container_image", self._image_uri)
 
-        suffixes = self._get_version_suffixes(on)
-
-        container_image = f"{container_image}{suffixes}"
+        # CustomImage does not use suffixes. We cann the image as is
+        if self.__class__.__name__ != "CustomImage":
+            suffixes = self._get_version_suffixes(on)
+            container_image = f"{container_image}{suffixes}"
 
         return tasks.run_simulation(
             self.simulator,
