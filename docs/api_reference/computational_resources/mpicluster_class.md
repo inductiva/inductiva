@@ -27,7 +27,7 @@ for the user.
 the head node and shared with the worker nodes. This partition is used to store
 the input and output files of the simulations.
 - the `max_idle_time` determines the time a machine group can remain idle (without
-receiving any task) before it is terminated.
+any active task) before it is terminated.
 - the `auto_terminate_ts` defines the moment in time in which the resource will
 be automatically terminated, even if there are tasks still running.
 
