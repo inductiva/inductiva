@@ -60,7 +60,7 @@ class CP2K(simulators.Simulator):
         if n_vcpus is not None:
             mpi_kwargs["np"] = n_vcpus
 
-        mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
+        mpi_config = MPIConfig(version="5.0.6", **mpi_kwargs)
         commands = [
             Command(f"cp2k.psmp {sim_config_filename}", mpi_config=mpi_config)
         ]
