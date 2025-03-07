@@ -42,8 +42,8 @@ ready to scale your simulations to the Cloud.
 
 Here is the code required to run a CP2K simulation using the Inductiva API.
 
-We will be running this simulation on a 16 vCPU virtual machine supported by a
-4th generation AMD EPYC™ (Genoa) processor.
+In this example, we will execute the simulation on a virtual machine with 16
+vCPUs, supported by a 4th generation AMD EPYC™ (Genoa) processor.
 
 ```python
 """CP2K Simulation."""
@@ -112,8 +112,9 @@ difference is expected, as cloud CPUs typically have lower clock speeds compared
 regular desktop processors, prioritizing energy efficiency and density
 over raw speed.
 
-However, increasing the number of vCPUs on this cloud machine can improve this
-result.
+However, increasing the number of vCPUs on the cloud machine could enhance
+performance.
+
 
 ### Scaling Up Your Simulation
 
@@ -123,10 +124,7 @@ two parameters:
 1. Modify the `machine_type` to a more powerful machine with more vCPUs.
 2. Adjust the `n_vcpus` accordingly to maximize parallel processing efficiency.
 
-We tested this simulation across multiple machines to analyze how performance
-and cost scale with increasing computational resources.
-
-As mentioned earlier, running this simulation on a **16 vCPU** cloud machine was
+As mentioned above, running this simulation on a **16 vCPU** cloud machine was
 slower than on a similarly powered local computer. To enhance performance, we
 upgraded to a **c3d-highcpu-60** instance with **60 vCPUs**, reducing the
 runtime to just **38 seconds**—with a slight cost increase to **$0.0077**.
@@ -139,4 +137,4 @@ runtime to just **38 seconds**—with a slight cost increase to **$0.0077**.
 
 By leveraging the Inductiva API, you can efficiently scale your CP2K simulations
 to meet your computational needs. Try different machine configurations and
-optimize your workflow for faster and more cost-effective results!
+optimize your workflow for faster,	 more cost-effective results!

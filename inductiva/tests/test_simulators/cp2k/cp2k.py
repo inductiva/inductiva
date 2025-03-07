@@ -1,7 +1,7 @@
 """CP2K example."""
 import inductiva
 
-# Instantiate machine group
+# Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
     machine_type="c2-standard-4")
