@@ -289,6 +289,7 @@ class GpuNamesSchema(schemas.ListSchema):
 
 
 ProviderIdSchema = Providers
+ZoneSchema = schemas.StrSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
@@ -359,6 +360,11 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
             typing.Union[
                 ProviderIdSchema,
             ],
+        'zone':
+            typing.Union[
+                ZoneSchema,
+                str,
+            ],
     },
     total=False)
 
@@ -420,6 +426,12 @@ request_query_provider_id = api_client.QueryParameter(
     name="provider_id",
     style=api_client.ParameterStyle.FORM,
     schema=ProviderIdSchema,
+    explode=True,
+)
+request_query_zone = api_client.QueryParameter(
+    name="zone",
+    style=api_client.ParameterStyle.FORM,
+    schema=ZoneSchema,
     explode=True,
 )
 
@@ -556,6 +568,7 @@ class BaseApi(api_client.Api):
                 request_query_gpus_range,
                 request_query_gpu_names,
                 request_query_provider_id,
+                request_query_zone,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
