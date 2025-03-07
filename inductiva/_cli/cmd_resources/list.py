@@ -58,7 +58,7 @@ def list_machine_types_available(args):
     resources_available = resources.get_available_machine_types(
         provider, machine_family)
     resources_available.sort(
-        key=lambda x: (x.machine_type.split("-")[:-1], x.num_cpus))
+        key=lambda x: (x.machine_type.split("-")[:-1], x.num_vcpus))
 
     machines_dict = {}
 
@@ -71,7 +71,7 @@ def list_machine_types_available(args):
 
         memory = machine.ram_gb
         price = machine.price
-        vcpus = machine.num_cpus
+        vcpus = machine.num_vcpus
         gpus = machine.num_gpus if machine.num_gpus else None
         gpu_name = machine.gpu_name if machine.num_gpus else None
 
