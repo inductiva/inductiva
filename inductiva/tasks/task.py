@@ -342,7 +342,6 @@ class Task:
         self._summary = None
         # Internal state to track if the method was called from the wait method
         self._called_from_wait = False
-        self.resource = None
 
     def is_running(self) -> bool:
         """Validate if the task is running.
@@ -665,7 +664,6 @@ class Task:
 
     def wait(self,
              polling_period: int = 1,
-             terminate_on_exit: bool = False,
              download_std_on_completion: bool = True) -> models.TaskStatusCode:
         """Wait for the task to complete.
 
@@ -675,8 +673,6 @@ class Task:
             polling_period: How often to poll the API for the task status.
             download_std_on_completion: Request immediate download of the
                 standard files (stdout and stderr) after the task completes.
-            terminate_on_exit: If True, the task will terminate the resource it
-                is running on when the task ends.
 
         Returns:
             The final status of the task.
@@ -735,15 +731,6 @@ class Task:
             #use is_terminal instead of the method to avoid an api call
             #that can make the task status inconsistent
             if self.info.is_terminal:
-
-                if terminate_on_exit and self.resource:
-                    self.resource.terminate()
-                elif terminate_on_exit and self.resource is None:
-                    logging.warning(
-                        "The task is in a terminal status but the resource "
-                        "is not available to terminate. Please ensure that "
-                        "the resource is terminated manually.")
-
                 self._handle_terminal_status(
                     download_std_on_completion=download_std_on_completion,
                     status=status)

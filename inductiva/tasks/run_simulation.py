@@ -57,9 +57,6 @@ def run_simulation(
             f"Expected result to be a string with task_id, got {type(task_id)}")
     task = tasks.Task(task_id)
 
-    # Save the resource information on the task
-    task.resource = computational_resources
-
     position = task.get_position_in_queue()
     if position is not None:
         pos_info = f"Number of tasks ahead in the queue: {position}."
