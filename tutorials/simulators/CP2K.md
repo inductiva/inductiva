@@ -132,13 +132,6 @@ upgraded to a **c3d-highcpu-60** instance with **60 vCPUs**, reducing the
 runtime to just **38 seconds**—with a slight cost increase to **$0.0077**.
 
 | Machine Type            | Virtual CPUs | Time              | Estimated Cost |
-|------------------------|--------------|------------------|---------------|
-| **Cloud c3d-highcpu-16** | 16           | 1 minute and 43 seconds | 0.0049 US$      |
-| **Cloud c3d-highcpu-60** | 60           | 38 seconds | 0.0077 US$      |
-
-### **Final Comparison**  
-
-| Machine Type            | Virtual CPUs | Time              | Estimated Cost |
 |-------------------------|--------------|------------------|---------------|
 | **Local Ryzen 7 7700X** | 16           | 1 minute and 15 seconds | N/A           |
 | **Cloud c3d-highcpu-16** | 16           | 1 minute and 43 seconds | 0.0049 US$      |
