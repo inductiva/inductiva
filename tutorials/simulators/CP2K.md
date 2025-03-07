@@ -47,7 +47,7 @@ We will be running this simulation on a 16 vCPU virtual machine supported by a
 """CP2K Simulation."""
 import inductiva
 
-# Instantiate machine group
+# Instantiate a machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( 
     provider="GCP",
     machine_type="c3d-highcpu-16")
@@ -60,8 +60,6 @@ cp2k = inductiva.simulators.CP2K(
 task = cp2k.run( 
     input_dir="/Path/to/H2O-64",
     sim_config_filename="H2O-64.inp",
-    n_vcpus=16,
-    use_hwthread=True,
     on=cloud_machine)
 
 task.wait()
@@ -109,7 +107,7 @@ actual execution time of the CP2K benchmark on a 16 virtual CPU machine.
 For comparison, the same simulation takes **1 minute and 15 seconds** on a similar
 local machine with a 16 virtual CPUs (Ryzen 7 7700X). This performance
 difference is expected, as cloud CPUs typically have lower clock speeds compared to
-high-performance desktop processors, prioritizing energy efficiency and density
+regular desktop processors, prioritizing energy efficiency and density
 over raw speed.
 
 However, increasing the number of vCPUs on this cloud machine can improve this
