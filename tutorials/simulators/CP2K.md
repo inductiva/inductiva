@@ -49,7 +49,7 @@ vCPUs, supported by a 4th generation AMD EPYC™ (Genoa) processor.
 """CP2K Simulation."""
 import inductiva
 
-# Instantiate a machine on Google Cloud Platform
+# Allocate a machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( 
     provider="GCP",
     machine_type="c3d-highcpu-16")
@@ -137,4 +137,4 @@ runtime to just **38 seconds**—with a slight cost increase to **$0.0077**.
 
 By leveraging the Inductiva API, you can efficiently scale your CP2K simulations
 to meet your computational needs. Try different machine configurations and
-optimize your workflow for faster,	 more cost-effective results!
+optimize your workflow for faster, more cost-effective results!
