@@ -13,6 +13,7 @@
 
 from inductiva.client.model.autoscale_policy import AutoscalePolicy
 from inductiva.client.model.backend_version import BackendVersion
+from inductiva.client.model.cpu_info import CPUInfo
 from inductiva.client.model.capability import Capability
 from inductiva.client.model.cost_components import CostComponents
 from inductiva.client.model.cost_detail import CostDetail
