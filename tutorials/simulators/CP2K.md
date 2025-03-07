@@ -18,6 +18,8 @@ We currently support the following CP2K version:
 
 ## Running the CP2K H2O-64 Benchmark
 
+<p align="center"><img src="../_static/h2o-64.gif" alt="CP2K simulation visualization" width="700"></p>
+
 ### Objective
 
 This tutorial will show you how to run a CP2K simulation using the H20-64
