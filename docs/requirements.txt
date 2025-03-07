@@ -10,3 +10,5 @@ sphinxcontrib-googleanalytics
 sphinxext.opengraph
 sphinx-sitemap
 sphinx-reredirects
+furo
+sphinx-material
