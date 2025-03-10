@@ -141,7 +141,7 @@ def estimate_machine_cost(machine_type: str,
 
     api = compute_api.ComputeApi(inductiva.api.get_client())
 
-    instance_price = api.get_instance_price(query_params={
+    instance_price = api.get_instance_price({
         "machine_type": machine_type,
         "zone": zone
     })
