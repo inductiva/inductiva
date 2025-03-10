@@ -57,7 +57,7 @@ def register(parser):
                            default=1,
                            type=int,
                            help="Number of machines to launch.")
-    
+
     subparser.add_argument("--zone",
                            type=str,
                            default="europe-west1-b",
