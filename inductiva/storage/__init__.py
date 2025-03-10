@@ -2,6 +2,7 @@
 from .storage import (
     ExportDestination,
     StorageOperation,
+    download,
     export,
     get_signed_urls,
     get_space_used,
