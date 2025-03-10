@@ -51,6 +51,7 @@ class BaseMachineGroup(ABC):
     """
     # Constructor arguments
     machine_type: str
+    zone: str
     provider: Union[ProviderType, str] = "GCP"
     threads_per_core: int = 2
     data_disk_gb: int = 10
@@ -255,6 +256,7 @@ class BaseMachineGroup(ABC):
                 self.auto_terminate_ts),
             dynamic_disk_resize_config=self._dynamic_disk_resize_config(),
             custom_vm_image=self._custom_vm_image,
+            zone=self.zone,
             **kwargs,
         )
 
@@ -427,6 +429,7 @@ class BaseMachineGroup(ABC):
         self._estimated_cost = inductiva.resources.estimate_machine_cost(
             self.machine_type,
             spot,
+            self.zone,
         )
 
         return self._estimated_cost
