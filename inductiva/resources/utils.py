@@ -126,7 +126,9 @@ def get_available_machine_types(
         raise e
 
 
-def estimate_machine_cost(machine_type: str, spot: bool = False, zone: str = None):
+def estimate_machine_cost(machine_type: str,
+                          spot: bool = False,
+                          zone: str = None):
     """Estimate the cloud cost of one machine per hour in US dollars.
 
     Args:
@@ -139,9 +141,9 @@ def estimate_machine_cost(machine_type: str, spot: bool = False, zone: str = Non
 
     api = compute_api.ComputeApi(inductiva.api.get_client())
 
-    instance_price = api.get_instance_price({
+    instance_price = api.get_instance_price(query_params={
         "machine_type": machine_type,
-        "zone": zone,
+        "zone": zone
     })
 
     if spot:
