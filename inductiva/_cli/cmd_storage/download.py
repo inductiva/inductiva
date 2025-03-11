@@ -27,6 +27,7 @@ def register(parser):
                            help="The remote path to the file or folder.")
     subparser.add_argument("local_dir",
                            type=str,
+                           nargs="?",
                            default="",
                            help="Local directory to save the content.")
     subparser.add_argument("-u",
