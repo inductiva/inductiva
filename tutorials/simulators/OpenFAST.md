@@ -26,7 +26,7 @@ of the turbine, solely considering the structure (no aerodynamics), where the to
 
 ### Prerequisites
 
-Download the required files [here](https://github.com/OpenFAST/r-test/tree/main/glue-codes/openfast/MinimalExample) and place them in your working directory. Then, you’ll be ready to send your simulation to the Cloud.
+Download the required files [here](https://github.com/OpenFAST/r-test/tree/main/glue-codes/openfast/MinimalExample) and place them in a folder called <MinimalExample>. Then, you’ll be ready to send your simulation to the Cloud.
 
 ### Running Your Simulation
 
