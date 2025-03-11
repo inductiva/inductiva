@@ -9,27 +9,22 @@ Still, the janitor is mindful of the user's work and will not terminate any
 computational resource right away. Instead, it will wait for a certain time
 before terminating the resource.
 
-The janitor will also terminate any computational resource that is running for
-a certain time, for safeguards.
-
-The janitor follows the following rules before terminating the resources. The
-default values are applied when omitted by the user.
-- **Total time after launch of computational resource**, independent of any
-simulation still running: 36 hours (standard), 7 days (power-user),
-2 years (enterprise)
+The janitor follows the following rules before terminating the resources, which
+can be specified by the user:
 - **Total time of inactivity allowed**, starting from the moment no simulations
-are active and resets if any task arrives: 3 minutes
+are active and resets if any task arrives: `max_idle_time`. The default value
+is 3 minutes.
+- **Total time after launch of computational resource**, independent of any
+simulation still running: `auto_terminate_ts` or `auto_terminate_minutes`. There
+is no default value. If not specified, the machine group will never terminate
+while having active tasks assigned.
 
 Please note that at the moment, the janitor doesn't preserve the data of running
-simulations. So please be mindful of the time your simulations may take to run,
-and if this doesn't suffice for your needs, please
-[contact us](mailto:support@inductiva.ai).
+simulations. So please be mindful of the time your simulations may take to run
+when specifying `auto_terminate_ts` or `auto_terminate_minutes`.
 
-
-The allowed machine group maximum validity (`auto_terminate_ts` or
-`auto_terminate_minutes`) and the total time of inactivity allowed
-(`max_idle_time`) can be defined when initializing the machine group (this is
-valid for all machine group types). `max_idle_time` can be a
+The above mentioned attributes can be defined when initializing the machine
+group (this is valid for all machine group types). `max_idle_time` can be a
 `datetime.timedelta` object or an integer representing the number of minutes.
 
 ```python
@@ -40,8 +35,11 @@ machine_group = inductiva.resources.MachineGroup(
     machine_type="c2-standard-16",
     data_disk_gb=20,
     max_idle_time=1,
-    # or max_idle_time=datetime.timedelta(minutes=1),
+    # or
+    # max_idle_time=datetime.timedelta(seconds=30),
     auto_terminate_ts=datetime.datetime.now(datetime.timezone.utc) +
     datetime.timedelta(hours=10),
+    # or
+    # auto_terminate_minutes=30,
 )
 ```
