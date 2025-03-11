@@ -69,10 +69,7 @@ def terminate_machine_group(args):
         cls = inductiva.resources.MachineGroup
         base_machine = cls.__new__(cls)
         rows = ["max_price_hour", "max_vcpus", "max_instances"]
-        base_machine.quota_usage = {
-            k: before_quotas[k]["in_use"]
-            for k in rows
-        }
+        base_machine.quota_usage = {k: before_quotas[k]["in_use"] for k in rows}
         logging.info(base_machine.quota_usage_table_str("freed by resources"))
 
     return 0
