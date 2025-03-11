@@ -83,6 +83,7 @@ from inductiva.client.model.task_status_info import TaskStatusInfo
 from inductiva.client.model.task_step import TaskStep
 from inductiva.client.model.task_submitted_info import TaskSubmittedInfo
 from inductiva.client.model.task_with_status_history import TaskWithStatusHistory
+from inductiva.client.model.task_with_user_info import TaskWithUserInfo
 from inductiva.client.model.terms_and_conditions import TermsAndConditions
 from inductiva.client.model.tier_full_info import TierFullInfo
 from inductiva.client.model.tier_quota_detail import TierQuotaDetail
@@ -104,6 +105,7 @@ from inductiva.client.model.user_costs_over_time import UserCostsOverTime
 from inductiva.client.model.user_create import UserCreate
 from inductiva.client.model.user_credits import UserCredits
 from inductiva.client.model.user_email_organization import UserEmailOrganization
+from inductiva.client.model.user_info_short import UserInfoShort
 from inductiva.client.model.user_most_used_machine_types_overview import UserMostUsedMachineTypesOverview
 from inductiva.client.model.user_most_used_simulators_overview import UserMostUsedSimulatorsOverview
 from inductiva.client.model.user_organization_update import UserOrganizationUpdate
