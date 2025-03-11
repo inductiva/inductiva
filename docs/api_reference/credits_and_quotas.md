@@ -1,6 +1,6 @@
 # Credits and Quotas
 
-All users receive 5 USD in credits upon registration. As a user you may also
+All users receive 5 US$ in credits upon registration. As a user you may also
 purchase credits via Stripe whenever you want.
 
 Credits are consumed based on the user's resource usage. This includes factors
