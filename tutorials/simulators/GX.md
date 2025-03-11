@@ -39,7 +39,7 @@ cloud_machine = inductiva.resources.MachineGroup( \
 gx = inductiva.simulators.GX()
 
 # Run simulation
-task = opensees.run( \
+task = gx.run( \
     input_dir="/Path/to/NonlinearExample",
     sim_config_filename="cyclone_miller_adiabatic_electrons.in",
     on=cloud_machine)
