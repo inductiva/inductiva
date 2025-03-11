@@ -17,6 +17,14 @@ wind resources for renewable energy generation.
 
 Both OpenFAST and FAST.Farm are compiled with OpenMP to enable parallel processing, enhancing the performance and scalability of your simulations.
 
+## Supported Versions
+We currently support the following OpenFAST versions:
+- **v4.0.2** (Feb., 2025)
+- **v3.5.2** (Jan., 2024)
+
+
+## Running OpenFAST
+
 ### Objective
 
 We will cover a quick start use case available in the [OpenFAST GitHub Repository](https://github.com/openfast) to help you get started with simulations.
