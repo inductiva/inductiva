@@ -36,6 +36,7 @@ class BaseMachineGroup(ABC):
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
           Check https://cloud.google.com/compute/docs/machine-resource for
           more information about machine types.
+        zone: The zone where the machines will be launched.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
@@ -51,7 +52,7 @@ class BaseMachineGroup(ABC):
     """
     # Constructor arguments
     machine_type: str
-    zone: Optional[str] = None
+    zone: Optional[str] = "europe-west1-b"
     provider: Union[ProviderType, str] = "GCP"
     threads_per_core: int = 2
     data_disk_gb: int = 10
@@ -566,6 +567,7 @@ class MachineGroup(BaseMachineGroup):
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
           Check https://cloud.google.com/compute/docs/machine-resource for
           information about machine types.
+        zone: The zone where the machines will be launched.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
@@ -657,6 +659,7 @@ class ElasticMachineGroup(BaseMachineGroup):
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
             Check https://cloud.google.com/compute/docs/machine-resource for
         more information about machine types.
+        zone: The zone where the machines will be launched.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
@@ -767,6 +770,7 @@ class MPICluster(BaseMachineGroup):
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
             Check https://cloud.google.com/compute/docs/machine-resource for
             information about machine types.
+        zone: The zone where the machines will be launched.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
