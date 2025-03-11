@@ -6,7 +6,7 @@ from inductiva import storage
 
 def download(args):
     """Download a file or folder from remote storage."""
-    storage.download(args.path, args.dest, args.uncompress)
+    storage.download(args.remote_path, args.local_dir, args.uncompress)
 
 
 def register(parser):
@@ -22,11 +22,10 @@ def register(parser):
         "or folders from your remote storage.\n"
         "Specify the remote path, the local destination, and whether or not to "
         "uncompress the content after downloading.\n")
-    subparser.add_argument("path",
+    subparser.add_argument("--remote_path",
                            type=str,
                            help="The remote path to the file or folder.")
-    subparser.add_argument("-d",
-                           "--dest",
+    subparser.add_argument("--local_dir",
                            type=str,
                            default="",
                            help="Local directory to save the content.")
