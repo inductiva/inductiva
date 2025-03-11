@@ -22,10 +22,10 @@ def register(parser):
         "or folders from your remote storage.\n"
         "Specify the remote path, the local destination, and whether or not to "
         "uncompress the content after downloading.\n")
-    subparser.add_argument("--remote_path",
+    subparser.add_argument("remote_path",
                            type=str,
                            help="The remote path to the file or folder.")
-    subparser.add_argument("--local_dir",
+    subparser.add_argument("local_dir",
                            type=str,
                            default="",
                            help="Local directory to save the content.")
