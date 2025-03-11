@@ -312,6 +312,15 @@ def download(remote_path: str, local_dir: str = "", uncompress: bool = True):
             will be saved. Defaults to the current working directory.
         uncompress (bool, optional): Whether to uncompress the downloaded file 
             or folder if it is compressed. Defaults to True.
+
+    Example:
+        # Download a folder from a remote server to the current directory
+        inductiva.storage.download(remote_path="/path/to/remote/folder/")
+    
+        # Download a file and save it to a local directory without uncompressing
+        inductiva.storage.download(remote_path="/path/to/remote/file.zip",
+                                   local_dir="/local/directory",
+                                   uncompress=False)
     """
     def _resolve_local_path(url, remote_path, local_dir):
         remote_absolute_path = urllib.parse.urlparse(url).path
@@ -356,10 +365,10 @@ def download(remote_path: str, local_dir: str = "", uncompress: bool = True):
     pool_manager = api_instance.api_client.rest_client.pool_manager
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        total = sum(executor.map(_get_file_size, urls))
+        total_bytes = sum(executor.map(_get_file_size, urls))
 
     with tqdm.tqdm(
-        total=total,
+        total=total_bytes,
         unit="B",
         unit_scale=True,
         unit_divisor=1000,  # Use 1 KB = 1000 bytes
