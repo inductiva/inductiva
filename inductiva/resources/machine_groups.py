@@ -410,9 +410,11 @@ class BaseMachineGroup(ABC):
             if verbose:
                 logging.info("Successfully requested termination of %s.",
                              repr(self))
-                logging.info("Termination of the machine group "
-                             "freed the following quotas:")
-                logging.info(self.quota_usage_table_str("freed by resource"))
+                if self.provider == ProviderType.GCP:
+                    logging.info("Termination of the machine group "
+                                 "freed the following quotas:")
+                    logging.info(
+                        self.quota_usage_table_str("freed by resource"))
             return True
 
         except inductiva.client.ApiException as api_exception:
