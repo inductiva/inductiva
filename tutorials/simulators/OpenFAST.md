@@ -21,7 +21,7 @@ Both OpenFAST and FAST.Farm are compiled with OpenMP to enable parallel processi
 
 We will cover a quick start use case available in the [OpenFAST GitHub Repository](https://github.com/openfast) to help you get started with simulations.
 
-This use case uses the [NREL 5-MW](https://www.nrel.gov/docs/fy09osti/38060.pdf) wind turbine, a hypothetical yet representative multi-MW wind turbine with a rated power of 5 MW, a rated rotor speed of 12.1 rpm, a hub height of 90 m, and a rotor diameter of 126 m. It focuses on an “onshore” version
+This use case uses the NREL 5-MW wind turbine, a hypothetical yet representative multi-MW wind turbine with a rated power of 5 MW, a rated rotor speed of 12.1 rpm, a hub height of 90 m, and a rotor diameter of 126 m. It focuses on an “onshore” version
 of the turbine, solely considering the structure (no aerodynamics), where the tower is initially offset by 3 m at the top.
 
 ### Prerequisites
