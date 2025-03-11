@@ -322,6 +322,7 @@ def download(remote_path: str, local_dir: str = "", uncompress: bool = True):
                                    local_dir="/local/directory",
                                    uncompress=False)
     """
+
     def _resolve_local_path(url, remote_path, local_dir):
         remote_absolute_path = urllib.parse.urlparse(url).path
         index = remote_absolute_path.find(remote_path)
@@ -336,8 +337,8 @@ def download(remote_path: str, local_dir: str = "", uncompress: bool = True):
         if resolved_dirname:
             os.makedirs(name=resolved_dirname, exist_ok=True)
         return resolved_path
-    
-    def _get_file_size(url):
+
+    def _get_size(url):
         response = pool_manager.urlopen("HEAD", url)
         size = int(response.getheader("Content-Length"))
         response.release_conn()
@@ -356,7 +357,8 @@ def download(remote_path: str, local_dir: str = "", uncompress: bool = True):
         if uncompress:
             uncompress_dir, ext = os.path.splitext(resolved_path)
             # TODO: Improve the check for ZIP file
-            if ext != ".zip": return
+            if ext != ".zip":
+                return
             utils.data.uncompress_zip(resolved_path, uncompress_dir)
             os.remove(resolved_path)
 
@@ -365,14 +367,14 @@ def download(remote_path: str, local_dir: str = "", uncompress: bool = True):
     pool_manager = api_instance.api_client.rest_client.pool_manager
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        total_bytes = sum(executor.map(_get_file_size, urls))
+        total_bytes = sum(executor.map(_get_size, urls))
 
     with tqdm.tqdm(
-        total=total_bytes,
-        unit="B",
-        unit_scale=True,
-        unit_divisor=1000,  # Use 1 KB = 1000 bytes
-        desc=f"Downloading {len(urls)} files from {remote_path}",
+            total=total_bytes,
+            unit="B",
+            unit_scale=True,
+            unit_divisor=1000,  # Use 1 KB = 1000 bytes
+            desc=f"Downloading {len(urls)} files from {remote_path}",
     ) as progress_bar:
         with concurrent.futures.ThreadPoolExecutor() as executor:
             progress_bar_lock = threading.Lock()

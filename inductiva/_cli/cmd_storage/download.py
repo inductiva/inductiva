@@ -21,13 +21,18 @@ def register(parser):
         "The `inductiva storage download` command allows you to download files "
         "or folders from your remote storage.\n"
         "Specify the remote path, the local destination, and whether or not to "
-        "uncompress the content after downloading.\n"
-    )
-    subparser.add_argument("path", type=str,
+        "uncompress the content after downloading.\n")
+    subparser.add_argument("path",
+                           type=str,
                            help="The remote path to the file or folder.")
-    subparser.add_argument("-d", "--dest", type=str, default="",
+    subparser.add_argument("-d",
+                           "--dest",
+                           type=str,
+                           default="",
                            help="Local directory to save the content.")
-    subparser.add_argument("-u", "--uncompress", action="store_true",
+    subparser.add_argument("-u",
+                           "--uncompress",
+                           action="store_true",
                            help="Uncompress the content after download.")
 
     subparser.set_defaults(func=download)
