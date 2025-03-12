@@ -195,6 +195,16 @@ class Simulator(ABC):
         suffix = f"{suffix}{dev_suffix}"
         return suffix
 
+    def get_simulator_image_based_on_resource(self, resource: types.ComputationalResources):
+        """
+        Get the simulator image for the simulation, based on the resourced used.
+
+        :param resource: The computational resource to use for the simulation.
+        :return: The simulator image based on the resource used.
+        """
+        suffixes = self._get_version_suffixes(resource)
+        return f"{self._image_uri}{suffixes}"
+
     def run(
         self,
         input_dir: Optional[str],
@@ -244,12 +254,11 @@ class Simulator(ABC):
 
         # Get the user-specified image name. If not specified,
         # use the default image name for the current simulator
-        container_image = kwargs.pop("container_image", self._image_uri)
+        self._image_uri = kwargs.pop("container_image", self._image_uri)
 
         # CustomImage does not use suffixes. We can the image as is
         if self.__class__.__name__ != "CustomImage":
-            suffixes = self._get_version_suffixes(on)
-            container_image = f"{container_image}{suffixes}"
+            self._image_uri = self.get_simulator_image_based_on_resource(on)
 
         return tasks.run_simulation(
             self.simulator,
@@ -257,7 +266,7 @@ class Simulator(ABC):
             simulator_obj=self,
             storage_dir=storage_dir,
             computational_resources=on,
-            container_image=container_image,
+            container_image=self._image_uri,
             resubmit_on_preemption=resubmit_on_preemption,
             input_resources=remote_assets,
             simulator_name_alias=self.simulator_name_alias,
