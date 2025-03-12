@@ -135,8 +135,8 @@ class BaseMachineGroup(ABC):
 
     def has_gpu(self) -> bool:
         """Check if the machine group has a GPU."""
-        # TODO: update this code to use gpu info
-        return "g2" in self.machine_type
+        return self._gpu_info is not None and self._gpu_info.get(
+            "gpu_count") > 0
 
     @property
     def id(self):
