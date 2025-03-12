@@ -65,10 +65,9 @@ def test_simulator___get_version_suffixes(use_dev, use_gpu):
     mg_no_gpu.has_gpu.return_value = False
 
     if use_gpu:
-        # pylint: disable=W0212
-        suffix = gmx._get_version_suffixes(mg_gpu)
+        sim_image = gmx.get_simulator_image_based_on_resource(mg_gpu)
     else:
-        suffix = gmx._get_version_suffixes(mg_no_gpu)  # pylint: disable=W0212
+        sim_image = gmx.get_simulator_image_based_on_resource(mg_no_gpu)  # pylint: disable=W0212
 
     dev_suffix = ""
     gpu_suffix = ""
@@ -77,16 +76,15 @@ def test_simulator___get_version_suffixes(use_dev, use_gpu):
     if use_gpu:
         gpu_suffix = "_gpu"
 
-    assert suffix == f"{gpu_suffix}{dev_suffix}"
+    assert sim_image.endswith(f"{gpu_suffix}{dev_suffix}")
 
     if use_gpu:
         with pytest.raises(ValueError) as excinfo:
-            # pylint: disable=W0212
-            suffix = cans._get_version_suffixes(mg_gpu)
+            sim_image = cans.get_simulator_image_based_on_resource(mg_gpu)
         assert "not have a GPU version" in str(excinfo.value)
         return
     else:
-        suffix = cans._get_version_suffixes(mg_no_gpu)  # pylint: disable=W0212
+        sim_image = cans.get_simulator_image_based_on_resource(mg_no_gpu)  # pylint: disable=W0212
 
     dev_suffix = ""
     gpu_suffix = ""
@@ -95,7 +93,7 @@ def test_simulator___get_version_suffixes(use_dev, use_gpu):
     if use_gpu:
         gpu_suffix = "_gpu"
 
-    assert suffix == f"{gpu_suffix}{dev_suffix}"
+    assert sim_image.endswith(f"{gpu_suffix}{dev_suffix}")
 
 
 @mock.patch("inductiva.resources.MPICluster")

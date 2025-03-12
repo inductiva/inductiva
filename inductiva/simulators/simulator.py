@@ -195,7 +195,8 @@ class Simulator(ABC):
         suffix = f"{suffix}{dev_suffix}"
         return suffix
 
-    def get_simulator_image_based_on_resource(self, resource: types.ComputationalResources):
+    def get_simulator_image_based_on_resource(
+            self, resource: types.ComputationalResources):
         """
         Get the simulator image for the simulation, based on the resourced used.
 
