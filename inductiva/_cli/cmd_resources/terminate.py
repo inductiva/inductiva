@@ -54,16 +54,23 @@ def terminate_machine_group(args):
     if not confirm:
         return 0
 
+    print_quotas = False
+
     before_quotas = inductiva.users.get_quotas()
     for name in target_machine_names:
         name_to_machine[name].terminate(verbose=False)
         logging.info("Successfully requested termination of %s.",
                      name_to_machine[name].name)
-    cls = inductiva.resources.MachineGroup
-    base_machine = cls.__new__(cls)
-    rows = ["max_price_hour", "max_vcpus", "max_instances"]
-    base_machine.quota_usage = {k: before_quotas[k]["in_use"] for k in rows}
-    logging.info(base_machine.quota_usage_table_str("freed by resources"))
+        if (name_to_machine[name].provider ==
+                inductiva.resources.utils.ProviderType.GCP):
+            print_quotas = True
+
+    if print_quotas:
+        cls = inductiva.resources.MachineGroup
+        base_machine = cls.__new__(cls)
+        rows = ["max_price_hour", "max_vcpus", "max_instances"]
+        base_machine.quota_usage = {k: before_quotas[k]["in_use"] for k in rows}
+        logging.info(base_machine.quota_usage_table_str("freed by resources"))
 
     return 0
 
