@@ -26,7 +26,7 @@ class MachineTypeInfo:
     threads_per_core: int
     machine_type: str
     provider_id: str
-    num_cpus: int
+    num_vcpus: int
     price: float
     ram_gb: int
     region: str
@@ -126,7 +126,9 @@ def get_available_machine_types(
         raise e
 
 
-def estimate_machine_cost(machine_type: str, spot: bool = False):
+def estimate_machine_cost(machine_type: str,
+                          spot: bool = False,
+                          zone: str = None):
     """Estimate the cloud cost of one machine per hour in US dollars.
 
     Args:
@@ -141,6 +143,7 @@ def estimate_machine_cost(machine_type: str, spot: bool = False):
 
     instance_price = api.get_instance_price({
         "machine_type": machine_type,
+        "zone": zone
     })
 
     if spot:

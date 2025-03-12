@@ -370,7 +370,7 @@ def download_file(
     response.release_conn()
 
 
-def uncompress_task_outputs(zip_path: pathlib.Path, output_dir: pathlib.Path):
+def uncompress_zip(zip_path: pathlib.Path, output_dir: pathlib.Path):
     """Uncompress a ZIP archive containing the outputs of a task.
 
     If the archive contains the directory called artifacts, it means that the

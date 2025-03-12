@@ -35,6 +35,7 @@ from inductiva.client.apis.paths.admin_machine_id_event import AdminMachineIdEve
 from inductiva.client.apis.paths.admin_users_username_costs_fee_percentage import AdminUsersUsernameCostsFeePercentage
 from inductiva.client.apis.paths.admin_organizations_organization_id_costs_fee_percentage import AdminOrganizationsOrganizationIdCostsFeePercentage
 from inductiva.client.apis.paths.admin_top_ups import AdminTopUps
+from inductiva.client.apis.paths.admin_tasks import AdminTasks
 from inductiva.client.apis.paths.task_runner_register import TaskRunnerRegister
 from inductiva.client.apis.paths.task_runner_machine_id import TaskRunnerMachineId
 from inductiva.client.apis.paths.task_runner_machine_id_task import TaskRunnerMachineIdTask
@@ -62,6 +63,7 @@ from inductiva.client.apis.paths.storage_signed_urls import StorageSignedUrls
 from inductiva.client.apis.paths.storage_input_notify import StorageInputNotify
 from inductiva.client.apis.paths.storage_input_remote import StorageInputRemote
 from inductiva.client.apis.paths.storage_ import Storage
+from inductiva.client.apis.paths.storage_copy import StorageCopy
 from inductiva.client.apis.paths.storage_operations_operation_id import StorageOperationsOperationId
 from inductiva.client.apis.paths.storage_operations import StorageOperations
 from inductiva.client.apis.paths.storage_export_multipart import StorageExportMultipart
@@ -155,6 +157,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminOrganizationsOrganizationIdCostsFeePercentage,
         PathValues.ADMIN_TOPUPS:
             AdminTopUps,
+        PathValues.ADMIN_TASKS:
+            AdminTasks,
         PathValues.TASKRUNNER_REGISTER:
             TaskRunnerRegister,
         PathValues.TASKRUNNER_MACHINE_ID:
@@ -209,6 +213,8 @@ PathToApi = typing_extensions.TypedDict(
             StorageInputRemote,
         PathValues.STORAGE_:
             Storage,
+        PathValues.STORAGE_COPY:
+            StorageCopy,
         PathValues.STORAGE_OPERATIONS_OPERATION_ID:
             StorageOperationsOperationId,
         PathValues.STORAGE_OPERATIONS:
@@ -324,6 +330,8 @@ path_to_api = PathToApi({
         AdminOrganizationsOrganizationIdCostsFeePercentage,
     PathValues.ADMIN_TOPUPS:
         AdminTopUps,
+    PathValues.ADMIN_TASKS:
+        AdminTasks,
     PathValues.TASKRUNNER_REGISTER:
         TaskRunnerRegister,
     PathValues.TASKRUNNER_MACHINE_ID:
@@ -378,6 +386,8 @@ path_to_api = PathToApi({
         StorageInputRemote,
     PathValues.STORAGE_:
         Storage,
+    PathValues.STORAGE_COPY:
+        StorageCopy,
     PathValues.STORAGE_OPERATIONS_OPERATION_ID:
         StorageOperationsOperationId,
     PathValues.STORAGE_OPERATIONS:

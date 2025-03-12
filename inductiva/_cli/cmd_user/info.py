@@ -108,13 +108,15 @@ def get_info(_, fout: TextIO = sys.stdout):
     """
     user_info = users.get_info()
 
-    organization = user_info["organization"] or ""
+    organization = user_info.get("organization")
     tier = user_info["tier"]
     username = user_info["username"]
     email = user_info["email"]
     name = user_info["name"] or ""
 
-    print(f"\nOrganization: {organization}\n", file=fout)
+    if organization:
+        print(f"\nOrganization: {organization}\n", file=fout)
+
     print(f"Name: {name}", file=fout)
     print(f"Email: {email}", file=fout)
     print(f"Username: {username}", file=fout)

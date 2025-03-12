@@ -3,16 +3,19 @@ import logging
 import math
 import os
 import pathlib
+import threading
 import time
 import urllib
 from dataclasses import dataclass
 from enum import Enum
 from typing import List, Literal, Optional, Tuple
 
+import concurrent.futures
 import tqdm
 
 import inductiva
 from inductiva import constants
+from inductiva import utils
 from inductiva.api import methods
 from inductiva.client import exceptions, models
 from inductiva.client.apis.tags import storage_api
@@ -295,6 +298,87 @@ def upload(
                 raise e
 
     logging.info("Input uploaded successfully.")
+
+
+def download(remote_path: str, local_dir: str = "", uncompress: bool = True):
+    """
+    Downloads a file or folder from storage to a local directory, optionally 
+    uncompressing the contents.
+
+    Args:
+        remote_path (str): The path of the file or folder on the remote server
+            to download.
+        local_dir (str, optional): The local directory where the file or folder
+            will be saved. Defaults to the current working directory.
+        uncompress (bool, optional): Whether to uncompress the downloaded file 
+            or folder if it is compressed. Defaults to True.
+
+    Example:
+        # Download a folder from a remote server to the current directory
+        inductiva.storage.download(remote_path="/path/to/remote/folder/")
+    
+        # Download a file and save it to a local directory without uncompressing
+        inductiva.storage.download(remote_path="/path/to/remote/file.zip",
+                                   local_dir="/local/directory",
+                                   uncompress=False)
+    """
+
+    def _resolve_local_path(url, remote_path, local_dir):
+        remote_absolute_path = urllib.parse.urlparse(url).path
+        index = remote_absolute_path.find(remote_path)
+        remote_relative_path = remote_absolute_path[index:]
+
+        resolved_dirname = local_dir \
+            if remote_path == remote_relative_path \
+            else os.path.join(local_dir, os.path.dirname(remote_relative_path))
+
+        resolved_filename = os.path.basename(remote_relative_path)
+        resolved_path = os.path.join(resolved_dirname, resolved_filename)
+        if resolved_dirname:
+            os.makedirs(name=resolved_dirname, exist_ok=True)
+        return resolved_path
+
+    def _get_size(url):
+        response = pool_manager.urlopen("HEAD", url)
+        size = int(response.getheader("Content-Length"))
+        response.release_conn()
+        return size
+
+    def _download_file(url):
+        response = pool_manager.urlopen("GET", url, preload_content=False)
+        resolved_path = _resolve_local_path(url, remote_path, local_dir)
+        with open(resolved_path, "wb") as file:
+            for chunk in response.stream():
+                file.write(chunk)
+                with progress_bar_lock:
+                    progress_bar.update(len(chunk))
+        response.release_conn()
+
+        if uncompress:
+            uncompress_dir, ext = os.path.splitext(resolved_path)
+            # TODO: Improve the check for ZIP file
+            if ext != ".zip":
+                return
+            utils.data.uncompress_zip(resolved_path, uncompress_dir)
+            os.remove(resolved_path)
+
+    urls = get_signed_urls(paths=[remote_path], operation="download")
+    api_instance = storage_api.StorageApi(inductiva.api.get_client())
+    pool_manager = api_instance.api_client.rest_client.pool_manager
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        total_bytes = sum(executor.map(_get_size, urls))
+
+    with tqdm.tqdm(
+            total=total_bytes,
+            unit="B",
+            unit_scale=True,
+            unit_divisor=1000,  # Use 1 KB = 1000 bytes
+            desc=f"Downloading {len(urls)} files from {remote_path}",
+    ) as progress_bar:
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            progress_bar_lock = threading.Lock()
+            _ = executor.map(_download_file, urls)
 
 
 def _list_files(root_path: str) -> Tuple[List[str], int]:
