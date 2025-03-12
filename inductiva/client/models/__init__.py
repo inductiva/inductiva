@@ -111,7 +111,6 @@ from inductiva.client.model.user_most_used_simulators_overview import UserMostUs
 from inductiva.client.model.user_organization_update import UserOrganizationUpdate
 from inductiva.client.model.user_task_status_overview import UserTaskStatusOverview
 from inductiva.client.model.user_tasks_overview import UserTasksOverview
-from inductiva.client.model.user_tier_update import UserTierUpdate
 from inductiva.client.model.user_update_terms_and_conditions import UserUpdateTermsAndConditions
 from inductiva.client.model.vm_group_config import VMGroupConfig
 from inductiva.client.model.validation_error import ValidationError
