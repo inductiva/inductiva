@@ -4,9 +4,9 @@ All users receive 5 US$ in credits upon registration. As a user you may also
 purchase credits via Stripe whenever you want.
 
 Credits are consumed based on the user's resource usage. This includes factors
-like computation time and the specific machine groups utilized. For example,
-running a simulation on a high-memory machine group will consume more credits
-than on a standard machine group.
+like computation time and the specific machines utilized. For example, running
+a simulation on a high-memory machine will consume more credits than on a
+standard machine.
 
 Real-time tracking of credit usage allows users to track and optimize their
 consumption efficiently and avoid unexpected shortfalls. Below we'll
@@ -31,15 +31,15 @@ organization (business or academic).
 | Maximum disk size | GB | instance | Maximum size of the disk that can be assigned to each individual machine in a machine group | 1000 | 5000 | 5000 |
 
 ***NOTE:** _global_ quotas are applied to the user account and will encompass all
-machine groups and tasks submitted by the user.
-_Instance_ quotas are applied to each machine group and task and, therefore,
+machines and tasks submitted by the user.
+_Instance_ quotas are applied to each machine and task and, therefore,
 are only applicable to each item individually.
 
 ## FAQs
 
 **When are credits and quotas verified?**
 
-> Every time the user tries to register a machine group or submits a task.
+> Every time the user tries to register a machine or submits a task.
 
 ## How to monitor your account details
 
@@ -52,6 +52,8 @@ $ inductiva user info
 Name: <name of the user here>
 Email: <user e-mail here>
 Username: <username here>
+
+■ Plan: Individual
 
 ■ Credits: 1000.00 US$
 
