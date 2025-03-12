@@ -36,6 +36,7 @@ class BaseMachineGroup(ABC):
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
           Check https://cloud.google.com/compute/docs/machine-resource for
           more information about machine types.
+        zone: The zone where the machines will be launched.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
@@ -51,6 +52,7 @@ class BaseMachineGroup(ABC):
     """
     # Constructor arguments
     machine_type: str
+    zone: Optional[str] = "europe-west1-b"
     provider: Union[ProviderType, str] = "GCP"
     threads_per_core: int = 2
     data_disk_gb: int = 10
@@ -77,6 +79,8 @@ class BaseMachineGroup(ABC):
     _idle_seconds = None
     _cost_per_hour = {}
     _total_ram_gb = None
+    _cpu_info = {}
+    _gpu_info = {}
 
     QUOTAS_EXCEEDED_SLEEP_SECONDS = 60
 
@@ -134,6 +138,7 @@ class BaseMachineGroup(ABC):
         return self._id
 
     @property
+    @abstractmethod
     def n_vcpus(self):
         """Returns the number of vCPUs available in the resource.
 
@@ -143,16 +148,7 @@ class BaseMachineGroup(ABC):
         In a case of an Elastic machine group, the total number of vCPUs is
         the maximum number of vCPUs that can be used at the same time.
         """
-        max_vcpus = int(self.quota_usage["max_vcpus"])
-        max_instances = int(self.quota_usage["max_instances"])
-
-        # if threads per core is 2
-        cores_per_machine = max_vcpus // max_instances
-
-        if self.threads_per_core == 1:
-            cores_per_machine //= 2
-
-        return VCPUCount(cores_per_machine * max_instances, cores_per_machine)
+        pass
 
     @property
     def available_vcpus(self):
@@ -261,6 +257,7 @@ class BaseMachineGroup(ABC):
                 self.auto_terminate_ts),
             dynamic_disk_resize_config=self._dynamic_disk_resize_config(),
             custom_vm_image=self._custom_vm_image,
+            zone=self.zone,
             **kwargs,
         )
 
@@ -283,6 +280,9 @@ class BaseMachineGroup(ABC):
             body.get("auto_terminate_ts"))
         self._total_ram_gb = body.get("total_ram_gb")
         self._cost_per_hour = body.get("cost_per_hour")
+        self._cpu_info = body.get("cpu_info")
+        self._gpu_info = body.get("gpu_info")
+        self.zone = body.get("zone")
 
         dynamic_disk_resize_config = body.get(
             "dynamic_disk_resize_config") or {}
@@ -433,6 +433,7 @@ class BaseMachineGroup(ABC):
         self._estimated_cost = inductiva.resources.estimate_machine_cost(
             self.machine_type,
             spot,
+            self.zone,
         )
 
         return self._estimated_cost
@@ -568,6 +569,7 @@ class MachineGroup(BaseMachineGroup):
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
           Check https://cloud.google.com/compute/docs/machine-resource for
           information about machine types.
+        zone: The zone where the machines will be launched.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
@@ -617,6 +619,12 @@ class MachineGroup(BaseMachineGroup):
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
 
+    @property
+    def n_vcpus(self):
+        return VCPUCount(
+            self._cpu_info["cpu_cores_logical"] * self.num_machines,
+            self._cpu_info["cpu_cores_logical"])
+
     def short_name(self) -> str:
         return "MachineGroup"
 
@@ -653,6 +661,7 @@ class ElasticMachineGroup(BaseMachineGroup):
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
             Check https://cloud.google.com/compute/docs/machine-resource for
         more information about machine types.
+        zone: The zone where the machines will be launched.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
@@ -715,6 +724,12 @@ class ElasticMachineGroup(BaseMachineGroup):
             raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
 
+    @property
+    def n_vcpus(self):
+        return VCPUCount(
+            self._cpu_info["cpu_cores_logical"] * self.max_machines,
+            self._cpu_info["cpu_cores_logical"])
+
     def short_name(self) -> str:
         return "ElasticMachineGroup"
 
@@ -757,6 +772,7 @@ class MPICluster(BaseMachineGroup):
         machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
             Check https://cloud.google.com/compute/docs/machine-resource for
             information about machine types.
+        zone: The zone where the machines will be launched.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
@@ -794,6 +810,12 @@ class MPICluster(BaseMachineGroup):
         if self.num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
+
+    @property
+    def n_vcpus(self):
+        return VCPUCount(
+            self._cpu_info["cpu_cores_logical"] * self.num_machines,
+            self._cpu_info["cpu_cores_logical"])
 
     @property
     def available_vcpus(self):
