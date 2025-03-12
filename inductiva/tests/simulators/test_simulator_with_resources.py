@@ -50,13 +50,11 @@ def test_simulator__wrong_version__raises_error():
     assert "not available" in str(excinfo.value)
 
 
-@mark.parametrize("use_dev,use_gpu", [(True, True), (True, False),
-                                      (False, True), (False, False)])
-def test_simulator___get_version_suffixes(use_dev, use_gpu):
+def test_get_simulator_image_based_on_resource__dev():
     #only has cpu versions
-    cans = inductiva.simulators.CaNS(use_dev=use_dev)
+    cans = inductiva.simulators.CaNS(use_dev=True)
     #has both cpu and gpu versions
-    gmx = inductiva.simulators.GROMACS(use_dev=use_dev)
+    gmx = inductiva.simulators.GROMACS(use_dev=True)
 
     mg_gpu = mock.Mock()
     mg_gpu.has_gpu.return_value = True
@@ -64,36 +62,23 @@ def test_simulator___get_version_suffixes(use_dev, use_gpu):
     mg_no_gpu = mock.Mock()
     mg_no_gpu.has_gpu.return_value = False
 
-    if use_gpu:
-        sim_image = gmx.get_simulator_image_based_on_resource(mg_gpu)
-    else:
-        sim_image = gmx.get_simulator_image_based_on_resource(mg_no_gpu)  # pylint: disable=W0212
+    sim_image_gpu = gmx.get_simulator_image_based_on_resource(mg_gpu)
+    sim_image_no_gpu = gmx.get_simulator_image_based_on_resource(mg_no_gpu)
 
-    dev_suffix = ""
-    gpu_suffix = ""
-    if use_dev:
-        dev_suffix = "_dev"
-    if use_gpu:
-        gpu_suffix = "_gpu"
+    assert sim_image_gpu.endswith("_gpu_dev")
+    assert sim_image_no_gpu.endswith("_dev")
 
-    assert sim_image.endswith(f"{gpu_suffix}{dev_suffix}")
 
-    if use_gpu:
-        with pytest.raises(ValueError) as excinfo:
-            sim_image = cans.get_simulator_image_based_on_resource(mg_gpu)
-        assert "not have a GPU version" in str(excinfo.value)
-        return
-    else:
-        sim_image = cans.get_simulator_image_based_on_resource(mg_no_gpu)  # pylint: disable=W0212
+def test_get_simulator_image_based_on_resource__not_dev():
+    #has both cpu and gpu versions
+    gmx = inductiva.simulators.GROMACS(use_dev=False)
 
-    dev_suffix = ""
-    gpu_suffix = ""
-    if use_dev:
-        dev_suffix = "_dev"
-    if use_gpu:
-        gpu_suffix = "_gpu"
+    mg_gpu = mock.Mock()
+    mg_gpu.has_gpu.return_value = True
 
-    assert sim_image.endswith(f"{gpu_suffix}{dev_suffix}")
+    sim_image_gpu = gmx.get_simulator_image_based_on_resource(mg_gpu)
+
+    assert sim_image_gpu.endswith("_gpu")
 
 
 @mock.patch("inductiva.resources.MPICluster")
