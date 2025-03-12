@@ -13,7 +13,6 @@ from inductiva.client.apis.paths.tasks_task_id_message import TasksTaskIdMessage
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_terms_and_conditions import AdminUsersEmailTermsAndConditions
 from inductiva.client.apis.paths.admin_users_username_organization import AdminUsersUsernameOrganization
-from inductiva.client.apis.paths.admin_users_username_tier import AdminUsersUsernameTier
 from inductiva.client.apis.paths.admin_users_username_credits import AdminUsersUsernameCredits
 from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
 from inductiva.client.apis.paths.admin_users_email import AdminUsersEmail
@@ -113,8 +112,6 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsersEmailTermsAndConditions,
         PathValues.ADMIN_USERS_USERNAME_ORGANIZATION:
             AdminUsersUsernameOrganization,
-        PathValues.ADMIN_USERS_USERNAME_TIER:
-            AdminUsersUsernameTier,
         PathValues.ADMIN_USERS_USERNAME_CREDITS:
             AdminUsersUsernameCredits,
         PathValues.ADMIN_USERS_EMAIL_API_KEY:
@@ -286,8 +283,6 @@ path_to_api = PathToApi({
         AdminUsersEmailTermsAndConditions,
     PathValues.ADMIN_USERS_USERNAME_ORGANIZATION:
         AdminUsersUsernameOrganization,
-    PathValues.ADMIN_USERS_USERNAME_TIER:
-        AdminUsersUsernameTier,
     PathValues.ADMIN_USERS_USERNAME_CREDITS:
         AdminUsersUsernameCredits,
     PathValues.ADMIN_USERS_EMAIL_API_KEY:

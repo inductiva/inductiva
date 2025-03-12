@@ -18,7 +18,6 @@ class PathValues(str, enum.Enum):
     ADMIN_USERS = "/admin/users"
     ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS = "/admin/users/{email}/terms_and_conditions"
     ADMIN_USERS_USERNAME_ORGANIZATION = "/admin/users/{username}/organization"
-    ADMIN_USERS_USERNAME_TIER = "/admin/users/{username}/tier"
     ADMIN_USERS_USERNAME_CREDITS = "/admin/users/{username}/credits"
     ADMIN_USERS_EMAIL_API_KEY = "/admin/users/{email}/api_key"
     ADMIN_USERS_EMAIL = "/admin/users/{email}"
