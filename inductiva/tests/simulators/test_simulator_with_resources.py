@@ -51,8 +51,6 @@ def test_simulator__wrong_version__raises_error():
 
 
 def test_get_simulator_image_based_on_resource__dev():
-    #only has cpu versions
-    cans = inductiva.simulators.CaNS(use_dev=True)
     #has both cpu and gpu versions
     gmx = inductiva.simulators.GROMACS(use_dev=True)
 
