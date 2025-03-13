@@ -173,7 +173,7 @@ Here are the results of running the same simulation on a few machines:
 |-------------------------|--------------|------------------|---------------|
 | **Local Ryzen 7 7700X** | 16           | 1 minute and 20 seconds | N/A           |
 | **Cloud c3d-highcpu-16** | 16           | 1 minute and 53 seconds | 0.0051 US$      |
-| **Cloud c3d-highcpu-60** | 60           | 1 minute and 9 seconds | 0.012 US$      | 
+| **Cloud c3d-highcpu-60** | 60           | 1 minute and 25 seconds | 0.014 US$      | 
 
 By leveraging the Inductiva API, you can efficiently scale your CM1 simulations
 to meet your computational needs. Try different machine configurations and
