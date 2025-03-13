@@ -1,16 +1,15 @@
-# Computational Resources Janitor
+# Computational Resources Monitoring
 
-Inductiva API has at all times a janitor running in the background that will clean
-up any resources that are not being used. The focus of this janitor is to make
-sure that no computational resources are being wasted or left idle, for example,
-when a user forgets to terminate their machines.
+Inductiva API has at all times a monitoring service running in the background
+that will clean up any resources that are not being used. The focus of this
+service is to make sure that no computational resources are being wasted or
+left idle, for example, when a user forgets to terminate their machines.
 
-Still, the janitor is mindful of the user's work and will not terminate any
+Still, this service is mindful of the user's work and will not terminate any
 computational resource right away. Instead, it will wait for a certain time
 before terminating the resource.
 
-The janitor follows the following rules before terminating the resources, which
-can be specified by the user:
+The following rules are verified before terminating the resources, which can be specified by the user:
 - **Total time of inactivity allowed**, starting from the moment no simulations
 are active and resets if any task arrives: `max_idle_time`. The default value
 is 3 minutes.
@@ -19,9 +18,9 @@ simulation still running: `auto_terminate_ts` or `auto_terminate_minutes`. There
 is no default value. If not specified, the machine group will never terminate
 while having active tasks assigned.
 
-Please note that at the moment, the janitor doesn't preserve the data of running
-simulations. So please be mindful of the time your simulations may take to run
-when specifying `auto_terminate_ts` or `auto_terminate_minutes`.
+Please note that at the moment, the background service doesn't preserve the
+data of running simulations. So please be mindful of the time your simulations
+may take to run when specifying `auto_terminate_ts` or `auto_terminate_minutes`.
 
 The above mentioned attributes can be defined when initializing the machine
 group (this is valid for all machine group types). `max_idle_time` can be a
