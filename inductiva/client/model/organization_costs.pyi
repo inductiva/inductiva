@@ -34,12 +34,14 @@ class OrganizationCosts(schemas.DictSchema):
             "costs",
             "name",
             "id",
+            "tier_id",
             "estimated_costs",
         }
 
         class properties:
             id = schemas.StrSchema
             name = schemas.StrSchema
+            tier_id = schemas.StrSchema
 
             @staticmethod
             def costs() -> typing.Type['OrganizationCostComponents']:
@@ -186,6 +188,7 @@ class OrganizationCosts(schemas.DictSchema):
             __annotations__ = {
                 "id": id,
                 "name": name,
+                "tier_id": tier_id,
                 "costs": costs,
                 "estimated_costs": estimated_costs,
                 "currency": currency,
@@ -195,6 +198,7 @@ class OrganizationCosts(schemas.DictSchema):
     costs: 'OrganizationCostComponents'
     name: MetaOapg.properties.name
     id: MetaOapg.properties.id
+    tier_id: MetaOapg.properties.tier_id
     estimated_costs: MetaOapg.properties.estimated_costs
 
     @typing.overload
@@ -207,6 +211,12 @@ class OrganizationCosts(schemas.DictSchema):
     def __getitem__(
             self, name: typing_extensions.Literal["name"]
     ) -> MetaOapg.properties.name:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["tier_id"]
+    ) -> MetaOapg.properties.tier_id:
         ...
 
     @typing.overload
@@ -240,6 +250,7 @@ class OrganizationCosts(schemas.DictSchema):
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "id",
         "name",
+        "tier_id",
         "costs",
         "estimated_costs",
         "currency",
@@ -258,6 +269,12 @@ class OrganizationCosts(schemas.DictSchema):
     def get_item_oapg(
             self, name: typing_extensions.Literal["name"]
     ) -> MetaOapg.properties.name:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["tier_id"]
+    ) -> MetaOapg.properties.tier_id:
         ...
 
     @typing.overload
@@ -294,6 +311,7 @@ class OrganizationCosts(schemas.DictSchema):
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "id",
         "name",
+        "tier_id",
         "costs",
         "estimated_costs",
         "currency",
@@ -314,6 +332,10 @@ class OrganizationCosts(schemas.DictSchema):
         ],
         id: typing.Union[
             MetaOapg.properties.id,
+            str,
+        ],
+        tier_id: typing.Union[
+            MetaOapg.properties.tier_id,
             str,
         ],
         estimated_costs: typing.Union[
@@ -344,6 +366,7 @@ class OrganizationCosts(schemas.DictSchema):
             costs=costs,
             name=name,
             id=id,
+            tier_id=tier_id,
             estimated_costs=estimated_costs,
             currency=currency,
             consolidation_last_update_ts=consolidation_last_update_ts,

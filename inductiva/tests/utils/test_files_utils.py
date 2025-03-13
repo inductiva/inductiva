@@ -211,7 +211,7 @@ def test_uncompress_task_outputs(tmp_path: pathlib.Path):
         zip_f.writestr("output.json", json.dumps(["result"]))
         zip_f.writestr("artifacts/file.txt", "Hello, World!")
 
-    data.uncompress_task_outputs(zip_path, output_dir)
+    data.uncompress_zip(zip_path, output_dir)
 
     assert (output_dir / "artifacts/file.txt").exists()
     assert (output_dir / "output.json").exists()

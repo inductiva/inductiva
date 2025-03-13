@@ -129,7 +129,7 @@ def notify_upload_complete(api_endpoint,
 
 
 def upload_input(api_instance: TasksApi, task_id, original_params,
-                 type_annotations):
+                 type_annotations, storage_path_prefix):
     """Uploads the inputs of a given task to the API.
 
     Args:
@@ -142,8 +142,11 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
     input_zip_path, zip_file_size = prepare_input(task_id, original_params,
                                                   type_annotations)
 
-    # TODO: the input filename shouldn't be hardcoded
-    url = storage.get_signed_urls([f"{task_id}/input.zip"], "upload")[0]
+    remote_input_zip_path = f"{storage_path_prefix}/{task_id}/input.zip"
+    url = storage.get_signed_urls(
+        paths=[remote_input_zip_path],
+        operation="upload",
+    )[0]
 
     with tqdm.tqdm(total=zip_file_size,
                    unit="B",
@@ -360,6 +363,7 @@ def submit_task(api_instance,
             original_params=params,
             task_id=task_id,
             type_annotations=type_annotations,
+            storage_path_prefix=storage_path_prefix,
         )
 
     return task_id

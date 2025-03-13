@@ -23,7 +23,7 @@ stateDiagram-v2
 
     STARTED --> PENDING_KILLED : user requested kill \n but is not yet delivered to executor
     PENDING_KILLED --> KILLED : when kill request \n is delivered to executor
-    STARTED --> EX_TERM_USER : when machine group \n is terminated (by janitor or user)
+    STARTED --> EX_TERM_USER : when machine group \n is terminated (by monitoring service or user)
     STARTED --> SPOT_PREEMPTED : when machine group \n is SPOT, and the executor gets preempted
     STARTED --> EX_FAILED : error in executor machine \n (eg no space in disk, etc)
     STARTED --> SUCCESS : Execution succeeded and \n output is available for download

@@ -44,6 +44,41 @@ def new_machine_init(self, machine_type):
     self.machine_type = machine_type
 
 
+def test_simulator__wrong_version__raises_error():
+    with pytest.raises(ValueError) as excinfo:
+        inductiva.simulators.CaNS(version="999")
+    assert "not available" in str(excinfo.value)
+
+
+def test_get_simulator_image_based_on_resource__dev():
+    #has both cpu and gpu versions
+    gmx = inductiva.simulators.GROMACS(use_dev=True)
+
+    mg_gpu = mock.Mock()
+    mg_gpu.has_gpu.return_value = True
+
+    mg_no_gpu = mock.Mock()
+    mg_no_gpu.has_gpu.return_value = False
+
+    sim_image_gpu = gmx.get_simulator_image_based_on_resource(mg_gpu)
+    sim_image_no_gpu = gmx.get_simulator_image_based_on_resource(mg_no_gpu)
+
+    assert sim_image_gpu.endswith("_gpu_dev")
+    assert sim_image_no_gpu.endswith("_dev")
+
+
+def test_get_simulator_image_based_on_resource__not_dev():
+    #has both cpu and gpu versions
+    gmx = inductiva.simulators.GROMACS(use_dev=False)
+
+    mg_gpu = mock.Mock()
+    mg_gpu.has_gpu.return_value = True
+
+    sim_image_gpu = gmx.get_simulator_image_based_on_resource(mg_gpu)
+
+    assert sim_image_gpu.endswith("_gpu")
+
+
 @mock.patch("inductiva.resources.MPICluster")
 def test_validate_computational_resources__unsupported_resource__raise_error(
         mpi_cluster_mock, list_available_fixture):  # pylint: disable=unused-argument
@@ -74,8 +109,8 @@ def test_mpi_enabled__dummy_simulator():
 
 
 @mark.parametrize("simulator", [
-    simulators.GROMACS, simulators.SplishSplash, simulators.FEniCSx,
-    simulators.FDS, simulators.DualSPHysics
+    simulators.GROMACS, simulators.SplishSplash, simulators.FDS,
+    simulators.DualSPHysics
 ])
 def test_valid_resources__non_mpi_simulators(simulator):
     """Validate  decorator  in non-MPI simulators.
@@ -208,11 +243,9 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
 
     mock_mg = mock.Mock()
     mock_mg.id = uuid.uuid4()
+    mock_mg.has_gpu.return_value = False
 
     for sim_name, simcls in sim_classes:
-        # these 2 classes are not wrappers around the simulators in the backend
-        if sim_name in ("FEniCSx"):
-            continue
 
         print(f"Testing simulator: {sim_name}")
 
@@ -252,6 +285,12 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
                 run_kwargs[resubmit_key] = resubmit_on_preemption
             if sim_name == "OpenFOAM":
                 run_kwargs["commands"] = ["ls"]
+
+            # pass remote_assets to coawst to avoid our internal checks
+            # that check if the input files are present
+            if sim_name == "COAWST":
+                run_kwargs["remote_assets"] = ["temp"]
+
             if sim_name in ("SWAN", "SWASH", "SNLSWAN"):
                 args = ("test_folder",)
 

@@ -35,7 +35,7 @@ Preemptible machines can be stopped at any time and for that reason are only
 advised for fault-tolerant workloads. If simulations are running when they are
 stopped, the simulation is resubmitted to the queue of the machine group again.
 - the `max_idle_time` determines the time a machine group can remain idle (without
-receiving any task) before it is terminated.
+any active task) before it is terminated.
 - the `auto_terminate_ts` defines the moment in time in which the resource will
 be automatically terminated, even if there are tasks still running.
 

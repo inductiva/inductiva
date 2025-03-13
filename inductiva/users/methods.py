@@ -36,7 +36,7 @@ def get_info() -> Dict[str, Any]:
     """Get the user information.
 
     This funtion gets the user information, including the user's name, email,
-    username, tier, programs, and total available credits.
+    username, plan, programs, and total available credits.
 
     Returns:
         Dict with the user information.

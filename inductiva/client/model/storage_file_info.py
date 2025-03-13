@@ -31,11 +31,68 @@ class StorageFileInfo(schemas.DictSchema):
 
     class MetaOapg:
         required = {
-            "size_bytes",
+            "is_directory",
         }
 
         class properties:
-            size_bytes = schemas.IntSchema
+            is_directory = schemas.BoolSchema
+
+            class size_bytes(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.IntSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'size_bytes':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
 
             class creation_time(
                     schemas.DateTimeBase,
@@ -98,11 +155,18 @@ class StorageFileInfo(schemas.DictSchema):
                     )
 
             __annotations__ = {
+                "is_directory": is_directory,
                 "size_bytes": size_bytes,
                 "creation_time": creation_time,
             }
 
-    size_bytes: MetaOapg.properties.size_bytes
+    is_directory: MetaOapg.properties.is_directory
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["is_directory"]
+    ) -> MetaOapg.properties.is_directory:
+        ...
 
     @typing.overload
     def __getitem__(
@@ -121,6 +185,7 @@ class StorageFileInfo(schemas.DictSchema):
         ...
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
+        "is_directory",
         "size_bytes",
         "creation_time",
     ], str]):
@@ -129,8 +194,14 @@ class StorageFileInfo(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["is_directory"]
+    ) -> MetaOapg.properties.is_directory:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["size_bytes"]
-    ) -> MetaOapg.properties.size_bytes:
+    ) -> typing.Union[MetaOapg.properties.size_bytes, schemas.Unset]:
         ...
 
     @typing.overload
@@ -146,6 +217,7 @@ class StorageFileInfo(schemas.DictSchema):
         ...
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
+        "is_directory",
         "size_bytes",
         "creation_time",
     ], str]):
@@ -157,11 +229,16 @@ class StorageFileInfo(schemas.DictSchema):
             dict,
             frozendict.frozendict,
         ],
-        size_bytes: typing.Union[
-            MetaOapg.properties.size_bytes,
-            decimal.Decimal,
-            int,
+        is_directory: typing.Union[
+            MetaOapg.properties.is_directory,
+            bool,
         ],
+        size_bytes: typing.Union[MetaOapg.properties.size_bytes, dict,
+                                 frozendict.frozendict, str, date, datetime,
+                                 uuid.UUID, int, float, decimal.Decimal, bool,
+                                 None, list, tuple, bytes, io.FileIO,
+                                 io.BufferedReader,
+                                 schemas.Unset] = schemas.unset,
         creation_time: typing.Union[MetaOapg.properties.creation_time, dict,
                                     frozendict.frozendict, str, date, datetime,
                                     uuid.UUID, int, float, decimal.Decimal,
@@ -177,6 +254,7 @@ class StorageFileInfo(schemas.DictSchema):
         return super().__new__(
             cls,
             *_args,
+            is_directory=is_directory,
             size_bytes=size_bytes,
             creation_time=creation_time,
             _configuration=_configuration,

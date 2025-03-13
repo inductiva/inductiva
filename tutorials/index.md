@@ -73,6 +73,8 @@ hidden: true
 simulators/overview
 simulators/AmrWind
 simulators/CaNS
+simulators/COAWST
+simulators/CP2K
 simulators/DualSPHysics
 simulators/FDS
 simulators/FVCOM
@@ -82,6 +84,7 @@ simulators/NWChem
 simulators/OpenFOAM
 simulators/OpenFAST
 simulators/OpenFASTAdvanced_Part1
+simulators/OpenSees
 simulators/QuantumEspresso
 simulators/Reef3D
 simulators/SCHISM
