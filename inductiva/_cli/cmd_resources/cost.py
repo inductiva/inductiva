@@ -11,10 +11,12 @@ def estimate_machine_cost(args):
     machine_type = args.machine_type
     spot = args.spot
     num_machines = args.num_machines
+    zone = args.zone
 
     cost = resources.estimate_machine_cost(
         machine_type=machine_type,
         spot=spot,
+        zone=zone,
     )
 
     total_cost = cost * num_machines
@@ -55,5 +57,10 @@ def register(parser):
                            default=1,
                            type=int,
                            help="Number of machines to launch.")
+
+    subparser.add_argument("--zone",
+                           type=str,
+                           default="europe-west1-b",
+                           help="Zone where the machines will be launched.")
 
     subparser.set_defaults(func=estimate_machine_cost)

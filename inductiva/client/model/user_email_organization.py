@@ -31,18 +31,22 @@ class UserEmailOrganization(schemas.DictSchema):
 
     class MetaOapg:
         required = {
+            "organization",
             "organization_id",
             "email",
         }
 
         class properties:
             email = schemas.StrSchema
+            organization = schemas.StrSchema
             organization_id = schemas.StrSchema
             __annotations__ = {
                 "email": email,
+                "organization": organization,
                 "organization_id": organization_id,
             }
 
+    organization: MetaOapg.properties.organization
     organization_id: MetaOapg.properties.organization_id
     email: MetaOapg.properties.email
 
@@ -50,6 +54,12 @@ class UserEmailOrganization(schemas.DictSchema):
     def __getitem__(
             self, name: typing_extensions.Literal["email"]
     ) -> MetaOapg.properties.email:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["organization"]
+    ) -> MetaOapg.properties.organization:
         ...
 
     @typing.overload
@@ -64,6 +74,7 @@ class UserEmailOrganization(schemas.DictSchema):
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "email",
+        "organization",
         "organization_id",
     ], str]):
         # dict_instance[name] accessor
@@ -73,6 +84,12 @@ class UserEmailOrganization(schemas.DictSchema):
     def get_item_oapg(
             self, name: typing_extensions.Literal["email"]
     ) -> MetaOapg.properties.email:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["organization"]
+    ) -> MetaOapg.properties.organization:
         ...
 
     @typing.overload
@@ -89,6 +106,7 @@ class UserEmailOrganization(schemas.DictSchema):
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "email",
+        "organization",
         "organization_id",
     ], str]):
         return super().get_item_oapg(name)
@@ -98,6 +116,10 @@ class UserEmailOrganization(schemas.DictSchema):
         *_args: typing.Union[
             dict,
             frozendict.frozendict,
+        ],
+        organization: typing.Union[
+            MetaOapg.properties.organization,
+            str,
         ],
         organization_id: typing.Union[
             MetaOapg.properties.organization_id,
@@ -116,6 +138,7 @@ class UserEmailOrganization(schemas.DictSchema):
         return super().__new__(
             cls,
             *_args,
+            organization=organization,
             organization_id=organization_id,
             email=email,
             _configuration=_configuration,
