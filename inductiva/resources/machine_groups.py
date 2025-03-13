@@ -292,6 +292,12 @@ class BaseMachineGroup(ABC):
         self._gpu_info = body.get("gpu_info")
         self.zone = body.get("zone")
 
+        # If the API response does not contain the CPU info, set default values
+        if self._cpu_info == {} or self._cpu_info is None:
+            self._cpu_info = {"cpu_cores_logical": 2, "cpu_cores_physical": 1}
+        if self._gpu_info == {} or self._gpu_info is None:
+            self._gpu_info = {"gpu_count": 0, "gpu_name": "None"}
+
         dynamic_disk_resize_config = body.get(
             "dynamic_disk_resize_config") or {}
         self.auto_resize_disk_max_gb = dynamic_disk_resize_config.get(
