@@ -59,8 +59,8 @@ Username: <username here>
 
 ■ Global User quotas
                                                                  CURRENT USAGE     MAX ALLOWED
- Maximum number of VCPUs                                         0 vcpu            1000 vcpu
- Maximum price per hour across all instances                     0 USD             270 USD
+ Maximum number of VCPUs                                         0 vcpu            300 vcpu
+ Maximum price per hour across all instances                     0 USD             10 USD
  Maximum simultaneous instances                                  0 instance        100 instance
 
 ■ Instance User quotas
