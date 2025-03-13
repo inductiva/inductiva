@@ -20,7 +20,8 @@ def register(parser):
 
     subparser.description = (
         "The `inductiva storage download` command allows you to download files "
-        "or folders from your remote storage.\n"
+        "or folders from your remote storage, maintaining the original storage "
+        "path structure.\n"
         "Specify the remote path, the local destination (optional), and whether"
         " to decompress the content after downloading (default: enabled).\n")
     subparser.add_argument(
