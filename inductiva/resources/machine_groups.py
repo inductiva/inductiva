@@ -141,7 +141,8 @@ class BaseMachineGroup(ABC):
         if self._gpu_info is None:
             return False
         # self._gpu_info can be a DynamicSchema, this is why we can't use .get()
-        return hasattr(self._gpu_info, "gpu_count") and self._gpu_info.gpu_count > 0
+        return hasattr(self._gpu_info,
+                       "gpu_count") and self._gpu_info.gpu_count > 0
 
     @property
     def id(self):
@@ -249,7 +250,7 @@ class BaseMachineGroup(ABC):
                 raise ValueError("The datetime string must be timezone aware.")
             return dt
         return None
-    
+
     def _update_attributes_from_response(self, resp: dict):
         """Update machine group attributes with values from the API response."""
         self._id = resp["id"]
@@ -328,7 +329,7 @@ class BaseMachineGroup(ABC):
         machine_group._started = bool(resp["started"])
         machine_group.__dict__["machines"] = resp["machines"]
         machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
-        
+
         machine_group._update_attributes_from_response(resp)
 
         return machine_group
