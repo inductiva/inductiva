@@ -401,7 +401,7 @@ class Project:
         list_of_tasks = self.list()
 
         for task in list_of_tasks:
-            task.download_outputs(output_dir=self.name)
+            task.download_outputs(output_dir=f"{self.name}/{task.id}")
 
     def __enter__(self):
         self.open()
