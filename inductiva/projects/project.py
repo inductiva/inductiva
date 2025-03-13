@@ -395,12 +395,13 @@ class Project:
     def download_outputs(self):
         """ Downloads all the outputs for all the tasks in the project.
         
-        All the files will be stored inside inductiva_output/<task_id's>.
+        All the files will be stored inside
+        `inductiva_output/<project_name>/<task_id's>`.
         """
         list_of_tasks = self.list()
 
         for task in list_of_tasks:
-            task.download_outputs()
+            task.download_outputs(output_dir=f"{self.name}/{task.id}")
 
     def __enter__(self):
         self.open()
