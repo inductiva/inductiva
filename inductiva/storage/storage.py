@@ -369,12 +369,15 @@ def download(remote_path: str, local_dir: str = "", uncompress: bool = True):
     with concurrent.futures.ThreadPoolExecutor() as executor:
         total_bytes = sum(executor.map(_get_size, urls))
 
+    n = len(urls)
+    desc = f"Downloading {n} file{'s' if n != 1 else ''} from {remote_path}"
+
     with tqdm.tqdm(
             total=total_bytes,
             unit="B",
             unit_scale=True,
             unit_divisor=1000,  # Use 1 KB = 1000 bytes
-            desc=f"Downloading {len(urls)} files from {remote_path}",
+            desc=desc,
     ) as progress_bar:
         with concurrent.futures.ThreadPoolExecutor() as executor:
             progress_bar_lock = threading.Lock()
