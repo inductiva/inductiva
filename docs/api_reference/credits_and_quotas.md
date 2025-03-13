@@ -55,17 +55,21 @@ Username: <username here>
 
 ■ Plan: Individual
 
-■ Credits: 1000.00 US$
+■ Credits: 9938.55 US$
+■ Estimated Costs (current month):
+    Computation: 0.048 US$
+    Storage:     0.84 US$
+    Total:       0.89 US$
 
 ■ Global User quotas
-                                                                 CURRENT USAGE     MAX ALLOWED
- Maximum number of VCPUs                                         0 vcpu            300 vcpu
- Maximum price per hour across all instances                     0 USD             10 USD
- Maximum simultaneous instances                                  0 instance        100 instance
+                                               CURRENT USAGE     MAX ALLOWED
+ Maximum simultaneous instances                0 instance        10 instance
+ Maximum price per hour across all instances   0 USD             10 USD
+ Maximum number of VCPUs                       0 vcpu            300 vcpu
 
 ■ Instance User quotas
-                                                                                          MAX ALLOWED
- Maximum disk size                                                                        1000 GB
+                     MAX ALLOWED
+ Maximum disk size   1000 GB
 
 ```
 
