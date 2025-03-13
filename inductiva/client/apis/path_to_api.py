@@ -21,6 +21,7 @@ from inductiva.client.apis.paths.admin_users_username_storage_size import AdminU
 from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUsernameTasks
 from inductiva.client.apis.paths.admin_users_username_capabilities import AdminUsersUsernameCapabilities
 from inductiva.client.apis.paths.admin_groups import AdminGroups
+from inductiva.client.apis.paths.admin_groups_id import AdminGroupsId
 from inductiva.client.apis.paths.admin_groups_active import AdminGroupsActive
 from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
 from inductiva.client.apis.paths.admin_groups_machine_group_id_terminate import AdminGroupsMachineGroupIdTerminate
@@ -128,6 +129,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsersUsernameCapabilities,
         PathValues.ADMIN_GROUPS:
             AdminGroups,
+        PathValues.ADMIN_GROUPS_ID:
+            AdminGroupsId,
         PathValues.ADMIN_GROUPS_ACTIVE:
             AdminGroupsActive,
         PathValues.ADMIN_ACTIVE_TASKS:
@@ -299,6 +302,8 @@ path_to_api = PathToApi({
         AdminUsersUsernameCapabilities,
     PathValues.ADMIN_GROUPS:
         AdminGroups,
+    PathValues.ADMIN_GROUPS_ID:
+        AdminGroupsId,
     PathValues.ADMIN_GROUPS_ACTIVE:
         AdminGroupsActive,
     PathValues.ADMIN_ACTIVE_TASKS:
