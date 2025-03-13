@@ -300,27 +300,27 @@ def upload(
     logging.info("Input uploaded successfully.")
 
 
-def download(remote_path: str, local_dir: str = "", uncompress: bool = True):
+def download(remote_path: str, local_dir: str = "", decompress: bool = True):
     """
     Downloads a file or folder from storage to a local directory, optionally 
-    uncompressing the contents.
+    decompressing the contents.
 
     Args:
         remote_path (str): The path of the file or folder on the remote server
             to download.
         local_dir (str, optional): The local directory where the file or folder
             will be saved. Defaults to the current working directory.
-        uncompress (bool, optional): Whether to uncompress the downloaded file 
+        decompress (bool, optional): Whether to decompress the downloaded file 
             or folder if it is compressed. Defaults to True.
 
     Example:
         # Download a folder from a remote server to the current directory
         inductiva.storage.download(remote_path="/path/to/remote/folder/")
     
-        # Download a file and save it to a local directory without uncompressing
+        # Download a file and save it to a local directory without decompressing
         inductiva.storage.download(remote_path="/path/to/remote/file.zip",
                                    local_dir="/local/directory",
-                                   uncompress=False)
+                                   decompress=False)
     """
 
     def _resolve_local_path(url, remote_path, local_dir):
@@ -354,12 +354,12 @@ def download(remote_path: str, local_dir: str = "", uncompress: bool = True):
                     progress_bar.update(len(chunk))
         response.release_conn()
 
-        if uncompress:
-            uncompress_dir, ext = os.path.splitext(resolved_path)
+        if decompress:
+            decompress_dir, ext = os.path.splitext(resolved_path)
             # TODO: Improve the check for ZIP file
             if ext != ".zip":
                 return
-            utils.data.uncompress_zip(resolved_path, uncompress_dir)
+            utils.data.uncompress_zip(resolved_path, decompress_dir)
             os.remove(resolved_path)
 
     urls = get_signed_urls(paths=[remote_path], operation="download")
