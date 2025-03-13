@@ -40,6 +40,7 @@ def register(parser):
     subparser.add_argument(
         "--decompress",
         action="store_true",
+        default=True,
         help=("Decompress the downloaded file or folder if it is compressed. "
               "This option is enabled by default."),
     )

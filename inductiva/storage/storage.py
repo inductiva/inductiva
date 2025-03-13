@@ -323,19 +323,12 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
                                    decompress=False)
     """
 
-    def _resolve_local_path(url, remote_path, local_dir):
+    def _resolve_local_path(url):
         remote_absolute_path = urllib.parse.urlparse(url).path
         index = remote_absolute_path.find(remote_path)
         remote_relative_path = remote_absolute_path[index:]
-
-        resolved_dirname = local_dir \
-            if remote_path == remote_relative_path \
-            else os.path.join(local_dir, os.path.dirname(remote_relative_path))
-
-        resolved_filename = os.path.basename(remote_relative_path)
-        resolved_path = os.path.join(resolved_dirname, resolved_filename)
-        if resolved_dirname:
-            os.makedirs(name=resolved_dirname, exist_ok=True)
+        resolved_path = os.path.join(local_dir, remote_relative_path)
+        os.makedirs(name=os.path.dirname(resolved_path), exist_ok=True)
         return resolved_path
 
     def _get_size(url):
@@ -346,7 +339,7 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
 
     def _download_file(url):
         response = pool_manager.urlopen("GET", url, preload_content=False)
-        resolved_path = _resolve_local_path(url, remote_path, local_dir)
+        resolved_path = _resolve_local_path(url)
         with open(resolved_path, "wb") as file:
             for chunk in response.stream():
                 file.write(chunk)
@@ -371,7 +364,7 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
 
     num_files = len(urls)
     text_file = f"file{'s' if num_files != 1 else ''}"
-    desc = f"Downloading {num_files} {text_file} from {remote_path}"
+    desc = f"Downloading {num_files} {text_file} from \"{remote_path}\""
 
     with tqdm.tqdm(
             total=total_bytes,
@@ -382,12 +375,10 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
     ) as progress_bar:
         with concurrent.futures.ThreadPoolExecutor() as executor:
             progress_bar_lock = threading.Lock()
-            _ = executor.map(_download_file, urls)
+            _ = list(executor.map(_download_file, urls))
 
-    text_dir = f"\"{local_dir}\"" if local_dir \
-        else "the current working directory"
-    logging.info("Successfully downloaded %d %s to %s.", num_files, text_file,
-                 text_dir)
+    logging.info("Successfully downloaded %d %s to \"%s\".", 
+                 num_files, text_file, local_dir or remote_path)
 
 
 def _list_files(root_path: str) -> Tuple[List[str], int]:
