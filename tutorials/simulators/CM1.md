@@ -87,7 +87,7 @@ import inductiva
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup(
     provider="GCP",
-    machine_type="c2d-highcpu-4")
+    machine_type="c3d-highcpu-4")
 
 # Initialize the Simulator
 cm1 = inductiva.simulators.CM1(
@@ -117,38 +117,38 @@ Once the simulation is complete, we terminate the machine, download the results
 and print a summary of the simulation as shown below.
 
 ```
-inductiva tasks info 3cx8gv4dd7y54f1ueb3ktgx4z
+inductiva tasks info 4kemtaacrjjoyr92oksh819my
 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 13/03, 10:38:08      0.999 s
-	In Queue                  at 13/03, 10:38:09      18.414 s
-	Preparing to Compute      at 13/03, 10:38:27      2.56 s
-	In Progress               at 13/03, 10:38:30      380.642 s
-		├> 1.156 s         cp -r /cm1 /workdir/output/artifacts/__cm1
-		├> 1.158 s         cp -f base.F /workdir/output/artifacts/__cm1/src
-		├> 1.155 s         cp -f init3d.F /workdir/output/artifacts/__cm1/src
-		├> 1.121 s         cp -f init_terrain.F /workdir/output/artifacts/__cm1/src
-		├> 1.065 s         cp -f init_surface.F /workdir/output/artifacts/__cm1/src
-		├> 64.122 s        make -C /workdir/output/artifacts/__cm1/src
-		├> 309.347 s       /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus --np 1 /workdir/output/artifacts/__cm1/run/cm1.exe namelist.input
-		└> 1.062 s         rm -r /workdir/output/artifacts/__cm1
-	Finalizing                at 13/03, 10:44:51      2.09 s
-	Success                   at 13/03, 10:44:53      
+	Waiting for Input         at 13/03, 15:00:21      0.918 s
+	In Queue                  at 13/03, 15:00:22      17.618 s
+	Preparing to Compute      at 13/03, 15:00:40      1.823 s
+	In Progress               at 13/03, 15:00:42      364.628 s
+		├> 1.164 s         cp -r /cm1 /workdir/output/artifacts/__cm1
+		├> 1.151 s         cp -f base.F /workdir/output/artifacts/__cm1/src
+		├> 1.151 s         cp -f init3d.F /workdir/output/artifacts/__cm1/src
+		├> 1.081 s         cp -f init_terrain.F /workdir/output/artifacts/__cm1/src
+		├> 1.066 s         cp -f init_surface.F /workdir/output/artifacts/__cm1/src
+		├> 59.115 s        make -C /workdir/output/artifacts/__cm1/src
+		├> 298.356 s       /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus --np 1 /workdir/output/artifacts/__cm1/run/cm1.exe namelist.input
+		└> 1.065 s         rm -r /workdir/output/artifacts/__cm1
+	Finalizing                at 13/03, 15:06:46      2.026 s
+	Success                   at 13/03, 15:06:48      
 
 Data:
 	Size of zipped output:    39.11 MB
 	Size of unzipped output:  128.26 MB
 	Number of output files:   13
 
-Estimated computation cost (US$): 0.0035 US$
+Estimated computation cost (US$): 0.0043 US$
 
-Go to https://console.inductiva.ai/tasks/3cx8gv4dd7y54f1ueb3ktgx4z for more details.
+Go to https://console.inductiva.ai/tasks/4kemtaacrjjoyr92oksh819my for more details.
 ```
 
-The core computation time of our simulation was 380 seconds (6 minutes and 20 seconds),
-as can be seen in the line `In Progress  at 13/03, 10:38:30  380.642 s`. This
+The core computation time of our simulation was 364 seconds (6 minutes and 4 seconds),
+as can be seen in the line `In Progress  at 13/03, 15:00:42  364.628 s`. This
 part of the timeline represents the actual execution of the simulation.
 
 Although it's short, there's still room for improvement to reduce the processing
@@ -162,14 +162,19 @@ of lines in your `namelist.input` file and in your Python script.
 Here are a list of changes you need to do:
 - Change `nodex` to 4 in the `namelist.input` file.
 - Change `nodey` to 4 in the `namelist.input` file.
-- Change your `machine_type` to `c2d-highcpu-16` in your Python script.
+- Change your `machine_type` to `c3d-highcpu-16` in your Python script.
 - Change your `n_vcpus` to `16` in your Python script.
 
 This is all you need to do to scale your simulation to a 16 vCPU machine.
 
 Here are the results of running the same simulation on a few machines:
 
-|  Machine Type  | Virtual CPUs |     Time     | Estimated Cost |
-|:--------------:|:------------:|:------------:|:--------------:|
-|  c2-standard-4 |       4      | - seconds | 0.00066 US$    |
-|  c2d-highcpu-16 |       16      | 110 seconds | 0.0037 US$    |
+| Machine Type            | Virtual CPUs | Time              | Estimated Cost |
+|-------------------------|--------------|------------------|---------------|
+| **Local Ryzen 7 7700X** | 16           | 1 minute and 20 seconds | N/A           |
+| **Cloud c3d-highcpu-16** | 16           | 1 minute and 53 seconds | 0.0051 US$      |
+| **Cloud c3d-highcpu-60** | 60           | 1 minute and 9 seconds | 0.012 US$      | 
+
+By leveraging the Inductiva API, you can efficiently scale your CM1 simulations
+to meet your computational needs. Try different machine configurations and
+optimize your workflow for faster, more cost-effective results!
