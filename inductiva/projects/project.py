@@ -396,14 +396,9 @@ class Project:
         """
         list_of_tasks = self.list()
 
-        # Set the new output dir based on the old one + project name
-        old_out_dir = inductiva.get_output_dir()
-        inductiva.set_output_dir(os.path.join(old_out_dir, self.name))
-
         for task in list_of_tasks:
-            task.download_outputs()
-        # Restore ols output dir
-        inductiva.set_output_dir(old_out_dir)
+            task.download_outputs(output_dir=self.name)
+
 
     def __enter__(self):
         self.open()
