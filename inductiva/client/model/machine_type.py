@@ -32,14 +32,14 @@ class MachineType(schemas.DictSchema):
     class MetaOapg:
         required = {
             "machine_type",
-            "num_cpus",
             "price",
+            "num_vcpus",
             "ram_gb",
         }
 
         class properties:
             machine_type = schemas.StrSchema
-            num_cpus = schemas.IntSchema
+            num_vcpus = schemas.IntSchema
             ram_gb = schemas.IntSchema
             price = schemas.NumberSchema
 
@@ -441,7 +441,7 @@ class MachineType(schemas.DictSchema):
 
             __annotations__ = {
                 "machine_type": machine_type,
-                "num_cpus": num_cpus,
+                "num_vcpus": num_vcpus,
                 "ram_gb": ram_gb,
                 "price": price,
                 "provider_id": provider_id,
@@ -454,8 +454,8 @@ class MachineType(schemas.DictSchema):
             }
 
     machine_type: MetaOapg.properties.machine_type
-    num_cpus: MetaOapg.properties.num_cpus
     price: MetaOapg.properties.price
+    num_vcpus: MetaOapg.properties.num_vcpus
     ram_gb: MetaOapg.properties.ram_gb
 
     @typing.overload
@@ -466,8 +466,8 @@ class MachineType(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["num_cpus"]
-    ) -> MetaOapg.properties.num_cpus:
+        self, name: typing_extensions.Literal["num_vcpus"]
+    ) -> MetaOapg.properties.num_vcpus:
         ...
 
     @typing.overload
@@ -530,7 +530,7 @@ class MachineType(schemas.DictSchema):
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "machine_type",
-        "num_cpus",
+        "num_vcpus",
         "ram_gb",
         "price",
         "provider_id",
@@ -552,8 +552,8 @@ class MachineType(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["num_cpus"]
-    ) -> MetaOapg.properties.num_cpus:
+        self, name: typing_extensions.Literal["num_vcpus"]
+    ) -> MetaOapg.properties.num_vcpus:
         ...
 
     @typing.overload
@@ -618,7 +618,7 @@ class MachineType(schemas.DictSchema):
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "machine_type",
-        "num_cpus",
+        "num_vcpus",
         "ram_gb",
         "price",
         "provider_id",
@@ -641,16 +641,16 @@ class MachineType(schemas.DictSchema):
             MetaOapg.properties.machine_type,
             str,
         ],
-        num_cpus: typing.Union[
-            MetaOapg.properties.num_cpus,
-            decimal.Decimal,
-            int,
-        ],
         price: typing.Union[
             MetaOapg.properties.price,
             decimal.Decimal,
             int,
             float,
+        ],
+        num_vcpus: typing.Union[
+            MetaOapg.properties.num_vcpus,
+            decimal.Decimal,
+            int,
         ],
         ram_gb: typing.Union[
             MetaOapg.properties.ram_gb,
@@ -706,8 +706,8 @@ class MachineType(schemas.DictSchema):
             cls,
             *_args,
             machine_type=machine_type,
-            num_cpus=num_cpus,
             price=price,
+            num_vcpus=num_vcpus,
             ram_gb=ram_gb,
             provider_id=provider_id,
             threads_per_core=threads_per_core,

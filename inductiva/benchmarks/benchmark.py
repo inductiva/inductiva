@@ -290,7 +290,7 @@ class Benchmark(projects.Project):
         """
 
         def _handle_suffix(executer):
-            if executer.host_type == resources.machine_types.ProviderType.GCP:
+            if executer.host_type == resources.utils.ProviderType.GCP:
                 return "-".join(executer.vm_name.split("-")[:-1])
             return executer.vm_name
 

@@ -1,21 +1,18 @@
 import typing_extensions
 
 from inductiva.client.paths import PathValues
-from inductiva.client.apis.paths.tasks_auth import TasksAuth
 from inductiva.client.apis.paths.tasks_submit import TasksSubmit
 from inductiva.client.apis.paths.tasks_task_id_input_uploaded import TasksTaskIdInputUploaded
 from inductiva.client.apis.paths.tasks_task_id import TasksTaskId
 from inductiva.client.apis.paths.tasks import Tasks
 from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
-from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDisableLogs
 from inductiva.client.apis.paths.tasks_task_id_register import TasksTaskIdRegister
 from inductiva.client.apis.paths.tasks_task_id_offer import TasksTaskIdOffer
 from inductiva.client.apis.paths.tasks_task_id_message import TasksTaskIdMessage
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_terms_and_conditions import AdminUsersEmailTermsAndConditions
 from inductiva.client.apis.paths.admin_users_username_organization import AdminUsersUsernameOrganization
-from inductiva.client.apis.paths.admin_users_username_tier import AdminUsersUsernameTier
 from inductiva.client.apis.paths.admin_users_username_credits import AdminUsersUsernameCredits
 from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
 from inductiva.client.apis.paths.admin_users_email import AdminUsersEmail
@@ -24,6 +21,7 @@ from inductiva.client.apis.paths.admin_users_username_storage_size import AdminU
 from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUsernameTasks
 from inductiva.client.apis.paths.admin_users_username_capabilities import AdminUsersUsernameCapabilities
 from inductiva.client.apis.paths.admin_groups import AdminGroups
+from inductiva.client.apis.paths.admin_groups_id import AdminGroupsId
 from inductiva.client.apis.paths.admin_groups_active import AdminGroupsActive
 from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
 from inductiva.client.apis.paths.admin_groups_machine_group_id_terminate import AdminGroupsMachineGroupIdTerminate
@@ -34,6 +32,10 @@ from inductiva.client.apis.paths.admin_tiers import AdminTiers
 from inductiva.client.apis.paths.admin_terminate_machine_groups_credits_exhausted import AdminTerminateMachineGroupsCreditsExhausted
 from inductiva.client.apis.paths.admin_import_provider_costs import AdminImportProviderCosts
 from inductiva.client.apis.paths.admin_machine_id_event import AdminMachineIdEvent
+from inductiva.client.apis.paths.admin_users_username_costs_fee_percentage import AdminUsersUsernameCostsFeePercentage
+from inductiva.client.apis.paths.admin_organizations_organization_id_costs_fee_percentage import AdminOrganizationsOrganizationIdCostsFeePercentage
+from inductiva.client.apis.paths.admin_top_ups import AdminTopUps
+from inductiva.client.apis.paths.admin_tasks import AdminTasks
 from inductiva.client.apis.paths.task_runner_register import TaskRunnerRegister
 from inductiva.client.apis.paths.task_runner_machine_id import TaskRunnerMachineId
 from inductiva.client.apis.paths.task_runner_machine_id_task import TaskRunnerMachineIdTask
@@ -50,7 +52,6 @@ from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
 from inductiva.client.apis.paths.compute_price import ComputePrice
 from inductiva.client.apis.paths.compute_groups import ComputeGroups
 from inductiva.client.apis.paths.compute_groups_history import ComputeGroupsHistory
-from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
 from inductiva.client.apis.paths.compute_machine_types import ComputeMachineTypes
 from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
 from inductiva.client.apis.paths.compute_group_machine_group_id_sharing import ComputeGroupMachineGroupIdSharing
@@ -62,6 +63,7 @@ from inductiva.client.apis.paths.storage_signed_urls import StorageSignedUrls
 from inductiva.client.apis.paths.storage_input_notify import StorageInputNotify
 from inductiva.client.apis.paths.storage_input_remote import StorageInputRemote
 from inductiva.client.apis.paths.storage_ import Storage
+from inductiva.client.apis.paths.storage_copy import StorageCopy
 from inductiva.client.apis.paths.storage_operations_operation_id import StorageOperationsOperationId
 from inductiva.client.apis.paths.storage_operations import StorageOperations
 from inductiva.client.apis.paths.storage_export_multipart import StorageExportMultipart
@@ -87,8 +89,6 @@ from inductiva.client.apis.paths.metrics_usage_statistics import MetricsUsageSta
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
-        PathValues.TASKS_AUTH:
-            TasksAuth,
         PathValues.TASKS_SUBMIT:
             TasksSubmit,
         PathValues.TASKS_TASK_ID_INPUT_UPLOADED:
@@ -101,8 +101,6 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdStatus,
         PathValues.TASKS_TASK_ID_KILL:
             TasksTaskIdKill,
-        PathValues.TASKS_TASK_ID_DISABLE_LOGS:
-            TasksTaskIdDisableLogs,
         PathValues.TASKS_TASK_ID_REGISTER:
             TasksTaskIdRegister,
         PathValues.TASKS_TASK_ID_OFFER:
@@ -115,8 +113,6 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsersEmailTermsAndConditions,
         PathValues.ADMIN_USERS_USERNAME_ORGANIZATION:
             AdminUsersUsernameOrganization,
-        PathValues.ADMIN_USERS_USERNAME_TIER:
-            AdminUsersUsernameTier,
         PathValues.ADMIN_USERS_USERNAME_CREDITS:
             AdminUsersUsernameCredits,
         PathValues.ADMIN_USERS_EMAIL_API_KEY:
@@ -133,6 +129,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsersUsernameCapabilities,
         PathValues.ADMIN_GROUPS:
             AdminGroups,
+        PathValues.ADMIN_GROUPS_ID:
+            AdminGroupsId,
         PathValues.ADMIN_GROUPS_ACTIVE:
             AdminGroupsActive,
         PathValues.ADMIN_ACTIVE_TASKS:
@@ -153,6 +151,14 @@ PathToApi = typing_extensions.TypedDict(
             AdminImportProviderCosts,
         PathValues.ADMIN_MACHINE_ID_EVENT:
             AdminMachineIdEvent,
+        PathValues.ADMIN_USERS_USERNAME_COSTS_FEE_PERCENTAGE:
+            AdminUsersUsernameCostsFeePercentage,
+        PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_COSTS_FEE_PERCENTAGE:
+            AdminOrganizationsOrganizationIdCostsFeePercentage,
+        PathValues.ADMIN_TOPUPS:
+            AdminTopUps,
+        PathValues.ADMIN_TASKS:
+            AdminTasks,
         PathValues.TASKRUNNER_REGISTER:
             TaskRunnerRegister,
         PathValues.TASKRUNNER_MACHINE_ID:
@@ -185,8 +191,6 @@ PathToApi = typing_extensions.TypedDict(
             ComputeGroups,
         PathValues.COMPUTE_GROUPS_HISTORY:
             ComputeGroupsHistory,
-        PathValues.COMPUTE_GROUP_STATUS:
-            ComputeGroupStatus,
         PathValues.COMPUTE_MACHINE_TYPES:
             ComputeMachineTypes,
         PathValues.COMPUTE_GROUP_NAME:
@@ -209,6 +213,8 @@ PathToApi = typing_extensions.TypedDict(
             StorageInputRemote,
         PathValues.STORAGE_:
             Storage,
+        PathValues.STORAGE_COPY:
+            StorageCopy,
         PathValues.STORAGE_OPERATIONS_OPERATION_ID:
             StorageOperationsOperationId,
         PathValues.STORAGE_OPERATIONS:
@@ -256,8 +262,6 @@ PathToApi = typing_extensions.TypedDict(
     })
 
 path_to_api = PathToApi({
-    PathValues.TASKS_AUTH:
-        TasksAuth,
     PathValues.TASKS_SUBMIT:
         TasksSubmit,
     PathValues.TASKS_TASK_ID_INPUT_UPLOADED:
@@ -270,8 +274,6 @@ path_to_api = PathToApi({
         TasksTaskIdStatus,
     PathValues.TASKS_TASK_ID_KILL:
         TasksTaskIdKill,
-    PathValues.TASKS_TASK_ID_DISABLE_LOGS:
-        TasksTaskIdDisableLogs,
     PathValues.TASKS_TASK_ID_REGISTER:
         TasksTaskIdRegister,
     PathValues.TASKS_TASK_ID_OFFER:
@@ -284,8 +286,6 @@ path_to_api = PathToApi({
         AdminUsersEmailTermsAndConditions,
     PathValues.ADMIN_USERS_USERNAME_ORGANIZATION:
         AdminUsersUsernameOrganization,
-    PathValues.ADMIN_USERS_USERNAME_TIER:
-        AdminUsersUsernameTier,
     PathValues.ADMIN_USERS_USERNAME_CREDITS:
         AdminUsersUsernameCredits,
     PathValues.ADMIN_USERS_EMAIL_API_KEY:
@@ -302,6 +302,8 @@ path_to_api = PathToApi({
         AdminUsersUsernameCapabilities,
     PathValues.ADMIN_GROUPS:
         AdminGroups,
+    PathValues.ADMIN_GROUPS_ID:
+        AdminGroupsId,
     PathValues.ADMIN_GROUPS_ACTIVE:
         AdminGroupsActive,
     PathValues.ADMIN_ACTIVE_TASKS:
@@ -322,6 +324,14 @@ path_to_api = PathToApi({
         AdminImportProviderCosts,
     PathValues.ADMIN_MACHINE_ID_EVENT:
         AdminMachineIdEvent,
+    PathValues.ADMIN_USERS_USERNAME_COSTS_FEE_PERCENTAGE:
+        AdminUsersUsernameCostsFeePercentage,
+    PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_COSTS_FEE_PERCENTAGE:
+        AdminOrganizationsOrganizationIdCostsFeePercentage,
+    PathValues.ADMIN_TOPUPS:
+        AdminTopUps,
+    PathValues.ADMIN_TASKS:
+        AdminTasks,
     PathValues.TASKRUNNER_REGISTER:
         TaskRunnerRegister,
     PathValues.TASKRUNNER_MACHINE_ID:
@@ -354,8 +364,6 @@ path_to_api = PathToApi({
         ComputeGroups,
     PathValues.COMPUTE_GROUPS_HISTORY:
         ComputeGroupsHistory,
-    PathValues.COMPUTE_GROUP_STATUS:
-        ComputeGroupStatus,
     PathValues.COMPUTE_MACHINE_TYPES:
         ComputeMachineTypes,
     PathValues.COMPUTE_GROUP_NAME:
@@ -378,6 +386,8 @@ path_to_api = PathToApi({
         StorageInputRemote,
     PathValues.STORAGE_:
         Storage,
+    PathValues.STORAGE_COPY:
+        StorageCopy,
     PathValues.STORAGE_OPERATIONS_OPERATION_ID:
         StorageOperationsOperationId,
     PathValues.STORAGE_OPERATIONS:

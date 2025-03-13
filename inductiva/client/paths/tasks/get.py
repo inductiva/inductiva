@@ -48,6 +48,7 @@ class PerPageSchema(schemas.IntSchema):
 
 StatusSchema = TaskStatusCode
 ProjectSchema = schemas.StrSchema
+ActiveSchema = schemas.BoolSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
@@ -68,6 +69,10 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
         'project': typing.Union[
             ProjectSchema,
             str,
+        ],
+        'active': typing.Union[
+            ActiveSchema,
+            bool,
         ],
     },
     total=False)
@@ -100,6 +105,12 @@ request_query_project = api_client.QueryParameter(
     name="project",
     style=api_client.ParameterStyle.FORM,
     schema=ProjectSchema,
+    explode=True,
+)
+request_query_active = api_client.QueryParameter(
+    name="active",
+    style=api_client.ParameterStyle.FORM,
+    schema=ActiveSchema,
     explode=True,
 )
 _auth = [
@@ -237,6 +248,7 @@ class BaseApi(api_client.Api):
                 request_query_per_page,
                 request_query_status,
                 request_query_project,
+                request_query_active,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
