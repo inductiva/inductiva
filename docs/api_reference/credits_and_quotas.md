@@ -55,11 +55,11 @@ Username: <username here>
 
 ■ Plan: Individual
 
-■ Credits: 9938.55 US$
+■ Credits: 4.55 US$
 ■ Estimated Costs (current month):
-    Computation: 0.048 US$
-    Storage:     0.84 US$
-    Total:       0.89 US$
+    Computation: 0.35 US$
+    Storage:     0.10 US$
+    Total:       0.45 US$
 
 ■ Global User quotas
                                                CURRENT USAGE     MAX ALLOWED
