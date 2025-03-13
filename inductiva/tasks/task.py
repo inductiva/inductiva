@@ -1022,7 +1022,7 @@ class Task:
 
         if uncompress:
             logging.info("Uncompressing the files to %s...", dir_path)
-            data.uncompress_task_outputs(zip_path, dir_path)
+            data.uncompress_zip(zip_path, dir_path)
             if rm_downloaded_zip_archive:
                 zip_path.unlink()
 

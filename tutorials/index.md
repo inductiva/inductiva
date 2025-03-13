@@ -73,6 +73,8 @@ hidden: true
 simulators/overview
 simulators/AmrWind
 simulators/CaNS
+simulators/COAWST
+simulators/CP2K
 simulators/DualSPHysics
 simulators/FDS
 simulators/FVCOM

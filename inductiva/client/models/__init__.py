@@ -13,6 +13,7 @@
 
 from inductiva.client.model.autoscale_policy import AutoscalePolicy
 from inductiva.client.model.backend_version import BackendVersion
+from inductiva.client.model.cpu_info import CPUInfo
 from inductiva.client.model.capability import Capability
 from inductiva.client.model.cost_components import CostComponents
 from inductiva.client.model.cost_detail import CostDetail
@@ -24,6 +25,7 @@ from inductiva.client.model.disk_resize_request import DiskResizeRequest
 from inductiva.client.model.dynamic_disk_resize_config import DynamicDiskResizeConfig
 from inductiva.client.model.executer import Executer
 from inductiva.client.model.file_info import FileInfo
+from inductiva.client.model.gpu_info import GPUInfo
 from inductiva.client.model.http_validation_error import HTTPValidationError
 from inductiva.client.model.machine_group_cost_per_hour import MachineGroupCostPerHour
 from inductiva.client.model.machine_group_costs import MachineGroupCosts
@@ -81,6 +83,7 @@ from inductiva.client.model.task_status_info import TaskStatusInfo
 from inductiva.client.model.task_step import TaskStep
 from inductiva.client.model.task_submitted_info import TaskSubmittedInfo
 from inductiva.client.model.task_with_status_history import TaskWithStatusHistory
+from inductiva.client.model.task_with_user_info import TaskWithUserInfo
 from inductiva.client.model.terms_and_conditions import TermsAndConditions
 from inductiva.client.model.tier_full_info import TierFullInfo
 from inductiva.client.model.tier_quota_detail import TierQuotaDetail
@@ -102,12 +105,12 @@ from inductiva.client.model.user_costs_over_time import UserCostsOverTime
 from inductiva.client.model.user_create import UserCreate
 from inductiva.client.model.user_credits import UserCredits
 from inductiva.client.model.user_email_organization import UserEmailOrganization
+from inductiva.client.model.user_info_short import UserInfoShort
 from inductiva.client.model.user_most_used_machine_types_overview import UserMostUsedMachineTypesOverview
 from inductiva.client.model.user_most_used_simulators_overview import UserMostUsedSimulatorsOverview
 from inductiva.client.model.user_organization_update import UserOrganizationUpdate
 from inductiva.client.model.user_task_status_overview import UserTaskStatusOverview
 from inductiva.client.model.user_tasks_overview import UserTasksOverview
-from inductiva.client.model.user_tier_update import UserTierUpdate
 from inductiva.client.model.user_update_terms_and_conditions import UserUpdateTermsAndConditions
 from inductiva.client.model.vm_group_config import VMGroupConfig
 from inductiva.client.model.validation_error import ValidationError

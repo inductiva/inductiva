@@ -7,7 +7,8 @@ cloud_machine = inductiva.resources.MachineGroup( \
     machine_type="c3d-standard-180")
 
 # Initialize the Simulator
-cp2k = inductiva.simulators.CP2K()
+cp2k = inductiva.simulators.CP2K( \
+    version="2025.1")
 
 # Run simulation with config files in the input directory
 task = cp2k.run( \
