@@ -1,4 +1,4 @@
-inductiva.utils.input\_functions module
+input\_functions module
 =======================================
 
 .. automodule:: inductiva.utils.input_functions

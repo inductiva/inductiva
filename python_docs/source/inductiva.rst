@@ -16,7 +16,6 @@ Subpackages
    inductiva.commands
    inductiva.projects
    inductiva.resources
-   inductiva.simulators
    inductiva.storage
    inductiva.tasks
    inductiva.templating

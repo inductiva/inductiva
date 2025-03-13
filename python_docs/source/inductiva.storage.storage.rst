@@ -1,4 +1,4 @@
-inductiva.storage.storage module
+storage module
 ================================
 
 .. automodule:: inductiva.storage.storage

@@ -1,4 +1,4 @@
-inductiva.resources package
+resources package
 ===========================
 
 .. automodule:: inductiva.resources

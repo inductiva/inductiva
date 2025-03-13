@@ -1,4 +1,4 @@
-inductiva.tasks.run\_simulation module
+run\_simulation module
 ======================================
 
 .. automodule:: inductiva.tasks.run_simulation

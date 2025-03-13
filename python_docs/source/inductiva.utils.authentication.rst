@@ -1,4 +1,4 @@
-inductiva.utils.authentication module
+authentication module
 =====================================
 
 .. automodule:: inductiva.utils.authentication

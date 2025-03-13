@@ -1,4 +1,4 @@
-inductiva.projects package
+projects package
 ==========================
 
 .. automodule:: inductiva.projects
@@ -12,4 +12,4 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   inductiva.projects.project
+   project <inductiva.projects.project>

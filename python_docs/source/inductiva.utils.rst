@@ -1,4 +1,4 @@
-inductiva.utils package
+utils package
 =======================
 
 .. automodule:: inductiva.utils

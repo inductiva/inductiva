@@ -1,4 +1,4 @@
-inductiva.tasks.file\_tracker module
+file\_tracker module
 ====================================
 
 .. automodule:: inductiva.tasks.file_tracker

@@ -1,4 +1,4 @@
-inductiva.tasks.streams module
+streams module
 ==============================
 
 .. automodule:: inductiva.tasks.streams

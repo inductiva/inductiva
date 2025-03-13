@@ -1,4 +1,4 @@
-inductiva.storage package
+storage package
 =========================
 
 .. automodule:: inductiva.storage
@@ -12,4 +12,4 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   inductiva.storage.storage
+   storage <inductiva.storage.storage>

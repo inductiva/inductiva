@@ -1,4 +1,4 @@
-inductiva.utils.format\_utils module
+format\_utils module
 ====================================
 
 .. automodule:: inductiva.utils.format_utils

@@ -1,4 +1,4 @@
-inductiva.users.methods module
+methods module
 ==============================
 
 .. automodule:: inductiva.users.methods

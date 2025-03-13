@@ -1,4 +1,4 @@
-inductiva.utils.files module
+files module
 ============================
 
 .. automodule:: inductiva.utils.files

@@ -1,4 +1,4 @@
-inductiva.templating package
+templating package
 ============================
 
 .. automodule:: inductiva.templating
@@ -12,4 +12,4 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   inductiva.templating.manager
+   templating.manager <inductiva.templating.manager>

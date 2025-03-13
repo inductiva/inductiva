@@ -1,4 +1,4 @@
-inductiva.tasks.output\_info module
+output\_info module
 ===================================
 
 .. automodule:: inductiva.tasks.output_info

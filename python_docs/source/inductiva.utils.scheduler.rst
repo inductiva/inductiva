@@ -1,4 +1,4 @@
-inductiva.utils.scheduler module
+scheduler module
 ================================
 
 .. automodule:: inductiva.utils.scheduler

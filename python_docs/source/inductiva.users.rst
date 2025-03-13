@@ -1,4 +1,4 @@
-inductiva.users package
+users package
 =======================
 
 .. automodule:: inductiva.users

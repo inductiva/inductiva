@@ -1,4 +1,4 @@
-inductiva.commands.commands module
+commands module
 ==================================
 
 .. automodule:: inductiva.commands.commands

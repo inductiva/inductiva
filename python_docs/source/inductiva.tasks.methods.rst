@@ -1,4 +1,4 @@
-inductiva.tasks.methods module
+methods module
 ==============================
 
 .. automodule:: inductiva.tasks.methods

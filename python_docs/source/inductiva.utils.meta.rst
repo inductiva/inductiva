@@ -1,4 +1,4 @@
-inductiva.utils.meta module
+meta module
 ===========================
 
 .. automodule:: inductiva.utils.meta

@@ -1,4 +1,4 @@
-inductiva.utils.data module
+data module
 ===========================
 
 .. automodule:: inductiva.utils.data

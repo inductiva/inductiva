@@ -1,4 +1,4 @@
-inductiva.commands package
+commands package
 ==========================
 
 .. automodule:: inductiva.commands
@@ -12,5 +12,5 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   inductiva.commands.commands
-   inductiva.commands.mpiconfig
+   commands <inductiva.commands.commands>
+   mpiconfig <inductiva.commands.mpiconfig>

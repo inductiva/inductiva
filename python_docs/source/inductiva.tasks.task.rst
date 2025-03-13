@@ -1,4 +1,4 @@
-inductiva.tasks.task module
+task module
 ===========================
 
 .. automodule:: inductiva.tasks.task

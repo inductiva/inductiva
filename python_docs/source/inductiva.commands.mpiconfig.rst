@@ -1,4 +1,4 @@
-inductiva.commands.mpiconfig module
+mpiconfig module
 ===================================
 
 .. automodule:: inductiva.commands.mpiconfig
