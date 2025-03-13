@@ -20,5 +20,4 @@ Subpackages
    inductiva.tasks
    inductiva.templating
    inductiva.users
-   inductiva.utils
 
