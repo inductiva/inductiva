@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath("./source"))
 # -- Project information -----------------------------------------------------
 
 project = 'Inductiva API Python client'
-copyright = '2024, Inductiva Research Labs'
+copyright = '2025, Inductiva Research Labs'
 author = 'Inductiva Research Labs'
 
 
@@ -29,7 +29,6 @@ autodoc_mock_imports = [
     "setup",        # Prevents issues with `setup.py` executing sys.exit()
     "conftest",     # Avoids errors if pytest isn't installed
     "pytest",       # Mock pytest to avoid import failures in test-related files
- #   "inductiva",    # Avoid importing inductiva package to prevent API calls
 ]
 
 
