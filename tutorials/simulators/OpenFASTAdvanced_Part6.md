@@ -62,7 +62,8 @@ By efficiently managing computational resources, we achieve faster results while
 keeping costs remarkably low.
 
 Lastly, running the `openfast_project.download_outputs()` will create a folder
-called `inductiva_output` with one folder for each simulation, as seen here:
+called `inductiva_output/Openfast_WavesWN` with one folder for each simulation,
+as seen here:
 
 ```
 total 0

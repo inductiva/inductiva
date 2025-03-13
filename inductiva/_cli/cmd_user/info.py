@@ -122,7 +122,7 @@ def get_info(_, fout: TextIO = sys.stdout):
     print(f"Username: {username}", file=fout)
 
     print("", file=fout)
-    print(f"■ Tier: {tier}", file=fout)
+    print(f"■ Plan: {tier}", file=fout)
     print("", file=fout)
 
     _print_credits_summary(user_info, fout=fout)

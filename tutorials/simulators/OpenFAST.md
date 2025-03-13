@@ -1,13 +1,6 @@
-In this guide, we will walk you through setting up and running OpenFAST, 
-an open-source engineering toolset developed by the National Renewable 
-Energy Laboratory (NREL) for simulating wind turbine dynamics.
+This guide will walk you through setting up and running OpenFAST simulations using the Inductiva API.
 
-We will cover:
-
-- Configuring OpenFAST and FAST.Farm for wind turbine and wind farm simulations.
-- Allowed Commands for running OpenFAST.
-- Example code to help you get started with simulations.
-- Available benchmarks to help you evaluate the performance of OpenFAST.
+We will cover an example code to help you get started with simulations.
 
 # OpenFAST
 
@@ -24,57 +17,83 @@ wind resources for renewable energy generation.
 
 Both OpenFAST and FAST.Farm are compiled with OpenMP to enable parallel processing, enhancing the performance and scalability of your simulations.
 
-## Allowed Commands
+## Supported Versions
+We currently support the following OpenFAST versions:
+- **v4.0.2** (Feb., 2025)
+- **v3.5.2** (Jan., 2024)
 
-The following commands are available for running OpenFAST and its modules:
 
-- `aerodyn_driver`: Performs **aerodynamic analysis** for airflow dynamics 
-around wind turbine blades.
-- `beamdyn_driver`: Focuses on **structural analysis** for the dynamic 
-response of wind turbine blades and towers.
-- `feam_driver`: Executes **finite element analysis (FEA)**, focusing on 
-detailed structural modeling and simulation.
-- `hydrodyn_driver`: Simulates **hydrodynamic interactions** between turbine 
-support structures and water bodies.
-- `inflowwind_driver`: Simulates **atmospheric conditions**, such as wind 
-inflow, and their effects on wind turbine performance.
-- `moordyn_driver`: Focuses on **mooring dynamics** for floating wind turbines, 
-analyzing the behavior of mooring systems.
-- `openfast`: The main **OpenFAST** executable for integrating and running 
-comprehensive wind turbine simulations.
-- `orca_driver`: Enables **aero-elastic and hydrodynamic coupled simulations**,
-useful for analyzing turbine behavior in complex marine environments.
-- `servodyn_driver`: Simulates **control system dynamics**, modeling how 
-wind turbine control systems respond to changing conditions.
-- `subdyn_driver`: Focuses on **substructure dynamics**, analyzing the interaction 
-between turbine components and support structures.
-- `turbsim`: A standalone tool that generates **atmospheric turbulence** data 
-for wind turbine simulations.
-- `unsteadyaero_driver`: Used for **unsteady aerodynamics analysis**, focusing 
-on time-varying airflow around turbine blades.
-- `FAST.Farm`: Specialized for **wind farm simulations**, accounting for 
-turbine interactions, wake effects, and turbulence.
+## Running OpenFAST
 
-## Example Code
+### Objective
 
-In the following example, we demonstrate how to run an OpenFAST simulation 
-using Inductiva’s cloud infrastructure. 
+We will cover a quick start use case available in the [OpenFAST GitHub Repository](https://github.com/openfast) to help you get started with simulations.
 
-```{literalinclude} ../../inductiva/tests/test_simulators/openfast/openfast.py
-:language: python
+This use case uses the NREL 5-MW wind turbine, a hypothetical yet representative multi-MW wind turbine with a rated power of 5 MW, a rated rotor speed of 12.1 rpm, a hub height of 90 m, and a rotor diameter of 126 m. It focuses on an “onshore” version
+of the turbine, solely considering the structure (no aerodynamics), where the tower is initially offset by 3 m at the top.
+
+### Prerequisites
+
+Download the required files [here](https://github.com/OpenFAST/r-test/tree/main/glue-codes/openfast/MinimalExample) and place them in a folder called `MinimalExample`. Then, you’ll be ready to send your simulation to the Cloud.
+
+### Running Your Simulation
+
+Here is the code required to run an OpenFAST simulation using the Inductiva API:
+
+```python
+"""OpenFAST example."""
+import inductiva
+
+# Allocate cloud machine on Google Cloud Platform
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c2-standard-4")
+
+# List of commands to run
+commands = ["openfast Main.fst"]
+
+# Initialize the Simulator
+openfast = inductiva.simulators.OpenFAST( \
+    version="4.0.2")
+
+# Run simulation
+task = openfast.run(input_dir="/Path/to/MinimalExample",
+              sim_config_filename="Main.fst",
+              commands=commands,
+              on=cloud_machine)
+
+# Wait for the simulation to finish and download the results
+task.wait()
+cloud_machine.terminate()
+
+task.download_outputs()
+
+task.print_summary()
 ```
 
-## Inductiva OpenFAST Benchmarks
+When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
-The following benchmarks are available to help you evaluate the performance of 
-the OpenFAST suite on Inductiva’s infrastructure:
+```
+Task status: Success
 
-* [5MW Land](https://benchmarks.inductiva.ai/OpenFAST/OpenFAST_Land/):
-A simulation of a land-based NREL 5-MW turbine using **BeamDyn** as the 
-structural module. It simulates 20 seconds with a time step size of 0.001.
-* [5MW OC4](https://benchmarks.inductiva.ai/OpenFAST/OpenFAST_OC4/): Simulates 
-an offshore, fixed-bottom NREL 5-MW turbine, with a focus on **HydroDyn** wave dynamics.
-* [FAST.Farm](https://benchmarks.inductiva.ai/OpenFAST/OpenFAST_FAST.Farm/): 
-A tool for forecasting the performance and loads of wind turbines within 
-a wind farm, running simulations in parallel with **OpenFAST**.
+Timeline:
+	Waiting for Input         at 10/03, 20:20:43      0.935 s
+	In Queue                  at 10/03, 20:20:44      30.778 s
+	Preparing to Compute      at 10/03, 20:21:15      1.353 s
+	In Progress               at 10/03, 20:21:16      3.89 s
+		└> 3.773 s         openfast Main.fst
+	Finalizing                at 10/03, 20:21:20      0.408 s
+	Success                   at 10/03, 20:21:20      
 
+Data:
+	Size of zipped output:    47.76 KB
+	Size of unzipped output:  141.94 KB
+	Number of output files:   4
+
+Estimated computation cost (US$): 0.00011 US$
+```
+
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
+the core computation time of this simulation was 3.8 seconds.
+
+It's that simple!

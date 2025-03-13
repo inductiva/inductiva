@@ -98,8 +98,11 @@ class BaseMachineGroup(ABC):
 
     def _validate_inputs(self):
         """Validate initialization inputs."""
-        if self.data_disk_gb <= 0:
-            raise ValueError("`data_disk_gb` must be positive.")
+        if not isinstance(self.data_disk_gb, int):
+            raise ValueError("`data_disk_gb` must be an integer.")
+
+        if not 10 <= self.data_disk_gb <= 65536:
+            raise ValueError("`data_disk_gb` must be between 10 and 65536.")
 
         if self.auto_resize_disk_max_gb is not None:
             if not isinstance(self.auto_resize_disk_max_gb,
