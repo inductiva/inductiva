@@ -369,8 +369,9 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
     with concurrent.futures.ThreadPoolExecutor() as executor:
         total_bytes = sum(executor.map(_get_size, urls))
 
-    n = len(urls)
-    desc = f"Downloading {n} file{'s' if n != 1 else ''} from {remote_path}"
+    num_files = len(urls)
+    text_file = f"file{'s' if num_files != 1 else ''}"
+    desc = f"Downloading {num_files} {text_file} from {remote_path}"
 
     with tqdm.tqdm(
             total=total_bytes,
@@ -382,6 +383,11 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
         with concurrent.futures.ThreadPoolExecutor() as executor:
             progress_bar_lock = threading.Lock()
             _ = executor.map(_download_file, urls)
+
+    text_dir = f"\"{local_dir}\"" if local_dir \
+        else "the current working directory"
+    logging.info("Successfully downloaded %d %s to %s.", num_files, text_file,
+                 text_dir)
 
 
 def _list_files(root_path: str) -> Tuple[List[str], int]:
