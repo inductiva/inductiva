@@ -378,7 +378,7 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
             _ = list(executor.map(_download_file, urls))
 
     logging.info("Successfully downloaded %d %s to \"%s\".", num_files,
-                 text_file, local_dir or remote_path)
+                 text_file, os.path.join(local_dir, remote_path))
 
 
 def _list_files(root_path: str) -> Tuple[List[str], int]:
