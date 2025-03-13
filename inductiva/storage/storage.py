@@ -377,8 +377,8 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
             progress_bar_lock = threading.Lock()
             _ = list(executor.map(_download_file, urls))
 
-    logging.info("Successfully downloaded %d %s to \"%s\".", 
-                 num_files, text_file, local_dir or remote_path)
+    logging.info("Successfully downloaded %d %s to \"%s\".", num_files,
+                 text_file, local_dir or remote_path)
 
 
 def _list_files(root_path: str) -> Tuple[List[str], int]:
