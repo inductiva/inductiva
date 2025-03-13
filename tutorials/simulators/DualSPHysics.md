@@ -1,22 +1,22 @@
-In this guide, we will walk you through setting up and running DualSPHysics, 
-a Smoothed-Particle Hydrodynamics (SPH) simulator, available as one of 
-the built-in tools via the Inductiva API. 
+In this guide, we will walk you through setting up and running DualSPHysics,
+a Smoothed-Particle Hydrodynamics (SPH) simulator, available as one of
+the built-in tools via the Inductiva API.
 
 We will cover:
 
 - Setting up DualSPHysics for use with our API.
 - Example code to help you get started with simulations.
-- An advanced Turbine example to show how to execute commands through the 
+- An advanced Turbine example to show how to execute commands through the
 Inductiva API.
 
 # DualSPHysics
 
-DualSPHysics is a Smoothed-Particle Hydrodynamics (SPH) simulator. The simulator 
+DualSPHysics is a Smoothed-Particle Hydrodynamics (SPH) simulator. The simulator
 is usually configured by a single file with the extension `.xml`. This file
-contains all the information about the simulation, including the geometry, 
+contains all the information about the simulation, including the geometry,
 the physical properties of the fluids, the boundary conditions, the numerical
 parameters, and the output files. Sometimes the configuration can also use extra
-geometry files. 
+geometry files.
 
 Running your DualSPHysics simulation workflows using Inductiva is very similar
 to running them on your local machine, but instead of calling your DualSPHysics
@@ -36,7 +36,7 @@ removed or set to run on default parameters.
 
 ## Technical details
 
-This section will focus on the implementation details of our compilation of 
+This section will focus on the implementation details of our compilation of
 DualSPHysics.
 
 Lets start with the available versions of DualSPHysics. For that you can check
@@ -56,13 +56,13 @@ will abstract achitecture and simulator version (`dualsphysics`).
 Below, we have a concrete example that will let you better understand the
 changes you may potentially have to do.
 
-For an extensive list of commands, please refer to the DualSPHysics 
+For an extensive list of commands, please refer to the DualSPHysics
 [documentation](https://dual.sphysics.org/). You can pass the API commands in
 lowercase, and we will handle the rest for you!
 
 ## Example code
 
-In this example, we run a classical CFD case of a flow over a cylinder. 
+In this example, we run a classical CFD case of a flow over a cylinder.
 
 ```{literalinclude} ../../inductiva/tests/test_simulators/dualsphysics/dualsphysics.py
 :language: python
@@ -79,7 +79,7 @@ in the DualSPHysics distribution using the Inductiva API.
 ### Prerequisites
 
 1. **Download Input Files**: Download DualSPHysics [package](https://dual.sphysics.org/downloads/)
-and see if you can find the example `examples/chrono/09_Turbine`. Navigate to 
+and see if you can find the example `examples/chrono/09_Turbine`. Navigate to
 `examples/chrono`. We are going to work from that directory and write our
 Inductiva python script there.
 
@@ -88,7 +88,7 @@ Inductiva python script there.
 ### Overview
 The first step involves making changes to the `xCaseTurbine_linux64_CPU.sh` script for
 execution within our environment. This step is straightforward and requires only
-minor modifications to the original script. The simulation generates output files for 
+minor modifications to the original script. The simulation generates output files for
 visualization in ParaView.
 
 Here is the overview of the code for this simulation:
@@ -137,7 +137,7 @@ at `examples/chrono/09_Turbine/xCaseTurbine_linux64_CPU.sh`.
 2. **Remove User Input Prompt:**
    Remove the last line on the script. This line waits for user input and will
    prevent the script from running in an automated environment:
-   
+
    ```bash
    read -n1 -r -p "Press any key to continue..." key
    ```
@@ -216,7 +216,7 @@ cloud_machine.start()
 
    Wich will output something like:
    ```bash
-    ■ Tier: Power-User
+    ■ Plan: Individual
 
     ■ Credits: 1000.00 US$
 
@@ -330,9 +330,9 @@ Downloading simulation outputs to inductiva_output/u8v7p1v7wfyvvkyc0iq0s632k/out
 Uncompressing the outputs to u8v7p1v7wfyvvkyc0iq0s632k...
 ```
 
-As usual, the results are placed in the `inductiva_output` folder, within a 
+As usual, the results are placed in the `inductiva_output` folder, within a
 subfolder named after the task. Earlier, we set a variable for the internal
-directory where all outputs would be placed (`dirout`), which was instantiated 
+directory where all outputs would be placed (`dirout`), which was instantiated
 as `CaseTurbine_out`. Let’s check its contents:
 
 ```bash
@@ -362,6 +362,6 @@ total 36080
    0 drwxr-xr-x   503 lsarmento  staff    16096 19 Aug 12:09 surface
 ```
 Data for visualization is placed inside the directories `boundary`, `particles`
-and `surface`. This data can be loaded in ParaView and rendered in a movie as 
+and `surface`. This data can be loaded in ParaView and rendered in a movie as
 the one seen above.
 
