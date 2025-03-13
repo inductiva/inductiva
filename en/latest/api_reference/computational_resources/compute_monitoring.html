@@ -16,16 +16,16 @@
         gtag('js', new Date());
         gtag('config', 'G-NHJ03C6M91');
     </script>
-    <meta property="og:title" content="Computational Resources Janitor" />
+    <meta property="og:title" content="Computational Resources Monitoring" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://docs.inductiva.ai/api_reference/computational_resources/compute_janitor.html" />
+<meta property="og:url" content="https://docs.inductiva.ai/api_reference/computational_resources/compute_monitoring.html" />
 <meta property="og:site_name" content="Inductiva.ai Docs" />
-<meta property="og:description" content="Inductiva API has at all times a janitor running in the background that will clean up any resources that are not being used. The focus of this janitor is to make sure that no computational resource..." />
+<meta property="og:description" content="Inductiva API has at all times a monitoring service running in the background that will clean up any resources that are not being used. The focus of this service is to make sure that no computation..." />
 <meta property="og:image" content="https://docs.inductiva.ai/_static/inductiva-social-banner.jpg" />
 <meta property="og:image:alt" content="Inductiva.ai Docs" />
-<meta name="description" content="Inductiva API has at all times a janitor running in the background that will clean up any resources that are not being used. The focus of this janitor is to make sure that no computational resource..." />
+<meta name="description" content="Inductiva API has at all times a monitoring service running in the background that will clean up any resources that are not being used. The focus of this service is to make sure that no computation..." />
 
-    <title>Computational Resources Janitor &#8212; Python API for Cloud-based Simulation</title>
+    <title>Computational Resources Monitoring &#8212; Python API for Cloud-based Simulation</title>
   
   
   
@@ -67,12 +67,12 @@
     <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api_reference/computational_resources/compute_janitor';</script>
-    <link rel="canonical" href="https://docs.inductiva.ai/api_reference/computational_resources/compute_janitor.html" />
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api_reference/computational_resources/compute_monitoring';</script>
+    <link rel="canonical" href="https://docs.inductiva.ai/api_reference/computational_resources/compute_monitoring.html" />
     <link rel="icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Tiers, Capabilities and Quotas" href="../tiers_and_quotas.html" />
+    <link rel="next" title="Credits and Quotas" href="../credits_and_quotas.html" />
     <link rel="prev" title="MPICluster Class" href="mpicluster_class.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -218,10 +218,10 @@
 <li class="toctree-l2"><a class="reference internal" href="machinegroup_class.html"><code class="docutils literal notranslate"><span class="pre">MachineGroup</span></code> Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="elasticgroup_class.html"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup</span></code> Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mpicluster_class.html"><code class="docutils literal notranslate"><span class="pre">MPICluster</span></code> Class</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Computational Resources Janitor</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Computational Resources Monitoring</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../tiers_and_quotas.html">Tiers, Capabilities and Quotas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../credits_and_quotas.html">Credits and Quotas</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../troubleshooting.html">Troubleshooting Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
@@ -280,7 +280,7 @@
       
       
       
-      <li><a href="../../_sources/api_reference/computational_resources/compute_janitor.md" target="_blank"
+      <li><a href="../../_sources/api_reference/computational_resources/compute_monitoring.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -362,7 +362,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Computational Resources Janitor</h1>
+    <h1>Computational Resources Monitoring</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -376,35 +376,31 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="computational-resources-janitor">
-<h1>Computational Resources Janitor<a class="headerlink" href="#computational-resources-janitor" title="Link to this heading">#</a></h1>
-<p>Inductiva API has at all times a janitor running in the background that will clean
-up any resources that are not being used. The focus of this janitor is to make
-sure that no computational resources are being wasted or left idle, for example,
-when a user forgets to terminate their machines.</p>
-<p>Still, the janitor is mindful of the user’s work and will not terminate any
+  <section id="computational-resources-monitoring">
+<h1>Computational Resources Monitoring<a class="headerlink" href="#computational-resources-monitoring" title="Link to this heading">#</a></h1>
+<p>Inductiva API has at all times a monitoring service running in the background
+that will clean up any resources that are not being used. The focus of this
+service is to make sure that no computational resources are being wasted or
+left idle, for example, when a user forgets to terminate their machines.</p>
+<p>Still, this service is mindful of the user’s work and will not terminate any
 computational resource right away. Instead, it will wait for a certain time
 before terminating the resource.</p>
-<p>The janitor will also terminate any computational resource that is running for
-a certain time, for safeguards.</p>
-<p>Moreover, to avoid cluttering the shared pool of resources, which is mostly meant for
-testing purposes, the janitor will terminate any task that is running also for a
-certain time.</p>
-<p>The janitor follows the following rules before terminating the resources:</p>
+<p>The following rules are verified before terminating the resources, which can be specified by the user:</p>
 <ul class="simple">
+<li><p><strong>Total time of inactivity allowed</strong>, starting from the moment no simulations
+are active and resets if any task arrives: <code class="docutils literal notranslate"><span class="pre">max_idle_time</span></code>. The default value
+is 3 minutes.</p></li>
 <li><p><strong>Total time after launch of computational resource</strong>, independent of any
-simulation still running: 36h</p></li>
-<li><p><strong>Total time of inactivity allowed</strong>, starting from the moment no simulations are
-on queue and reset if any arrive: 30 min</p></li>
+simulation still running: <code class="docutils literal notranslate"><span class="pre">auto_terminate_ts</span></code> or <code class="docutils literal notranslate"><span class="pre">auto_terminate_minutes</span></code>. There
+is no default value. If not specified, the machine group will never terminate
+while having active tasks assigned.</p></li>
 </ul>
-<p>Please note that at the moment, the janitor is clumsy and doesn’t know how to handle
-the data of running simulations. So please be mindful of the time your simulations
-may take to run, and if this doesn’t suffice for your needs, please <a class="reference external" href="mailto:support&#37;&#52;&#48;inductiva&#46;ai" rel="noreferer noopener" target="_blank">contact us</a>.</p>
-<p>The allowed machine group maximum validity (<code class="docutils literal notranslate"><span class="pre">auto_terminate_ts</span></code>) and the total
-time of inactivity allowed (<code class="docutils literal notranslate"><span class="pre">max_idle_time</span></code>) can be defined when initializing
-the machine group (this is valid for all machine group types). <code class="docutils literal notranslate"><span class="pre">max_idle_time</span></code>
-is optional and when passed it can be a <code class="docutils literal notranslate"><span class="pre">datetime.timedelta</span></code> object or an integer
-representing the number of minutes.</p>
+<p>Please note that at the moment, the background service doesn’t preserve the
+data of running simulations. So please be mindful of the time your simulations
+may take to run when specifying <code class="docutils literal notranslate"><span class="pre">auto_terminate_ts</span></code> or <code class="docutils literal notranslate"><span class="pre">auto_terminate_minutes</span></code>.</p>
+<p>The above mentioned attributes can be defined when initializing the machine
+group (this is valid for all machine group types). <code class="docutils literal notranslate"><span class="pre">max_idle_time</span></code> can be a
+<code class="docutils literal notranslate"><span class="pre">datetime.timedelta</span></code> object or an integer representing the number of minutes.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 
@@ -412,15 +408,15 @@ representing the number of minutes.</p>
     <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-16&quot;</span><span class="p">,</span>
     <span class="n">data_disk_gb</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
     <span class="n">max_idle_time</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="c1"># or max_idle_time=datetime.timedelta(minutes=1),</span>
+    <span class="c1"># or</span>
+    <span class="c1"># max_idle_time=datetime.timedelta(seconds=30),</span>
     <span class="n">auto_terminate_ts</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span> <span class="o">+</span>
     <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+    <span class="c1"># or</span>
+    <span class="c1"># auto_terminate_minutes=30,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>When omitted, these parameters will have the values mentioned above, a timestamp
-that is 36 hours in the future for <code class="docutils literal notranslate"><span class="pre">auto_terminate_ts</span></code> and 30 minutes for
-<code class="docutils literal notranslate"><span class="pre">max_idle_time</span></code>.</p>
 </section>
 
 
@@ -444,11 +440,11 @@ that is 36 hours in the future for <code class="docutils literal notranslate"><s
       </div>
     </a>
     <a class="right-next"
-       href="../tiers_and_quotas.html"
+       href="../credits_and_quotas.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Tiers, Capabilities and Quotas</p>
+        <p class="prev-next-title">Credits and Quotas</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
