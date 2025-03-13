@@ -403,7 +403,6 @@ class Project:
         for task in list_of_tasks:
             task.download_outputs(output_dir=self.name)
 
-
     def __enter__(self):
         self.open()
         return self
