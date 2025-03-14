@@ -140,9 +140,7 @@ class BaseMachineGroup(ABC):
         """Check if the machine group has a GPU."""
         if self._gpu_info is None:
             return False
-        # self._gpu_info can be a DynamicSchema, this is why we can't use .get()
-        return hasattr(self._gpu_info,
-                       "gpu_count") and self._gpu_info.gpu_count > 0
+        return self._gpu_info.get("gpu_count") > 0
 
     @property
     def id(self):
@@ -886,7 +884,8 @@ def get_by_name(machine_name: str):
     """Returns the machine group corresponding to `machine_name`."""
     try:
         api_compute = compute_api.ComputeApi(inductiva.api.get_client())
-        response = api_compute.get_vm_group_by_name({"name": machine_name}).body
+        response = api_compute.get_vm_group_by_name({"name": machine_name})
+        response = json.loads(response.response.data)
         mg_class = _get_machine_group_class(response["type"],
                                             response["is_elastic"])
         return mg_class.from_api_response(response)
