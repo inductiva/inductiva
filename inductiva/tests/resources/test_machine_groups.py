@@ -1,4 +1,5 @@
 """Tests for machine_groups functions"""
+import json
 import pytest
 from unittest import mock
 import inductiva
@@ -38,7 +39,9 @@ def test_get_by_name(response, expected_result):
 
     with mock.patch(mock_compute_api_path) as mock_compute_api:
         mock_response = mock.MagicMock()
-        mock_response.body = response
+
+        mock_response.response.data = json.dumps(response,
+                                                 indent=2).encode('utf-8')
 
         mock_get_vm_group_by_name = mock.MagicMock(return_value=mock_response)
         (mock_compute_api.return_value.get_vm_group_by_name
