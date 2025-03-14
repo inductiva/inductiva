@@ -138,8 +138,9 @@ class BaseMachineGroup(ABC):
 
     def has_gpu(self) -> bool:
         """Check if the machine group has a GPU."""
-        return self._gpu_info is not None and self._gpu_info.get(
-            "gpu_count") > 0
+        if self._gpu_info is None:
+            return False
+        return self._gpu_info.get("gpu_count") > 0
 
     @property
     def id(self):
@@ -248,6 +249,29 @@ class BaseMachineGroup(ABC):
             return dt
         return None
 
+    def _update_attributes_from_response(self, resp: dict):
+        """Update machine group attributes with values from the API response."""
+        self._id = resp["id"]
+        self._name = resp["name"]
+        self.quota_usage = resp.get("quota_usage") or {}
+        # Lifecycle configuration parameters are updated with default values
+        # from the API response if they were not provided by the user
+        self.max_idle_time = self._seconds_to_timedelta(
+            resp.get("max_idle_time"))
+        self._idle_seconds = self._seconds_to_timedelta(
+            resp.get("idle_seconds"))
+        self.auto_terminate_ts = self._iso_to_datetime(
+            resp.get("auto_terminate_ts"))
+        self._total_ram_gb = resp.get("total_ram_gb")
+        self._cost_per_hour = resp.get("cost_per_hour")
+        self._cpu_info = resp.get("cpu_info")
+        self._gpu_info = resp.get("gpu_info")
+        self.zone = resp.get("zone")
+        dynamic_disk_resize_config = resp.get(
+            "dynamic_disk_resize_config") or {}
+        self.auto_resize_disk_max_gb = dynamic_disk_resize_config.get(
+            "max_disk_size_gb")
+
     def _register_machine_group(self, **kwargs):
         """Register machine group configuration in API.
 
@@ -275,27 +299,8 @@ class BaseMachineGroup(ABC):
         )
         body = json.loads(resp.response.data)
 
-        self._id = body["id"]
-        self._name = body["name"]
-        self.quota_usage = body.get("quota_usage") or {}
-        # Lifecycle configuration parameters are updated with default values
-        # from the API response if they were not provided by the user
-        self.max_idle_time = self._seconds_to_timedelta(
-            body.get("max_idle_time"))
-        self._idle_seconds = self._seconds_to_timedelta(
-            body.get("idle_seconds"))
-        self.auto_terminate_ts = self._iso_to_datetime(
-            body.get("auto_terminate_ts"))
-        self._total_ram_gb = body.get("total_ram_gb")
-        self._cost_per_hour = body.get("cost_per_hour")
-        self._cpu_info = body.get("cpu_info")
-        self._gpu_info = body.get("gpu_info")
-        self.zone = body.get("zone")
+        self._update_attributes_from_response(body)
 
-        dynamic_disk_resize_config = body.get(
-            "dynamic_disk_resize_config") or {}
-        self.auto_resize_disk_max_gb = dynamic_disk_resize_config.get(
-            "max_disk_size_gb")
         self._log_machine_group_info()
 
     def __repr__(self):
@@ -316,21 +321,13 @@ class BaseMachineGroup(ABC):
         machine_group._api = compute_api.ComputeApi(api.get_client())
         machine_group.machine_type = resp["machine_type"]
         machine_group.data_disk_gb = resp["disk_size_gb"]
-        machine_group._id = resp["id"]
         machine_group.provider = resp["provider_id"]
-        machine_group._name = resp["name"]
         machine_group.create_time = resp["creation_timestamp"]
         machine_group._started = bool(resp["started"])
-        machine_group.quota_usage = resp.get("quota_usage") or {}
-        machine_group._max_idle_time = cls._seconds_to_timedelta(
-            resp.get("max_idle_time"))
-        machine_group._idle_seconds = cls._seconds_to_timedelta(
-            resp.get("idle_seconds"))
-        machine_group._auto_terminate_ts = cls._iso_to_datetime(
-            resp.get("auto_terminate_ts"))
-        machine_group.provider = resp["provider_id"]
         machine_group.__dict__["machines"] = resp["machines"]
         machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
+
+        machine_group._update_attributes_from_response(resp)
 
         return machine_group
 
@@ -886,7 +883,8 @@ def get_by_name(machine_name: str):
     """Returns the machine group corresponding to `machine_name`."""
     try:
         api_compute = compute_api.ComputeApi(inductiva.api.get_client())
-        response = api_compute.get_vm_group_by_name({"name": machine_name}).body
+        response = api_compute.get_vm_group_by_name({"name": machine_name})
+        response = json.loads(response.response.data)
         mg_class = _get_machine_group_class(response["type"],
                                             response["is_elastic"])
         return mg_class.from_api_response(response)
