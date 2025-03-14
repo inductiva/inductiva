@@ -104,6 +104,7 @@ from inductiva.client.model.user_costs_details import UserCostsDetails
 from inductiva.client.model.user_costs_over_time import UserCostsOverTime
 from inductiva.client.model.user_create import UserCreate
 from inductiva.client.model.user_credits import UserCredits
+from inductiva.client.model.user_email import UserEmail
 from inductiva.client.model.user_email_organization import UserEmailOrganization
 from inductiva.client.model.user_info_short import UserInfoShort
 from inductiva.client.model.user_most_used_machine_types_overview import UserMostUsedMachineTypesOverview
