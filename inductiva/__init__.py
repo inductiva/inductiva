@@ -106,20 +106,21 @@ class VersionError(Exception):
 
 
 def compare_client_and_backend_versions(client_version: str):
-    """ Compares the provided client version 7with the backend API version.
+    """
+    Compares the provided client version with the backend API version.
 
     Sends a GET request to the backend API's version comparison endpoint
     with the client version as a parameter. Evaluates the response to
     determine if the client version is compatible with the backend version.
     Raises exceptions for communication issues or incompatibility.
 
-    Parameters:
-    - client_version (str): The version of the client to be compared with the
-                            backend version.
+    Args:
+        client_version (str): The version of the client to be compared
+            with the backend version.
 
     Raises:
-    - RuntimeError: If the API cannot be reached, or if the client version is
-      incompatible with the backend version, or for other general failures.
+        RuntimeError: If the API cannot be reached, if the client version
+            is incompatible with the backend version, or for other general failures.
     """
 
     api_config = Configuration(host=api_url)
@@ -174,7 +175,7 @@ def _validate_api_key(api_key, login_message=True):
 
 
 def set_api_key(api_key, login_message=True):
-    """Sets the value of `inductiva._api_key` to `api_key"""
+    """Sets the value of `inductiva._api_key` to `api_key`"""
     _validate_api_key(api_key, login_message)
     _api_key.set(api_key)
 

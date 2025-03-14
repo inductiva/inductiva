@@ -66,8 +66,11 @@ autodoc_default_options = {
     "special-members": "__init__",  # Ensure constructors (__init__) are documented
     "show-inheritance": True,    # Show class hierarchy
     "inherited-members": True,   # Show inherited methods from base classes
+    "module-first": True,  # Show modules before class names
 }
 
+# Hides the full module name in class/method documentation
+add_module_names = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -87,9 +90,6 @@ main_doc = 'index'
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = [
-    'README.md',
-    'markdown_sample.md',
-    'task_state_diagram.md',
 ]
 
 myst_links_external_new_tab = True
@@ -139,18 +139,4 @@ html_baseurl = 'https://docs.inductiva.ai/'
 
 #For redirects to work there needs to be an actual html file
 redirects = {
-    "en/latest/how_to/run-parallel_simulations.html":
-        "https://tutorials.inductiva.ai/how_to/run-parallel_simulations.html",
-    "en/latest/how_to/manage_computational_resources.html":
-        "https://tutorials.inductiva.ai/how_to/manage_computational_resources.html",
-    "en/latest/how_to/set-up-elastic-machine-group.html":
-        "https://tutorials.inductiva.ai/how_to/set-up-elastic-machine-group.html",
-    "en/latest/how_to/set-up-mpi-cluster.html":
-        "https://tutorials.inductiva.ai/how_to/set-up-elastic-machine-group.html",
-    "en/latest/how_to/manage-remote-storage.html":
-        "https://tutorials.inductiva.ai/how_to/set-up-elastic-machine-group.html",
-    "en/latest/how_to/manage_tasks.html":
-        "https://tutorials.inductiva.ai/how_to/set-up-elastic-machine-group.html",
-    "en/latest/how_to/manage_and_retrieve_results.html":
-        "https://tutorials.inductiva.ai/how_to/set-up-elastic-machine-group.html",
 }
