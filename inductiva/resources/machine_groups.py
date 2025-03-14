@@ -271,7 +271,6 @@ class BaseMachineGroup(ABC):
             "dynamic_disk_resize_config") or {}
         self.auto_resize_disk_max_gb = dynamic_disk_resize_config.get(
             "max_disk_size_gb")
-        print(resp)
 
     def _register_machine_group(self, **kwargs):
         """Register machine group configuration in API.
