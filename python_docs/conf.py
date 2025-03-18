@@ -58,6 +58,9 @@ extensions = [
 # Enable automatic docstring discovery
 autosummary_generate = True
 
+# Treat warnings as errors
+nitpicky = True
+
 autodoc_default_options = {
     "members": True,             # Include all public functions/methods
     "undoc-members": False,      # Include methods even if they lack docstrings?
@@ -104,10 +107,6 @@ myst_heading_anchors = 3
 html_theme = 'furo'
 
 html_theme_options = {
-    "logo": {
-        "image_light": "_static/inductiva-logo-black.svg",
-        "image_dark": "_static/inductiva-logo-white.svg"
-    },
     "collapse_navigation": False,
     "show_nav_level": 1
 }
@@ -126,7 +125,7 @@ googleanalytics_id = "G-NHJ03C6M91"
 googleanalytics_enabled = True
 
 # OpenGraph protocol
-ogp_site_name = "Inductiva.ai Docs"
+ogp_site_name = "Inductiva.ai Python Docs"
 ogp_site_url = "https://docs.inductiva.ai"
 ogp_image = "https://docs.inductiva.ai/_static/inductiva-social-banner.jpg"
 
