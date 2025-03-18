@@ -2,6 +2,8 @@
 from typing import List, Optional
 from abc import ABC
 import logging
+import os
+import re
 
 import pathlib
 
@@ -66,6 +68,52 @@ class Simulator(ABC):
     def image_uri(self):
         """Get the image URI for this simulator."""
         return self._image_uri
+
+    def _input_files_exist(self, input_dir, **kwargs):
+        """
+        Checks if all the files in kwargs are present in the input_dir.
+        """
+        missing_files = []
+
+        for _, file_path in kwargs.items():
+            # Get the full file path by joining the input directory with the
+            # file path in kwargs
+            full_file_path = os.path.join(input_dir, file_path)
+
+            # Check if the file exists
+            if not os.path.isfile(full_file_path):
+                missing_files.append(file_path)
+
+        if missing_files:
+            missing_files_str = ", ".join(missing_files)
+            raise FileNotFoundError(
+                "The following files are missing from your input directory:\n"
+                f"{missing_files_str}")
+
+    def _regex_exists_in_file(self, file_path: str, pattern: str) -> bool:
+        """
+        Check if a given regular expression exists in a file.
+        
+        :param file_path: Path to the file.
+        :param pattern: Regular expression pattern to search for.
+        :return: True if the pattern exists, False otherwise.
+        """
+        with open(file_path, "r", encoding="utf-8") as file:
+            for line in file:
+                if re.search(pattern, line):
+                    return True
+        return False
+
+    def _check_vcpus(
+        self,
+        n_vcpus: Optional[int],
+        machine: types.ComputationalResources,
+    ) -> bool:
+        """ Checks if the machine supports the number of n_vcpus passed."""
+        if n_vcpus is not None and n_vcpus > machine.n_vcpus.total:
+            raise ValueError(
+                "The number of virtual cpus asked surpasses the"
+                " available virtual cpus for the selected resource.")
 
     def _get_image_uri(self):
         """Get the appropriate image name for this simulator."""

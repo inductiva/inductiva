@@ -26,7 +26,7 @@ class MachineTypeInfo:
     threads_per_core: int
     machine_type: str
     provider_id: str
-    num_cpus: int
+    num_vcpus: int
     price: float
     ram_gb: int
     region: str
