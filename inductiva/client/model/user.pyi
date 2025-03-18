@@ -35,7 +35,6 @@ class User(schemas.DictSchema):
             "terms_and_conditions_decision",
             "tier",
             "total_available_credits",
-            "organization",
             "registration_ts",
             "email",
             "username",
@@ -44,7 +43,6 @@ class User(schemas.DictSchema):
         class properties:
             email = schemas.StrSchema
             username = schemas.StrSchema
-            organization = schemas.StrSchema
             tier = schemas.StrSchema
             total_available_credits = schemas.NumberSchema
 
@@ -106,6 +104,63 @@ class User(schemas.DictSchema):
                                            decimal.Decimal, None, list, tuple,
                                            bytes],
                 ) -> 'name':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
+            class organization(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'organization':
                     return super().__new__(
                         cls,
                         *_args,
@@ -232,8 +287,6 @@ class User(schemas.DictSchema):
                     email,
                 "username":
                     username,
-                "organization":
-                    organization,
                 "tier":
                     tier,
                 "total_available_credits":
@@ -246,6 +299,8 @@ class User(schemas.DictSchema):
                     costs_fee_percentage,
                 "name":
                     name,
+                "organization":
+                    organization,
                 "credits_currency":
                     credits_currency,
                 "terms_and_conditions_decision_ts":
@@ -256,7 +311,6 @@ class User(schemas.DictSchema):
     terms_and_conditions_decision: 'TermsAndConditions'
     tier: MetaOapg.properties.tier
     total_available_credits: MetaOapg.properties.total_available_credits
-    organization: MetaOapg.properties.organization
     registration_ts: MetaOapg.properties.registration_ts
     email: MetaOapg.properties.email
     username: MetaOapg.properties.username
@@ -271,12 +325,6 @@ class User(schemas.DictSchema):
     def __getitem__(
         self, name: typing_extensions.Literal["username"]
     ) -> MetaOapg.properties.username:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["organization"]
-    ) -> MetaOapg.properties.organization:
         ...
 
     @typing.overload
@@ -317,6 +365,12 @@ class User(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["organization"]
+    ) -> MetaOapg.properties.organization:
+        ...
+
+    @typing.overload
+    def __getitem__(
         self, name: typing_extensions.Literal["credits_currency"]
     ) -> MetaOapg.properties.credits_currency:
         ...
@@ -335,13 +389,13 @@ class User(schemas.DictSchema):
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "email",
         "username",
-        "organization",
         "tier",
         "total_available_credits",
         "terms_and_conditions_decision",
         "registration_ts",
         "costs_fee_percentage",
         "name",
+        "organization",
         "credits_currency",
         "terms_and_conditions_decision_ts",
     ], str]):
@@ -358,12 +412,6 @@ class User(schemas.DictSchema):
     def get_item_oapg(
         self, name: typing_extensions.Literal["username"]
     ) -> MetaOapg.properties.username:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["organization"]
-    ) -> MetaOapg.properties.organization:
         ...
 
     @typing.overload
@@ -404,6 +452,12 @@ class User(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["organization"]
+    ) -> typing.Union[MetaOapg.properties.organization, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["credits_currency"]
     ) -> typing.Union[MetaOapg.properties.credits_currency, schemas.Unset]:
         ...
@@ -425,13 +479,13 @@ class User(schemas.DictSchema):
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "email",
         "username",
-        "organization",
         "tier",
         "total_available_credits",
         "terms_and_conditions_decision",
         "registration_ts",
         "costs_fee_percentage",
         "name",
+        "organization",
         "credits_currency",
         "terms_and_conditions_decision_ts",
     ], str]):
@@ -460,10 +514,6 @@ class User(schemas.DictSchema):
             int,
             float,
         ],
-        organization: typing.Union[
-            MetaOapg.properties.organization,
-            str,
-        ],
         registration_ts: typing.Union[
             MetaOapg.properties.registration_ts,
             str,
@@ -482,6 +532,12 @@ class User(schemas.DictSchema):
                            uuid.UUID, int, float, decimal.Decimal, bool, None,
                            list, tuple, bytes, io.FileIO, io.BufferedReader,
                            schemas.Unset] = schemas.unset,
+        organization: typing.Union[MetaOapg.properties.organization, dict,
+                                   frozendict.frozendict, str, date, datetime,
+                                   uuid.UUID, int, float, decimal.Decimal, bool,
+                                   None, list, tuple, bytes, io.FileIO,
+                                   io.BufferedReader,
+                                   schemas.Unset] = schemas.unset,
         credits_currency: typing.Union[MetaOapg.properties.credits_currency,
                                        dict, frozendict.frozendict, str, date,
                                        datetime, uuid.UUID, int, float,
@@ -506,11 +562,11 @@ class User(schemas.DictSchema):
             terms_and_conditions_decision=terms_and_conditions_decision,
             tier=tier,
             total_available_credits=total_available_credits,
-            organization=organization,
             registration_ts=registration_ts,
             email=email,
             username=username,
             name=name,
+            organization=organization,
             credits_currency=credits_currency,
             terms_and_conditions_decision_ts=terms_and_conditions_decision_ts,
             _configuration=_configuration,

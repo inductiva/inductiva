@@ -156,7 +156,7 @@ def list_machine_groups(_, fout: TextIO = sys.stdout):
         print("Active Resources:", file=fout)
         print(_machine_group_list_to_str(machine_group_list), file=fout, end="")
     else:
-        print("No active computational resources found.", file=fout, end="")
+        print("No active computational resources found.", file=fout)
 
 
 def register(parser):

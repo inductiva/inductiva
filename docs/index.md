@@ -50,7 +50,7 @@ maxdepth: 2
 hidden: true
 ---
 api_reference/computational_resources/index
-api_reference/tiers_and_quotas
+api_reference/credits_and_quotas
 api_reference/troubleshooting
 api_reference/faq
 api_reference/glossary

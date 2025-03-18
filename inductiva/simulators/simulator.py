@@ -125,21 +125,26 @@ class Simulator(ABC):
         available = list_available_images()
         listing = available.get(img_type, {}).get(name, [])
 
+        self._supported_versions = {
+            element.split("_")[0] for element in listing
+        }
+
+        self._supported_versions_with_suffixes = listing
+
         if self._version is None:
             # kutu does not have a specific tag for the latest version
             # this hack is a workaround to get that version, but it is prone
             # to errors.
-            self._version = max(listing)
+            self._version = max(self._supported_versions)
 
-        if self._version not in listing:
+        if self._version not in self._supported_versions:
             raise ValueError(
                 f"Version {self.version} is not available for simulator {name}."
-                f" Available versions are: {listing}.")
+                f" Available versions are: {self._supported_versions}.")
         self._logger.info("■ Using %s image of %s version %s", img_type,
                           sim_name, self.version)
 
-        suffix = "_dev" if self._use_dev else ""
-        return f"docker://inductiva/kutu:{name}_v{self._version}" + suffix
+        return f"docker://inductiva/kutu:{name}_v{self._version}"
 
     @classmethod
     def get_supported_resources(cls):
@@ -162,6 +167,44 @@ class Simulator(ABC):
         if not input_dir and not remote_assets:
             raise ValueError(
                 "Either input_dir or remote_assets must be provided.")
+
+    def _get_version_suffixes(self,
+                              resource: types.ComputationalResources) -> str:
+        """
+        Gets the suffixes based on the resource used for the simulation.
+
+        :param resource: The resource used for the simulation.
+        :return: A string of suffixes.
+        """
+        dev_suffix = "_dev" if self._use_dev else ""
+        gpu_suffix = "_gpu" if resource.has_gpu() else ""
+
+        suffix = f"{gpu_suffix}"
+
+        if (f"{self.version}{suffix}"
+                not in self._supported_versions_with_suffixes):
+            raise ValueError(
+                f"The selected resource `{resource.machine_type}` has GPU(s) "
+                f"but the simulator {self.name} v{self.version} does not have"
+                " a GPU version available.\nPlease select a different resource"
+                "or simulator." if resource.has_gpu() else
+                f"The selected resource `{resource.machine_type}` does not "
+                f"have GPUs, but the simulator {self.name} v{self.version} "
+                "does not have a CPU version available.\n"
+                "Please select a different resource or simulator.")
+        suffix = f"{suffix}{dev_suffix}"
+        return suffix
+
+    def get_simulator_image_based_on_resource(
+            self, resource: types.ComputationalResources):
+        """
+        Get the simulator image for the simulation, based on the resourced used.
+
+        :param resource: The computational resource to use for the simulation.
+        :return: The simulator image based on the resource used.
+        """
+        suffixes = self._get_version_suffixes(resource)
+        return f"{self._image_uri}{suffixes}"
 
     def run(
         self,
@@ -204,11 +247,6 @@ class Simulator(ABC):
                 "run-parallel_simulations.html "
                 "to learn how to create your own computational resource.")
 
-        if on.allow_auto_start and not on.started:
-            logging.info("\n■ The computational resource is not started."
-                         " Starting it now.\n")
-            on.start()
-
         self.validate_computational_resources(on)
 
         if "commands" in kwargs:
@@ -217,7 +255,11 @@ class Simulator(ABC):
 
         # Get the user-specified image name. If not specified,
         # use the default image name for the current simulator
-        container_image = kwargs.pop("container_image", self._image_uri)
+        self._image_uri = kwargs.pop("container_image", self._image_uri)
+
+        # CustomImage does not use suffixes. We can the image as is
+        if self.__class__.__name__ != "CustomImage":
+            self._image_uri = self.get_simulator_image_based_on_resource(on)
 
         return tasks.run_simulation(
             self.simulator,
@@ -225,7 +267,7 @@ class Simulator(ABC):
             simulator_obj=self,
             storage_dir=storage_dir,
             computational_resources=on,
-            container_image=container_image,
+            container_image=self._image_uri,
             resubmit_on_preemption=resubmit_on_preemption,
             input_resources=remote_assets,
             simulator_name_alias=self.simulator_name_alias,

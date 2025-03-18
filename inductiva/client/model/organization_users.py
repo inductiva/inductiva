@@ -33,6 +33,7 @@ class OrganizationUsers(schemas.DictSchema):
         required = {
             "costs_fee_percentage",
             "identity_provider_id",
+            "tier",
             "name",
             "creation_ts",
             "id",
@@ -45,6 +46,7 @@ class OrganizationUsers(schemas.DictSchema):
             id = schemas.StrSchema
             identity_provider_id = schemas.StrSchema
             name = schemas.StrSchema
+            tier = schemas.StrSchema
 
             @staticmethod
             def status() -> typing.Type['OrgStatus']:
@@ -84,6 +86,7 @@ class OrganizationUsers(schemas.DictSchema):
                 "id": id,
                 "identity_provider_id": identity_provider_id,
                 "name": name,
+                "tier": tier,
                 "status": status,
                 "creation_ts": creation_ts,
                 "costs_fee_percentage": costs_fee_percentage,
@@ -93,6 +96,7 @@ class OrganizationUsers(schemas.DictSchema):
 
     costs_fee_percentage: MetaOapg.properties.costs_fee_percentage
     identity_provider_id: MetaOapg.properties.identity_provider_id
+    tier: MetaOapg.properties.tier
     name: MetaOapg.properties.name
     creation_ts: MetaOapg.properties.creation_ts
     id: MetaOapg.properties.id
@@ -116,6 +120,12 @@ class OrganizationUsers(schemas.DictSchema):
     def __getitem__(
             self, name: typing_extensions.Literal["name"]
     ) -> MetaOapg.properties.name:
+        ...
+
+    @typing.overload
+    def __getitem__(
+            self, name: typing_extensions.Literal["tier"]
+    ) -> MetaOapg.properties.tier:
         ...
 
     @typing.overload
@@ -155,6 +165,7 @@ class OrganizationUsers(schemas.DictSchema):
         "id",
         "identity_provider_id",
         "name",
+        "tier",
         "status",
         "creation_ts",
         "costs_fee_percentage",
@@ -180,6 +191,12 @@ class OrganizationUsers(schemas.DictSchema):
     def get_item_oapg(
             self, name: typing_extensions.Literal["name"]
     ) -> MetaOapg.properties.name:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+            self, name: typing_extensions.Literal["tier"]
+    ) -> MetaOapg.properties.tier:
         ...
 
     @typing.overload
@@ -221,6 +238,7 @@ class OrganizationUsers(schemas.DictSchema):
         "id",
         "identity_provider_id",
         "name",
+        "tier",
         "status",
         "creation_ts",
         "costs_fee_percentage",
@@ -243,6 +261,10 @@ class OrganizationUsers(schemas.DictSchema):
         ],
         identity_provider_id: typing.Union[
             MetaOapg.properties.identity_provider_id,
+            str,
+        ],
+        tier: typing.Union[
+            MetaOapg.properties.tier,
             str,
         ],
         name: typing.Union[
@@ -280,6 +302,7 @@ class OrganizationUsers(schemas.DictSchema):
             *_args,
             costs_fee_percentage=costs_fee_percentage,
             identity_provider_id=identity_provider_id,
+            tier=tier,
             name=name,
             creation_ts=creation_ts,
             id=id,

@@ -3,11 +3,12 @@ import contextvars
 import datetime
 import logging
 import time
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 import inductiva
 from inductiva.client import ApiException
 from inductiva.client import models
+from inductiva.client.apis.paths.tasks import Tasks
 from inductiva.client.apis.tags import projects_api
 from inductiva.client.model.project import Project as ProjectModel
 from inductiva.utils.format_utils import bytes_formatter, currency_formatter, timedelta_formatter
@@ -319,10 +320,12 @@ class Project:
             f"  {k}: {v}" for k, v in self._info.task_by_status.items())
         return header + summary
 
-    def get_tasks(self,
-                  last_n: int = -1,
-                  force_update=False,
-                  status: Optional[Union[str, models.TaskStatusCode]] = None):
+    def get_tasks(
+        self,
+        last_n: int = -1,
+        force_update=False,
+        status: Optional[Union[str,
+                               models.TaskStatusCode]] = None) -> List[Tasks]:
         """Get the the tasks of this project.
 
         Get the tasks that belong to this project,
@@ -347,10 +350,12 @@ class Project:
                          force_update=force_update,
                          status=status)
 
-    def list(self,
-             last_n: int = -1,
-             force_update=False,
-             status: Optional[Union[str, models.TaskStatusCode]] = None):
+    def list(
+        self,
+        last_n: int = -1,
+        force_update=False,
+        status: Optional[Union[str,
+                               models.TaskStatusCode]] = None) -> List[Tasks]:
         """Get the the tasks of this project.
 
         Get the tasks that belong to this project,
@@ -390,12 +395,13 @@ class Project:
     def download_outputs(self):
         """ Downloads all the outputs for all the tasks in the project.
         
-        All the files will be stored inside inductiva_output/<task_id's>.
+        All the files will be stored inside
+        `inductiva_output/<project_name>/<task_id's>`.
         """
         list_of_tasks = self.list()
 
         for task in list_of_tasks:
-            task.download_outputs()
+            task.download_outputs(output_dir=f"{self.name}/{task.id}")
 
     def __enter__(self):
         self.open()
