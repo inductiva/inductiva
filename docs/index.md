@@ -56,19 +56,3 @@ api_reference/faq
 api_reference/glossary
 api_reference/uninstall_inductiva
 ```
-
-```{toctree}
----
-maxdepth: 1
-caption: Python client docs
----
-
-Benchmarks <source/inductiva.benchmarks>
-Projects <source/inductiva.projects>
-Resources <source/inductiva.resources>
-Storage <source/inductiva.storage>
-Tasks <source/inductiva.tasks>
-
-```
-
-
