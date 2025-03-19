@@ -75,8 +75,11 @@ def run_simulation(
         "\n\tinductiva tasks list --id %s\n"
         "· Or, tracking the logs of the task via CLI:"
         "\n\tinductiva logs %s\n"
+        "· Or, track the task files in real time with:"
+        "\n\tinductiva tasks list-files %s\n"
         "· You can also get more information "
         "about the task via the CLI command:"
-        "\n\tinductiva tasks info %s\n\n", pos_info, task_id, task_id, task_id)
+        "\n\tinductiva tasks info %s\n\n", pos_info, task_id, task_id, task_id,
+        task_id)
 
     return task
