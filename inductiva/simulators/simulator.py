@@ -29,7 +29,11 @@ class Simulator(ABC):
     }
     _logger = logging.getLogger(__name__)
 
-    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
+    def __init__(self,
+                 /,
+                 version: Optional[str] = None,
+                 use_dev: bool = False,
+                 acceleration_method: str = None):
         """Initialize the simulator.
 
         Args:
@@ -38,9 +42,20 @@ class Simulator(ABC):
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
+            acceleration_method (str): Pick whether to use the CPU or GPU
+                version of the Docker image. By default, the appropriate option
+                is selected based on the hardware used to run the simulation. If
+                you explicitly request a specific acceleration_method, ensure
+                that the corresponding Docker image exists with
+                `inductiva simulators ls`.
         """
         if version is not None and not isinstance(version, str):
             raise ValueError("Version must be a string or None.")
+
+        if acceleration_method is not None and acceleration_method.lower(
+        ) != "gpu" or acceleration_method.lower() != "cpu":
+            raise ValueError("Wrong value for `acceleration_method`. Supported "
+                             "values are `gpu` or `cpu`.")
         self.simulator = ""
         self.simulator_name_alias = None
         self._version = version
@@ -48,6 +63,7 @@ class Simulator(ABC):
         self._image_uri = self._get_image_uri()
         self.container_image = self._image_uri
         self._logger.info("")
+        self._acceleration_method = acceleration_method.lower()
 
     @property
     def version(self):
@@ -178,6 +194,13 @@ class Simulator(ABC):
         """
         dev_suffix = "_dev" if self._use_dev else ""
         gpu_suffix = "_gpu" if resource.has_gpu() else ""
+
+        # Overwrites the gpu suffix if the user passed a specific
+        # acceleration method
+        if self._acceleration_method == "gpu":
+            gpu_suffix = "_gpu"
+        elif self._acceleration_method == "cpu":
+            gpu_suffix = ""
 
         suffix = f"{gpu_suffix}"
 

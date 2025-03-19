@@ -40,7 +40,9 @@ class OpenFOAM(simulators.Simulator):
 
         self._distribution = distribution
 
-        super().__init__(version=version, use_dev=use_dev)
+        super().__init__(version=version,
+                         use_dev=use_dev,
+                         acceleration_method=acceleration_method)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = f"openfoam_{distribution}"
 

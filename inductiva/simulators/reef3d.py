@@ -11,7 +11,11 @@ from inductiva.commands.mpiconfig import MPIConfig
 class REEF3D(simulators.Simulator):
     """Class to invoke a generic REEF3D simulation on the API."""
 
-    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
+    def __init__(self,
+                 /,
+                 version: Optional[str] = None,
+                 use_dev: bool = False,
+                 acceleration_method: str = None):
         """Initialize the REEF3D simulator.
 
         Args:
@@ -20,8 +24,16 @@ class REEF3D(simulators.Simulator):
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
+            acceleration_method (str): Pick whether to use the CPU or GPU
+                version of the Docker image. By default, the appropriate option
+                is selected based on the hardware used to run the simulation. If
+                you explicitly request a specific acceleration_method, ensure
+                that the corresponding Docker image exists with
+                `inductiva simulators ls`.
         """
-        super().__init__(version=version, use_dev=use_dev)
+        super().__init__(version=version,
+                         use_dev=use_dev,
+                         acceleration_method=acceleration_method)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "reef3d"
 

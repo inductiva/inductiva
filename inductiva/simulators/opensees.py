@@ -35,7 +35,9 @@ class OpenSees(simulators.Simulator):
                 f"Available interfaces are: "
                 f"{AVAILABLE_OPENSEES_INTERFACES}")
         self._interface = interface.lower()
-        super().__init__(version=version, use_dev=use_dev)
+        super().__init__(version=version,
+                         use_dev=use_dev,
+                         acceleration_method=acceleration_method)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "opensees"
 
