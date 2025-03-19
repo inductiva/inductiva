@@ -1,11 +1,7 @@
 """MOHID simulator module of the API."""
-
-import os
 from typing import List, Optional
 
 from inductiva import types, tasks, simulators
-from inductiva.commands.commands import Command
-from inductiva.commands.mpiconfig import MPIConfig
 
 ALLOWD_MOHID_COMMANDS = ["MohidWater.exe", "MohidLand.exe"]
 
