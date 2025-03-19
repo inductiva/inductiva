@@ -33,7 +33,7 @@ class Simulator(ABC):
                  /,
                  version: Optional[str] = None,
                  use_dev: bool = False,
-                 acceleration_method: str = None):
+                 device: str = None):
         """Initialize the simulator.
 
         Args:
@@ -42,19 +42,20 @@ class Simulator(ABC):
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
-            acceleration_method (str): Pick whether to use the CPU or GPU
+            device (str): Pick whether to use the CPU or GPU
                 version of the Docker image. By default, the appropriate option
                 is selected based on the hardware used to run the simulation. If
-                you explicitly request a specific acceleration_method, ensure
+                you explicitly request a specific device, ensure
                 that the corresponding Docker image exists with
                 `inductiva simulators ls`.
         """
         if version is not None and not isinstance(version, str):
             raise ValueError("Version must be a string or None.")
 
-        if acceleration_method is not None and acceleration_method.lower(
-        ) != "gpu" or acceleration_method.lower() != "cpu":
-            raise ValueError("Wrong value for `acceleration_method`. Supported "
+        if  device is not None and \
+            device.lower() != "gpu" and \
+            device.lower() != "cpu":
+            raise ValueError("Wrong value for `device`. Supported "
                              "values are `gpu` or `cpu`.")
         self.simulator = ""
         self.simulator_name_alias = None
@@ -63,7 +64,7 @@ class Simulator(ABC):
         self._image_uri = self._get_image_uri()
         self.container_image = self._image_uri
         self._logger.info("")
-        self._acceleration_method = acceleration_method.lower()
+        self._device = device.lower() if device else None
 
     @property
     def version(self):
@@ -196,16 +197,24 @@ class Simulator(ABC):
         gpu_suffix = "_gpu" if resource.has_gpu() else ""
 
         # Overwrites the gpu suffix if the user passed a specific
-        # acceleration method
-        if self._acceleration_method == "gpu":
+        # device
+        if self._device == "gpu":
             gpu_suffix = "_gpu"
-        elif self._acceleration_method == "cpu":
+        elif self._device == "cpu":
             gpu_suffix = ""
 
         suffix = f"{gpu_suffix}"
 
         if (f"{self.version}{suffix}"
                 not in self._supported_versions_with_suffixes):
+            # If the user asked for a specific device
+            if self._device is not None:
+                raise ValueError(
+                    "This simulator does not support the requested "
+                    "device.\nUse `inductiva simulators ls` to "
+                    "check what versions/devices each simulator"
+                    " has.")
+            # If we got the device from the provided machine
             raise ValueError(
                 f"The selected resource `{resource.machine_type}` has GPU(s) "
                 f"but the simulator {self.name} v{self.version} does not have"

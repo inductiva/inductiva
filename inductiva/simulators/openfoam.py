@@ -19,7 +19,8 @@ class OpenFOAM(simulators.Simulator):
                  /,
                  distribution: str = "foundation",
                  version: Optional[str] = None,
-                 use_dev: bool = False):
+                 use_dev: bool = False,
+                 device: str = None):
         """Initialize the OpenFOAM simulator.
 
         Args:
@@ -31,6 +32,12 @@ class OpenFOAM(simulators.Simulator):
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
+            device (str): Pick whether to use the CPU or GPU
+                version of the Docker image. By default, the appropriate option
+                is selected based on the hardware used to run the simulation. If
+                you explicitly request a specific device, ensure
+                that the corresponding Docker image exists with
+                `inductiva simulators ls`.
         """
         if distribution not in AVAILABLE_OPENFOAM_DISTRIBUTIONS:
             raise ValueError(
@@ -40,9 +47,7 @@ class OpenFOAM(simulators.Simulator):
 
         self._distribution = distribution
 
-        super().__init__(version=version,
-                         use_dev=use_dev,
-                         acceleration_method=acceleration_method)
+        super().__init__(version=version, use_dev=use_dev, device=device)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = f"openfoam_{distribution}"
 
