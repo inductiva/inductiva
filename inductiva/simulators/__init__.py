@@ -15,6 +15,7 @@ from .xbeach import XBeach
 from .schism import SCHISM
 from .nwchem import NWChem
 from .coawst import COAWST
+from .mohid import MOHID
 from .fvcom import FVCOM
 from .swash import SWASH
 from .cans import CaNS
