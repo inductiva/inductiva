@@ -22,8 +22,10 @@ def list_files(args: argparse.Namespace, fout: TextIO = sys.stdout):
 
 def register(parser):
     """Register the info tasks command."""
-    subparser = parser.add_parser("list-files",
-                                  formatter_class=argparse.RawTextHelpFormatter)
+    subparser = parser.add_parser(
+        "list-files",
+        help="Lists the current files of a running task.",
+        formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = ("The `inductiva tasks list-files` command lists "
                              "the contents of a task's working directory while "

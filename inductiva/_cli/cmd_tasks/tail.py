@@ -47,8 +47,10 @@ async def consume(generator: AsyncGenerator, fout: TextIO):
 
 def register(parser):
     """Register the info tasks command."""
-    subparser = parser.add_parser("tail",
-                                  formatter_class=argparse.RawTextHelpFormatter)
+    subparser = parser.add_parser(
+        "tail",
+        help="Prints the last -l/--lines of a file of a running task.",
+        formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = (
         "The `inductiva tasks tail` shows the last lines "
