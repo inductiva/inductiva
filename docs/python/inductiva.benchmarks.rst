@@ -1,15 +1,7 @@
-benchmarks package
+benchmarks sub-package
 ============================
 
-.. automodule:: inductiva.benchmarks
+.. automodule:: inductiva.benchmarks.benchmark
    :members:
    :show-inheritance:
    :undoc-members:
-
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 4
-
-   benchmark <inductiva.benchmarks.benchmark>

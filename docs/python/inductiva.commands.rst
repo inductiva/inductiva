@@ -1,16 +1,12 @@
-commands package
+commands sub-package
 ==========================
 
-.. automodule:: inductiva.commands
+.. automodule:: inductiva.commands.commands
    :members:
    :show-inheritance:
    :undoc-members:
 
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 4
-
-   commands <inductiva.commands.commands>
-   mpiconfig <inductiva.commands.mpiconfig>
+.. automodule:: inductiva.commands.mpiconfig
+   :members:
+   :show-inheritance:
+   :undoc-members:

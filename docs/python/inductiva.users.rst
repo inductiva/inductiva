@@ -1,15 +1,7 @@
-users package
+users sub-package
 =======================
 
-.. automodule:: inductiva.users
+.. automodule:: inductiva.users.methods
    :members:
    :show-inheritance:
    :undoc-members:
-
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 4
-
-   inductiva.users.methods

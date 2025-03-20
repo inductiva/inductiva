@@ -1,20 +1,34 @@
-tasks package
+tasks sub-package
 =======================
 
-.. automodule:: inductiva.tasks
+
+.. automodule:: inductiva.tasks.task
    :members:
    :show-inheritance:
    :undoc-members:
 
-Submodules
-----------
+.. automodule:: inductiva.tasks.methods
+   :members:
+   :show-inheritance:
+   :undoc-members:
 
-.. toctree::
-   :maxdepth: 4
+.. automodule:: inductiva.tasks.run_simulation
+   :members:
+   :show-inheritance:
+   :undoc-members:
 
-   inductiva.tasks.file_tracker
-   inductiva.tasks.methods
-   inductiva.tasks.output_info
-   inductiva.tasks.run_simulation
-   inductiva.tasks.streams
-   inductiva.tasks.task
+.. automodule:: inductiva.tasks.output_info
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+.. automodule:: inductiva.tasks.file_tracker
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+.. automodule:: inductiva.tasks.streams
+   :members:
+   :show-inheritance:
+   :undoc-members:
+

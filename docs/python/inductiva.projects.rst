@@ -1,15 +1,7 @@
-projects package
+projects sub-package
 ==========================
 
-.. automodule:: inductiva.projects
+.. automodule:: inductiva.projects.project
    :members:
    :show-inheritance:
    :undoc-members:
-
-Submodules
-----------
-
-.. toctree::
-   :maxdepth: 4
-
-   project <inductiva.projects.project>

@@ -59,9 +59,15 @@ api_reference/uninstall_inductiva
 
 ```{toctree}
 :titlesonly:
-:maxdepth: 0
+:maxdepth: 2
 :caption: Python Client Docs
 
-inductiva <python/inductiva>
-
+benchmarks <python/inductiva.benchmarks>
+commands <python/inductiva.commands>
+projects <python/inductiva.projects>
+resources <python/inductiva.resources>
+storage <python/inductiva.storage>
+tasks <python/inductiva.tasks>
+templating <python/inductiva.templating>
+users <python/inductiva.users>
 ```
