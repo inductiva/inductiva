@@ -56,3 +56,12 @@ api_reference/faq
 api_reference/glossary
 api_reference/uninstall_inductiva
 ```
+
+```{toctree}
+:titlesonly:
+:maxdepth: 0
+:caption: Python Client Docs
+
+inductiva <python/inductiva>
+
+```
