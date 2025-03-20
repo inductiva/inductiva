@@ -88,7 +88,7 @@ def list_machine_types_available(args):
             "gpus": [],
             "memory": memory,
             "price": price,
-            "gpu_name": gpu_name,
+            "gpu_name": gpu_name
         }
 
         machines_dict[machine_type][zone]["vcpus"].append(int(vcpus))
