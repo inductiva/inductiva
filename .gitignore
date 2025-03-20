@@ -612,7 +612,3 @@ output/
 
 # Allow client submodule tags to be committed
 !inductiva/client/**/tags
-
-
-# Builds of automatic documentation
-python_docs/build/
