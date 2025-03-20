@@ -63,7 +63,6 @@ api_reference/uninstall_inductiva
 :caption: Python Client Docs
 
 benchmarks <python/inductiva.benchmarks>
-commands <python/inductiva.commands>
 projects <python/inductiva.projects>
 resources <python/inductiva.resources>
 storage <python/inductiva.storage>
