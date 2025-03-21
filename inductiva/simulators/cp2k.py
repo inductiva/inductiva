@@ -23,11 +23,9 @@ class CP2K(simulators.Simulator):
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
-            device (str): Specifies whether to use the CPU or GPU version of
-                the Docker image. You can also pick `auto` and the device will
-                be detected based on the machine used to run the simulation.
-                By default, we will pick `auto` and if a machine has a GPU we
-                will run the simulation on the GPU.
+            device (str): Select between CPU or GPU for running the simulation.
+                Default is "auto", which will auto-detect if the machine has a
+                GPU and use if it available, otherwise use the CPU.
         """
         super().__init__(version=version, use_dev=use_dev, device=device)
         self.simulator = "arbitrary_commands"
