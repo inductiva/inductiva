@@ -27,11 +27,7 @@ class QuantumEspresso(simulators.Simulator):
         "phcg", "projwfc", "q2r", "turbo_magnon"
     ]
 
-    def __init__(self,
-                 /,
-                 version: Optional[str] = None,
-                 use_dev: bool = False,
-                 device: str = None):
+    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
         """Initialize the Quantum Espresso simulator.
 
         Args:
@@ -40,14 +36,8 @@ class QuantumEspresso(simulators.Simulator):
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
-            device (str): Pick whether to use the CPU or GPU
-                version of the Docker image. By default, the appropriate option
-                is selected based on the hardware used to run the simulation. If
-                you explicitly request a specific device, ensure
-                that the corresponding Docker image exists with
-                `inductiva simulators ls`.
         """
-        super().__init__(version=version, use_dev=use_dev, device=device)
+        super().__init__(version=version, use_dev=use_dev)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "quantumespresso"
 

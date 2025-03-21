@@ -29,11 +29,13 @@ class Simulator(ABC):
     }
     _logger = logging.getLogger(__name__)
 
+    _supported_device_values = ["gpu", "cpu", "auto"]
+
     def __init__(self,
                  /,
                  version: Optional[str] = None,
                  use_dev: bool = False,
-                 device: str = None):
+                 device: str = "auto"):
         """Initialize the simulator.
 
         Args:
@@ -42,21 +44,19 @@ class Simulator(ABC):
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
-            device (str): Pick whether to use the CPU or GPU
-                version of the Docker image. By default, the appropriate option
-                is selected based on the hardware used to run the simulation. If
-                you explicitly request a specific device, ensure
-                that the corresponding Docker image exists with
-                `inductiva simulators ls`.
+            device (str): Specifies whether to use the CPU or GPU version of
+                the Docker image. If `auto` is picked we will pick the
+                appropriate device based on the machine used to run the
+                simulation, meaning, if the machine has a GPU we will pick
+                GPU, otherwise we pick CPU.
         """
         if version is not None and not isinstance(version, str):
             raise ValueError("Version must be a string or None.")
 
         if  device is not None and \
-            device.lower() != "gpu" and \
-            device.lower() != "cpu":
+            device.lower() not in self._supported_device_values:
             raise ValueError("Wrong value for `device`. Supported "
-                             "values are `gpu` or `cpu`.")
+                             "values are `gpu`, `cpu` or `auto`.")
         self.simulator = ""
         self.simulator_name_alias = None
         self._version = version
@@ -132,6 +132,14 @@ class Simulator(ABC):
                 "The number of virtual cpus asked surpasses the"
                 " available virtual cpus for the selected resource.")
 
+    def runs_on_gpu(self):
+        """Checks if this simulator and version run on GPU"""
+        return f"{self._version}_gpu" in self._supported_versions_with_suffixes
+
+    def runs_on_cpu(self):
+        """Checks if this simulator and version run on CPU"""
+        return self._version in self._supported_versions_with_suffixes
+
     def _get_image_uri(self):
         """Get the appropriate image name for this simulator."""
 
@@ -190,6 +198,8 @@ class Simulator(ABC):
         """
         Gets the suffixes based on the resource used for the simulation.
 
+        If the resource has a GPU we will prioritize that.
+
         :param resource: The resource used for the simulation.
         :return: A string of suffixes.
         """
@@ -203,27 +213,14 @@ class Simulator(ABC):
         elif self._device == "cpu":
             gpu_suffix = ""
 
+        # Add new suffixes here
         suffix = f"{gpu_suffix}"
 
-        if (f"{self.version}{suffix}"
-                not in self._supported_versions_with_suffixes):
-            # If the user asked for a specific device
-            if self._device is not None:
-                raise ValueError(
-                    "This simulator does not support the requested "
-                    "device.\nUse `inductiva simulators ls` to "
-                    "check what versions/devices each simulator"
-                    " has.")
-            # If we got the device from the provided machine
-            raise ValueError(
-                f"The selected resource `{resource.machine_type}` has GPU(s) "
-                f"but the simulator {self.name} v{self.version} does not have"
-                " a GPU version available.\nPlease select a different resource"
-                "or simulator." if resource.has_gpu() else
-                f"The selected resource `{resource.machine_type}` does not "
-                f"have GPUs, but the simulator {self.name} v{self.version} "
-                "does not have a CPU version available.\n"
-                "Please select a different resource or simulator.")
+        if self._device and self._device == "gpu" and not resource.has_gpu():
+            raise ValueError("The selected machine needs to have a GPU.\n"
+                             "If available, either pick device=`cpu` or pick"
+                             " a different machine.")
+
         suffix = f"{suffix}{dev_suffix}"
         return suffix
 
@@ -232,10 +229,18 @@ class Simulator(ABC):
         """
         Get the simulator image for the simulation, based on the resourced used.
 
+        This method takes in consideration the specified device for the
+        simulation. If device=`auto` we will pick the appropriate device based
+        on the machine.
+
         :param resource: The computational resource to use for the simulation.
         :return: The simulator image based on the resource used.
         """
-        suffixes = self._get_version_suffixes(resource)
+        suffixes = ""
+
+        if self._device:
+            suffixes = self._get_version_suffixes(resource)
+
         return f"{self._image_uri}{suffixes}"
 
     def run(
@@ -292,6 +297,11 @@ class Simulator(ABC):
         # CustomImage does not use suffixes. We can the image as is
         if self.__class__.__name__ != "CustomImage":
             self._image_uri = self.get_simulator_image_based_on_resource(on)
+
+        if on.has_gpu() and "_gpu" not in self._image_uri:
+            logging.warning("Attention: The machine you selected has a GPU, but"
+                            " the simulator you picked will run on the CPU "
+                            "only.\n")
 
         return tasks.run_simulation(
             self.simulator,

@@ -14,7 +14,7 @@ class CP2K(simulators.Simulator):
                  /,
                  version: Optional[str] = None,
                  use_dev: bool = False,
-                 device: str = None):
+                 device: str = "auto"):
         """Initialize the CP2K simulator.
 
         Args:
@@ -23,12 +23,11 @@ class CP2K(simulators.Simulator):
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
-            device (str): Pick whether to use the CPU or GPU
-                version of the Docker image. By default, the appropriate option
-                is selected based on the hardware used to run the simulation. If
-                you explicitly request a specific device, ensure
-                that the corresponding Docker image exists with
-                `inductiva simulators ls`.
+            device (str): Specifies whether to use the CPU or GPU version of
+                the Docker image. You can also pick `auto` and the device will
+                be detected based on the machine used to run the simulation.
+                By default, we will pick `auto` and if a machine has a GPU we
+                will run the simulation on the GPU.
         """
         super().__init__(version=version, use_dev=use_dev, device=device)
         self.simulator = "arbitrary_commands"
