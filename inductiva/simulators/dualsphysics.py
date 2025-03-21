@@ -1,6 +1,6 @@
 """DualSPHysics simulator module of the API."""
 
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 from inductiva import types, tasks, simulators
 
@@ -12,7 +12,7 @@ class DualSPHysics(simulators.Simulator):
                  /,
                  version: Optional[str] = None,
                  use_dev: bool = False,
-                 device: str = "auto"):
+                 device: Literal["auto", "cpu", "gpu"] = "auto"):
         """Initialize the DualSPHysics simulator.
 
         Args:

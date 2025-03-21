@@ -1,5 +1,5 @@
 """Base class for low-level simulators."""
-from typing import List, Optional
+from typing import List, Literal, Optional
 from abc import ABC
 import logging
 import os
@@ -35,7 +35,7 @@ class Simulator(ABC):
                  /,
                  version: Optional[str] = None,
                  use_dev: bool = False,
-                 device: str = "auto"):
+                 device: Literal["auto", "cpu", "gpu"] = "auto"):
         """Initialize the simulator.
 
         Args:
