@@ -243,7 +243,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
 
     mock_mg = mock.Mock()
     mock_mg.id = uuid.uuid4()
-    mock_mg.has_gpu.return_value = False
+    mock_mg.has_gpu.return_value = True
 
     for sim_name, simcls in sim_classes:
 

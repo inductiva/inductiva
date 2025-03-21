@@ -781,6 +781,120 @@ class RegisterVMGroupRequest(schemas.DictSchema):
                         **kwargs,
                     )
 
+            class gpu_count(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.IntSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'gpu_count':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
+            class gpu_name(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'gpu_name':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             __annotations__ = {
                 "machine_type": machine_type,
                 "name": name,
@@ -800,6 +914,8 @@ class RegisterVMGroupRequest(schemas.DictSchema):
                 "cpu_cores_logical": cpu_cores_logical,
                 "cpu_cores_physical": cpu_cores_physical,
                 "zone": zone,
+                "gpu_count": gpu_count,
+                "gpu_name": gpu_name,
             }
 
     @typing.overload
@@ -911,6 +1027,18 @@ class RegisterVMGroupRequest(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["gpu_count"]
+    ) -> MetaOapg.properties.gpu_count:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["gpu_name"]
+    ) -> MetaOapg.properties.gpu_name:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -933,6 +1061,8 @@ class RegisterVMGroupRequest(schemas.DictSchema):
         "cpu_cores_logical",
         "cpu_cores_physical",
         "zone",
+        "gpu_count",
+        "gpu_name",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -1048,6 +1178,18 @@ class RegisterVMGroupRequest(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["gpu_count"]
+    ) -> typing.Union[MetaOapg.properties.gpu_count, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["gpu_name"]
+    ) -> typing.Union[MetaOapg.properties.gpu_name, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -1071,6 +1213,8 @@ class RegisterVMGroupRequest(schemas.DictSchema):
         "cpu_cores_logical",
         "cpu_cores_physical",
         "zone",
+        "gpu_count",
+        "gpu_name",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -1166,6 +1310,18 @@ class RegisterVMGroupRequest(schemas.DictSchema):
                            uuid.UUID, int, float, decimal.Decimal, bool, None,
                            list, tuple, bytes, io.FileIO, io.BufferedReader,
                            schemas.Unset] = schemas.unset,
+        gpu_count: typing.Union[MetaOapg.properties.gpu_count, dict,
+                                frozendict.frozendict, str, date, datetime,
+                                uuid.UUID, int, float, decimal.Decimal, bool,
+                                None, list, tuple, bytes, io.FileIO,
+                                io.BufferedReader,
+                                schemas.Unset] = schemas.unset,
+        gpu_name: typing.Union[MetaOapg.properties.gpu_name, dict,
+                               frozendict.frozendict, str, date, datetime,
+                               uuid.UUID, int, float, decimal.Decimal, bool,
+                               None, list, tuple, bytes, io.FileIO,
+                               io.BufferedReader,
+                               schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -1193,6 +1349,8 @@ class RegisterVMGroupRequest(schemas.DictSchema):
             cpu_cores_logical=cpu_cores_logical,
             cpu_cores_physical=cpu_cores_physical,
             zone=zone,
+            gpu_count=gpu_count,
+            gpu_name=gpu_name,
             _configuration=_configuration,
             **kwargs,
         )
