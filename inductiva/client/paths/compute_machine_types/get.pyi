@@ -288,8 +288,33 @@ class GpuNamesSchema(schemas.ListSchema):
         return super().__getitem__(i)
 
 
+class ZonesSchema(schemas.ListSchema):
+
+    class MetaOapg:
+        items = schemas.StrSchema
+
+    def __new__(
+        cls,
+        _arg: typing.Union[typing.Tuple[typing.Union[
+            MetaOapg.items,
+            str,
+        ]], typing.List[typing.Union[
+            MetaOapg.items,
+            str,
+        ]]],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+    ) -> 'ZonesSchema':
+        return super().__new__(
+            cls,
+            _arg,
+            _configuration=_configuration,
+        )
+
+    def __getitem__(self, i: int) -> MetaOapg.items:
+        return super().__getitem__(i)
+
+
 ProviderIdSchema = Providers
-ZoneSchema = schemas.StrSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
@@ -356,14 +381,15 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
                 list,
                 tuple,
             ],
+        'zones':
+            typing.Union[
+                ZonesSchema,
+                list,
+                tuple,
+            ],
         'provider_id':
             typing.Union[
                 ProviderIdSchema,
-            ],
-        'zone':
-            typing.Union[
-                ZoneSchema,
-                str,
             ],
     },
     total=False)
@@ -422,16 +448,16 @@ request_query_gpu_names = api_client.QueryParameter(
     schema=GpuNamesSchema,
     explode=True,
 )
+request_query_zones = api_client.QueryParameter(
+    name="zones",
+    style=api_client.ParameterStyle.FORM,
+    schema=ZonesSchema,
+    explode=True,
+)
 request_query_provider_id = api_client.QueryParameter(
     name="provider_id",
     style=api_client.ParameterStyle.FORM,
     schema=ProviderIdSchema,
-    explode=True,
-)
-request_query_zone = api_client.QueryParameter(
-    name="zone",
-    style=api_client.ParameterStyle.FORM,
-    schema=ZoneSchema,
     explode=True,
 )
 
@@ -567,8 +593,8 @@ class BaseApi(api_client.Api):
                 request_query_spot,
                 request_query_gpus_range,
                 request_query_gpu_names,
+                request_query_zones,
                 request_query_provider_id,
-                request_query_zone,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
