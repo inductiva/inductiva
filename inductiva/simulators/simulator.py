@@ -132,14 +132,6 @@ class Simulator(ABC):
                 "The number of virtual cpus asked surpasses the"
                 " available virtual cpus for the selected resource.")
 
-    def runs_on_gpu(self):
-        """Checks if this simulator and version run on GPU"""
-        return f"{self._version}_gpu" in self._supported_versions_with_suffixes
-
-    def runs_on_cpu(self):
-        """Checks if this simulator and version run on CPU"""
-        return self._version in self._supported_versions_with_suffixes
-
     def _get_image_uri(self):
         """Get the appropriate image name for this simulator."""
 
