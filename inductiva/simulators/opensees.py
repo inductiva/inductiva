@@ -27,7 +27,7 @@ class OpenSees(simulators.Simulator):
                 the simulator. By default (False), the production version
                 is used.
             interface (str): The interface to use for interacting with the
-                simulator. Can be either "python" (default) or "tcl". 
+                simulator. Can be either "python" (default) or "tcl".
         """
         if interface.lower() not in AVAILABLE_OPENSEES_INTERFACES:
             raise ValueError(
