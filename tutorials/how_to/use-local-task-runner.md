@@ -19,9 +19,9 @@ Let’s get started!
 
 Before proceeding, ensure you have the following installed on your computer:
 
-- [Docker](https://www.docker.com/)  
+- [Docker](https://www.docker.com/)
 - Inductiva Python package (`pip install inductiva`)
-- Inductiva Python package with Task-Runner support (`pip install inductiva[task-runner]`)
+- Inductiva Python package with Task-Runner support (`pip install "inductiva[task-runner]"`)
 
 ## Step 1: Launch the Local Task-Runner
 
@@ -56,7 +56,7 @@ Showing machines of machine group: local-machine-group
 
  HOST NAME                     STARTED           STATUS     LAST SEEN         RUNNING TASK
  rodrigo-ThinkPad-T14s-Gen-4   15/01, 11:54:03   Active     15/01, 11:54:33   n/a
-    
+
 ```
 
 In the web-console:
@@ -152,7 +152,7 @@ We highlight the main bennefits of the local task-runner as:
 - Convenience: Easily manage and monitor tasks using Inductiva’s CLI.
 
 
-By following this tutorial, you can efficiently utilize the local task-runner to execute simulations at a small scale while minimizing costs. After you guarentee that your simulation is producing the intended results, you can scale-up to the state-of-the-art [computational resources](https://cloud.google.com/compute/docs/machine-resource) available on the cloud. 
+By following this tutorial, you can efficiently utilize the local task-runner to execute simulations at a small scale while minimizing costs. After you guarentee that your simulation is producing the intended results, you can scale-up to the state-of-the-art [computational resources](https://cloud.google.com/compute/docs/machine-resource) available on the cloud.
 
 
 ### FAQs
