@@ -379,12 +379,12 @@ def _download_file(url,
         os.remove(download_path)
 
 
-def is_file_inside_zip(path):
+def _is_file_inside_zip(path):
     parts = path.split(os.sep)
     return any(part.endswith(".zip") for part in parts[:-1])
 
 
-def _download_file_from_inside_zip(remote_path, local_dir, desc, pool_manager,
+def _download_file_from_inside_zip(remote_path, local_dir, pool_manager,
                                    decompress):
     before, after = remote_path.split(".zip" + os.sep, 1)
     path = before + ".zip"
@@ -415,6 +415,7 @@ def _download_file_from_inside_zip(remote_path, local_dir, desc, pool_manager,
                                         True)
 
     download_path = resolved_path
+    desc = f"Downloading 1 file from \"{remote_path}\""
     with tqdm.tqdm(
             total=range_end - range_start,
             unit="B",
@@ -433,6 +434,36 @@ def _download_file_from_inside_zip(remote_path, local_dir, desc, pool_manager,
             range_start=range_start,
             range_end=range_end,
         )
+
+
+def download_path(remote_path, local_dir, pool_manager, decompress):
+    urls = get_signed_urls(paths=[remote_path], operation="download")
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        total_bytes = sum(
+            executor.map(_get_size, urls, itertools.repeat(pool_manager)))
+
+    resolved_paths = [
+        _resolve_local_path(url, remote_path, local_dir) for url in urls
+    ]
+    num_files = len(urls)
+    text_file = f"file{'s' if num_files != 1 else ''}"
+    desc = f"Downloading {num_files} {text_file} from \"{remote_path}\""
+
+    with tqdm.tqdm(
+            total=total_bytes,
+            unit="B",
+            unit_scale=True,
+            unit_divisor=1000,  # Use 1 KB = 1000 bytes
+            desc=desc,
+    ) as progress_bar:
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            progress_bar_lock = threading.Lock()
+            _ = list(
+                executor.map(_download_file, urls, resolved_paths,
+                             itertools.repeat(progress_bar),
+                             itertools.repeat(progress_bar_lock),
+                             itertools.repeat(pool_manager),
+                             itertools.repeat(decompress)))
 
 
 def download(remote_path: str, local_dir: str = "", decompress: bool = True):
@@ -461,44 +492,11 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
     pool_manager = api_instance.api_client.rest_client.pool_manager
 
-    if is_file_inside_zip(remote_path):
-        num_files = 1
-        text_file = "file"
-        total_bytes = 5
-        desc = f"Downloading {num_files} {text_file} from \"{remote_path}\""
-        _download_file_from_inside_zip(remote_path, local_dir, desc,
-                                       pool_manager, decompress)
+    if _is_file_inside_zip(remote_path):
+        _download_file_from_inside_zip(remote_path, local_dir, pool_manager,
+                                       decompress)
     else:
-        urls = get_signed_urls(paths=[remote_path], operation="download")
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            total_bytes = sum(
-                executor.map(_get_size, urls, itertools.repeat(pool_manager)))
-
-        resolved_paths = [
-            _resolve_local_path(url, remote_path, local_dir) for url in urls
-        ]
-        num_files = len(urls)
-        text_file = f"file{'s' if num_files != 1 else ''}"
-        desc = f"Downloading {num_files} {text_file} from \"{remote_path}\""
-
-        with tqdm.tqdm(
-                total=total_bytes,
-                unit="B",
-                unit_scale=True,
-                unit_divisor=1000,  # Use 1 KB = 1000 bytes
-                desc=desc,
-        ) as progress_bar:
-            with concurrent.futures.ThreadPoolExecutor() as executor:
-                progress_bar_lock = threading.Lock()
-                _ = list(
-                    executor.map(_download_file, urls, resolved_paths,
-                                 itertools.repeat(progress_bar),
-                                 itertools.repeat(progress_bar_lock),
-                                 itertools.repeat(pool_manager),
-                                 itertools.repeat(decompress)))
-
-    logging.info("Successfully downloaded %d %s to \"%s\".", num_files,
-                 text_file, os.path.join(local_dir, remote_path))
+        download_path(remote_path, local_dir, pool_manager, decompress)
 
 
 def _list_files(root_path: str) -> Tuple[List[str], int]:
