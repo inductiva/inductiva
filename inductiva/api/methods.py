@@ -140,27 +140,32 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
     """
     # Use the blocking task context
     with blocking_task_context(api_instance, task_id):
-        input_zip_path, zip_file_size = prepare_input(task_id, original_params,
-                                                      type_annotations)
+        try:
+            input_zip_path, zip_file_size = prepare_input(
+                task_id, original_params, type_annotations)
 
-        remote_input_zip_path = f"{storage_path_prefix}/{task_id}/input.zip"
-        url = storage.get_signed_urls(
-            paths=[remote_input_zip_path],
-            operation="upload",
-        )[0]
+            remote_input_zip_path = f"{storage_path_prefix}/{task_id}/input.zip"
+            url = storage.get_signed_urls(
+                paths=[remote_input_zip_path],
+                operation="upload",
+            )[0]
 
-        with tqdm.tqdm(total=zip_file_size,
-                       unit="B",
-                       unit_scale=True,
-                       unit_divisor=1000) as progress_bar:
-            upload_file(api_instance, input_zip_path, "PUT", url, progress_bar)
-            notify_upload_complete(
-                api_instance.notify_input_uploaded,
-                path_params={"task_id": task_id},
-            )
+            with tqdm.tqdm(total=zip_file_size,
+                           unit="B",
+                           unit_scale=True,
+                           unit_divisor=1000) as progress_bar:
+                upload_file(api_instance, input_zip_path, "PUT", url,
+                            progress_bar)
+                notify_upload_complete(
+                    api_instance.notify_input_uploaded,
+                    path_params={"task_id": task_id},
+                )
 
-        logging.info("Local input directory successfully uploaded.")
-        logging.info("")
+            logging.info("Local input directory successfully uploaded.")
+            logging.info("")
+
+        finally:
+            os.remove(input_zip_path)
 
 
 def block_until_finish(api_instance: TasksApi, task_id: str) -> str:
