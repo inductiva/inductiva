@@ -49,6 +49,7 @@ def get_projects():
         _logger.error("Failed to get remote projects", exc_info=ex)
         raise ex
 
+    # pylint: disable=protected-access
     return [Project._from_api_response(resp) for resp in response.body]
 
 

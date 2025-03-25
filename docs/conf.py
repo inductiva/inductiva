@@ -22,14 +22,12 @@ project = 'Inductiva API Python client'
 copyright = '2025, Inductiva Research Labs'
 author = 'Inductiva Research Labs'
 
-
 # Mock imports for modules that may not be available or cause issues
 autodoc_mock_imports = [
-    "setup",        # Prevents issues with `setup.py` executing sys.exit()
-    "conftest",     # Avoids errors if pytest isn't installed
-    "pytest",       # Mock pytest to avoid import failures in test-related files
+    "setup",  # Prevents issues with `setup.py` executing sys.exit()
+    "conftest",  # Avoids errors if pytest isn't installed
+    "pytest",  # Mock pytest to avoid import failures in test-related files
 ]
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -38,10 +36,10 @@ autodoc_mock_imports = [
 # ones.
 
 extensions = [
-    "sphinx.ext.autodoc",       # Auto-generates docs from docstrings
-    "sphinx.ext.napoleon",      # Supports Google/NumPy-style docstrings
-#    "sphinx.ext.viewcode",      # Adds links to source code
-    "sphinx.ext.autosummary",   # Auto-generates a summary for modules
+    "sphinx.ext.autodoc",  # Auto-generates docs from docstrings
+    "sphinx.ext.napoleon",  # Supports Google/NumPy-style docstrings
+    #    "sphinx.ext.viewcode",      # Adds links to source code
+    "sphinx.ext.autosummary",  # Auto-generates a summary for modules
     'sphinx.ext.mathjax',
     'myst_parser',
     'sphinxcontrib.mermaid',
@@ -61,12 +59,13 @@ autosummary_generate = True
 nitpicky = True
 
 autodoc_default_options = {
-    "members": True,             # Include all public functions/methods
-    "undoc-members": False,      # Include methods even if they lack docstrings?
-    "private-members": False,    # Exclude private methods (_method_name)
-    "special-members": "__init__",  # Ensure constructors (__init__) are documented
-    "show-inheritance": True,    # Show class hierarchy
-    "inherited-members": True,   # Show inherited methods from base classes
+    "members": True,  # Include all public functions/methods
+    "undoc-members": False,  # Include methods even if they lack docstrings?
+    "private-members": False,  # Exclude private methods (_method_name)
+    "special-members":
+        "__init__",  # Ensure constructors (__init__) are documented
+    "show-inheritance": True,  # Show class hierarchy
+    "inherited-members": True,  # Show inherited methods from base classes
     "module-first": True,  # Show modules before class names
 }
 

@@ -9,7 +9,7 @@ from pytest import mark
 import pytest
 
 from inductiva import TemplateManager
-from inductiva.templating import manager
+from inductiva.templating import helpers
 
 ASSETS_DIR = pathlib.Path(__file__).parent / "assets"
 
@@ -91,8 +91,8 @@ def test_render_file__correctly_renders_files(tmp_target_dir, template_name,
 
     TemplateManager.render_dir(ASSETS_DIR, tmp_target_dir, text="world")
 
-    if manager._is_template(template_name):
-        template_name = manager._strip_extension(template_name)
+    if helpers.is_template(template_name):
+        template_name = helpers.strip_extension(template_name)
     current = _get_file_contents(tmp_target_dir / template_name)
     assert current == expected
 
@@ -103,7 +103,7 @@ def test_render_file__correctly_renders_files(tmp_target_dir, template_name,
                    ("folder/nested_template.txt.jinja", True)])
 def test_is_template__correctly_identifies_templates(filename, is_template):
     # Determine if template files are correctly identified.
-    assert manager._is_template(filename) == is_template
+    assert helpers.is_template(filename) == is_template
 
 
 @mark.parametrize("filename, expected",
@@ -114,7 +114,7 @@ def test_is_template__correctly_identifies_templates(filename, is_template):
 def test_strip_extension__correctly_removes_extension(filename, expected):
     # Determine if the template extension is correctly stripped from a
     # template filename.
-    assert manager._strip_extension(filename) == expected
+    assert helpers.strip_extension(filename) == expected
 
 
 def test_render_file__missing_parameter__raises_exception(tmp_target_dir):
