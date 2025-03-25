@@ -1,8 +1,8 @@
 """Test file for Tasks class."""
 import inductiva
 import pytest
-from unittest.mock import Mock, PropertyMock, patch
-from inductiva import constants, storage
+from unittest.mock import Mock, patch
+from inductiva import constants
 from inductiva.client import exceptions
 import inductiva.client
 from inductiva.client.model.task_status_code import TaskStatusCode
