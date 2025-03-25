@@ -370,14 +370,6 @@ def _download_file(url,
         os.remove(download_path)
         download_path = uncompress_path
 
-    if decompress:
-        decompress_dir, ext = os.path.splitext(download_path)
-        # TODO: Improve the check for ZIP file
-        if ext != ".zip":
-            return
-        utils.data.uncompress_zip(download_path, decompress_dir)
-        os.remove(download_path)
-
 
 def _is_file_inside_zip(path):
     parts = path.split(os.sep)
@@ -436,7 +428,7 @@ def _download_file_from_inside_zip(remote_path, local_dir, pool_manager,
         )
 
 
-def download_path(remote_path, local_dir, pool_manager, decompress):
+def _download_path(remote_path, local_dir, pool_manager, decompress):
     urls = get_signed_urls(paths=[remote_path], operation="download")
     with concurrent.futures.ThreadPoolExecutor() as executor:
         total_bytes = sum(
@@ -464,6 +456,15 @@ def download_path(remote_path, local_dir, pool_manager, decompress):
                              itertools.repeat(progress_bar_lock),
                              itertools.repeat(pool_manager),
                              itertools.repeat(decompress)))
+
+
+def _decompress(path):
+    decompress_dir, ext = os.path.splitext(path)
+    # TODO: Improve the check for ZIP file
+    if ext != ".zip":
+        return
+    utils.data.uncompress_zip(path, decompress_dir)
+    os.remove(path)
 
 
 def download(remote_path: str, local_dir: str = "", decompress: bool = True):
@@ -496,7 +497,10 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
         _download_file_from_inside_zip(remote_path, local_dir, pool_manager,
                                        decompress)
     else:
-        download_path(remote_path, local_dir, pool_manager, decompress)
+        _download_path(remote_path, local_dir, pool_manager, decompress)
+
+    if decompress:
+        _decompress(local_dir)
 
 
 def _list_files(root_path: str) -> Tuple[List[str], int]:
