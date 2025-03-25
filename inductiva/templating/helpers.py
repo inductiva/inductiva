@@ -46,7 +46,7 @@ def get_dir_structure(template_dir: str):
     }
 
 
-def _check_prerender_dir(source_dir_struct, target_dir: str):
+def check_prerender_dir(source_dir_struct, target_dir: str):
     """Check if the destination filenames exist.
 
     Check if the destination filenames exist and raise a FileExistsError if
