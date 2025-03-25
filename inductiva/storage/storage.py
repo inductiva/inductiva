@@ -305,6 +305,136 @@ def upload(
     logging.info("Input uploaded successfully.")
 
 
+def _resolve_local_path(
+    url,
+    remote_base_path,
+    local_base_dir,
+    append_path=None,
+    strip_zip=False,
+):
+    remote_url_path = urllib.parse.urlparse(url).path
+    index = remote_url_path.find(remote_base_path)
+    relative_path = remote_url_path[index:]
+
+    if strip_zip and relative_path.endswith(".zip"):
+        relative_path = relative_path.removesuffix(".zip")
+
+    local_path = os.path.join(local_base_dir, relative_path)
+    if append_path:
+        local_path = os.path.join(local_path, append_path)
+
+    os.makedirs(os.path.dirname(local_path), exist_ok=True)
+
+    return local_path
+
+
+def _get_size(url, pool_manager):
+    response = pool_manager.urlopen("HEAD", url)
+    size = int(response.getheader("Content-Length"))
+    response.release_conn()
+    return size
+
+
+def _download_file(url,
+                   download_path,
+                   progress_bar,
+                   progress_bar_lock,
+                   pool_manager,
+                   decompress=False,
+                   range_start=None,
+                   range_end=None):
+    headers = {}
+    is_range = range_start is not None and range_end is not None
+
+    if is_range:
+        headers["Range"] = f"bytes={range_start}-{range_end}"
+    response = pool_manager.urlopen("GET",
+                                    url,
+                                    headers=headers,
+                                    preload_content=False)
+
+    with open(download_path, "wb") as file:
+        for chunk in response.stream():
+            file.write(chunk)
+            with progress_bar_lock:
+                progress_bar.update(len(chunk))
+    response.release_conn()
+
+    if is_range:
+        with open(download_path, "rb") as f:
+            compressed_data = f.read()
+        decompressed_data = zlib.decompress(compressed_data, -zlib.MAX_WBITS)
+        uncompress_path = download_path.removesuffix(".zip")
+        with open(uncompress_path, "wb") as f:
+            f.write(decompressed_data)
+        os.remove(download_path)
+        download_path = uncompress_path
+
+    if decompress:
+        decompress_dir, ext = os.path.splitext(download_path)
+        # TODO: Improve the check for ZIP file
+        if ext != ".zip":
+            return
+        utils.data.uncompress_zip(download_path, decompress_dir)
+        os.remove(download_path)
+
+
+def is_file_inside_zip(path):
+    parts = path.split(os.sep)
+    return any(part.endswith(".zip") for part in parts[:-1])
+
+
+def _download_file_from_inside_zip(remote_path, local_dir, desc, pool_manager,
+                                   decompress):
+    before, after = remote_path.split(".zip" + os.sep, 1)
+    path = before + ".zip"
+    zip_relative_path = os.path.dirname(after)
+    zip_filename = os.path.basename(after)
+
+    url = get_signed_urls(paths=[path], operation="download")[0]
+
+    if "output.zip" in path:
+        prefix = "artifacts/"
+    elif "input.zip" in path:
+        prefix = "sim_dir/"
+    else:
+        prefix = ""
+
+    zip_files = get_zip_contents(path, prefix + zip_relative_path).files
+
+    for zip_file in zip_files:
+        if zip_file.name == zip_filename:
+            break
+
+    else:
+        raise ValueError(f"File \"{after}\" not found in \"{path}\".")
+
+    range_start = zip_file.range_start
+    range_end = range_start + zip_file.compressed_size
+    resolved_path = _resolve_local_path(url, path, local_dir, after + ".zip",
+                                        True)
+
+    download_path = resolved_path
+    with tqdm.tqdm(
+            total=range_end - range_start,
+            unit="B",
+            unit_scale=True,
+            unit_divisor=1000,  # Use 1 KB = 1000 bytes
+            desc=desc,
+    ) as progress_bar:
+        progress_bar_lock = threading.Lock()
+        _download_file(
+            url=url,
+            download_path=download_path,
+            progress_bar=progress_bar,
+            progress_bar_lock=progress_bar_lock,
+            pool_manager=pool_manager,
+            decompress=decompress,
+            range_start=range_start,
+            range_end=range_end,
+        )
+
+
 def download(remote_path: str, local_dir: str = "", decompress: bool = True):
     """
     Downloads a file or folder from storage to a local directory, optionally 
@@ -328,140 +458,21 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
                                    decompress=False)
     """
 
-    def _resolve_local_path(
-        url,
-        remote_base_path,
-        local_base_dir,
-        append_path=None,
-        strip_zip=False,
-    ):
-        remote_url_path = urllib.parse.urlparse(url).path
-        index = remote_url_path.find(remote_base_path)
-        relative_path = remote_url_path[index:]
-
-        if strip_zip and relative_path.endswith(".zip"):
-            relative_path = relative_path.removesuffix(".zip")
-
-        local_path = os.path.join(local_base_dir, relative_path)
-        if append_path:
-            local_path = os.path.join(local_path, append_path)
-
-        os.makedirs(os.path.dirname(local_path), exist_ok=True)
-
-        return local_path
-
-    def _get_size(url):
-        response = pool_manager.urlopen("HEAD", url)
-        size = int(response.getheader("Content-Length"))
-        response.release_conn()
-        return size
-
-    def _download_file(url,
-                       download_path,
-                       progress_bar,
-                       progress_bar_lock,
-                       range_start=None,
-                       range_end=None):
-        headers = {}
-        is_range = range_start is not None and range_end is not None
-
-        if is_range:
-            headers["Range"] = f"bytes={range_start}-{range_end}"
-        response = pool_manager.urlopen("GET",
-                                        url,
-                                        headers=headers,
-                                        preload_content=False)
-
-        with open(download_path, "wb") as file:
-            for chunk in response.stream():
-                file.write(chunk)
-                with progress_bar_lock:
-                    progress_bar.update(len(chunk))
-        response.release_conn()
-
-        if is_range:
-            with open(download_path, "rb") as f:
-                compressed_data = f.read()
-            decompressed_data = zlib.decompress(compressed_data,
-                                                -zlib.MAX_WBITS)
-            uncompress_path = download_path.removesuffix(".zip")
-            with open(uncompress_path, "wb") as f:
-                f.write(decompressed_data)
-            os.remove(download_path)
-            download_path = uncompress_path
-
-        if decompress:
-            decompress_dir, ext = os.path.splitext(download_path)
-            # TODO: Improve the check for ZIP file
-            if ext != ".zip":
-                return
-            utils.data.uncompress_zip(download_path, decompress_dir)
-            os.remove(download_path)
-
-    def _is_zip_file(path):
-        parts = path.split(os.sep)
-        return any(part.endswith(".zip") for part in parts[:-1])
-
-    def _download_zip_file():
-        before, after = remote_path.split(".zip" + os.sep, 1)
-        path = before + ".zip"
-        zip_relative_path = os.path.dirname(after)
-        zip_filename = os.path.basename(after)
-
-        url = get_signed_urls(paths=[path], operation="download")[0]
-
-        if "output.zip" in path:
-            prefix = "artifacts/"
-        elif "input.zip" in path:
-            prefix = "sim_dir/"
-        else:
-            prefix = ""
-
-        zip_files = get_zip_contents(path, prefix + zip_relative_path).files
-
-        for zip_file in zip_files:
-            if zip_file.name == zip_filename:
-                break
-
-        else:
-            raise ValueError(f"File \"{after}\" not found in \"{path}\".")
-
-        range_start = zip_file.range_start
-        range_end = range_start + zip_file.compressed_size
-        resolved_path = _resolve_local_path(url, path, local_dir,
-                                            after + ".zip", True)
-
-        download_path = resolved_path
-        with tqdm.tqdm(
-                total=total_bytes,
-                unit="B",
-                unit_scale=True,
-                unit_divisor=1000,  # Use 1 KB = 1000 bytes
-                desc=desc,
-        ) as progress_bar:
-            progress_bar_lock = threading.Lock()
-            _download_file(
-                url,
-                download_path,
-                progress_bar,
-                progress_bar_lock,
-                range_start,
-                range_end,
-            )
-
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
     pool_manager = api_instance.api_client.rest_client.pool_manager
 
-    if _is_zip_file(remote_path):
+    if is_file_inside_zip(remote_path):
         num_files = 1
         text_file = "file"
         total_bytes = 5
         desc = f"Downloading {num_files} {text_file} from \"{remote_path}\""
-        _download_zip_file()
+        _download_file_from_inside_zip(remote_path, local_dir, desc,
+                                       pool_manager, decompress)
     else:
         urls = get_signed_urls(paths=[remote_path], operation="download")
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            total_bytes = sum(executor.map(_get_size, urls))
+            total_bytes = sum(
+                executor.map(_get_size, urls, itertools.repeat(pool_manager)))
 
         resolved_paths = [
             _resolve_local_path(url, remote_path, local_dir) for url in urls
@@ -469,11 +480,6 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
         num_files = len(urls)
         text_file = f"file{'s' if num_files != 1 else ''}"
         desc = f"Downloading {num_files} {text_file} from \"{remote_path}\""
-
-        def _download_file_wrapper(url, resolved_path, progress_bar,
-                                   progress_bar_lock):
-            return _download_file(url, resolved_path, progress_bar,
-                                  progress_bar_lock)
 
         with tqdm.tqdm(
                 total=total_bytes,
@@ -485,9 +491,11 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
             with concurrent.futures.ThreadPoolExecutor() as executor:
                 progress_bar_lock = threading.Lock()
                 _ = list(
-                    executor.map(_download_file_wrapper, urls, resolved_paths,
+                    executor.map(_download_file, urls, resolved_paths,
                                  itertools.repeat(progress_bar),
-                                 itertools.repeat(progress_bar_lock)))
+                                 itertools.repeat(progress_bar_lock),
+                                 itertools.repeat(pool_manager),
+                                 itertools.repeat(decompress)))
 
     logging.info("Successfully downloaded %d %s to \"%s\".", num_files,
                  text_file, os.path.join(local_dir, remote_path))
