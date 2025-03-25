@@ -438,6 +438,7 @@ def _download_path(remote_path, local_dir, pool_manager):
                              itertools.repeat(progress_bar_lock),
                              itertools.repeat(pool_manager)))
 
+
 def _decompress(path):
     decompress_dir, ext = os.path.splitext(path)
     # TODO: Improve the check for ZIP file
