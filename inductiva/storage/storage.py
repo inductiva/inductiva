@@ -340,7 +340,6 @@ def _download_file(url,
                    progress_bar,
                    progress_bar_lock,
                    pool_manager,
-                   decompress=False,
                    range_start=None,
                    range_end=None):
     headers = {}
@@ -359,16 +358,6 @@ def _download_file(url,
             with progress_bar_lock:
                 progress_bar.update(len(chunk))
     response.release_conn()
-
-    if is_range:
-        with open(download_path, "rb") as f:
-            compressed_data = f.read()
-        decompressed_data = zlib.decompress(compressed_data, -zlib.MAX_WBITS)
-        uncompress_path = download_path.removesuffix(".zip")
-        with open(uncompress_path, "wb") as f:
-            f.write(decompressed_data)
-        os.remove(download_path)
-        download_path = uncompress_path
 
 
 def _is_file_inside_zip(path):
@@ -403,10 +392,9 @@ def _download_file_from_inside_zip(remote_path, local_dir, pool_manager,
 
     range_start = zip_file.range_start
     range_end = range_start + zip_file.compressed_size
-    resolved_path = _resolve_local_path(url, path, local_dir, after + ".zip",
+    download_path = _resolve_local_path(url, path, local_dir, after + ".zip",
                                         True)
 
-    download_path = resolved_path
     desc = f"Downloading 1 file from \"{remote_path}\""
     with tqdm.tqdm(
             total=range_end - range_start,
@@ -422,10 +410,10 @@ def _download_file_from_inside_zip(remote_path, local_dir, pool_manager,
             progress_bar=progress_bar,
             progress_bar_lock=progress_bar_lock,
             pool_manager=pool_manager,
-            decompress=decompress,
             range_start=range_start,
             range_end=range_end,
         )
+    return download_path
 
 
 def _download_path(remote_path, local_dir, pool_manager, decompress):
@@ -454,8 +442,7 @@ def _download_path(remote_path, local_dir, pool_manager, decompress):
                 executor.map(_download_file, urls, resolved_paths,
                              itertools.repeat(progress_bar),
                              itertools.repeat(progress_bar_lock),
-                             itertools.repeat(pool_manager),
-                             itertools.repeat(decompress)))
+                             itertools.repeat(pool_manager)))
 
 
 def _decompress(path):
@@ -464,6 +451,18 @@ def _decompress(path):
     if ext != ".zip":
         return
     utils.data.uncompress_zip(path, decompress_dir)
+    os.remove(path)
+
+
+def _decompress_file_inside_zip(path):
+    if not path.endswith(".zip"):
+        return
+    with open(path, "rb") as f:
+        compressed_data = f.read()
+    decompressed_data = zlib.decompress(compressed_data, -zlib.MAX_WBITS)
+    uncompress_path = path.removesuffix(".zip")
+    with open(uncompress_path, "wb") as f:
+        f.write(decompressed_data)
     os.remove(path)
 
 
@@ -494,8 +493,9 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
     pool_manager = api_instance.api_client.rest_client.pool_manager
 
     if _is_file_inside_zip(remote_path):
-        _download_file_from_inside_zip(remote_path, local_dir, pool_manager,
-                                       decompress)
+        download_path = _download_file_from_inside_zip(remote_path, local_dir,
+                                                       pool_manager, decompress)
+        _decompress_file_inside_zip(download_path)
     else:
         _download_path(remote_path, local_dir, pool_manager, decompress)
 
