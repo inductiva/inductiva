@@ -10,3 +10,4 @@ resources sub-package
    :members:
    :show-inheritance:
    :undoc-members:
+   :exclude-members: ResourceType, VCPUCount, ProviderType, MachineTypeInfo

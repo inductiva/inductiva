@@ -22,13 +22,3 @@ tasks sub-package
    :show-inheritance:
    :undoc-members:
 
-.. automodule:: inductiva.tasks.file_tracker
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
-.. automodule:: inductiva.tasks.streams
-   :members:
-   :show-inheritance:
-   :undoc-members:
-

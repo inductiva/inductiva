@@ -32,7 +32,10 @@ class Benchmark(projects.Project):
     """Represents the benchmark runner."""
 
     class InfoKey:
-        """Constant keys for the info used in the benchmark runs."""
+        """Constant keys for the info used in the benchmark runs.
+
+        :meta private:
+        """
         TASK_ID = "task_id"
         SIMULATOR = "simulator"
         MACHINE_TYPE = "machine_type"

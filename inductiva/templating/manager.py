@@ -63,11 +63,11 @@ class TemplateManager:
                                          keep_trailing_newline=True,
                                          undefined=jinja2.StrictUndefined)
 
-        template_dir_struct = get_dir_structure(source_dir)
+        template_dir_struct = _get_dir_structure(source_dir)
 
         if not overwrite:
             try:
-                check_prerender_dir(template_dir_struct, target_dir)
+                _check_prerender_dir(template_dir_struct, target_dir)
             except FileExistsError as e:
                 msg = f"{e}; set `overwrite=True` to overwrite existing files."
                 raise FileExistsError(msg) from e
@@ -83,26 +83,26 @@ class TemplateManager:
 
             # render template files
             for file in contents["templates"]:
-                target_path = target_subdir / strip_extension(file)
+                target_path = target_subdir / _strip_extension(file)
                 template_name = (pathlib.Path(subdir) / file).as_posix()
                 template = environment.get_template(template_name)
                 stream = template.stream(**render_args)
                 stream.dump(str(target_path))
 
 
-def is_template(file: str) -> bool:
+def _is_template(file: str) -> bool:
     """Check if the given file is of template type."""
     return file.endswith(TEMPLATE_EXTENSION)
 
 
-def strip_extension(file: str) -> str:
+def _strip_extension(file: str) -> str:
     """Strip the template extension if the given file is a template."""
-    if not is_template(file):
+    if not _is_template(file):
         return file
     return os.path.splitext(file)[0]
 
 
-def get_dir_structure(template_dir: str):
+def _get_dir_structure(template_dir: str):
     """
     Generate a dictionary with the structure of the template directory.
     The keys are the subdirectories of the template directory, relative to
@@ -125,13 +125,13 @@ def get_dir_structure(template_dir: str):
     """
     return {
         os.path.relpath(root, start=template_dir): {
-            "templates": [f for f in files if is_template(f)],
-            "files": [f for f in files if not is_template(f)],
+            "templates": [f for f in files if _is_template(f)],
+            "files": [f for f in files if not _is_template(f)],
         } for root, _, files in os.walk(template_dir, topdown=True)
     }
 
 
-def check_prerender_dir(source_dir_struct, target_dir: str):
+def _check_prerender_dir(source_dir_struct, target_dir: str):
     """Check if the destination filenames exist.
 
     Check if the destination filenames exist and raise a FileExistsError if
@@ -148,6 +148,6 @@ def check_prerender_dir(source_dir_struct, target_dir: str):
         dest_subdir = target_dir / subdir
         for file in contents["files"] + contents["templates"]:
             raw_target_name = str(dest_subdir / file)
-            target_name = strip_extension(raw_target_name)
+            target_name = _strip_extension(raw_target_name)
             if os.path.exists(target_name):
                 raise FileExistsError(f"File {target_name} already exists.")

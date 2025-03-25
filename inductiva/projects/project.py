@@ -49,7 +49,7 @@ def get_projects():
         _logger.error("Failed to get remote projects", exc_info=ex)
         raise ex
 
-    return [Project.from_api_response(resp) for resp in response.body]
+    return [Project._from_api_response(resp) for resp in response.body]
 
 
 class Project:
@@ -64,15 +64,19 @@ class Project:
  
     Example usage:
  
-    >>> project = inductiva.projects.Project("test_project")
-    >>> project.start()
-    >>> simulator.run(...)  # Submitted to  `'test_project'`
-    >>> project.stop()
+    .. code-block:: python
+
+        project = inductiva.projects.Project("test_project")
+        project.start()
+        simulator.run(...)  # Submitted to  `'test_project'`
+        project.stop()
  
     This is equivalent to:
  
-    >>> with inductiva.projects.Project("test_project"):
-    >>>    simulator.run(...)
+    .. code-block:: python
+
+        with inductiva.projects.Project("test_project"):
+            simulator.run(...)
 
     """
 
@@ -95,7 +99,7 @@ class Project:
         self._update_from_api_response(model)
 
     @classmethod
-    def from_api_response(cls, model: ProjectModel) -> "Project":
+    def _from_api_response(cls, model: ProjectModel) -> "Project":
         """Builds a `Project` object from an API response.
 
         Args:

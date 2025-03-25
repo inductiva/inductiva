@@ -49,6 +49,8 @@ class BaseMachineGroup(ABC):
                 kept alive. After auto_terminate_minutes minutes the machine
                 will be terminated. This time will start counting after calling
                 this method.
+
+    :meta private:
     """
     # Constructor arguments
     machine_type: str
