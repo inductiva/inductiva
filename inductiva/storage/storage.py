@@ -167,7 +167,7 @@ class ZipFileInfo:
     name: str
     size: int
     compressed_size: int
-    range_start: int
+    range_start: Optional[int]
 
 
 @dataclass
