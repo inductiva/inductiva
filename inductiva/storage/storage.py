@@ -361,8 +361,7 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
                        progress_bar,
                        progress_bar_lock,
                        range_start=None,
-                       range_end=None,
-                       decompress=False):
+                       range_end=None):
         headers = {}
         is_range = range_start is not None and range_end is not None
 
@@ -401,11 +400,11 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
 
     def _is_zip_file(path):
         parts = path.split(os.sep)
-        return any(part.endswith('.zip') for part in parts[:-1])
+        return any(part.endswith(".zip") for part in parts[:-1])
 
     def _download_zip_file():
-        before, after = remote_path.split('.zip' + os.sep, 1)
-        path = before + '.zip'
+        before, after = remote_path.split(".zip" + os.sep, 1)
+        path = before + ".zip"
         zip_relative_path = os.path.dirname(after)
         zip_filename = os.path.basename(after)
 
