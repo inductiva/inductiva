@@ -365,6 +365,16 @@ def _is_file_inside_zip(path):
     return any(part.endswith(".zip") for part in parts[:-1])
 
 
+def _get_progress_bar(desc, total_bytes):
+    return tqdm.tqdm(
+        total=total_bytes,
+        unit="B",
+        unit_scale=True,
+        unit_divisor=1000,
+        desc=desc,
+    )
+
+
 def _download_file_from_inside_zip(remote_path, local_dir, pool_manager):
     before, after = remote_path.split(".zip" + os.sep, 1)
     path = before + ".zip"
@@ -385,7 +395,6 @@ def _download_file_from_inside_zip(remote_path, local_dir, pool_manager):
     for zip_file in zip_files:
         if zip_file.name == zip_filename:
             break
-
     else:
         raise ValueError(f"File \"{after}\" not found in \"{path}\".")
 
@@ -394,14 +403,8 @@ def _download_file_from_inside_zip(remote_path, local_dir, pool_manager):
     download_path = _resolve_local_path(url, path, local_dir, after + ".zip",
                                         True)
 
-    desc = f"Downloading 1 file from \"{remote_path}\""
-    with tqdm.tqdm(
-            total=range_end - range_start,
-            unit="B",
-            unit_scale=True,
-            unit_divisor=1000,  # Use 1 KB = 1000 bytes
-            desc=desc,
-    ) as progress_bar:
+    desc = f"Downloading \"{zip_filename}\" from \"{remote_path}\""
+    with _get_progress_bar(desc, range_start - range_end) as progress_bar:
         progress_bar_lock = threading.Lock()
         _download_file(
             url=url,
@@ -424,17 +427,9 @@ def _download_path(remote_path, local_dir, pool_manager):
     resolved_paths = [
         _resolve_local_path(url, remote_path, local_dir) for url in urls
     ]
-    num_files = len(urls)
-    text_file = f"file{'s' if num_files != 1 else ''}"
-    desc = f"Downloading {num_files} {text_file} from \"{remote_path}\""
 
-    with tqdm.tqdm(
-            total=total_bytes,
-            unit="B",
-            unit_scale=True,
-            unit_divisor=1000,  # Use 1 KB = 1000 bytes
-            desc=desc,
-    ) as progress_bar:
+    desc = f"Downloading {len(urls)} file(s) from \"{remote_path}\""
+    with _get_progress_bar(desc, total_bytes) as progress_bar:
         with concurrent.futures.ThreadPoolExecutor() as executor:
             progress_bar_lock = threading.Lock()
             _ = list(
@@ -442,7 +437,6 @@ def _download_path(remote_path, local_dir, pool_manager):
                              itertools.repeat(progress_bar),
                              itertools.repeat(progress_bar_lock),
                              itertools.repeat(pool_manager)))
-
 
 def _decompress(path):
     decompress_dir, ext = os.path.splitext(path)
