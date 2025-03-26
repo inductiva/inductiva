@@ -5,3 +5,4 @@ subparsers for several subcommands (e.g. `tasks` and `machines`).
 """
 from . import utils
 from .main import main, get_main_parser
+from .cmd_task_runner.convert import convert_image
