@@ -473,14 +473,29 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
         decompress (bool, optional): Whether to decompress the downloaded file 
             or folder if it is compressed. Defaults to True.
 
-    Example:
-        # Download a folder from a remote server to the current directory
-        inductiva.storage.download(remote_path="/path/to/remote/folder/")
-    
-        # Download a file and save it to a local directory without decompressing
-        inductiva.storage.download(remote_path="/path/to/remote/file.zip",
-                                   local_dir="/local/directory",
-                                   decompress=False)
+    Examples:
+        Download a folder from a remote server to the current directory:
+
+        .. code-block:: python
+
+            inductiva.storage.download(remote_path="/path/to/remote/folder/")
+
+        Download a file and save it to a local directory without decompressing:
+
+        .. code-block:: python
+
+            inductiva.storage.download(remote_path="/path/to/remote/file.zip",
+                                       local_dir="/local/directory",
+                                       decompress=False)
+
+        Download a file inside a zip archive:
+
+        .. code-block:: python
+
+            inductiva.storage.download(remote_path="/path/to/zip/file.txt")
+
+    Note:
+        It is not possible to download folders that are inside zip archives.
     """
 
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
