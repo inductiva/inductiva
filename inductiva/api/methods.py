@@ -247,7 +247,8 @@ def block_until_status_is(api_instance: TasksApi,
 
 
 @contextmanager
-def blocking_task_context(api_instance: TasksApi, task_id: str, action_str: str):
+def blocking_task_context(api_instance: TasksApi, task_id: str,
+                          action_str: str):
     """Context to handle execution of a blocking task.
 
     The context handles exceptions and the SIGINT signal, issuing a request
