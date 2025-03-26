@@ -6,7 +6,7 @@ import argparse
 import os
 import tempfile
 from inductiva import storage
-from inductiva import _cli
+from inductiva._cli.cmd_task_runner import convert as docker_convert
 
 
 def upload_container(args):
@@ -24,7 +24,7 @@ def upload_container(args):
                                           output=sif_file_path)
 
         print(f"Converting {args.image} -> {sif_file_path}...")
-        _cli.convert_image(convert_args)
+        docker_convert.convert_image(convert_args)
 
         # 4. Upload entire folder to storage
         print(f"Uploading '{sif_folder_path}' to remote dir '{folder_name}'...")
