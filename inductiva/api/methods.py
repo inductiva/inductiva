@@ -193,7 +193,7 @@ def kill_task(api_instance: TasksApi, task_id: str):
    """
     logging.debug("Sending kill task request ...")
     api_instance.kill_task(path_params={"task_id": task_id},)
-    logging.info(f"Task with ID {task_id} was terminated.")
+    logging.info("Task with ID %s was terminated.", task_id)
 
 
 def get_task_status(api_instance: TasksApi, task_id: str) -> TaskStatus:
@@ -271,7 +271,7 @@ def blocking_task_context(api_instance: TasksApi, task_id: str, action_str: str)
         kill_task(api_instance, task_id)
         raise err
     except KeyboardInterrupt:
-        logging.info(f"Caught SIGINT: {action_str} interrupted by user.")
+        logging.info("Caught SIGINT: %s interrupted by user.", action_str)
         kill_task(api_instance, task_id)
         sys.exit(1)
     finally:
