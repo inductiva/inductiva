@@ -168,6 +168,7 @@ class ZipFileInfo:
     size: int
     compressed_size: int
     range_start: Optional[int]
+    compress_type: Optional[int]
 
 
 @dataclass
@@ -206,6 +207,8 @@ def get_zip_contents(
             if file["compressed_size"] else None,
         range_start=int(file["range_start"]) \
             if file["range_start"] else None,
+        compress_type=int(file["compress_type"])
+            if file["compress_type"] else None
     ) for file in response_body["contents"]]
     return ZipArchiveInfo(size=int(response_body["size"]), files=files)
 
@@ -400,8 +403,9 @@ def _download_file_from_inside_zip(remote_path, local_dir, pool_manager):
 
     range_start = zip_file.range_start
     range_end = range_start + zip_file.compressed_size
-    download_path = _resolve_local_path(url, path, local_dir, after + ".zip",
-                                        True)
+    compress_type = zip_file.compress_type
+    file_path = os.path.join(after, ".zip") if compress_type else after
+    download_path = _resolve_local_path(url, path, local_dir, file_path, True)
 
     desc = f"Downloading \"{zip_filename}\" from \"{remote_path}\""
     with _get_progress_bar(desc, range_start - range_end) as progress_bar:
