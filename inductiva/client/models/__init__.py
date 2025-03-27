@@ -66,6 +66,8 @@ from inductiva.client.model.storage_file_info import StorageFileInfo
 from inductiva.client.model.storage_operation import StorageOperation
 from inductiva.client.model.storage_operation_name import StorageOperationName
 from inductiva.client.model.storage_sort_by import StorageSortBy
+from inductiva.client.model.stripe_customer_info import StripeCustomerInfo
+from inductiva.client.model.stripe_customer_info_update import StripeCustomerInfoUpdate
 from inductiva.client.model.task import Task
 from inductiva.client.model.task_connection import TaskConnection
 from inductiva.client.model.task_machine_operation import TaskMachineOperation

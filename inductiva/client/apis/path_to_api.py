@@ -37,6 +37,7 @@ from inductiva.client.apis.paths.admin_users_username_costs_fee_percentage impor
 from inductiva.client.apis.paths.admin_organizations_organization_id_costs_fee_percentage import AdminOrganizationsOrganizationIdCostsFeePercentage
 from inductiva.client.apis.paths.admin_top_ups import AdminTopUps
 from inductiva.client.apis.paths.admin_tasks import AdminTasks
+from inductiva.client.apis.paths.admin_users_email_stripe_customer_id import AdminUsersEmailStripeCustomerId
 from inductiva.client.apis.paths.task_runner_register import TaskRunnerRegister
 from inductiva.client.apis.paths.task_runner_machine_id import TaskRunnerMachineId
 from inductiva.client.apis.paths.task_runner_machine_id_task import TaskRunnerMachineIdTask
@@ -162,6 +163,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminTopUps,
         PathValues.ADMIN_TASKS:
             AdminTasks,
+        PathValues.ADMIN_USERS_EMAIL_STRIPE_CUSTOMER_ID:
+            AdminUsersEmailStripeCustomerId,
         PathValues.TASKRUNNER_REGISTER:
             TaskRunnerRegister,
         PathValues.TASKRUNNER_MACHINE_ID:
@@ -337,6 +340,8 @@ path_to_api = PathToApi({
         AdminTopUps,
     PathValues.ADMIN_TASKS:
         AdminTasks,
+    PathValues.ADMIN_USERS_EMAIL_STRIPE_CUSTOMER_ID:
+        AdminUsersEmailStripeCustomerId,
     PathValues.TASKRUNNER_REGISTER:
         TaskRunnerRegister,
     PathValues.TASKRUNNER_MACHINE_ID:
