@@ -161,7 +161,7 @@ def register(parser):
         formatter_class=argparse.RawTextHelpFormatter,
     )
     subparser.description = (
-        "The `inductiva task-runner convert` command converts a Docker "
+        "The `inductiva containers convert` command converts a Docker "
         "image—specified as a Docker Hub URL,\n a local Docker image reference,"
         " or a .tar archive—into an Apptainer .sif file using\n the Apptainer.")
     subparser.add_argument(
