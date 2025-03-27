@@ -404,7 +404,7 @@ def _download_file_from_inside_zip(remote_path, local_dir, pool_manager):
         raise ValueError(f"File \"{after}\" not found in \"{path}\".")
 
     range_start = zip_file.range_start
-    range_end = range_start + zip_file.compressed_size
+    range_end = range_start + zip_file.compressed_size - 1
     compress_type = zip_file.compress_type
     file_path = after + ".zip" if compress_type else after
     download_path = _resolve_local_path(url, path, local_dir, file_path, True)
@@ -521,6 +521,11 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
     if decompress:
         _decompress(paths)
 
+    download_path = (paths[0] if len(paths) == 1 else os.path.join(
+        local_dir, remote_path))
+
+    logging.info('Successfully downloaded {} file(s) to "{}".'.format(
+        len(paths), download_path))
 
 def _list_files(root_path: str) -> Tuple[List[str], int]:
     """
