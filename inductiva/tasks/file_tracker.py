@@ -23,6 +23,7 @@ aiortc_logger.setLevel(logging.WARNING)
 class Operations(enum.Enum):
     LIST = "ls"
     TAIL = "tail"
+    TOP = "top"
 
 
 class FileTracker:

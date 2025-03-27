@@ -1156,6 +1156,22 @@ class Task:
                 Operations.LIST, formatter=self._format_directory_listing)
         ]
         return directory[0]
+    
+    async def list_top(self):
+        """
+        Execute the `top -b -H -n 1` command on the task's machine and stream
+        its output.
+
+        This method runs the `top -b -H -n 1` command remotely on the machine
+        where the task is being executed. It streams the output, allowing
+        real-time monitoring of system processes and resource usage.
+        """
+
+        async for lines in self._file_operation(Operations.TOP,
+                                                # applies no formatter
+                                                formatter= lambda _: _ ,
+                                                follow=False):
+            yield lines
 
     async def tail_file(self, filename: str, n_lines: int = 10, follow=False):
         """Get the last n_lines lines of a 
