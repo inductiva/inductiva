@@ -521,6 +521,11 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
     if decompress:
         _decompress(paths)
 
+    download_path = (paths[0] if len(paths) == 1 else os.path.join(
+        local_dir, remote_path))
+    logging.info(
+        f"Successfully downloaded {len(paths)} file(s) to \"{download_path}\".")
+
 
 def _list_files(root_path: str) -> Tuple[List[str], int]:
     """
