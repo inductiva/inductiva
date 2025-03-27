@@ -93,7 +93,7 @@ class SWAN(simulators.Simulator):
             commands.append(machinefile_command)
 
             #if the user does not provide n_vcpus use all available by default
-            mpi_flag = f"-mpi {n_vcpus or on.n_vcpus.total}"
+            mpi_flag = f"-mpi {n_vcpus or on.available_vcpus}"
 
             swanrun_command = Command(
                 f"swanrun -input {config_file_only} {mpi_flag}")
