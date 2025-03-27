@@ -4,6 +4,7 @@ The relevant function for usage outside of this file is invoke_async_api().
 Check the demos directory for examples on how it is used.
 """
 import os
+import sys
 import time
 import tqdm
 import tqdm.utils
@@ -138,29 +139,32 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         original_params: Params of the request passed by the user.
         type_annotations: Annotations of the params' types.
     """
+    try:
+        input_zip_path, zip_file_size = prepare_input(task_id, original_params,
+                                                      type_annotations)
 
-    input_zip_path, zip_file_size = prepare_input(task_id, original_params,
-                                                  type_annotations)
+        remote_input_zip_path = f"{storage_path_prefix}/{task_id}/input.zip"
+        url = storage.get_signed_urls(
+            paths=[remote_input_zip_path],
+            operation="upload",
+        )[0]
 
-    remote_input_zip_path = f"{storage_path_prefix}/{task_id}/input.zip"
-    url = storage.get_signed_urls(
-        paths=[remote_input_zip_path],
-        operation="upload",
-    )[0]
+        with tqdm.tqdm(total=zip_file_size,
+                       unit="B",
+                       unit_scale=True,
+                       unit_divisor=1000) as progress_bar:
+            upload_file(api_instance, input_zip_path, "PUT", url, progress_bar)
+            notify_upload_complete(
+                api_instance.notify_input_uploaded,
+                path_params={"task_id": task_id},
+            )
 
-    with tqdm.tqdm(total=zip_file_size,
-                   unit="B",
-                   unit_scale=True,
-                   unit_divisor=1000) as progress_bar:
-        upload_file(api_instance, input_zip_path, "PUT", url, progress_bar)
-        notify_upload_complete(
-            api_instance.notify_input_uploaded,
-            path_params={"task_id": task_id},
-        )
+        logging.info("Local input directory successfully uploaded.")
+        logging.info("")
 
-    logging.info("Local input directory successfully uploaded.")
-    logging.info("")
-    os.remove(input_zip_path)
+    finally:
+        if input_zip_path:
+            os.remove(input_zip_path)
 
 
 def block_until_finish(api_instance: TasksApi, task_id: str) -> str:
@@ -189,7 +193,7 @@ def kill_task(api_instance: TasksApi, task_id: str):
    """
     logging.debug("Sending kill task request ...")
     api_instance.kill_task(path_params={"task_id": task_id},)
-    logging.info("Task terminated.")
+    logging.info("Task with ID %s was terminated.", task_id)
 
 
 def get_task_status(api_instance: TasksApi, task_id: str) -> TaskStatus:
@@ -243,7 +247,9 @@ def block_until_status_is(api_instance: TasksApi,
 
 
 @contextmanager
-def blocking_task_context(api_instance: TasksApi, task_id):
+def blocking_task_context(api_instance: TasksApi,
+                          task_id: str,
+                          action_str: str = "action"):
     """Context to handle execution of a blocking task.
 
     The context handles exceptions and the SIGINT signal, issuing a request
@@ -266,10 +272,10 @@ def blocking_task_context(api_instance: TasksApi, task_id):
         logging.info("Caught exception: terminating blocking task...")
         kill_task(api_instance, task_id)
         raise err
-    except KeyboardInterrupt as err:
-        logging.info("Caught SIGINT: terminating blocking task...")
+    except KeyboardInterrupt:
+        logging.info("Caught SIGINT: %s interrupted by user.", action_str)
         kill_task(api_instance, task_id)
-        raise err
+        sys.exit(1)
     finally:
         # Reset original SIGINT handler
         signal.signal(signal.SIGINT, original_sig)
@@ -357,14 +363,15 @@ def submit_task(api_instance,
         ))
 
     if task_submitted_info["status"] == "pending-input":
-
-        upload_input(
-            api_instance=api_instance,
-            original_params=params,
-            task_id=task_id,
-            type_annotations=type_annotations,
-            storage_path_prefix=storage_path_prefix,
-        )
+        # Use the blocking task context
+        with blocking_task_context(api_instance, task_id, "input upload"):
+            upload_input(
+                api_instance=api_instance,
+                original_params=params,
+                task_id=task_id,
+                type_annotations=type_annotations,
+                storage_path_prefix=storage_path_prefix,
+            )
 
     return task_id
 
