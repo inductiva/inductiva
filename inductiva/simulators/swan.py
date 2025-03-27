@@ -92,7 +92,8 @@ class SWAN(simulators.Simulator):
 
             commands.append(machinefile_command)
 
-            mpi_flag = f"-mpi {n_vcpus}" if n_vcpus else ""
+            #if the user does not provide n_vcpus use all available by default
+            mpi_flag = f"-mpi {n_vcpus or on.n_vcpus.total}"
 
             swanrun_command = Command(
                 f"swanrun -input {config_file_only} {mpi_flag}")
@@ -103,6 +104,7 @@ class SWAN(simulators.Simulator):
         elif command == "swan.exe":
 
             mpi_kwargs = {}
+            #If the user does not provide n_vcpus mpi will use all available
             if n_vcpus is not None:
                 mpi_kwargs["np"] = n_vcpus
             mpi_kwargs["use_hwthread_cpus"] = use_hwthread
