@@ -21,7 +21,7 @@ jobs:
           pre-build-command: |
             apt-get update -y && \
             apt-get install -y git && \
-            pip install -r ../requirements.txt && \
+            pip install -r requirements.txt && \
             pip install -y myst-parser && \
             echo "extensions = ['myst_parser']" > conf.py
           build-command: "sphinx-build . ../../build/en/latest -W -D version=latest"
