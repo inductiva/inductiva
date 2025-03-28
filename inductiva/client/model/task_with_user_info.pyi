@@ -1014,6 +1014,61 @@ class TaskWithUserInfo(schemas.DictSchema):
                     return super().__getitem__(i)
 
             stream_zip = schemas.BoolSchema
+
+            class compress_with(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            CompressionMethod,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'compress_with':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             __annotations__ = {
                 "task_id": task_id,
                 "status": status,
@@ -1040,6 +1095,7 @@ class TaskWithUserInfo(schemas.DictSchema):
                 "error_detail": error_detail,
                 "input_resources": input_resources,
                 "stream_zip": stream_zip,
+                "compress_with": compress_with,
             }
 
     simulator: MetaOapg.properties.simulator
@@ -1200,6 +1256,12 @@ class TaskWithUserInfo(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["compress_with"]
+    ) -> MetaOapg.properties.compress_with:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -1229,6 +1291,7 @@ class TaskWithUserInfo(schemas.DictSchema):
         "error_detail",
         "input_resources",
         "stream_zip",
+        "compress_with",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -1386,6 +1449,12 @@ class TaskWithUserInfo(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["compress_with"]
+    ) -> typing.Union[MetaOapg.properties.compress_with, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -1416,6 +1485,7 @@ class TaskWithUserInfo(schemas.DictSchema):
         "error_detail",
         "input_resources",
         "stream_zip",
+        "compress_with",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -1545,6 +1615,12 @@ class TaskWithUserInfo(schemas.DictSchema):
                                       tuple, schemas.Unset] = schemas.unset,
         stream_zip: typing.Union[MetaOapg.properties.stream_zip, bool,
                                  schemas.Unset] = schemas.unset,
+        compress_with: typing.Union[MetaOapg.properties.compress_with, dict,
+                                    frozendict.frozendict, str, date, datetime,
+                                    uuid.UUID, int, float, decimal.Decimal,
+                                    bool, None, list, tuple, bytes, io.FileIO,
+                                    io.BufferedReader,
+                                    schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -1579,11 +1655,13 @@ class TaskWithUserInfo(schemas.DictSchema):
             error_detail=error_detail,
             input_resources=input_resources,
             stream_zip=stream_zip,
+            compress_with=compress_with,
             _configuration=_configuration,
             **kwargs,
         )
 
 
+from inductiva.client.model.compression_method import CompressionMethod
 from inductiva.client.model.executer import Executer
 from inductiva.client.model.task_metrics import TaskMetrics
 from inductiva.client.model.task_status_code import TaskStatusCode
