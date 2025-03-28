@@ -19,7 +19,8 @@ import logging
 import inductiva
 from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
-from inductiva.client.models import TaskRequest, TaskStatus, TaskSubmittedInfo
+from inductiva.client.models import (TaskRequest, TaskStatus, TaskSubmittedInfo,
+                                     CompressionMethod)
 from inductiva import types, constants, storage
 from inductiva.utils.data import (get_validate_request_params, pack_input)
 from inductiva.utils import format_utils, files
@@ -337,6 +338,10 @@ def submit_task(api_instance,
 
     if not input_resources:
         input_resources = []
+
+    stream_zip = request_params.pop("stream_zip", True)
+    compress_with = request_params.pop("compress_with", CompressionMethod.AUTO)
+
     task_request = TaskRequest(simulator=simulator,
                                params=request_params,
                                project=current_project,
@@ -345,7 +350,9 @@ def submit_task(api_instance,
                                storage_path_prefix=storage_path_prefix,
                                simulator_name_alias=simulator_name_alias,
                                resubmit_on_preemption=resubmit_on_preemption,
-                               input_resources=input_resources)
+                               input_resources=input_resources,
+                               stream_zip=stream_zip,
+                               compress_with=compress_with)
 
     task_submitted_info = submit_request(
         api_instance=api_instance,
