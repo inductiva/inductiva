@@ -16,13 +16,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get install -y libglu1-mesa ca-certificates
-          python -m pip install --upgrade pip setuptools wheel
-          pwd
-          ls -la
           cd source
-          pwd
-          ls -la
           python -m pip install -r requirements.txt
 
       - uses: nicholasphair/sphinx-action@7.0.0
@@ -31,10 +25,7 @@ jobs:
           # required by #1291
           pre-build-command: |
             apt-get update -y && \
-            apt-get install -y git && \
-            pip install -y myst-parser && \
-            echo "extensions = ['myst_parser']" > conf.py
-          build-command: "sphinx-build . ../../build/en/latest -W -D version=latest"
+          build-command: "sphinx-build . ../../build/en/latest -W -D version=latest --keep-going"
 
       - name: Deploy to staging webserver via rsync
         uses: burnett01/rsync-deployments@7.0.0
