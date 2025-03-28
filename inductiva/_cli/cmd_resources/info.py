@@ -1,4 +1,5 @@
 """Prints a machine group information via CLI."""
+from collections import defaultdict
 from typing import TextIO
 import argparse
 import sys

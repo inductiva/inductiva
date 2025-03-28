@@ -1,5 +1,4 @@
 """Functions to manage or retrieve user resources."""
-from collections import defaultdict
 from dataclasses import dataclass
 import json
 from typing import List, Optional, Tuple, Union
