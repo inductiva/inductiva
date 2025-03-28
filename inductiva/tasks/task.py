@@ -1156,7 +1156,7 @@ class Task:
                 Operations.LIST, formatter=self._format_directory_listing)
         ]
         return directory[0]
-    
+
     async def list_top(self):
         """
         Execute the `top -b -H -n 1` command on the task's machine and stream
@@ -1167,10 +1167,24 @@ class Task:
         real-time monitoring of system processes and resource usage.
         """
 
-        async for lines in self._file_operation(Operations.TOP,
-                                                # applies no formatter
-                                                formatter= lambda _: _ ,
-                                                follow=False):
+        async for lines in self._file_operation(
+                Operations.TOP,
+                # applies no formatter
+                formatter=lambda _: _,
+                follow=False):
+            yield lines
+
+    async def last_modifed_file(self):
+        """
+        Execute the `last_modifed_file` command on the task's machine and stream
+        its output.
+        """
+
+        async for lines in self._file_operation(
+                Operations.LAST_MODIFIED_FILE,
+                # applies no formatter
+                formatter=lambda _: _,
+                follow=False):
             yield lines
 
     async def tail_file(self, filename: str, n_lines: int = 10, follow=False):
