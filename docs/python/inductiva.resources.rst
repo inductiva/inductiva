@@ -5,9 +5,10 @@ resources sub-package
    :members:
    :show-inheritance:
    :undoc-members:
+   :exclude-members: ResourceType, VCPUCount
 
 .. automodule:: inductiva.resources.utils
    :members:
    :show-inheritance:
    :undoc-members:
-   :exclude-members: ResourceType, VCPUCount, ProviderType, MachineTypeInfo
+   :exclude-members: ProviderType, MachineTypeInfo

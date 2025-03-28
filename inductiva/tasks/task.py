@@ -39,7 +39,10 @@ class Metric:
 
 
 class TaskInfo:
-    """Represents the task information."""
+    """Represents the task information.
+
+    :meta private:
+    """
 
     MISSING_UNTIL_TASK_STARTED = "N/A until task is started"
     MISSING_UNTIL_TASK_ENDED = "N/A until task ends"

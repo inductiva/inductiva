@@ -11,14 +11,3 @@ tasks sub-package
    :members:
    :show-inheritance:
    :undoc-members:
-
-.. automodule:: inductiva.tasks.run_simulation
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
-.. automodule:: inductiva.tasks.output_info
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
