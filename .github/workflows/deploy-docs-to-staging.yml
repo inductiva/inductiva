@@ -25,6 +25,7 @@ jobs:
         run:
           pwd
           cd source/docs
+          ls -la
           sphinx-build . ../../build/en/latest -W -D version=latest --keep-going
 
       - name: Deploy to staging webserver via rsync
