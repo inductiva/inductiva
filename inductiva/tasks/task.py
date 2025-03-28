@@ -30,13 +30,19 @@ import warnings
 
 @dataclass
 class Metric:
-    """Represents a single metric with a value and a label."""
+    """Represents a single metric with a value and a label.
+    
+    :meta private:
+    """
     label: str
     value: Optional[float] = None
 
 
 class TaskInfo:
-    """Represents the task information."""
+    """Represents the task information.
+
+    :meta private:
+    """
 
     MISSING_UNTIL_TASK_STARTED = "N/A until task is started"
     MISSING_UNTIL_TASK_ENDED = "N/A until task ends"
@@ -294,16 +300,15 @@ class Task:
     """Represents a running/completed task on the Inductiva API.
 
     Example usage:
+    
+    .. code-block:: python
+
         task = scenario.simulate(...)
         final_status = task.wait()
         info = task.get_info() # dictionary with info about the task
         task.download_outputs(
             filenames=["file1.txt", "file2.dat"] # download only these files
         )
-
-    Attributes:
-        id: The task ID.
-        _api: Instance of TasksApi (from the generated API client).
     """
 
     FAILED_STATUSES = {
