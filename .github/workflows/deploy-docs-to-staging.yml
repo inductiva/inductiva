@@ -15,8 +15,6 @@ jobs:
           path: source
 
       - name: Install dependencies
-        env:
-          BOT_REPO_ACCESS: ${{ secrets.BOT_REPO_ACCESS }}
         run: |
           sudo apt-get install -y libglu1-mesa ca-certificates
           python -m pip install --upgrade pip setuptools wheel
