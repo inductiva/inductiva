@@ -21,7 +21,7 @@ jobs:
           pwd
           ls -la
           ls -la source
-          python -m pip install -r source/requirements.txt
+          cd source & python -m pip install -r requirements.txt
 
       - uses: nicholasphair/sphinx-action@7.0.0
         with:
