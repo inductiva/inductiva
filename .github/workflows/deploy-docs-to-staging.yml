@@ -18,14 +18,14 @@ jobs:
         run: |
           cd source
           python -m pip install -r requirements.txt
+          cd docs
+          python -m pip install -r requirements.txt
 
-      - uses: nicholasphair/sphinx-action@7.0.0
-        with:
-          docs-folder: "source/docs/"
-          # required by #1291
-          pre-build-command: |
-            apt-get update -y && \
-          build-command: "sphinx-build . ../../build/en/latest -W -D version=latest --keep-going"
+      - name: Build docs with Sphinx
+        run:
+          pwd
+          cd source/docs
+          sphinx-build . ../../build/en/latest -W -D version=latest --keep-going
 
       - name: Deploy to staging webserver via rsync
         uses: burnett01/rsync-deployments@7.0.0
