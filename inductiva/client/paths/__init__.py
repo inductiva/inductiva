@@ -42,6 +42,7 @@ class PathValues(str, enum.Enum):
     ADMIN_ORGANIZATIONS_ORGANIZATION_ID_COSTS_FEE_PERCENTAGE = "/admin/organizations/{organization_id}/costs_fee_percentage"
     ADMIN_TOPUPS = "/admin/top-ups"
     ADMIN_TASKS = "/admin/tasks"
+    ADMIN_USERS_EMAIL_STRIPE_CUSTOMER_ID = "/admin/users/{email}/stripe_customer_id"
     TASKRUNNER_REGISTER = "/task-runner/register"
     TASKRUNNER_MACHINE_ID = "/task-runner/{machine_id}"
     TASKRUNNER_MACHINE_ID_TASK = "/task-runner/{machine_id}/task"
