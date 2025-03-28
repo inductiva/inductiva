@@ -16,7 +16,6 @@ jobs:
 
       - name: Install package requirements
         run: |
-          python -m pip install -r requirements.txt
 
       - uses: nicholasphair/sphinx-action@7.0.0
         with:
@@ -25,10 +24,11 @@ jobs:
           pre-build-command: |
             apt-get update -y && \
             apt-get install -y git && \
+            python -m pip install -r ../../requirements.txt && \
             pip install -y myst-parser && \
             echo "extensions = ['myst_parser']" > conf.py
           build-command: "sphinx-build . ../../build/en/latest -W -D version=latest"
-          
+
       - name: Deploy to staging webserver via rsync
         uses: burnett01/rsync-deployments@7.0.0
         with:
