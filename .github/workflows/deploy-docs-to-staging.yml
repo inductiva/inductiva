@@ -14,9 +14,6 @@ jobs:
         with:
           path: source
 
-      - name: Install package requirements
-        run: |
-
       - uses: nicholasphair/sphinx-action@7.0.0
         with:
           docs-folder: "source/docs/"
