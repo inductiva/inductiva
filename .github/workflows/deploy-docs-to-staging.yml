@@ -23,10 +23,8 @@ jobs:
 
       - name: Build docs with Sphinx
         run: |
-          pwd
           cd source/docs
-          ls -la
-          sphinx-build . ../../build/en/latest -D version=latest --keep-going
+          sphinx-build . ../../build/en/latest -D version=latest
 
       - name: Deploy to staging webserver via rsync
         uses: burnett01/rsync-deployments@7.0.0

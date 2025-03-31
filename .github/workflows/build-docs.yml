@@ -13,17 +13,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: main
           path: source
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: development
           path: source-dev
 
-      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          cd source
+          python -m pip install -r requirements.txt
+          cd docs
+          python -m pip install -r requirements.txt
+
+      - uses: actions/checkout@v3
         with:
           ref: gh-pages
           path: build
@@ -32,29 +39,15 @@ jobs:
         working-directory: build
         run: rm -vfr *
 
-      - uses: nicholasphair/sphinx-action@7.0.0
-        with:
-          docs-folder: "source/docs/"
-          # required by #1291
-          pre-build-command: |
-            apt-get update -y && \
-            apt-get install -y git && \
-            pip install -r ../requirements.txt && \
-            pip install -y myst-parser && \
-            echo "extensions = ['myst_parser']" > conf.py
-          build-command: "sphinx-build . ../../build/en/latest -W -D version=latest"
+      - name: Build "main" docs with Sphinx
+        run: |
+          cd source/docs
+          sphinx-build . ../../build/en/latest -D version=latest      
 
-      - uses: nicholasphair/sphinx-action@7.0.0
-        with:
-          docs-folder: "source-dev/docs/"
-          # required by #1291
-          pre-build-command: |
-            apt-get update -y && \
-            apt-get install -y git && \
-            pip install -r ../requirements.txt && \
-            pip install -y myst-parser && \
-            echo "extensions = ['myst_parser']" > conf.py
-          build-command: "sphinx-build . ../../build/en/development -W -D version=development"
+      - name: Build "dev" docs with Sphinx
+        run: |
+          cd source-dev/docs
+          sphinx-build . ../../build/en/development -W -D version=development      
 
       - name: disable jekyll
         working-directory: build
