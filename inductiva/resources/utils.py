@@ -139,4 +139,3 @@ def estimate_machine_cost(machine_type: str,
         estimated_cost = instance_price.body["on_demand_price"]
 
     return float(estimated_cost)
-

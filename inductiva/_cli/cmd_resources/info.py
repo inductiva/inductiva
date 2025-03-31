@@ -31,6 +31,7 @@ def get_machine_dict(machines):
 
     return table
 
+
 def machine_group_info(args, fout: TextIO = sys.stdout):
     """Prints a task information."""
     machine_group_name = args.name
