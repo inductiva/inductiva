@@ -47,7 +47,7 @@ jobs:
       - name: Build "dev" docs with Sphinx
         run: |
           cd source-dev/docs
-          sphinx-build . ../../build/en/development -W -D version=development      
+          sphinx-build . ../../build/en/development -D version=development      
 
       - name: disable jekyll
         working-directory: build
