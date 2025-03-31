@@ -32,9 +32,9 @@ def register(parser):
         "folder",
         nargs="?",
         type=str,
-        help=
-        ("Optional folder path in remote storage to list container files from.\n"
-         "If omitted, defaults to 'my-containers'."),
+        help=(
+            "Opt folder path in remote storage to list container files from.\n"
+            "If omitted, defaults to 'my-containers'."),
     )
 
     subparser.add_argument("-m", "--max-results", default=10, type=int)
