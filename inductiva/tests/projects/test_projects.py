@@ -1,7 +1,4 @@
 """Tests for the projects class"""
-from unittest import mock
-import pytest
-
 import inductiva
 
 

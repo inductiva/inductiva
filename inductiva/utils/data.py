@@ -18,8 +18,6 @@ import urllib3
 
 import logging
 
-from .meta import is_tuple
-
 INPUT_FILENAME = "input.json"
 OUTPUT_FILENAME = "output.json"
 ARTIFACTS_DIRNAME = "artifacts"
