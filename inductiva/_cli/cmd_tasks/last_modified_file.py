@@ -68,8 +68,9 @@ async def consume(generator: AsyncGenerator, fout: TextIO):
                 data["now_timestamp"]).strftime("%Y-%m-%d %H:%M:%S")
 
             # Print the information
+            recent_file = data["most_recent_file"]
             print("", file=fout)
-            print(f"Most Recent File: {data["most_recent_file"]}", file=fout)
+            print(f"Most Recent File: {recent_file}", file=fout)
             print(f"Modification Time: {most_recent_time}", file=fout)
             print(f"Current Time on Machine: {now_time}", file=fout)
             print("", file=fout)
