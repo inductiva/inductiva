@@ -1,14 +1,12 @@
 """CLI for logs."""
 import re
 import sys
-import argparse
 from time import sleep
 from typing import Tuple
 
 from inductiva import constants
 
 from .. import utils as cli_utils
-from ..cmd_tasks.tail import tail
 from ... import tasks
 
 
@@ -109,23 +107,11 @@ def stream_task_logs_tail(args):
     task_id = args.mode.lower()
     task = tasks.Task(task_id)
 
-    result, data = _check_if_task_is_running(task, wait=args.wait)
-    if not result:
-        print(data, file=sys.stderr)
-        return 1
-
     filename = "stdout.txt" if args.stdout else "stderr.txt"
     files = ["stdout.txt", "stderr.txt"
             ] if args.stdout == args.stderr else [filename]
 
-    new_args = argparse.Namespace(
-        id=task_id,
-        filename=files,
-        lines=10,
-        follow=True,
-    )
-
-    return tail(new_args)
+    return task.print_tail_files(files,10, True, sys.stdout)
 
 
 def register(parser):

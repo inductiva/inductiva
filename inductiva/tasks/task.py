@@ -1,4 +1,5 @@
 """Manage running/completed tasks on the Inductiva API."""
+import asyncio
 import sys
 import time
 import json
@@ -7,7 +8,7 @@ import logging
 import datetime
 import contextlib
 from typing_extensions import TypedDict
-from typing import Callable, Dict, Any, List, Optional, Tuple, Union
+from typing import AsyncGenerator, Callable, Dict, Any, List, Optional, TextIO, Tuple, Union
 
 import urllib3
 import tabulate
@@ -743,6 +744,55 @@ class Task:
 
             time.sleep(polling_period)
 
+    async def _gather_tasks(self, tail_files: List[str], lines: int,
+                            follow: bool, fout: TextIO):
+        generators = [
+            self.tail_file(filename, lines, follow) for filename in tail_files
+        ]
+        tail_tasks = [
+            asyncio.create_task(self._consume(generator, fout))
+            for generator in generators
+        ]
+        try:
+            await asyncio.gather(*tail_tasks)
+        except asyncio.CancelledError:
+            for tail_task in tail_tasks:
+                tail_task.cancel()
+            await self.close_stream()
+
+    async def _consume(self, generator: AsyncGenerator, fout: TextIO):
+        try:
+            async for lines in generator:
+                print(lines, file=fout, end="", flush=True)
+        except asyncio.CancelledError:
+            pass
+
+    def _validate_task_computation_started(self) -> Tuple[bool, Optional[str]]:
+        info = self.get_info()
+        if info.is_terminal:
+            return (False, f"Task {self.id} has terminated.\n"
+                    "Access its output using:\n\n"
+                    f"  inductiva tasks download --id {self.id}")
+        if not info.status == "computation-started":
+            return (False, f"Task {self.id} has not started yet.\n"
+                    "Wait for computation to start.")
+
+        return (True, None)
+    
+
+
+    def print_tail_files(self, tail_files: List[str], lines: int, follow: bool,
+             fout: TextIO):
+        """
+        Prints the result of tailing a list of files.
+        """
+        valid, err_msg = self._validate_task_computation_started()
+        if not valid:
+            print(err_msg, file=sys.stderr)
+            return 1
+        asyncio.run(self._gather_tasks(tail_files, lines, follow, fout))
+        return 0
+
     def _send_kill_request(self, max_api_requests: int) -> None:
         """Send a kill request to the API.
         If the api request fails, it will retry until
@@ -1153,14 +1203,24 @@ class Task:
         if self.file_tracker is not None:
             await self.file_tracker.cleanup()
 
-    async def list_files(self) -> str:
-        """List the files in the task's working directory."""
-
+    async def _list_files(self) -> str:
         directory = [
             files async for files in self._file_operation(
                 Operations.LIST, formatter=self._format_directory_listing)
         ]
         return directory[0]
+    
+    def list_files(self):
+        """List the files in the task's working directory.
+        
+        The task needs to be running for this method to work.
+        """
+        valid, err_msg = self._validate_task_computation_started()
+        if not valid:
+            print(err_msg, file=sys.stderr)
+            return 1
+        return asyncio.run(self._list_files())
+        
 
     async def tail_file(self, filename: str, n_lines: int = 10, follow=False):
         """Get the last n_lines lines of a 
