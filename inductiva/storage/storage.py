@@ -269,7 +269,7 @@ def upload(
     if os.path.join(remote_dir, constants.TASK_OUTPUT_ZIP) in remote_file_paths:
         raise ValueError(f"Invalid file name: '{constants.TASK_OUTPUT_ZIP}.'")
 
-    logging.info("Uploading input...")
+    logging.info("Uploading content...")
 
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
@@ -297,7 +297,7 @@ def upload(
             except exceptions.ApiException as e:
                 raise e
 
-    logging.info("Input uploaded successfully.")
+    logging.info("Content uploaded successfully.")
 
 
 def download(remote_path: str, local_dir: str = "", decompress: bool = True):
