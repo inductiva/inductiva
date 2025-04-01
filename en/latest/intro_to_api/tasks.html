@@ -45,7 +45,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
@@ -415,7 +415,7 @@ This ensures separate executions for each submission of the same simulation.</p>
 <p>Here’s an example of how to create a <code class="docutils literal notranslate"><span class="pre">Task</span></code> by submitting a SpliSHSPlasH simulation
 to the API:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Running the SplishSplash simulator example</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
+<span class="kn">import</span> <span class="nn">inductiva</span>
 
 <span class="c1"># Instantiate machine group</span>
 <span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">)</span>
@@ -458,7 +458,7 @@ Instead, all such objects point to the same underlying task, allowing you
 to access and manage it across different sessions.</p>
 <p>This mechanism is useful when you want to recreate a <code class="docutils literal notranslate"><span class="pre">Task</span></code> object to
 retrieve information about tasks you created in previous sessions:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">inductiva</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">task1</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">Task</span><span class="p">(</span><span class="s2">&quot;i4ir3kvv62odsfrhko4y8w2an&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">task2</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">Task</span><span class="p">(</span><span class="s2">&quot;i4ir3kvv62odsfrhko4y8w2an&quot;</span><span class="p">)</span>

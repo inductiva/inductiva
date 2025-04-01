@@ -1,0 +1,1038 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NHJ03C6M91"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-NHJ03C6M91');
+    </script>
+    <meta property="og:title" content="tasks sub-package" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.inductiva.ai/python/inductiva.tasks.html" />
+<meta property="og:site_name" content="Inductiva.ai Docs" />
+<meta property="og:description" content="Manage running/completed tasks on the Inductiva API. Methods to interact with the tasks submitted to the API." />
+<meta property="og:image" content="https://docs.inductiva.ai/_static/inductiva-social-banner.jpg" />
+<meta property="og:image:alt" content="Inductiva.ai Docs" />
+<meta name="description" content="Manage running/completed tasks on the Inductiva API. Methods to interact with the tasks submitted to the API." />
+
+    <title>tasks sub-package &#8212; Python API for Cloud-based Simulation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'python/inductiva.tasks';</script>
+    <link rel="canonical" href="https://docs.inductiva.ai/python/inductiva.tasks.html" />
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="templating sub-package" href="inductiva.templating.html" />
+    <link rel="prev" title="storage sub-package" href="inductiva.storage.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/inductiva-logo-black.svg" class="logo__image only-light" alt="Python API for Cloud-based Simulation - Home"/>
+    <script>document.write(`<img src="../_static/inductiva-logo-white.svg" class="logo__image only-dark" alt="Python API for Cloud-based Simulation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Ready Your System</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../preinstallation/system/system-requirements.html">Getting Started: systems requirements and installation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../preinstallation/system/osx.html">MacOS System Prep Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../preinstallation/system/windows.html">Windows System Prep Guide</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction to Inductiva API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/how_it_works.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/tasks.html">Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/shared_dedicated_resources.html">Resource Allocation Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/data_flow.html">Storage and Data Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/computational-infrastructure.html">Computational Infrastructure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/templating.html">Templating Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/configuring-simulators.html">Configuring Simulators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/projects.html">Projects</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Command Line Interface (CLI)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cli/access_simulation_output.html">How to access simulation output while it is running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/cli-overview.html">CLI Overview and Functionalities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/managing-resources.html">Manage your Computational Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/tracking-tasks.html">Track your Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/streaming-logs.html">Stream Logs of a Task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/access-storage.html">Access your Remote Storage</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api_reference/computational_resources/index.html">Class Description</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/machinegroup_class.html"><code class="docutils literal notranslate"><span class="pre">MachineGroup</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/elasticgroup_class.html"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/mpicluster_class.html"><code class="docutils literal notranslate"><span class="pre">MPICluster</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/compute_monitoring.html">Computational Resources Monitoring</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/credits_and_quotas.html">Credits and Quotas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/faq.html">FAQs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/uninstall_inductiva.html">Uninstall the <code class="docutils literal notranslate"><span class="pre">inductiva</span></code> package</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python Client Docs</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="inductiva.benchmarks.html">benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inductiva.projects.html">projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inductiva.resources.html">resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inductiva.storage.html">storage</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inductiva.templating.html">templating</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inductiva.users.html">users</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/python/inductiva.tasks.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>tasks sub-package</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task"><code class="docutils literal notranslate"><span class="pre">Task</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.FAILED_STATUSES"><code class="docutils literal notranslate"><span class="pre">Task.FAILED_STATUSES</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.KILLABLE_STATUSES"><code class="docutils literal notranslate"><span class="pre">Task.KILLABLE_STATUSES</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.KILL_VERBOSITY_LEVELS"><code class="docutils literal notranslate"><span class="pre">Task.KILL_VERBOSITY_LEVELS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.RUNNING_STATUSES"><code class="docutils literal notranslate"><span class="pre">Task.RUNNING_STATUSES</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.STANDARD_OUTPUT_FILES"><code class="docutils literal notranslate"><span class="pre">Task.STANDARD_OUTPUT_FILES</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.__init__"><code class="docutils literal notranslate"><span class="pre">Task.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.close_stream"><code class="docutils literal notranslate"><span class="pre">Task.close_stream()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.download_inputs"><code class="docutils literal notranslate"><span class="pre">Task.download_inputs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.download_outputs"><code class="docutils literal notranslate"><span class="pre">Task.download_outputs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.from_api_info"><code class="docutils literal notranslate"><span class="pre">Task.from_api_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_computation_time"><code class="docutils literal notranslate"><span class="pre">Task.get_computation_time()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_info"><code class="docutils literal notranslate"><span class="pre">Task.get_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_input_url"><code class="docutils literal notranslate"><span class="pre">Task.get_input_url()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_machine_type"><code class="docutils literal notranslate"><span class="pre">Task.get_machine_type()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_output_info"><code class="docutils literal notranslate"><span class="pre">Task.get_output_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_output_url"><code class="docutils literal notranslate"><span class="pre">Task.get_output_url()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_position_in_queue"><code class="docutils literal notranslate"><span class="pre">Task.get_position_in_queue()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_simulator_name"><code class="docutils literal notranslate"><span class="pre">Task.get_simulator_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_status"><code class="docutils literal notranslate"><span class="pre">Task.get_status()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_storage_path"><code class="docutils literal notranslate"><span class="pre">Task.get_storage_path()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_total_time"><code class="docutils literal notranslate"><span class="pre">Task.get_total_time()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.info"><code class="docutils literal notranslate"><span class="pre">Task.info</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.is_failed"><code class="docutils literal notranslate"><span class="pre">Task.is_failed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.is_running"><code class="docutils literal notranslate"><span class="pre">Task.is_running()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.is_terminal"><code class="docutils literal notranslate"><span class="pre">Task.is_terminal()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.kill"><code class="docutils literal notranslate"><span class="pre">Task.kill()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.list_files"><code class="docutils literal notranslate"><span class="pre">Task.list_files()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.print_summary"><code class="docutils literal notranslate"><span class="pre">Task.print_summary()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.remove_remote_files"><code class="docutils literal notranslate"><span class="pre">Task.remove_remote_files()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.summary"><code class="docutils literal notranslate"><span class="pre">Task.summary</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.sync_context"><code class="docutils literal notranslate"><span class="pre">Task.sync_context()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.tail_file"><code class="docutils literal notranslate"><span class="pre">Task.tail_file()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.wait"><code class="docutils literal notranslate"><span class="pre">Task.wait()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.methods.get"><code class="docutils literal notranslate"><span class="pre">get()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.methods.get_all"><code class="docutils literal notranslate"><span class="pre">get_all()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.methods.get_tasks"><code class="docutils literal notranslate"><span class="pre">get_tasks()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.methods.to_dict"><code class="docutils literal notranslate"><span class="pre">to_dict()</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-inductiva.tasks.task">
+<span id="tasks-sub-package"></span><h1>tasks sub-package<a class="headerlink" href="#module-inductiva.tasks.task" title="Link to this heading">#</a></h1>
+<p>Manage running/completed tasks on the Inductiva API.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.tasks.task.Task" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a running/completed task on the Inductiva API.</p>
+<p>Example usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="o">=</span> <span class="n">scenario</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">final_status</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="n">info</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">get_info</span><span class="p">()</span> <span class="c1"># dictionary with info about the task</span>
+<span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">(</span>
+    <span class="n">filenames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;file1.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;file2.dat&quot;</span><span class="p">]</span> <span class="c1"># download only these files</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.FAILED_STATUSES">
+<span class="sig-name descname"><span class="pre">FAILED_STATUSES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{&lt;DynamicSchema:</span> <span class="pre">'executer-failed'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'executer-terminated'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'executer-terminated-by-user'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'executer-terminated-ttl-exceeded'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'failed'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'killed'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'spot-instance-preempted'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'ttl-exceeded'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'zombie'&gt;}</span></em><a class="headerlink" href="#inductiva.tasks.task.Task.FAILED_STATUSES" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.KILLABLE_STATUSES">
+<span class="sig-name descname"><span class="pre">KILLABLE_STATUSES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{&lt;DynamicSchema:</span> <span class="pre">'computation-ended'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'computation-started'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'pending-input'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'started'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'submitted'&gt;}</span></em><a class="headerlink" href="#inductiva.tasks.task.Task.KILLABLE_STATUSES" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.KILL_VERBOSITY_LEVELS">
+<span class="sig-name descname"><span class="pre">KILL_VERBOSITY_LEVELS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">2]</span></em><a class="headerlink" href="#inductiva.tasks.task.Task.KILL_VERBOSITY_LEVELS" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.RUNNING_STATUSES">
+<span class="sig-name descname"><span class="pre">RUNNING_STATUSES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{&lt;DynamicSchema:</span> <span class="pre">'computation-ended'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'computation-started'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'pending-input'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'started'&gt;}</span></em><a class="headerlink" href="#inductiva.tasks.task.Task.RUNNING_STATUSES" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.STANDARD_OUTPUT_FILES">
+<span class="sig-name descname"><span class="pre">STANDARD_OUTPUT_FILES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['stdout.txt',</span> <span class="pre">'stderr.txt']</span></em><a class="headerlink" href="#inductiva.tasks.task.Task.STANDARD_OUTPUT_FILES" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.tasks.task.Task.__init__" title="Link to this definition">#</a></dt>
+<dd><p>Initialize the instance from a task ID.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.close_stream">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">close_stream</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.tasks.task.Task.close_stream" title="Link to this definition">#</a></dt>
+<dd><p>Close the stream to the task.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.download_inputs">
+<span class="sig-name descname"><span class="pre">download_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filenames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uncompress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rm_downloaded_zip_archive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rm_remote_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.download_inputs" title="Link to this definition">#</a></dt>
+<dd><p>Download input files of the task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filenames</strong> – List of filenames to download. If None or empty, all
+files are downloaded.</p></li>
+<li><p><strong>input_dir</strong> – Directory where to download the files. If None, the
+files are downloaded to the default directory. The default is
+{inductiva.get_output_dir()}/[{input_dir}|{task_id}]/inputs/.</p></li>
+<li><p><strong>uncompress</strong> – Whether to uncompress the archive after downloading it.</p></li>
+<li><p><strong>rm_downloaded_zip_archive</strong> – Whether to remove the archive after
+uncompressing it. If uncompress is False, this argument is
+ignored.</p></li>
+<li><p><strong>rm_remote_files</strong> – Whether to remove all task files from remote
+storage after the download is complete. Only used if filenames
+is None or empty (i.e., all input files are downloaded).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.download_outputs">
+<span class="sig-name descname"><span class="pre">download_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filenames</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uncompress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rm_downloaded_zip_archive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rm_remote_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.download_outputs" title="Link to this definition">#</a></dt>
+<dd><p>Download output files of the task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filenames</strong> – List of filenames to download. If None or empty, all
+files are downloaded.</p></li>
+<li><p><strong>output_dir</strong> – Directory where to download the files. If None, the
+files are downloaded to the default directory. The default is
+{inductiva.get_output_dir()}/[{output_dir}|{task_id}]/outputs/.</p></li>
+<li><p><strong>uncompress</strong> – Whether to uncompress the archive after downloading it.</p></li>
+<li><p><strong>rm_downloaded_zip_archive</strong> – Whether to remove the archive after
+uncompressing it. If uncompress is False, this argument is
+ignored.</p></li>
+<li><p><strong>rm_remote_files</strong> – Whether to remove all task files from remote
+storage after the download is complete. Only used if filenames
+is None or empty (i.e., all output files are downloaded).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.from_api_info">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_api_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#inductiva.tasks.task.Task" title="inductiva.tasks.task.Task"><span class="pre">Task</span></a></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.from_api_info" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.get_computation_time">
+<span class="sig-name descname"><span class="pre">get_computation_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cached</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.get_computation_time" title="Link to this definition">#</a></dt>
+<dd><p>Get the time the computation of the task took to complete.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The task computation time if the task is already started or in a
+terminal state, or None otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.get_info">
+<span class="sig-name descname"><span class="pre">get_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TaskInfo</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.get_info" title="Link to this definition">#</a></dt>
+<dd><p>Get a dictionary with information about the task.</p>
+<p>Information includes e.g., “task_id”, “status”, timestamps
+(“create_time”, “input_submit_time, “start_time”, “end_time”),
+among others.</p>
+<p>This method issues a request to the API.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.get_input_url">
+<span class="sig-name descname"><span class="pre">get_input_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.get_input_url" title="Link to this definition">#</a></dt>
+<dd><p>Get a public URL to download the input files of the task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The URL to download the input files of the task, or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.get_machine_type">
+<span class="sig-name descname"><span class="pre">get_machine_type</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.get_machine_type" title="Link to this definition">#</a></dt>
+<dd><p>Get the machine type used in the task.</p>
+<p>Streamlines the process of obtaining the task info, extracting the
+machine type from the comprehensive task info.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The machine type, or None if a machine hasn’t been assigned yet.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.get_output_info">
+<span class="sig-name descname"><span class="pre">get_output_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TaskOutputInfo</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.get_output_info" title="Link to this definition">#</a></dt>
+<dd><p>Get information about the output files of the task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instance of the OutputInfo class, which can be used to
+access info about the output archive (number of files, total
+compressed size, total uncompressed size) and information about
+each file (name, size, compressed size). It can also be used to
+print that information in a formatted way.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.get_output_url">
+<span class="sig-name descname"><span class="pre">get_output_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.get_output_url" title="Link to this definition">#</a></dt>
+<dd><p>Get a public URL to download the output files of the task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The URL to download the output files of the task, or None
+if the</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.get_position_in_queue">
+<span class="sig-name descname"><span class="pre">get_position_in_queue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.get_position_in_queue" title="Link to this definition">#</a></dt>
+<dd><p>Get the position of the task in the queue.</p>
+<p>This method issues a request to the API.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.get_simulator_name">
+<span class="sig-name descname"><span class="pre">get_simulator_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.get_simulator_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.get_status">
+<span class="sig-name descname"><span class="pre">get_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TaskStatusCode</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.get_status" title="Link to this definition">#</a></dt>
+<dd><p>Get status of the task.</p>
+<p>This method issues a request to the API and updates the task info
+is_terminal. The api call to get the status now returns the status and
+is_terminated.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.get_storage_path">
+<span class="sig-name descname"><span class="pre">get_storage_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.get_storage_path" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.get_total_time">
+<span class="sig-name descname"><span class="pre">get_total_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cached</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.get_total_time" title="Link to this definition">#</a></dt>
+<dd><p>Get the total time the task workflow took to complete.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The task total duration since it was created, or None if the
+metric is not available or can’t be computed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.info">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TaskInfo</span></em><a class="headerlink" href="#inductiva.tasks.task.Task.info" title="Link to this definition">#</a></dt>
+<dd><p>Get information about the task.</p>
+<p>It contains cached information about the task from the latest call to
+<cite>get_info</cite>, therefore it can be outdated.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.is_failed">
+<span class="sig-name descname"><span class="pre">is_failed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.is_failed" title="Link to this definition">#</a></dt>
+<dd><p>Validate if the task has failed.</p>
+<p>This method issues a request to the API.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.is_running">
+<span class="sig-name descname"><span class="pre">is_running</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.is_running" title="Link to this definition">#</a></dt>
+<dd><p>Validate if the task is running.</p>
+<p>This method issues a request to the API.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.is_terminal">
+<span class="sig-name descname"><span class="pre">is_terminal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.is_terminal" title="Link to this definition">#</a></dt>
+<dd><p>Check if the task is in a terminal status.</p>
+<p>This method issues a request to the API.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.kill">
+<span class="sig-name descname"><span class="pre">kill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wait_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbosity_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.kill" title="Link to this definition">#</a></dt>
+<dd><p>Request a task to be killed.</p>
+<p>This method requests that the current task is remotely killed.
+If <cite>wait_timeout</cite> is None (default), the kill request is sent to the
+backend and the method returns. However, if <cite>wait_timeout</cite> is
+a positive number, the method waits up to <cite>wait_timeout</cite> seconds
+to ensure that the task transitions to the KILLED state.
+:param wait_timeout: Optional - number of seconds to wait
+:type wait_timeout: int, float
+:param for the kill command or None if only the request is to be sent.:
+:param verbosity_level: Optional. the verbosity of the logs when the
+:type verbosity_level: int
+:param task signal is sent and when the task is killed. Verbosity 0:
+:param produces no outputs:
+:type produces no outputs: Default
+:param 1 produces minimal outputs:
+:type 1 produces minimal outputs: Default
+:param and 2:
+:type and 2: Default
+:param produces extensive outputs.:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p>None if <cite>wait_timeout</cite> is None and the kill request was
+successfully sent;</p></li>
+<li><p>True if <cite>wait_timeout</cite>&gt; 0 and the task successfully transitioned
+to the <cite>KILLED</cite> state within <cite>wait_timeout</cite> seconds;</p></li>
+<li><p>False if <cite>wait_timeout</cite> &gt; 0 but the task didn’t transition
+to the <cite>KILLED</cite> state within <cite>wait_timeout</cite> seconds;</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.list_files">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">list_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.list_files" title="Link to this definition">#</a></dt>
+<dd><p>List the files in the task’s working directory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.print_summary">
+<span class="sig-name descname"><span class="pre">print_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fhandle=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.tasks.task.Task.print_summary" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.remove_remote_files">
+<span class="sig-name descname"><span class="pre">remove_remote_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.remove_remote_files" title="Link to this definition">#</a></dt>
+<dd><p>Removes all files associated with the task from remote storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the files were removed successfully, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.summary">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">summary</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#inductiva.tasks.task.Task.summary" title="Link to this definition">#</a></dt>
+<dd><p>It returns cached information about the task summary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.sync_context">
+<span class="sig-name descname"><span class="pre">sync_context</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.tasks.task.Task.sync_context" title="Link to this definition">#</a></dt>
+<dd><p>Enter context manager for blocking sync execution.</p>
+<p>This turns an asynchronous task into a blocking task.
+If an exception/ctrl+c is caught while in the context manager, the
+remote task is killed.</p>
+<dl>
+<dt>Usage:</dt><dd><p>task = scenario.simulate(…)</p>
+<dl class="simple">
+<dt>with task.sync_context():</dt><dd><p># If an exception happens here or ctrl+c is pressed, the task
+# will be killed.
+task.wait()</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.tail_file">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tail_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_lines</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">follow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.tasks.task.Task.tail_file" title="Link to this definition">#</a></dt>
+<dd><p>Get the last n_lines lines of a
+file in the task’s working directory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.wait">
+<span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">polling_period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download_std_on_completion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TaskStatusCode</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.wait" title="Link to this definition">#</a></dt>
+<dd><p>Wait for the task to complete.</p>
+<p>This method issues requests to the API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>polling_period</strong> – How often to poll the API for the task status.</p></li>
+<li><p><strong>download_std_on_completion</strong> – Request immediate download of the
+standard files (stdout and stderr) after the task completes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The final status of the task.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p id="module-inductiva.tasks.methods">Methods to interact with the tasks submitted to the API.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.tasks.methods.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">last_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">TaskStatusCode</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="inductiva.projects.html#inductiva.projects.project.Project" title="inductiva.projects.project.Project"><span class="pre">Project</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#inductiva.tasks.task.Task" title="inductiva.tasks.task.Task"><span class="pre">Task</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#inductiva.tasks.methods.get" title="Link to this definition">#</a></dt>
+<dd><p>Get the last N tasks of a user.</p>
+<p>This function fetches info about the last N tasks (with respect to
+submission time) of a user to stdout, sorted by submission time with the
+most recent first.
+A status can be specified to filter to get only tasks with that status, in
+which case the last N tasks with that status will be listed.
+The number of tasks can be less than N if the aren’t enough tasks that match
+the specified criteria.</p>
+<p>Similar to the inductiva.task.list() function, but instead of printing
+to stdout, returns a list of Task objects which can be used to perform
+further operations on those tasks (e.g., download outputs,
+kill unfinished tasks, etc.).</p>
+<dl>
+<dt>Example usage:</dt><dd><p># get the last 5 tasks that haven’t started yet and kill them
+tasks = inductiva.tasks.get(5, status=”submitted”)
+for task in tasks:</p>
+<blockquote>
+<div><p>task.kill()</p>
+</div></blockquote>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>last_n</strong> – The number of most recent tasks with respect to submission
+time to fetch. If filtering criteria (currently status is available)
+is specified, most recent N tasks that match that criteria will be
+listed. The actual number of tasks may be less if there
+aren’t enough tasks available.</p></li>
+<li><p><strong>status</strong> – The status of the tasks to get. If None, tasks with any status
+will be returned.</p></li>
+<li><p><strong>project</strong> – The project from which to fetch. If None, fetches from all
+projects.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of Task objects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.tasks.methods.get_all">
+<span class="sig-name descname"><span class="pre">get_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">TaskStatusCode</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="inductiva.projects.html#inductiva.projects.project.Project" title="inductiva.projects.project.Project"><span class="pre">Project</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#inductiva.tasks.task.Task" title="inductiva.tasks.task.Task"><span class="pre">Task</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#inductiva.tasks.methods.get_all" title="Link to this definition">#</a></dt>
+<dd><p>Get all tasks of a user.</p>
+<p>This function fetches all tasks of a user, sorted by submission
+time with the most recent first. If status is specified, only
+tasks with that status will be fetched.
+:param status: The status of the tasks to get. If None, tasks with any status</p>
+<blockquote>
+<div><p>will be returned.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of dictionaries with information about the tasks.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.tasks.methods.get_tasks">
+<span class="sig-name descname"><span class="pre">get_tasks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">last_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">project</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="inductiva.projects.html#inductiva.projects.project.Project" title="inductiva.projects.project.Project"><span class="pre">Project</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">TaskStatusCode</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.tasks.methods.get_tasks" title="Link to this definition">#</a></dt>
+<dd><p>Get the last N submitted tasks.</p>
+<p>Get the last N submitted tasks, eventually filtered by status.
+By default, only the last 10 submitted tasks are returned,
+irrespectively of their status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>last_n</strong> (<em>int</em>) – The number of tasks with repect to the submission
+time to fectch. If <cite>last_n&lt;=0</cite> we fetch all tasks submitted
+to the project.</p></li>
+<li><p><strong>status</strong> – Status of the tasks to get. If <cite>None</cite>, tasks with any
+status will be returned.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.tasks.methods.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list_of_tasks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#inductiva.tasks.task.Task" title="inductiva.tasks.task.Task"><span class="pre">Task</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Mapping</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#inductiva.tasks.methods.to_dict" title="Link to this definition">#</a></dt>
+<dd><p>Converts an Iterable of tasks to a dictionary with all the
+relevant information for all the tasks.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Args:</dt><dd><p>list_of_tasks: An Iterable of tasks.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A dictionary with all the relevant information for
+all the tasks. Example: { “ID”: [1, 2, 3],
+“Simulator”: [“reef3d”, “reef3d”, “reef3d”], … }</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="inductiva.storage.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">storage sub-package</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="inductiva.templating.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">templating sub-package</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task"><code class="docutils literal notranslate"><span class="pre">Task</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.FAILED_STATUSES"><code class="docutils literal notranslate"><span class="pre">Task.FAILED_STATUSES</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.KILLABLE_STATUSES"><code class="docutils literal notranslate"><span class="pre">Task.KILLABLE_STATUSES</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.KILL_VERBOSITY_LEVELS"><code class="docutils literal notranslate"><span class="pre">Task.KILL_VERBOSITY_LEVELS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.RUNNING_STATUSES"><code class="docutils literal notranslate"><span class="pre">Task.RUNNING_STATUSES</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.STANDARD_OUTPUT_FILES"><code class="docutils literal notranslate"><span class="pre">Task.STANDARD_OUTPUT_FILES</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.__init__"><code class="docutils literal notranslate"><span class="pre">Task.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.close_stream"><code class="docutils literal notranslate"><span class="pre">Task.close_stream()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.download_inputs"><code class="docutils literal notranslate"><span class="pre">Task.download_inputs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.download_outputs"><code class="docutils literal notranslate"><span class="pre">Task.download_outputs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.from_api_info"><code class="docutils literal notranslate"><span class="pre">Task.from_api_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_computation_time"><code class="docutils literal notranslate"><span class="pre">Task.get_computation_time()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_info"><code class="docutils literal notranslate"><span class="pre">Task.get_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_input_url"><code class="docutils literal notranslate"><span class="pre">Task.get_input_url()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_machine_type"><code class="docutils literal notranslate"><span class="pre">Task.get_machine_type()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_output_info"><code class="docutils literal notranslate"><span class="pre">Task.get_output_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_output_url"><code class="docutils literal notranslate"><span class="pre">Task.get_output_url()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_position_in_queue"><code class="docutils literal notranslate"><span class="pre">Task.get_position_in_queue()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_simulator_name"><code class="docutils literal notranslate"><span class="pre">Task.get_simulator_name()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_status"><code class="docutils literal notranslate"><span class="pre">Task.get_status()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_storage_path"><code class="docutils literal notranslate"><span class="pre">Task.get_storage_path()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_total_time"><code class="docutils literal notranslate"><span class="pre">Task.get_total_time()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.info"><code class="docutils literal notranslate"><span class="pre">Task.info</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.is_failed"><code class="docutils literal notranslate"><span class="pre">Task.is_failed()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.is_running"><code class="docutils literal notranslate"><span class="pre">Task.is_running()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.is_terminal"><code class="docutils literal notranslate"><span class="pre">Task.is_terminal()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.kill"><code class="docutils literal notranslate"><span class="pre">Task.kill()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.list_files"><code class="docutils literal notranslate"><span class="pre">Task.list_files()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.print_summary"><code class="docutils literal notranslate"><span class="pre">Task.print_summary()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.remove_remote_files"><code class="docutils literal notranslate"><span class="pre">Task.remove_remote_files()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.summary"><code class="docutils literal notranslate"><span class="pre">Task.summary</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.sync_context"><code class="docutils literal notranslate"><span class="pre">Task.sync_context()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.tail_file"><code class="docutils literal notranslate"><span class="pre">Task.tail_file()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.wait"><code class="docutils literal notranslate"><span class="pre">Task.wait()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.methods.get"><code class="docutils literal notranslate"><span class="pre">get()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.methods.get_all"><code class="docutils literal notranslate"><span class="pre">get_all()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.methods.get_tasks"><code class="docutils literal notranslate"><span class="pre">get_tasks()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.methods.to_dict"><code class="docutils literal notranslate"><span class="pre">to_dict()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Inductiva Research Labs
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Inductiva Research Labs.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

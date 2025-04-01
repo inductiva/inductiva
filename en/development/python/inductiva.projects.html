@@ -1,0 +1,753 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NHJ03C6M91"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-NHJ03C6M91');
+    </script>
+    <meta property="og:title" content="projects sub-package" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.inductiva.ai/python/inductiva.projects.html" />
+<meta property="og:site_name" content="Inductiva.ai Docs" />
+<meta property="og:description" content="Project class" />
+<meta property="og:image" content="https://docs.inductiva.ai/_static/inductiva-social-banner.jpg" />
+<meta property="og:image:alt" content="Inductiva.ai Docs" />
+<meta name="description" content="Project class" />
+
+    <title>projects sub-package &#8212; Python API for Cloud-based Simulation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'python/inductiva.projects';</script>
+    <link rel="canonical" href="https://docs.inductiva.ai/python/inductiva.projects.html" />
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="resources sub-package" href="inductiva.resources.html" />
+    <link rel="prev" title="benchmarks sub-package" href="inductiva.benchmarks.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/inductiva-logo-black.svg" class="logo__image only-light" alt="Python API for Cloud-based Simulation - Home"/>
+    <script>document.write(`<img src="../_static/inductiva-logo-white.svg" class="logo__image only-dark" alt="Python API for Cloud-based Simulation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Ready Your System</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../preinstallation/system/system-requirements.html">Getting Started: systems requirements and installation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../preinstallation/system/osx.html">MacOS System Prep Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../preinstallation/system/windows.html">Windows System Prep Guide</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction to Inductiva API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/how_it_works.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/tasks.html">Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/shared_dedicated_resources.html">Resource Allocation Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/data_flow.html">Storage and Data Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/computational-infrastructure.html">Computational Infrastructure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/benchmarking.html">Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/templating.html">Templating Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/configuring-simulators.html">Configuring Simulators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/projects.html">Projects</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Command Line Interface (CLI)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cli/access_simulation_output.html">How to access simulation output while it is running</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/cli-overview.html">CLI Overview and Functionalities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/managing-resources.html">Manage your Computational Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/tracking-tasks.html">Track your Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/streaming-logs.html">Stream Logs of a Task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/access-storage.html">Access your Remote Storage</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api_reference/computational_resources/index.html">Class Description</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/machinegroup_class.html"><code class="docutils literal notranslate"><span class="pre">MachineGroup</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/elasticgroup_class.html"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/mpicluster_class.html"><code class="docutils literal notranslate"><span class="pre">MPICluster</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/compute_monitoring.html">Computational Resources Monitoring</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/credits_and_quotas.html">Credits and Quotas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/faq.html">FAQs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/uninstall_inductiva.html">Uninstall the <code class="docutils literal notranslate"><span class="pre">inductiva</span></code> package</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Python Client Docs</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="inductiva.benchmarks.html">benchmarks</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inductiva.resources.html">resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inductiva.storage.html">storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inductiva.tasks.html">tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inductiva.templating.html">templating</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inductiva.users.html">users</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/python/inductiva.projects.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>projects sub-package</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.__init__"><code class="docutils literal notranslate"><span class="pre">Project.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.close"><code class="docutils literal notranslate"><span class="pre">Project.close()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.describe"><code class="docutils literal notranslate"><span class="pre">Project.describe()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.download_outputs"><code class="docutils literal notranslate"><span class="pre">Project.download_outputs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.get_info"><code class="docutils literal notranslate"><span class="pre">Project.get_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.get_tasks"><code class="docutils literal notranslate"><span class="pre">Project.get_tasks()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.info"><code class="docutils literal notranslate"><span class="pre">Project.info</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.list"><code class="docutils literal notranslate"><span class="pre">Project.list()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.name"><code class="docutils literal notranslate"><span class="pre">Project.name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.open"><code class="docutils literal notranslate"><span class="pre">Project.open()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.opened"><code class="docutils literal notranslate"><span class="pre">Project.opened</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.wait"><code class="docutils literal notranslate"><span class="pre">Project.wait()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.ProjectInfo"><code class="docutils literal notranslate"><span class="pre">ProjectInfo</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.ProjectInfo.__init__"><code class="docutils literal notranslate"><span class="pre">ProjectInfo.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.get_current_project"><code class="docutils literal notranslate"><span class="pre">get_current_project()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.get_projects"><code class="docutils literal notranslate"><span class="pre">get_projects()</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-inductiva.projects.project">
+<span id="projects-sub-package"></span><h1>projects sub-package<a class="headerlink" href="#module-inductiva.projects.project" title="Link to this heading">#</a></h1>
+<p>Project class</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="inductiva.projects.project.Project">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.Project" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Projects management class.</p>
+<p>The Project class allows tasks to be collected under the umbrella
+of a single container object. All tasks submitted in the context
+of an opened project will be associated with that project and can
+be retrieved altogether using the project as a filter. A project
+can be created and managed declaratively or using a context
+manager.</p>
+<p>Example usage:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">project</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Project</span><span class="p">(</span><span class="s2">&quot;test_project&quot;</span><span class="p">)</span>
+<span class="n">project</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>  <span class="c1"># Submitted to  `&#39;test_project&#39;`</span>
+<span class="n">project</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This is equivalent to:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Project</span><span class="p">(</span><span class="s2">&quot;test_project&quot;</span><span class="p">):</span>
+    <span class="n">simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.projects.project.Project.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.Project.__init__" title="Link to this definition">#</a></dt>
+<dd><p>Initialize the Project instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the project.</p></li>
+<li><p><strong>append</strong> (<em>bool</em>) – A flag indicating that new tasks can be appended to
+the project. If set to False (default), task submission will fail,
+even though the project might be opened.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.projects.project.Project.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.Project.close" title="Link to this definition">#</a></dt>
+<dd><p>Close the project.</p>
+<p>Calls to the <cite>get_current_project</cite> will return <cite>None</cite> after
+the project is closed.  Consecutive calls to this method are
+idempotent.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.projects.project.Project.describe">
+<span class="sig-name descname"><span class="pre">describe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#inductiva.projects.project.Project.describe" title="Link to this definition">#</a></dt>
+<dd><p>Generates a string description of the object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>A string description of the object. Includes project name,</dt><dd><p>total number of tasks and the number of tasks by status.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.projects.project.Project.download_outputs">
+<span class="sig-name descname"><span class="pre">download_outputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.Project.download_outputs" title="Link to this definition">#</a></dt>
+<dd><p>Downloads all the outputs for all the tasks in the project.</p>
+<p>All the files will be stored inside
+<cite>inductiva_output/&lt;project_name&gt;/&lt;task_id’s&gt;</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.projects.project.Project.get_info">
+<span class="sig-name descname"><span class="pre">get_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#inductiva.projects.project.ProjectInfo" title="inductiva.projects.project.ProjectInfo"><span class="pre">ProjectInfo</span></a></span></span><a class="headerlink" href="#inductiva.projects.project.Project.get_info" title="Link to this definition">#</a></dt>
+<dd><p>Get project information.</p>
+<p>Get updated information on the project. This method executes a
+call to the backend to retrieve the most recent information
+about this project and stores it internally so that it becomes
+available through the <cite>Project.info</cite> property.  This method is
+suitable when up-to-date information is required.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.projects.project.Project.get_tasks">
+<span class="sig-name descname"><span class="pre">get_tasks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">last_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">TaskStatusCode</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tasks</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#inductiva.projects.project.Project.get_tasks" title="Link to this definition">#</a></dt>
+<dd><p>Get the the tasks of this project.</p>
+<p>Get the tasks that belong to this project,
+eventually filtered by status. By default, it will return all the tasks,
+irrespectively of their status.
+This method will only do a request to the back end if the list of
+tasks is None (never requested the list of tasks) or if <cite>force_update</cite>
+is passed as True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>last_n</strong> (<em>int</em>) – The number of tasks with repect to the submission
+time to fectch. If <cite>last_n&lt;=0</cite> we fetch all tasks submitted
+to the project.</p></li>
+<li><p><strong>force_update</strong> (<em>bool</em>) – Forces the request to the back end, even if we
+already have a list of tasks associated with this project.</p></li>
+<li><p><strong>status</strong> – Status of the tasks to get. If <cite>None</cite>, tasks with any
+status will be returned.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="inductiva.projects.project.Project.info">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#inductiva.projects.project.ProjectInfo" title="inductiva.projects.project.ProjectInfo"><span class="pre">ProjectInfo</span></a></em><a class="headerlink" href="#inductiva.projects.project.Project.info" title="Link to this definition">#</a></dt>
+<dd><p>Returns project info.</p>
+<p>It makes no requests to the backend. Instead it uses
+previously stored information. Therefore it can be
+outdated. For a method that requests the most recent data from
+the backend use: <cite>get_info</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.projects.project.Project.list">
+<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">last_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">TaskStatusCode</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tasks</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#inductiva.projects.project.Project.list" title="Link to this definition">#</a></dt>
+<dd><p>Get the the tasks of this project.</p>
+<p>Get the tasks that belong to this project,
+eventually filtered by status. By default, it will return all the tasks,
+irrespectively of their status.
+This method will only do a request to the back end if the list of
+tasks is None (never requested the list of tasks) or if <cite>force_update</cite>
+is passed as True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>last_n</strong> (<em>int</em>) – The number of tasks with repect to the submission
+time to fectch. If <cite>last_n&lt;=0</cite> we fetch all tasks submitted
+to the project.</p></li>
+<li><p><strong>force_update</strong> (<em>bool</em>) – Forces the request to the back end, even if we
+already have a list of tasks associated with this project.</p></li>
+<li><p><strong>status</strong> – Status of the tasks to get. If <cite>None</cite>, tasks with any
+status will be returned.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="inductiva.projects.project.Project.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#inductiva.projects.project.Project.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.projects.project.Project.open">
+<span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.Project.open" title="Link to this definition">#</a></dt>
+<dd><p>Open the project.</p>
+<p>Open the project and make it the active one in the calling
+thread. An opened project will ensure that calls to the
+<cite>get_current_project</cite> function will return this project.
+Consecutive calls to this method are idempotent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>RuntimeError if another opened project exists</strong><strong>, </strong><strong>i.e.</strong><strong>,</strong> – </p></li>
+<li><p><strong>get_current_project</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="inductiva.projects.project.Project.opened">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">opened</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#inductiva.projects.project.Project.opened" title="Link to this definition">#</a></dt>
+<dd><p>Checks if the project is open.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.projects.project.Project.wait">
+<span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.Project.wait" title="Link to this definition">#</a></dt>
+<dd><p>Wait for all the tasks in a project to complete.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="inductiva.projects.project.ProjectInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ProjectInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.ProjectInfo" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Stores info about the project.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.projects.project.ProjectInfo.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.ProjectInfo.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.projects.project.get_current_project">
+<span class="sig-name descname"><span class="pre">get_current_project</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.get_current_project" title="Link to this definition">#</a></dt>
+<dd><p>Get the current active project.</p>
+<p>Returns the currently active project in the calling thread.  If no
+project has been defined, the default project (<cite>None</cite>) will be
+returned.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.projects.project.get_projects">
+<span class="sig-name descname"><span class="pre">get_projects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.get_projects" title="Link to this definition">#</a></dt>
+<dd><p>Gets all the user’s projects.</p>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="inductiva.benchmarks.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">benchmarks sub-package</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="inductiva.resources.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">resources sub-package</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.__init__"><code class="docutils literal notranslate"><span class="pre">Project.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.close"><code class="docutils literal notranslate"><span class="pre">Project.close()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.describe"><code class="docutils literal notranslate"><span class="pre">Project.describe()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.download_outputs"><code class="docutils literal notranslate"><span class="pre">Project.download_outputs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.get_info"><code class="docutils literal notranslate"><span class="pre">Project.get_info()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.get_tasks"><code class="docutils literal notranslate"><span class="pre">Project.get_tasks()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.info"><code class="docutils literal notranslate"><span class="pre">Project.info</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.list"><code class="docutils literal notranslate"><span class="pre">Project.list()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.name"><code class="docutils literal notranslate"><span class="pre">Project.name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.open"><code class="docutils literal notranslate"><span class="pre">Project.open()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.opened"><code class="docutils literal notranslate"><span class="pre">Project.opened</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.wait"><code class="docutils literal notranslate"><span class="pre">Project.wait()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.ProjectInfo"><code class="docutils literal notranslate"><span class="pre">ProjectInfo</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.ProjectInfo.__init__"><code class="docutils literal notranslate"><span class="pre">ProjectInfo.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.get_current_project"><code class="docutils literal notranslate"><span class="pre">get_current_project()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.get_projects"><code class="docutils literal notranslate"><span class="pre">get_projects()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Inductiva Research Labs
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Inductiva Research Labs.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

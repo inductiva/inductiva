@@ -45,7 +45,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
@@ -410,7 +410,7 @@ The following sections will explain how to create and interact with projects.</p
 if one with the same name already exists, a reference to that project
 will be returned, otherwise, a new one is created. The following snippet
 creates an empty project called <code class="docutils literal notranslate"><span class="pre">my_project</span></code> and prints a description of it:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">inductiva</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">project</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Project</span><span class="p">(</span><span class="s2">&quot;my_project&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
 <span class="go">Project &#39;my_project&#39; with 0 tasks (id=35ea9cf0-e8ce-47cf-b6cf-6a3eb4994d98)</span>
@@ -433,7 +433,7 @@ in the task submission and ensures that no orphaned tasks are created.</p>
 <h2>Listing existing projects<a class="headerlink" href="#listing-existing-projects" title="Link to this heading">#</a></h2>
 <p>To retrieve a list of all existing projects, use the <code class="docutils literal notranslate"><span class="pre">get_projects</span></code> function
 from the <code class="docutils literal notranslate"><span class="pre">projects</span></code> module:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">inductiva</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">projects</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">get_projects</span><span class="p">()</span>
 <span class="go">[&lt;inductiva.projects.project.Project at 0x123f22110&gt;,</span>
 <span class="go"> ...</span>
@@ -464,7 +464,7 @@ error will be raised. This mechanism is meant to work as a security measure that
 ensures that the user is explicitly aware that new tasks are being appended to the
 project, which is particularly useful to ensure the consistency of the project’s
 content.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">inductiva</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">project</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Project</span><span class="p">(</span><span class="s2">&quot;demo&quot;</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">project</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="c1"># &lt;-- An exception will be raised because the project is appendable</span>
 <span class="gp">...</span>
@@ -486,7 +486,7 @@ be instantiated, opened for task submission and then closed to prevent further t
 from being appended to it. Any task submitted between the opening and closing of
 the project will be added to it. The following snippet demonstrates how to add a
 task to a project using explicit management:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
 <span class="c1"># Instantiate machine group</span>
 <span class="n">cloud_machine</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
@@ -537,7 +537,7 @@ by calling the <code class="docutils literal notranslate"><span class="pre">open
 of the <code class="docutils literal notranslate"><span class="pre">with</span></code> block, respectively. Any task that is created inside the <code class="docutils literal notranslate"><span class="pre">with</span></code> block
 will be appended to the project managed in that context; tasks submitted outside
 will be added to the default one:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
 <span class="c1"># Instantiate machine group</span>
 <span class="n">cloud_machine</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
@@ -586,7 +586,7 @@ by calling the <code class="docutils literal notranslate"><span class="pre">get_
 <h2>Listing Tasks in a Project<a class="headerlink" href="#listing-tasks-in-a-project" title="Link to this heading">#</a></h2>
 <p>Each project has a list of tasks that belong to it. To list all tasks in a given
 object, use the <code class="docutils literal notranslate"><span class="pre">get_tasks</span></code> method of the <code class="docutils literal notranslate"><span class="pre">Project</span></code> class:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">inductiva</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">project</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Project</span><span class="p">(</span><span class="s2">&quot;my_xbeach_project&quot;</span><span class="p">)</span>
 <span class="go">&gt;&gt;&gt;&gt; tasks = project.get_tasks()</span>
 <span class="go">[&lt;inductiva.tasks.task.Task at 0x123f22110&gt;,</span>
@@ -618,7 +618,7 @@ the calling thread using the <code class="docutils literal notranslate"><span cl
 This function will return the project that is currently open for task submission,
 or <code class="docutils literal notranslate"><span class="pre">None</span></code> if the default project is being used. The following snippet demonstrates
 how to use this function:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">inductiva</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># so far, no project is open, hence &quot;None&quot; is returned</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">inductiva</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">get_current_project</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span>
 <span class="go">True</span>
@@ -640,10 +640,10 @@ The main thread opens a project, and a new thread is created in the context of t
 opened project. The new thread retrieves the current project and prints its object
 just to find out that the default project is being used therein, even though
 the main thread has opened a project other than the default one:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">inductiva</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
+<span class="kn">import</span> <span class="nn">threading</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">run</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Thread 1: </span><span class="si">{</span><span class="n">inductiva</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">get_current_project</span><span class="p">()</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="k">with</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Project</span><span class="p">(</span><span class="s2">&quot;demo&quot;</span><span class="p">,</span> <span class="n">append</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
