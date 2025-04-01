@@ -1,5 +1,4 @@
 """Project class"""
-import contextvars
 import datetime
 import logging
 import time
@@ -14,19 +13,6 @@ from inductiva.client.model.project import Project as ProjectModel
 from inductiva.utils.format_utils import bytes_formatter, currency_formatter, timedelta_formatter
 
 _logger = logging.getLogger(__name__)
-
-_CURRENT_PROJECT = contextvars.ContextVar("current_project", default=None)
-
-
-def get_current_project():
-    """Get the current active project.
-    
-    Returns the currently active project in the calling thread.  If no
-    project has been defined, the default project (`None`) will be
-    returned.
-
-    """
-    return _CURRENT_PROJECT.get()
 
 
 class ProjectInfo:
@@ -81,17 +67,12 @@ class Project:
 
     """
 
-    def __init__(self, name: str, *, append: bool = False):
+    def __init__(self, name: str, *):
         """Initialize the Project instance.
         
         Args:
           name (str): The name of the project.
-          append (bool): A flag indicating that new tasks can be appended to
-              the project. If set to False (default), task submission will fail,
-              even though the project might be opened.
         """
-        self.append = append
-        self._token = None
         self._list_of_tasks = None
 
         model = self._get_model(name)
@@ -109,8 +90,6 @@ class Project:
 
         """
         project = cls.__new__(Project)
-        project.append = False
-        project._token = None
         return project._update_from_api_response(model)
 
     @staticmethod
@@ -162,60 +141,11 @@ class Project:
 
         return self
 
-    def open(self):
-        """Open the project.
-
-        Open the project and make it the active one in the calling
-        thread. An opened project will ensure that calls to the
-        `get_current_project` function will return this project.
-        Consecutive calls to this method are idempotent.
-
-        Raises:
-            RuntimeError if another opened project exists, i.e.,
-            `get_current_project` returns something other than None.
-
-        """
-        if not self.append:
-            raise RuntimeError(
-                "Trying to open a project with `append=False`.\n"
-                "A Project can only be opened when instantiated with the"
-                " `append=True` option.")
-
-        _logger.debug("Opening project %s", self._name)
-        current_project = get_current_project()
-
-        if current_project is self:
-            _logger.debug("Project is already opened.")
-            return
-
-        if current_project is not None:
-            raise RuntimeError(
-                "Trying to open a project when another is active.")
-
-        self._token = _CURRENT_PROJECT.set(self)
-
-    def close(self):
-        """Close the project.
-
-        Calls to the `get_current_project` will return `None` after
-        the project is closed.  Consecutive calls to this method are
-        idempotent.
-
-        """
-        if self._token is None:
-            return
-
-        _CURRENT_PROJECT.reset(self._token)
-        self._token = None
 
     @property
     def name(self) -> str:
         return self._name
 
-    @property
-    def opened(self) -> bool:
-        """Checks if the project is open."""
-        return self._token is not None
 
     @property
     def info(self) -> ProjectInfo:
@@ -407,13 +337,6 @@ class Project:
 
         for task in list_of_tasks:
             task.download_outputs(output_dir=f"{self.name}/{task.id}")
-
-    def __enter__(self):
-        self.open()
-        return self
-
-    def __exit__(self, exc_type, exc_value, exc_tb):
-        self.close()
 
     def __eq__(self, other) -> bool:
         return isinstance(other, Project) and \
