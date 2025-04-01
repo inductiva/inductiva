@@ -1,31 +1,23 @@
 """Top command for task."""
-import ast
 import datetime
 from typing import TextIO, AsyncGenerator
 import argparse
 import sys
 import asyncio
 
-from inductiva import tasks, utils
+from inductiva import tasks
 from inductiva._cli.cmd_tasks import task_utils
 from inductiva.utils import format_utils
 
 
 def last_modifed_file(args: argparse.Namespace, fout: TextIO = sys.stdout):
-    """Prints the result of the last_modifed_file command.
-    
-    This command will return a dict with the last modified file, time when that
-    modification happened, the current time on the machine, and how long it
-    was since the last modification.
+    """
+    Display the last modified file for a given task.
 
-    Example:
-            Most recent file: file1.txt
-            Modification time: 
-            Current time on the machine: 
-
-            Time since last modification: 
-        }
-
+    This function retrieves and streams information about the most recently 
+    modified file associated with a specified task. It validates that the 
+    task computation has started before proceeding. If the task is invalid 
+    or not started, an error message is printed to `stderr`.
     """
     task_id = args.id
     task = tasks.Task(task_id)
@@ -53,29 +45,36 @@ async def stream_task_output(task: tasks.Task, fout: TextIO):
 
 async def consume(generator: AsyncGenerator, fout: TextIO):
     """
-    Consume and write the output from an asynchronous generator to a file-like
-    object.
+    Consume and write the formatted output from an asynchronous generator to a
+    file-like object.
 
     This function iterates over the provided asynchronous generator, writing 
     each line of output to the specified file-like object.
+
+    Example:
+        Most Recent File: /workdir/io9od5da6xh131inmsno0fapm/stdin.txt
+        Modification Time: 2025-04-01 09:28:33
+        Current Time on Machine: 2025-04-01 09:29:17
+
+        Time Since Last Modification: 0:00:43
     """
     try:
         async for data in generator:
 
             # Convert timestamps to readable datetime
             most_recent_time = datetime.datetime.fromtimestamp(
-                data['most_recent_timestamp']).strftime('%Y-%m-%d %H:%M:%S')
+                data["most_recent_timestamp"]).strftime("%Y-%m-%d %H:%M:%S")
             now_time = datetime.datetime.fromtimestamp(
-                data['now_timestamp']).strftime('%Y-%m-%d %H:%M:%S')
+                data["now_timestamp"]).strftime("%Y-%m-%d %H:%M:%S")
 
             # Print the information
             print("", file=fout)
-            print(f"Most Recent File: {data['most_recent_file']}", file=fout)
+            print(f"Most Recent File: {data["most_recent_file"]}", file=fout)
             print(f"Modification Time: {most_recent_time}", file=fout)
             print(f"Current Time on Machine: {now_time}", file=fout)
             print("", file=fout)
             formatted_seconds = format_utils.seconds_formatter(
-                data['time_since_last_mod'])
+                data["time_since_last_mod"])
             print(f"Time Since Last Modification: {formatted_seconds}",
                   file=fout)
 
