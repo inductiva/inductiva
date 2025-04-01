@@ -69,16 +69,17 @@ async def consume(generator: AsyncGenerator, fout: TextIO):
 
             # Print the information
             recent_file = data["most_recent_file"]
-            print("", file=fout)
-            print(f"Most Recent File: {recent_file}", file=fout)
-            print(f"Modification Time: {most_recent_time}", file=fout)
-            print(f"Current Time on Machine: {now_time}", file=fout)
-            print("", file=fout)
             formatted_seconds = format_utils.seconds_formatter(
                 data["time_since_last_mod"])
-            print(f"Time Since Last Modification: {formatted_seconds}",
-                  file=fout)
-
+            print(
+                "\n"
+                f"Most Recent File: {recent_file}\n"
+                f"Most Recent File: {recent_file}\n"
+                f"Modification Time: {most_recent_time}\n"
+                f"Current Time on Machine: {now_time}\n"
+                "\n"
+                f"Time Since Last Modification: {formatted_seconds}",
+                file=fout)
     except asyncio.CancelledError:
         pass
 
