@@ -12,7 +12,7 @@ def run_simulation(
     simulator: str,
     input_dir: Optional[pathlib.Path],
     *,
-    computational_resources: types.ComputationalResources,
+    machine_group: types.ComputationalResources,
     resubmit_on_preemption: bool = False,
     storage_dir: Optional[str] = "",
     simulator_obj=None,
@@ -23,35 +23,30 @@ def run_simulation(
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
 
-    params = {
-        "sim_dir": input_dir,
-        **kwargs,
-    }
-
     if not remote_assets:
         remote_assets = []
 
     container_image = kwargs.get("container_image", None)
 
-    if (computational_resources.allow_auto_start and
-            not computational_resources.started):
+    if (machine_group.allow_auto_start and not machine_group.started):
         logging.info("\n■ The computational resource is not started."
                      " Starting it now.\n")
-        computational_resources.start()
+        machine_group.start()
 
     task_id = methods.submit_task(simulator,
-                          params,
-                          computational_resources,
-                          storage_path_prefix=storage_dir,
-                          resubmit_on_preemption=resubmit_on_preemption,
-                          container_image=container_image,
-                          simulator_name_alias=simulator_name_alias,
-                          simulator_obj=simulator_obj,
-                          remote_assets=remote_assets,
-                          project_name=project_name)
-    
+                                  input_dir=input_dir,
+                                  machine_group=machine_group,
+                                  kwargs=kwargs,
+                                  storage_path_prefix=storage_dir,
+                                  resubmit_on_preemption=resubmit_on_preemption,
+                                  container_image=container_image,
+                                  simulator_name_alias=simulator_name_alias,
+                                  simulator_obj=simulator_obj,
+                                  remote_assets=remote_assets,
+                                  project_name=project_name)
+
     logging.info("■ Task %s submitted to the queue of the %s.", task_id,
-                 computational_resources)
+                 machine_group)
 
     if not isinstance(task_id, str):
         raise RuntimeError(

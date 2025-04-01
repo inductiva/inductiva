@@ -141,11 +141,9 @@ class Project:
 
         return self
 
-
     @property
     def name(self) -> str:
         return self._name
-
 
     @property
     def info(self) -> ProjectInfo:

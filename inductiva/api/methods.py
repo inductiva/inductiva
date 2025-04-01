@@ -66,21 +66,23 @@ def submit_request(task_api_instance: TasksApi,
     return api_response.body
 
 
-def prepare_input(task_id, original_params):
-    sim_dir = original_params["sim_dir"]
-    # If the input directory is empty, do not zip it
-    # still need to zip the input parameters though
-    if sim_dir:
-        inputs_size = files.get_path_size(sim_dir)
-        logging.info("Preparing upload of the local input directory %s (%s).",
-                     sim_dir, format_utils.bytes_formatter(inputs_size))
+def prepare_input(task_id, input_dir, kwargs):
+    """Prepare the input files for a task submission."""
 
-        if os.path.isfile(os.path.join(sim_dir, constants.TASK_OUTPUT_ZIP)):
+    # If the input directory is empty, do not zip it
+    # still need to zip the input kwargs parameters though
+    if input_dir:
+        inputs_size = files.get_path_size(input_dir)
+        logging.info("Preparing upload of the local input directory %s (%s).",
+                     input_dir, format_utils.bytes_formatter(inputs_size))
+
+        if os.path.isfile(os.path.join(input_dir, constants.TASK_OUTPUT_ZIP)):
             raise ValueError(
                 f"Invalid file name: '{constants.TASK_OUTPUT_ZIP}'")
 
     input_zip_path = pack_input(
-        params=original_params,
+        input_dir,
+        kwargs,
         zip_name=task_id,
     )
 
@@ -128,17 +130,20 @@ def notify_upload_complete(api_endpoint,
     api_endpoint(**params)
 
 
-def upload_input(api_instance: TasksApi, task_id, original_params,
+def upload_input(api_instance: TasksApi, input_dir, kwargs, task_id,
                  storage_path_prefix):
     """Uploads the inputs of a given task to the API.
 
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task.
-        original_params: Params of the request passed by the user.
-    """
+        input_dir: Directory containing the input files to be uploaded.
+        kwargs: Additional parameters to be sent to the API.
+        storage_path_prefix: Path to the storage bucket.
+        """
     try:
-        input_zip_path, zip_file_size = prepare_input(task_id, original_params)
+        input_zip_path, zip_file_size = prepare_input(task_id, input_dir,
+                                                      kwargs)
 
         remote_input_zip_path = f"{storage_path_prefix}/{task_id}/input.zip"
         url = storage.get_signed_urls(
@@ -280,7 +285,7 @@ def blocking_task_context(api_instance: TasksApi,
 
 def task_info_str(
     task_id,
-    params,
+    local_input_dir,
     resource_pool,
     simulator,
     task_submitted_info: TaskSubmittedInfo,
@@ -294,7 +299,6 @@ def task_info_str(
                      f"\t· Version:               {simulator.version}\n"
                      f"\t· Image:                 {simulator.image_uri}\n")
 
-    local_input_dir = params["sim_dir"]
     info_str += (f"\t· Local input directory: {local_input_dir}\n"
                  "\t· Submitting to the following computational resources:\n")
     if resource_pool is not None:
@@ -312,8 +316,9 @@ def task_info_str(
 
 
 def submit_task(simulator,
-                request_params,
-                resource_pool,
+                input_dir,
+                machine_group,
+                kwargs,
                 storage_path_prefix,
                 resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
@@ -336,18 +341,17 @@ def submit_task(simulator,
     Return:
         Returns the task id.
     """
-    resource_pool_id = resource_pool.id
 
     if not remote_assets:
         remote_assets = []
 
-    stream_zip = request_params.pop("stream_zip", True)
-    compress_with = request_params.pop("compress_with", CompressionMethod.AUTO)
+    stream_zip = kwargs.pop("stream_zip", True)
+    compress_with = kwargs.pop("compress_with", CompressionMethod.AUTO)
 
     task_request = TaskRequest(simulator=simulator,
-                               params=request_params,
+                               params=kwargs,
                                project=project_name,
-                               resource_pool=resource_pool_id,
+                               resource_pool=machine_group.id,
                                container_image=container_image,
                                storage_path_prefix=storage_path_prefix,
                                simulator_name_alias=simulator_name_alias,
@@ -356,9 +360,8 @@ def submit_task(simulator,
                                stream_zip=stream_zip,
                                compress_with=compress_with)
 
-
     # Create an instance of the TasksApi class
-    task_api_instance=TasksApi(get_client())
+    task_api_instance = TasksApi(get_client())
 
     # Submit task via the "POST task/submit" endpoint.
     # HTTP status code 400 informs the requested method is invalid.
@@ -372,12 +375,12 @@ def submit_task(simulator,
     logging.info(
         task_info_str(
             task_id,
-            params,
-            resource_pool,
+            input_dir,
+            machine_group,
             simulator_obj,
             task_submitted_info,
         ))
-    
+
     # If the status returned by the previous HTTP request is "pending-input",
     #  ZIP inputs and send them via "POST task/{task_id}/input".
     if task_submitted_info["status"] == "pending-input":
@@ -385,7 +388,8 @@ def submit_task(simulator,
         with blocking_task_context(task_api_instance, task_id, "input upload"):
             upload_input(
                 api_instance=task_api_instance,
-                original_params=params,
+                input_dir=input_dir,
+                kwargs=kwargs,
                 task_id=task_id,
                 storage_path_prefix=storage_path_prefix,
             )
@@ -393,4 +397,3 @@ def submit_task(simulator,
     # Return task_id and leaves the simulation on the queue until resources
     # become available.
     return task_id
-

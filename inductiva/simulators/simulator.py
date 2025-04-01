@@ -300,7 +300,7 @@ class Simulator(ABC):
             input_dir_path,
             simulator_obj=self,
             storage_dir=storage_dir,
-            computational_resources=on,
+            machine_group=on,
             container_image=self._image_uri,
             resubmit_on_preemption=resubmit_on_preemption,
             remote_assets=remote_assets,
