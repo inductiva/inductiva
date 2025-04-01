@@ -40,16 +40,14 @@ class Benchmark(projects.Project):
         TIME = f"computation_time ({TIME_UNIT})"
         COST = f"estimated_computation_cost ({CURRENCY_SYMBOL})"
 
-    def __init__(self, name: str, append: bool = True):
+    def __init__(self, name: str):
         """
         Initializes a new Benchmark instance.
 
         Args:
             name (str): The name of the benchmark runner.
-            append (bool): Indicates whether to allow adding runs to the 
-            existing benchmark (default is True).
         """
-        super().__init__(name=name, append=append)
+        super().__init__(name=name)
         self.runs = []
         self.simulator = None
         self.input_dir = None

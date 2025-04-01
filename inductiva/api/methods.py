@@ -326,15 +326,10 @@ def submit_task(api_instance,
                 container_image: Optional[str] = None,
                 simulator_name_alias: Optional[str] = None,
                 simulator_obj=None,
-                input_resources: Optional[List[str]] = None):
+                input_resources: Optional[List[str]] = None,
+                project_name: Optional[str] = None):
     """Submit a task and send input files to the API."""
     resource_pool_id = resource_pool.id
-
-    current_project = inductiva.projects.get_current_project()
-    if current_project is not None:
-        if not current_project.opened:
-            raise RuntimeError("Trying to submit a task to a closed project.")
-        current_project = current_project.name
 
     if not input_resources:
         input_resources = []
@@ -344,7 +339,7 @@ def submit_task(api_instance,
 
     task_request = TaskRequest(simulator=simulator,
                                params=request_params,
-                               project=current_project,
+                               project=project_name,
                                resource_pool=resource_pool_id,
                                container_image=container_image,
                                storage_path_prefix=storage_path_prefix,

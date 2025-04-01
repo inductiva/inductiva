@@ -67,7 +67,7 @@ class Project:
 
     """
 
-    def __init__(self, name: str, *):
+    def __init__(self, name: str):
         """Initialize the Project instance.
         
         Args:
