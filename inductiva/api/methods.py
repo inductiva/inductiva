@@ -1,6 +1,6 @@
 """Methods that interact with the lower-level inductiva-web-api-client.
 
-The relevant function for usage outside of this file is invoke_async_api().
+The relevant function for usage outside of this file is submit_task().
 Check the demos directory for examples on how it is used.
 """
 import os
@@ -22,7 +22,7 @@ from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.models import (TaskRequest, TaskStatus, TaskSubmittedInfo,
                                      CompressionMethod)
 from inductiva import types, constants, storage
-from inductiva.utils.data import (get_validate_request_params, pack_input)
+from inductiva.utils.data import pack_input
 from inductiva.utils import format_utils, files
 
 
@@ -49,7 +49,7 @@ def get_client(api_config: Optional[Configuration] = None) -> ApiClient:
     return client
 
 
-def submit_request(api_instance: TasksApi,
+def submit_request(task_api_instance: TasksApi,
                    request: TaskRequest) -> TaskSubmittedInfo:
     """Submits a task request to the API.
 
@@ -59,15 +59,14 @@ def submit_request(api_instance: TasksApi,
         Returns the body of the HTTP response.
         Contains two fields, "id" and "status".
     """
-
-    api_response = api_instance.submit_task(body=request)
-
+    # Submit task using provided or temporary instance
+    api_response = task_api_instance.submit_task(body=request)
     logging.debug("Request status: %s", api_response.body["status"])
 
     return api_response.body
 
 
-def prepare_input(task_id, original_params, type_annotations):
+def prepare_input(task_id, original_params):
     sim_dir = original_params["sim_dir"]
     # If the input directory is empty, do not zip it
     # still need to zip the input parameters though
@@ -82,7 +81,6 @@ def prepare_input(task_id, original_params, type_annotations):
 
     input_zip_path = pack_input(
         params=original_params,
-        type_annotations=type_annotations,
         zip_name=task_id,
     )
 
@@ -131,18 +129,16 @@ def notify_upload_complete(api_endpoint,
 
 
 def upload_input(api_instance: TasksApi, task_id, original_params,
-                 type_annotations, storage_path_prefix):
+                 storage_path_prefix):
     """Uploads the inputs of a given task to the API.
 
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task.
         original_params: Params of the request passed by the user.
-        type_annotations: Annotations of the params' types.
     """
     try:
-        input_zip_path, zip_file_size = prepare_input(task_id, original_params,
-                                                      type_annotations)
+        input_zip_path, zip_file_size = prepare_input(task_id, original_params)
 
         remote_input_zip_path = f"{storage_path_prefix}/{task_id}/input.zip"
         url = storage.get_signed_urls(
@@ -315,24 +311,35 @@ def task_info_str(
     return info_str
 
 
-def submit_task(api_instance,
-                simulator,
+def submit_task(simulator,
                 request_params,
                 resource_pool,
                 storage_path_prefix,
-                params,
-                type_annotations,
                 resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
                 simulator_name_alias: Optional[str] = None,
                 simulator_obj=None,
-                input_resources: Optional[List[str]] = None,
+                remote_assets: Optional[List[str]] = None,
                 project_name: Optional[str] = None):
-    """Submit a task and send input files to the API."""
+    """Submit a task and send input files to the API.
+    
+    Args:
+        input_dir: Directory containing the input files to be uploaded.
+        container_image: The container image to use for the simulation
+            Example: container_image="docker://inductiva/kutu:xbeach_v1.23_dev"
+        resubmit_on_preemption (bool): Resubmit task for execution when
+                previous execution attempts were preempted. Only applicable when
+                using a preemptible resource, i.e., resource instantiated with
+                `spot=True`.
+        remote_assets: Additional input files that will be copied to the
+                simulation from a bucket or from another task output.
+    Return:
+        Returns the task id.
+    """
     resource_pool_id = resource_pool.id
 
-    if not input_resources:
-        input_resources = []
+    if not remote_assets:
+        remote_assets = []
 
     stream_zip = request_params.pop("stream_zip", True)
     compress_with = request_params.pop("compress_with", CompressionMethod.AUTO)
@@ -345,12 +352,19 @@ def submit_task(api_instance,
                                storage_path_prefix=storage_path_prefix,
                                simulator_name_alias=simulator_name_alias,
                                resubmit_on_preemption=resubmit_on_preemption,
-                               input_resources=input_resources,
+                               input_resources=remote_assets,
                                stream_zip=stream_zip,
                                compress_with=compress_with)
 
+
+    # Create an instance of the TasksApi class
+    task_api_instance=TasksApi(get_client())
+
+    # Submit task via the "POST task/submit" endpoint.
+    # HTTP status code 400 informs the requested method is invalid.
+    # HTTP status code 403 informs that the user is not authorized.
     task_submitted_info = submit_request(
-        api_instance=api_instance,
+        task_api_instance=task_api_instance,
         request=task_request,
     )
 
@@ -363,81 +377,20 @@ def submit_task(api_instance,
             simulator_obj,
             task_submitted_info,
         ))
-
+    
+    # If the status returned by the previous HTTP request is "pending-input",
+    #  ZIP inputs and send them via "POST task/{task_id}/input".
     if task_submitted_info["status"] == "pending-input":
         # Use the blocking task context
-        with blocking_task_context(api_instance, task_id, "input upload"):
+        with blocking_task_context(task_api_instance, task_id, "input upload"):
             upload_input(
-                api_instance=api_instance,
+                api_instance=task_api_instance,
                 original_params=params,
                 task_id=task_id,
-                type_annotations=type_annotations,
                 storage_path_prefix=storage_path_prefix,
             )
 
+    # Return task_id and leaves the simulation on the queue until resources
+    # become available.
     return task_id
 
-
-def invoke_async_api(simulator: str,
-                     params,
-                     type_annotations: Dict[Any, Type],
-                     resource_pool: types.ComputationalResources,
-                     storage_path_prefix: Optional[str] = "",
-                     container_image: Optional[str] = None,
-                     resubmit_on_preemption: bool = False,
-                     simulator_obj=None,
-                     simulator_name_alias=None,
-                     input_resources: Optional[List[str]] = None) -> str:
-    """Perform a task asyc and remotely via Inductiva's Web API.
-
-    Submits a simulation async to the API and returns the task id.
-    The flow is summarized as follows:
-        1. Transform request params into the params used to
-        validate permission to execute the request.
-        2. Submit task via the "POST task/submit" endpoint.
-            Note: HTTP status code 400 informs the requested method is invalid,
-                and HTTP status code 403 informs that the user is not authorized
-                to post such request.
-        3. If the status returned by the previous HTTP request is
-            "pending-input", ZIP inputs and send them via
-            "POST task/{task_id}/input".
-        4. Return task_id and leaves the simulation on the queue until resources
-            become available.
-
-    Args:
-        request: Request sent to the API for validation.
-        input_dir: Directory containing the input files to be uploaded.
-        container_image: The container image to use for the simulation
-            Example: container_image="docker://inductiva/kutu:xbeach_v1.23_dev"
-        resubmit_on_preemption (bool): Resubmit task for execution when
-                previous execution attempts were preempted. Only applicable when
-                using a preemptible resource, i.e., resource instantiated with
-                `spot=True`.
-        input_resources: Additional input files that will be copied to the
-                simulation from a bucket or from another task output.
-    Return:
-        Returns the task id.
-    """
-
-    request_params = get_validate_request_params(
-        original_params=params,
-        type_annotations=type_annotations,
-    )
-
-    with get_client() as client:
-        api_instance = TasksApi(client)
-
-        task_id = submit_task(api_instance=api_instance,
-                              simulator=simulator,
-                              simulator_name_alias=simulator_name_alias,
-                              request_params=request_params,
-                              resource_pool=resource_pool,
-                              storage_path_prefix=storage_path_prefix,
-                              params=params,
-                              container_image=container_image,
-                              type_annotations=type_annotations,
-                              resubmit_on_preemption=resubmit_on_preemption,
-                              simulator_obj=simulator_obj,
-                              input_resources=input_resources)
-
-    return task_id

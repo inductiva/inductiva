@@ -15,10 +15,10 @@ def run_simulation(
     computational_resources: types.ComputationalResources,
     resubmit_on_preemption: bool = False,
     storage_dir: Optional[str] = "",
-    api_invoker=None,
     simulator_obj=None,
-    input_resources: Optional[List[str]] = None,
+    remote_assets: Optional[List[str]] = None,
     simulator_name_alias: Optional[str] = None,
+    project_name: Optional[str] = None,
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
@@ -27,15 +27,9 @@ def run_simulation(
         "sim_dir": input_dir,
         **kwargs,
     }
-    type_annotations = {
-        "sim_dir": pathlib.Path,
-    }
 
-    if api_invoker is None:
-        api_invoker = methods.invoke_async_api
-
-    if not input_resources:
-        input_resources = []
+    if not remote_assets:
+        remote_assets = []
 
     container_image = kwargs.get("container_image", None)
 
@@ -45,16 +39,17 @@ def run_simulation(
                      " Starting it now.\n")
         computational_resources.start()
 
-    task_id = api_invoker(simulator,
+    task_id = methods.submit_task(simulator,
                           params,
-                          type_annotations,
                           computational_resources,
-                          resubmit_on_preemption=resubmit_on_preemption,
-                          simulator_name_alias=simulator_name_alias,
-                          container_image=container_image,
                           storage_path_prefix=storage_dir,
+                          resubmit_on_preemption=resubmit_on_preemption,
+                          container_image=container_image,
+                          simulator_name_alias=simulator_name_alias,
                           simulator_obj=simulator_obj,
-                          input_resources=input_resources)
+                          remote_assets=remote_assets,
+                          project_name=project_name)
+    
     logging.info("■ Task %s submitted to the queue of the %s.", task_id,
                  computational_resources)
 
