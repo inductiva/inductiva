@@ -330,29 +330,32 @@ def submit_task(api_instance,
     """Submit a task and send input files to the API."""
     resource_pool_id = resource_pool.id
 
-    current_project = inductiva.projects.get_current_project()
-    if current_project is not None:
-        if not current_project.opened:
-            raise RuntimeError("Trying to submit a task to a closed project.")
-        current_project = current_project.name
-
     if not input_resources:
         input_resources = []
 
     stream_zip = request_params.pop("stream_zip", True)
     compress_with = request_params.pop("compress_with", CompressionMethod.AUTO)
 
-    task_request = TaskRequest(simulator=simulator,
-                               params=request_params,
-                               project=current_project,
-                               resource_pool=resource_pool_id,
-                               container_image=container_image,
-                               storage_path_prefix=storage_path_prefix,
-                               simulator_name_alias=simulator_name_alias,
-                               resubmit_on_preemption=resubmit_on_preemption,
-                               input_resources=input_resources,
-                               stream_zip=stream_zip,
-                               compress_with=compress_with)
+    task_params = {
+        "simulator": simulator,
+        "params": request_params,
+        "resource_pool": resource_pool_id,
+        "container_image": container_image,
+        "storage_path_prefix": storage_path_prefix,
+        "simulator_name_alias": simulator_name_alias,
+        "resubmit_on_preemption": resubmit_on_preemption,
+        "input_resources": input_resources,
+        "stream_zip": stream_zip,
+        "compress_with": compress_with
+    }
+
+    current_project = inductiva.projects.get_current_project()
+    if current_project:
+        if not current_project.opened:
+            raise RuntimeError("Trying to submit a task to a closed project.")
+        task_params["project"] = current_project.name
+
+    task_request = TaskRequest(**task_params)
 
     task_submitted_info = submit_request(
         api_instance=api_instance,
