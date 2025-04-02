@@ -1263,8 +1263,8 @@ class Task:
 
     async def _last_modified_file(self):
         """
-        Execute the `last_modified_file` command on the task's machine and stream
-        its output.
+        Execute the `last_modified_file` command on the task's machine and
+        stream its output.
         """
 
         async for lines in self._file_operation(
@@ -1276,8 +1276,8 @@ class Task:
 
     async def _stream_task_output_modified_files(self, fout: TextIO):
         """
-        Stream the output of a task's `last_modifed_file` generator to the specified
-        output.
+        Stream the output of a task's `last_modifed_file` generator to the
+        specified output.
 
         This function gathers and streams the output of the `_last_modifed_file`
         method from the given task to the provided file-like object.
@@ -1291,8 +1291,8 @@ class Task:
     async def _consume_modified_file(self, generator: AsyncGenerator,
                                      fout: TextIO):
         """
-        Consume and write the formatted output from an asynchronous generator to a
-        file-like object.
+        Consume and write the formatted output from an asynchronous generator to
+        a file-like object.
 
         This function iterates over the provided asynchronous generator, writing 
         each line of output to the specified file-like object.
@@ -1305,20 +1305,20 @@ class Task:
             Time Since Last Modification: 0:00:43
         """
         try:
-            async for data in generator:
-
-                print(data)
+            async for generator_data in generator:
 
                 # Convert timestamps to readable datetime
                 most_recent_time = datetime.datetime.fromtimestamp(
-                    data["most_recent_timestamp"]).strftime("%Y-%m-%d %H:%M:%S")
+                    generator_data["most_recent_timestamp"]).strftime(
+                        "%Y-%m-%d %H:%M:%S")
                 now_time = datetime.datetime.fromtimestamp(
-                    data["now_timestamp"]).strftime("%Y-%m-%d %H:%M:%S")
+                    generator_data["now_timestamp"]).strftime(
+                        "%Y-%m-%d %H:%M:%S")
 
                 # Print the information
-                recent_file = data["most_recent_file"]
+                recent_file = generator_data["most_recent_file"]
                 formatted_seconds = format_utils.seconds_formatter(
-                    data["time_since_last_mod"])
+                    generator_data["time_since_last_mod"])
                 print(
                     "\n"
                     f"Most Recent File: {recent_file}\n"
@@ -1378,8 +1378,8 @@ class Task:
 
     async def _consume_top(self, generator: AsyncGenerator, fout: TextIO):
         """
-        Consume and write the output from an asynchronous generator to a file-like
-        object.
+        Consume and write the output from an asynchronous generator to a
+        file-like object.
 
         This function iterates over the provided asynchronous generator, writing 
         each line of output to the specified file-like object.
