@@ -7,6 +7,7 @@ import pathlib
 import logging
 import datetime
 import contextlib
+import nest_asyncio
 from typing_extensions import TypedDict
 from typing import AsyncGenerator, Callable, Dict, Any, List, Optional, TextIO, Tuple, Union
 
@@ -670,6 +671,7 @@ class Task:
 
     def wait(self,
              polling_period: int = 1,
+             silent_mode: bool = False,
              download_std_on_completion: bool = True) -> models.TaskStatusCode:
         """Wait for the task to complete.
 
@@ -677,6 +679,7 @@ class Task:
 
         Args:
             polling_period: How often to poll the API for the task status.
+            silent_mode: If True, do not print the task logs to the console.
             download_std_on_completion: Request immediate download of the
                 standard files (stdout and stderr) after the task completes.
 
@@ -715,6 +718,12 @@ class Task:
                     requires_newline = False
                     sys.stdout.write("\n")
                 self._handle_status_change(status, description)
+
+                if (status == models.TaskStatusCode.COMPUTATIONSTARTED) and (
+                        not silent_mode):
+                    self.print_tail_files(["stdout.txt", "stderr.txt"], 50,
+                                          True, sys.stdout)
+
             # Print timer
             elif (status != models.TaskStatusCode.SUBMITTED and
                   not task_info.is_terminal):
@@ -778,18 +787,27 @@ class Task:
                     "Wait for computation to start.")
 
         return (True, None)
-    
-
 
     def print_tail_files(self, tail_files: List[str], lines: int, follow: bool,
-             fout: TextIO):
+                         fout: TextIO):
         """
         Prints the result of tailing a list of files.
+
+        Args:
+            tail_files: A list of files to tail.
+            lines: The number of lines to print.
+            follow: Whether to follow the file or not.
+            fout: The file object to print the result to.
         """
         valid, err_msg = self._validate_task_computation_started()
         if not valid:
             print(err_msg, file=sys.stderr)
             return 1
+        # Notebooks do not support nested event loops, this is why we use
+        # nest_asyncio
+        if inductiva.is_notebook():
+            nest_asyncio.apply()
+
         asyncio.run(self._gather_tasks(tail_files, lines, follow, fout))
         return 0
 
@@ -1209,7 +1227,7 @@ class Task:
                 Operations.LIST, formatter=self._format_directory_listing)
         ]
         return directory[0]
-    
+
     def list_files(self):
         """List the files in the task's working directory.
         
@@ -1220,7 +1238,6 @@ class Task:
             print(err_msg, file=sys.stderr)
             return 1
         return asyncio.run(self._list_files())
-        
 
     async def tail_file(self, filename: str, n_lines: int = 10, follow=False):
         """Get the last n_lines lines of a 

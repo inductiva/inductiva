@@ -111,7 +111,7 @@ def stream_task_logs_tail(args):
     files = ["stdout.txt", "stderr.txt"
             ] if args.stdout == args.stderr else [filename]
 
-    return task.print_tail_files(files,10, True, sys.stdout)
+    return task.print_tail_files(files, 10, True, sys.stdout)
 
 
 def register(parser):
