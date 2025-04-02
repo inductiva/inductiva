@@ -1,13 +1,9 @@
 """Top command for task."""
-import datetime
-from typing import TextIO, AsyncGenerator
+from typing import TextIO
 import argparse
 import sys
-import asyncio
 
 from inductiva import tasks
-from inductiva._cli.cmd_tasks import task_utils
-from inductiva.utils import format_utils
 
 
 def last_modifed_file(args: argparse.Namespace, fout: TextIO = sys.stdout):
@@ -21,67 +17,10 @@ def last_modifed_file(args: argparse.Namespace, fout: TextIO = sys.stdout):
     """
     task_id = args.id
     task = tasks.Task(task_id)
-    valid, err_msg = task_utils.validate_task_computation_started(task)
-    if not valid:
-        print(err_msg, file=sys.stderr)
-        return 1
-    asyncio.run(stream_task_output(task, fout))
+
+    task.last_modified_file(fout)
+
     return 0
-
-
-async def stream_task_output(task: tasks.Task, fout: TextIO):
-    """
-    Stream the output of a task's `last_modifed_file` generator to the specified
-    output.
-
-    This function gathers and streams the output of the `last_modifed_file`
-    method from the given task to the provided file-like object.
-    """
-    try:
-        await asyncio.gather(consume(task.last_modifed_file(), fout))
-    except asyncio.CancelledError:
-        await task.close_stream()
-
-
-async def consume(generator: AsyncGenerator, fout: TextIO):
-    """
-    Consume and write the formatted output from an asynchronous generator to a
-    file-like object.
-
-    This function iterates over the provided asynchronous generator, writing 
-    each line of output to the specified file-like object.
-
-    Example:
-        Most Recent File: /workdir/io9od5da6xh131inmsno0fapm/stdin.txt
-        Modification Time: 2025-04-01 09:28:33
-        Current Time on Machine: 2025-04-01 09:29:17
-
-        Time Since Last Modification: 0:00:43
-    """
-    try:
-        async for data in generator:
-
-            # Convert timestamps to readable datetime
-            most_recent_time = datetime.datetime.fromtimestamp(
-                data["most_recent_timestamp"]).strftime("%Y-%m-%d %H:%M:%S")
-            now_time = datetime.datetime.fromtimestamp(
-                data["now_timestamp"]).strftime("%Y-%m-%d %H:%M:%S")
-
-            # Print the information
-            recent_file = data["most_recent_file"]
-            formatted_seconds = format_utils.seconds_formatter(
-                data["time_since_last_mod"])
-            print(
-                "\n"
-                f"Most Recent File: {recent_file}\n"
-                f"Most Recent File: {recent_file}\n"
-                f"Modification Time: {most_recent_time}\n"
-                f"Current Time on Machine: {now_time}\n"
-                "\n"
-                f"Time Since Last Modification: {formatted_seconds}",
-                file=fout)
-    except asyncio.CancelledError:
-        pass
 
 
 def register(parser):

@@ -679,7 +679,8 @@ class Task:
 
         Args:
             polling_period: How often to poll the API for the task status.
-            silent_mode: If True, do not print the task logs to the console.
+            silent_mode: If True, do not print the task logs (stdout and stderr)
+                to the console.
             download_std_on_completion: Request immediate download of the
                 standard files (stdout and stderr) after the task completes.
 
@@ -721,8 +722,8 @@ class Task:
 
                 if (status == models.TaskStatusCode.COMPUTATIONSTARTED) and (
                         not silent_mode):
-                    self.print_tail_files(["stdout.txt", "stderr.txt"], 50,
-                                          True, sys.stdout)
+                    self.tail_files(["stdout.txt", "stderr.txt"], 50, True,
+                                    sys.stdout)
 
             # Print timer
             elif (status != models.TaskStatusCode.SUBMITTED and
@@ -788,15 +789,18 @@ class Task:
 
         return (True, None)
 
-    def print_tail_files(self, tail_files: List[str], lines: int, follow: bool,
-                         fout: TextIO):
+    def tail_files(self, tail_files: List[str], lines: int, follow: bool,
+                   fout: TextIO):
         """
         Prints the result of tailing a list of files.
 
         Args:
             tail_files: A list of files to tail.
             lines: The number of lines to print.
-            follow: Whether to follow the file or not.
+            follow: Whether to keep tailing a file or not. If True, tail_files
+                will keep printing the new lines in the selected files as they
+                are changed in real time. If False, it will print the tail and
+                end.
             fout: The file object to print the result to.
         """
         valid, err_msg = self._validate_task_computation_started()
@@ -1231,7 +1235,8 @@ class Task:
     def list_files(self):
         """List the files in the task's working directory.
         
-        The task needs to be running for this method to work.
+        This method will list the files, in real time, in the task's working
+        directory. It will also print the files in a tree-like structure.
         """
         valid, err_msg = self._validate_task_computation_started()
         if not valid:
@@ -1256,9 +1261,9 @@ class Task:
                 follow=False):
             yield lines
 
-    async def last_modifed_file(self):
+    async def _last_modified_file(self):
         """
-        Execute the `last_modifed_file` command on the task's machine and stream
+        Execute the `last_modified_file` command on the task's machine and stream
         its output.
         """
 
@@ -1268,6 +1273,78 @@ class Task:
                 formatter=lambda _: _,
                 follow=False):
             yield lines
+
+    async def _stream_task_output_modified_files(self, fout: TextIO):
+        """
+        Stream the output of a task's `last_modifed_file` generator to the specified
+        output.
+
+        This function gathers and streams the output of the `_last_modifed_file`
+        method from the given task to the provided file-like object.
+        """
+        try:
+            await asyncio.gather(
+                self._consume_modified_file(self._last_modified_file(), fout))
+        except asyncio.CancelledError:
+            await self.close_stream()
+
+    async def _consume_modified_file(self, generator: AsyncGenerator,
+                                     fout: TextIO):
+        """
+        Consume and write the formatted output from an asynchronous generator to a
+        file-like object.
+
+        This function iterates over the provided asynchronous generator, writing 
+        each line of output to the specified file-like object.
+
+        Example:
+            Most Recent File: /workdir/io9od5da6xh131inmsno0fapm/stdin.txt
+            Modification Time: 2025-04-01 09:28:33
+            Current Time on Machine: 2025-04-01 09:29:17
+
+            Time Since Last Modification: 0:00:43
+        """
+        try:
+            async for data in generator:
+
+                print(data)
+
+                # Convert timestamps to readable datetime
+                most_recent_time = datetime.datetime.fromtimestamp(
+                    data["most_recent_timestamp"]).strftime("%Y-%m-%d %H:%M:%S")
+                now_time = datetime.datetime.fromtimestamp(
+                    data["now_timestamp"]).strftime("%Y-%m-%d %H:%M:%S")
+
+                # Print the information
+                recent_file = data["most_recent_file"]
+                formatted_seconds = format_utils.seconds_formatter(
+                    data["time_since_last_mod"])
+                print(
+                    "\n"
+                    f"Most Recent File: {recent_file}\n"
+                    f"Most Recent File: {recent_file}\n"
+                    f"Modification Time: {most_recent_time}\n"
+                    f"Current Time on Machine: {now_time}\n"
+                    "\n"
+                    f"Time Since Last Modification: {formatted_seconds}",
+                    file=fout)
+        except asyncio.CancelledError:
+            pass
+
+    def last_modified_file(self, fout: TextIO):
+        """
+        Display the last modified file for a given task.
+
+        This function retrieves and prints information about the most recently 
+        modified file associated with a specified task. It validates that the 
+        task computation has started before proceeding. If the task is invalid 
+        or not started, an error message is printed to `stderr`.
+        """
+        valid, err_msg = self._validate_task_computation_started()
+        if not valid:
+            print(err_msg, file=sys.stderr)
+            return 1
+        asyncio.run(self._stream_task_output_modified_files(fout))
 
     async def tail_file(self, filename: str, n_lines: int = 10, follow=False):
         """Get the last n_lines lines of a 
@@ -1285,6 +1362,47 @@ class Task:
                                                 lines=n_lines,
                                                 follow=follow):
             yield lines
+
+    async def _stream_task_output_top(self, fout: TextIO):
+        """
+        Stream the output of a task's `list_top` generator to the specified
+        output.
+
+        This function gathers and streams the output of the `list_top` method 
+        from the given task to the provided file-like object.
+        """
+        try:
+            await asyncio.gather(self._consume(self.list_top(), fout))
+        except asyncio.CancelledError:
+            await self.close_stream()
+
+    async def _consume_top(self, generator: AsyncGenerator, fout: TextIO):
+        """
+        Consume and write the output from an asynchronous generator to a file-like
+        object.
+
+        This function iterates over the provided asynchronous generator, writing 
+        each line of output to the specified file-like object.
+        """
+        try:
+            async for lines in generator:
+                print(lines, file=fout, end="", flush=True)
+        except asyncio.CancelledError:
+            pass
+
+    def top(self, fout: TextIO):
+        """Prints the result of the `top -b -H -n 1` command.
+    
+        This command will list the processes and threads (-H) in batch mode
+        (-b).
+        This command will run only once (-n 1) instead of running continuously.
+        The result is an instant snapshot of the machine CPU and RAM metrics."
+        """
+        valid, err_msg = self._validate_task_computation_started()
+        if not valid:
+            print(err_msg, file=sys.stderr)
+            return 1
+        asyncio.run(self._stream_task_output_top(fout))
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""
