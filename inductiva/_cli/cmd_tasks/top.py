@@ -13,7 +13,7 @@ def top(args: argparse.Namespace, fout: TextIO = sys.stdout):
     
     This command will list the processes and threads (-H) in batch mode (-b).
     This command will run only once (-n 1) instead of running continuously.
-
+    The result is an instant snapshot of the machine CPU and RAM metrics."
     """
     task_id = args.id
     task = tasks.Task(task_id)
