@@ -411,7 +411,9 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.is_running"><code class="docutils literal notranslate"><span class="pre">Task.is_running()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.is_terminal"><code class="docutils literal notranslate"><span class="pre">Task.is_terminal()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.kill"><code class="docutils literal notranslate"><span class="pre">Task.kill()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.last_modifed_file"><code class="docutils literal notranslate"><span class="pre">Task.last_modifed_file()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.list_files"><code class="docutils literal notranslate"><span class="pre">Task.list_files()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.list_top"><code class="docutils literal notranslate"><span class="pre">Task.list_top()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.print_summary"><code class="docutils literal notranslate"><span class="pre">Task.print_summary()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.remove_remote_files"><code class="docutils literal notranslate"><span class="pre">Task.remove_remote_files()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.summary"><code class="docutils literal notranslate"><span class="pre">Task.summary</span></code></a></li>
@@ -720,9 +722,26 @@ to the <cite>KILLED</cite> state within <cite>wait_timeout</cite> seconds;</p></
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.last_modifed_file">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">last_modifed_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.tasks.task.Task.last_modifed_file" title="Link to this definition">#</a></dt>
+<dd><p>Execute the <cite>last_modifed_file</cite> command on the task’s machine and stream
+its output.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="inductiva.tasks.task.Task.list_files">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">list_files</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.list_files" title="Link to this definition">#</a></dt>
 <dd><p>List the files in the task’s working directory.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.list_top">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">list_top</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.tasks.task.Task.list_top" title="Link to this definition">#</a></dt>
+<dd><p>Execute the <cite>top -b -H -n 1</cite> command on the task’s machine and stream
+its output.</p>
+<p>This method runs the <cite>top -b -H -n 1</cite> command remotely on the machine
+where the task is being executed. It streams the output, allowing
+real-time monitoring of system processes and resource usage.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -968,7 +987,9 @@ all the tasks. Example: { “ID”: [1, 2, 3],
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.is_running"><code class="docutils literal notranslate"><span class="pre">Task.is_running()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.is_terminal"><code class="docutils literal notranslate"><span class="pre">Task.is_terminal()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.kill"><code class="docutils literal notranslate"><span class="pre">Task.kill()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.last_modifed_file"><code class="docutils literal notranslate"><span class="pre">Task.last_modifed_file()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.list_files"><code class="docutils literal notranslate"><span class="pre">Task.list_files()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.list_top"><code class="docutils literal notranslate"><span class="pre">Task.list_top()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.print_summary"><code class="docutils literal notranslate"><span class="pre">Task.print_summary()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.remove_remote_files"><code class="docutils literal notranslate"><span class="pre">Task.remove_remote_files()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.summary"><code class="docutils literal notranslate"><span class="pre">Task.summary</span></code></a></li>
