@@ -1303,8 +1303,8 @@ class Task:
         ]
         await self._gather_and_consume(generators, fout)
 
-    async def _aggregate_single_generator(self,generator : AsyncGenerator
-                                          , fout: TextIO):
+    async def _aggregate_single_generator(self, generator: AsyncGenerator,
+                                          fout: TextIO):
         """
         Stream the output of the passed generator.
 
@@ -1376,7 +1376,8 @@ class Task:
         if not self._validate_task_computation_started():
             return 1
 
-        asyncio.run(self._consume_modified_file(self._last_modified_file(),fout))
+        asyncio.run(
+            self._consume_modified_file(self._last_modified_file(), fout))
 
     async def _run_tail_on_machine(self,
                                    filename: str,
@@ -1427,7 +1428,8 @@ class Task:
         if not self._validate_task_computation_started():
             return 1
 
-        asyncio.run(self._aggregate_single_generator(self._run_top_on_machine(),fout))
+        asyncio.run(
+            self._aggregate_single_generator(self._run_top_on_machine(), fout))
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""
