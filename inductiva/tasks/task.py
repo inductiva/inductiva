@@ -1322,7 +1322,6 @@ class Task:
                 print(
                     "\n"
                     f"Most Recent File: {recent_file}\n"
-                    f"Most Recent File: {recent_file}\n"
                     f"Modification Time: {most_recent_time}\n"
                     f"Current Time on Machine: {now_time}\n"
                     "\n"
@@ -1392,7 +1391,7 @@ class Task:
         except asyncio.CancelledError:
             pass
 
-    def top(self, fout: TextIO):
+    def _top(self, fout: TextIO):
         """Prints the result of the `top -b -H -n 1` command.
     
         This command will list the processes and threads (-H) in batch mode

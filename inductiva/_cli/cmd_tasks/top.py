@@ -15,7 +15,7 @@ def top(args: argparse.Namespace, fout: TextIO = sys.stdout):
     """
     task_id = args.id
     task = tasks.Task(task_id)
-    task.top(fout)
+    task._top(fout)
     return 0
 
 
