@@ -1244,7 +1244,7 @@ class Task:
             return 1
         return asyncio.run(self._list_files())
 
-    async def list_top(self):
+    async def _run_top_on_machine(self):
         """
         Execute the `top -b -H -n 1` command on the task's machine and stream
         its output.
@@ -1365,14 +1365,15 @@ class Task:
 
     async def _stream_task_output_top(self, fout: TextIO):
         """
-        Stream the output of a task's `list_top` generator to the specified
-        output.
+        Stream the output of a task's `_run_top_on_machine` generator to the
+        specified output.
 
-        This function gathers and streams the output of the `list_top` method 
-        from the given task to the provided file-like object.
+        This function gathers and streams the output of the
+        `_run_top_on_machine` method from the given task to the provided
+        file-like object.
         """
         try:
-            await asyncio.gather(self._consume(self.list_top(), fout))
+            await asyncio.gather(self._consume(self._run_top_on_machine(), fout))
         except asyncio.CancelledError:
             await self.close_stream()
 
