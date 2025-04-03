@@ -1303,20 +1303,22 @@ class Task:
         ]
         await self._gather_and_consume(generators, fout)
 
-    async def _aggregate_top_generators(self, fout: TextIO):
+    async def _aggregate_single_generator(self,generator : AsyncGenerator
+                                          , fout: TextIO):
         """
-        Stream the output of the `top` command executed on the task's machine.
+        Stream the output of the passed generator.
 
-        This method gathers the output of the `_run_top_on_machine` generator, 
-        which executes the `top -b -H -n 1` command remotely on the task's
-        machine. The output is streamed to the provided file-like object in real
-        time, allowing monitoring of system processes and resource usage.
+        This method gathers the output of the generator, passed as argument.
+        The output is streamed to the provided file-like object in real
+        time.
 
         Args:
+            generator (AsyncGenerator): The generator that yields the output of
+                the wanted command.
             fout (TextIO): A file-like object where the output will be written. 
                         Typically, this is `sys.stdout` for console output.
         """
-        await self._gather_and_consume([self._run_top_on_machine()], fout)
+        await self._gather_and_consume([generator], fout)
 
     async def _consume_modified_file(self, generator: AsyncGenerator,
                                      fout: TextIO):
@@ -1374,7 +1376,7 @@ class Task:
         if not self._validate_task_computation_started():
             return 1
 
-        asyncio.run(self._stream_task_output_modified_files(fout))
+        asyncio.run(self._consume_modified_file(self._last_modified_file(),fout))
 
     async def _run_tail_on_machine(self,
                                    filename: str,
@@ -1425,7 +1427,7 @@ class Task:
         if not self._validate_task_computation_started():
             return 1
 
-        asyncio.run(self._aggregate_top_generators(fout))
+        asyncio.run(self._aggregate_single_generator(self._run_top_on_machine(),fout))
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""
