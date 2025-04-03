@@ -790,7 +790,7 @@ class Task:
         return (True, None)
 
     def tail_files(self, tail_files: List[str], lines: int, follow: bool,
-                   fout: TextIO):
+                   fout: TextIO = sys.stdout):
         """
         Prints the result of tailing a list of files.
 
@@ -801,7 +801,7 @@ class Task:
                 will keep printing the new lines in the selected files as they
                 are changed in real time. If False, it will print the tail and
                 end.
-            fout: The file object to print the result to.
+            fout: The file object to print the result to. Default is stdout.
         """
         valid, err_msg = self._validate_task_computation_started()
         if not valid:
@@ -1330,7 +1330,7 @@ class Task:
         except asyncio.CancelledError:
             pass
 
-    def last_modified_file(self, fout: TextIO):
+    def last_modified_file(self, fout: TextIO = sys.stdout):
         """
         Display the last modified file for a given task.
 
@@ -1338,6 +1338,8 @@ class Task:
         modified file associated with a specified task. It validates that the 
         task computation has started before proceeding. If the task is invalid 
         or not started, an error message is printed to `stderr`.
+        Args:
+            fout: The file object to print the result to. Default is stdout.
         """
         valid, err_msg = self._validate_task_computation_started()
         if not valid:
@@ -1391,13 +1393,17 @@ class Task:
         except asyncio.CancelledError:
             pass
 
-    def _top(self, fout: TextIO):
+    def _top(self, fout: TextIO = sys.stdout):
         """Prints the result of the `top -b -H -n 1` command.
     
         This command will list the processes and threads (-H) in batch mode
         (-b).
         This command will run only once (-n 1) instead of running continuously.
-        The result is an instant snapshot of the machine CPU and RAM metrics."
+        The result is an instant snapshot of the machine CPU and RAM metrics.
+
+        Args:
+            fout: The file object to print the result to. Default is stdout.
+
         """
         valid, err_msg = self._validate_task_computation_started()
         if not valid:
