@@ -789,7 +789,10 @@ class Task:
 
         return (True, None)
 
-    def tail_files(self, tail_files: List[str], lines: int, follow: bool,
+    def tail_files(self,
+                   tail_files: List[str],
+                   lines: int,
+                   follow: bool,
                    fout: TextIO = sys.stdout):
         """
         Prints the result of tailing a list of files.
