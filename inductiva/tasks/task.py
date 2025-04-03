@@ -757,7 +757,7 @@ class Task:
     async def _gather_tasks(self, tail_files: List[str], lines: int,
                             follow: bool, fout: TextIO):
         generators = [
-            self.tail_file(filename, lines, follow) for filename in tail_files
+            self._tail_file(filename, lines, follow) for filename in tail_files
         ]
         tail_tasks = [
             asyncio.create_task(self._consume(generator, fout))
@@ -1346,7 +1346,7 @@ class Task:
             return 1
         asyncio.run(self._stream_task_output_modified_files(fout))
 
-    async def tail_file(self, filename: str, n_lines: int = 10, follow=False):
+    async def _tail_file(self, filename: str, n_lines: int = 10, follow=False):
         """Get the last n_lines lines of a 
         file in the task's working directory."""
 
@@ -1373,7 +1373,8 @@ class Task:
         file-like object.
         """
         try:
-            await asyncio.gather(self._consume(self._run_top_on_machine(), fout))
+            await asyncio.gather(self._consume(self._run_top_on_machine(),
+                                               fout))
         except asyncio.CancelledError:
             await self.close_stream()
 
