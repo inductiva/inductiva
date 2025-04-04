@@ -1500,7 +1500,7 @@ class Task:
             fout: TextIO = sys.stdout):
         if not self._validate_task_computation_started():
             return 1
-        
+
         if inductiva.is_notebook():
             nest_asyncio.apply()
 
@@ -1514,7 +1514,7 @@ class Task:
                                fout: TextIO = sys.stdout):
         if not self._validate_task_computation_started():
             return 1
-        
+
         if inductiva.is_notebook():
             nest_asyncio.apply()
 
