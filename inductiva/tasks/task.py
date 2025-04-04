@@ -722,8 +722,13 @@ class Task:
 
                 if (status == models.TaskStatusCode.COMPUTATIONSTARTED) and (
                         not silent_mode):
-                    self.tail_files(["stdout.txt", "stderr.txt"], 50, True,
-                                    sys.stdout)
+                    try:
+                        self.tail_files(["stdout.txt", "stderr.txt"], 50, True,
+                                        sys.stdout)
+                    # pylint: disable=broad-except
+                    except Exception as _:
+                        # Ignore errors while tailing files
+                        pass
 
             # Print timer
             elif (status != models.TaskStatusCode.SUBMITTED and
