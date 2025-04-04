@@ -12,6 +12,10 @@ def list_files(args: argparse.Namespace, fout: TextIO = sys.stdout):
 
     directories = task.list_files()
 
+    # Command failed
+    if directories == 1:
+        return 1
+
     print(directories, file=fout)
     return 0
 

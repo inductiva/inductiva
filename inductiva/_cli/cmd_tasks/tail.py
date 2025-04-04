@@ -10,9 +10,7 @@ def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
 
-    task.tail_files(args.filename, args.lines, args.follow, fout)
-
-    return 0
+    return task.tail_files(args.filename, args.lines, args.follow, fout)
 
 
 def register(parser):
