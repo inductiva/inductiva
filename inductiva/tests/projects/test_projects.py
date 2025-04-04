@@ -1,67 +1,58 @@
 """Tests for the projects class"""
-from unittest import mock
-import pytest
-
 import inductiva
 
-MOCK_PATH_PROJECTS = "inductiva.projects.project.projects_api.ProjectsApi"
-MOCK_PATH_CLIENT = "inductiva.projects.project.inductiva.api.get_client"
+
+def test_create_new_project():
+    """Tests if can create new project."""
+
+    my_proj = inductiva.projects.Project("benchmarks-hackathon")
+
+    expected_str = """Project \'benchmarks-hackathon\' with 8 tasks (id=8b918ccf-84bd-449b-a671-a1bf2ced35ad).
+
+Tasks status:
+success: 8
+
+Total number of output files: 64
+Total size of output: 11.75 GB
+
+Project duration: 14 minutes and 52 seconds
+Project total simulated time: 40 minutes and 10 seconds
+
+Estimated project cost: 1.38 US$
+"""
+    print(expected_str)
+    print(str(my_proj))
+    assert str(my_proj) == expected_str
 
 
-def test_open_project_and_close():
-    """Tests if the open and close of the project changes the context
-    variable properly."""
-    with mock.patch(MOCK_PATH_PROJECTS), mock.patch(MOCK_PATH_CLIENT):
-        assert inductiva.projects.get_current_project() is None
+def test_get_all_projects():
+    """Tests if can get all projects."""
 
-        with inductiva.projects.Project("test_project", append=True) as project:
-            assert inductiva.projects.get_current_project() == project
-            assert project.opened
+    my_projs = inductiva.projects.get_projects()
 
-        assert inductiva.projects.get_current_project() is None
-        assert not project.opened
-
-        project = inductiva.projects.Project("test_project", append=True)
-        project.open()
-        assert inductiva.projects.get_current_project() == project
-        assert project.opened
-        project.close()
-        assert inductiva.projects.get_current_project() is None
-        assert not project.opened
+    for proj in my_projs:
+        # ensure the objects are an instance of the Project class
+        assert isinstance(proj, inductiva.projects.Project)
+        # ensure that printing the project does not raise an error
+        print(proj)
 
 
-def test_open_project_without_closing():
-    """Tests if opening two projects at the same time fails."""
-    with mock.patch(MOCK_PATH_PROJECTS), mock.patch(MOCK_PATH_CLIENT):
+def test_add_task_to_project():
+    """Tests if can add task to project."""
 
-        expected_message = "another is active."
+    task = inductiva.tasks.get_tasks()[0]
+    previous_project_name = task.info.project
+    previous_project = inductiva.projects.Project(previous_project_name)
 
-        with pytest.raises(Exception) as exc_info:
-            project_1 = inductiva.projects.Project(name="p1", append=True)
-            project_2 = inductiva.projects.Project(name="p2", append=True)
-            project_1.open()
-            project_2.open()
-        assert expected_message in str(exc_info.value)
-        assert inductiva.projects.get_current_project() == project_1
+    new_proj = inductiva.projects.Project("new-project")
+    new_proj.add_task(task)
+    # Check if the task was added to the new project
+    assert task.info.project == new_proj.name
+    # Check if the previous project no longer contains the task
+    assert task.info.project != previous_project.name
 
-        project_1.close()
-
-        with pytest.raises(Exception) as exc_info:
-            with inductiva.projects.Project(name="p1", append=True):
-                with inductiva.projects.Project(name="p2", append=True):
-                    pass
-        assert expected_message in str(exc_info.value)
-        assert inductiva.projects.get_current_project() is None
+    # # Check if the task was added to the project
+    # assert task.info.project == my_proj.name
+    # # Check if the previous project no longer contains the task
 
 
-def test_open_project_with_append_raises_exception():
-    """Tests if opening a project with append=False raises an exception."""
-    with mock.patch(MOCK_PATH_PROJECTS), mock.patch(MOCK_PATH_CLIENT):
-        project = inductiva.projects.Project(name="project", append=False)
-
-        with pytest.raises(RuntimeError):
-            project.open()
-
-        with pytest.raises(RuntimeError):
-            with inductiva.projects.Project(name="project", append=False):
-                pass
