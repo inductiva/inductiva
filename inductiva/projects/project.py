@@ -4,10 +4,10 @@ import logging
 import time
 from typing import List, Optional, Union
 
-import inductiva
-from inductiva.client import ApiException
-from inductiva.client import models
-from inductiva.client.apis.paths.tasks import Tasks
+from inductiva import tasks
+from inductiva import client as api_client
+# from inductiva.client import ApiException
+# from inductiva.client import models
 from inductiva.client.apis.tags import projects_api
 from inductiva.utils.format_utils import bytes_formatter, currency_formatter, timedelta_formatter
 
@@ -18,9 +18,9 @@ def get_projects():
     """Gets all the user's projects."""
     try:
         _logger.debug("Trying to get remote projects")
-        api = projects_api.ProjectsApi(inductiva.api.get_client())
+        api = projects_api.ProjectsApi(api_client.get_client())
         response = api.get_user_projects()
-    except ApiException as ex:
+    except api_client.ApiException as ex:
         _logger.error("Failed to get remote projects", exc_info=ex)
         raise ex
 
@@ -57,11 +57,11 @@ class Project:
     def _get_project(self, name: str):
         """Fetches the project info from the backend."""
         try:
-            api_client = projects_api.ProjectsApi(inductiva.api.get_client())
+            api_client = projects_api.ProjectsApi(api_client.get_client())
             response = api_client.get_project({"name": name})
             print(type(response.body))
             return response.body
-        except ApiException as ex:
+        except api_client.ApiException as ex:
             if ex.status != 404:
                 _logger.error("Failed to get project %s", name, exc_info=ex)
                 raise ex
@@ -70,13 +70,12 @@ class Project:
     def _create_project(self, name):
         """Creates a project with the given name on the backend."""
         try:
-            api_client = projects_api.ProjectsApi(inductiva.api.get_client())
+            api_client = projects_api.ProjectsApi(api_client.get_client())
             response = api_client.create_project({"name": name})
             return response.body
-        except ApiException as ex:
+        except api_client.ApiException as ex:
             _logger.error("Failed to create project %s", name, exc_info=ex)
             raise RuntimeError(f"Unable to create project {name}") from ex
-
 
     @classmethod
     def _from_api_response(cls, resp):
@@ -104,7 +103,7 @@ class Project:
     @property
     def task_by_status(self) -> dict:
         return {
-            models.TaskStatusCode(attr): int(value) for attr, value in
+            api_client.models.TaskStatusCode(attr): int(value) for attr, value in
             self._proj_data.get("task_status_overview").items()
         }
 
@@ -129,8 +128,6 @@ class Project:
 
         list_of_tasks = self.get_tasks()
 
-        print(f"project name {self.name} #task = {len(list_of_tasks)}")
-
         total_duration = datetime.timedelta()
         running_tasks_warning = ""
         for task in list_of_tasks:
@@ -140,7 +137,8 @@ class Project:
                 total_files += task.info.data_metrics.output_total_files.value
                 total_size += task.info.data_metrics.output_size_bytes.value
                 if task.info.start_time and task.info.end_time:
-                    start = datetime.datetime.fromisoformat(task.info.start_time)
+                    start = datetime.datetime.fromisoformat(
+                        task.info.start_time)
                     end = datetime.datetime.fromisoformat(task.info.end_time)
                     duration_task = end - start
                     total_duration += duration_task
@@ -149,8 +147,8 @@ class Project:
                         "Warning: Some tasks may not be finished "
                         "yet. The values presented may change as a result.")
             except Exception as ex:
-                _logger.error(f"Failed to get all the task info for {task.id}", exc_info=ex)
-
+                _logger.error(f"Failed to get all the task info for {task.id}",
+                              exc_info=ex)
 
         if len(list_of_tasks) > 0:
             # get start/end time
@@ -197,26 +195,39 @@ class Project:
             f"  {k}: {v}" for k, v in self.task_by_status.items())
         return header + summary
 
+    def add_task(self, task: tasks.Task):
+        """Adds a task to the project.
+
+        Args:
+            task: The task to add to the project.
+        """
+        try:
+            api_client = projects_api.ProjectsApi(api_client.get_client())
+            api_client.add_task_to_project(self.id, {"task_id": task.id})
+        except api_client.ApiException as ex:
+            _logger.error("Failed to add task %s to project %s",
+                          task.id,
+                          self.name,
+                          exc_info=ex)
+            raise ex
+
     def get_tasks(
         self,
         last_n: int = -1,
-        status: Optional[Union[str,
-                               models.TaskStatusCode]] = None) -> List[Tasks]:
+        status: Optional[Union[str, api_client.models.TaskStatusCode]] = None
+    ) -> List[tasks.Task]:
         """Get the the tasks of this project.
 
-        Get the tasks that belong to this project. Optionally, those can be
-        filtered by status.
+        Optionally, those can be filtered by task status.
 
         Args:
             last_n (int): The number of tasks with repect to the submission
-                time to fectch. If `last_n<=0` we fetch all tasks submitted
+                time to fetch. If `last_n<=0` we fetch all tasks submitted
                 to the project.
             status: Status of the tasks to get. If `None`, tasks with any
                 status will be returned.
         """
-        return inductiva.tasks.get_tasks(last_n=last_n,
-                                         project=self,
-                                         status=status)
+        return tasks.get_tasks(last_n=last_n, project=self, status=status)
 
     def wait(self):
         """ Wait for all the tasks in a project to complete."""

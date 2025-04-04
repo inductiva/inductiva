@@ -1,4 +1,5 @@
 """List the tasks information via CLI."""
+from collections import defaultdict
 from typing import TextIO
 import argparse
 import sys
@@ -6,7 +7,59 @@ import sys
 from inductiva import tasks, _cli, projects
 from inductiva.utils import format_utils
 from inductiva.client import models
+from inductiva.utils import format_utils
+from typing import Any, Iterable, List, Mapping
 
+
+def _tasks_lists_to_dict(list_of_tasks: Iterable[tasks.Task]) -> Mapping[str, List[Any]]:
+    """
+    Converts an Iterable of tasks to a dictionary with all the
+    relevant information for all the tasks.
+        Args:
+            list_of_tasks: An Iterable of tasks.
+        Returns:
+            A dictionary with all the relevant information for
+            all the tasks. Example: { "ID": [1, 2, 3], 
+            "Simulator": ["reef3d", "reef3d", "reef3d"], ... }
+    """
+    column_names = [
+        "ID", "Simulator", "Status", "Submitted", "Started", "Computation Time",
+        "Resource Type"
+    ]
+    table = defaultdict(list, {key: [] for key in column_names})
+
+    for task in list_of_tasks:
+        execution_time = task.get_computation_time(cached=True)
+
+        if execution_time is not None:
+            execution_time = format_utils.seconds_formatter(execution_time)
+            if task.info.computation_end_time is None:
+                if task.info.status in ["started", "submitted"]:
+                    execution_time = f"*{execution_time}"
+                else:
+                    execution_time = "n/a"
+
+        if task.info.executer is None:
+            resource_type = None
+        else:
+            if task.info.executer.vm_type == "n/a":
+                vm_type = task.info.executer.vm_name
+            else:
+                vm_type = task.info.executer.vm_type
+            resource_type = (f"{task.info.executer.host_type} "
+                             f"{vm_type}")
+            if task.info.executer.n_mpi_hosts > 1:
+                resource_type += f" x{task.info.executer.n_mpi_hosts}"
+
+        table["ID"].append(task.id)
+        table["Simulator"].append(task.get_simulator_name())
+        table["Status"].append(task.info.status_alias)
+        table["Submitted"].append(task.info.input_submit_time)
+        table["Started"].append(task.info.start_time)
+        table["Computation Time"].append(execution_time)
+        table["Resource Type"].append(resource_type)
+
+    return table
 
 def list_tasks(args: argparse.Namespace, fout: TextIO = sys.stdout):
     _list_tasks(**vars(args), fout=fout)
@@ -42,7 +95,7 @@ def _list_tasks(project_name, last_n, task_id, all_tasks: bool, fout: TextIO,
         print("No tasks found.", file=fout)
         return 1
 
-    table_dict = tasks.to_dict(task_list)
+    table_dict = _tasks_lists_to_dict(task_list)
 
     emph_formatter = format_utils.get_ansi_formatter()
 
