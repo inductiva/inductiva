@@ -151,9 +151,9 @@ def upload_input(api_instance: TasksApi, input_dir, kwargs, task_id,
         )[0]
 
         with tqdm.tqdm(total=zip_file_size,
-                        unit="B",
-                        unit_scale=True,
-                        unit_divisor=1000) as progress_bar:
+                       unit="B",
+                       unit_scale=True,
+                       unit_divisor=1000) as progress_bar:
             upload_file(api_instance, input_zip_path, "PUT", url, progress_bar)
             notify_upload_complete(
                 api_instance.notify_input_uploaded,
@@ -194,7 +194,7 @@ def kill_task(api_instance: TasksApi, task_id: str):
    """
     logging.debug("Sending kill task request ...")
     api_instance.kill_task(path_params={"task_id": task_id},)
-    logging.info("Task with ID %s was with ID %s was terminated.", task_id, task_id)
+    logging.info("Task with ID %s was terminated.", task_id)
 
 
 def get_task_status(api_instance: TasksApi, task_id: str) -> TaskStatus:
@@ -275,10 +275,7 @@ def blocking_task_context(api_instance: TasksApi,
         raise err
     except KeyboardInterrupt:
         logging.info("Caught SIGINT: %s interrupted by user.", action_str)
-    except KeyboardInterrupt:
-        logging.info("Caught SIGINT: %s interrupted by user.", action_str)
         kill_task(api_instance, task_id)
-        sys.exit(1)
         sys.exit(1)
     finally:
         # Reset original SIGINT handler
@@ -350,7 +347,6 @@ def submit_task(simulator,
     stream_zip = kwargs.pop("stream_zip", True)
     compress_with = kwargs.pop("compress_with", CompressionMethod.AUTO)
 
-
     stream_zip = request_params.pop("stream_zip", True)
     compress_with = request_params.pop("compress_with", CompressionMethod.AUTO)
 
@@ -391,14 +387,16 @@ def submit_task(simulator,
     #  ZIP inputs and send them via "POST task/{task_id}/input".
     if task_submitted_info["status"] == "pending-input":
         # Use the blocking task context
-        with blocking_task_context(task_api_instance, task_id, "input upload"):        # Use the blocking task context
-                upload_input(
-                    api_instance=task_api_instance,
-                    input_dir=input_dir,
+        with blocking_task_context(
+                task_api_instance, task_id,
+                "input upload"):  # Use the blocking task context
+            upload_input(
+                api_instance=task_api_instance,
+                input_dir=input_dir,
                 kwargs=kwargs,
-                    task_id=task_id,
-                        storage_path_prefix=storage_path_prefix,
-                )
+                task_id=task_id,
+                storage_path_prefix=storage_path_prefix,
+            )
 
     # Return task_id and leaves the simulation on the queue until resources
     # become available.
