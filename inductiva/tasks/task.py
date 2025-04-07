@@ -1211,7 +1211,7 @@ class Task:
         if self.file_tracker is not None:
             await self.file_tracker.cleanup()
 
-    def list_files(self):
+    def list_files(self) -> Tuple[Optional[str], int]:
         """List the files in the task's working directory.
         
         This method will list the files, in real time, in the task's working
@@ -1365,7 +1365,7 @@ class Task:
         except asyncio.CancelledError:
             pass
 
-    def _top(self, fout: TextIO = sys.stdout):
+    def _top(self) -> Tuple[Optional[str], int]:
         """Prints the result of the `top -b -H -n 1` command.
     
         This command will list the processes and threads (-H) in batch mode
@@ -1373,20 +1373,13 @@ class Task:
         This command will run only once (-n 1) instead of running continuously.
         The result is an instant snapshot of the machine CPU and RAM metrics.
 
-        Args:
-            fout: The file object to print the result to. Default is stdout.
-
+        Returns:
+            A string with the formatted directory listing. 
+            The return code for the command. 0 if successful, 1 if failed.
         """
         result, return_code = self._run_streaming_command(
             lambda: self._file_operation(
                 Operations.TOP, formatter=lambda _: _, follow=False))
-
-        if return_code != 0:
-            print(
-                f"Error: {result}",
-                file=sys.stderr,
-            )
-            return None, return_code
 
         return result, return_code
 
@@ -1534,8 +1527,9 @@ class Task:
                                      fout))
         return 0
 
-    def _run_streaming_command(self,
-                               generator_factory: Callable[[], AsyncGenerator]):
+    def _run_streaming_command(
+        self, generator_factory: Callable[[], AsyncGenerator]
+    ) -> Tuple[Optional[str], int]:
         if not self._validate_task_computation_started():
             return None, 1
 
