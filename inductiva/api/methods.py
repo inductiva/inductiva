@@ -144,28 +144,25 @@ def upload_input(api_instance: TasksApi, input_dir, kwargs, task_id,
         input_zip_path, zip_file_size = prepare_input(task_id, input_dir,
                                                       kwargs)
 
-            remote_input_zip_path = f"{storage_path_prefix}/{task_id}/input.zip"
-            url = storage.get_signed_urls(
-                paths=[remote_input_zip_path],
-                operation="upload",
-            )[0]
+        remote_input_zip_path = f"{storage_path_prefix}/{task_id}/input.zip"
+        url = storage.get_signed_urls(
+            paths=[remote_input_zip_path],
+            operation="upload",
+        )[0]
 
-            with tqdm.tqdm(total=zip_file_size,
-                           unit="B",
-                           unit_scale=True,
-                           unit_divisor=1000) as progress_bar:
-                upload_file(api_instance, input_zip_path, "PUT", url, progress_bar)
-                notify_upload_complete(
-                    api_instance.notify_input_uploaded,
-                    path_params={"task_id": task_id},
-                )
+        with tqdm.tqdm(total=zip_file_size,
+                        unit="B",
+                        unit_scale=True,
+                        unit_divisor=1000) as progress_bar:
+            upload_file(api_instance, input_zip_path, "PUT", url, progress_bar)
+            notify_upload_complete(
+                api_instance.notify_input_uploaded,
+                path_params={"task_id": task_id},
+            )
 
-            logging.info("Local input directory successfully uploaded.")
-            logging.info("")
+        logging.info("Local input directory successfully uploaded.")
+        logging.info("")
 
-    finally:
-        if input_zip_path:
-        
     finally:
         if input_zip_path:
             os.remove(input_zip_path)
@@ -395,7 +392,6 @@ def submit_task(simulator,
     if task_submitted_info["status"] == "pending-input":
         # Use the blocking task context
         with blocking_task_context(task_api_instance, task_id, "input upload"):        # Use the blocking task context
-        with blocking_task_context(api_instance, task_id, "input upload"):
                 upload_input(
                     api_instance=task_api_instance,
                     input_dir=input_dir,
