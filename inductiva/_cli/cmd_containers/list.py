@@ -3,7 +3,7 @@ List all container files inside a specified (or default) storage folder.
 """
 
 import argparse
-from inductiva import storage
+from inductiva import storage, client
 
 
 def list_containers(args):
@@ -13,7 +13,19 @@ def list_containers(args):
     if not output_path:
         output_path = default_folder
 
-    storage.listdir(output_path, args.max_results)
+    try:
+        storage.listdir(output_path, args.max_results)
+    except client.exceptions.ApiException as e:
+        if e.status == 404:
+            error_msg = f"Folder '{output_path}' not found on remote storage."
+            if output_path == default_folder:
+                error_msg += ("\nUse the `inductiva containers upload` command "
+                              "to upload a container to the remote storage.")
+            print(error_msg)
+            return False
+    except Exception as e:
+        print(f"Unkown error while listing containers.")
+        return False
 
 
 def register(parser):
