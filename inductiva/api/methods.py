@@ -351,6 +351,7 @@ def submit_task(simulator,
     if current_project is not None:
         if not current_project.opened:
             raise RuntimeError("Trying to submit a task to a closed project.")
+        current_project = current_project.name
 
     if not remote_assets:
         remote_assets = []
@@ -360,7 +361,7 @@ def submit_task(simulator,
 
     task_request = TaskRequest(simulator=simulator,
                                params=kwargs,
-                               project=current_project.name,
+                               project=current_project,
                                resource_pool=machine_group.id,
                                container_image=container_image,
                                storage_path_prefix=storage_path_prefix,
