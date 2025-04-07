@@ -23,8 +23,8 @@ def list_containers(args):
                               "to upload a container to the remote storage.")
             print(error_msg)
             return False
-    except Exception as e:
-        print(f"Unkown error while listing containers.")
+    except Exception:  # pylint: disable=broad-exception-caught
+        print("Unkown error while listing containers.")
         return False
 
 

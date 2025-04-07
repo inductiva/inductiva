@@ -67,7 +67,7 @@ def upload_container(args):
                 return
 
             print(
-                f"Uploading '{sif_folder_path}' to remote dir '{folder_name}'..."
+                f"Uploading '{sif_folder_path}' to remote dir '{folder_name}'.."
             )
             storage.upload(local_path=sif_folder_path, remote_dir=folder_name)
 
@@ -76,7 +76,7 @@ def upload_container(args):
             print("To use the container, instantiate it with:")
             print(f"\t > inductiva://{folder_name}/{filename}")
     except Exception as e:  # pylint: disable=broad-exception-caught
-        print(f"❌ Failed to upload container")
+        print("❌ Failed to upload container")
         print(f"Error details: {str(e)}")
         return
 

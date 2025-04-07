@@ -153,7 +153,7 @@ def convert_image(args, fout: TextIO = sys.stdout):
                       file=fout)
         return False
 
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-exception-caught
         print(f"Error during conversion: {e}", file=fout)
         return False
 
