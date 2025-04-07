@@ -1311,7 +1311,7 @@ class Task:
                 "\n"
                 f"Time Since Last Modification: {formatted_seconds}")
 
-    def last_modified_file(self, fout: TextIO = sys.stdout):
+    def last_modified_file(self):
         """
         Display the last modified file for a given task.
 
@@ -1319,8 +1319,6 @@ class Task:
         modified file associated with a specified task. It validates that the 
         task computation has started before proceeding. If the task is invalid 
         or not started, an error message is printed to `stderr`.
-        Args:
-            fout: The file object to print the result to. Default is stdout.
         """
 
         result, return_code = self._run_streaming_command(
