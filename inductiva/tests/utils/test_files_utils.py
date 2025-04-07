@@ -85,78 +85,25 @@ def test_resolve_output_path():
     assert resolved_path == pathlib.Path("/tmp/protein.pdb")
 
 
-def test_unpack_value_with_path():
-    # Setup
-    value = "test_file.txt"
-    var_type = pathlib.Path
-    output_dir = pathlib.Path("/tmp")
-    expected = output_dir / value
-
-    result = data.unpack_value(value, var_type, output_dir)
-    assert result == expected, f"Expected {expected}, got {result}"
-
-
-def test_get_validate_request_params():
-    """Test get_validate_request_params function."""
-    original_params = {"param1": "value1", "param2": pathlib.Path("/some/path")}
-    type_annotations = {"param1": str, "param2": pathlib.Path}
-
-    expected_params = {
-        "param1": "value1",
-        "param2": str(pathlib.Path("/some/path"))
-    }
-
-    validated_params = data.get_validate_request_params(original_params,
-                                                        type_annotations)
-    assert validated_params == expected_params
-
-
-def test_pack_param(tmp_path: pathlib.Path):
-    """Test pack_param function."""
-    src_dir = tmp_path / "src"
-    src_dir.mkdir()
-    (src_dir / "file.txt").write_text("Hello, World!")
-
-    dst_dir = tmp_path / "dst"
-    dst_dir.mkdir()
-
-    param_value = data.pack_param("param", src_dir, pathlib.Path, dst_dir)
-    assert param_value == "param"
-    assert (dst_dir / "param" / "file.txt").exists()
-
-
 def test_pack_input(tmp_path: pathlib.Path):
     """Test pack_input function."""
     dir_path = tmp_path / "dir"
     dir_path.mkdir()
     (dir_path / "file_in_dir.txt").write_text("Hello, Directory!")
-    params_dir = {"param1": "value1", "param2": dir_path}
-    type_annotations_dir = {"param1": str, "param2": pathlib.Path}
+    params = {"param1": "value1", "param2": "value2"}
     zip_name_dir = "test_zip_dir"
 
-    zip_path_dir = data.pack_input(params_dir, type_annotations_dir,
-                                   zip_name_dir)
+    zip_path_dir = data.pack_input(dir_path, params, zip_name_dir)
     assert zipfile.is_zipfile(zip_path_dir)
 
     with zipfile.ZipFile(zip_path_dir, "r") as zip_f:
+        print(zip_f.namelist())
         assert "input.json" in zip_f.namelist()
-        assert "param2/file_in_dir.txt" in zip_f.namelist()
+        assert "sim_dir/file_in_dir.txt" in zip_f.namelist()
         with zip_f.open("input.json") as input_file:
             input_params = json.load(input_file)
             assert input_params["param1"] == "value1"
-            assert input_params["param2"] == "param2"
-
-
-def test_unpack_output(tmp_path: pathlib.Path):
-    """Test unpack_output function."""
-    # Setup the output.json file
-    result_list = ["output.json"]
-    output_json_path = tmp_path / "output.json"
-    output_json_path.write_text(json.dumps(["result"]))
-
-    # Test case when return_type is pathlib.Path
-    unpacked_output = data.unpack_output(result_list, tmp_path, pathlib.Path)
-    assert unpacked_output == tmp_path
+            assert input_params["param2"] == "value2"
 
 
 def test_extract_output(tmp_path: pathlib.Path):
