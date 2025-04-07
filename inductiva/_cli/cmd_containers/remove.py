@@ -20,7 +20,7 @@ def rm_container(args):
     # Check if container exists
     try:
         contents = storage.listdir(folder, max_results=100, print_results=False)
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         print(f"Error accessing remote folder '{folder}': {e}", file=sys.stderr)
         return 1
 
@@ -47,7 +47,7 @@ def rm_container(args):
         storage.remove_workspace(container_path)
         print(f"✅ Container '{container_name}' removed.")
         return 0
-    except Exception as e:
+    except Exception as e:  # pylint: disable=broad-except
         print(f"Error removing container: {e}", file=sys.stderr)
         return 1
 
