@@ -148,7 +148,7 @@ def convert_image(args, fout: TextIO = sys.stdout):
                 container.kill()
                 container.remove(force=True)
                 print("🧹 Container stopped and removed.", file=fout)
-            except Exception as cleanup_err:
+            except Exception as cleanup_err:  # pylint: disable=broad-exception-caught
                 print(f"⚠️ Failed to clean up container: {cleanup_err}",
                       file=fout)
         return False
