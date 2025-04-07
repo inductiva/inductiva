@@ -97,7 +97,6 @@ def test_pack_input(tmp_path: pathlib.Path):
     assert zipfile.is_zipfile(zip_path_dir)
 
     with zipfile.ZipFile(zip_path_dir, "r") as zip_f:
-        print(zip_f.namelist())
         assert "input.json" in zip_f.namelist()
         assert "sim_dir/file_in_dir.txt" in zip_f.namelist()
         with zip_f.open("input.json") as input_file:

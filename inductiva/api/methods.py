@@ -323,23 +323,33 @@ def submit_task(simulator,
                 container_image: Optional[str] = None,
                 simulator_name_alias: Optional[str] = None,
                 simulator_obj=None,
-                remote_assets: Optional[List[str]] = None,
-                project_name: Optional[str] = None):
+                remote_assets: Optional[List[str]] = None):
     """Submit a task and send input files to the API.
     
     Args:
+        simulator: The simulator to use
         input_dir: Directory containing the input files to be uploaded.
-        container_image: The container image to use for the simulation
-            Example: container_image="docker://inductiva/kutu:xbeach_v1.23_dev"
+        machine_group: Group of machines with a queue to submit the task to.
+        kwargs: Additional parameters to pass to the simulator
+        storage_path_prefix: Path prefix for storing simulation data
         resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
+        container_image: The container image to use for the simulation
+            Example: container_image="docker://inductiva/kutu:xbeach_v1.23_dev"
+        simulator_name_alias: Optional alias name for the simulator
+        simulator_obj: Optional simulator object with additional configuration
         remote_assets: Additional input files that will be copied to the
                 simulation from a bucket or from another task output.
     Return:
         Returns the task id.
     """
+
+    current_project = inductiva.projects.get_current_project()
+    if current_project is not None:
+        if not current_project.opened:
+            raise RuntimeError("Trying to submit a task to a closed project.")
 
     if not remote_assets:
         remote_assets = []
@@ -352,7 +362,7 @@ def submit_task(simulator,
 
     task_request = TaskRequest(simulator=simulator,
                                params=kwargs,
-                               project=project_name,
+                               project=current_project.name,
                                resource_pool=machine_group.id,
                                container_image=container_image,
                                storage_path_prefix=storage_path_prefix,
