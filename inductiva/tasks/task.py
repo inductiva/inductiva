@@ -1221,21 +1221,12 @@ class Task:
             A string with the formatted directory listing.
             The return code for the command. 0 if successful, 1 if failed.
         """
-        buffer = io.StringIO()
 
-        ret_code = self._run_streaming_command(lambda: self._file_operation(
-            Operations.LIST, formatter=self._format_directory_listing),
-                                               fout=buffer)
-        # if the command failed, print the error message
-        # and return None
-        if ret_code != 0:
-            print(
-                f"Error: {buffer.getvalue()}",
-                file=sys.stderr,
-            )
-            return None, ret_code
+        result, return_code = self._run_streaming_command(
+            lambda: self._file_operation(
+                Operations.LIST, formatter=self._format_directory_listing))
 
-        return buffer.getvalue(), ret_code
+        return result, return_code
 
     async def _gather_and_consume(self, generators: List[AsyncGenerator],
                                   fout: TextIO):
@@ -1331,11 +1322,14 @@ class Task:
         Args:
             fout: The file object to print the result to. Default is stdout.
         """
-        return self._run_streaming_command(lambda: self._file_operation(
-            Operations.LAST_MODIFIED_FILE,
-            formatter=self._last_modified_file_formatter,
-        ),
-                                           fout=fout)
+
+        result, return_code = self._run_streaming_command(
+            lambda: self._file_operation(
+                Operations.LAST_MODIFIED_FILE,
+                formatter=self._last_modified_file_formatter,
+            ))
+
+        return result, return_code
 
     async def _run_tail_on_machine(self,
                                    filename: str,
@@ -1383,9 +1377,18 @@ class Task:
             fout: The file object to print the result to. Default is stdout.
 
         """
-        return self._run_streaming_command(lambda: self._file_operation(
-            Operations.TOP, formatter=lambda _: _, follow=False),
-                                           fout=fout)
+        result, return_code = self._run_streaming_command(
+            lambda: self._file_operation(
+                Operations.TOP, formatter=lambda _: _, follow=False))
+
+        if return_code != 0:
+            print(
+                f"Error: {result}",
+                file=sys.stderr,
+            )
+            return None, return_code
+
+        return result, return_code
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""
@@ -1532,16 +1535,18 @@ class Task:
         return 0
 
     def _run_streaming_command(self,
-                               generator_factory: Callable[[], AsyncGenerator],
-                               fout: TextIO = sys.stdout):
+                               generator_factory: Callable[[], AsyncGenerator]):
         if not self._validate_task_computation_started():
-            return 1
+            return None, 1
 
         if inductiva.is_notebook():
             nest_asyncio.apply()
 
-        asyncio.run(self._gather_and_consume([generator_factory()], fout))
-        return 0
+        buffer = io.StringIO()
+
+        asyncio.run(self._gather_and_consume([generator_factory()], buffer))
+
+        return buffer.getvalue(), 0
 
     @property
     def summary(self) -> str:

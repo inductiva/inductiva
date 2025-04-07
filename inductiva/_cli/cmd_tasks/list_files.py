@@ -11,8 +11,8 @@ def list_files(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task = tasks.Task(task_id)
 
     directories, ret_code = task.list_files()
-
-    print(directories, file=fout)
+    if directories:
+        print(directories, file=fout)
     return ret_code
 
 

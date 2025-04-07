@@ -18,7 +18,12 @@ def last_modifed_file(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
 
-    return task.last_modified_file(fout)
+    result, return_code = task.last_modified_file(fout)
+
+    if result:
+        print(result, file=fout)
+
+    return return_code
 
 
 def register(parser):
