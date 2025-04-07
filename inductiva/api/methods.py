@@ -12,14 +12,15 @@ import signal
 import urllib3
 import decimal
 from contextlib import contextmanager
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional, Type
 
 import logging
 
 import inductiva
 from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
-from inductiva.client.models import TaskRequest, TaskStatus, TaskSubmittedInfo
+from inductiva.client.models import (TaskRequest, TaskStatus, TaskSubmittedInfo,
+                                     CompressionMethod)
 from inductiva import types, constants, storage
 from inductiva.utils.data import pack_input
 from inductiva.utils import format_utils, files
