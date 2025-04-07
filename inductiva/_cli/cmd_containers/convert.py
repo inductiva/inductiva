@@ -122,8 +122,8 @@ def convert_image(args, fout: TextIO = sys.stdout):
         "build", f"{out_mount_path}/{output_filename}", conversion_source
     ]
 
+    container = None
     try:
-        # Run the Apptainer builder container on the linux/amd64 platform.
         container = client.containers.run(
             image=constants.TASK_RUNNER_IMAGE,
             name="apptainer-converter",
@@ -132,17 +132,28 @@ def convert_image(args, fout: TextIO = sys.stdout):
             mounts=mounts,
             platform="linux/amd64",
             detach=True,
-            auto_remove=True,
+            auto_remove=False,
         )
 
-        print(
-            "Conversion started with container ID:",
-            container.short_id,
-            file=fout,
-        )
+        print("Conversion started with container ID:",
+              container.short_id,
+              file=fout)
         join_container_streams(container, fout=fout)
         print(f"Conversion complete. Output saved at: {output}", file=fout)
-    except Exception as e:  # pylint: disable=broad-exception-caught
+
+    except KeyboardInterrupt:
+        print("\n⚠️ Conversion interrupted by user. Cleaning up...", file=fout)
+        if container:
+            try:
+                container.kill()
+                container.remove(force=True)
+                print("🧹 Container stopped and removed.", file=fout)
+            except Exception as cleanup_err:
+                print(f"⚠️ Failed to clean up container: {cleanup_err}",
+                      file=fout)
+        return False
+
+    except Exception as e:
         print(f"Error during conversion: {e}", file=fout)
         return False
 
