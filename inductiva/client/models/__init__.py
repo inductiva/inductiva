@@ -15,6 +15,7 @@ from inductiva.client.model.autoscale_policy import AutoscalePolicy
 from inductiva.client.model.backend_version import BackendVersion
 from inductiva.client.model.cpu_info import CPUInfo
 from inductiva.client.model.capability import Capability
+from inductiva.client.model.compression_method import CompressionMethod
 from inductiva.client.model.cost_components import CostComponents
 from inductiva.client.model.cost_detail import CostDetail
 from inductiva.client.model.cost_type import CostType
@@ -24,6 +25,7 @@ from inductiva.client.model.currency_code import CurrencyCode
 from inductiva.client.model.disk_resize_request import DiskResizeRequest
 from inductiva.client.model.dynamic_disk_resize_config import DynamicDiskResizeConfig
 from inductiva.client.model.executer import Executer
+from inductiva.client.model.feature_flag import FeatureFlag
 from inductiva.client.model.file_info import FileInfo
 from inductiva.client.model.gpu_info import GPUInfo
 from inductiva.client.model.http_validation_error import HTTPValidationError
@@ -66,6 +68,8 @@ from inductiva.client.model.storage_file_info import StorageFileInfo
 from inductiva.client.model.storage_operation import StorageOperation
 from inductiva.client.model.storage_operation_name import StorageOperationName
 from inductiva.client.model.storage_sort_by import StorageSortBy
+from inductiva.client.model.stripe_customer_info import StripeCustomerInfo
+from inductiva.client.model.stripe_customer_info_update import StripeCustomerInfoUpdate
 from inductiva.client.model.task import Task
 from inductiva.client.model.task_connection import TaskConnection
 from inductiva.client.model.task_machine_operation import TaskMachineOperation
