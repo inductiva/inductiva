@@ -10,10 +10,10 @@ def list_files(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
 
-    directories = task.list_files()
-
-    print(directories, file=fout)
-    return 0
+    directories, ret_code = task.list_files()
+    if directories:
+        print(directories, file=fout)
+    return ret_code
 
 
 def register(parser):
