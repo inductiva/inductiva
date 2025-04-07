@@ -32,18 +32,22 @@ class CostComponents(schemas.DictSchema):
     class MetaOapg:
         required = {
             "compute",
+            "data_transfer",
             "storage",
         }
 
         class properties:
             compute = schemas.NumberSchema
             storage = schemas.NumberSchema
+            data_transfer = schemas.NumberSchema
             __annotations__ = {
                 "compute": compute,
                 "storage": storage,
+                "data_transfer": data_transfer,
             }
 
     compute: MetaOapg.properties.compute
+    data_transfer: MetaOapg.properties.data_transfer
     storage: MetaOapg.properties.storage
 
     @typing.overload
@@ -59,12 +63,19 @@ class CostComponents(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["data_transfer"]
+    ) -> MetaOapg.properties.data_transfer:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "compute",
         "storage",
+        "data_transfer",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -83,6 +94,12 @@ class CostComponents(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["data_transfer"]
+    ) -> MetaOapg.properties.data_transfer:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -90,6 +107,7 @@ class CostComponents(schemas.DictSchema):
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "compute",
         "storage",
+        "data_transfer",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -101,6 +119,12 @@ class CostComponents(schemas.DictSchema):
         ],
         compute: typing.Union[
             MetaOapg.properties.compute,
+            decimal.Decimal,
+            int,
+            float,
+        ],
+        data_transfer: typing.Union[
+            MetaOapg.properties.data_transfer,
             decimal.Decimal,
             int,
             float,
@@ -121,6 +145,7 @@ class CostComponents(schemas.DictSchema):
             cls,
             *_args,
             compute=compute,
+            data_transfer=data_transfer,
             storage=storage,
             _configuration=_configuration,
             **kwargs,

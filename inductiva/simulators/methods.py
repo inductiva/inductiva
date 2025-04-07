@@ -43,7 +43,7 @@ def list_available_images():
     url = f"{DOCKERHUB_URL}?page_size=100"
 
     while url is not None:
-        resp = requests.get(url, timeout=10)
+        resp = requests.get(url, timeout=120)
         data = resp.json()
 
         for tag in data["results"]:

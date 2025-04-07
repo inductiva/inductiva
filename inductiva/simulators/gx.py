@@ -18,7 +18,7 @@ class GX(simulators.Simulator):
                 the simulator. By default (False), the production version
                 is used.
         """
-        super().__init__(version=version, use_dev=use_dev)
+        super().__init__(version=version, use_dev=use_dev, device="gpu")
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "gx"
 
