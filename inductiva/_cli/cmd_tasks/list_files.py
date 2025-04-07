@@ -10,14 +10,10 @@ def list_files(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
 
-    directories = task.list_files()
-
-    # Command failed
-    if directories == 1:
-        return 1
+    directories, ret_code = task.list_files()
 
     print(directories, file=fout)
-    return 0
+    return ret_code
 
 
 def register(parser):

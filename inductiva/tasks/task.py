@@ -1,8 +1,9 @@
 """Manage running/completed tasks on the Inductiva API."""
-import asyncio
+import io
 import sys
 import time
 import json
+import asyncio
 import pathlib
 import logging
 import datetime
@@ -1210,15 +1211,31 @@ class Task:
         if self.file_tracker is not None:
             await self.file_tracker.cleanup()
 
-    def list_files(self, fout: TextIO = sys.stdout):
+    def list_files(self):
         """List the files in the task's working directory.
         
         This method will list the files, in real time, in the task's working
         directory. It will also print the files in a tree-like structure.
+
+        returns:
+            A string with the formatted directory listing.
+            The return code for the command. 0 if successful, 1 if failed.
         """
-        return self._run_streaming_command(lambda: self._file_operation(
+        buffer = io.StringIO()
+
+        ret_code = self._run_streaming_command(lambda: self._file_operation(
             Operations.LIST, formatter=self._format_directory_listing),
-                                           fout=fout)
+                                               fout=buffer)
+        # if the command failed, print the error message
+        # and return None
+        if ret_code != 0:
+            print(
+                f"Error: {buffer.getvalue()}",
+                file=sys.stderr,
+            )
+            return None, ret_code
+
+        return buffer.getvalue(), ret_code
 
     async def _gather_and_consume(self, generators: List[AsyncGenerator],
                                   fout: TextIO):
