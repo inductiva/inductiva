@@ -53,13 +53,13 @@ def convert_image(args, fout: TextIO = sys.stdout):
             "'pip install inductiva[task-runner]' to install it.",
             file=fout,
         )
-        return
+        return False
 
     try:
         client = docker.from_env()
     except DockerException as e:
         print(f"Failed to connect to Docker: {e}", file=fout)
-        return
+        return False
 
     # Prepare output file path
     output = os.path.abspath(args.output)
@@ -83,8 +83,11 @@ def convert_image(args, fout: TextIO = sys.stdout):
         try:
             image_obj = client.images.get(source)
         except ImageNotFound:
-            print(f"Local image '{source}' not found.", file=fout)
-            return
+            print(
+                f"Local image '{source}' not found. "
+                "\nThe image must be pulled or built in the system",
+                file=fout)
+            return False
 
         # Save the image to a temporary tar file.
         with tempfile.NamedTemporaryFile(suffix=".tar", delete=False) as tmp:
@@ -141,7 +144,7 @@ def convert_image(args, fout: TextIO = sys.stdout):
         print(f"Conversion complete. Output saved at: {output}", file=fout)
     except Exception as e:  # pylint: disable=broad-exception-caught
         print(f"Error during conversion: {e}", file=fout)
-        return
+        return False
 
     # Clean up the temporary tar file if one was created.
     if tmp_tar_path and os.path.exists(tmp_tar_path):
@@ -151,6 +154,9 @@ def convert_image(args, fout: TextIO = sys.stdout):
             print(
                 f"Warning: could not remove temporary file {tmp_tar_path}: {e}",
                 file=fout)
+            return False
+
+    return True
 
 
 def register(parser):

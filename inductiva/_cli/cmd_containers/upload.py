@@ -52,21 +52,33 @@ def upload_container(args):
     filename = os.path.basename(output_path)
 
     # Create temp folder to hold .sif
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        sif_folder_path = os.path.join(tmp_dir, folder_name)
-        os.makedirs(sif_folder_path, exist_ok=True)
-        sif_file_path = os.path.join(sif_folder_path, filename)
+    try:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            sif_folder_path = os.path.join(tmp_dir, folder_name)
+            os.makedirs(sif_folder_path, exist_ok=True)
+            sif_file_path = os.path.join(sif_folder_path, filename)
 
-        convert_args = argparse.Namespace(image=args.image,
-                                          output=sif_file_path)
+            convert_args = argparse.Namespace(image=args.image,
+                                              output=sif_file_path)
 
-        print(f"Converting {args.image} -> {sif_file_path}...")
-        convert_image(convert_args)
+            print(f"Converting {args.image} -> {sif_file_path}...")
+            if not convert_image(convert_args):
+                print("❌ Conversion failed.")
+                return
 
-        print(f"Uploading '{sif_folder_path}' to remote dir '{folder_name}'...")
-        storage.upload(local_path=sif_folder_path, remote_dir=folder_name)
+            print(
+                f"Uploading '{sif_folder_path}' to remote dir '{folder_name}'..."
+            )
+            storage.upload(local_path=sif_folder_path, remote_dir=folder_name)
 
-        print("✅ Upload complete.")
+            # Print the remote path
+            print("✅ Upload complete.")
+            print("To use the container, instantiate it with:")
+            print(f"\t > inductiva://{folder_name}/{filename}")
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        print(f"❌ Failed to upload container")
+        print(f"Error details: {str(e)}")
+        return
 
 
 def register(parser):
