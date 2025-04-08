@@ -1,10 +1,5 @@
 """CLI for logs."""
-import re
 import sys
-from time import sleep
-from typing import Tuple
-
-from inductiva import constants
 
 from .. import utils as cli_utils
 from ... import tasks
