@@ -5,8 +5,8 @@ import time
 from typing import List, Optional, Union
 
 from inductiva import tasks
-from inductiva import client as api_client
-# from inductiva.client import ApiException
+from inductiva import api as inductiva_api
+from inductiva.client import ApiException
 # from inductiva.client import models
 from inductiva.client.apis.tags import projects_api
 from inductiva.utils.format_utils import bytes_formatter, currency_formatter, timedelta_formatter
@@ -18,9 +18,9 @@ def get_projects():
     """Gets all the user's projects."""
     try:
         _logger.debug("Trying to get remote projects")
-        api = projects_api.ProjectsApi(api_client.get_client())
+        api = projects_api.ProjectsApi(inductiva_api.get_client())
         response = api.get_user_projects()
-    except api_client.ApiException as ex:
+    except ApiException as ex:
         _logger.error("Failed to get remote projects", exc_info=ex)
         raise ex
 
@@ -57,11 +57,11 @@ class Project:
     def _get_project(self, name: str):
         """Fetches the project info from the backend."""
         try:
-            api_client = projects_api.ProjectsApi(api_client.get_client())
-            response = api_client.get_project({"name": name})
+            api = projects_api.ProjectsApi(inductiva_api.get_client())
+            response = api.get_project({"name": name})
             print(type(response.body))
             return response.body
-        except api_client.ApiException as ex:
+        except ApiException as ex:
             if ex.status != 404:
                 _logger.error("Failed to get project %s", name, exc_info=ex)
                 raise ex
@@ -70,10 +70,10 @@ class Project:
     def _create_project(self, name):
         """Creates a project with the given name on the backend."""
         try:
-            api_client = projects_api.ProjectsApi(api_client.get_client())
-            response = api_client.create_project({"name": name})
+            api = projects_api.ProjectsApi(inductiva_api.get_client())
+            response = api.create_project({"name": name})
             return response.body
-        except api_client.ApiException as ex:
+        except ApiException as ex:
             _logger.error("Failed to create project %s", name, exc_info=ex)
             raise RuntimeError(f"Unable to create project {name}") from ex
 
@@ -103,7 +103,7 @@ class Project:
     @property
     def task_by_status(self) -> dict:
         return {
-            api_client.models.TaskStatusCode(attr): int(value) for attr, value in
+            inductiva_api.models.TaskStatusCode(attr): int(value) for attr, value in
             self._proj_data.get("task_status_overview").items()
         }
 
@@ -202,9 +202,9 @@ class Project:
             task: The task to add to the project.
         """
         try:
-            api_client = projects_api.ProjectsApi(api_client.get_client())
-            api_client.add_task_to_project(self.id, {"task_id": task.id})
-        except api_client.ApiException as ex:
+            api = projects_api.ProjectsApi(inductiva_api.get_client())
+            api.add_task_to_project({"task_id": task.id, "name": self.name})
+        except ApiException as ex:
             _logger.error("Failed to add task %s to project %s",
                           task.id,
                           self.name,
@@ -214,7 +214,7 @@ class Project:
     def get_tasks(
         self,
         last_n: int = -1,
-        status: Optional[Union[str, api_client.models.TaskStatusCode]] = None
+        status: Optional[str] = None
     ) -> List[tasks.Task]:
         """Get the the tasks of this project.
 
@@ -227,7 +227,7 @@ class Project:
             status: Status of the tasks to get. If `None`, tasks with any
                 status will be returned.
         """
-        return tasks.get_tasks(last_n=last_n, project=self, status=status)
+        return tasks.get_tasks(last_n=last_n, project=self.name, status=status)
 
     def wait(self):
         """ Wait for all the tasks in a project to complete."""
