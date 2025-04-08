@@ -19,8 +19,6 @@ APPTAINER_CONVERTER_IMAGE = os.environ.get(
     "INDUCTIVA_APPTAINER_CONVERTER_IMAGE",
     "inductiva/kutu:apptainer-converter_v0.1.0_dev")
 
-DEFAULT_QUEUE_MACHINE_TYPE = "c2-standard-4"
-
 TASK_KILL_MAX_API_REQUESTS = 5
 
 TASK_KILL_RETRY_SLEEP_SEC = 1.0

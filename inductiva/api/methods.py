@@ -301,17 +301,8 @@ def task_info_str(
     local_input_dir = params["sim_dir"]
     info_str += (f"\t· Local input directory: {local_input_dir}\n"
                  "\t· Submitting to the following computational resources:\n")
-    if resource_pool is not None:
-        info_str += f" \t\t· {resource_pool}\n"
-    else:
-        machine_type = constants.DEFAULT_QUEUE_MACHINE_TYPE
-        info_str += f" \t\t· Default queue with {machine_type} machines.\n"
-        ttl_seconds = task_submitted_info.get("time_to_live_seconds")
-        if ttl_seconds is not None and isinstance(ttl_seconds, decimal.Decimal):
-            ttl_seconds = format_utils.seconds_formatter(ttl_seconds)
-            info_str += (f" \t\t· Task will be killed after the computation "
-                         f"time exceeds {ttl_seconds} (h:m:s).\n")
-    info_str += "\n"
+    info_str += f" \t\t· {resource_pool}\n"
+
     return info_str
 
 
