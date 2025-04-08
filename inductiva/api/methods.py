@@ -22,7 +22,6 @@ from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.models import (TaskRequest, TaskStatus, TaskSubmittedInfo,
                                      CompressionMethod)
 from inductiva import constants, storage
-from inductiva.utils.data import pack_input
 from inductiva.utils import format_utils, files
 
 
@@ -80,7 +79,7 @@ def prepare_input(task_id, input_dir, kwargs):
             raise ValueError(
                 f"Invalid file name: '{constants.TASK_OUTPUT_ZIP}'")
 
-    input_zip_path = pack_input(
+    input_zip_path = inductiva.utils.data.pack_input(
         input_dir,
         kwargs,
         zip_name=task_id,
@@ -318,7 +317,7 @@ def task_info_str(
 def submit_task(simulator,
                 input_dir,
                 machine_group,
-                kwargs,
+                request_params,
                 storage_path_prefix,
                 resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
@@ -331,7 +330,7 @@ def submit_task(simulator,
         simulator: The simulator to use
         input_dir: Directory containing the input files to be uploaded.
         machine_group: Group of machines with a queue to submit the task to.
-        kwargs: Additional parameters to pass to the simulator
+        request_params: Additional parameters to pass to the simulator.
         storage_path_prefix: Path prefix for storing simulation data
         resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
@@ -356,11 +355,11 @@ def submit_task(simulator,
     if not remote_assets:
         remote_assets = []
 
-    stream_zip = kwargs.pop("stream_zip", True)
-    compress_with = kwargs.pop("compress_with", CompressionMethod.AUTO)
+    stream_zip = request_params.pop("stream_zip", True)
+    compress_with = request_params.pop("compress_with", CompressionMethod.AUTO)
 
     task_request = TaskRequest(simulator=simulator,
-                               params=kwargs,
+                               params=request_params,
                                project=current_project,
                                resource_pool=machine_group.id,
                                container_image=container_image,
