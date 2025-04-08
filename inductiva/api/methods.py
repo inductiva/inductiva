@@ -22,7 +22,6 @@ from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.models import (TaskRequest, TaskStatus, TaskSubmittedInfo,
                                      CompressionMethod)
 from inductiva import constants, storage
-from inductiva.utils.data import pack_input
 from inductiva.utils import format_utils, files
 
 
@@ -66,11 +65,11 @@ def submit_request(task_api_instance: TasksApi,
     return api_response.body
 
 
-def prepare_input(task_id, input_dir, kwargs):
+def prepare_input(task_id, input_dir, params):
     """Prepare the input files for a task submission."""
 
     # If the input directory is empty, do not zip it
-    # still need to zip the input kwargs parameters though
+    # still need to zip the input params parameters though
     if input_dir:
         inputs_size = files.get_path_size(input_dir)
         logging.info("Preparing upload of the local input directory %s (%s).",
@@ -80,9 +79,9 @@ def prepare_input(task_id, input_dir, kwargs):
             raise ValueError(
                 f"Invalid file name: '{constants.TASK_OUTPUT_ZIP}'")
 
-    input_zip_path = pack_input(
+    input_zip_path = inductiva.utils.data.pack_input(
         input_dir,
-        kwargs,
+        params,
         zip_name=task_id,
     )
 
@@ -130,7 +129,7 @@ def notify_upload_complete(api_endpoint,
     api_endpoint(**params)
 
 
-def upload_input(api_instance: TasksApi, input_dir, kwargs, task_id,
+def upload_input(api_instance: TasksApi, input_dir, params, task_id,
                  storage_path_prefix):
     """Uploads the inputs of a given task to the API.
 
@@ -138,12 +137,12 @@ def upload_input(api_instance: TasksApi, input_dir, kwargs, task_id,
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task.
         input_dir: Directory containing the input files to be uploaded.
-        kwargs: Additional parameters to be sent to the API.
+        params: Additional parameters to be sent to the API.
         storage_path_prefix: Path to the storage bucket.
         """
     try:
         input_zip_path, zip_file_size = prepare_input(task_id, input_dir,
-                                                      kwargs)
+                                                      params)
 
         remote_input_zip_path = f"{storage_path_prefix}/{task_id}/input.zip"
         url = storage.get_signed_urls(
@@ -318,7 +317,7 @@ def task_info_str(
 def submit_task(simulator,
                 input_dir,
                 machine_group,
-                kwargs,
+                params,
                 storage_path_prefix,
                 resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
@@ -328,37 +327,36 @@ def submit_task(simulator,
                 project_name: Optional[str] = None):
     """Submit a task and send input files to the API.
     
-    Args:	
-    simulator: The simulator to use	
-    input_dir: Directory containing the input files to be uploaded.	
-    machine_group: Group of machines with a queue to submit the task to.	
-    kwargs: Additional parameters to pass to the simulator	
-    storage_path_prefix: Path prefix for storing simulation data	
-    resubmit_on_preemption (bool): Resubmit task for execution when
-            previous execution attempts were preempted. Only applicable when	
-            using a preemptible resource, i.e., resource instantiated with	
-            `spot=True`.	
-    container_image: The container image to use for the simulation	
-        Example: container_image="docker://inductiva/kutu:xbeach_v1.23_dev"	
-    simulator_name_alias: Optional alias name for the simulator	
-    simulator_obj: Optional simulator object with additional configuration	
-    remote_assets: Additional input files that will be copied to the	
-            simulation from a bucket or from another task output.	
-            
-    Return:	
-        Returns the task id.	
+    Args:
+        simulator: The simulator to use
+        input_dir: Directory containing the input files to be uploaded.
+        machine_group: Group of machines with a queue to submit the task to.
+        params: Additional parameters to pass to the simulator.
+        storage_path_prefix: Path prefix for storing simulation data
+        resubmit_on_preemption (bool): Resubmit task for execution when
+                previous execution attempts were preempted. Only applicable when
+                using a preemptible resource, i.e., resource instantiated with
+                `spot=True`.
+        container_image: The container image to use for the simulation
+            Example: container_image="docker://inductiva/kutu:xbeach_v1.23_dev"
+        simulator_name_alias: Optional alias name for the simulator
+        simulator_obj: Optional simulator object with additional configuration
+        remote_assets: Additional input files that will be copied to the
+                simulation from a bucket or from another task output.
+    Return:
+        Returns the task id.
     """
 
     if not remote_assets:
         remote_assets = []
 
-    stream_zip = kwargs.pop("stream_zip", True)
-    compress_with = kwargs.pop("compress_with", CompressionMethod.AUTO)
+    stream_zip = params.pop("stream_zip", True)
+    compress_with = params.pop("compress_with", CompressionMethod.AUTO)
 
     task_request = TaskRequest(simulator=simulator,
-                               kwargs=kwargs,
+                               params=params,
                                project=project_name,
-                               machine_group=machine_group,
+                               resource_pool=machine_group.id,
                                container_image=container_image,
                                storage_path_prefix=storage_path_prefix,
                                simulator_name_alias=simulator_name_alias,
@@ -396,7 +394,7 @@ def submit_task(simulator,
             upload_input(
                 api_instance=task_api_instance,
                 input_dir=input_dir,
-                kwargs=kwargs,
+                params=params,
                 task_id=task_id,
                 storage_path_prefix=storage_path_prefix,
             )

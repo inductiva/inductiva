@@ -36,7 +36,7 @@ def run_simulation(
     task_id = methods.submit_task(simulator,
                                   input_dir=input_dir,
                                   machine_group=machine_group,
-                                  kwargs=kwargs,
+                                  params=kwargs,
                                   storage_path_prefix=storage_dir,
                                   resubmit_on_preemption=resubmit_on_preemption,
                                   container_image=container_image,
