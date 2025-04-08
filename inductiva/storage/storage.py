@@ -61,10 +61,13 @@ def get_space_used():
     return storage_used
 
 
-def listdir(path="/",
-            max_results: int = 10,
-            order_by: Literal["size", "creation_time"] = "creation_time",
-            sort_order: Literal["asc", "desc"] = "desc"):
+def listdir(
+    path="/",
+    max_results: int = 10,
+    order_by: Literal["size", "creation_time"] = "creation_time",
+    sort_order: Literal["asc", "desc"] = "desc",
+    print_results: bool = True,
+):
     """List and display the contents of the user's storage.
     Args:
         path (str): Storage directory to list. Default is root.
@@ -110,12 +113,14 @@ def listdir(path="/",
             "size": round(float(size), 3),
             "creation_time": creation_time
         })
-    print(_print_contents_table(all_contents))
+    if print_results:
+        print(_print_contents_table(all_contents))
 
-    _print_storage_size_and_cost()
+        _print_storage_size_and_cost()
 
-    print(f"Listed {len(all_contents)} folder(s). Ordered by {order_by}.\n"
-          "Use --max-results/-m to control the number of results displayed.")
+        print(
+            f"Listed {len(all_contents)} folder(s). Ordered by {order_by}.\n"
+            "Use --max-results/-m to control the number of results displayed.")
     return all_contents
 
 
@@ -269,7 +274,7 @@ def upload(
     if os.path.join(remote_dir, constants.TASK_OUTPUT_ZIP) in remote_file_paths:
         raise ValueError(f"Invalid file name: '{constants.TASK_OUTPUT_ZIP}.'")
 
-    logging.info("Uploading input...")
+    logging.info("Uploading content...")
 
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
@@ -297,7 +302,7 @@ def upload(
             except exceptions.ApiException as e:
                 raise e
 
-    logging.info("Input uploaded successfully.")
+    logging.info("Content uploaded successfully.")
 
 
 def download(remote_path: str, local_dir: str = "", decompress: bool = True):
