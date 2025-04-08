@@ -326,7 +326,28 @@ def submit_task(simulator,
                 simulator_obj=None,
                 remote_assets: Optional[List[str]] = None,
                 project_name: Optional[str] = None):
-    """Submit a task and send input files to the API."""
+    """Submit a task and send input files to the API.
+    
+    Args:	
+    simulator: The simulator to use	
+    input_dir: Directory containing the input files to be uploaded.	
+    machine_group: Group of machines with a queue to submit the task to.	
+    kwargs: Additional parameters to pass to the simulator	
+    storage_path_prefix: Path prefix for storing simulation data	
+    resubmit_on_preemption (bool): Resubmit task for execution when
+            previous execution attempts were preempted. Only applicable when	
+            using a preemptible resource, i.e., resource instantiated with	
+            `spot=True`.	
+    container_image: The container image to use for the simulation	
+        Example: container_image="docker://inductiva/kutu:xbeach_v1.23_dev"	
+    simulator_name_alias: Optional alias name for the simulator	
+    simulator_obj: Optional simulator object with additional configuration	
+    remote_assets: Additional input files that will be copied to the	
+            simulation from a bucket or from another task output.	
+            
+    Return:	
+        Returns the task id.	
+    """
 
     if not remote_assets:
         remote_assets = []
