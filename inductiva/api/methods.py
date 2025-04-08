@@ -65,11 +65,11 @@ def submit_request(task_api_instance: TasksApi,
     return api_response.body
 
 
-def prepare_input(task_id, input_dir, kwargs):
+def prepare_input(task_id, input_dir, params):
     """Prepare the input files for a task submission."""
 
     # If the input directory is empty, do not zip it
-    # still need to zip the input kwargs parameters though
+    # still need to zip the input params parameters though
     if input_dir:
         inputs_size = files.get_path_size(input_dir)
         logging.info("Preparing upload of the local input directory %s (%s).",
@@ -81,7 +81,7 @@ def prepare_input(task_id, input_dir, kwargs):
 
     input_zip_path = inductiva.utils.data.pack_input(
         input_dir,
-        kwargs,
+        params,
         zip_name=task_id,
     )
 
@@ -129,7 +129,7 @@ def notify_upload_complete(api_endpoint,
     api_endpoint(**params)
 
 
-def upload_input(api_instance: TasksApi, input_dir, kwargs, task_id,
+def upload_input(api_instance: TasksApi, input_dir, params, task_id,
                  storage_path_prefix):
     """Uploads the inputs of a given task to the API.
 
@@ -137,12 +137,12 @@ def upload_input(api_instance: TasksApi, input_dir, kwargs, task_id,
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task.
         input_dir: Directory containing the input files to be uploaded.
-        kwargs: Additional parameters to be sent to the API.
+        params: Additional parameters to be sent to the API.
         storage_path_prefix: Path to the storage bucket.
         """
     try:
         input_zip_path, zip_file_size = prepare_input(task_id, input_dir,
-                                                      kwargs)
+                                                      params)
 
         remote_input_zip_path = f"{storage_path_prefix}/{task_id}/input.zip"
         url = storage.get_signed_urls(
@@ -317,7 +317,7 @@ def task_info_str(
 def submit_task(simulator,
                 input_dir,
                 machine_group,
-                request_params,
+                params,
                 storage_path_prefix,
                 resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
@@ -330,7 +330,7 @@ def submit_task(simulator,
         simulator: The simulator to use
         input_dir: Directory containing the input files to be uploaded.
         machine_group: Group of machines with a queue to submit the task to.
-        request_params: Additional parameters to pass to the simulator.
+        params: Additional parameters to pass to the simulator.
         storage_path_prefix: Path prefix for storing simulation data
         resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
@@ -355,11 +355,11 @@ def submit_task(simulator,
     if not remote_assets:
         remote_assets = []
 
-    stream_zip = request_params.pop("stream_zip", True)
-    compress_with = request_params.pop("compress_with", CompressionMethod.AUTO)
+    stream_zip = params.pop("stream_zip", True)
+    compress_with = params.pop("compress_with", CompressionMethod.AUTO)
 
     task_request = TaskRequest(simulator=simulator,
-                               params=request_params,
+                               params=params,
                                project=current_project,
                                resource_pool=machine_group.id,
                                container_image=container_image,
@@ -401,7 +401,7 @@ def submit_task(simulator,
             upload_input(
                 api_instance=task_api_instance,
                 input_dir=input_dir,
-                kwargs=kwargs,
+                params=params,
                 task_id=task_id,
                 storage_path_prefix=storage_path_prefix,
             )
