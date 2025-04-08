@@ -2,10 +2,11 @@
 import datetime
 import logging
 import time
-from typing import List, Optional, Union
+from typing import List, Optional
 
 from inductiva import tasks
 from inductiva import api as inductiva_api
+from inductiva.client.models import TaskStatusCode
 from inductiva.client import ApiException
 # from inductiva.client import models
 from inductiva.client.apis.tags import projects_api
@@ -103,8 +104,8 @@ class Project:
     @property
     def task_by_status(self) -> dict:
         return {
-            inductiva_api.models.TaskStatusCode(attr): int(value) for attr, value in
-            self._proj_data.get("task_status_overview").items()
+            TaskStatusCode(attr): int(value) for attr, value
+            in self._proj_data.get("task_status_overview").items()
         }
 
     def _get_project_cost(self):
@@ -146,9 +147,11 @@ class Project:
                     running_tasks_warning = (
                         "Warning: Some tasks may not be finished "
                         "yet. The values presented may change as a result.")
+            # pylint: disable=broad-exception-caught
+            # Catch all exceptions to avoid crashing the program
             except Exception as ex:
-                _logger.error(f"Failed to get all the task info for {task.id}",
-                              exc_info=ex)
+                _logger.error("Failed to get all the task info for %s",
+                              task.id, exc_info=ex)
 
         if len(list_of_tasks) > 0:
             # get start/end time
@@ -211,11 +214,9 @@ class Project:
                           exc_info=ex)
             raise ex
 
-    def get_tasks(
-        self,
-        last_n: int = -1,
-        status: Optional[str] = None
-    ) -> List[tasks.Task]:
+    def get_tasks(self,
+                  last_n: int = -1,
+                  status: Optional[str] = None) -> List[tasks.Task]:
         """Get the the tasks of this project.
 
         Optionally, those can be filtered by task status.

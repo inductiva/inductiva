@@ -62,11 +62,10 @@ def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
     return table
 
 
-def _fetch_tasks_from_api(
-        status: Optional[str] = None,
-        page=1,
-        per_page=10,
-        project: Optional[str] = None) -> List[Dict]:
+def _fetch_tasks_from_api(status: Optional[str] = None,
+                          page=1,
+                          per_page=10,
+                          project: Optional[str] = None) -> List[Dict]:
     """Get information about a user's tasks on the API.
 
     Tags can be filtered by a status. Results are paginated indexed from 1.
@@ -103,11 +102,9 @@ def _fetch_tasks_from_api(
             raise e
 
 
-def get(
-    last_n: int = 5,
-    status: Optional[Union[str, models.TaskStatusCode]] = None,
-    project: Optional[str] = None
-) -> List["inductiva.tasks.Task"]:
+def get(last_n: int = 5,
+        status: Optional[Union[str, models.TaskStatusCode]] = None,
+        project: Optional[str] = None) -> List["inductiva.tasks.Task"]:
     """Get the last N tasks of a user.
 
     This function fetches info about the last N tasks (with respect to

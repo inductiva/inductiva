@@ -7,6 +7,7 @@ def test_create_new_project():
 
     my_proj = inductiva.projects.Project("benchmarks-hackathon")
 
+    # pylint: disable=line-too-long
     expected_str = """Project \'benchmarks-hackathon\' with 8 tasks (id=8b918ccf-84bd-449b-a671-a1bf2ced35ad).
 
 Tasks status:
@@ -40,12 +41,14 @@ def test_get_all_projects():
 def test_add_task_to_project():
     """Tests if can add task to project."""
 
-    task = inductiva.tasks.get_tasks()[0]
+    task = inductiva.tasks.get_tasks(project="default", last_n=10)[0]
     previous_project_name = task.info.project
     previous_project = inductiva.projects.Project(previous_project_name)
 
     new_proj = inductiva.projects.Project("new-project")
     new_proj.add_task(task)
+
+    previous_project.get_tasks(status = task.get_status())
     # Check if the task was added to the new project
     # assert task.info.project == new_proj.name
     # Check if the previous project no longer contains the task
@@ -54,5 +57,3 @@ def test_add_task_to_project():
     # # Check if the task was added to the project
     # assert task.info.project == my_proj.name
     # # Check if the previous project no longer contains the task
-
-
