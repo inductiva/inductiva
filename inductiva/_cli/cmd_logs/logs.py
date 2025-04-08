@@ -10,7 +10,6 @@ from .. import utils as cli_utils
 from ... import tasks
 
 
-
 def stream_task_logs_tail(args):
     task_id = args.mode.lower()
     task = tasks.Task(task_id)

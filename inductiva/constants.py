@@ -3,7 +3,6 @@ import os
 import pathlib
 import platform
 
-
 TURN_SERVER_URL = os.environ.get("INDUCTIVA_TURN_SERVER_URL",
                                  "webrtc.inductiva.ai:3478")
 
