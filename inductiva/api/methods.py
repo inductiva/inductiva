@@ -302,7 +302,13 @@ def task_info_str(
     info_str += (f"\t· Local input directory: {local_input_dir}\n"
                  "\t· Submitting to the following computational resources:\n")
     info_str += f" \t\t· {resource_pool}\n"
-
+    
+    ttl_seconds = task_submitted_info.get("time_to_live_seconds")
+    if ttl_seconds is not None and isinstance(ttl_seconds, decimal.Decimal):
+        ttl_seconds = format_utils.seconds_formatter(ttl_seconds)
+        info_str += (f" \t\t· Task will be killed after the computation "
+                        f"time exceeds {ttl_seconds} (h:m:s).\n")
+    info_str += "\n"
     return info_str
 
 
