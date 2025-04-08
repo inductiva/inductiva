@@ -15,6 +15,7 @@ from inductiva.client.apis.paths.admin_users_email_terms_and_conditions import A
 from inductiva.client.apis.paths.admin_users_username_organization import AdminUsersUsernameOrganization
 from inductiva.client.apis.paths.admin_users_username_credits import AdminUsersUsernameCredits
 from inductiva.client.apis.paths.admin_user_emails import AdminUserEmails
+from inductiva.client.apis.paths.admin_user_buckets import AdminUserBuckets
 from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
 from inductiva.client.apis.paths.admin_users_email import AdminUsersEmail
 from inductiva.client.apis.paths.admin_users_username_storage_size_fs import AdminUsersUsernameStorageSizeFs
@@ -123,6 +124,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsersUsernameCredits,
         PathValues.ADMIN_USER_EMAILS:
             AdminUserEmails,
+        PathValues.ADMIN_USER_BUCKETS:
+            AdminUserBuckets,
         PathValues.ADMIN_USERS_EMAIL_API_KEY:
             AdminUsersEmailApiKey,
         PathValues.ADMIN_USERS_EMAIL:
@@ -308,6 +311,8 @@ path_to_api = PathToApi({
         AdminUsersUsernameCredits,
     PathValues.ADMIN_USER_EMAILS:
         AdminUserEmails,
+    PathValues.ADMIN_USER_BUCKETS:
+        AdminUserBuckets,
     PathValues.ADMIN_USERS_EMAIL_API_KEY:
         AdminUsersEmailApiKey,
     PathValues.ADMIN_USERS_EMAIL:
