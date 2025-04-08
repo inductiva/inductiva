@@ -104,8 +104,8 @@ class Project:
     @property
     def task_by_status(self) -> dict:
         return {
-            TaskStatusCode(attr): int(value) for attr, value
-            in self._proj_data.get("task_status_overview").items()
+            TaskStatusCode(attr): int(value) for attr, value in
+            self._proj_data.get("task_status_overview").items()
         }
 
     def _get_project_cost(self):
@@ -151,7 +151,8 @@ class Project:
             # Catch all exceptions to avoid crashing the program
             except Exception as ex:
                 _logger.error("Failed to get all the task info for %s",
-                              task.id, exc_info=ex)
+                              task.id,
+                              exc_info=ex)
 
         if len(list_of_tasks) > 0:
             # get start/end time
