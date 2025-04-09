@@ -537,12 +537,9 @@ following files:</p>
 <h3>Overwrite safety<a class="headerlink" href="#overwrite-safety" title="Link to this heading">#</a></h3>
 <p>By default, the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> <em>will not overwrite</em> any existing files in the
 destination directory. Calls to the <code class="docutils literal notranslate"><span class="pre">render_dir</span></code> method will fail if
-any of the destination files already exist. Rendering and coping actions are
-transactional, meaning that the entire action will fail if any destination file
-exists. For example, consecutive calls to the same method will fail in the second
-call. This behavior is intended to prevent accidental overwriting of
-files that may have been generated in a previous run.</p>
-<p>To enforce the overwriting of existing files, you can set the <code class="docutils literal notranslate"><span class="pre">overwrite</span></code> argument
+any file already exist in the <code class="docutils literal notranslate"><span class="pre">target_dir</span></code>. This behavior is intended to prevent
+accidental overwriting of files that may have been generated in a previous run.</p>
+<p>To enforce deleting existing files, you can set the <code class="docutils literal notranslate"><span class="pre">overwrite</span></code> argument
 to <code class="docutils literal notranslate"><span class="pre">True</span></code> when calling the <code class="docutils literal notranslate"><span class="pre">renderdir</span></code> method.</p>
 </section>
 </section>
