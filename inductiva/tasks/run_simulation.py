@@ -4,7 +4,7 @@ from typing import Any, List, Optional
 
 import logging
 
-from inductiva import tasks, types
+from inductiva import tasks, types, utils
 from inductiva.api import methods
 
 
@@ -23,7 +23,7 @@ def run_simulation(
     """Run a simulation via Inductiva Web API."""
 
     params = {
-        "sim_dir": "sim_dir",
+        "sim_dir": utils.data.INPUT_DIRNAME,
         **kwargs,
     }
 

@@ -21,6 +21,7 @@ import logging
 INPUT_FILENAME = "input.json"
 OUTPUT_FILENAME = "output.json"
 ARTIFACTS_DIRNAME = "artifacts"
+INPUT_DIRNAME = "sim_dir"
 
 
 def pack_input(input_dir, kwargs, zip_name) -> str:
@@ -42,7 +43,7 @@ def pack_input(input_dir, kwargs, zip_name) -> str:
     """
     with tempfile.TemporaryDirectory() as tmpdir_path:
         # Copy input directory to a temporary directory
-        dst_fullpath = os.path.join(tmpdir_path, "sim_dir")
+        dst_fullpath = os.path.join(tmpdir_path, INPUT_DIRNAME)
         shutil.copytree(input_dir, dst_fullpath)
 
         # Write input dictionary with packed params to a JSON file
