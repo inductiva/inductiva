@@ -1,6 +1,5 @@
 """Helper functions for the templating module."""
 import os
-import pathlib
 
 TEMPLATE_EXTENSION = ".jinja"
 
