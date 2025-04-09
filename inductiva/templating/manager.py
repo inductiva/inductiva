@@ -35,9 +35,8 @@ class TemplateManager:
                 containing template files (and potentially static files to be
                 copied without modification).
             target_dir (str): Path to the target directory.
-            overwrite (bool): If True, the destination folder will first
-                be deleted if it already exists.
-                If False (default), a FileExistsError
+            overwrite (bool): If True, the destination files will be overwritten
+                if they already exist. If False (default), a FileExistsError
                 will be raised if any destination file already exists.
             render_args: Keyword arguments to render the template files.
 
@@ -64,13 +63,12 @@ class TemplateManager:
 
         template_dir_struct = helpers.get_dir_structure(source_dir)
 
-        if target_dir.exists() and any(target_dir.iterdir()):
-            if overwrite:
-                shutil.rmtree(target_dir)
-            else:
-                msg = (f"Non-empty target directory {target_dir}.\n"
-                       "Use `overwrite=True` to delete previous content.")
-                raise FileExistsError(msg)
+        if not overwrite:
+            try:
+                helpers.check_prerender_dir(template_dir_struct, target_dir)
+            except FileExistsError as e:
+                msg = f"{e}; set `overwrite=True` to overwrite existing files."
+                raise FileExistsError(msg) from e
 
         for subdir, contents in template_dir_struct.items():
             target_subdir = target_dir / subdir
