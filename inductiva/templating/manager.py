@@ -37,8 +37,8 @@ class TemplateManager:
             target_dir (str): Path to the target directory.
             overwrite (bool): If True, the destination folder will first
                 be deleted if it already exists.
-                If False (default), a FileExistsError
-                will be raised if any destination file already exists.
+                If False (default), a FileExistsError will be raised if
+                any file already exists in the target directory.
             render_args: Keyword arguments to render the template files.
 
         Raises:
