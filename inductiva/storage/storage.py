@@ -280,7 +280,7 @@ def upload(
             inductiva.storage.upload('local/path/folder', 'my_data')
     """
 
-    remote_dir = remote_dir.rstrip('/')
+    remote_dir = remote_dir.rstrip("/")
     is_dir = os.path.isdir(local_path)
     if is_dir:
         local_dir = os.path.join(local_path, "")
