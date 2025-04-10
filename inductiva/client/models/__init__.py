@@ -88,6 +88,7 @@ from inductiva.client.model.task_step import TaskStep
 from inductiva.client.model.task_submitted_info import TaskSubmittedInfo
 from inductiva.client.model.task_with_status_history import TaskWithStatusHistory
 from inductiva.client.model.task_with_user_info import TaskWithUserInfo
+from inductiva.client.model.terminate_resources_credits_threshold_update import TerminateResourcesCreditsThresholdUpdate
 from inductiva.client.model.terms_and_conditions import TermsAndConditions
 from inductiva.client.model.tier_full_info import TierFullInfo
 from inductiva.client.model.tier_quota_detail import TierQuotaDetail
