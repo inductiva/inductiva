@@ -4,6 +4,7 @@ from .quantum_espresso import QuantumEspresso
 from .splishsplash import SplishSplash
 from .dualsphysics import DualSPHysics
 from .custom_image import CustomImage
+from .opentelemac import OpenTelemac
 from .openfoam import OpenFOAM
 from .opensees import OpenSees
 from .openfast import OpenFAST
