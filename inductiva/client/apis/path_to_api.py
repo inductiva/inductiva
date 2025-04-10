@@ -36,7 +36,6 @@ from inductiva.client.apis.paths.admin_import_provider_costs import AdminImportP
 from inductiva.client.apis.paths.admin_machine_id_event import AdminMachineIdEvent
 from inductiva.client.apis.paths.admin_users_username_costs_fee_percentage import AdminUsersUsernameCostsFeePercentage
 from inductiva.client.apis.paths.admin_organizations_organization_id_costs_fee_percentage import AdminOrganizationsOrganizationIdCostsFeePercentage
-from inductiva.client.apis.paths.admin_organizations_organization_id_terminate_resources_credits_threshold import AdminOrganizationsOrganizationIdTerminateResourcesCreditsThreshold
 from inductiva.client.apis.paths.admin_top_ups import AdminTopUps
 from inductiva.client.apis.paths.admin_tasks import AdminTasks
 from inductiva.client.apis.paths.admin_users_email_stripe_customer_id import AdminUsersEmailStripeCustomerId
@@ -167,8 +166,6 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsersUsernameCostsFeePercentage,
         PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_COSTS_FEE_PERCENTAGE:
             AdminOrganizationsOrganizationIdCostsFeePercentage,
-        PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_TERMINATE_RESOURCES_CREDITS_THRESHOLD:
-            AdminOrganizationsOrganizationIdTerminateResourcesCreditsThreshold,
         PathValues.ADMIN_TOPUPS:
             AdminTopUps,
         PathValues.ADMIN_TASKS:
@@ -356,8 +353,6 @@ path_to_api = PathToApi({
         AdminUsersUsernameCostsFeePercentage,
     PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_COSTS_FEE_PERCENTAGE:
         AdminOrganizationsOrganizationIdCostsFeePercentage,
-    PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_TERMINATE_RESOURCES_CREDITS_THRESHOLD:
-        AdminOrganizationsOrganizationIdTerminateResourcesCreditsThreshold,
     PathValues.ADMIN_TOPUPS:
         AdminTopUps,
     PathValues.ADMIN_TASKS:
