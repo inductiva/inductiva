@@ -11,7 +11,7 @@ class Delft3D(simulators.Simulator):
     def __init__(
         self,
         /,
-        version: Optional[str] = "8p4r0",
+        version: Optional[str] = None,
         use_dev: bool = False,
     ):
         super().__init__(version, use_dev, self._default_delft3d_device)
