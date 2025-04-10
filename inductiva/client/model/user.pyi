@@ -33,7 +33,6 @@ class User(schemas.DictSchema):
         required = {
             "costs_fee_percentage",
             "terms_and_conditions_decision",
-            "terminate_resources_credits_threshold",
             "tier",
             "total_available_credits",
             "registration_ts",
@@ -54,7 +53,6 @@ class User(schemas.DictSchema):
 
             registration_ts = schemas.DateTimeSchema
             costs_fee_percentage = schemas.NumberSchema
-            terminate_resources_credits_threshold = schemas.NumberSchema
 
             class name(
                     schemas.ComposedSchema,):
@@ -299,8 +297,6 @@ class User(schemas.DictSchema):
                     registration_ts,
                 "costs_fee_percentage":
                     costs_fee_percentage,
-                "terminate_resources_credits_threshold":
-                    terminate_resources_credits_threshold,
                 "name":
                     name,
                 "organization":
@@ -313,7 +309,6 @@ class User(schemas.DictSchema):
 
     costs_fee_percentage: MetaOapg.properties.costs_fee_percentage
     terms_and_conditions_decision: 'TermsAndConditions'
-    terminate_resources_credits_threshold: MetaOapg.properties.terminate_resources_credits_threshold
     tier: MetaOapg.properties.tier
     total_available_credits: MetaOapg.properties.total_available_credits
     registration_ts: MetaOapg.properties.registration_ts
@@ -364,13 +359,6 @@ class User(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-        self,
-        name: typing_extensions.Literal["terminate_resources_credits_threshold"]
-    ) -> MetaOapg.properties.terminate_resources_credits_threshold:
-        ...
-
-    @typing.overload
-    def __getitem__(
             self, name: typing_extensions.Literal["name"]
     ) -> MetaOapg.properties.name:
         ...
@@ -406,7 +394,6 @@ class User(schemas.DictSchema):
         "terms_and_conditions_decision",
         "registration_ts",
         "costs_fee_percentage",
-        "terminate_resources_credits_threshold",
         "name",
         "organization",
         "credits_currency",
@@ -459,13 +446,6 @@ class User(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self,
-        name: typing_extensions.Literal["terminate_resources_credits_threshold"]
-    ) -> MetaOapg.properties.terminate_resources_credits_threshold:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
         self, name: typing_extensions.Literal["name"]
     ) -> typing.Union[MetaOapg.properties.name, schemas.Unset]:
         ...
@@ -504,7 +484,6 @@ class User(schemas.DictSchema):
         "terms_and_conditions_decision",
         "registration_ts",
         "costs_fee_percentage",
-        "terminate_resources_credits_threshold",
         "name",
         "organization",
         "credits_currency",
@@ -525,12 +504,6 @@ class User(schemas.DictSchema):
             float,
         ],
         terms_and_conditions_decision: 'TermsAndConditions',
-        terminate_resources_credits_threshold: typing.Union[
-            MetaOapg.properties.terminate_resources_credits_threshold,
-            decimal.Decimal,
-            int,
-            float,
-        ],
         tier: typing.Union[
             MetaOapg.properties.tier,
             str,
@@ -587,8 +560,6 @@ class User(schemas.DictSchema):
             *_args,
             costs_fee_percentage=costs_fee_percentage,
             terms_and_conditions_decision=terms_and_conditions_decision,
-            terminate_resources_credits_threshold=
-            terminate_resources_credits_threshold,
             tier=tier,
             total_available_credits=total_available_credits,
             registration_ts=registration_ts,
