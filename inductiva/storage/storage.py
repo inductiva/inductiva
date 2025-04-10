@@ -263,7 +263,7 @@ def upload(
     Args:
         local_path (str): The path to the local file or directory to be
             uploaded.
-        remote_dir (str, optional): The remote directory where the file will
+        remote_dir (str): The remote directory where the file will
             be uploaded.
     """
     is_dir = os.path.isdir(local_path)
