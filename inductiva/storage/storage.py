@@ -265,6 +265,12 @@ def upload(
             uploaded.
         remote_dir (str): The remote directory where the file will
             be uploaded.
+
+    Example:
+        .. code-block:: python
+
+            inductiva storage upload local/path/file_or_directory remote_dir
+
     """
     is_dir = os.path.isdir(local_path)
 
