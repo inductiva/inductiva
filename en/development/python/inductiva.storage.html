@@ -681,11 +681,20 @@ class.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>local_path</strong> (<em>str</em>) – The path to the local file or directory to be
 uploaded.</p></li>
-<li><p><strong>remote_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – The remote directory where the file will
+<li><p><strong>remote_dir</strong> (<em>str</em>) – The remote directory where the file will
 be uploaded.</p></li>
 </ul>
 </dd>
 </dl>
+<p class="rubric">Example</p>
+<p>Upload a file to a remote directory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inductiva</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="s1">&#39;local/path/file.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;my_data&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Upload a directory to a remote location:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inductiva</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="s1">&#39;local/path/folder&#39;</span><span class="p">,</span> <span class="s1">&#39;my_data&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
