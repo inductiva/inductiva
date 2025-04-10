@@ -22,6 +22,7 @@ from inductiva.api import methods
 from inductiva.client import exceptions, models
 from inductiva.client.apis.tags import storage_api
 from inductiva.utils import format_utils
+from inductiva.utils import data
 
 MB = 1024 * 1024
 _boto3_imported = True
@@ -393,10 +394,10 @@ def _download_file_from_inside_zip(remote_path, local_dir, pool_manager):
 
     url = get_signed_urls(paths=[path], operation="download")[0]
 
-    if "output.zip" in path:
-        prefix = "artifacts/"
-    elif "input.zip" in path:
-        prefix = "sim_dir/"
+    if constants.TASK_OUTPUT_ZIP in path:
+        prefix = data.ARTIFACTS_DIRNAME
+    elif constants.TASK_INPUT_ZIP in path:
+        prefix = data.INPUT_DIRNAME
     else:
         prefix = ""
 
@@ -455,7 +456,7 @@ def _decompress(paths):
         # TODO: Improve the check for ZIP file
         if ext != ".zip":
             return
-        utils.data.uncompress_zip(path, decompress_dir)
+        utils.data.decompress_zip(path, decompress_dir)
         os.remove(path)
 
 
@@ -467,12 +468,12 @@ def _decompress_file_inside_zip(path):
         compressed_data = f.read()
     decompressed_data = zlib.decompress(compressed_data, -zlib.MAX_WBITS)
 
-    uncompress_path = path.removesuffix(".zip")
-    with open(uncompress_path, "wb") as f:
+    decompress_path = path.removesuffix(".zip")
+    with open(decompress_path, "wb") as f:
         f.write(decompressed_data)
     os.remove(path)
 
-    return uncompress_path
+    return decompress_path
 
 
 def download(remote_path: str, local_dir: str = "", decompress: bool = True):
@@ -507,8 +508,9 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
 
         .. code-block:: python
 
-            inductiva.storage.download(remote_path="/path/to/zip/file.txt")
-
+            inductiva.storage.download(
+                remote_path="/some_task_id/output.zip/stdout.txt"
+            )
     Note:
         It is not possible to download folders that are inside zip archives.
     """
