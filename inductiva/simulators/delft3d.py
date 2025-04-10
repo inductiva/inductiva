@@ -21,14 +21,14 @@ class Delft3D(simulators.Simulator):
     def run(self,
             input_dir: Optional[str],
             *,
-            commands: Optional[types.Commands] = None ,
+            commands: Optional[types.Commands] = None,
             shell_script: Optional[str] = None,
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[list[str]] = None,
             **kwargs):
-        
+
         if commands is None and shell_script is None:
             raise ValueError("Either commands or shell_script "
                              "must be provided.")
