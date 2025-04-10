@@ -269,7 +269,9 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             list_mock.return_value = {"production": DefaultDictMock()}
 
             submit_mock.return_value = {"id": "123", "status": None}
-            if sim_name == "CustomImage":
+            if sim_name == "OpenTelemac":
+                sim_obj = simcls(version="1.0.0")
+            elif sim_name == "CustomImage":
                 sim_obj = simcls(container_image="test")
             else:
                 sim_obj = simcls()

@@ -11,7 +11,7 @@ input_dir = inductiva.utils.download_from_url(
     "opentelemac-input-example.zip",
     unzip=True)
 
-opentelemac = inductiva.simulators.OpenTelemac()
+opentelemac = inductiva.simulators.OpenTelemac(version="8p4r0")
 
 # List of commands to run
 commands = ["telemac2d.py t2d_malpasset-fine.cas --ncsize=16"]

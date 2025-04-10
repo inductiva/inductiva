@@ -1,3 +1,4 @@
+"""OpenTelemac module of the API."""
 from typing import Optional
 from inductiva import types, simulators
 
