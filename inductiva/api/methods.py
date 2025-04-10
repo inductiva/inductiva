@@ -140,6 +140,8 @@ def upload_input(api_instance: TasksApi, input_dir, params, task_id,
         params: Additional parameters to be sent to the API.
         storage_path_prefix: Path to the storage bucket.
         """
+    input_zip_path = None
+
     try:
         input_zip_path, zip_file_size = prepare_input(task_id, input_dir,
                                                       params)

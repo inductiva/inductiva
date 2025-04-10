@@ -33,7 +33,8 @@ def pack_input(input_dir, kwargs, zip_name) -> str:
     returned.
 
     Args:
-        params: Dict with the params that are passed into
+        input_dir: Directory containing the input files to be uploaded.
+        kwargs: Dict with the params that are passed into
             the request by the user.
         zip_name: Name of the zip file to be created.
 
@@ -44,7 +45,9 @@ def pack_input(input_dir, kwargs, zip_name) -> str:
     with tempfile.TemporaryDirectory() as tmpdir_path:
         # Copy input directory to a temporary directory
         dst_fullpath = os.path.join(tmpdir_path, INPUT_DIRNAME)
-        shutil.copytree(input_dir, dst_fullpath)
+
+        if input_dir:
+            shutil.copytree(input_dir, dst_fullpath)
 
         # Write input dictionary with packed params to a JSON file
         input_json_path = os.path.join(tmpdir_path, INPUT_FILENAME)
