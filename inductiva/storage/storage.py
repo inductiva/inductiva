@@ -1,4 +1,5 @@
 """Methods to interact with the user storage resources."""
+import itertools
 import logging
 import math
 import os
@@ -6,6 +7,7 @@ import pathlib
 import threading
 import time
 import urllib
+import zlib
 from dataclasses import dataclass
 from enum import Enum
 from typing import List, Literal, Optional, Tuple
@@ -20,6 +22,7 @@ from inductiva.api import methods
 from inductiva.client import exceptions, models
 from inductiva.client.apis.tags import storage_api
 from inductiva.utils import format_utils
+from inductiva.utils import data
 
 MB = 1024 * 1024
 _boto3_imported = True
@@ -61,10 +64,13 @@ def get_space_used():
     return storage_used
 
 
-def listdir(path="/",
-            max_results: int = 10,
-            order_by: Literal["size", "creation_time"] = "creation_time",
-            sort_order: Literal["asc", "desc"] = "desc"):
+def listdir(
+    path="/",
+    max_results: int = 10,
+    order_by: Literal["size", "creation_time"] = "creation_time",
+    sort_order: Literal["asc", "desc"] = "desc",
+    print_results: bool = True,
+):
     """List and display the contents of the user's storage.
     Args:
         path (str): Storage directory to list. Default is root.
@@ -110,12 +116,14 @@ def listdir(path="/",
             "size": round(float(size), 3),
             "creation_time": creation_time
         })
-    print(_print_contents_table(all_contents))
+    if print_results:
+        print(_print_contents_table(all_contents))
 
-    _print_storage_size_and_cost()
+        _print_storage_size_and_cost()
 
-    print(f"Listed {len(all_contents)} folder(s). Ordered by {order_by}.\n"
-          "Use --max-results/-m to control the number of results displayed.")
+        print(
+            f"Listed {len(all_contents)} folder(s). Ordered by {order_by}.\n"
+            "Use --max-results/-m to control the number of results displayed.")
     return all_contents
 
 
@@ -165,6 +173,8 @@ class ZipFileInfo:
     name: str
     size: int
     compressed_size: int
+    range_start: Optional[int]
+    compress_type: Optional[int]
 
 
 @dataclass
@@ -201,6 +211,10 @@ def get_zip_contents(
             if file["size"] else None,
         compressed_size=int(file["compressed_size"]) \
             if file["compressed_size"] else None,
+        range_start=int(file["range_start"]) \
+            if file["range_start"] else None,
+        compress_type=int(file["compress_type"])
+            if file["compress_type"] else None
     ) for file in response_body["contents"]]
     return ZipArchiveInfo(size=int(response_body["size"]), files=files)
 
@@ -249,9 +263,23 @@ def upload(
     Args:
         local_path (str): The path to the local file or directory to be
             uploaded.
-        remote_dir (str, optional): The remote directory where the file will
+        remote_dir (str): The remote directory where the file will
             be uploaded.
+    
+    Example:
+        Upload a file to a remote directory:
+
+        .. code-block:: python
+
+            inductiva.storage.upload('local/path/file.txt', 'my_data')
+
+        Upload a directory to a remote location:
+
+        .. code-block:: python
+
+            inductiva.storage.upload('local/path/folder', 'my_data')
     """
+
     is_dir = os.path.isdir(local_path)
 
     if is_dir:
@@ -269,7 +297,7 @@ def upload(
     if os.path.join(remote_dir, constants.TASK_OUTPUT_ZIP) in remote_file_paths:
         raise ValueError(f"Invalid file name: '{constants.TASK_OUTPUT_ZIP}.'")
 
-    logging.info("Uploading input...")
+    logging.info("Uploading content...")
 
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
@@ -297,7 +325,169 @@ def upload(
             except exceptions.ApiException as e:
                 raise e
 
-    logging.info("Input uploaded successfully.")
+    logging.info("Content uploaded successfully.")
+
+
+def _resolve_local_path(
+    url,
+    remote_base_path,
+    local_base_dir,
+    append_path=None,
+    strip_zip=False,
+):
+    remote_url_path = urllib.parse.urlparse(url).path
+    index = remote_url_path.find(remote_base_path)
+    relative_path = remote_url_path[index:]
+
+    if strip_zip and relative_path.endswith(".zip"):
+        relative_path = relative_path.removesuffix(".zip")
+
+    local_path = os.path.join(local_base_dir, relative_path)
+    if append_path:
+        local_path = os.path.join(local_path, append_path)
+
+    os.makedirs(os.path.dirname(local_path), exist_ok=True)
+
+    return local_path
+
+
+def _get_size(url, pool_manager):
+    response = pool_manager.urlopen("HEAD", url)
+    size = int(response.getheader("Content-Length"))
+    response.release_conn()
+    return size
+
+
+def _download_file(url,
+                   download_path,
+                   progress_bar,
+                   progress_bar_lock,
+                   pool_manager,
+                   range_start=None,
+                   range_end=None):
+    headers = {}
+    is_range = range_start is not None and range_end is not None
+
+    if is_range:
+        headers["Range"] = f"bytes={range_start}-{range_end}"
+    response = pool_manager.urlopen("GET",
+                                    url,
+                                    headers=headers,
+                                    preload_content=False)
+
+    with open(download_path, "wb") as file:
+        for chunk in response.stream():
+            file.write(chunk)
+            with progress_bar_lock:
+                progress_bar.update(len(chunk))
+    response.release_conn()
+
+    return download_path
+
+
+def _is_file_inside_zip(path):
+    parts = path.split(os.sep)
+    return any(part.endswith(".zip") for part in parts[:-1])
+
+
+def _get_progress_bar(desc, total_bytes):
+    return tqdm.tqdm(
+        total=total_bytes,
+        unit="B",
+        unit_scale=True,
+        unit_divisor=1000,
+        desc=desc,
+    )
+
+
+def _download_file_from_inside_zip(remote_path, local_dir, pool_manager):
+    before, after = remote_path.split(".zip" + os.sep, 1)
+    path = before + ".zip"
+    zip_relative_path = os.path.dirname(after)
+    zip_filename = os.path.basename(after)
+
+    url = get_signed_urls(paths=[path], operation="download")[0]
+
+    if constants.TASK_OUTPUT_ZIP in path:
+        prefix = data.ARTIFACTS_DIRNAME
+    elif constants.TASK_INPUT_ZIP in path:
+        prefix = data.INPUT_DIRNAME
+    else:
+        prefix = ""
+
+    zip_files = get_zip_contents(path, prefix + zip_relative_path).files
+
+    for zip_file in zip_files:
+        if zip_file.name == zip_filename:
+            break
+    else:
+        raise ValueError(f"File \"{after}\" not found in \"{path}\".")
+
+    range_start = zip_file.range_start
+    range_end = range_start + zip_file.compressed_size - 1
+    compress_type = zip_file.compress_type
+    file_path = after + ".zip" if compress_type else after
+    download_path = _resolve_local_path(url, path, local_dir, file_path, True)
+
+    desc = f"Downloading \"{zip_filename}\" from \"{remote_path}\""
+    with _get_progress_bar(desc, range_start - range_end) as progress_bar:
+        progress_bar_lock = threading.Lock()
+        return _download_file(
+            url=url,
+            download_path=download_path,
+            progress_bar=progress_bar,
+            progress_bar_lock=progress_bar_lock,
+            pool_manager=pool_manager,
+            range_start=range_start,
+            range_end=range_end,
+        )
+
+
+def _download_path(remote_path, local_dir, pool_manager):
+    urls = get_signed_urls(paths=[remote_path], operation="download")
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        total_bytes = sum(
+            executor.map(_get_size, urls, itertools.repeat(pool_manager)))
+
+    resolved_paths = [
+        _resolve_local_path(url, remote_path, local_dir) for url in urls
+    ]
+
+    desc = f"Downloading {len(urls)} file(s) from \"{remote_path}\""
+    with _get_progress_bar(desc, total_bytes) as progress_bar:
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            progress_bar_lock = threading.Lock()
+            return list(
+                executor.map(_download_file, urls, resolved_paths,
+                             itertools.repeat(progress_bar),
+                             itertools.repeat(progress_bar_lock),
+                             itertools.repeat(pool_manager)))
+
+
+def _decompress(paths):
+    for path in paths:
+        decompress_dir, ext = os.path.splitext(path)
+        # TODO: Improve the check for ZIP file
+        if ext != ".zip":
+            return
+        utils.data.decompress_zip(path, decompress_dir)
+        os.remove(path)
+
+
+def _decompress_file_inside_zip(path):
+    if not path.endswith(".zip"):
+        return path
+
+    with open(path, "rb") as f:
+        compressed_data = f.read()
+    decompressed_data = zlib.decompress(compressed_data, -zlib.MAX_WBITS)
+
+    decompress_path = path.removesuffix(".zip")
+    with open(decompress_path, "wb") as f:
+        f.write(decompressed_data)
+    os.remove(path)
+
+    return decompress_path
 
 
 def download(remote_path: str, local_dir: str = "", decompress: bool = True):
@@ -313,72 +503,50 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
         decompress (bool, optional): Whether to decompress the downloaded file 
             or folder if it is compressed. Defaults to True.
 
-    Example:
-        # Download a folder from a remote server to the current directory
-        inductiva.storage.download(remote_path="/path/to/remote/folder/")
-    
-        # Download a file and save it to a local directory without decompressing
-        inductiva.storage.download(remote_path="/path/to/remote/file.zip",
-                                   local_dir="/local/directory",
-                                   decompress=False)
+    Examples:
+        Download a folder from a remote server to the current directory:
+
+        .. code-block:: python
+
+            inductiva.storage.download(remote_path="/path/to/remote/folder/")
+
+        Download a file and save it to a local directory without decompressing:
+
+        .. code-block:: python
+
+            inductiva.storage.download(remote_path="/path/to/remote/file.zip",
+                                       local_dir="/local/directory",
+                                       decompress=False)
+
+        Download a file inside a zip archive:
+
+        .. code-block:: python
+
+            inductiva.storage.download(
+                remote_path="/some_task_id/output.zip/stdout.txt"
+            )
+    Note:
+        It is not possible to download folders that are inside zip archives.
     """
 
-    def _resolve_local_path(url):
-        remote_absolute_path = urllib.parse.urlparse(url).path
-        index = remote_absolute_path.find(remote_path)
-        remote_relative_path = remote_absolute_path[index:]
-        resolved_path = os.path.join(local_dir, remote_relative_path)
-        os.makedirs(name=os.path.dirname(resolved_path), exist_ok=True)
-        return resolved_path
-
-    def _get_size(url):
-        response = pool_manager.urlopen("HEAD", url)
-        size = int(response.getheader("Content-Length"))
-        response.release_conn()
-        return size
-
-    def _download_file(url):
-        response = pool_manager.urlopen("GET", url, preload_content=False)
-        resolved_path = _resolve_local_path(url)
-        with open(resolved_path, "wb") as file:
-            for chunk in response.stream():
-                file.write(chunk)
-                with progress_bar_lock:
-                    progress_bar.update(len(chunk))
-        response.release_conn()
-
-        if decompress:
-            decompress_dir, ext = os.path.splitext(resolved_path)
-            # TODO: Improve the check for ZIP file
-            if ext != ".zip":
-                return
-            utils.data.uncompress_zip(resolved_path, decompress_dir)
-            os.remove(resolved_path)
-
-    urls = get_signed_urls(paths=[remote_path], operation="download")
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
     pool_manager = api_instance.api_client.rest_client.pool_manager
 
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        total_bytes = sum(executor.map(_get_size, urls))
+    if _is_file_inside_zip(remote_path):
+        download_path = _download_file_from_inside_zip(remote_path, local_dir,
+                                                       pool_manager)
+        paths = [_decompress_file_inside_zip(download_path)]
+    else:
+        paths = _download_path(remote_path, local_dir, pool_manager)
 
-    num_files = len(urls)
-    text_file = f"file{'s' if num_files != 1 else ''}"
-    desc = f"Downloading {num_files} {text_file} from \"{remote_path}\""
+    if decompress:
+        _decompress(paths)
 
-    with tqdm.tqdm(
-            total=total_bytes,
-            unit="B",
-            unit_scale=True,
-            unit_divisor=1000,  # Use 1 KB = 1000 bytes
-            desc=desc,
-    ) as progress_bar:
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            progress_bar_lock = threading.Lock()
-            _ = list(executor.map(_download_file, urls))
+    download_path = (paths[0] if len(paths) == 1 else os.path.join(
+        local_dir, remote_path))
 
-    logging.info("Successfully downloaded %d %s to \"%s\".", num_files,
-                 text_file, os.path.join(local_dir, remote_path))
+    logging.info('Successfully downloaded %d file(s) to "%s".', len(paths),
+                 download_path)
 
 
 def _list_files(root_path: str) -> Tuple[List[str], int]:

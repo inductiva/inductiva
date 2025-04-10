@@ -4,11 +4,13 @@ from .quantum_espresso import QuantumEspresso
 from .splishsplash import SplishSplash
 from .dualsphysics import DualSPHysics
 from .custom_image import CustomImage
+from .opentelemac import OpenTelemac
 from .openfoam import OpenFOAM
 from .opensees import OpenSees
 from .openfast import OpenFAST
 from .snl_swan import SNLSWAN
 from .amr_wind import AmrWind
+from .delft3d import Delft3D
 from .gromacs import GROMACS
 from .reef3d import REEF3D
 from .xbeach import XBeach

@@ -3,9 +3,6 @@ import os
 import pathlib
 import platform
 
-LOGS_WEBSOCKET_URL = os.environ.get("INDUCTIVA_TASK_LOGS_URL",
-                                    "wss://logs.inductiva.ai")
-
 TURN_SERVER_URL = os.environ.get("INDUCTIVA_TURN_SERVER_URL",
                                  "webrtc.inductiva.ai:3478")
 
@@ -15,7 +12,9 @@ TASK_RUNNER_IMAGE = os.environ.get("INDUCTIVA_TASK_RUNNER_IMAGE",
 FILE_TRACKER_IMAGE = os.environ.get("INDUCTIVA_FILE_TRACKER_IMAGE",
                                     "inductiva/file-tracker:main")
 
-DEFAULT_QUEUE_MACHINE_TYPE = "c2-standard-4"
+APPTAINER_CONVERTER_IMAGE = os.environ.get(
+    "INDUCTIVA_APPTAINER_CONVERTER_IMAGE",
+    "inductiva/kutu:apptainer-converter_v0.1.0_dev")
 
 TASK_KILL_MAX_API_REQUESTS = 5
 
@@ -48,5 +47,6 @@ LOGS_FILE_PATH = HOME_DIR / "inductiva.log"
 API_KEY_FILE_PATH = HOME_DIR / "api_key"
 
 TASK_OUTPUT_ZIP = "output.zip"
+TASK_INPUT_ZIP = "input.zip"
 
 LOGIN_MESSAGE = "Please login with `inductiva auth login`."
