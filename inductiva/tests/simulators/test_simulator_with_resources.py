@@ -285,7 +285,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             run_kwargs = {"on": mock_mg}
             if resubmit_on_preemption is not None:
                 run_kwargs[resubmit_key] = resubmit_on_preemption
-            if sim_name == "OpenFOAM" or sim_name == "Delft3D":
+            if sim_name in ("OpenFOAM", "Delft3D"):
                 run_kwargs["commands"] = ["ls"]
 
             # pass remote_assets to coawst to avoid our internal checks
