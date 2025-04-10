@@ -62,6 +62,7 @@ class COAWST(simulators.Simulator):
             coawst_bin: str = "coawstM",
             init_commands: Optional[List[str]] = None,
             cleanup_commands: Optional[List[str]] = None,
+            simulation_binary: Optional[str] = None,
             use_hwthread: bool = True,
             n_vcpus: Optional[int] = None,
             storage_dir: Optional[str] = "",
@@ -86,6 +87,9 @@ class COAWST(simulators.Simulator):
                 after your simulation finishes. Used to copy files from
                 `/workdir/output/artifacts/__COAWST` to your input_dir. Or
                 to delete unwanted files generated during the simulation.
+            simulation_binary: Name of the simulation binary to execute. If 
+                provided, it will skip the compilation step and directly run the
+                simulation with the provided binary.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
             (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
@@ -109,7 +113,10 @@ class COAWST(simulators.Simulator):
                                     build_coawst_script=build_coawst_script)
 
             build_script = os.path.join(input_dir, build_coawst_script)
-            self._validate_build_script(build_script=str(build_script))
+            
+            # only validates the build script if we are going to compile
+            if simulation_binary is None:
+                self._validate_build_script(build_script=str(build_script))
 
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
@@ -117,17 +124,29 @@ class COAWST(simulators.Simulator):
             mpi_kwargs["np"] = n_vcpus
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
 
-        # 34 selects dmpar for linux when compiling WRF
-        compilation_command = Command(f"bash {build_coawst_script}", "34")
+        #only compiles if we are not using a precompiled binary
+        if simulation_binary is None:
+            # 34 selects dmpar for linux when compiling WRF
+            compilation_command = Command(f"bash {build_coawst_script}", "34")
+        else:
+            # Copy the simulation binary to the __COAWST directory
+            # and make it executable
+            compilation_command = [
+                f"cp -f {simulation_binary} __COAWST/",
+                f"chmod +x __COAWST/{simulation_binary}",
+            ]
 
         commands = [
             #Copy COAWST source code to our input dir
             "cp -r /opt/COAWST /workdir/output/artifacts/__COAWST",
             "create_all_sim_links",
-            #Compile COAWST
+            #Compile COAWST or use the provided binary
             compilation_command,
+            #Run the simulation
             Command(f"{coawst_bin} {sim_config_filename}",
                     mpi_config=mpi_config),
+            #Cleanup COAWST source code
+            # and remove the symlinks
             "rm -r  __COAWST",
             "clean_all_sim_links"
         ]
