@@ -34,21 +34,25 @@ class OrganizationCreate(schemas.DictSchema):
             "identity_provider_id",
             "name",
             "id",
+            "tier_id",
         }
 
         class properties:
             id = schemas.StrSchema
             identity_provider_id = schemas.StrSchema
             name = schemas.StrSchema
+            tier_id = schemas.StrSchema
             __annotations__ = {
                 "id": id,
                 "identity_provider_id": identity_provider_id,
                 "name": name,
+                "tier_id": tier_id,
             }
 
     identity_provider_id: MetaOapg.properties.identity_provider_id
     name: MetaOapg.properties.name
     id: MetaOapg.properties.id
+    tier_id: MetaOapg.properties.tier_id
 
     @typing.overload
     def __getitem__(
@@ -69,6 +73,12 @@ class OrganizationCreate(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["tier_id"]
+    ) -> MetaOapg.properties.tier_id:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -76,6 +86,7 @@ class OrganizationCreate(schemas.DictSchema):
         "id",
         "identity_provider_id",
         "name",
+        "tier_id",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -100,6 +111,12 @@ class OrganizationCreate(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["tier_id"]
+    ) -> MetaOapg.properties.tier_id:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -108,6 +125,7 @@ class OrganizationCreate(schemas.DictSchema):
         "id",
         "identity_provider_id",
         "name",
+        "tier_id",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -129,6 +147,10 @@ class OrganizationCreate(schemas.DictSchema):
             MetaOapg.properties.id,
             str,
         ],
+        tier_id: typing.Union[
+            MetaOapg.properties.tier_id,
+            str,
+        ],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -141,6 +163,7 @@ class OrganizationCreate(schemas.DictSchema):
             identity_provider_id=identity_provider_id,
             name=name,
             id=id,
+            tier_id=tier_id,
             _configuration=_configuration,
             **kwargs,
         )

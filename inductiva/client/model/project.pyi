@@ -45,6 +45,7 @@ class Project(schemas.DictSchema):
             id = schemas.UUIDSchema
             created_at = schemas.DateTimeSchema
             num_tasks = schemas.IntSchema
+            estimated_computation_cost = schemas.NumberSchema
 
             class task_status_overview(schemas.DictSchema):
 
@@ -90,6 +91,7 @@ class Project(schemas.DictSchema):
                 "id": id,
                 "created_at": created_at,
                 "num_tasks": num_tasks,
+                "estimated_computation_cost": estimated_computation_cost,
                 "task_status_overview": task_status_overview,
             }
 
@@ -124,6 +126,12 @@ class Project(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["estimated_computation_cost"]
+    ) -> MetaOapg.properties.estimated_computation_cost:
+        ...
+
+    @typing.overload
+    def __getitem__(
         self, name: typing_extensions.Literal["task_status_overview"]
     ) -> MetaOapg.properties.task_status_overview:
         ...
@@ -137,6 +145,7 @@ class Project(schemas.DictSchema):
         "id",
         "created_at",
         "num_tasks",
+        "estimated_computation_cost",
         "task_status_overview",
     ], str]):
         # dict_instance[name] accessor
@@ -168,6 +177,13 @@ class Project(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["estimated_computation_cost"]
+    ) -> typing.Union[MetaOapg.properties.estimated_computation_cost,
+                      schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["task_status_overview"]
     ) -> typing.Union[MetaOapg.properties.task_status_overview, schemas.Unset]:
         ...
@@ -183,6 +199,7 @@ class Project(schemas.DictSchema):
         "id",
         "created_at",
         "num_tasks",
+        "estimated_computation_cost",
         "task_status_overview",
     ], str]):
         return super().get_item_oapg(name)
@@ -212,6 +229,9 @@ class Project(schemas.DictSchema):
             str,
             uuid.UUID,
         ],
+        estimated_computation_cost: typing.Union[
+            MetaOapg.properties.estimated_computation_cost, decimal.Decimal,
+            int, float, schemas.Unset] = schemas.unset,
         task_status_overview: typing.Union[
             MetaOapg.properties.task_status_overview, dict,
             frozendict.frozendict, schemas.Unset] = schemas.unset,
@@ -228,6 +248,7 @@ class Project(schemas.DictSchema):
             name=name,
             created_at=created_at,
             id=id,
+            estimated_computation_cost=estimated_computation_cost,
             task_status_overview=task_status_overview,
             _configuration=_configuration,
             **kwargs,

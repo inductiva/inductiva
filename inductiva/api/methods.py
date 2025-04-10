@@ -1,9 +1,10 @@
 """Methods that interact with the lower-level inductiva-web-api-client.
 
-The relevant function for usage outside of this file is invoke_async_api().
+The relevant function for usage outside of this file is submit_task().
 Check the demos directory for examples on how it is used.
 """
 import os
+import sys
 import time
 import tqdm
 import tqdm.utils
@@ -11,16 +12,16 @@ import signal
 import urllib3
 import decimal
 from contextlib import contextmanager
-from typing import Any, Dict, List, Optional, Type
+from typing import Dict, List, Optional
 
 import logging
 
 import inductiva
 from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
-from inductiva.client.models import TaskRequest, TaskStatus, TaskSubmittedInfo
-from inductiva import types, constants, storage
-from inductiva.utils.data import (get_validate_request_params, pack_input)
+from inductiva.client.models import (TaskRequest, TaskStatus, TaskSubmittedInfo,
+                                     CompressionMethod)
+from inductiva import constants, storage
 from inductiva.utils import format_utils, files
 
 
@@ -47,7 +48,7 @@ def get_client(api_config: Optional[Configuration] = None) -> ApiClient:
     return client
 
 
-def submit_request(api_instance: TasksApi,
+def submit_request(task_api_instance: TasksApi,
                    request: TaskRequest) -> TaskSubmittedInfo:
     """Submits a task request to the API.
 
@@ -57,30 +58,30 @@ def submit_request(api_instance: TasksApi,
         Returns the body of the HTTP response.
         Contains two fields, "id" and "status".
     """
-
-    api_response = api_instance.submit_task(body=request)
-
+    # Submit task using provided or temporary instance
+    api_response = task_api_instance.submit_task(body=request)
     logging.debug("Request status: %s", api_response.body["status"])
 
     return api_response.body
 
 
-def prepare_input(task_id, original_params, type_annotations):
-    sim_dir = original_params["sim_dir"]
-    # If the input directory is empty, do not zip it
-    # still need to zip the input parameters though
-    if sim_dir:
-        inputs_size = files.get_path_size(sim_dir)
-        logging.info("Preparing upload of the local input directory %s (%s).",
-                     sim_dir, format_utils.bytes_formatter(inputs_size))
+def prepare_input(task_id, input_dir, params):
+    """Prepare the input files for a task submission."""
 
-        if os.path.isfile(os.path.join(sim_dir, constants.TASK_OUTPUT_ZIP)):
+    # If the input directory is empty, do not zip it
+    # still need to zip the input params parameters though
+    if input_dir:
+        inputs_size = files.get_path_size(input_dir)
+        logging.info("Preparing upload of the local input directory %s (%s).",
+                     input_dir, format_utils.bytes_formatter(inputs_size))
+
+        if os.path.isfile(os.path.join(input_dir, constants.TASK_OUTPUT_ZIP)):
             raise ValueError(
                 f"Invalid file name: '{constants.TASK_OUTPUT_ZIP}'")
 
-    input_zip_path = pack_input(
-        params=original_params,
-        type_annotations=type_annotations,
+    input_zip_path = inductiva.utils.data.pack_input(
+        input_dir,
+        params,
         zip_name=task_id,
     )
 
@@ -128,19 +129,20 @@ def notify_upload_complete(api_endpoint,
     api_endpoint(**params)
 
 
-def upload_input(api_instance: TasksApi, task_id, original_params,
-                 type_annotations, storage_path_prefix):
+def upload_input(api_instance: TasksApi, input_dir, params, task_id,
+                 storage_path_prefix):
     """Uploads the inputs of a given task to the API.
 
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task.
-        original_params: Params of the request passed by the user.
-        type_annotations: Annotations of the params' types.
-    """
+        input_dir: Directory containing the input files to be uploaded.
+        params: Additional parameters to be sent to the API.
+        storage_path_prefix: Path to the storage bucket.
+        """
     try:
-        input_zip_path, zip_file_size = prepare_input(task_id, original_params,
-                                                      type_annotations)
+        input_zip_path, zip_file_size = prepare_input(task_id, input_dir,
+                                                      params)
 
         remote_input_zip_path = f"{storage_path_prefix}/{task_id}/input.zip"
         url = storage.get_signed_urls(
@@ -162,7 +164,8 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         logging.info("")
 
     finally:
-        os.remove(input_zip_path)
+        if input_zip_path:
+            os.remove(input_zip_path)
 
 
 def block_until_finish(api_instance: TasksApi, task_id: str) -> str:
@@ -191,7 +194,7 @@ def kill_task(api_instance: TasksApi, task_id: str):
    """
     logging.debug("Sending kill task request ...")
     api_instance.kill_task(path_params={"task_id": task_id},)
-    logging.info("Task terminated.")
+    logging.info("Task with ID %s was terminated.", task_id)
 
 
 def get_task_status(api_instance: TasksApi, task_id: str) -> TaskStatus:
@@ -245,7 +248,9 @@ def block_until_status_is(api_instance: TasksApi,
 
 
 @contextmanager
-def blocking_task_context(api_instance: TasksApi, task_id):
+def blocking_task_context(api_instance: TasksApi,
+                          task_id: str,
+                          action_str: str = "action"):
     """Context to handle execution of a blocking task.
 
     The context handles exceptions and the SIGINT signal, issuing a request
@@ -268,10 +273,10 @@ def blocking_task_context(api_instance: TasksApi, task_id):
         logging.info("Caught exception: terminating blocking task...")
         kill_task(api_instance, task_id)
         raise err
-    except KeyboardInterrupt as err:
-        logging.info("Caught SIGINT: terminating blocking task...")
+    except KeyboardInterrupt:
+        logging.info("Caught SIGINT: %s interrupted by user.", action_str)
         kill_task(api_instance, task_id)
-        raise err
+        sys.exit(1)
     finally:
         # Reset original SIGINT handler
         signal.signal(signal.SIGINT, original_sig)
@@ -279,7 +284,7 @@ def blocking_task_context(api_instance: TasksApi, task_id):
 
 def task_info_str(
     task_id,
-    params,
+    local_input_dir,
     resource_pool,
     simulator,
     task_submitted_info: TaskSubmittedInfo,
@@ -293,14 +298,11 @@ def task_info_str(
                      f"\t· Version:               {simulator.version}\n"
                      f"\t· Image:                 {simulator.image_uri}\n")
 
-    local_input_dir = params["sim_dir"]
     info_str += (f"\t· Local input directory: {local_input_dir}\n"
                  "\t· Submitting to the following computational resources:\n")
-    if resource_pool is not None:
-        info_str += f" \t\t· {resource_pool}\n"
-    else:
-        machine_type = constants.DEFAULT_QUEUE_MACHINE_TYPE
-        info_str += f" \t\t· Default queue with {machine_type} machines.\n"
+    info_str += f" \t\t· {resource_pool}\n"
+
+    if task_submitted_info is not None:
         ttl_seconds = task_submitted_info.get("time_to_live_seconds")
         if ttl_seconds is not None and isinstance(ttl_seconds, decimal.Decimal):
             ttl_seconds = format_utils.seconds_formatter(ttl_seconds)
@@ -310,20 +312,37 @@ def task_info_str(
     return info_str
 
 
-def submit_task(api_instance,
-                simulator,
-                request_params,
-                resource_pool,
-                storage_path_prefix,
+def submit_task(simulator,
+                input_dir,
+                machine_group,
                 params,
-                type_annotations,
+                storage_path_prefix,
                 resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
                 simulator_name_alias: Optional[str] = None,
                 simulator_obj=None,
-                input_resources: Optional[List[str]] = None):
-    """Submit a task and send input files to the API."""
-    resource_pool_id = resource_pool.id
+                remote_assets: Optional[List[str]] = None):
+    """Submit a task and send input files to the API.
+    
+    Args:
+        simulator: The simulator to use
+        input_dir: Directory containing the input files to be uploaded.
+        machine_group: Group of machines with a queue to submit the task to.
+        params: Additional parameters to pass to the simulator.
+        storage_path_prefix: Path prefix for storing simulation data
+        resubmit_on_preemption (bool): Resubmit task for execution when
+                previous execution attempts were preempted. Only applicable when
+                using a preemptible resource, i.e., resource instantiated with
+                `spot=True`.
+        container_image: The container image to use for the simulation
+            Example: container_image="docker://inductiva/kutu:xbeach_v1.23_dev"
+        simulator_name_alias: Optional alias name for the simulator
+        simulator_obj: Optional simulator object with additional configuration
+        remote_assets: Additional input files that will be copied to the
+                simulation from a bucket or from another task output.
+    Return:
+        Returns the task id.
+    """
 
     current_project = inductiva.projects.get_current_project()
     if current_project is not None:
@@ -331,20 +350,32 @@ def submit_task(api_instance,
             raise RuntimeError("Trying to submit a task to a closed project.")
         current_project = current_project.name
 
-    if not input_resources:
-        input_resources = []
+    if not remote_assets:
+        remote_assets = []
+
+    stream_zip = params.pop("stream_zip", True)
+    compress_with = params.pop("compress_with", CompressionMethod.AUTO)
+
     task_request = TaskRequest(simulator=simulator,
-                               params=request_params,
+                               params=params,
                                project=current_project,
-                               resource_pool=resource_pool_id,
+                               resource_pool=machine_group.id,
                                container_image=container_image,
                                storage_path_prefix=storage_path_prefix,
                                simulator_name_alias=simulator_name_alias,
                                resubmit_on_preemption=resubmit_on_preemption,
-                               input_resources=input_resources)
+                               input_resources=remote_assets,
+                               stream_zip=stream_zip,
+                               compress_with=compress_with)
 
+    # Create an instance of the TasksApi class
+    task_api_instance = TasksApi(get_client())
+
+    # Submit task via the "POST task/submit" endpoint.
+    # HTTP status code 400 informs the requested method is invalid.
+    # HTTP status code 403 informs that the user is not authorized.
     task_submitted_info = submit_request(
-        api_instance=api_instance,
+        task_api_instance=task_api_instance,
         request=task_request,
     )
 
@@ -352,86 +383,27 @@ def submit_task(api_instance,
     logging.info(
         task_info_str(
             task_id,
-            params,
-            resource_pool,
+            input_dir,
+            machine_group,
             simulator_obj,
             task_submitted_info,
         ))
 
+    # If the status returned by the previous HTTP request is "pending-input",
+    #  ZIP inputs and send them via "POST task/{task_id}/input".
     if task_submitted_info["status"] == "pending-input":
         # Use the blocking task context
-        with blocking_task_context(api_instance, task_id):
+        with blocking_task_context(
+                task_api_instance, task_id,
+                "input upload"):  # Use the blocking task context
             upload_input(
-                api_instance=api_instance,
-                original_params=params,
+                api_instance=task_api_instance,
+                input_dir=input_dir,
+                params=params,
                 task_id=task_id,
-                type_annotations=type_annotations,
                 storage_path_prefix=storage_path_prefix,
             )
 
-    return task_id
-
-
-def invoke_async_api(simulator: str,
-                     params,
-                     type_annotations: Dict[Any, Type],
-                     resource_pool: types.ComputationalResources,
-                     storage_path_prefix: Optional[str] = "",
-                     container_image: Optional[str] = None,
-                     resubmit_on_preemption: bool = False,
-                     simulator_obj=None,
-                     simulator_name_alias=None,
-                     input_resources: Optional[List[str]] = None) -> str:
-    """Perform a task asyc and remotely via Inductiva's Web API.
-
-    Submits a simulation async to the API and returns the task id.
-    The flow is summarized as follows:
-        1. Transform request params into the params used to
-        validate permission to execute the request.
-        2. Submit task via the "POST task/submit" endpoint.
-            Note: HTTP status code 400 informs the requested method is invalid,
-                and HTTP status code 403 informs that the user is not authorized
-                to post such request.
-        3. If the status returned by the previous HTTP request is
-            "pending-input", ZIP inputs and send them via
-            "POST task/{task_id}/input".
-        4. Return task_id and leaves the simulation on the queue until resources
-            become available.
-
-    Args:
-        request: Request sent to the API for validation.
-        input_dir: Directory containing the input files to be uploaded.
-        container_image: The container image to use for the simulation
-            Example: container_image="docker://inductiva/kutu:xbeach_v1.23_dev"
-        resubmit_on_preemption (bool): Resubmit task for execution when
-                previous execution attempts were preempted. Only applicable when
-                using a preemptible resource, i.e., resource instantiated with
-                `spot=True`.
-        input_resources: Additional input files that will be copied to the
-                simulation from a bucket or from another task output.
-    Return:
-        Returns the task id.
-    """
-
-    request_params = get_validate_request_params(
-        original_params=params,
-        type_annotations=type_annotations,
-    )
-
-    with get_client() as client:
-        api_instance = TasksApi(client)
-
-        task_id = submit_task(api_instance=api_instance,
-                              simulator=simulator,
-                              simulator_name_alias=simulator_name_alias,
-                              request_params=request_params,
-                              resource_pool=resource_pool,
-                              storage_path_prefix=storage_path_prefix,
-                              params=params,
-                              container_image=container_image,
-                              type_annotations=type_annotations,
-                              resubmit_on_preemption=resubmit_on_preemption,
-                              simulator_obj=simulator_obj,
-                              input_resources=input_resources)
-
+    # Return task_id and leaves the simulation on the queue until resources
+    # become available.
     return task_id

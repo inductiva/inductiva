@@ -49,6 +49,8 @@ class BaseMachineGroup(ABC):
                 kept alive. After auto_terminate_minutes minutes the machine
                 will be terminated. This time will start counting after calling
                 this method.
+
+    :meta private:
     """
     # Constructor arguments
     machine_type: str
@@ -860,7 +862,7 @@ def _fetch_machine_groups_from_api():
         api_compute = compute_api.ComputeApi(inductiva.api.get_client())
         response = api_compute.list_active_user_instance_groups()
 
-        return response.body
+        return json.loads(response.response.data)
 
     except inductiva.client.ApiException as api_exception:
         raise api_exception

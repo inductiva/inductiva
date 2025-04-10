@@ -15,6 +15,7 @@ from inductiva.client.apis.paths.admin_users_email_terms_and_conditions import A
 from inductiva.client.apis.paths.admin_users_username_organization import AdminUsersUsernameOrganization
 from inductiva.client.apis.paths.admin_users_username_credits import AdminUsersUsernameCredits
 from inductiva.client.apis.paths.admin_user_emails import AdminUserEmails
+from inductiva.client.apis.paths.admin_user_buckets import AdminUserBuckets
 from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
 from inductiva.client.apis.paths.admin_users_email import AdminUsersEmail
 from inductiva.client.apis.paths.admin_users_username_storage_size_fs import AdminUsersUsernameStorageSizeFs
@@ -35,8 +36,12 @@ from inductiva.client.apis.paths.admin_import_provider_costs import AdminImportP
 from inductiva.client.apis.paths.admin_machine_id_event import AdminMachineIdEvent
 from inductiva.client.apis.paths.admin_users_username_costs_fee_percentage import AdminUsersUsernameCostsFeePercentage
 from inductiva.client.apis.paths.admin_organizations_organization_id_costs_fee_percentage import AdminOrganizationsOrganizationIdCostsFeePercentage
+from inductiva.client.apis.paths.admin_organizations_organization_id_terminate_resources_credits_threshold import AdminOrganizationsOrganizationIdTerminateResourcesCreditsThreshold
 from inductiva.client.apis.paths.admin_top_ups import AdminTopUps
 from inductiva.client.apis.paths.admin_tasks import AdminTasks
+from inductiva.client.apis.paths.admin_users_email_stripe_customer_id import AdminUsersEmailStripeCustomerId
+from inductiva.client.apis.paths.admin_feature_flags_name import AdminFeatureFlagsName
+from inductiva.client.apis.paths.admin_feature_flags_ import AdminFeatureFlags
 from inductiva.client.apis.paths.task_runner_register import TaskRunnerRegister
 from inductiva.client.apis.paths.task_runner_machine_id import TaskRunnerMachineId
 from inductiva.client.apis.paths.task_runner_machine_id_task import TaskRunnerMachineIdTask
@@ -79,6 +84,8 @@ from inductiva.client.apis.paths.users_organization_costs import UsersOrganizati
 from inductiva.client.apis.paths.users_top_ups import UsersTopUps
 from inductiva.client.apis.paths.projects import Projects
 from inductiva.client.apis.paths.projects_name import ProjectsName
+from inductiva.client.apis.paths.projects_name_task_task_id_add import ProjectsNameTaskTaskIdAdd
+from inductiva.client.apis.paths.projects_name_task_task_id_remove import ProjectsNameTaskTaskIdRemove
 from inductiva.client.apis.paths.metrics_users_username_activity import MetricsUsersUsernameActivity
 from inductiva.client.apis.paths.metrics_users_username_cost_over_time import MetricsUsersUsernameCostOverTime
 from inductiva.client.apis.paths.metrics_users_username_task_status_overview import MetricsUsersUsernameTaskStatusOverview
@@ -118,6 +125,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsersUsernameCredits,
         PathValues.ADMIN_USER_EMAILS:
             AdminUserEmails,
+        PathValues.ADMIN_USER_BUCKETS:
+            AdminUserBuckets,
         PathValues.ADMIN_USERS_EMAIL_API_KEY:
             AdminUsersEmailApiKey,
         PathValues.ADMIN_USERS_EMAIL:
@@ -158,10 +167,18 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsersUsernameCostsFeePercentage,
         PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_COSTS_FEE_PERCENTAGE:
             AdminOrganizationsOrganizationIdCostsFeePercentage,
+        PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_TERMINATE_RESOURCES_CREDITS_THRESHOLD:
+            AdminOrganizationsOrganizationIdTerminateResourcesCreditsThreshold,
         PathValues.ADMIN_TOPUPS:
             AdminTopUps,
         PathValues.ADMIN_TASKS:
             AdminTasks,
+        PathValues.ADMIN_USERS_EMAIL_STRIPE_CUSTOMER_ID:
+            AdminUsersEmailStripeCustomerId,
+        PathValues.ADMIN_FEATUREFLAGS_NAME:
+            AdminFeatureFlagsName,
+        PathValues.ADMIN_FEATUREFLAGS_:
+            AdminFeatureFlags,
         PathValues.TASKRUNNER_REGISTER:
             TaskRunnerRegister,
         PathValues.TASKRUNNER_MACHINE_ID:
@@ -246,6 +263,10 @@ PathToApi = typing_extensions.TypedDict(
             Projects,
         PathValues.PROJECTS_NAME:
             ProjectsName,
+        PathValues.PROJECTS_NAME_TASK_TASK_ID_ADD:
+            ProjectsNameTaskTaskIdAdd,
+        PathValues.PROJECTS_NAME_TASK_TASK_ID_REMOVE:
+            ProjectsNameTaskTaskIdRemove,
         PathValues.METRICS_USERS_USERNAME_ACTIVITY:
             MetricsUsersUsernameActivity,
         PathValues.METRICS_USERS_USERNAME_COST_OVER_TIME:
@@ -293,6 +314,8 @@ path_to_api = PathToApi({
         AdminUsersUsernameCredits,
     PathValues.ADMIN_USER_EMAILS:
         AdminUserEmails,
+    PathValues.ADMIN_USER_BUCKETS:
+        AdminUserBuckets,
     PathValues.ADMIN_USERS_EMAIL_API_KEY:
         AdminUsersEmailApiKey,
     PathValues.ADMIN_USERS_EMAIL:
@@ -333,10 +356,18 @@ path_to_api = PathToApi({
         AdminUsersUsernameCostsFeePercentage,
     PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_COSTS_FEE_PERCENTAGE:
         AdminOrganizationsOrganizationIdCostsFeePercentage,
+    PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_TERMINATE_RESOURCES_CREDITS_THRESHOLD:
+        AdminOrganizationsOrganizationIdTerminateResourcesCreditsThreshold,
     PathValues.ADMIN_TOPUPS:
         AdminTopUps,
     PathValues.ADMIN_TASKS:
         AdminTasks,
+    PathValues.ADMIN_USERS_EMAIL_STRIPE_CUSTOMER_ID:
+        AdminUsersEmailStripeCustomerId,
+    PathValues.ADMIN_FEATUREFLAGS_NAME:
+        AdminFeatureFlagsName,
+    PathValues.ADMIN_FEATUREFLAGS_:
+        AdminFeatureFlags,
     PathValues.TASKRUNNER_REGISTER:
         TaskRunnerRegister,
     PathValues.TASKRUNNER_MACHINE_ID:
@@ -421,6 +452,10 @@ path_to_api = PathToApi({
         Projects,
     PathValues.PROJECTS_NAME:
         ProjectsName,
+    PathValues.PROJECTS_NAME_TASK_TASK_ID_ADD:
+        ProjectsNameTaskTaskIdAdd,
+    PathValues.PROJECTS_NAME_TASK_TASK_ID_REMOVE:
+        ProjectsNameTaskTaskIdRemove,
     PathValues.METRICS_USERS_USERNAME_ACTIVITY:
         MetricsUsersUsernameActivity,
     PathValues.METRICS_USERS_USERNAME_COST_OVER_TIME:

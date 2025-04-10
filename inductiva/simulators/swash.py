@@ -89,7 +89,8 @@ class SWASH(simulators.Simulator):
 
             commands.append(machinefile_command)
 
-            mpi_flag = f"-mpi {n_vcpus}" if n_vcpus else ""
+            #if the user does not provide n_vcpus use all available by default
+            mpi_flag = f"-mpi {n_vcpus or on.available_vcpus}"
 
             swashrun_command = Command(
                 f"swashrun -input {config_file_only} {mpi_flag}")
@@ -100,6 +101,7 @@ class SWASH(simulators.Simulator):
         elif command == "swash.exe":
 
             mpi_kwargs = {}
+            #If the user does not provide n_vcpus mpi will use all available
             if n_vcpus is not None:
                 mpi_kwargs["np"] = n_vcpus
             mpi_kwargs["use_hwthread_cpus"] = use_hwthread

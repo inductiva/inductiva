@@ -10,20 +10,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: source
 
-      - uses: nicholasphair/sphinx-action@7.0.0
-        with:
-          docs-folder: "source/docs/"
-          # required by #1291
-          pre-build-command: |
-            apt-get update -y && \
-            apt-get install -y git && \
-            pip install -y myst-parser && \
-            echo "extensions = ['myst_parser']" > conf.py
-          build-command: "sphinx-build . ../../build/en/latest -W -D version=latest"
+      - name: Install dependencies
+        run: |
+          cd source
+          python -m pip install -r requirements.txt
+          cd docs
+          python -m pip install -r requirements.txt
+
+      - name: Build docs with Sphinx
+        run: |
+          cd source/docs
+          sphinx-build . ../../build/en/latest -D version=latest
+
       - name: Deploy to staging webserver via rsync
         uses: burnett01/rsync-deployments@7.0.0
         with:
