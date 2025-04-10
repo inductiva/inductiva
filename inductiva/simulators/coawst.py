@@ -113,7 +113,7 @@ class COAWST(simulators.Simulator):
                                     build_coawst_script=build_coawst_script)
 
             build_script = os.path.join(input_dir, build_coawst_script)
-            
+
             # only validates the build script if we are going to compile
             if simulation_binary is None:
                 self._validate_build_script(build_script=str(build_script))
