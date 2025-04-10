@@ -402,8 +402,10 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.__init__"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.compress_type"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.compress_type</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.compressed_size"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.compressed_size</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.name"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.range_start"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.range_start</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.size"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.size</span></code></a></li>
 </ul>
 </li>
@@ -496,12 +498,17 @@ the status of the operation.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileInfo">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ZipFileInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compressed_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ZipFileInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compressed_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compress_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Represents information about a file within a ZIP archive.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileInfo.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compressed_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo.__init__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compressed_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compress_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileInfo.compress_type">
+<span class="sig-name descname"><span class="pre">compress_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo.compress_type" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -512,6 +519,11 @@ the status of the operation.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileInfo.name">
 <span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileInfo.range_start">
+<span class="sig-name descname"><span class="pre">range_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo.range_start" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -538,15 +550,27 @@ or folder if it is compressed. Defaults to True.</p></li>
 </ul>
 </dd>
 </dl>
-<p class="rubric">Example</p>
-<p># Download a folder from a remote server to the current directory
-inductiva.storage.download(remote_path=”/path/to/remote/folder/”)</p>
-<p># Download a file and save it to a local directory without decompressing
-inductiva.storage.download(remote_path=”/path/to/remote/file.zip”,</p>
-<blockquote>
-<div><p>local_dir=”/local/directory”,
-decompress=False)</p>
-</div></blockquote>
+<p class="rubric">Examples</p>
+<p>Download a folder from a remote server to the current directory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inductiva</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">remote_path</span><span class="o">=</span><span class="s2">&quot;/path/to/remote/folder/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Download a file and save it to a local directory without decompressing:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inductiva</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">remote_path</span><span class="o">=</span><span class="s2">&quot;/path/to/remote/file.zip&quot;</span><span class="p">,</span>
+                           <span class="n">local_dir</span><span class="o">=</span><span class="s2">&quot;/local/directory&quot;</span><span class="p">,</span>
+                           <span class="n">decompress</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Download a file inside a zip archive:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inductiva</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">download</span><span class="p">(</span>
+    <span class="n">remote_path</span><span class="o">=</span><span class="s2">&quot;/some_task_id/output.zip/stdout.txt&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is not possible to download folders that are inside zip archives.</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -747,8 +771,10 @@ If not specified, the name will be extracted from the URL.</p></li>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.__init__"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.compress_type"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.compress_type</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.compressed_size"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.compressed_size</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.name"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.range_start"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.range_start</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.size"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.size</span></code></a></li>
 </ul>
 </li>
