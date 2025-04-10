@@ -61,6 +61,7 @@ class COAWST(simulators.Simulator):
             on: types.ComputationalResources,
             coawst_bin: str = "coawstM",
             init_commands: Optional[List[str]] = None,
+            cleanup_commands: Optional[List[str]] = None,
             use_hwthread: bool = True,
             n_vcpus: Optional[int] = None,
             storage_dir: Optional[str] = "",
@@ -81,6 +82,10 @@ class COAWST(simulators.Simulator):
                 `/workdir/output/artifacts/__COAWST`. It can also be used
                 to run any helper function present within COAWST, like
                 `scrip_coawst`.
+            cleanup_commands: List of helper commands to clean up things
+                after your simulation finishes. Used to copy files from
+                `/workdir/output/artifacts/__COAWST` to your input_dir. Or
+                to delete unwanted files generated during the simulation.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
             (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
@@ -130,6 +135,11 @@ class COAWST(simulators.Simulator):
         # Add init commands after building and before running the simulation
         if init_commands is not None:
             commands = commands[:1] + init_commands + commands[1:]
+
+        # Add cleanup commands after running the simulation
+        if cleanup_commands is not None:
+            # add comands to the penultimate position
+            commands = commands[:-2] + cleanup_commands + commands[-2:]
 
         return super().run(input_dir,
                            on=on,
