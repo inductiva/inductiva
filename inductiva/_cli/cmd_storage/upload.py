@@ -21,7 +21,10 @@ def register(parser):
     subparser.description = (
         "The `inductiva storage upload` command allows you to upload files "
         "or folders to your remote storage.\n"
-        "Specify the local path and the remote destination.\n")
+        "Specify the local path and the remote destination.\n\n"
+        "Example:\n"
+        "    inductiva storage upload local/path/file_or_directory remote_dir\n"
+    )
 
     subparser.add_argument(
         "local_path",
