@@ -56,13 +56,13 @@ class COAWST(simulators.Simulator):
     def run(self,
             input_dir: Optional[str],
             sim_config_filename: str,
-            build_coawst_script: str,
             *,
+            build_coawst_script: str = None,
             on: types.ComputationalResources,
             coawst_bin: str = "coawstM",
             init_commands: Optional[List[str]] = None,
             cleanup_commands: Optional[List[str]] = None,
-            simulation_binary: Optional[str] = None,
+            compile_simulator: bool = True,
             use_hwthread: bool = True,
             n_vcpus: Optional[int] = None,
             storage_dir: Optional[str] = "",
@@ -76,8 +76,11 @@ class COAWST(simulators.Simulator):
             on: The computational resource to launch the simulation on.
             sim_config_filename: Name of the simulation configuration file.
             build_coawst_script: Script used to build the COAWST executable.
-            coawst_bin: Name of the COAWST binary to execute (coawstM by
-            default).
+            coawst_bin : str
+                Name of the COAWST binary to execute (defaults to 'coawstM').
+                This binary will be used whether the simulator is compiled or
+                not. If compilation is skipped, the binary must
+                already exist in the `input_dir`.
             init_commands: List of helper commands to prepare things for your
                 simulation. Used to copy files to and from
                 `/workdir/output/artifacts/__COAWST`. It can also be used
@@ -87,14 +90,18 @@ class COAWST(simulators.Simulator):
                 after your simulation finishes. Used to copy files from
                 `/workdir/output/artifacts/__COAWST` to your input_dir. Or
                 to delete unwanted files generated during the simulation.
-            simulation_binary: Name of the simulation binary to execute. If 
-                provided, it will skip the compilation step and directly run the
-                simulation with the provided binary.
+            compile_simulator :
+                If True, the simulator will be compiled using the provided
+                `build_coawst_script`, and the simulation will run using the
+                specified `coawst_bin`.  
+                If False, the simulation will be run directly using the
+                precompiled `coawst_bin` binary, which should already exist in
+                the `input_dir`.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
-            (default), all vCPUs will be used.
+                (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
-            number of hardware threads on the node, and use that as the
-            number of slots available.
+                number of hardware threads on the node, and use that as the
+                number of slots available.
             other arguments: See the documentation of the base class.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
@@ -104,18 +111,23 @@ class COAWST(simulators.Simulator):
                 the simulation directory.
         """
 
+        if build_coawst_script is None and compile_simulator:
+            raise ValueError("build_coawst_script is required if "
+                             "compile_simulator is True")
+
         self._check_vcpus(n_vcpus, on)
 
         #only runs checks if we dont use remote assets
         if remote_assets is None:
             self._input_files_exist(input_dir=input_dir,
-                                    sim_config_filename=sim_config_filename,
-                                    build_coawst_script=build_coawst_script)
-
-            build_script = os.path.join(input_dir, build_coawst_script)
+                                    sim_config_filename=sim_config_filename)
 
             # only validates the build script if we are going to compile
-            if simulation_binary is None:
+            if compile_simulator:
+                self._input_files_exist(input_dir=input_dir,
+                                        build_coawst_script=build_coawst_script)
+
+                build_script = os.path.join(input_dir, build_coawst_script)
                 self._validate_build_script(build_script=str(build_script))
 
         mpi_kwargs = {}
@@ -125,23 +137,23 @@ class COAWST(simulators.Simulator):
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
 
         #only compiles if we are not using a precompiled binary
-        if simulation_binary is None:
+        if compile_simulator:
             # 34 selects dmpar for linux when compiling WRF
-            compilation_command = Command(f"bash {build_coawst_script}", "34")
+            compilation_command = [Command(f"bash {build_coawst_script}", "34")]
         else:
             # Copy the simulation binary to the __COAWST directory
             # and make it executable
             compilation_command = [
-                f"cp -f {simulation_binary} __COAWST/",
-                f"chmod +x __COAWST/{simulation_binary}",
+                f"cp -f {coawst_bin} __COAWST/",
+                f"chmod +x __COAWST/{coawst_bin}",
             ]
 
         commands = [
             #Copy COAWST source code to our input dir
             "cp -r /opt/COAWST /workdir/output/artifacts/__COAWST",
             "create_all_sim_links",
-            #Compile COAWST or use the provided binary
-            compilation_command,
+            #Either compiles the simulator or copies the provided binary
+            *compilation_command,
             #Run the simulation
             Command(f"{coawst_bin} {sim_config_filename}",
                     mpi_config=mpi_config),
