@@ -18,6 +18,7 @@ def run_simulation(
     simulator_obj=None,
     remote_assets: Optional[List[str]] = None,
     simulator_name_alias: Optional[str] = None,
+    project_name: Optional[str] = None,
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
@@ -46,7 +47,8 @@ def run_simulation(
                                   container_image=container_image,
                                   simulator_name_alias=simulator_name_alias,
                                   simulator_obj=simulator_obj,
-                                  remote_assets=remote_assets)
+                                  remote_assets=remote_assets,
+                                  project_name=project_name)
 
     logging.info("■ Task %s submitted to the queue of the %s.", task_id,
                  machine_group)
