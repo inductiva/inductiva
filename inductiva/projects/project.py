@@ -31,21 +31,21 @@ def get_projects():
 
 class Project:
     """Projects management class.
-    
+
     Groups related tasks together under a single project.
-    
+
     Example:
         project = inductiva.projects.Project("test_project")
 
-        task_1 = simulator.run(...) 
+        task_1 = simulator.run(...)
         project.add_task(task_1)
-        task_2 = simulator.run(...) 
+        task_2 = simulator.run(...)
         project.add_task(task_2)
     """
 
     def __init__(self, name: str):
         """Initialize the Project instance.
-        
+
         Args:
           name (str): The name of the project.
         """
@@ -115,7 +115,7 @@ class Project:
         """
         total_cost = 0.0
         for task in self.get_tasks():
-            total_cost += task.info.estimated_computation_cost
+            total_cost += task.info.estimated_computation_cost or 0
         return total_cost
 
     def __str__(self) -> str:
@@ -243,7 +243,7 @@ class Project:
 
     def download_outputs(self):
         """ Downloads all the outputs for all the tasks in the project.
-        
+
         All the files will be stored inside
         `inductiva_output/<project_name>/<task_id's>`.
         """
