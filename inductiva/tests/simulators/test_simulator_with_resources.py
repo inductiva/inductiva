@@ -292,7 +292,6 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
                 run_kwargs["remote_assets"] = ["temp"]
                 run_kwargs["build_coawst_script"] = "hello_world.sh"
 
-
             if sim_name in ("SWAN", "SWASH", "SNLSWAN"):
                 args = ("test_folder",)
 
