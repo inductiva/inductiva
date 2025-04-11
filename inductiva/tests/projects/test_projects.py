@@ -13,7 +13,6 @@ def test_get_default_project():
     print(str(default_proj))
 
 
-
 def test_get_all_projects():
     """Tests if can get all projects."""
 
