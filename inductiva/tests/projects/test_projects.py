@@ -35,7 +35,7 @@ def test_add_task_to_project():
     new_proj = inductiva.projects.Project("new-project")
     new_proj.add_task(task)
 
-    prev_proj_tasks =previous_project.get_tasks(status=task.get_status())
+    prev_proj_tasks = previous_project.get_tasks(status=task.get_status())
     # Check if the task was removed from the previous project
     assert not any(t.id == task.id for t in prev_proj_tasks)
 
