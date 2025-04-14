@@ -25,20 +25,30 @@ def test_get_all_projects():
         print(proj)
 
 
-def test_add_task_to_project():
+def test_move_task_from_default_project():
     """Tests if can add task to project."""
 
-    task = inductiva.tasks.get_tasks(project="default", last_n=10)[0]
+    prev_proj_tasks = inductiva.tasks.get_tasks(project="default",
+                                                status="success",
+                                                last_n=10)
+    assert prev_proj_tasks, "No tasks found in the default project with status 'success'."
+    task = prev_proj_tasks[0]
     previous_project_name = task.info.project
     previous_project = inductiva.projects.Project(previous_project_name)
 
     new_proj = inductiva.projects.Project("new-project")
     new_proj.add_task(task)
 
-    prev_proj_tasks = previous_project.get_tasks(status=task.get_status())
+    # Ask again for the previous project tasks
+    prev_proj_tasks = inductiva.tasks.get_tasks(project="default",
+                                                status="success",
+                                                last_n=10)
     # Check if the task was removed from the previous project
     assert not any(t.id == task.id for t in prev_proj_tasks)
 
     new_proj_tasks = new_proj.get_tasks(status=task.get_status())
     # Check if the task was added to the new project
     assert any(t.id == task.id for t in new_proj_tasks)
+
+    # Move it back to the previous project
+    previous_project.add_task(task)
