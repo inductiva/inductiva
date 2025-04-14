@@ -122,9 +122,9 @@ class Project:
             f"  {k}: {v}" for k, v in self.task_by_status.items())
 
         return f"Project '{self.name}' with "\
-               f"{self.num_tasks} tasks (id={self.id}).\n"\
+               f"{self.num_tasks} tasks.\n"\
                "\nTasks status:\n"\
-               f"{status_report}"\
+               f"{status_report}\n"\
                f"\nEstimated project cost: {formatted_cost}\n"
 
 

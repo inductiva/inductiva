@@ -13,7 +13,6 @@ from inductiva import simulators, resources
 import inductiva
 
 
-
 @pytest.fixture(name="list_available_fixture")
 def _list_available_fixture():
     # Fixture that returns a dictionary with the available images for
