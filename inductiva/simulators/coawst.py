@@ -86,17 +86,19 @@ class COAWST(simulators.Simulator):
                 `/workdir/output/artifacts/__COAWST`. It can also be used
                 to run any helper function present within COAWST, like
                 `scrip_coawst`.
+                Will run before the compilation of the simulator.
             cleanup_commands: List of helper commands to clean up things
                 after your simulation finishes. Used to copy files from
                 `/workdir/output/artifacts/__COAWST` to your input_dir. Or
                 to delete unwanted files generated during the simulation.
+                Will run after the simulation ends.
             compile_simulator :
                 If True, the simulator will be compiled using the provided
                 `build_coawst_script`, and the simulation will run using the
                 specified `coawst_bin`.  
                 If False, the simulation will be run directly using the
                 precompiled `coawst_bin` binary, which should already exist in
-                the `input_dir`.
+                the `input_dir` with the same name as `coawst_bin`.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
                 (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
