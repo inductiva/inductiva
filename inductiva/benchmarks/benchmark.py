@@ -148,7 +148,10 @@ class Benchmark(projects.Project):
             if not machine_group.started:
                 machine_group.start(wait_for_quotas=wait_for_quotas)
             for _ in range(num_repeats):
-                simulator.run(input_dir=input_dir, on=machine_group, **kwargs)
+                task = simulator.run(input_dir=input_dir,
+                                     on=machine_group,
+                                     **kwargs)
+                self.add_task(task)
         self.runs.clear()
         return self
 
