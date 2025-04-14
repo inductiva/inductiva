@@ -57,7 +57,7 @@ class COAWST(simulators.Simulator):
             input_dir: Optional[str],
             sim_config_filename: str,
             *,
-            build_coawst_script: str = None,
+            build_coawst_script: Optional[str] = None,
             on: types.ComputationalResources,
             coawst_bin: str = "coawstM",
             init_commands: Optional[List[str]] = None,
