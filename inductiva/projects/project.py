@@ -1,5 +1,4 @@
 """Project class"""
-import datetime
 import logging
 import time
 from typing import List, Optional
@@ -10,7 +9,7 @@ from inductiva.client.models import TaskStatusCode
 from inductiva.client import ApiException
 # from inductiva.client import models
 from inductiva.client.apis.tags import projects_api
-from inductiva.utils.format_utils import bytes_formatter, currency_formatter, timedelta_formatter
+from inductiva.utils.format_utils import currency_formatter
 
 _logger = logging.getLogger(__name__)
 
@@ -108,94 +107,31 @@ class Project:
             self._proj_data.get("task_status_overview").items()
         }
 
-    def _get_estimated_computation_cost(self):
+    @property
+    def estimated_computation_cost(self) -> float:
         """Returns the estimated project cost.
 
-        The estimated project cost is the combination of the cost of all tasks.
+        Computed as the sum of the estimated computation cost of each task.
         """
         return self._proj_data.get("estimated_computation_cost")
-    
 
     def __str__(self) -> str:
-        project_cost = currency_formatter(self._get_estimated_computation_cost())
+        formatted_cost = currency_formatter(self.estimated_computation_cost)
 
-        #Count status
-        status_counts = {}
-        total_files = 0
-        total_size = 0
-        duration = datetime.timedelta()
-
-        list_of_tasks = self.get_tasks()
-
-        total_duration = datetime.timedelta()
-        running_tasks_warning = ""
-        for task in list_of_tasks:
-            try:
-                status_counts[task.get_status()] = status_counts.get(
-                    task.get_status(), 0) + 1
-                total_files += task.info.data_metrics.output_total_files.value
-                total_size += task.info.data_metrics.output_size_bytes.value
-                if task.info.start_time and task.info.end_time:
-                    start = datetime.datetime.fromisoformat(
-                        task.info.start_time)
-                    end = datetime.datetime.fromisoformat(task.info.end_time)
-                    duration_task = end - start
-                    total_duration += duration_task
-                else:
-                    running_tasks_warning = (
-                        "Warning: Some tasks may not be finished "
-                        "yet. The values presented may change as a result.")
-            # pylint: disable=broad-exception-caught
-            # Catch all exceptions to avoid crashing the program
-            except Exception as ex:
-                _logger.error("Failed to get all the task info for %s",
-                              task.id,
-                              exc_info=ex)
-
-        if len(list_of_tasks) > 0:
-            # get start/end time
-            start_project_time = min(
-                datetime.datetime.fromisoformat(task.info.start_time)
-                for task in list_of_tasks
-                if task.info.start_time)
-            end_project_time = max(
-                datetime.datetime.fromisoformat(task.info.end_time)
-                for task in list_of_tasks
-                if task.info.end_time)
-
-            duration = end_project_time - start_project_time
-
-        total_size = bytes_formatter(total_size)
-        duration = timedelta_formatter(duration)
-        total_duration = timedelta_formatter(total_duration)
-
-        status_report = ""
-        for status, count in status_counts.items():
-            status_report += f"{status}: {count}\n"
+        status_report = "\n".join(
+            f"  {k}: {v}" for k, v in self.task_by_status.items())
 
         return f"Project '{self.name}' with "\
                f"{self.num_tasks} tasks (id={self.id}).\n"\
                "\nTasks status:\n"\
                f"{status_report}"\
-               f"\nTotal number of output files: {total_files}\n"\
-               f"Total size of output: {total_size}\n"\
-               f"\nProject duration: {duration}\n"\
-               f"Project total simulated time: {total_duration}\n"\
-               f"\nEstimated project cost: {project_cost}\n"\
-               f"{running_tasks_warning}"
+               f"\nEstimated project cost: {formatted_cost}\n"
 
-    def describe(self) -> str:
-        """Generates a string description of the object
 
-        Returns:
-          str: A string description of the object. Includes project name,
-            total number of tasks and the number of tasks by status.
-
-        """
-        header = str(self) + "\n"
-        summary = "\n".join(
-            f"  {k}: {v}" for k, v in self.task_by_status.items())
-        return header + summary
+#               f"Project total simulated time: {total_duration}\n"\
+#               f"\nTotal number of output files: {total_files}\n"\
+#               f"Total size of output: {total_size}\n"\
+#               f"\nProject duration: {duration}\n"\
 
     def add_task(self, task: tasks.Task):
         """Adds a task to the project.
