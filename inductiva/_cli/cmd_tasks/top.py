@@ -16,8 +16,10 @@ def top(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
     # pylint: disable=protected-access
-    task._top(fout)
-    return 0
+    result, return_code = task._top()
+    if result:
+        print(result, file=fout)
+    return return_code
 
 
 def register(parser):

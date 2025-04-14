@@ -140,6 +140,8 @@ def upload_input(api_instance: TasksApi, input_dir, params, task_id,
         params: Additional parameters to be sent to the API.
         storage_path_prefix: Path to the storage bucket.
         """
+    input_zip_path = None
+
     try:
         input_zip_path, zip_file_size = prepare_input(task_id, input_dir,
                                                       params)
@@ -300,11 +302,9 @@ def task_info_str(
 
     info_str += (f"\t· Local input directory: {local_input_dir}\n"
                  "\t· Submitting to the following computational resources:\n")
-    if resource_pool is not None:
-        info_str += f" \t\t· {resource_pool}\n"
-    else:
-        machine_type = constants.DEFAULT_QUEUE_MACHINE_TYPE
-        info_str += f" \t\t· Default queue with {machine_type} machines.\n"
+    info_str += f" \t\t· {resource_pool}\n"
+
+    if task_submitted_info is not None:
         ttl_seconds = task_submitted_info.get("time_to_live_seconds")
         if ttl_seconds is not None and isinstance(ttl_seconds, decimal.Decimal):
             ttl_seconds = format_utils.seconds_formatter(ttl_seconds)
