@@ -31,7 +31,7 @@ def test_move_task_from_default_project():
     prev_proj_tasks = inductiva.tasks.get_tasks(project="default",
                                                 status="success",
                                                 last_n=10)
-    assert prev_proj_tasks, "No tasks found in the default project with status 'success'."
+    assert prev_proj_tasks, "No tasks found with status 'success'."
     task = prev_proj_tasks[0]
     previous_project_name = task.info.project
     previous_project = inductiva.projects.Project(previous_project_name)
