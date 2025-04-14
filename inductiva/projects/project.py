@@ -108,18 +108,16 @@ class Project:
             self._proj_data.get("task_status_overview").items()
         }
 
-    def _get_project_cost(self):
+    def _get_estimated_computation_cost(self):
         """Returns the estimated project cost.
 
         The estimated project cost is the combination of the cost of all tasks.
         """
-        total_cost = 0.0
-        for task in self.get_tasks():
-            total_cost += task.info.estimated_computation_cost or 0
-        return total_cost
+        return self._proj_data.get("estimated_computation_cost")
+    
 
     def __str__(self) -> str:
-        project_cost = currency_formatter(self._get_project_cost())
+        project_cost = currency_formatter(self._get_estimated_computation_cost())
 
         #Count status
         status_counts = {}
