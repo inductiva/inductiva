@@ -9,7 +9,7 @@ from inductiva.client.models import TaskStatusCode
 from inductiva.client import ApiException
 # from inductiva.client import models
 from inductiva.client.apis.tags import projects_api
-from inductiva.utils.format_utils import currency_formatter
+from inductiva.utils import format_utils
 
 _logger = logging.getLogger(__name__)
 
@@ -89,7 +89,10 @@ class Project:
         return self._proj_data.get("name")
 
     @property
-    def created_at(self) -> str:
+    def created_on(self) -> str:
+        # TODO: rename backend to pass also "created_on" instead
+        # of "created_at" since we are talking about date/time 
+        # and not a location.
         return self._proj_data.get("created_at")
 
     @property
@@ -116,22 +119,17 @@ class Project:
         return self._proj_data.get("estimated_computation_cost")
 
     def __str__(self) -> str:
-        formatted_cost = currency_formatter(self.estimated_computation_cost)
-
+        formatted_cost = format_utils.currency_formatter(
+            self.estimated_computation_cost)
+        formatted_created_on = format_utils.datetime_formatter_ymd_hm(self.created_on)
         status_report = "\n".join(
             f"  {k}: {v}" for k, v in self.task_by_status.items())
 
-        return f"Project '{self.name}' with "\
-               f"{self.num_tasks} tasks.\n"\
-               "\nTasks status:\n"\
+        return f"Project '{self.name}' created on {formatted_created_on}.\n"\
+               f"\nTotal number of tasks: {self.num_tasks}\n"\
+               "\nTasks by status:\n"\
                f"{status_report}\n"\
-               f"\nEstimated project cost: {formatted_cost}\n"
-
-
-#               f"Project total simulated time: {total_duration}\n"\
-#               f"\nTotal number of output files: {total_files}\n"\
-#               f"Total size of output: {total_size}\n"\
-#               f"\nProject duration: {duration}\n"\
+               f"\nEstimated total computation cost: {formatted_cost}\n"
 
     def add_task(self, task: tasks.Task):
         """Adds a task to the project.
