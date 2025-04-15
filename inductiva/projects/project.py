@@ -89,10 +89,7 @@ class Project:
         return self._proj_data.get("name")
 
     @property
-    def created_on(self) -> str:
-        # TODO: rename backend to pass also "created_on" instead
-        # of "created_at" since we are talking about date/time
-        # and not a location.
+    def created_at(self) -> str:
         return self._proj_data.get("created_at")
 
     @property
@@ -121,12 +118,12 @@ class Project:
     def __str__(self) -> str:
         formatted_cost = format_utils.currency_formatter(
             self.estimated_computation_cost)
-        formatted_created_on = format_utils.datetime_formatter_ymd_hm(
-            self.created_on)
+        formatted_created_at = format_utils.datetime_formatter_ymd_hm(
+            self.created_at)
         status_report = "\n".join(
             f"  {k}: {v}" for k, v in self.task_by_status.items())
 
-        return f"Project '{self.name}' created on {formatted_created_on}.\n"\
+        return f"Project '{self.name}' created at {formatted_created_at}.\n"\
                f"\nTotal number of tasks: {self.num_tasks}\n"\
                "\nTasks by status:\n"\
                f"{status_report}\n"\
