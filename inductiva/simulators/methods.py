@@ -1,62 +1,35 @@
 """Methods to interact with the available simulators."""
 import requests
-from collections import defaultdict
-import re
-
-# Regex to extract metadata from the image name
-# Example:
-#   dualsphysics_v5.2.1_dev -> name=dualsphysics, version=5.2.1, isdev=_dev
-#   dualsphysics_v5.2.1 -> name=dualsphysics, version=5.2.1, isdev=None
-IMAGE_TOKENIZER = re.compile(r"(?P<name>[a-zA-Z-_0-9]+)"
-                             r"_v(?P<version>.+?(?=(_dev|$)))"
-                             r"(?P<isdev>_dev)?")
-
-DOCKERHUB_URL = "https://hub.docker.com/v2/repositories/inductiva/kutu/tags/"
-
-SKIP_IMAGES = ["base-image", "echo"]
+from typing import Any
+import logging
 
 
-def list_available_images():
-    """List available images on DockerHub for the Inductiva API.
+# Constants
+DEFAULT_API_URL: str = "https://api-dev.inductiva.ai/simulators/available-images"
+DEFAULT_TIMEOUT: int = 120
 
-    Returns:
-        A dictionary with the available images for the API, grouped by branch
-        (dev/prod) and simulator name.
+ERROR_HTTP: str = "API returned HTTP error: {}"
+ERROR_CONNECTION: str = "Failed to connect to the API."
+ERROR_TIMEOUT: str = "The request timed out."
+ERROR_REQUEST: str = "An unexpected error occurred while making the API request."
 
-    Example:
-    >>> list_available_images()
-    {
-        {'dev':
-            {'amr-wind': ['1.4.0'],
-              ...
-             'dualsphysics': ['5.2.1']
-            },
-        'prod':
-            {'amr-wind': ['1.3.0', '1.4.0'],
-              ...
-             'dualsphysics': ['5.2.1']
-            }
-        }
-    """
 
-    images = defaultdict(lambda: defaultdict(list))
-    url = f"{DOCKERHUB_URL}?page_size=100"
+def list_available_images() -> Any:
+    """Fetch the list of available simulator images from the API."""
+    try:
+        response = requests.get(DEFAULT_API_URL, timeout=DEFAULT_TIMEOUT)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.HTTPError as http_err:
+        logging.error(f"{ERROR_HTTP} {http_err} - Status code: {response.status_code}")
+        raise RuntimeError(ERROR_HTTP.format(http_err))
+    except requests.exceptions.ConnectionError  as conn_err:
+        logging.error(f"{ERROR_CONNECTION}: {conn_err}")
+        raise RuntimeError(ERROR_CONNECTION)
+    except requests.exceptions.Timeout as timeout_err:
+        logging.error(f"{ERROR_TIMEOUT}: {timeout_err}")
+        raise RuntimeError(ERROR_TIMEOUT)
+    except requests.exceptions.RequestException as req_err:
+        logging.error(f"{ERROR_REQUEST}: {req_err}")
+        raise RuntimeError(ERROR_REQUEST)
 
-    while url is not None:
-        resp = requests.get(url, timeout=120)
-        data = resp.json()
-
-        for tag in data["results"]:
-            if (match := IMAGE_TOKENIZER.match(tag["name"])) is None:
-                continue
-
-            if match.group("name") in SKIP_IMAGES:
-                continue
-
-            name, version = match.group("name"), match.group("version")
-            branch = "development" if match.group("isdev") else "production"
-            images[branch][name].append(version)
-
-        url = data["next"]
-
-    return images
