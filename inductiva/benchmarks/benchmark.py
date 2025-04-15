@@ -164,7 +164,7 @@ class Benchmark(projects.Project):
         Returns:
             Self: The current instance for method chaining.
         """
-        tasks = self.list()
+        tasks = self.get_tasks()
         for task in tasks:
             task.wait(download_std_on_completion=False)
         return self
@@ -252,7 +252,7 @@ class Benchmark(projects.Project):
             select = SelectMode[select.upper()]
 
         info = []
-        tasks = self.list(status=status)
+        tasks = self.get_tasks(status=status)
         for task in tasks:
             task_input_params = get_task_input_params(task)
             task_info = task.info
@@ -289,7 +289,7 @@ class Benchmark(projects.Project):
 
         machine_names = {
             _handle_suffix(task.info.executer)
-            for task in self.list()
+            for task in self.get_tasks()
             if task.info.executer
         }
 
