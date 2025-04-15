@@ -11,7 +11,7 @@ from inductiva.events.actions import Action
 _logger = logging.getLogger(__name__)
 
 
-def list():
+def list_events():
     """Gets all the user's events."""
     try:
         _logger.debug("Trying to get events")

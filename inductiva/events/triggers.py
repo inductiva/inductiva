@@ -1,3 +1,5 @@
+""" Triggers for events."""
+
 from inductiva.client.model.trigger_task_create import TriggerTaskCreate
 from inductiva.client.model.trigger_task_type import TriggerTaskType
 

@@ -1,3 +1,5 @@
+""" Actions for events"""
+
 from inductiva.client.model.action_email_create import ActionEmailCreate
 from inductiva.client.model.action_webhook_create import ActionWebhookCreate
 
@@ -8,7 +10,7 @@ class Action:
     def __init__(self) -> None:
         pass
 
-    def get_action() -> None:
+    def get_action(self) -> None:
         raise NotImplementedError("Subclasses must implement this method.")
 
 
