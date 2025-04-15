@@ -1,4 +1,5 @@
 from inductiva.client.model.action_email_create import ActionEmailCreate
+from inductiva.client.model.action_webhook_create import ActionWebhookCreate
 
 
 class Action:
@@ -33,3 +34,27 @@ class EmailNotification(Action):
         return ActionEmailCreate(
             email_address=self.email_address,
             action_type=ActionEmailCreate.MetaOapg.properties.action_type.EMAIL)
+
+
+class WebhookNotification(Action):
+    """
+    Action that sends a webhook notification.
+
+    Attributes:
+        webhook_url (str): The webhook url to send the notification to.
+    """
+
+    def __init__(self, webhook_url: str) -> None:
+        super().__init__()
+        self.webhook_url = webhook_url
+
+    def get_action(self) -> ActionEmailCreate:
+        """
+        Constructs and returns the webhook object.
+
+        Returns:
+            ActionWebhookCreate: Configured webhook instance.
+        """
+        return ActionWebhookCreate(
+            webhook_url=self.webhook_url,
+            action_type=ActionWebhookCreate.MetaOapg.properties.action_type.WEBHOOK)
