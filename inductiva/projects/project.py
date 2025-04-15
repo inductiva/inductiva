@@ -99,6 +99,7 @@ class Project:
         Args:
           name (str): The name of the project.
         """
+        self._api = projects_api.ProjectsApi(inductiva_api.get_client())
         # If the project already exists, we will load it from the backend.
         self._proj_data = self._get_project(name)
         # Else, we will create a new project.
@@ -108,8 +109,7 @@ class Project:
     def _get_project(self, name: str):
         """Fetches the project info from the backend."""
         try:
-            api = projects_api.ProjectsApi(inductiva_api.get_client())
-            response = api.get_project({"name": name})
+            response = self._api.get_project({"name": name})
             return response.body
         except ApiException as ex:
             if ex.status != 404:
@@ -120,8 +120,7 @@ class Project:
     def _create_project(self, name):
         """Creates a project with the given name on the backend."""
         try:
-            api = projects_api.ProjectsApi(inductiva_api.get_client())
-            response = api.create_project({"name": name})
+            response = self._api.create_project({"name": name})
             return response.body
         except ApiException as ex:
             _logger.error("Failed to create project %s", name, exc_info=ex)
@@ -197,8 +196,7 @@ class Project:
             task: The task to add to the project.
         """
         try:
-            api = projects_api.ProjectsApi(inductiva_api.get_client())
-            api.add_task_to_project({"task_id": task.id, "name": self.name})
+            self._api.add_task_to_project({"task_id": task.id, "name": self.name})
         except ApiException as ex:
             _logger.error(
                 "Failed to add task %s to project %s",
