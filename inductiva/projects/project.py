@@ -110,7 +110,6 @@ class Project:
         try:
             api = projects_api.ProjectsApi(inductiva_api.get_client())
             response = api.get_project({"name": name})
-            print(type(response.body))
             return response.body
         except ApiException as ex:
             if ex.status != 404:
