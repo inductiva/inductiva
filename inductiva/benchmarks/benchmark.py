@@ -146,11 +146,14 @@ class Benchmark(projects.Project):
         Returns:
             Self: The current instance for method chaining.
         """
-        for simulator, input_dir, machine_group, kwargs in self.runs:
-            if not machine_group.started:
-                machine_group.start(wait_for_quotas=wait_for_quotas)
-            for _ in range(num_repeats):
-                simulator.run(input_dir=input_dir, on=machine_group, **kwargs)
+        with self:
+            for simulator, input_dir, machine_group, kwargs in self.runs:
+                if not machine_group.started:
+                    machine_group.start(wait_for_quotas=wait_for_quotas)
+                for _ in range(num_repeats):
+                    simulator.run(input_dir=input_dir,
+                                  on=machine_group,
+                                  **kwargs)
         self.runs.clear()
         return self
 
@@ -161,7 +164,7 @@ class Benchmark(projects.Project):
         Returns:
             Self: The current instance for method chaining.
         """
-        tasks = self.get_tasks()
+        tasks = self.list()
         for task in tasks:
             task.wait(download_std_on_completion=False)
         return self
@@ -249,7 +252,7 @@ class Benchmark(projects.Project):
             select = SelectMode[select.upper()]
 
         info = []
-        tasks = self.get_tasks(status=status)
+        tasks = self.list(status=status)
         for task in tasks:
             task_input_params = get_task_input_params(task)
             task_info = task.info
@@ -286,7 +289,7 @@ class Benchmark(projects.Project):
 
         machine_names = {
             _handle_suffix(task.info.executer)
-            for task in self.get_tasks()
+            for task in self.list()
             if task.info.executer
         }
 
