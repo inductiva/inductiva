@@ -1,4 +1,49 @@
-"""Project class"""
+"""
+This module provides functionality for managing projects and their associated
+tasks within the Inductiva platform. A project serves as a container for
+grouping related tasks, enabling better organization and management of
+computational workflows.
+
+Classes:
+    - Project: Represents a project that groups related tasks together.
+      Provides methods for creating, retrieving, and managing projects and their tasks.
+
+Functions:
+    - get_projects(): Retrieves all projects associated with the current user.
+
+Key Features:
+    - Create and manage projects on the backend.
+    - Add tasks to projects and retrieve the most recent tasks or filter by
+      status.
+    - Monitor the status of all tasks in a project and wait for their 
+    completion.
+    - Download outputs for all tasks in a project.
+    - Estimate the total computation cost of a project based on its tasks.
+
+Example Usage:
+
+      .. code-block:: python
+
+        import inductiva
+
+        # Create a new project or load an existing one
+        project = inductiva.projects.Project("my_project")
+
+        # Select a simulator
+        fvcom = inductiva.simulators.FVCOM()
+        # Run and add tasks to the project
+        for i in range(10):
+            task = fvcom.run(...)
+            project.add_task(task)
+
+        # Monitor task completion
+        project.wait()
+        # Download outputs for all tasks
+        project.download_outputs()
+        # Print project details
+        print(project)
+"""
+
 import logging
 import time
 from typing import List, Optional
@@ -7,6 +52,7 @@ from inductiva import tasks
 from inductiva import api as inductiva_api
 from inductiva.client.models import TaskStatusCode
 from inductiva.client import ApiException
+
 # from inductiva.client import models
 from inductiva.client.apis.tags import projects_api
 from inductiva.utils import format_utils
@@ -14,7 +60,7 @@ from inductiva.utils import format_utils
 _logger = logging.getLogger(__name__)
 
 
-def get_projects():
+def get_projects() -> List["Project"]:
     """Gets all the user's projects."""
     try:
         _logger.debug("Trying to get remote projects")
@@ -29,21 +75,27 @@ def get_projects():
 
 
 class Project:
-    """Projects management class.
+    """
+    Projects management class.
 
     Groups related tasks together under a single project.
 
     Example:
-        project = inductiva.projects.Project("test_project")
+
+      .. code-block:: python
+
+        project = inductiva.projects.Project("my project")
 
         task_1 = simulator.run(...)
         project.add_task(task_1)
+
         task_2 = simulator.run(...)
         project.add_task(task_2)
     """
 
     def __init__(self, name: str):
-        """Initialize the Project instance.
+        """
+        Initialize the Project instance.
 
         Args:
           name (str): The name of the project.
@@ -86,22 +138,31 @@ class Project:
 
     @property
     def name(self) -> str:
+        """Returns the name of the project."""
         return self._proj_data.get("name")
 
     @property
     def created_at(self) -> str:
+        """Returns the creation date and time of the project."""
         return self._proj_data.get("created_at")
 
     @property
     def num_tasks(self) -> int:
+        """Returns the number of tasks in the project."""
         return self._proj_data.get("num_tasks")
 
     @property
     def id(self) -> str:
+        """Returns the unique ID of the project."""
         return self._proj_data.get("id")
 
     @property
     def task_by_status(self) -> dict:
+        """
+        Returns a dictionary with the number of tasks by status.
+        The keys are the status codes and the values are the number of tasks
+        with that status.
+        """
         return {
             TaskStatusCode(attr): int(value) for attr, value in
             self._proj_data.get("task_status_overview").items()
@@ -109,7 +170,8 @@ class Project:
 
     @property
     def estimated_computation_cost(self) -> float:
-        """Returns the estimated project cost.
+        """
+        Returns the estimated project cost.
 
         Computed as the sum of the estimated computation cost of each task.
         """
@@ -123,14 +185,15 @@ class Project:
         status_report = "\n".join(
             f"  {k}: {v}" for k, v in self.task_by_status.items())
 
-        return f"Project '{self.name}' created at {formatted_created_at}.\n"\
-               f"\nTotal number of tasks: {self.num_tasks}\n"\
-               "\nTasks by status:\n"\
-               f"{status_report}\n"\
-               f"\nEstimated total computation cost: {formatted_cost}\n"
+        return (f"Project '{self.name}' created at {formatted_created_at}.\n"
+                f"\nTotal number of tasks: {self.num_tasks}\n"
+                "\nTasks by status:\n"
+                f"{status_report}\n"
+                f"\nEstimated total computation cost: {formatted_cost}\n")
 
     def add_task(self, task: tasks.Task):
-        """Adds a task to the project.
+        """
+        Adds a task to the project.
 
         Args:
             task: The task to add to the project.
@@ -139,16 +202,19 @@ class Project:
             api = projects_api.ProjectsApi(inductiva_api.get_client())
             api.add_task_to_project({"task_id": task.id, "name": self.name})
         except ApiException as ex:
-            _logger.error("Failed to add task %s to project %s",
-                          task.id,
-                          self.name,
-                          exc_info=ex)
+            _logger.error(
+                "Failed to add task %s to project %s",
+                task.id,
+                self.name,
+                exc_info=ex,
+            )
             raise ex
 
     def get_tasks(self,
                   last_n: int = -1,
                   status: Optional[str] = None) -> List[tasks.Task]:
-        """Get the the tasks of this project.
+        """
+        Get the the tasks of this project.
 
         Optionally, those can be filtered by task status.
 
@@ -162,17 +228,18 @@ class Project:
         return tasks.get_tasks(last_n=last_n, project=self.name, status=status)
 
     def wait(self):
-        """ Wait for all the tasks in a project to complete."""
+        """Wait for all the tasks in a project to complete."""
         all_tasks = self.get_tasks()
         print("Waiting for ALL tasks to finish")
-        while (not all(x.is_terminal() for x in all_tasks)):
+        while not all(x.is_terminal() for x in all_tasks):
             finished = sum(x.is_terminal() for x in all_tasks)
             print(f"Finished: {finished} Total: {len(all_tasks)}", end="\r")
             time.sleep(5)
         print("All tasks in the project terminated.")
 
     def download_outputs(self):
-        """ Downloads all the outputs for all the tasks in the project.
+        """
+        Downloads all the outputs for all the tasks in the project.
 
         All the files will be stored inside
         `inductiva_output/<project_name>/<task_id's>`.
@@ -183,6 +250,5 @@ class Project:
             task.download_outputs(output_dir=f"{self.name}/{task.id}")
 
     def __eq__(self, other) -> bool:
-        return isinstance(other, Project) and \
-            self.name == other.name and \
-            self.id == other.id
+        return (isinstance(other, Project) and self.name == other.name and
+                self.id == other.id)
