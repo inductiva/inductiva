@@ -57,6 +57,6 @@ class WebhookNotification(Action):
         Returns:
             ActionWebhookCreate: Configured webhook instance.
         """
-        return ActionWebhookCreate(
-            webhook_url=self.webhook_url,
-            action_type=ActionWebhookCreate.MetaOapg.properties.action_type.WEBHOOK)
+        return ActionWebhookCreate(webhook_url=self.webhook_url,
+                                   action_type=ActionWebhookCreate.MetaOapg.
+                                   properties.action_type.WEBHOOK)
