@@ -10,6 +10,7 @@ from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.tasks_task_id_register import TasksTaskIdRegister
 from inductiva.client.apis.paths.tasks_task_id_offer import TasksTaskIdOffer
 from inductiva.client.apis.paths.tasks_task_id_message import TasksTaskIdMessage
+from inductiva.client.apis.paths.tasks_task_id_metadata import TasksTaskIdMetadata
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_terms_and_conditions import AdminUsersEmailTermsAndConditions
 from inductiva.client.apis.paths.admin_users_username_organization import AdminUsersUsernameOrganization
@@ -95,6 +96,9 @@ from inductiva.client.apis.paths.metrics_users_username_tasks_overview import Me
 from inductiva.client.apis.paths.metrics_users_username_most_used_machine_types import MetricsUsersUsernameMostUsedMachineTypes
 from inductiva.client.apis.paths.metrics_users_username_most_used_simulators_overview import MetricsUsersUsernameMostUsedSimulatorsOverview
 from inductiva.client.apis.paths.metrics_usage_statistics import MetricsUsageStatistics
+from inductiva.client.apis.paths.events_ import Events
+from inductiva.client.apis.paths.events_event_id import EventsEventId
+from inductiva.client.apis.paths.simulators_available_images import SimulatorsAvailableImages
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
@@ -116,6 +120,8 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdOffer,
         PathValues.TASKS_TASK_ID_MESSAGE:
             TasksTaskIdMessage,
+        PathValues.TASKS_TASK_ID_METADATA:
+            TasksTaskIdMetadata,
         PathValues.ADMIN_USERS:
             AdminUsers,
         PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
@@ -286,6 +292,12 @@ PathToApi = typing_extensions.TypedDict(
             MetricsUsersUsernameMostUsedSimulatorsOverview,
         PathValues.METRICS_USAGE_STATISTICS:
             MetricsUsageStatistics,
+        PathValues.EVENTS_:
+            Events,
+        PathValues.EVENTS_EVENT_ID:
+            EventsEventId,
+        PathValues.SIMULATORS_AVAILABLEIMAGES:
+            SimulatorsAvailableImages,
     })
 
 path_to_api = PathToApi({
@@ -307,6 +319,8 @@ path_to_api = PathToApi({
         TasksTaskIdOffer,
     PathValues.TASKS_TASK_ID_MESSAGE:
         TasksTaskIdMessage,
+    PathValues.TASKS_TASK_ID_METADATA:
+        TasksTaskIdMetadata,
     PathValues.ADMIN_USERS:
         AdminUsers,
     PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
@@ -477,4 +491,10 @@ path_to_api = PathToApi({
         MetricsUsersUsernameMostUsedSimulatorsOverview,
     PathValues.METRICS_USAGE_STATISTICS:
         MetricsUsageStatistics,
+    PathValues.EVENTS_:
+        Events,
+    PathValues.EVENTS_EVENT_ID:
+        EventsEventId,
+    PathValues.SIMULATORS_AVAILABLEIMAGES:
+        SimulatorsAvailableImages,
 })
