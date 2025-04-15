@@ -6,7 +6,6 @@ computational workflows.
 
 Classes:
     - Project: Represents a project that groups related tasks together.
-      Provides methods for creating, retrieving, and managing projects and their tasks.
 
 Functions:
     - get_projects(): Retrieves all projects associated with the current user.
