@@ -196,7 +196,10 @@ class Project:
             task: The task to add to the project.
         """
         try:
-            self._api.add_task_to_project({"task_id": task.id, "name": self.name})
+            self._api.add_task_to_project({
+                "task_id": task.id,
+                "name": self.name
+            })
         except ApiException as ex:
             _logger.error(
                 "Failed to add task %s to project %s",
