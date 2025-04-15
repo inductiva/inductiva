@@ -1,4 +1,4 @@
-"""Project class"""
+"""Event module"""
 import logging
 
 from inductiva import api as inductiva_api
