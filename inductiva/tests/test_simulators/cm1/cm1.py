@@ -1,4 +1,4 @@
-"""DualSPHysics example."""
+"""CM1 example"""
 import inductiva
 
 # Instantiate machine group
@@ -6,19 +6,20 @@ cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
     machine_type="c2d-highcpu-4")
 
-# Download the configuration files into a folder
+# Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "dualsphysics-input-example.zip",
+    "cm1-input-example.zip",
     unzip=True)
 
 # Initialize the Simulator
-dualsphysics = inductiva.simulators.DualSPHysics()
+cm1 = inductiva.simulators.CM1( \
+    version="21.1")
 
 # Run simulation with config files in the input directory
-task = dualsphysics.run( \
+task = cm1.run( \
     input_dir=input_dir,
-    shell_script="run.sh",
+    sim_config_filename="namelist.input",
     on=cloud_machine)
 
 task.wait()

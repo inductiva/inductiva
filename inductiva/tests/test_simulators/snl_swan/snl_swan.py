@@ -1,4 +1,4 @@
-"""DualSPHysics example."""
+"""SNLSWAN example."""
 import inductiva
 
 # Instantiate machine group
@@ -6,21 +6,23 @@ cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
     machine_type="c2d-highcpu-4")
 
-# Download the configuration files into a folder
-input_dir = inductiva.utils.download_from_url(
+# Set simulation input directory
+input_dir = inductiva.utils.files.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "dualsphysics-input-example.zip",
-    unzip=True)
+    "snlswan-input-example.zip", True)
 
 # Initialize the Simulator
-dualsphysics = inductiva.simulators.DualSPHysics()
+snlswan = inductiva.simulators.SNLSWAN( \
+    version="2.2")
 
 # Run simulation with config files in the input directory
-task = dualsphysics.run( \
+# Uses swanrun by default
+task = snlswan.run( \
     input_dir=input_dir,
-    shell_script="run.sh",
+    sim_config_filename="input.swn",
     on=cloud_machine)
 
+# Wait for the simulation to finish and download the results
 task.wait()
 cloud_machine.terminate()
 

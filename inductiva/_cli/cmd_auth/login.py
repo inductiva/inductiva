@@ -1,6 +1,8 @@
 """Register CLI command for login."""
 import argparse
+import requests
 import getpass
+import pkgutil
 import os
 
 import inductiva
@@ -40,10 +42,40 @@ def login(args):
     # If the API Key is invalid, this will raise an exception
     user_info = users.get_info()
 
-    utils.set_stored_api_key(api_key)
+    exists = utils.set_stored_api_key(api_key)
 
     user_name = user_info["name"] or ""
-    print(f"Welcome back {user_name}!")
+
+    if exists:
+        print(f"Welcome back {user_name}!")
+    else:
+        modules = [
+            name for _, name, _ in pkgutil.iter_modules(
+                inductiva.simulators.__path__)
+        ]
+        #openfoam as a different naming convention
+        modules.append("openfoam_esi")
+        modules.append("openfoam_foundation")
+
+        os.makedirs("simulator_examples", exist_ok=True)
+
+        for module in modules:
+            url = constants.INDUCTIVA_GIT_EXAMPLES_URL + f"{module}/{module}.py"
+
+            response = requests.get(url, timeout=10)
+            if response.status_code == 200:
+                with open(f"simulator_examples/{module}.py",
+                          "w",
+                          encoding="utf-8") as f:
+                    f.write(response.text)
+        print("")
+        print(f"Welcome {user_name}!\n"
+              "Since this is your first time logging in, we have downloaded "
+              "some example scripts for you to get started.\n"
+              "The examples are located in the `simulator_examples` folder.\n"
+              "You can run them using the command "
+              "`python simulator_examples/<example.py>`.\n\n"
+              "Example: `python simulator_examples/openfoam_esi.py`\n")
 
 
 def register(parser):
