@@ -15,7 +15,7 @@ _URL = "https://storage.googleapis.com/inductiva-api-demo-files/" \
 @mock.patch("urllib.request.urlopen",
             side_effect=lambda *args, **kwargs: urllib.request.urlopen(
                 args[0], context=ssl._create_unverified_context()))
-def test_download_from_url_unzip_false():
+def test_download_from_url_unzip_false(mock_urlopen):
 
     expected_download_path = os.path.join(os.curdir,
                                           "openfoam-input-example.zip")
@@ -36,7 +36,7 @@ def test_download_from_url_unzip_false():
 @mock.patch("urllib.request.urlopen",
             side_effect=lambda *args, **kwargs: urllib.request.urlopen(
                 args[0], context=ssl._create_unverified_context()))
-def test_download_from_url_unzip_true():
+def test_download_from_url_unzip_true(mock_urlopen):
     # Disable SSL verification.
     # Had to do this for tests to pass on windows.
     #pylint: disable=protected-access
