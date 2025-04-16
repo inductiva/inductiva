@@ -1,6 +1,6 @@
 """Test examples download."""
 import os
-import ssl
+# import ssl
 import shutil
 import zipfile
 import inductiva
@@ -31,7 +31,7 @@ def test_download_from_url_unzip_true():
     # Disable SSL verification.
     # Had to do this for tests to pass on windows.
     #pylint: disable=protected-access
-    ssl._create_default_https_context = ssl._create_unverified_context
+    # ssl._create_default_https_context = ssl._create_unverified_context
 
     # Check that the expected folder to unzip to, does not exist yet.
     expected_unzipped_folder_path = os.path.join(os.curdir,
