@@ -4,6 +4,7 @@ import logging
 import math
 import os
 import pathlib
+import platform
 import threading
 import time
 import urllib
@@ -301,7 +302,14 @@ def upload(
 
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
-    urls = get_signed_urls(paths=remote_file_paths, operation="upload")
+    remote_file_paths_unix = remote_file_paths
+    if platform.system() == "Windows":
+        remote_file_paths_unix = [
+            remote_file_path.removeprefix("c:").replace("\\", "/")
+            for remote_file_path in remote_file_paths
+        ]
+
+    urls = get_signed_urls(paths=remote_file_paths_unix, operation="upload")
 
     with tqdm.tqdm(total=total_size,
                    unit="B",
@@ -309,7 +317,8 @@ def upload(
                    unit_divisor=1000) as progress_bar:
 
         for url, remote_file_path in zip(urls, remote_file_paths):
-            file_path = remote_file_path.removeprefix(f"{remote_dir}/")
+            remote_dir_prefix = f"{remote_dir}{os.path.sep}"
+            file_path = remote_file_path.removeprefix(remote_dir_prefix)
             local_file_path = os.path.join(local_dir, file_path)
 
             try:
