@@ -1,14 +1,20 @@
 """Test examples download."""
 import os
-# import ssl
 import shutil
+import ssl
+import urllib.request
 import zipfile
+from unittest import mock
+
 import inductiva
 
 _URL = "https://storage.googleapis.com/inductiva-api-demo-files/" \
           "openfoam-input-example.zip"
 
 
+@mock.patch("urllib.request.urlopen",
+            side_effect=lambda *args, **kwargs: urllib.request.urlopen(
+                args[0], context=ssl._create_unverified_context()))
 def test_download_from_url_unzip_false():
 
     expected_download_path = os.path.join(os.curdir,
@@ -27,6 +33,9 @@ def test_download_from_url_unzip_false():
     os.remove(download_path)
 
 
+@mock.patch("urllib.request.urlopen",
+            side_effect=lambda *args, **kwargs: urllib.request.urlopen(
+                args[0], context=ssl._create_unverified_context()))
 def test_download_from_url_unzip_true():
     # Disable SSL verification.
     # Had to do this for tests to pass on windows.
