@@ -1,5 +1,4 @@
 """Test files module."""
-import json
 import os
 import glob
 import pathlib

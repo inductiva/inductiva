@@ -6,7 +6,6 @@ Additionally, it contains some global constant variables defining
 configurations related to paths where certain files are expected to be.
 """
 import os
-import json
 import pathlib
 import zipfile
 import tempfile

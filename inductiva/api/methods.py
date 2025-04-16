@@ -126,7 +126,7 @@ def notify_upload_complete(api_endpoint,
     api_endpoint(**params)
 
 
-def upload_input(api_instance: TasksApi, input_dir, task_id, 
+def upload_input(api_instance: TasksApi, input_dir, task_id,
                  storage_path_prefix):
     """Uploads the inputs of a given task to the API.
 
