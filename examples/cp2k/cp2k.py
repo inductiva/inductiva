@@ -4,7 +4,7 @@ import inductiva
 # Allocate Google cloud machine
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c3d-standard-180")
+    machine_type="c3d-highcpu-180")
 
 # Initialize the Simulator
 cp2k = inductiva.simulators.CP2K( \
