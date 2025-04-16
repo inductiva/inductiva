@@ -18,13 +18,11 @@ import urllib3
 
 import logging
 
-INPUT_FILENAME = "input.json"
-OUTPUT_FILENAME = "output.json"
 ARTIFACTS_DIRNAME = "artifacts"
 INPUT_DIRNAME = "sim_dir"
 
 
-def pack_input(input_dir, kwargs, zip_name) -> str:
+def pack_input(input_dir, zip_name) -> str:
     """Pack all inputs into a zip file.
 
     Pack all input params and compress all files into a zip file.
@@ -34,8 +32,6 @@ def pack_input(input_dir, kwargs, zip_name) -> str:
 
     Args:
         input_dir: Directory containing the input files to be uploaded.
-        kwargs: Dict with the params that are passed into
-            the request by the user.
         zip_name: Name of the zip file to be created.
 
     Return:
@@ -49,11 +45,6 @@ def pack_input(input_dir, kwargs, zip_name) -> str:
         if input_dir:
             shutil.copytree(input_dir, dst_fullpath)
 
-        # Write input dictionary with packed params to a JSON file
-        input_json_path = os.path.join(tmpdir_path, INPUT_FILENAME)
-        with open(input_json_path, "w", encoding="UTF-8") as fp:
-            json.dump(kwargs, fp)
-
         # Zip everything in the temporary directory into a single zip file
         zip_path = shutil.make_archive(
             os.path.join(tempfile.gettempdir(), zip_name), "zip", tmpdir_path)
@@ -61,15 +52,6 @@ def pack_input(input_dir, kwargs, zip_name) -> str:
         logging.debug("Compressed inputs to %s", zip_path)
 
     return zip_path
-
-
-def extract_output(zip_path, output_dir):
-    with zipfile.ZipFile(zip_path, "r") as zip_fp:
-        output_json = zip_fp.read(OUTPUT_FILENAME)
-        result_list = json.loads(output_json)
-
-        extract_subdir_files(zip_fp, ARTIFACTS_DIRNAME, output_dir)
-    return result_list
 
 
 def extract_subdir_files(zip_fp: zipfile.ZipFile, dir_name: str,
