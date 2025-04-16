@@ -167,7 +167,8 @@ def test_benchmark_runs_info_select_all(benchmark):
     task1.info.task_id = "task1"
     task1.info.simulator = "sim1"
     task1.info.executer.vm_type = "vm1"
-    task1.info.to_dict = mock.MagicMock(return_value={"extra_params": {}})
+    kwargs = {"extra_params": {"param": "value"}}
+    task1.info.to_dict = mock.MagicMock(return_value=kwargs)
 
     task2 = mock.MagicMock()
     task2.download_inputs = mock.MagicMock(return_value=Path("input_dir_path2"))
@@ -177,7 +178,7 @@ def test_benchmark_runs_info_select_all(benchmark):
     task2.info.task_id = "task2"
     task2.info.simulator = "sim2"
     task2.info.executer.vm_type = "vm2"
-    task2.info.to_dict = mock.MagicMock(return_value={"extra_params": {}})
+    task2.info.to_dict = mock.MagicMock(return_value=kwargs)
 
     benchmark.get_tasks = mock.MagicMock(return_value=[task1, task2])
 
@@ -211,7 +212,8 @@ def test_benchmark_runs_info_select_distinct(benchmark):
     task1.info.task_id = "task1"
     task1.info.simulator = "sim1"
     task1.info.executer.vm_type = "vm1"
-    task1.info.to_dict = mock.MagicMock(return_value={"extra_params": {}})
+    kwargs = {"extra_params": {"param": "value"}}
+    task1.info.to_dict = mock.MagicMock(return_value=kwargs)
 
     task2 = mock.MagicMock()
     task2.download_inputs = mock.MagicMock(return_value=Path("input_dir_path2"))
@@ -221,7 +223,7 @@ def test_benchmark_runs_info_select_distinct(benchmark):
     task2.info.task_id = "task2"
     task2.info.simulator = "sim1"
     task2.info.executer.vm_type = "vm2"
-    task2.info.to_dict = mock.MagicMock(return_value={"extra_params": {}})
+    task2.info.to_dict = mock.MagicMock(return_value=kwargs)
 
     benchmark.get_tasks = mock.MagicMock(return_value=[task1, task2])
 
