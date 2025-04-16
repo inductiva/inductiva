@@ -57,7 +57,7 @@ def login(args):
         modules.append("openfoam_esi")
         modules.append("openfoam_foundation")
 
-        os.makedirs("Inductiva_examples", exist_ok=True)
+        os.makedirs("inductiva_examples", exist_ok=True)
         downloaded = []
         for module in modules:
             url = constants.INDUCTIVA_GIT_EXAMPLES_URL + f"{module}/{module}.py"
@@ -65,7 +65,7 @@ def login(args):
             response = requests.get(url, timeout=10)
             if response.status_code == 200:
                 downloaded.append(f"{module}.py")
-                with open(f"Inductiva_examples/{module}.py",
+                with open(f"inductiva_examples/{module}.py",
                           "w",
                           encoding="utf-8") as f:
                     f.write(response.text)
@@ -73,15 +73,15 @@ def login(args):
         print(f"Welcome {user_name}!\n"
               "Since this is your first time logging in, we have downloaded "
               "some example scripts for you to get started.\n"
-              "The examples are located in the `Inductiva_examples` folder.\n"
+              "The examples are located in the `inductiva_examples` folder.\n"
               "You can run them using the command "
-              "`python Inductiva_examples/<example.py>`.\n\n")
+              "`python inductiva_examples/<example.py>`.\n\n")
         print("Available examples:\n")
         for i in range(0, len(downloaded), 2):
             line = [word.ljust(25) for word in downloaded[i:i + 3]]
             print("".join(line))
         print("\n\nRun your first simulation with "
-              "`python Inductiva_examples/openfoam_esi.py`\n")
+              "`python inductiva_examples/openfoam_esi.py`\n")
 
 
 def register(parser):
