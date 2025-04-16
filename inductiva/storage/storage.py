@@ -316,7 +316,8 @@ def upload(
                    unit_scale=True,
                    unit_divisor=1000) as progress_bar:
 
-        for url, remote_file_path in zip(urls, remote_file_paths):
+        for url, remote_file_path, remote_file_path_unix in \
+                zip(urls, remote_file_paths, remote_file_paths_unix):
             remote_dir_prefix = f"{remote_dir}{os.path.sep}"
             file_path = remote_file_path.removeprefix(remote_dir_prefix)
             local_file_path = os.path.join(local_dir, file_path)
@@ -328,7 +329,7 @@ def upload(
                 methods.notify_upload_complete(
                     api_instance.notify_upload_file,
                     query_params={
-                        "path": remote_file_path,
+                        "path": remote_file_path_unix,
                     },
                 )
             except exceptions.ApiException as e:
