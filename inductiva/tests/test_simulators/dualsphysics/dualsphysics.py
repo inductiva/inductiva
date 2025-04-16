@@ -13,7 +13,8 @@ input_dir = inductiva.utils.download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-dualsphysics = inductiva.simulators.DualSPHysics()
+dualsphysics = inductiva.simulators.DualSPHysics( \
+    version="5.2.1")
 
 # Run simulation with config files in the input directory
 task = dualsphysics.run( \
