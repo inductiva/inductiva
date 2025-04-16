@@ -4,7 +4,7 @@ import inductiva
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2-standard-4")
+    machine_type="c2-highcpu-4")
 
 # Download the configuration files into a folder
 input_dir = inductiva.utils.download_from_url(
