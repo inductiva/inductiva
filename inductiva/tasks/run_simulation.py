@@ -22,7 +22,7 @@ def run_simulation(
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
 
-    params = {
+    extra_params = {
         "sim_dir": utils.data.INPUT_DIRNAME,
         **kwargs,
     }
@@ -40,7 +40,7 @@ def run_simulation(
     task_id = methods.submit_task(simulator,
                                   input_dir=input_dir,
                                   machine_group=machine_group,
-                                  params=params,
+                                  extra_params=extra_params,
                                   storage_path_prefix=storage_dir,
                                   resubmit_on_preemption=resubmit_on_preemption,
                                   container_image=container_image,
