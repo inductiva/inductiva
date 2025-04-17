@@ -265,7 +265,7 @@ def _convert_path_unix(path):
 
 def _construct_remote_paths(local_path, remote_dir):
     """ Constructs remote paths for files to be uploaded."""
-    remote_dir = os.path.normpath(_convert_path_unix(remote_dir))
+    remote_dir = os.path.normpath(remote_dir)
     local_path = os.path.normpath(_convert_path_unix(local_path))
 
     is_dir = os.path.isdir(local_path)
