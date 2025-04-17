@@ -316,6 +316,9 @@ def upload(
             inductiva.storage.upload('local/path/folder', 'my_data')
     """
 
+    if not os.path.exists(local_path):
+        raise ValueError(f"File or directory '{local_path}' does not exist.")
+
     remote_file_paths, local_dir, total_size = _construct_remote_paths(
         local_path, remote_dir)
 
