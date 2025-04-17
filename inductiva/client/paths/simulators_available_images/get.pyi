@@ -24,7 +24,9 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+from inductiva.client.model.available_simulator_versions import AvailableSimulatorVersions
+
+SchemaFor200ResponseBodyApplicationJson = AvailableSimulatorVersions
 
 
 @dataclass

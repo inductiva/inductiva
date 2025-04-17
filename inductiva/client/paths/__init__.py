@@ -48,6 +48,8 @@ class PathValues(str, enum.Enum):
     ADMIN_USERS_EMAIL_STRIPE_CUSTOMER_ID = "/admin/users/{email}/stripe_customer_id"
     ADMIN_FEATUREFLAGS_NAME = "/admin/feature-flags/{name}"
     ADMIN_FEATUREFLAGS_ = "/admin/feature-flags/"
+    ADMIN_ALERTS_CHECK_CREDITS = "/admin/alerts/check_credits"
+    ADMIN_ALERTS_CHECK_TASKS = "/admin/alerts/check_tasks"
     TASKRUNNER_REGISTER = "/task-runner/register"
     TASKRUNNER_MACHINE_ID = "/task-runner/{machine_id}"
     TASKRUNNER_MACHINE_ID_TASK = "/task-runner/{machine_id}/task"
