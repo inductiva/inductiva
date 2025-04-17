@@ -12,7 +12,8 @@ input_dir = inductiva.utils.download_from_url(
     unzip=True)
 
 # Set simulation input directory
-splishsplash = inductiva.simulators.SplishSplash()
+splishsplash = inductiva.simulators.SplishSplash( \
+    version="2.13.0")
 
 task = splishsplash.run( \
     input_dir=input_dir,

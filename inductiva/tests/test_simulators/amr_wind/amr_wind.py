@@ -13,7 +13,8 @@ input_dir = inductiva.utils.download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-amr_wind = inductiva.simulators.AmrWind()
+amr_wind = inductiva.simulators.AmrWind( \
+    version="3.4.1")
 
 # Run simulation with config files in the input directory
 task = amr_wind.run( \

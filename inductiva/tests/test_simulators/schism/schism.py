@@ -12,7 +12,8 @@ input_dir = inductiva.utils.files.download_from_url(
     "schism-input-example.zip", True)
 
 # Initialize the Simulator
-schism = inductiva.simulators.SCHISM()
+schism = inductiva.simulators.SCHISM( \
+    version="5.11.0")
 
 # Run simulation with config files in the input directory
 task = schism.run( \

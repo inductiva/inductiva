@@ -26,7 +26,8 @@ commands = [
 ]
 
 # Initialize QuantumEspresso simulator
-qe = inductiva.simulators.QuantumEspresso()
+qe = inductiva.simulators.QuantumEspresso( \
+    version="7.4.1")
 
 # Run simulation
 task = qe.run( \

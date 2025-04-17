@@ -11,7 +11,8 @@ input_dir = inductiva.utils.download_from_url(
     "reef3d-input-example.zip",
     unzip=True)
 
-reef3d = inductiva.simulators.REEF3D()
+reef3d = inductiva.simulators.REEF3D( \
+    version="24.02")
 
 task = reef3d.run( \
     input_dir=input_dir,

@@ -26,7 +26,8 @@ commands = [
      "-g eql.log"),
 ]
 
-gromacs = inductiva.simulators.GROMACS()
+gromacs = inductiva.simulators.GROMACS( \
+    version="2022.2")
 
 task = gromacs.run( \
     input_dir=input_dir,

@@ -12,7 +12,8 @@ input_dir = inductiva.utils.files.download_from_url(
     "swan-input-example.zip", True)
 
 # Initialize the Simulator
-swan = inductiva.simulators.SWAN()
+swan = inductiva.simulators.SWAN( \
+    version="41.45")
 
 # Run simulation with config files in the input directory
 # Uses swanrun by default

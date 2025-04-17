@@ -13,7 +13,8 @@ input_dir = inductiva.utils.download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-fvcom = inductiva.simulators.FVCOM()
+fvcom = inductiva.simulators.FVCOM( \
+    version="5.1.0")
 
 # Run simulation with config files in the input directory
 task = fvcom.run( \

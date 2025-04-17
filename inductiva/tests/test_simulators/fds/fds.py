@@ -11,7 +11,8 @@ input_dir = inductiva.utils.download_from_url(
     "fds-input-example.zip",
     unzip=True)
 
-fds = inductiva.simulators.FDS()
+fds = inductiva.simulators.FDS( \
+    version="6.10.1")
 
 task = fds.run( \
     input_dir=input_dir,

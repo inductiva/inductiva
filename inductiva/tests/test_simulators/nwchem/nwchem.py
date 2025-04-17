@@ -11,7 +11,8 @@ input_dir = inductiva.utils.download_from_url(
     "nwchem-input-example.zip",
     unzip=True)
 
-nwchem = inductiva.simulators.NWChem()
+nwchem = inductiva.simulators.NWChem( \
+    version="7.2.3")
 
 task = nwchem.run( \
     input_dir=input_dir,
