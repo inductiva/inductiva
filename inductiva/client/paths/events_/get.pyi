@@ -26,6 +26,7 @@ from inductiva.client import schemas  # noqa: F401
 
 from inductiva.client.model.trigger_task_type import TriggerTaskType
 from inductiva.client.model.trigger_machine_group_type import TriggerMachineGroupType
+from inductiva.client.model.event_info import EventInfo
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
@@ -89,7 +90,29 @@ request_query_machine_group_trigger = api_client.QueryParameter(
     schema=MachineGroupTriggerSchema,
     explode=True,
 )
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+
+
+class SchemaFor200ResponseBodyApplicationJson(schemas.ListSchema):
+
+    class MetaOapg:
+
+        @staticmethod
+        def items() -> typing.Type['EventInfo']:
+            return EventInfo
+
+    def __new__(
+        cls,
+        _arg: typing.Union[typing.Tuple['EventInfo'], typing.List['EventInfo']],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+    ) -> 'SchemaFor200ResponseBodyApplicationJson':
+        return super().__new__(
+            cls,
+            _arg,
+            _configuration=_configuration,
+        )
+
+    def __getitem__(self, i: int) -> 'EventInfo':
+        return super().__getitem__(i)
 
 
 @dataclass

@@ -12,7 +12,9 @@
 # sys.setrecursionlimit(n)
 
 from inductiva.client.model.action_email_create import ActionEmailCreate
+from inductiva.client.model.action_email_info import ActionEmailInfo
 from inductiva.client.model.action_webhook_create import ActionWebhookCreate
+from inductiva.client.model.action_webhook_info import ActionWebhookInfo
 from inductiva.client.model.autoscale_policy import AutoscalePolicy
 from inductiva.client.model.available_simulator_versions import AvailableSimulatorVersions
 from inductiva.client.model.backend_version import BackendVersion
@@ -28,6 +30,7 @@ from inductiva.client.model.currency_code import CurrencyCode
 from inductiva.client.model.disk_resize_request import DiskResizeRequest
 from inductiva.client.model.dynamic_disk_resize_config import DynamicDiskResizeConfig
 from inductiva.client.model.event_create import EventCreate
+from inductiva.client.model.event_info import EventInfo
 from inductiva.client.model.executer import Executer
 from inductiva.client.model.feature_flag import FeatureFlag
 from inductiva.client.model.file_info import FileInfo
@@ -100,8 +103,10 @@ from inductiva.client.model.top_up_type import TopUpType
 from inductiva.client.model.transaction import Transaction
 from inductiva.client.model.transaction_with_user_info import TransactionWithUserInfo
 from inductiva.client.model.trigger_machine_group_create import TriggerMachineGroupCreate
+from inductiva.client.model.trigger_machine_group_info import TriggerMachineGroupInfo
 from inductiva.client.model.trigger_machine_group_type import TriggerMachineGroupType
 from inductiva.client.model.trigger_task_create import TriggerTaskCreate
+from inductiva.client.model.trigger_task_info import TriggerTaskInfo
 from inductiva.client.model.trigger_task_type import TriggerTaskType
 from inductiva.client.model.update_capabilities_actions import UpdateCapabilitiesActions
 from inductiva.client.model.update_capabilities_request import UpdateCapabilitiesRequest
