@@ -2,11 +2,13 @@
 from typing import List, Literal, Optional
 from abc import ABC
 import logging
+import sys
 import os
 import re
 
 import pathlib
 
+from inductiva.utils import InductivaException
 from inductiva import types, tasks, resources
 from .methods import list_available_images
 from inductiva import commands
@@ -265,8 +267,12 @@ class Simulator(ABC):
                 simulation API method.
         """
         self._validate_input_files(input_dir, remote_assets)
-
-        input_dir_path = self._setup_input_dir(input_dir) if input_dir else None
+        try:
+            input_dir_path = self._setup_input_dir(
+                input_dir) if input_dir else None
+        except ValueError as e:
+            raise InductivaException(
+                f"Error setting up input directory: {str(e)}") from e
 
         if on is None:
             raise ValueError(

@@ -1,4 +1,5 @@
 # pylint: disable=missing-module-docstring
+from .inductiva_exceptions import InductivaException
 from . import files
 from . import data
 from .files import download_from_url
