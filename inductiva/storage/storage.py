@@ -253,6 +253,42 @@ def upload_from_url(
     logging.info("You can use 'inductiva storage ls' to check the status.")
 
 
+def _convert_path_unix(path):
+    """
+    Convert a Windows path to a Unix-style path.
+    """
+    _, path = os.path.splitdrive(path)
+    if r"\\" in path:
+        path = str(pathlib.PureWindowsPath(path).as_posix())
+    return path
+
+
+def _construct_remote_paths(local_path, remote_dir):
+    """ Constructs remote paths for files to be uploaded."""
+    remote_dir = os.path.normpath(_convert_path_unix(remote_dir))
+    local_path = os.path.normpath(_convert_path_unix(local_path))
+
+    is_dir = os.path.isdir(local_path)
+    if is_dir:
+        local_dir = os.path.normpath(local_path)
+        file_paths, total_size = _list_files(local_path)
+
+        remote_file_paths = [
+            os.path.normpath(os.path.join(remote_dir, file_path))
+            for file_path in file_paths
+        ]
+    else:
+        local_dir = os.path.dirname(local_path)
+        filename = os.path.basename(local_path)
+        remote_file_paths = [os.path.join(remote_dir, filename)]
+        total_size = os.path.getsize(local_path)
+
+    remote_file_paths = [
+        _convert_path_unix(remote_path) for remote_path in remote_file_paths
+    ]
+    return remote_file_paths, local_dir, total_size
+
+
 def upload(
     local_path: str,
     remote_dir: str,
@@ -280,19 +316,8 @@ def upload(
             inductiva.storage.upload('local/path/folder', 'my_data')
     """
 
-    remote_dir = remote_dir.rstrip("/")
-    is_dir = os.path.isdir(local_path)
-    if is_dir:
-        local_dir = os.path.join(local_path, "")
-        file_paths, total_size = _list_files(local_path)
-        remote_file_paths = [
-            os.path.join(remote_dir, file_path) for file_path in file_paths
-        ]
-    else:
-        local_dir = os.path.dirname(local_path)
-        filename = os.path.basename(local_path)
-        remote_file_paths = [os.path.join(remote_dir, filename)]
-        total_size = os.path.getsize(local_path)
+    remote_file_paths, local_dir, total_size = _construct_remote_paths(
+        local_path, remote_dir)
 
     if os.path.join(remote_dir, constants.TASK_OUTPUT_ZIP) in remote_file_paths:
         raise ValueError(f"Invalid file name: '{constants.TASK_OUTPUT_ZIP}.'")
@@ -310,7 +335,8 @@ def upload(
 
         for url, remote_file_path in zip(urls, remote_file_paths):
             file_path = remote_file_path.removeprefix(f"{remote_dir}/")
-            local_file_path = os.path.join(local_dir, file_path)
+            local_file_path = _convert_path_unix(
+                os.path.join(local_dir, file_path))
 
             try:
                 methods.upload_file(api_instance, local_file_path, "PUT", url,
