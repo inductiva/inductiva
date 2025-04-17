@@ -109,6 +109,7 @@ from inductiva.client.model.upload_part import UploadPart
 from inductiva.client.model.usage_statistics import UsageStatistics
 from inductiva.client.model.user import User
 from inductiva.client.model.user_activity import UserActivity
+from inductiva.client.model.user_admin_view import UserAdminView
 from inductiva.client.model.user_api_key import UserApiKey
 from inductiva.client.model.user_computation_trend import UserComputationTrend
 from inductiva.client.model.user_costs import UserCosts
