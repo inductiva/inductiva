@@ -59,7 +59,7 @@ def _format_traceback_to_string(exc_traceback, is_notebook: bool):
         f"{frame.filename} line {frame.lineno}" for frame in tb_list
     ]
 
-    result_string = ("\n".join(formatted_tb))
+    result_string = "\n".join(formatted_tb)
 
     return result_string
 
@@ -88,7 +88,7 @@ def _log_error(detail, exc_type, exc_value, exc_traceback):
 
 def _format_detail_message(detail, context, formatted_tb):
     return (f"{detail}\n\n  In {formatted_tb}\n\n"
-            # f"{context}\n\n"
+            f"{context}\n\n"
             "For more information on this error, "
             f"check the logs at {get_logs_file_path()}")
 
