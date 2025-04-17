@@ -24,6 +24,7 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.event_info import EventInfo
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Path params
@@ -50,7 +51,7 @@ request_path_event_id = api_client.PathParameter(
     schema=EventIdSchema,
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+SchemaFor200ResponseBodyApplicationJson = EventInfo
 
 
 @dataclass
