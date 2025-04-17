@@ -14,6 +14,7 @@
 from inductiva.client.model.action_email_create import ActionEmailCreate
 from inductiva.client.model.action_webhook_create import ActionWebhookCreate
 from inductiva.client.model.autoscale_policy import AutoscalePolicy
+from inductiva.client.model.available_simulator_versions import AvailableSimulatorVersions
 from inductiva.client.model.backend_version import BackendVersion
 from inductiva.client.model.cpu_info import CPUInfo
 from inductiva.client.model.capability import Capability
