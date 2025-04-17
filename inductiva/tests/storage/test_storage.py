@@ -1,10 +1,13 @@
+""" Unit tests for the storage module."""
+
 import pytest
 from unittest import mock
 from inductiva.storage.storage import _construct_remote_paths
 
 
 @pytest.mark.parametrize(
-    "local_path, remote_dir, is_dir, mock_list_files_return, expected_remote_paths",
+    'local_path, remote_dir, is_dir, mock_list_files_return,' \
+    'expected_remote_paths',
     [
         # Case 1: Directory (Unix style)
         (
@@ -32,8 +35,8 @@ from inductiva.storage.storage import _construct_remote_paths
         ),
         # Case 4: Directory (Windows style)
         (
-            'C:\\local\path\\to\\dir',
-            'remote\dir',
+            'C:\\local\\path\\to\\dir',
+            'remote\\dir',
             True,
             (['file1.txt', 'file2.txt'], 100),
             ['remote/dir/file1.txt', 'remote/dir/file2.txt'],
@@ -41,7 +44,7 @@ from inductiva.storage.storage import _construct_remote_paths
         # Case 5: File (Windows style)
         (
             'C:\\local\\path\\to\\file.txt',
-            'remote\dir',
+            'remote\\dir',
             False,
             ([], 0),
             ['remote/dir/file.txt'],
