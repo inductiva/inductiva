@@ -71,6 +71,33 @@ def _get_traceback_first_and_last_lines(exc_traceback, n_lines: int,
 
     return result_string
 
+def _format_traceback(exc_traceback, is_notebook: bool):
+    """Formats the traceback to get the first line.
+
+    The first line has the most relevant information, that is, where
+    the error happened.
+    """
+    formatted_tb = _get_traceback_first_and_last_lines(
+        exc_traceback,
+        constants.EXCEPTIONS_MAX_TRACEBACK_DEPTH,
+        is_notebook=is_notebook
+    )
+    print(formatted_tb.splitlines()[1])
+    return formatted_tb.splitlines()[0]  # Get only the first line
+
+def _log_error(detail, exc_type, exc_value, exc_traceback):
+    """Logs the error with the appropriate details."""
+    root_logger.error(
+        "ERROR: %s",
+        detail,
+        exc_info=(exc_type, exc_value, exc_traceback)
+    )
+
+def _format_detail_message(detail, formatted_tb):
+    return (f"{detail}\n  in:\n{formatted_tb}\n"
+                    "For more information on this error, "
+                    f"check the logs at {get_logs_file_path()}")
+    
 
 def _handle_api_exception(exc_type, exc_value, exc_traceback,
                           is_notebook: bool):
@@ -78,29 +105,30 @@ def _handle_api_exception(exc_type, exc_value, exc_traceback,
         400 <= exc_value.status  < 500:
         detail = json.loads(exc_value.body)["detail"]
 
-        # Gets the last N lines of the traceback
-        formatted_tb = _get_traceback_first_and_last_lines(
-            exc_traceback,
-            constants.EXCEPTIONS_MAX_TRACEBACK_DEPTH,
-            is_notebook=is_notebook)
+        formatted_tb = _format_traceback(exc_traceback, is_notebook)
 
         if not is_cli():
-            detail = (f"{detail}\n  in:\n{formatted_tb}\n"
-                      "For more information on this error, "
-                      f"check the logs at {get_logs_file_path()}")
+            detail = _format_detail_message(detail, formatted_tb)
 
-        root_logger.error("ERROR: %s",
-                          detail,
-                          exc_info=(exc_type, exc_value, exc_traceback))
+        _log_error(detail, exc_type, exc_value, exc_traceback)
         return True
     if issubclass(exc_type, exceptions.ApiValueError):
-        root_logger.error("Error: %s",
-                          exc_value,
-                          exc_info=(exc_type, exc_value, exc_traceback))
+        _log_error(exc_value, exc_type, exc_value, exc_traceback)
+
         return True
     if issubclass(exc_type, inductiva.VersionError):
         root_logger.error(exc_value)
         return True
+    
+    #Catches every other exception
+    detail = f"{exc_value}"
+
+    formatted_tb = _format_traceback(exc_traceback, is_notebook)
+
+    if not is_cli():
+        detail = _format_detail_message(detail, formatted_tb)
+
+    _log_error(detail, exc_type, exc_value, exc_traceback)
 
     return False
 
