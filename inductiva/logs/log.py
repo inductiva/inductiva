@@ -170,6 +170,10 @@ def _handle_api_exception(exc_type, exc_value, exc_traceback,
 
         _log_error(detail, exc_type, exc_value, exc_traceback)
 
+        #Inductiva exit would be called here
+        #Would make some cleanup if needed
+        #Like turning off some machines etc.
+
         return True
 
     return False
