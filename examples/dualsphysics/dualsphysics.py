@@ -4,6 +4,7 @@ import inductiva
 # Allocate Google cloud machine
 cloud_machine_gpu = inductiva.resources.MachineGroup( \
     provider="GCP",
+    zone="europe-west4-b",
     machine_type="a3-highgpu-1g")
 
 # Initialize the Simulator

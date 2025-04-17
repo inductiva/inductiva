@@ -216,7 +216,7 @@ cloud_machine.start()
 
    Wich will output something like:
    ```bash
-    ■ Plan: Individual
+    ■ Plan: Starter
 
     ■ Credits: 1000.00 US$
 

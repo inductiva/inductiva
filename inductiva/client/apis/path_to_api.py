@@ -10,6 +10,7 @@ from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.tasks_task_id_register import TasksTaskIdRegister
 from inductiva.client.apis.paths.tasks_task_id_offer import TasksTaskIdOffer
 from inductiva.client.apis.paths.tasks_task_id_message import TasksTaskIdMessage
+from inductiva.client.apis.paths.tasks_task_id_metadata import TasksTaskIdMetadata
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_terms_and_conditions import AdminUsersEmailTermsAndConditions
 from inductiva.client.apis.paths.admin_users_username_organization import AdminUsersUsernameOrganization
@@ -36,6 +37,7 @@ from inductiva.client.apis.paths.admin_import_provider_costs import AdminImportP
 from inductiva.client.apis.paths.admin_machine_id_event import AdminMachineIdEvent
 from inductiva.client.apis.paths.admin_users_username_costs_fee_percentage import AdminUsersUsernameCostsFeePercentage
 from inductiva.client.apis.paths.admin_organizations_organization_id_costs_fee_percentage import AdminOrganizationsOrganizationIdCostsFeePercentage
+from inductiva.client.apis.paths.admin_organizations_organization_id_terminate_resources_credits_threshold import AdminOrganizationsOrganizationIdTerminateResourcesCreditsThreshold
 from inductiva.client.apis.paths.admin_top_ups import AdminTopUps
 from inductiva.client.apis.paths.admin_tasks import AdminTasks
 from inductiva.client.apis.paths.admin_users_email_stripe_customer_id import AdminUsersEmailStripeCustomerId
@@ -85,6 +87,8 @@ from inductiva.client.apis.paths.projects import Projects
 from inductiva.client.apis.paths.projects_name import ProjectsName
 from inductiva.client.apis.paths.projects_name_task_task_id_add import ProjectsNameTaskTaskIdAdd
 from inductiva.client.apis.paths.projects_name_task_task_id_remove import ProjectsNameTaskTaskIdRemove
+from inductiva.client.apis.paths.projects_name_metadata import ProjectsNameMetadata
+from inductiva.client.apis.paths.pubsub_notify_file_change import PubsubNotifyFileChange
 from inductiva.client.apis.paths.metrics_users_username_activity import MetricsUsersUsernameActivity
 from inductiva.client.apis.paths.metrics_users_username_cost_over_time import MetricsUsersUsernameCostOverTime
 from inductiva.client.apis.paths.metrics_users_username_task_status_overview import MetricsUsersUsernameTaskStatusOverview
@@ -93,6 +97,9 @@ from inductiva.client.apis.paths.metrics_users_username_tasks_overview import Me
 from inductiva.client.apis.paths.metrics_users_username_most_used_machine_types import MetricsUsersUsernameMostUsedMachineTypes
 from inductiva.client.apis.paths.metrics_users_username_most_used_simulators_overview import MetricsUsersUsernameMostUsedSimulatorsOverview
 from inductiva.client.apis.paths.metrics_usage_statistics import MetricsUsageStatistics
+from inductiva.client.apis.paths.events_ import Events
+from inductiva.client.apis.paths.events_event_id import EventsEventId
+from inductiva.client.apis.paths.simulators_available_images import SimulatorsAvailableImages
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
@@ -114,6 +121,8 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdOffer,
         PathValues.TASKS_TASK_ID_MESSAGE:
             TasksTaskIdMessage,
+        PathValues.TASKS_TASK_ID_METADATA:
+            TasksTaskIdMetadata,
         PathValues.ADMIN_USERS:
             AdminUsers,
         PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
@@ -166,6 +175,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsersUsernameCostsFeePercentage,
         PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_COSTS_FEE_PERCENTAGE:
             AdminOrganizationsOrganizationIdCostsFeePercentage,
+        PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_TERMINATE_RESOURCES_CREDITS_THRESHOLD:
+            AdminOrganizationsOrganizationIdTerminateResourcesCreditsThreshold,
         PathValues.ADMIN_TOPUPS:
             AdminTopUps,
         PathValues.ADMIN_TASKS:
@@ -264,6 +275,10 @@ PathToApi = typing_extensions.TypedDict(
             ProjectsNameTaskTaskIdAdd,
         PathValues.PROJECTS_NAME_TASK_TASK_ID_REMOVE:
             ProjectsNameTaskTaskIdRemove,
+        PathValues.PROJECTS_NAME_METADATA:
+            ProjectsNameMetadata,
+        PathValues.PUBSUB_NOTIFY_FILE_CHANGE:
+            PubsubNotifyFileChange,
         PathValues.METRICS_USERS_USERNAME_ACTIVITY:
             MetricsUsersUsernameActivity,
         PathValues.METRICS_USERS_USERNAME_COST_OVER_TIME:
@@ -280,6 +295,12 @@ PathToApi = typing_extensions.TypedDict(
             MetricsUsersUsernameMostUsedSimulatorsOverview,
         PathValues.METRICS_USAGE_STATISTICS:
             MetricsUsageStatistics,
+        PathValues.EVENTS_:
+            Events,
+        PathValues.EVENTS_EVENT_ID:
+            EventsEventId,
+        PathValues.SIMULATORS_AVAILABLEIMAGES:
+            SimulatorsAvailableImages,
     })
 
 path_to_api = PathToApi({
@@ -301,6 +322,8 @@ path_to_api = PathToApi({
         TasksTaskIdOffer,
     PathValues.TASKS_TASK_ID_MESSAGE:
         TasksTaskIdMessage,
+    PathValues.TASKS_TASK_ID_METADATA:
+        TasksTaskIdMetadata,
     PathValues.ADMIN_USERS:
         AdminUsers,
     PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
@@ -353,6 +376,8 @@ path_to_api = PathToApi({
         AdminUsersUsernameCostsFeePercentage,
     PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_COSTS_FEE_PERCENTAGE:
         AdminOrganizationsOrganizationIdCostsFeePercentage,
+    PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID_TERMINATE_RESOURCES_CREDITS_THRESHOLD:
+        AdminOrganizationsOrganizationIdTerminateResourcesCreditsThreshold,
     PathValues.ADMIN_TOPUPS:
         AdminTopUps,
     PathValues.ADMIN_TASKS:
@@ -451,6 +476,10 @@ path_to_api = PathToApi({
         ProjectsNameTaskTaskIdAdd,
     PathValues.PROJECTS_NAME_TASK_TASK_ID_REMOVE:
         ProjectsNameTaskTaskIdRemove,
+    PathValues.PROJECTS_NAME_METADATA:
+        ProjectsNameMetadata,
+    PathValues.PUBSUB_NOTIFY_FILE_CHANGE:
+        PubsubNotifyFileChange,
     PathValues.METRICS_USERS_USERNAME_ACTIVITY:
         MetricsUsersUsernameActivity,
     PathValues.METRICS_USERS_USERNAME_COST_OVER_TIME:
@@ -467,4 +496,10 @@ path_to_api = PathToApi({
         MetricsUsersUsernameMostUsedSimulatorsOverview,
     PathValues.METRICS_USAGE_STATISTICS:
         MetricsUsageStatistics,
+    PathValues.EVENTS_:
+        Events,
+    PathValues.EVENTS_EVENT_ID:
+        EventsEventId,
+    PathValues.SIMULATORS_AVAILABLEIMAGES:
+        SimulatorsAvailableImages,
 })
