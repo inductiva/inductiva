@@ -258,7 +258,7 @@ def _convert_path_unix(path):
     Convert a Windows path to a Unix-style path.
     """
     _, path = os.path.splitdrive(path)
-    if r"\\" in path:
+    if "\\" in path:
         path = str(pathlib.PureWindowsPath(path).as_posix())
     return path
 

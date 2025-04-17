@@ -32,48 +32,48 @@ from inductiva.storage.storage import _construct_remote_paths
         ),
         # Case 4: Directory (Windows style)
         (
-            r'C:\\local\\path\\to\\dir',
-            r'remote\\dir',
+            'C:\\local\path\\to\\dir',
+            'remote\dir',
             True,
             (['file1.txt', 'file2.txt'], 100),
             ['remote/dir/file1.txt', 'remote/dir/file2.txt'],
         ),
         # Case 5: File (Windows style)
         (
-            r'C:\\local\\path\\to\\file.txt',
-            r'remote\\dir',
+            'C:\\local\\path\\to\\file.txt',
+            'remote\dir',
             False,
             ([], 0),
             ['remote/dir/file.txt'],
         ),
         # Case 6: Trailing slash in remote_dir (Windows style)
         (
-            r'C:\\local\\path\\to\\dir',
-            r'remote\\dir\\',
+            'C:\\local\\path\\to\\dir',
+            'remote\\dir\\',
             True,
             (['file1.txt', 'file2.txt'], 100),
             ['remote/dir/file1.txt', 'remote/dir/file2.txt'],
         ),
         # Case 7: Trailing slash in remote_dir (Windows style)
         (
-            r'local\\path\\to\\dir',
-            r'remote\\dir\\',
+            'local\\path\\to\\dir',
+            'remote\\dir\\',
             True,
             (['file1.txt', 'file2.txt'], 100),
             ['remote/dir/file1.txt', 'remote/dir/file2.txt'],
         ),
         # Case 8: Relative directory path (Windows style)
         (
-            r'\\relative\\path\\to\\dir',
-            r'remote\\dir',
+            '\\relative\\path\\to\\dir',
+            'remote\\dir',
             True,
             (['file1.txt', 'file2.txt'], 100),
             ['remote/dir/file1.txt', 'remote/dir/file2.txt'],
         ),
         # Case 9: Relative file path (Windows style)
         (
-            r'\\another\\path\\file.txt',
-            r'remote\\dir',
+            '\\another\\path\\file.txt',
+            'remote\\dir',
             False,
             ([], 0),
             ['remote/dir/file.txt'],
