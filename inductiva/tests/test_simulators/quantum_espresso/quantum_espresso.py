@@ -5,7 +5,7 @@ from inductiva.commands import MPIConfig, Command
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2-highcpu-4")
+    machine_type="c2d-highcpu-4")
 
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
@@ -26,7 +26,8 @@ commands = [
 ]
 
 # Initialize QuantumEspresso simulator
-qe = inductiva.simulators.QuantumEspresso()
+qe = inductiva.simulators.QuantumEspresso( \
+    version="7.4.1")
 
 # Run simulation
 task = qe.run( \

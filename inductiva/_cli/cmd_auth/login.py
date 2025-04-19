@@ -1,6 +1,8 @@
 """Register CLI command for login."""
 import argparse
+import requests
 import getpass
+import pkgutil
 import os
 
 import inductiva
@@ -40,10 +42,46 @@ def login(args):
     # If the API Key is invalid, this will raise an exception
     user_info = users.get_info()
 
-    utils.set_stored_api_key(api_key)
+    exists = utils.set_stored_api_key(api_key)
 
     user_name = user_info["name"] or ""
-    print(f"Welcome back {user_name}!")
+
+    if exists:
+        print(f"Welcome back {user_name}!")
+    else:
+        modules = [
+            name for _, name, _ in pkgutil.iter_modules(
+                inductiva.simulators.__path__)
+        ]
+        #openfoam as a different naming convention
+        modules.append("openfoam_esi")
+        modules.append("openfoam_foundation")
+
+        os.makedirs("inductiva_examples", exist_ok=True)
+        downloaded = []
+        for module in modules:
+            url = constants.INDUCTIVA_GIT_EXAMPLES_URL + f"{module}/{module}.py"
+
+            response = requests.get(url, timeout=10)
+            if response.status_code == 200:
+                downloaded.append(f"{module}.py")
+                with open(f"inductiva_examples/{module}.py",
+                          "w",
+                          encoding="utf-8") as f:
+                    f.write(response.text)
+        print("\n")
+        print(f"Welcome {user_name}!\n"
+              "Since this is your first time logging in, we have downloaded "
+              "some example scripts for you to get started.\n"
+              "The examples are located in the `inductiva_examples` folder.\n"
+              "You can run them using the command "
+              "`python inductiva_examples/<example.py>`.\n\n")
+        print("Available examples:\n")
+        for i in range(0, len(downloaded), 3):
+            line = [word.ljust(25) for word in downloaded[i:i + 3]]
+            print("".join(line))
+        print("\n\nRun your first simulation with "
+              "`python inductiva_examples/openfoam_esi.py`\n")
 
 
 def register(parser):
