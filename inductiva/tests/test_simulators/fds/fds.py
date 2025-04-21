@@ -4,14 +4,15 @@ import inductiva
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2-highcpu-4")
+    machine_type="c2d-highcpu-4")
 
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "fds-input-example.zip",
     unzip=True)
 
-fds = inductiva.simulators.FDS()
+fds = inductiva.simulators.FDS( \
+    version="6.10.1")
 
 task = fds.run( \
     input_dir=input_dir,
