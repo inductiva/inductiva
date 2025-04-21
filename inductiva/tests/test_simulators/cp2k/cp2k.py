@@ -4,7 +4,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2-highcpu-4")
+    machine_type="c2d-highcpu-4")
 
 # Download input files and store them in a directory
 input_dir = inductiva.utils.download_from_url(

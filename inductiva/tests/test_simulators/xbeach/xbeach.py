@@ -4,7 +4,7 @@ import inductiva
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2-highcpu-4")
+    machine_type="c2d-highcpu-4")
 
 # Download example configuration files from Inductiva storage
 input_dir = inductiva.utils.download_from_url(
@@ -13,7 +13,8 @@ input_dir = inductiva.utils.download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-xbeach = inductiva.simulators.XBeach()
+xbeach = inductiva.simulators.XBeach( \
+    version="1.24")
 
 # Run simulation with configuration files in the input directory
 task = xbeach.run( \
