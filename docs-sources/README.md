@@ -1,8 +1,9 @@
-# Documentation Deployment Workflow
+<!-- # Documentation Deployment Workflow
 
-This directory contains the source files for the documentation presented on the website. To keep the documentation up to date in the **staging environment**, we use a [GitHub Action workflow](https://github.com/inductiva/website-new/actions/workflows/deploy-docs-to-staging.yml) that automatically deploys changes to the `development` branch.
+This directory contains the source files for the documentation presented on the website. -->
+<!-- To keep the documentation up to date in the **staging environment**, we use a [GitHub Action workflow](https://github.com/inductiva/website-new/actions/workflows/deploy-docs-to-staging.yml) that automatically deploys changes to the `development` branch. -->
 
-### How to Trigger the Deployment To Development/Staging
+<!-- ### How to Trigger the Deployment To Development/Staging
 
 To deploy changes from any branch to the `development` environment, follow these steps:
 
@@ -18,7 +19,6 @@ To deploy changes from any branch to the `development` environment, follow these
   
      <img width="1490" alt="Captura de ecrã 2025-03-26, às 17 05 43" src="https://github.com/user-attachments/assets/df2b611e-437a-44cc-ba84-5f7eac067303" />
 
-
 3. **What Happens Next**:  
    - The workflow will check if there are any changes in the `docs-sources` folder.
    - If changes are found, it will automatically **commit** them to the `development` branch and **push** the changes to the repository.
@@ -32,12 +32,11 @@ This workflow allows automatic updates to the documentation without needing to g
 
 - **Changes outside the `docs-sources` folder will not trigger the workflow**. If you modify files outside of this folder, the workflow will not take any action, and those changes will not be deployed.
   
-- If you need to **add or remove documentation options** presented the submenu under the **Resources** section that shows some of these docs, this change must be made **via code**. For such modifications, please **contact Sara** to handle those changes.
-
+- If you need to **add or remove documentation options** presented the submenu under the **Resources** section that shows some of these docs, this change must be made **via code**. For such modifications, please **contact Sara** to handle those changes. -->
 
 ### How to View the Documentation Changes
 
-As you make changes to the documentation, they are reflected in the website, depending on the structure of the `docs-sources` folder. Each subfolder within `docs-sources` represents a distinct root of the documentation, and these sections can be accessed under the **/guides** path on the website. 
+As you make changes to the documentation, they are reflected in the website, depending on the structure of the `docs-sources` folder. Each subfolder within `docs-sources` represents a distinct root of the documentation, and these sections can be accessed under the **/guides** path on the website.
 
 For example, let's use [**openfast**](https://website-staging.inductiva.ai/guides/openfast) documentation as an example:
 
@@ -46,7 +45,6 @@ For example, let's use [**openfast**](https://website-staging.inductiva.ai/guide
 - `docs-sources/reef3d` → `/guides/reef3d`
 
 <img width="321" alt="Captura de ecrã 2025-03-26, às 17 35 13" src="https://github.com/user-attachments/assets/2ba1c174-19c6-4a0c-a49d-bf66ecd1e08f" />
-
 
 <img width="1500" alt="Captura de ecrã 2025-03-26, às 17 37 50" src="https://github.com/user-attachments/assets/9e1d7b8a-19ec-43f2-af82-03e179083f04" />
 
@@ -60,9 +58,7 @@ Once the deployment is triggered and the changes are pushed to the `development`
 
 This way, you can easily preview the changes to each section as they are deployed to the staging environment.
 
-
-
----
+<!-- ---
 
 ## For Developers: How to View Changes Locally
 
@@ -76,6 +72,7 @@ npm i  # Install project dependencies
 ```
 
 ### 2. **Start the Project Locally**
+
 ```sh
 npm run dev  # Start the project in development mode
 ```
@@ -97,4 +94,4 @@ or
 npm i && npm run dev
 ```
 
-This will build the new changes and restart the project to ensure that updates are visible.
+This will build the new changes and restart the project to ensure that updates are visible. -->
