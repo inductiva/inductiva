@@ -1,6 +1,6 @@
 ```{toctree}
 ---
-caption: Python Client Docs
+caption: Python Client
 maxdepth: 2
 hidden: true
 ---
