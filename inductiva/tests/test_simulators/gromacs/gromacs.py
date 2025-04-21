@@ -4,7 +4,7 @@ import inductiva
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2-highcpu-4")
+    machine_type="c2d-highcpu-4")
 
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -26,7 +26,8 @@ commands = [
      "-g eql.log"),
 ]
 
-gromacs = inductiva.simulators.GROMACS()
+gromacs = inductiva.simulators.GROMACS( \
+    version="2022.2")
 
 task = gromacs.run( \
     input_dir=input_dir,
