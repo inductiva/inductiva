@@ -103,7 +103,7 @@ def _fetch_tasks_from_api(status: Optional[str] = None,
 
 
 def get(last_n: int = 5,
-        status: Optional[str] = None,
+        status: Optional[Union[str, models.TaskStatusCode]] = None,
         project: Optional[str] = None) -> List["inductiva.tasks.Task"]:
     """Get the last N tasks of a user.
 
