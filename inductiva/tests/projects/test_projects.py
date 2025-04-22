@@ -1,16 +1,19 @@
 """Tests for the projects class"""
 import inductiva
+import pytest
+
+DEFAULT_PROJECT_NAME = "default"
 
 
 def test_get_default_project():
     """Tests if can create new project."""
 
-    default_proj = inductiva.projects.Project("default")
+    default_proj = inductiva.projects.Project(DEFAULT_PROJECT_NAME)
     assert isinstance(default_proj, inductiva.projects.Project)
-    assert default_proj.name == "default"
+    assert default_proj.name == DEFAULT_PROJECT_NAME
     # Make sure the project info can be printed
     # without raising an error
-    print(str(default_proj))
+    assert str(default_proj)
 
 
 def test_get_all_projects():
@@ -22,16 +25,19 @@ def test_get_all_projects():
         # ensure the objects are an instance of the Project class
         assert isinstance(proj, inductiva.projects.Project)
         # ensure that printing the project does not raise an error
-        print(proj)
+        assert str(proj)
 
 
 def test_move_task_from_default_project():
     """Tests if can add task to project."""
 
-    prev_proj_tasks = inductiva.tasks.get_tasks(project="default",
-                                                status="success",
-                                                last_n=10)
-    assert prev_proj_tasks, "No tasks found with status 'success'."
+    prev_proj_tasks = inductiva.tasks.get_tasks(project=DEFAULT_PROJECT_NAME,
+                                                status="success")
+
+    # Skip test if no successful tasks are available
+    if not prev_proj_tasks:
+        pytest.skip("No tasks found with status 'success' for testing")
+
     task = prev_proj_tasks[0]
     previous_project_name = task.info.project
     previous_project = inductiva.projects.Project(previous_project_name)
@@ -40,9 +46,8 @@ def test_move_task_from_default_project():
     new_proj.add_task(task)
 
     # Ask again for the previous project tasks
-    prev_proj_tasks = inductiva.tasks.get_tasks(project="default",
-                                                status="success",
-                                                last_n=10)
+    prev_proj_tasks = inductiva.tasks.get_tasks(project=DEFAULT_PROJECT_NAME,
+                                                status="success")
     # Check if the task was removed from the previous project
     assert not any(t.id == task.id for t in prev_proj_tasks)
 
