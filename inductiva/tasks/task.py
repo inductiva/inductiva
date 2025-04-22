@@ -1599,10 +1599,7 @@ class Task:
         try:
             response = self._api.get_metadata(path_params={"task_id": self.id})
 
-            if hasattr(response, 'body'):
-                return response.body
-            else:
-                return {}
+            return dict(response.body)
 
         except exceptions.ApiException as exc:
             raise RuntimeError(f"Failed to get metadata for task {self.id}. "
