@@ -1549,3 +1549,61 @@ class Task:
 
     def print_summary(self, fhandle=sys.stdout):
         print(self._get_summary(), file=fhandle)
+
+    def set_metadata(self, metadata: Dict[str, str]):
+        """Set metadata for the task.
+        
+        Metadata is stored as key-value pairs, where both
+        keys and values must be strings.
+        Metadata can be useful for categorizing, searching,
+        and filtering tasks.
+
+        Example usage:
+            task = simulator.run(...)
+            # Add experiment information to the task
+            task.set_metadata({
+                "study": "study_1",
+                "experiment": "experiment_1",
+                "description": "This is a test experiment",
+                "parameters": "param1=1,param2=2",
+            })
+
+        Args:
+            metadata: A dictionary with the metadata to set.
+        """
+        # Validate metadata
+        if not isinstance(metadata, Dict):
+            raise TypeError("Metadata must be a dictionary.")
+
+        for key, value in metadata.items():
+            if not isinstance(key, str) or not isinstance(value, str):
+                raise TypeError("Metadata keys and values must be strings.")
+            if not key or not value:
+                raise ValueError(
+                    "Metadata keys and values cannot be empty strings.")
+
+        try:
+            self._api.set_metadata(path_params={"task_id": self.id},
+                                   body=metadata)
+        except exceptions.ApiException as exc:
+            raise RuntimeError(f"Failed to set metadata for task {self.id}. "
+                               f"Error: {str(exc)}") from exc
+
+    def get_metadata(self) -> Dict[str, str]:
+        """Get the metadata associated with the task.
+            
+        Returns:
+            A dictionary with the custom metadata previously set on this task.
+            Returns an empty dictionary if no metadata has been set.
+        """
+        try:
+            response = self._api.get_metadata(path_params={"task_id": self.id})
+
+            if hasattr(response, 'body'):
+                return response.body
+            else:
+                return {}
+
+        except exceptions.ApiException as exc:
+            raise RuntimeError(f"Failed to get metadata for task {self.id}. "
+                               f"Error: {str(exc)}") from exc
