@@ -1594,7 +1594,6 @@ class Task:
             
         Returns:
             A dictionary with the custom metadata previously set on this task.
-            Returns an empty dictionary if no metadata has been set.
         """
         try:
             response = self._api.get_metadata(path_params={"task_id": self.id})
