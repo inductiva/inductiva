@@ -1,7 +1,7 @@
 """Methods to interact with the tasks submitted to the API."""
 from collections import defaultdict
 import json
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Union
+from typing import Any, Dict, Iterable, List, Mapping, Optional
 
 import inductiva
 from inductiva.client import models

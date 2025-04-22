@@ -172,7 +172,7 @@ class Project:
 
         Computed as the sum of the estimated computation cost of each task.
         """
-        return self._proj_data.get("estimated_computation_cost")
+        return self._proj_data.get("estimated_computation_cost", 0.0)
 
     def __str__(self) -> str:
         formatted_cost = format_utils.currency_formatter(
