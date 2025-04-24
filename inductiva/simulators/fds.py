@@ -34,6 +34,7 @@ class FDS(simulators.Simulator):
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
+            project_name: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -53,6 +54,8 @@ class FDS(simulators.Simulator):
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
+            project_name: Name of the project to which the task will be assigned.
+                If None, the task will be assigned to the default project.
         """
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
@@ -73,4 +76,5 @@ class FDS(simulators.Simulator):
                            storage_dir=storage_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project_name=project_name,
                            **kwargs)

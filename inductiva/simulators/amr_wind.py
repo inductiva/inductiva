@@ -39,6 +39,7 @@ class AmrWind(simulators.Simulator):
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
+            project_name: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:
@@ -56,6 +57,8 @@ class AmrWind(simulators.Simulator):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project_name: Name of the project to which the task will be assigned.
+                If None, the task will be assigned to the default project.
         """
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
@@ -73,4 +76,5 @@ class AmrWind(simulators.Simulator):
                            commands=commands,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project_name=project_name,
                            **kwargs)
