@@ -343,8 +343,9 @@ def submit_task(simulator,
         simulator_obj: Optional simulator object with additional configuration
         remote_assets: Additional input files that will be copied to the
                 simulation from a bucket or from another task output.
-        project_name: Name of the project to which the task will be assigned.
-                If None, the task will be assigned to the default project.
+        project_name: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project.
     Return:
         Returns the task id.
     """

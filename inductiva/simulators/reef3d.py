@@ -53,8 +53,9 @@ class REEF3D(simulators.Simulator):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
-            project_name: Name of the project to which the task will be assigned.
-                If None, the task will be assigned to the default project.
+            project_name: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project.
             other arguments: See the documentation of the base class.
         """
         mpi_kwargs = {}

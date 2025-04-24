@@ -54,8 +54,9 @@ class FDS(simulators.Simulator):
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
-            project_name: Name of the project to which the task will be assigned.
-                If None, the task will be assigned to the default project.
+            project_name: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project.
         """
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread

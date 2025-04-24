@@ -54,8 +54,9 @@ class DualSPHysics(simulators.Simulator):
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
-            project_name: Name of the project to which the task will be assigned.
-                If None, the task will be assigned to the default project.
+            project_name: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project.
 
         Returns:
             tasks.Task: An object representing the simulation task.

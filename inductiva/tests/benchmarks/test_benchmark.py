@@ -15,6 +15,7 @@ def benchmark_fixture():
     mocked_benchmark.on = None
     mocked_benchmark.kwargs = {}
     mocked_benchmark.open = mock.MagicMock(return_value=None)
+    mocked_benchmark.name = "test_benchmark"
     return mocked_benchmark
 
 

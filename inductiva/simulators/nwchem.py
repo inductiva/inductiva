@@ -55,8 +55,9 @@ class NWChem(simulators.Simulator):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
-            project_name: Name of the project to which the task will be assigned.
-                If None, the task will be assigned to the default project.
+            project_name: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project.
         """
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
