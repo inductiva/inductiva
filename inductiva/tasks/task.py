@@ -1582,12 +1582,7 @@ class Task:
                 raise ValueError(
                     "Metadata keys and values cannot be empty strings.")
 
-        try:
-            self._api.set_metadata(path_params={"task_id": self.id},
-                                   body=metadata)
-        except exceptions.ApiException as exc:
-            raise RuntimeError(f"Failed to set metadata for task {self.id}. "
-                               f"Error: {str(exc)}") from exc
+        self._api.set_metadata(path_params={"task_id": self.id}, body=metadata)
 
     def get_metadata(self) -> Dict[str, str]:
         """Get the metadata associated with the task.
@@ -1595,11 +1590,6 @@ class Task:
         Returns:
             A dictionary with the custom metadata previously set on this task.
         """
-        try:
-            response = self._api.get_metadata(path_params={"task_id": self.id})
+        response = self._api.get_metadata(path_params={"task_id": self.id})
 
-            return dict(response.body)
-
-        except exceptions.ApiException as exc:
-            raise RuntimeError(f"Failed to get metadata for task {self.id}. "
-                               f"Error: {str(exc)}") from exc
+        return dict(response.body)
