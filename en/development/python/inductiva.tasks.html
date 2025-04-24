@@ -398,6 +398,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_info"><code class="docutils literal notranslate"><span class="pre">Task.get_info()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_input_url"><code class="docutils literal notranslate"><span class="pre">Task.get_input_url()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_machine_type"><code class="docutils literal notranslate"><span class="pre">Task.get_machine_type()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_metadata"><code class="docutils literal notranslate"><span class="pre">Task.get_metadata()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_output_info"><code class="docutils literal notranslate"><span class="pre">Task.get_output_info()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_output_url"><code class="docutils literal notranslate"><span class="pre">Task.get_output_url()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_position_in_queue"><code class="docutils literal notranslate"><span class="pre">Task.get_position_in_queue()</span></code></a></li>
@@ -414,6 +415,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.list_files"><code class="docutils literal notranslate"><span class="pre">Task.list_files()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.print_summary"><code class="docutils literal notranslate"><span class="pre">Task.print_summary()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.remove_remote_files"><code class="docutils literal notranslate"><span class="pre">Task.remove_remote_files()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.set_metadata"><code class="docutils literal notranslate"><span class="pre">Task.set_metadata()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.summary"><code class="docutils literal notranslate"><span class="pre">Task.summary</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.sync_context"><code class="docutils literal notranslate"><span class="pre">Task.sync_context()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.tail_files"><code class="docutils literal notranslate"><span class="pre">Task.tail_files()</span></code></a></li>
@@ -589,6 +591,17 @@ machine type from the comprehensive task info.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.get_metadata">
+<span class="sig-name descname"><span class="pre">get_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.get_metadata" title="Link to this definition">#</a></dt>
+<dd><p>Get the metadata associated with the task.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A dictionary with the custom metadata previously set on this task.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="inductiva.tasks.task.Task.get_output_info">
 <span class="sig-name descname"><span class="pre">get_output_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TaskOutputInfo</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.get_output_info" title="Link to this definition">#</a></dt>
 <dd><p>Get information about the output files of the task.</p>
@@ -755,6 +768,34 @@ The return code for the command. 0 if successful, 1 if failed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>True if the files were removed successfully, False otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.set_metadata">
+<span class="sig-name descname"><span class="pre">set_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.tasks.task.Task.set_metadata" title="Link to this definition">#</a></dt>
+<dd><p>Set metadata for the task.</p>
+<p>Metadata is stored as key-value pairs, where both
+keys and values must be strings.
+Metadata can be useful for categorizing, searching,
+and filtering tasks.</p>
+<dl>
+<dt>Example usage:</dt><dd><p>task = simulator.run(…)
+# Add experiment information to the task
+task.set_metadata({</p>
+<blockquote>
+<div><p>“study”: “study_1”,
+“experiment”: “experiment_1”,
+“description”: “This is a test experiment”,
+“parameters”: “param1=1,param2=2”,</p>
+</div></blockquote>
+<p>})</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>metadata</strong> – A dictionary with the metadata to set.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -988,6 +1029,7 @@ all the tasks. Example: { “ID”: [1, 2, 3],
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_info"><code class="docutils literal notranslate"><span class="pre">Task.get_info()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_input_url"><code class="docutils literal notranslate"><span class="pre">Task.get_input_url()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_machine_type"><code class="docutils literal notranslate"><span class="pre">Task.get_machine_type()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_metadata"><code class="docutils literal notranslate"><span class="pre">Task.get_metadata()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_output_info"><code class="docutils literal notranslate"><span class="pre">Task.get_output_info()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_output_url"><code class="docutils literal notranslate"><span class="pre">Task.get_output_url()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.get_position_in_queue"><code class="docutils literal notranslate"><span class="pre">Task.get_position_in_queue()</span></code></a></li>
@@ -1004,6 +1046,7 @@ all the tasks. Example: { “ID”: [1, 2, 3],
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.list_files"><code class="docutils literal notranslate"><span class="pre">Task.list_files()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.print_summary"><code class="docutils literal notranslate"><span class="pre">Task.print_summary()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.remove_remote_files"><code class="docutils literal notranslate"><span class="pre">Task.remove_remote_files()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.set_metadata"><code class="docutils literal notranslate"><span class="pre">Task.set_metadata()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.summary"><code class="docutils literal notranslate"><span class="pre">Task.summary</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.sync_context"><code class="docutils literal notranslate"><span class="pre">Task.sync_context()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.tail_files"><code class="docutils literal notranslate"><span class="pre">Task.tail_files()</span></code></a></li>
