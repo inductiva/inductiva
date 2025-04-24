@@ -355,7 +355,6 @@ document.write(`
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
- | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
@@ -379,8 +378,6 @@ document.write(`
         <li><a href="python/inductiva.resources.html#inductiva.resources.machine_groups.MPICluster.__init__">(MPICluster method)</a>
 </li>
         <li><a href="python/inductiva.projects.html#inductiva.projects.project.Project.__init__">(Project method)</a>
-</li>
-        <li><a href="python/inductiva.projects.html#inductiva.projects.project.ProjectInfo.__init__">(ProjectInfo method)</a>
 </li>
         <li><a href="python/inductiva.storage.html#inductiva.storage.storage.StorageOperation.__init__">(StorageOperation method)</a>
 </li>
@@ -407,6 +404,12 @@ document.write(`
       </ul></li>
       <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.add_run">add_run() (Benchmark method)</a>
 </li>
+      <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.add_task">add_task() (Benchmark method)</a>
+
+      <ul>
+        <li><a href="python/inductiva.projects.html#inductiva.projects.project.Project.add_task">(Project method)</a>
+</li>
+      </ul></li>
       <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.SelectMode.ALL">ALL (SelectMode attribute)</a>
 </li>
       <li><a href="python/inductiva.resources.html#inductiva.resources.machine_groups.ElasticMachineGroup.allow_auto_start">allow_auto_start (ElasticMachineGroup attribute)</a>
@@ -475,26 +478,26 @@ document.write(`
         <li><a href="python/inductiva.resources.html#inductiva.resources.machine_groups.MPICluster.can_start_resource">(MPICluster method)</a>
 </li>
       </ul></li>
-      <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.close">close() (Benchmark method)</a>
-
-      <ul>
-        <li><a href="python/inductiva.projects.html#inductiva.projects.project.Project.close">(Project method)</a>
-</li>
-      </ul></li>
       <li><a href="python/inductiva.tasks.html#inductiva.tasks.task.Task.close_stream">close_stream() (Task method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/inductiva.storage.html#inductiva.storage.storage.ZipFileInfo.compress_type">compress_type (ZipFileInfo attribute)</a>
 </li>
       <li><a href="python/inductiva.storage.html#inductiva.storage.storage.ZipFileInfo.compressed_size">compressed_size (ZipFileInfo attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/inductiva.resources.html#inductiva.resources.machine_groups.ElasticMachineGroup.create_time">create_time (ElasticMachineGroup attribute)</a>
 
       <ul>
         <li><a href="python/inductiva.resources.html#inductiva.resources.machine_groups.MachineGroup.create_time">(MachineGroup attribute)</a>
 </li>
         <li><a href="python/inductiva.resources.html#inductiva.resources.machine_groups.MPICluster.create_time">(MPICluster attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.created_at">created_at (Benchmark property)</a>
+
+      <ul>
+        <li><a href="python/inductiva.projects.html#inductiva.projects.project.Project.created_at">(Project property)</a>
 </li>
       </ul></li>
       <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.ExportFormat.CSV">CSV (ExportFormat attribute)</a>
@@ -513,16 +516,10 @@ document.write(`
         <li><a href="python/inductiva.resources.html#inductiva.resources.machine_groups.MPICluster.data_disk_gb">(MPICluster attribute)</a>
 </li>
       </ul></li>
-      <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.describe">describe() (Benchmark method)</a>
-
-      <ul>
-        <li><a href="python/inductiva.projects.html#inductiva.projects.project.Project.describe">(Project method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.SelectMode.DISTINCT">DISTINCT (SelectMode attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/inductiva.storage.html#inductiva.storage.storage.download">download() (in module inductiva.storage.storage)</a>
 </li>
       <li><a href="python/inductiva.tasks.html#inductiva.tasks.task.Task.download_inputs">download_inputs() (Task method)</a>
@@ -553,6 +550,12 @@ document.write(`
       </ul></li>
       <li><a href="python/inductiva.resources.html#inductiva.resources.utils.estimate_machine_cost">estimate_machine_cost() (in module inductiva.resources.utils)</a>
 </li>
+      <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.estimated_computation_cost">estimated_computation_cost (Benchmark property)</a>
+
+      <ul>
+        <li><a href="python/inductiva.projects.html#inductiva.projects.project.Project.estimated_computation_cost">(Project property)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.export">export() (Benchmark method)</a>
@@ -613,15 +616,9 @@ document.write(`
 </li>
       <li><a href="python/inductiva.users.html#inductiva.users.methods.get_costs">get_costs() (in module inductiva.users.methods)</a>
 </li>
-      <li><a href="python/inductiva.projects.html#inductiva.projects.project.get_current_project">get_current_project() (in module inductiva.projects.project)</a>
-</li>
-      <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.get_info">get_info() (Benchmark method)</a>
+      <li><a href="python/inductiva.users.html#inductiva.users.methods.get_info">get_info() (in module inductiva.users.methods)</a>
 
       <ul>
-        <li><a href="python/inductiva.users.html#inductiva.users.methods.get_info">(in module inductiva.users.methods)</a>
-</li>
-        <li><a href="python/inductiva.projects.html#inductiva.projects.project.Project.get_info">(Project method)</a>
-</li>
         <li><a href="python/inductiva.tasks.html#inductiva.tasks.task.Task.get_info">(Task method)</a>
 </li>
       </ul></li>
@@ -629,12 +626,12 @@ document.write(`
 </li>
       <li><a href="python/inductiva.tasks.html#inductiva.tasks.task.Task.get_machine_type">get_machine_type() (Task method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/inductiva.tasks.html#inductiva.tasks.task.Task.get_output_info">get_output_info() (Task method)</a>
 </li>
       <li><a href="python/inductiva.tasks.html#inductiva.tasks.task.Task.get_output_url">get_output_url() (Task method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/inductiva.tasks.html#inductiva.tasks.task.Task.get_position_in_queue">get_position_in_queue() (Task method)</a>
 </li>
       <li><a href="python/inductiva.projects.html#inductiva.projects.project.get_projects">get_projects() (in module inductiva.projects.project)</a>
@@ -683,12 +680,16 @@ document.write(`
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python/inductiva.resources.html#inductiva.resources.machine_groups.ElasticMachineGroup.id">id (ElasticMachineGroup property)</a>
+      <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.id">id (Benchmark property)</a>
 
       <ul>
+        <li><a href="python/inductiva.resources.html#inductiva.resources.machine_groups.ElasticMachineGroup.id">(ElasticMachineGroup property)</a>
+</li>
         <li><a href="python/inductiva.resources.html#inductiva.resources.machine_groups.MachineGroup.id">(MachineGroup property)</a>
 </li>
         <li><a href="python/inductiva.resources.html#inductiva.resources.machine_groups.MPICluster.id">(MPICluster property)</a>
+</li>
+        <li><a href="python/inductiva.projects.html#inductiva.projects.project.Project.id">(Project property)</a>
 </li>
       </ul></li>
       <li><a href="python/inductiva.resources.html#inductiva.resources.machine_groups.ElasticMachineGroup.idle_time">idle_time (ElasticMachineGroup property)</a>
@@ -727,6 +728,8 @@ document.write(`
         <li><a href="python/inductiva.resources.html#module-inductiva.resources.utils">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     inductiva.storage.storage
 
@@ -734,8 +737,6 @@ document.write(`
         <li><a href="python/inductiva.storage.html#module-inductiva.storage.storage">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     inductiva.tasks.methods
 
@@ -764,14 +765,8 @@ document.write(`
         <li><a href="python/inductiva.users.html#module-inductiva.users.methods">module</a>
 </li>
       </ul></li>
-      <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.info">info (Benchmark property)</a>
-
-      <ul>
-        <li><a href="python/inductiva.projects.html#inductiva.projects.project.Project.info">(Project property)</a>
+      <li><a href="python/inductiva.tasks.html#inductiva.tasks.task.Task.info">info (Task property)</a>
 </li>
-        <li><a href="python/inductiva.tasks.html#inductiva.tasks.task.Task.info">(Task property)</a>
-</li>
-      </ul></li>
       <li><a href="python/inductiva.tasks.html#inductiva.tasks.task.Task.is_failed">is_failed() (Task method)</a>
 </li>
       <li><a href="python/inductiva.tasks.html#inductiva.tasks.task.Task.is_running">is_running() (Task method)</a>
@@ -808,12 +803,6 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/inductiva.tasks.html#inductiva.tasks.task.Task.last_modified_file">last_modified_file() (Task method)</a>
 </li>
-      <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.list">list() (Benchmark method)</a>
-
-      <ul>
-        <li><a href="python/inductiva.projects.html#inductiva.projects.project.Project.list">(Project method)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/inductiva.tasks.html#inductiva.tasks.task.Task.list_files">list_files() (Task method)</a>
@@ -915,24 +904,10 @@ document.write(`
         <li><a href="python/inductiva.resources.html#inductiva.resources.machine_groups.MPICluster.num_machines">(MPICluster attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-</tr></table>
-
-<h2 id="O">O</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.open">open() (Benchmark method)</a>
+      <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.num_tasks">num_tasks (Benchmark property)</a>
 
       <ul>
-        <li><a href="python/inductiva.projects.html#inductiva.projects.project.Project.open">(Project method)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.opened">opened (Benchmark property)</a>
-
-      <ul>
-        <li><a href="python/inductiva.projects.html#inductiva.projects.project.Project.opened">(Project property)</a>
+        <li><a href="python/inductiva.projects.html#inductiva.projects.project.Project.num_tasks">(Project property)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -944,8 +919,6 @@ document.write(`
       <li><a href="python/inductiva.tasks.html#inductiva.tasks.task.Task.print_summary">print_summary() (Task method)</a>
 </li>
       <li><a href="python/inductiva.projects.html#inductiva.projects.project.Project">Project (class in inductiva.projects.project)</a>
-</li>
-      <li><a href="python/inductiva.projects.html#inductiva.projects.project.ProjectInfo">ProjectInfo (class in inductiva.projects.project)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1079,6 +1052,12 @@ document.write(`
 </li>
       <li><a href="python/inductiva.tasks.html#inductiva.tasks.task.Task">Task (class in inductiva.tasks.task)</a>
 </li>
+      <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.task_by_status">task_by_status (Benchmark property)</a>
+
+      <ul>
+        <li><a href="python/inductiva.projects.html#inductiva.projects.project.Project.task_by_status">(Project property)</a>
+</li>
+      </ul></li>
       <li><a href="python/inductiva.templating.html#inductiva.templating.manager.TemplateManager">TemplateManager (class in inductiva.templating.manager)</a>
 </li>
       <li><a href="python/inductiva.benchmarks.html#inductiva.benchmarks.benchmark.Benchmark.terminate">terminate() (Benchmark method)</a>

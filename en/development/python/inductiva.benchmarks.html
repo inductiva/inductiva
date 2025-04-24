@@ -386,20 +386,19 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark"><code class="docutils literal notranslate"><span class="pre">Benchmark</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.__init__"><code class="docutils literal notranslate"><span class="pre">Benchmark.__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.add_run"><code class="docutils literal notranslate"><span class="pre">Benchmark.add_run()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.close"><code class="docutils literal notranslate"><span class="pre">Benchmark.close()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.describe"><code class="docutils literal notranslate"><span class="pre">Benchmark.describe()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.add_task"><code class="docutils literal notranslate"><span class="pre">Benchmark.add_task()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.created_at"><code class="docutils literal notranslate"><span class="pre">Benchmark.created_at</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.download_outputs"><code class="docutils literal notranslate"><span class="pre">Benchmark.download_outputs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.estimated_computation_cost"><code class="docutils literal notranslate"><span class="pre">Benchmark.estimated_computation_cost</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.export"><code class="docutils literal notranslate"><span class="pre">Benchmark.export()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.get_info"><code class="docutils literal notranslate"><span class="pre">Benchmark.get_info()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.get_tasks"><code class="docutils literal notranslate"><span class="pre">Benchmark.get_tasks()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.info"><code class="docutils literal notranslate"><span class="pre">Benchmark.info</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.list"><code class="docutils literal notranslate"><span class="pre">Benchmark.list()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.id"><code class="docutils literal notranslate"><span class="pre">Benchmark.id</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.name"><code class="docutils literal notranslate"><span class="pre">Benchmark.name</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.open"><code class="docutils literal notranslate"><span class="pre">Benchmark.open()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.opened"><code class="docutils literal notranslate"><span class="pre">Benchmark.opened</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.num_tasks"><code class="docutils literal notranslate"><span class="pre">Benchmark.num_tasks</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.run"><code class="docutils literal notranslate"><span class="pre">Benchmark.run()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.runs_info"><code class="docutils literal notranslate"><span class="pre">Benchmark.runs_info()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.set_default"><code class="docutils literal notranslate"><span class="pre">Benchmark.set_default()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.task_by_status"><code class="docutils literal notranslate"><span class="pre">Benchmark.task_by_status</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.terminate"><code class="docutils literal notranslate"><span class="pre">Benchmark.terminate()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.wait"><code class="docutils literal notranslate"><span class="pre">Benchmark.wait()</span></code></a></li>
 </ul>
@@ -430,20 +429,16 @@ document.write(`
 <p>API for Benchmarking</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Benchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Benchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="inductiva.projects.html#inductiva.projects.project.Project" title="inductiva.projects.project.Project"><code class="xref py py-class docutils literal notranslate"><span class="pre">Project</span></code></a></p>
 <p>Represents the benchmark runner.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">append</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.__init__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.__init__" title="Link to this definition">#</a></dt>
 <dd><p>Initializes a new Benchmark instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<em>str</em>) – The name of the benchmark runner.</p></li>
-<li><p><strong>append</strong> (<em>bool</em>) – Indicates whether to allow adding runs to the</p></li>
-<li><p><strong>benchmark</strong> (<em>existing</em>)</p></li>
-</ul>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – The name of the benchmark runner.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -477,30 +472,20 @@ will overwrite any previously set parameters.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.close">
-<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.close" title="Link to this definition">#</a></dt>
-<dd><p>Close the project.</p>
-<p>Calls to the <cite>get_current_project</cite> will return <cite>None</cite> after
-the project is closed.  Consecutive calls to this method are
-idempotent.</p>
+<dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.add_task">
+<span class="sig-name descname"><span class="pre">add_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="inductiva.tasks.html#inductiva.tasks.task.Task" title="inductiva.tasks.task.Task"><span class="pre">Task</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.add_task" title="Link to this definition">#</a></dt>
+<dd><p>Adds a task to the project.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>task</strong> – The task to add to the project.</p>
+</dd>
+</dl>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.describe">
-<span class="sig-name descname"><span class="pre">describe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.describe" title="Link to this definition">#</a></dt>
-<dd><p>Generates a string description of the object</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>A string description of the object. Includes project name,</dt><dd><p>total number of tasks and the number of tasks by status.</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>str</p>
-</dd>
-</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.created_at">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">created_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.created_at" title="Link to this definition">#</a></dt>
+<dd><p>Returns the creation date and time of the project.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -511,9 +496,16 @@ idempotent.</p>
 <cite>inductiva_output/&lt;project_name&gt;/&lt;task_id’s&gt;</cite>.</p>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.estimated_computation_cost">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">estimated_computation_cost</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.estimated_computation_cost" title="Link to this definition">#</a></dt>
+<dd><p>Returns the estimated project cost.</p>
+<p>Computed as the sum of the estimated computation cost of each task.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.export">
-<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#inductiva.benchmarks.benchmark.ExportFormat" title="inductiva.benchmarks.benchmark.ExportFormat"><span class="pre">ExportFormat</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ExportFormat.JSON</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">TaskStatusCode</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#inductiva.benchmarks.benchmark.SelectMode" title="inductiva.benchmarks.benchmark.SelectMode"><span class="pre">SelectMode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">SelectMode.DISTINCT</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.export" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#inductiva.benchmarks.benchmark.ExportFormat" title="inductiva.benchmarks.benchmark.ExportFormat"><span class="pre">ExportFormat</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ExportFormat.JSON</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TaskStatusCode</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#inductiva.benchmarks.benchmark.SelectMode" title="inductiva.benchmarks.benchmark.SelectMode"><span class="pre">SelectMode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">SelectMode.DISTINCT</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.export" title="Link to this definition">#</a></dt>
 <dd><p>Exports the benchmark performance metrics in the specified format.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -535,34 +527,16 @@ includes only the parameters that vary between different runs.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.get_info">
-<span class="sig-name descname"><span class="pre">get_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="inductiva.projects.html#inductiva.projects.project.ProjectInfo" title="inductiva.projects.project.ProjectInfo"><span class="pre">ProjectInfo</span></a></span></span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.get_info" title="Link to this definition">#</a></dt>
-<dd><p>Get project information.</p>
-<p>Get updated information on the project. This method executes a
-call to the backend to retrieve the most recent information
-about this project and stores it internally so that it becomes
-available through the <cite>Project.info</cite> property.  This method is
-suitable when up-to-date information is required.</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.get_tasks">
-<span class="sig-name descname"><span class="pre">get_tasks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">last_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">TaskStatusCode</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tasks</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.get_tasks" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_tasks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">last_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="inductiva.tasks.html#inductiva.tasks.task.Task" title="inductiva.tasks.task.Task"><span class="pre">Task</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.get_tasks" title="Link to this definition">#</a></dt>
 <dd><p>Get the the tasks of this project.</p>
-<p>Get the tasks that belong to this project,
-eventually filtered by status. By default, it will return all the tasks,
-irrespectively of their status.
-This method will only do a request to the back end if the list of
-tasks is None (never requested the list of tasks) or if <cite>force_update</cite>
-is passed as True.</p>
+<p>Optionally, those can be filtered by task status.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>last_n</strong> (<em>int</em>) – The number of tasks with repect to the submission
-time to fectch. If <cite>last_n&lt;=0</cite> we fetch all tasks submitted
+time to fetch. If <cite>last_n&lt;=0</cite> we fetch all tasks submitted
 to the project.</p></li>
-<li><p><strong>force_update</strong> (<em>bool</em>) – Forces the request to the back end, even if we
-already have a list of tasks associated with this project.</p></li>
 <li><p><strong>status</strong> – Status of the tasks to get. If <cite>None</cite>, tasks with any
 status will be returned.</p></li>
 </ul>
@@ -571,67 +545,21 @@ status will be returned.</p></li>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.info">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="inductiva.projects.html#inductiva.projects.project.ProjectInfo" title="inductiva.projects.project.ProjectInfo"><span class="pre">ProjectInfo</span></a></em><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.info" title="Link to this definition">#</a></dt>
-<dd><p>Returns project info.</p>
-<p>It makes no requests to the backend. Instead it uses
-previously stored information. Therefore it can be
-outdated. For a method that requests the most recent data from
-the backend use: <cite>get_info</cite>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.list">
-<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">last_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">TaskStatusCode</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tasks</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.list" title="Link to this definition">#</a></dt>
-<dd><p>Get the the tasks of this project.</p>
-<p>Get the tasks that belong to this project,
-eventually filtered by status. By default, it will return all the tasks,
-irrespectively of their status.
-This method will only do a request to the back end if the list of
-tasks is None (never requested the list of tasks) or if <cite>force_update</cite>
-is passed as True.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>last_n</strong> (<em>int</em>) – The number of tasks with repect to the submission
-time to fectch. If <cite>last_n&lt;=0</cite> we fetch all tasks submitted
-to the project.</p></li>
-<li><p><strong>force_update</strong> (<em>bool</em>) – Forces the request to the back end, even if we
-already have a list of tasks associated with this project.</p></li>
-<li><p><strong>status</strong> – Status of the tasks to get. If <cite>None</cite>, tasks with any
-status will be returned.</p></li>
-</ul>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.id">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.id" title="Link to this definition">#</a></dt>
+<dd><p>Returns the unique ID of the project.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.name">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.name" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.open">
-<span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.open" title="Link to this definition">#</a></dt>
-<dd><p>Open the project.</p>
-<p>Open the project and make it the active one in the calling
-thread. An opened project will ensure that calls to the
-<cite>get_current_project</cite> function will return this project.
-Consecutive calls to this method are idempotent.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>RuntimeError if another opened project exists</strong><strong>, </strong><strong>i.e.</strong><strong>,</strong> – </p></li>
-<li><p><strong>get_current_project</strong> – </p></li>
-</ul>
-</dd>
-</dl>
+<dd><p>Returns the name of the project.</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.opened">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">opened</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.opened" title="Link to this definition">#</a></dt>
-<dd><p>Checks if the project is open.</p>
+<dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.num_tasks">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_tasks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.num_tasks" title="Link to this definition">#</a></dt>
+<dd><p>Returns the number of tasks in the project.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -663,7 +591,7 @@ are not available (default is <cite>True</cite>).</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.runs_info">
-<span class="sig-name descname"><span class="pre">runs_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">TaskStatusCode</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#inductiva.benchmarks.benchmark.SelectMode" title="inductiva.benchmarks.benchmark.SelectMode"><span class="pre">SelectMode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">SelectMode.DISTINCT</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.runs_info" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">runs_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TaskStatusCode</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#inductiva.benchmarks.benchmark.SelectMode" title="inductiva.benchmarks.benchmark.SelectMode"><span class="pre">SelectMode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">SelectMode.DISTINCT</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.runs_info" title="Link to this definition">#</a></dt>
 <dd><p>Gathers the configuration and performance metrics for each run
 associated with the benchmark in a list, including computation cost and
 execution time.</p>
@@ -720,6 +648,14 @@ with the same names.</p></li>
 <dd class="field-odd"><p>Self</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.task_by_status">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">task_by_status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.task_by_status" title="Link to this definition">#</a></dt>
+<dd><p>Returns a dictionary with the number of tasks by status.
+The keys are the status codes and the values are the number of tasks
+with that status.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -838,20 +774,19 @@ should be included in the benchmarking results.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark"><code class="docutils literal notranslate"><span class="pre">Benchmark</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.__init__"><code class="docutils literal notranslate"><span class="pre">Benchmark.__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.add_run"><code class="docutils literal notranslate"><span class="pre">Benchmark.add_run()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.close"><code class="docutils literal notranslate"><span class="pre">Benchmark.close()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.describe"><code class="docutils literal notranslate"><span class="pre">Benchmark.describe()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.add_task"><code class="docutils literal notranslate"><span class="pre">Benchmark.add_task()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.created_at"><code class="docutils literal notranslate"><span class="pre">Benchmark.created_at</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.download_outputs"><code class="docutils literal notranslate"><span class="pre">Benchmark.download_outputs()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.estimated_computation_cost"><code class="docutils literal notranslate"><span class="pre">Benchmark.estimated_computation_cost</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.export"><code class="docutils literal notranslate"><span class="pre">Benchmark.export()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.get_info"><code class="docutils literal notranslate"><span class="pre">Benchmark.get_info()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.get_tasks"><code class="docutils literal notranslate"><span class="pre">Benchmark.get_tasks()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.info"><code class="docutils literal notranslate"><span class="pre">Benchmark.info</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.list"><code class="docutils literal notranslate"><span class="pre">Benchmark.list()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.id"><code class="docutils literal notranslate"><span class="pre">Benchmark.id</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.name"><code class="docutils literal notranslate"><span class="pre">Benchmark.name</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.open"><code class="docutils literal notranslate"><span class="pre">Benchmark.open()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.opened"><code class="docutils literal notranslate"><span class="pre">Benchmark.opened</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.num_tasks"><code class="docutils literal notranslate"><span class="pre">Benchmark.num_tasks</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.run"><code class="docutils literal notranslate"><span class="pre">Benchmark.run()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.runs_info"><code class="docutils literal notranslate"><span class="pre">Benchmark.runs_info()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.set_default"><code class="docutils literal notranslate"><span class="pre">Benchmark.set_default()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.task_by_status"><code class="docutils literal notranslate"><span class="pre">Benchmark.task_by_status</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.terminate"><code class="docutils literal notranslate"><span class="pre">Benchmark.terminate()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.wait"><code class="docutils literal notranslate"><span class="pre">Benchmark.wait()</span></code></a></li>
 </ul>
