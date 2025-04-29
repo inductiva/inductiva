@@ -12,7 +12,7 @@ import signal
 import urllib3
 import decimal
 from contextlib import contextmanager
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 import logging
 
