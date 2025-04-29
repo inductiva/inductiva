@@ -1,4 +1,5 @@
 """Methods to interact with the user storage resources."""
+import datetime
 import itertools
 import logging
 import math
@@ -171,9 +172,10 @@ def get_signed_urls(
 class ZipFileInfo:
     """Represents information about a file within a ZIP archive."""
     name: str
-    size: int
-    compressed_size: int
+    size: Optional[int]
+    compressed_size: Optional[int]
     range_start: Optional[int]
+    creation_time: Optional[datetime.datetime]
     compress_type: Optional[int]
 
 
@@ -213,6 +215,7 @@ def get_zip_contents(
             if file["compressed_size"] else None,
         range_start=int(file["range_start"]) \
             if file["range_start"] else None,
+        creation_time=datetime.datetime.fromisoformat(file["creation_time"]),
         compress_type=int(file["compress_type"])
             if file["compress_type"] else None
     ) for file in response_body["contents"]]
