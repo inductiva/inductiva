@@ -318,7 +318,8 @@ def submit_task(simulator,
                 container_image: Optional[str] = None,
                 simulator_name_alias: Optional[str] = None,
                 simulator_obj=None,
-                remote_assets: Optional[List[str]] = None):
+                remote_assets: Optional[List[str]] = None,
+                project_name: Optional[str] = None):
     """Submit a task and send input files to the API.
     
     Args:
@@ -341,12 +342,6 @@ def submit_task(simulator,
         Returns the task id.
     """
 
-    current_project = inductiva.projects.get_current_project()
-    if current_project is not None:
-        if not current_project.opened:
-            raise RuntimeError("Trying to submit a task to a closed project.")
-        current_project = current_project.name
-
     if not remote_assets:
         remote_assets = []
 
@@ -355,7 +350,7 @@ def submit_task(simulator,
 
     task_request = TaskRequest(simulator=simulator,
                                extra_params=extra_params,
-                               project=current_project,
+                               project=project_name,
                                resource_pool=machine_group.id,
                                container_image=container_image,
                                storage_path_prefix=storage_path_prefix,
@@ -390,9 +385,7 @@ def submit_task(simulator,
     #  ZIP inputs and send them via "POST task/{task_id}/input".
     if task_submitted_info["status"] == "pending-input":
         # Use the blocking task context
-        with blocking_task_context(
-                task_api_instance, task_id,
-                "input upload"):  # Use the blocking task context
+        with blocking_task_context(task_api_instance, task_id, "input upload"):
             upload_input(
                 api_instance=task_api_instance,
                 input_dir=input_dir,

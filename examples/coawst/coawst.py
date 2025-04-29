@@ -4,7 +4,7 @@ import inductiva
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c3d-standard-180")
+    machine_type="c3d-highcpu-180")
 
 # Initialize the Simulator
 coawst = inductiva.simulators.COAWST( \

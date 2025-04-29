@@ -4,7 +4,7 @@ import inductiva
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2-standard-4")
+    machine_type="c2d-highcpu-4")
 
 # Set simulation input directory
 input_dir = inductiva.utils.files.download_from_url(
@@ -12,7 +12,8 @@ input_dir = inductiva.utils.files.download_from_url(
     "schism-input-example.zip", True)
 
 # Initialize the Simulator
-schism = inductiva.simulators.SCHISM()
+schism = inductiva.simulators.SCHISM( \
+    version="5.11.0")
 
 # Run simulation with config files in the input directory
 task = schism.run( \

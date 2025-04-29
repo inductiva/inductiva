@@ -7,7 +7,9 @@ import enum
 
 class TagValues(str, enum.Enum):
     COMPUTE = "compute"
+    EVENTS = "events"
     PROJECTS = "projects"
+    SIMULATORS = "simulators"
     STORAGE = "storage"
     TASKS = "tasks"
     USERS = "users"

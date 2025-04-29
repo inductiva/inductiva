@@ -10,6 +10,7 @@ from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.tasks_task_id_register import TasksTaskIdRegister
 from inductiva.client.apis.paths.tasks_task_id_offer import TasksTaskIdOffer
 from inductiva.client.apis.paths.tasks_task_id_message import TasksTaskIdMessage
+from inductiva.client.apis.paths.tasks_task_id_metadata import TasksTaskIdMetadata
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_terms_and_conditions import AdminUsersEmailTermsAndConditions
 from inductiva.client.apis.paths.admin_users_username_organization import AdminUsersUsernameOrganization
@@ -42,6 +43,8 @@ from inductiva.client.apis.paths.admin_tasks import AdminTasks
 from inductiva.client.apis.paths.admin_users_email_stripe_customer_id import AdminUsersEmailStripeCustomerId
 from inductiva.client.apis.paths.admin_feature_flags_name import AdminFeatureFlagsName
 from inductiva.client.apis.paths.admin_feature_flags_ import AdminFeatureFlags
+from inductiva.client.apis.paths.admin_alerts_check_credits import AdminAlertsCheckCredits
+from inductiva.client.apis.paths.admin_alerts_check_tasks import AdminAlertsCheckTasks
 from inductiva.client.apis.paths.task_runner_register import TaskRunnerRegister
 from inductiva.client.apis.paths.task_runner_machine_id import TaskRunnerMachineId
 from inductiva.client.apis.paths.task_runner_machine_id_task import TaskRunnerMachineIdTask
@@ -86,6 +89,7 @@ from inductiva.client.apis.paths.projects import Projects
 from inductiva.client.apis.paths.projects_name import ProjectsName
 from inductiva.client.apis.paths.projects_name_task_task_id_add import ProjectsNameTaskTaskIdAdd
 from inductiva.client.apis.paths.projects_name_task_task_id_remove import ProjectsNameTaskTaskIdRemove
+from inductiva.client.apis.paths.projects_name_metadata import ProjectsNameMetadata
 from inductiva.client.apis.paths.pubsub_notify_file_change import PubsubNotifyFileChange
 from inductiva.client.apis.paths.metrics_users_username_activity import MetricsUsersUsernameActivity
 from inductiva.client.apis.paths.metrics_users_username_cost_over_time import MetricsUsersUsernameCostOverTime
@@ -95,6 +99,9 @@ from inductiva.client.apis.paths.metrics_users_username_tasks_overview import Me
 from inductiva.client.apis.paths.metrics_users_username_most_used_machine_types import MetricsUsersUsernameMostUsedMachineTypes
 from inductiva.client.apis.paths.metrics_users_username_most_used_simulators_overview import MetricsUsersUsernameMostUsedSimulatorsOverview
 from inductiva.client.apis.paths.metrics_usage_statistics import MetricsUsageStatistics
+from inductiva.client.apis.paths.events_ import Events
+from inductiva.client.apis.paths.events_event_id import EventsEventId
+from inductiva.client.apis.paths.simulators_available_images import SimulatorsAvailableImages
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
@@ -116,6 +123,8 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdOffer,
         PathValues.TASKS_TASK_ID_MESSAGE:
             TasksTaskIdMessage,
+        PathValues.TASKS_TASK_ID_METADATA:
+            TasksTaskIdMetadata,
         PathValues.ADMIN_USERS:
             AdminUsers,
         PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
@@ -180,6 +189,10 @@ PathToApi = typing_extensions.TypedDict(
             AdminFeatureFlagsName,
         PathValues.ADMIN_FEATUREFLAGS_:
             AdminFeatureFlags,
+        PathValues.ADMIN_ALERTS_CHECK_CREDITS:
+            AdminAlertsCheckCredits,
+        PathValues.ADMIN_ALERTS_CHECK_TASKS:
+            AdminAlertsCheckTasks,
         PathValues.TASKRUNNER_REGISTER:
             TaskRunnerRegister,
         PathValues.TASKRUNNER_MACHINE_ID:
@@ -268,6 +281,8 @@ PathToApi = typing_extensions.TypedDict(
             ProjectsNameTaskTaskIdAdd,
         PathValues.PROJECTS_NAME_TASK_TASK_ID_REMOVE:
             ProjectsNameTaskTaskIdRemove,
+        PathValues.PROJECTS_NAME_METADATA:
+            ProjectsNameMetadata,
         PathValues.PUBSUB_NOTIFY_FILE_CHANGE:
             PubsubNotifyFileChange,
         PathValues.METRICS_USERS_USERNAME_ACTIVITY:
@@ -286,6 +301,12 @@ PathToApi = typing_extensions.TypedDict(
             MetricsUsersUsernameMostUsedSimulatorsOverview,
         PathValues.METRICS_USAGE_STATISTICS:
             MetricsUsageStatistics,
+        PathValues.EVENTS_:
+            Events,
+        PathValues.EVENTS_EVENT_ID:
+            EventsEventId,
+        PathValues.SIMULATORS_AVAILABLEIMAGES:
+            SimulatorsAvailableImages,
     })
 
 path_to_api = PathToApi({
@@ -307,6 +328,8 @@ path_to_api = PathToApi({
         TasksTaskIdOffer,
     PathValues.TASKS_TASK_ID_MESSAGE:
         TasksTaskIdMessage,
+    PathValues.TASKS_TASK_ID_METADATA:
+        TasksTaskIdMetadata,
     PathValues.ADMIN_USERS:
         AdminUsers,
     PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
@@ -371,6 +394,10 @@ path_to_api = PathToApi({
         AdminFeatureFlagsName,
     PathValues.ADMIN_FEATUREFLAGS_:
         AdminFeatureFlags,
+    PathValues.ADMIN_ALERTS_CHECK_CREDITS:
+        AdminAlertsCheckCredits,
+    PathValues.ADMIN_ALERTS_CHECK_TASKS:
+        AdminAlertsCheckTasks,
     PathValues.TASKRUNNER_REGISTER:
         TaskRunnerRegister,
     PathValues.TASKRUNNER_MACHINE_ID:
@@ -459,6 +486,8 @@ path_to_api = PathToApi({
         ProjectsNameTaskTaskIdAdd,
     PathValues.PROJECTS_NAME_TASK_TASK_ID_REMOVE:
         ProjectsNameTaskTaskIdRemove,
+    PathValues.PROJECTS_NAME_METADATA:
+        ProjectsNameMetadata,
     PathValues.PUBSUB_NOTIFY_FILE_CHANGE:
         PubsubNotifyFileChange,
     PathValues.METRICS_USERS_USERNAME_ACTIVITY:
@@ -477,4 +506,10 @@ path_to_api = PathToApi({
         MetricsUsersUsernameMostUsedSimulatorsOverview,
     PathValues.METRICS_USAGE_STATISTICS:
         MetricsUsageStatistics,
+    PathValues.EVENTS_:
+        Events,
+    PathValues.EVENTS_EVENT_ID:
+        EventsEventId,
+    PathValues.SIMULATORS_AVAILABLEIMAGES:
+        SimulatorsAvailableImages,
 })
