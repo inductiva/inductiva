@@ -28,7 +28,6 @@ class CM1(simulators.Simulator):
             input_dir: Optional[str],
             *,
             on: types.ComputationalResources,
-            mode: str = "mpi",
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
             sim_config_filename: Optional[str] = None,
@@ -40,7 +39,6 @@ class CM1(simulators.Simulator):
 
         Args:
             input_dir: Path to the directory of the simulation input files.
-            mode (str): The execution mode, either 'mpi' or 'openmp'.
             on: The computational resource to launch the simulation on.
             sim_config_filename: Name of the simulation configuration file.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
@@ -57,19 +55,15 @@ class CM1(simulators.Simulator):
                 the simulation directory.
             other arguments: See the documentation of the base class.
         """
-        mode = mode.lower()
-        executable = "cm1.exe" if mode == "mpi" else "cm1_openmp.exe"
         mpi_config = None
 
-        if mode == "mpi":
-            mpi_kwargs = {"use_hwthread_cpus": use_hwthread}
-            if n_vcpus is not None:
-                mpi_kwargs["np"] = n_vcpus
-            mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
+        mpi_kwargs = {"use_hwthread_cpus": use_hwthread}
+        if n_vcpus is not None:
+            mpi_kwargs["np"] = n_vcpus
+        mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
 
         commands = [
-            Command(f"{executable} {sim_config_filename}",
-                    mpi_config=mpi_config)
+            Command(f"cm1.exe {sim_config_filename}", mpi_config=mpi_config)
         ]
 
         return super().run(input_dir,

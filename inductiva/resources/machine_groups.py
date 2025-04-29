@@ -795,12 +795,12 @@ class MPICluster(BaseMachineGroup):
     """
     # Constructor arguments
     num_machines: int = 2
+    spot: bool = True
 
     # Internal attributes
     auto_resize_disk_max_gb = None
     _type = ResourceType.MPI.value
     _is_elastic = False
-    _spot = False
 
     def __post_init__(self):
         """Validate inputs and initialize additional attributes after
@@ -809,7 +809,7 @@ class MPICluster(BaseMachineGroup):
 
         self._register_machine_group(num_vms=self.num_machines,
                                      is_elastic=self._is_elastic,
-                                     spot=self._spot,
+                                     spot=self.spot,
                                      type=self._type)
 
     def _validate_inputs(self):
@@ -850,6 +850,7 @@ class MPICluster(BaseMachineGroup):
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
         logging.info("\t· Number of machines:       %s", self.num_machines)
+        logging.info("\t· Spot:                     %s", self.spot)
         self.estimate_cloud_cost()
 
     def _log_estimated_spot_vm_savings(self) -> None:

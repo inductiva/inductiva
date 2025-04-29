@@ -24,9 +24,11 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.available_simulator_versions import AvailableSimulatorVersions
+
 from . import path
 
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+SchemaFor200ResponseBodyApplicationJson = AvailableSimulatorVersions
 
 
 @dataclass
