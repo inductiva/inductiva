@@ -625,7 +625,7 @@ def copy(source: str, target: str):
     """
     api = storage_api.StorageApi(inductiva.api.get_client())
     api.copy(query_params={"source": source, "target": target})
-    logging.info("Copied {} to {} successfully.", source, target)
+    logging.info("Copied %s to %s successfully.", source, target)
 
 
 class StorageOperation():
