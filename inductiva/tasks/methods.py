@@ -1,10 +1,9 @@
 """Methods to interact with the tasks submitted to the API."""
 from collections import defaultdict
 import json
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Union
+from typing import Any, Dict, Iterable, List, Mapping, Optional
 
 import inductiva
-from inductiva import projects
 from inductiva.client import models
 from inductiva.tasks.task import Task
 from inductiva.utils import format_utils
@@ -63,11 +62,10 @@ def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
     return table
 
 
-def _fetch_tasks_from_api(
-        status: Optional[Union[str, models.TaskStatusCode]] = None,
-        page=1,
-        per_page=10,
-        project: Union[str, "inductiva.projects.Project"] = None) -> List[Dict]:
+def _fetch_tasks_from_api(status: Optional[str] = None,
+                          page=1,
+                          per_page=10,
+                          project: Optional[str] = None) -> List[Dict]:
     """Get information about a user's tasks on the API.
 
     Tags can be filtered by a status. Results are paginated indexed from 1.
@@ -82,8 +80,6 @@ def _fetch_tasks_from_api(
         }
 
         if project is not None:
-            if isinstance(project, inductiva.projects.Project):
-                project = project.name
             query_params["project"] = project
 
         if status is not None:
@@ -106,11 +102,9 @@ def _fetch_tasks_from_api(
             raise e
 
 
-def get(
-    last_n: int = 5,
-    status: Optional[Union[str, models.TaskStatusCode]] = None,
-    project: Union[str, "inductiva.projects.Project"] = None
-) -> List["inductiva.tasks.Task"]:
+def get(last_n: int = 5,
+        status: Optional[str] = None,
+        project: Optional[str] = None) -> List["inductiva.tasks.Task"]:
     """Get the last N tasks of a user.
 
     This function fetches info about the last N tasks (with respect to
@@ -149,8 +143,6 @@ def get(
     if last_n < 1:
         raise ValueError("last_n must be >= 1")
 
-    status = models.TaskStatusCode(status) if status is not None else None
-
     raw_tasks_info = _fetch_tasks_from_api(status,
                                            page=1,
                                            per_page=last_n,
@@ -163,8 +155,8 @@ def get(
 
 
 def get_tasks(last_n: int = 10,
-              project: projects.Project = None,
-              status: Optional[Union[str, models.TaskStatusCode]] = None):
+              project: Optional[str] = None,
+              status: Optional[str] = None):
     """Get the last N submitted tasks.
 
         Get the last N submitted tasks, eventually filtered by status.
@@ -184,8 +176,8 @@ def get_tasks(last_n: int = 10,
 
 
 def get_all(
-    status: Optional[Union[str, models.TaskStatusCode]] = None,
-    project: Union[str, "inductiva.projects.Project"] = None,
+    status: Optional[str] = None,
+    project: Optional[str] = None,
 ) -> List["inductiva.tasks.Task"]:
     """Get all tasks of a user.
 
@@ -198,8 +190,6 @@ def get_all(
     Returns:
         List of dictionaries with information about the tasks.
     """
-    status = models.TaskStatusCode(status) if status is not None else None
-
     all_tasks = []
     page_counter = 1
     while tasks_fetched := _fetch_tasks_from_api(status,

@@ -344,13 +344,6 @@ def upload(
             try:
                 methods.upload_file(api_instance, local_file_path, "PUT", url,
                                     progress_bar)
-
-                methods.notify_upload_complete(
-                    api_instance.notify_upload_file,
-                    query_params={
-                        "path": remote_file_path,
-                    },
-                )
             except exceptions.ApiException as e:
                 raise e
 

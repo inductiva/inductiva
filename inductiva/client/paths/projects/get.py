@@ -41,7 +41,7 @@ class PageSchema(schemas.IntSchema):
 class PerPageSchema(schemas.IntSchema):
 
     class MetaOapg:
-        inclusive_maximum = 50
+        inclusive_maximum = 100
         inclusive_minimum = 1
 
 
