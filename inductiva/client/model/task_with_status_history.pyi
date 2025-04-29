@@ -37,6 +37,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
             "project",
             "task_id",
             "machine_operations",
+            "num_retries",
             "is_terminated",
             "status",
         }
@@ -52,6 +53,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
             simulator = schemas.StrSchema
             project = schemas.StrSchema
             is_terminated = schemas.BoolSchema
+            num_retries = schemas.IntSchema
 
             class status_history(schemas.ListSchema):
 
@@ -1215,6 +1217,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
                 "simulator": simulator,
                 "project": project,
                 "is_terminated": is_terminated,
+                "num_retries": num_retries,
                 "status_history": status_history,
                 "machine_operations": machine_operations,
                 "storage_path": storage_path,
@@ -1246,6 +1249,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
     project: MetaOapg.properties.project
     task_id: MetaOapg.properties.task_id
     machine_operations: MetaOapg.properties.machine_operations
+    num_retries: MetaOapg.properties.num_retries
     is_terminated: MetaOapg.properties.is_terminated
     status: 'TaskStatusCode'
 
@@ -1283,6 +1287,12 @@ class TaskWithStatusHistory(schemas.DictSchema):
     def __getitem__(
         self, name: typing_extensions.Literal["is_terminated"]
     ) -> MetaOapg.properties.is_terminated:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["num_retries"]
+    ) -> MetaOapg.properties.num_retries:
         ...
 
     @typing.overload
@@ -1434,6 +1444,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
         "simulator",
         "project",
         "is_terminated",
+        "num_retries",
         "status_history",
         "machine_operations",
         "storage_path",
@@ -1495,6 +1506,12 @@ class TaskWithStatusHistory(schemas.DictSchema):
     def get_item_oapg(
         self, name: typing_extensions.Literal["is_terminated"]
     ) -> MetaOapg.properties.is_terminated:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["num_retries"]
+    ) -> MetaOapg.properties.num_retries:
         ...
 
     @typing.overload
@@ -1650,6 +1667,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
         "simulator",
         "project",
         "is_terminated",
+        "num_retries",
         "status_history",
         "machine_operations",
         "storage_path",
@@ -1707,6 +1725,11 @@ class TaskWithStatusHistory(schemas.DictSchema):
             MetaOapg.properties.machine_operations,
             list,
             tuple,
+        ],
+        num_retries: typing.Union[
+            MetaOapg.properties.num_retries,
+            decimal.Decimal,
+            int,
         ],
         is_terminated: typing.Union[
             MetaOapg.properties.is_terminated,
@@ -1840,6 +1863,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
             project=project,
             task_id=task_id,
             machine_operations=machine_operations,
+            num_retries=num_retries,
             is_terminated=is_terminated,
             status=status,
             storage_path=storage_path,

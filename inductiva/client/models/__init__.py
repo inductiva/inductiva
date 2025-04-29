@@ -61,6 +61,7 @@ from inductiva.client.model.org_status import OrgStatus
 from inductiva.client.model.organization_cost_components import OrganizationCostComponents
 from inductiva.client.model.organization_costs import OrganizationCosts
 from inductiva.client.model.organization_create import OrganizationCreate
+from inductiva.client.model.organization_partial_update import OrganizationPartialUpdate
 from inductiva.client.model.organization_update import OrganizationUpdate
 from inductiva.client.model.organization_users import OrganizationUsers
 from inductiva.client.model.project import Project
