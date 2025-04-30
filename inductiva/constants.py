@@ -49,6 +49,8 @@ else:
 
 LOGS_FILE_PATH = HOME_DIR / "inductiva.log"
 API_KEY_FILE_PATH = HOME_DIR / "api_key"
+TMP_DIR = HOME_DIR / "tmp"
+TMP_DIR.mkdir(parents=True, exist_ok=True)
 
 TASK_OUTPUT_ZIP = "output.zip"
 TASK_INPUT_ZIP = "input.zip"
