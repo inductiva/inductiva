@@ -7,8 +7,8 @@ from .mpiconfig import MPIConfig
 class Command:
     """Abstraction class for commands."""
 
-    SPECIAL_CHARACTERS = r"[|><&;*?~$()\[\]]"
-    SPECIAL_CHARACTERS_PRETTY_PRINT = r"| > < & ; * ? ~ $ ( ) [ ]"
+    SPECIAL_CHARACTERS = r"[|><&;*?~$]"
+    SPECIAL_CHARACTERS_PRETTY_PRINT = r"| > < & ; * ? ~ $"
 
     def __init__(self, cmd: str, *prompts: str, mpi_config: MPIConfig = None):
         """
