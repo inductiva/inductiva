@@ -69,7 +69,7 @@ request_query_path = api_client.QueryParameter(
     schema=PathSchema,
     explode=True,
 )
-SchemaFor200ResponseBodyApplicationJson = schemas.IntSchema
+SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
 @dataclass
