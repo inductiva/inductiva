@@ -243,7 +243,7 @@ class Simulator(ABC):
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
         remote_assets: Optional[List[str]] = None,
-        project_name: Optional[str] = None,
+        project: Optional[str] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -262,7 +262,7 @@ class Simulator(ABC):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
-            project_name: Name of the project to which the task will be
+            project: Name of the project to which the task will be
                 assigned. If None, the task will be assigned to
                 the default project.
             **kwargs: Additional keyword arguments to be passed to the
@@ -309,7 +309,7 @@ class Simulator(ABC):
             resubmit_on_preemption=resubmit_on_preemption,
             remote_assets=remote_assets,
             simulator_name_alias=self.simulator_name_alias,
-            project_name=project_name,
+            project_name=project,
             **kwargs,
         )
 

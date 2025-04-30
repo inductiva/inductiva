@@ -150,7 +150,7 @@ class Benchmark(projects.Project):
             for _ in range(num_repeats):
                 simulator.run(input_dir=input_dir,
                               on=machine_group,
-                              project_name=self.name,
+                              project=self.name,
                               **kwargs)
         self.runs.clear()
         return self

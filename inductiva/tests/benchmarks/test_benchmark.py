@@ -152,11 +152,11 @@ def test_benchmark_run(benchmark, num_repeats, wait_for_quotas):
 
     simulator_run_calls = [
         mock.call(
-            input_dir="dir", on=m4, a=1, b=1, project_name="test_benchmark"),
+            input_dir="dir", on=m4, a=1, b=1, project="test_benchmark"),
         mock.call(
-            input_dir="dir", on=m4, a=1, b=4, project_name="test_benchmark"),
+            input_dir="dir", on=m4, a=1, b=4, project="test_benchmark"),
         mock.call(
-            input_dir="dir", on=m8, a=1, b=8, project_name="test_benchmark"),
+            input_dir="dir", on=m8, a=1, b=8, project="test_benchmark"),
     ] * num_repeats
     simulator.run.assert_has_calls(calls=simulator_run_calls, any_order=True)
     assert len(simulator.run.call_args_list) == num_repeats * num_runs

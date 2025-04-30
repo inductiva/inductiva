@@ -26,7 +26,7 @@ class OpenTelemac(simulators.Simulator):
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[list[str]] = None,
-            project_name: Optional[str] = None,
+            project: Optional[str] = None,
             **kwargs):
 
         return super().run(input_dir,
@@ -35,5 +35,5 @@ class OpenTelemac(simulators.Simulator):
                            storage_dir=storage_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
-                           project_name=project_name,
+                           project=project,
                            **kwargs)

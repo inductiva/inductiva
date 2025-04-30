@@ -68,7 +68,7 @@ class COAWST(simulators.Simulator):
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
-            project_name: Optional[str] = None,
+            project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -112,7 +112,7 @@ class COAWST(simulators.Simulator):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
-            project_name: Name of the project to which the task will be
+            project: Name of the project to which the task will be
                 assigned. If None, the task will be assigned to
                 the default project.
         """
@@ -184,5 +184,5 @@ class COAWST(simulators.Simulator):
                            storage_dir=storage_dir,
                            remote_assets=remote_assets,
                            resubmit_on_preemption=resubmit_on_preemption,
-                           project_name=project_name,
+                           project=project,
                            **kwargs)

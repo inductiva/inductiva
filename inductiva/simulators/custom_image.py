@@ -31,7 +31,7 @@ class CustomImage(simulators.Simulator):
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
-            project_name: Optional[str] = None,
+            project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:
@@ -46,7 +46,7 @@ class CustomImage(simulators.Simulator):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
-            project_name: Name of the project to which the task will be
+            project: Name of the project to which the task will be
                 assigned. If None, the task will be assigned to
                 the default project.
         """
@@ -57,5 +57,5 @@ class CustomImage(simulators.Simulator):
                            container_image=self._image_uri,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
-                           project_name=project_name,
+                           project=project,
                            **kwargs)
