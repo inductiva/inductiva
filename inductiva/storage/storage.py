@@ -614,6 +614,20 @@ def remove_workspace(remote_dir) -> bool:
     logging.info("Workspace file(s) removed successfully.")
 
 
+def copy(source: str, target: str):
+    """
+    Copies a file or folder from a source path in storage to a target path.
+
+    Args:
+        source (str): The source path of the file or directory to copy.
+        target (str): The destination path where the file or directory 
+                      should be copied to.
+    """
+    api = storage_api.StorageApi(inductiva.api.get_client())
+    api.copy(query_params={"source": source, "target": target})
+    logging.info("Copied %s to %s successfully.", source, target)
+
+
 class StorageOperation():
     """Represents a storage operation running remotely via Inductiva API."""
 
