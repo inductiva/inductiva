@@ -10,13 +10,11 @@ import tempfile
 from typing import TextIO
 import uuid
 
-import docker.errors
-
 from inductiva import constants
 
 try:
     import docker
-    from docker.errors import DockerException, ImageNotFound
+    from docker.errors import DockerException, ImageNotFound, NotFound
 except ImportError:
     docker = None
 
@@ -167,7 +165,7 @@ def convert_image(args, fout: TextIO = sys.stdout):
         try:
             if container:
                 container.remove(force=True)
-        except docker.errors.NotFound:
+        except NotFound:
             pass
 
     # Clean up the temporary tar file if one was created.

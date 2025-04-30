@@ -54,7 +54,7 @@ def upload_container(args):
     folder_name = output_path.split(os.sep)[0]
     filename = os.path.basename(output_path)
 
-    # ---------- pre-flight: does it already exist? ------------------------------
+    # ---------- pre-flight: does it already exist? ---------------------------
     try:
         contents = storage.listdir(folder_name, print_results=False)
     except Exception as e:  # pylint: disable=broad-except
