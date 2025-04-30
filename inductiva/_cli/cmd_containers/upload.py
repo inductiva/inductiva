@@ -8,6 +8,7 @@ import pathlib
 import sys
 import tempfile
 from inductiva import storage, constants
+from inductiva.client.exceptions import ApiException
 from inductiva.utils.input_functions import user_confirmation_prompt
 from .convert import convert_image
 
@@ -57,7 +58,7 @@ def upload_container(args):
     # ---------- pre-flight: does it already exist? ---------------------------
     try:
         contents = storage.listdir(folder_name, print_results=False)
-    except Exception as e:  # pylint: disable=broad-except
+    except ApiException as e:
         print(f"Error accessing remote folder '{folder_name}': {e}",
               file=sys.stderr)
         return
@@ -65,11 +66,11 @@ def upload_container(args):
     already_there = any(c["content_name"] == filename for c in contents)
     if already_there:
         if args.overwrite:
-            print(f"⚠️  '{output_path}' exists - will overwrite it "
+            print(f"'{output_path}' exists - will overwrite it "
                   "(because --overwrite).")
             try:
                 storage.remove_workspace(f"{folder_name}/{filename}")
-            except Exception as e:  # pylint: disable=broad-except
+            except ApiException as e:
                 print(f"Failed to delete old file: {e}", file=sys.stderr)
                 return
         else:
