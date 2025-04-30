@@ -215,7 +215,8 @@ def get_zip_contents(
             if file["compressed_size"] else None,
         range_start=int(file["range_start"]) \
             if file["range_start"] else None,
-        creation_time=datetime.datetime.fromisoformat(file["creation_time"]),
+        creation_time=datetime.datetime.fromisoformat(file["creation_time"])
+            if file["creation_time"] else None,
         compress_type=int(file["compress_type"])
             if file["compress_type"] else None
     ) for file in response_body["contents"]]
