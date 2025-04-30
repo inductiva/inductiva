@@ -409,6 +409,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.size"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.size</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.copy"><code class="docutils literal notranslate"><span class="pre">copy()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.download"><code class="docutils literal notranslate"><span class="pre">download()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.export"><code class="docutils literal notranslate"><span class="pre">export()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.export_to_aws_s3"><code class="docutils literal notranslate"><span class="pre">export_to_aws_s3()</span></code></a></li>
@@ -536,6 +537,21 @@ the status of the operation.</p>
 <span class="sig-name descname"><span class="pre">size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo.size" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.storage.storage.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.copy" title="Link to this definition">#</a></dt>
+<dd><p>Copies a file or folder from a source path in storage to a target path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<em>str</em>) – The source path of the file or directory to copy.</p></li>
+<li><p><strong>target</strong> (<em>str</em>) – The destination path where the file or directory
+should be copied to.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -793,6 +809,7 @@ If not specified, the name will be extracted from the URL.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.size"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.size</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.copy"><code class="docutils literal notranslate"><span class="pre">copy()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.download"><code class="docutils literal notranslate"><span class="pre">download()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.export"><code class="docutils literal notranslate"><span class="pre">export()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.export_to_aws_s3"><code class="docutils literal notranslate"><span class="pre">export_to_aws_s3()</span></code></a></li>
