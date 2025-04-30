@@ -8,6 +8,9 @@ import sys
 import os
 import tempfile
 from typing import TextIO
+import uuid
+
+import docker.errors
 
 from inductiva import constants
 
@@ -90,7 +93,9 @@ def convert_image(args, fout: TextIO = sys.stdout):
             return False
 
         # Save the image to a temporary tar file.
-        with tempfile.NamedTemporaryFile(suffix=".tar", delete=False) as tmp:
+        with tempfile.NamedTemporaryFile(suffix=".tar",
+                                         delete=False,
+                                         dir=constants.TMP_DIR) as tmp:
             tmp_tar_path = tmp.name
             with open(tmp_tar_path, "wb") as f:
                 for chunk in image_obj.save(named=True):
@@ -126,7 +131,7 @@ def convert_image(args, fout: TextIO = sys.stdout):
     try:
         container = client.containers.run(
             image=constants.TASK_RUNNER_IMAGE,
-            name="apptainer-converter",
+            name=f"apptainer-converter-{uuid.uuid4().hex[:8]}",
             entrypoint="/usr/bin/apptainer",
             command=command,
             mounts=mounts,
@@ -156,6 +161,14 @@ def convert_image(args, fout: TextIO = sys.stdout):
     except Exception as e:  # pylint: disable=broad-exception-caught
         print(f"Error during conversion: {e}", file=fout)
         return False
+
+    finally:
+        # Clean up the container if it was created.
+        try:
+            if container:
+                container.remove(force=True)
+        except docker.errors.NotFound:
+            pass
 
     # Clean up the temporary tar file if one was created.
     if tmp_tar_path and os.path.exists(tmp_tar_path):

@@ -4,8 +4,11 @@ Uploads a Docker image as a converted Apptainer .sif to remote storage.
 
 import argparse
 import os
+import pathlib
+import sys
 import tempfile
-from inductiva import storage
+from inductiva import storage, constants
+from inductiva.utils.input_functions import user_confirmation_prompt
 from .convert import convert_image
 
 
@@ -51,10 +54,41 @@ def upload_container(args):
     folder_name = output_path.split(os.sep)[0]
     filename = os.path.basename(output_path)
 
+    # ---------- pre-flight: does it already exist? ------------------------------
+    try:
+        contents = storage.listdir(folder_name, print_results=False)
+    except Exception as e:  # pylint: disable=broad-except
+        print(f"Error accessing remote folder '{folder_name}': {e}",
+              file=sys.stderr)
+        return
+
+    already_there = any(c["content_name"] == filename for c in contents)
+    if already_there:
+        if args.overwrite:
+            print(f"⚠️  '{output_path}' exists - will overwrite it "
+                  "(because --overwrite).")
+            try:
+                storage.remove_workspace(f"{folder_name}/{filename}")
+            except Exception as e:  # pylint: disable=broad-except
+                print(f"Failed to delete old file: {e}", file=sys.stderr)
+                return
+        else:
+            confirm = user_confirmation_prompt(
+                [filename],
+                "File already exists.",
+                "File already exists.",
+                "Overwrite the existing file?",
+                is_all=False,
+            )
+            if not confirm:
+                print("Operation cancelled.")
+                return
+            storage.remove_workspace(f"{folder_name}/{filename}")
+
     # Create temp folder to hold .sif
     try:
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            sif_folder_path = os.path.join(tmp_dir, folder_name)
+        with tempfile.TemporaryDirectory(dir=constants.TMP_DIR) as tmp_dir:
+            sif_folder_path = pathlib.Path(tmp_dir) / folder_name
             os.makedirs(sif_folder_path, exist_ok=True)
             sif_file_path = os.path.join(sif_folder_path, filename)
 
@@ -106,5 +140,10 @@ def register(parser):
             "Optional output path for the .sif file, my-containers/nginx.sif.\n"
             "If omitted, defaults to my-containers/<image-name>.sif."),
     )
+    subparser.add_argument(
+        "-f",
+        "--overwrite",
+        action="store_true",
+        help="Overwrite the file in remote storage without asking.")
 
     subparser.set_defaults(func=upload_container)
