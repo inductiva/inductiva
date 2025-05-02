@@ -1,4 +1,4 @@
-# ⚙️ Test Your Inductiva Setup 
+# Test Your Inductiva Setup ⚙️
 Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick SWAN simulation — it only takes a few seconds!
 
 ## Step 1: Copy and Run the Code
@@ -22,7 +22,8 @@ input_dir = inductiva.utils.files.download_from_url(
     "swan-input-example.zip", True)
 
 # Initialize the Simulator
-swan = inductiva.simulators.SWAN()
+swan = inductiva.simulators.SWAN( \
+    version="41.45")
 
 # Run simulation
 task = swan.run( \

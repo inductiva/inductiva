@@ -20,11 +20,11 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c3d-standard-30",
+    machine_type="c2d-highcpu-16",
 	spot=True)
 
 # Initialize the Simulator
-XBeach = inductiva.simulators.XBeach( \
+xbeach = inductiva.simulators.XBeach( \
     version="1.24")
 
 # Run simulation
@@ -51,23 +51,23 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-    Waiting for Input         at 09/04, 15:17:40      1.219 s
-    In Queue                  at 09/04, 15:17:42      45.35 s
-    Preparing to Compute      at 09/04, 15:18:27      1.288 s
-    In Progress               at 09/04, 15:18:28      230.371 s
-        └> 230.219 s       /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus xbeach params.txt
-    Finalizing                at 09/04, 15:22:19      5.173 s
-    Success                   at 09/04, 15:22:24      
+	Waiting for Input         at 21/04, 19:24:34      1.145 s
+	In Queue                  at 21/04, 19:24:35      38.265 s
+	Preparing to Compute      at 21/04, 19:25:13      1.226 s
+	In Progress               at 21/04, 19:25:14      368.298 s
+		└> 368.152 s       /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus xbeach params.txt
+	Finalizing                at 21/04, 19:31:22      5.112 s
+	Success                   at 21/04, 19:31:28      
 
 Data:
-    Size of zipped output:    131.96 MB
-    Size of unzipped output:  175.41 MB
-    Number of output files:   12
+	Size of zipped output:    132.13 MB
+	Size of unzipped output:  175.42 MB
+	Number of output files:   13
 
-Estimated computation cost (US$): 0.019 US$
+Estimated computation cost (US$): 0.012 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was 230.4 seconds (approximately 4 min).
+the core computation time of this simulation was 368.3 seconds (approximately 6 minutes and 8 seconds).
 
 It's that simple!

@@ -1,11 +1,13 @@
 # Run Your First Simulation
 This tutorial will show you how to run CaNS simulations using the Inductiva API. 
 
-We will cover the `closed_box` use case from the examples available on the [official CaNS documentation](https://github.com/CaNS-World/CaNS), to help you get started with simulations.
+We will cover the `closed_box` use case from the examples available in the [official CaNS documentation](https://github.com/CaNS-World/CaNS), to help you get started with simulations.
 
 ## Prerequisites
 1. Download the required files [here](https://github.com/CaNS-World/CaNS/tree/v2.4.0/examples/closed_box) and save them to a folder named `SimulationFiles`.
 2. In the `SimulationFiles` folder, create a new folder named `data`. The simulator writes files to this folder and will encounter an error if it is not present.
+
+Then, you’ll be ready to send your simulation to the Cloud.
 
 ## Running a CaNS Simulation
 Here is the code required to run a CaNS simulation using the Inductiva API:

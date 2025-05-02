@@ -19,7 +19,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2-standard-4",
+    machine_type="c2d-highcpu-4",
 	spot=True)
 
 # List of commands to run
@@ -49,29 +49,30 @@ task.print_summary()
 To adapt this script for other OpenFAST simulations, replace `input_dir` with the
 path to your OpenFAST input files and set the `sim_config_filename` accordingly.
 
-When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
+When the simulation is complete, we terminate the machine, download the results and print a summary 
+of the simulation as shown below.
 
 ```
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 10/03, 20:20:43      0.935 s
-	In Queue                  at 10/03, 20:20:44      30.778 s
-	Preparing to Compute      at 10/03, 20:21:15      1.353 s
-	In Progress               at 10/03, 20:21:16      3.89 s
-		└> 3.773 s         openfast Main.fst
-	Finalizing                at 10/03, 20:21:20      0.408 s
-	Success                   at 10/03, 20:21:20      
+	Waiting for Input         at 21/04, 15:44:16      0.959 s
+	In Queue                  at 21/04, 15:44:17      31.921 s
+	Preparing to Compute      at 21/04, 15:44:49      1.346 s
+	In Progress               at 21/04, 15:44:50      3.45 s
+		└> 3.336 s         openfast Main.fst
+	Finalizing                at 21/04, 15:44:53      0.4 s
+	Success                   at 21/04, 15:44:54      
 
 Data:
-	Size of zipped output:    47.76 KB
+	Size of zipped output:    47.58 KB
 	Size of unzipped output:  141.94 KB
-	Number of output files:   4
+	Number of output files:   3
 
-Estimated computation cost (US$): 0.00011 US$
+Estimated computation cost (US$): 0.000054 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was 3.8 seconds.
+the core computation time of this simulation was approximately 3.5 seconds.
 
 It's that simple!

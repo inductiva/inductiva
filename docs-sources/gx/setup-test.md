@@ -1,4 +1,4 @@
-# ⚙️ Test Your Inductiva Setup 
+# Test Your Inductiva Setup ⚙️
 Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick GX simulation — it only takes a few seconds!
 
 ## Step 1: Copy and Run the Code
@@ -23,7 +23,8 @@ input_dir = inductiva.utils.download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-gx = inductiva.simulators.GX()
+gx = inductiva.simulators.GX( \
+    version="11-2024")
 
 # Run simulation
 task = gx.run( \

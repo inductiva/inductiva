@@ -4,7 +4,7 @@
 
 # FAQ
 
-## Can OpenFAST be run in parallel?
+## 1. Can OpenFAST be run in parallel?
 Yes, OpenFAST can be run in parallel, but only under specific conditions. To
 utilize parallel processing, OpenFAST requires either OpenMP support via OLAF
 (OpenFAST Large-Area Farm) or the FAST.Farm framework. These tools enable
@@ -15,7 +15,7 @@ in a single-threaded mode and cannot take advantage of parallel computing capabi
 
 <br>
 
-## What is the best machine for running OpenFAST?
+## 2. What is the best machine for running OpenFAST?
 The ideal machine for running OpenFAST depends on how you plan to run it. If
 you're using OpenFAST with parallel processing (through OLAF or FAST.Farm),
 a machine with a higher number of cores will provide better performance. However,
@@ -25,7 +25,7 @@ additional cores in this mode.
 
 <br>
 
-## Can I run multiple OpenFAST simulations in parallel?
+## 3. Can I run multiple OpenFAST simulations in parallel?
 Absolutely! Running multiple simulations in parallel is the best way to fully
 utilize your available cloud resources. While OpenFAST can have limitations in
 terms of parallelism for individual simulations, executing several simulations
@@ -35,7 +35,7 @@ to see how you can do it.
 
 <br>
 
-## How to Load the `libdiscon.so` library?
+## 4. How to Load the `libdiscon.so` library?
 
 Some simulations require the `libdiscon.so` library. To simplify the process,
 we've included this library in our simulation image. You can use it by
@@ -47,7 +47,7 @@ referencing the following path in your simulation files:
 
 <br>
 
-## What commands are used to run OpenFAST and its modules?
+## 5. What commands are used to run OpenFAST and its modules?
 Here is a list of the commands available to run OpenFAST v4.0.2 and its modules, in alphabetical order:
 
 - `aerodisk_driver`: Performs **aerodynamic analysis** for wind turbine rotors, using an actuator disk approach

@@ -1,13 +1,13 @@
 # Run Your First Simulation
 This tutorial will show you how to run OpenFOAM simulations using the Inductiva API. 
 
-We will cover the `motorbike` use case from the the [OpenFOAM Foundation GitHub repository](https://github.com/OpenFOAM/OpenFOAM-8/tree/version-8/tutorials), to help you get started with simulations.
+We will cover the `motorbike` use case from the [OpenFOAM Foundation GitHub repository](https://github.com/OpenFOAM/OpenFOAM-8/tree/version-8/tutorials), to help you get started with simulations.
 
 ## Prerequisites
 Download the required files [here](https://github.com/OpenFOAM/OpenFOAM-8/tree/version-8/tutorials/incompressible/simpleFoam/motorBike) and place them in a folder called `SimulationFiles`. Then, you’ll be ready to send your simulation to the Cloud.
 
 ## Running an OpenFOAM Simulation
-Here is the code required to run a OpenFOAM simulation using the Inductiva API:
+Here is the code required to run an OpenFOAM simulation using the Inductiva API:
 
 ```python
 """OpenFOAM example"""
@@ -16,7 +16,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c3d-standard-16",
+    machine_type="c2d-highcpu-16",
 	spot=True)
 
 # Initialize the Simulator
@@ -25,7 +25,7 @@ OpenFOAM = inductiva.simulators.OpenFOAM( \
 	distribution="foundation")
 
 # Run simulation
-task = OpenFOAM.run(input_dir="/Path/to/RegularWavePropagation",
+task = OpenFOAM.run(input_dir="/Path/to/SimulationFiles",
     shell_script="./Allrun",
     on=cloud_machine)
 
@@ -51,23 +51,23 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 10/04, 10:44:12      0.78 s
-	In Queue                  at 10/04, 10:44:12      40.014 s
-	Preparing to Compute      at 10/04, 10:44:52      3.416 s
-	In Progress               at 10/04, 10:44:56      185.345 s
-		└> 185.228 s       bash ./Allrun
-	Finalizing                at 10/04, 10:48:01      14.257 s
-	Success                   at 10/04, 10:48:15      
+	Waiting for Input         at 21/04, 15:55:50      0.828 s
+	In Queue                  at 21/04, 15:55:50      32.128 s
+	Preparing to Compute      at 21/04, 15:56:22      3.111 s
+	In Progress               at 21/04, 15:56:26      130.295 s
+		└> 130.184 s       bash ./Allrun
+	Finalizing                at 21/04, 15:58:36      9.277 s
+	Success                   at 21/04, 15:58:45      
 
 Data:
 	Size of zipped output:    253.64 MB
 	Size of unzipped output:  344.54 MB
-	Number of output files:   463
+	Number of output files:   464
 
-Estimated computation cost (US$): 0.011 US$
+Estimated computation cost (US$): 0.0047 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 3 minutes.
+the core computation time of this simulation was approximately 2 minutes and 10 seconds.
 
 It's that simple!

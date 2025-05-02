@@ -3,23 +3,21 @@ Your resource hub for all things Quantum ESPRESSO at Inductiva. Whether you're j
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check! 
 
-<h3>About Quantum ESPRESSO</h3>
-
+## About Quantum ESPRESSO
 [Quantum ESPRESSO](https://sandialabs.github.io/Quantum/) is an open-source suite widely used for electronic structure calculations and materials modeling at the nanoscale. It is based on density functional theory (DFT) and uses plane-wave basis sets to solve quantum mechanical equations for many-body systems.
-
-## Supported Versions
-Inductiva currently supports the following versions of Quantum ESPRESSO:
-- **v7.4.1** (Feb., 2025) for CPU
-- **v7.3.1** (Feb., 2024) for CPU
-
-Inductiva has compiled Quantum ESPRESSO for two parallel execution models: **MPI** and **OpenMP**. To run the MPI version, use the standard command names (e.g., `pw.x`). For the OpenMP version, append `_openmp` to the command names (e.g., `pw_openmp.x`). 
-
-If you need to use a version that is not listed, please [contact us](mailto:support@inductiva.ai).
 
 ## What You'll Find Here
 - **Tutorials:** Step-by-step guides to help you learn how to run Quantum ESPRESSO through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 - **Benchmarks:** A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how Quantum ESPRESSO performs on different hardware configurations.
 
+```{toctree}
+---
+caption: " "
+maxdepth: 1
+hidden: true
+---
+versions-and-containers
+```
 
 ```{toctree}
 ---

@@ -4,7 +4,7 @@
 
 # FAQ
 
-## What file structure is assumed for OpenFOAM simulations?
+## 1. What file structure is assumed for OpenFOAM simulations?
 We assume the canonical OpenFOAM directory structure, which includes the following key folders:
 
 - `time`: Contains files for particular fields, such as
@@ -17,7 +17,7 @@ numerical parameters, and output files.
 
 <br>
 
-## Can I manually set and run OpenFOAM commands?
+## 2. Can I manually set and run OpenFOAM commands?
 Yes, absolutely! For greater flexibility, you can manually define and run each command step-by-step, giving you full control over your simulation.
 
 Here’s an example of how to set commands manually:

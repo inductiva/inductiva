@@ -1,4 +1,4 @@
-# ⚙️ Test Your Inductiva Setup 
+# Test Your Inductiva Setup ⚙️
 Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick Quantum ESPRESSO simulation — it only takes a few seconds!
 
 ## Step 1: Copy and Run the Code
@@ -36,7 +36,8 @@ commands = [
 ]
 
 # Initialize the Simulator
-qe = inductiva.simulators.QuantumEspresso()
+qe = inductiva.simulators.QuantumEspresso( \
+    version="7.4.1")
 
 # Run simulation
 task = qe.run( \

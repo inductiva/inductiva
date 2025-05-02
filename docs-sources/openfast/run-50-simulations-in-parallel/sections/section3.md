@@ -1,4 +1,4 @@
-# From 1 to 50
+# Generalizing the Use Case
 While a single simulation may run at similar speed, Inductiva allows you to scale many simulations in parallel. So let's say you want to study 
 the effect of changing a certain input parameter of your simulation. For the sake of demonstration, let us assume that we want to study what happens 
 when the offshore turbine in this example is installed in locations with different water depths.

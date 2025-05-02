@@ -1,12 +1,10 @@
 # Run Your First Simulation
 This tutorial will show you how to run Deft3D simulations using the Inductiva API. 
 
-This tutorial will cover a use case, available in the [Delft3D subversion repository](https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/), to help you get started with simulations.
+We will cover the `01_standard` use case from the examples available in the [Delft3D Subversion repository](https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/),
 
 ## Prerequisites
-Download the required files
-[here](https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/examples/01_standard/)
-and place them in a folder called `SimulationFiles`. Then, you’ll be ready to
+Download the required files [here](https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/examples/01_standard/) and save them to a folder named `SimulationFiles`. Then, you’ll be ready to
 send your simulation to the Cloud.
 
 ## Running a Delft3D Simulation
@@ -40,9 +38,10 @@ task.download_outputs()
 
 task.print_summary()
 ```
+> **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
 
 To adapt this script for other Delft3D simulations, replace `input_dir` with the
-path to your Delft3D input files and set the `commands` accordingly to your simulation.
+path to your Delft3D input files and set the the `commands` accordingly.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 

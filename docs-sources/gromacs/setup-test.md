@@ -1,4 +1,4 @@
-# ⚙️ Test Your Inductiva Setup 
+# Test Your Inductiva Setup ⚙️
 Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick GROMACS simulation — it only takes a few seconds!
 
 ## Step 1: Copy and Run the Code
@@ -39,7 +39,8 @@ commands = [
 ]
 
 # Initialize the Simulator
-gromacs = inductiva.simulators.GROMACS()
+gromacs = inductiva.simulators.GROMACS( \
+    version="2022.2")
 
 # Run simulation
 task = gromacs.run( \

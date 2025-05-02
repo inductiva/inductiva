@@ -1,4 +1,4 @@
-# ⚙️ Test Your Inductiva Setup 
+# Test Your Inductiva Setup ⚙️
 Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick XBeach simulation — it only takes a few seconds!
 
 ## Step 1: Copy and Run the Code
@@ -23,7 +23,8 @@ input_dir = inductiva.utils.download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-xbeach = inductiva.simulators.XBeach()
+xbeach = inductiva.simulators.XBeach( \
+    version="1.24")
 
 # Run simulation
 task = xbeach.run( \

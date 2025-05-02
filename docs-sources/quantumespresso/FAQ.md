@@ -4,7 +4,7 @@
 
 # FAQ
 
-## What commands are used to run Quantum ESPRESSO?
+## 1. What commands are used to run Quantum ESPRESSO?
 Here is a list of the commands available to run Quantum ESPRESSO, in alphabetical order:
 
 |                      |                     |                    |                   |                      |

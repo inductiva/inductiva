@@ -3,22 +3,21 @@ Your resource hub for all things OpenFAST at Inductiva. Whether you're just star
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to explore ever larger design spaces and achieve better results, while keeping your costs in check!
 
-<h3>About OpenFAST</h3>
-
+## About OpenFAST
 [OpenFAST](https://www2.nrel.gov/wind/nwtc/openfast) is a highly customizable open-source wind turbine dynamics simulation tool managed by the National Renewable Energy Lab (NREL). It allows engineers to analyze a range of wind turbine configurations and model them on land or offshore on fixed or floating substructures. 
-
-## Supported Versions
-Inductiva currently supports the following versions of OpenFAST:
-- **v4.0.3** (Apr., 2025)
-- **v4.0.2** (Feb., 2025)
-- **v3.5.2** (Jan., 2024)
-
-If you need to use a version that is not listed, please [contact us](mailto:support@inductiva.ai).
 
 ## What You'll Find Here
 - **Tutorials:** Step-by-step guides to help you learn how to run OpenFAST through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 - **Benchmarks:** A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how OpenFAST performs on different hardware configurations.
 
+```{toctree}
+---
+caption: " "
+maxdepth: 1
+hidden: true
+---
+versions-and-containers
+```
 
 ```{toctree}
 ---

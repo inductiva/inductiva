@@ -45,7 +45,7 @@ for depth in range(100, 200, 2):
 
    # Initialize OpenFAST simulator
    openfast = inductiva.simulators.OpenFAST(
-       version="4.0.2"
+       version="4.0.2")
 
 
    task = openfast.run(

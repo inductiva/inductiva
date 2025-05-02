@@ -1,8 +1,7 @@
 # Run Your First Simulation
 This tutorial will show you how to run SCHISM simulations using the Inductiva API. 
 
-We will cover the `Test_HydraulicStruct` use case from the verification tests collection from the [official SCHISM documentation](https://schism-dev.github.io/schism/master/getting-started/test_suite.html) to help you get started with simulations.
-
+We will cover the `Test_HydraulicStruct` use case from the verification tests collection in the [official SCHISM documentation](https://schism-dev.github.io/schism/master/getting-started/test_suite.html) to help you get started with simulations.
 
 ## Prerequisites
 Download the required files [here](https://columbia.vims.edu/schism/schism_verification_tests/Test_HydraulicStruct/) and place them in a folder called `SimulationFiles`. Then, you’ll be ready to send your simulation to the Cloud.

@@ -3,8 +3,7 @@ Your resource hub for all things REEF3D at Inductiva. Whether you're just starti
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check! 
 
-<h3>About REEF3D</h3>
-
+## About REEF3D
 [REEF3D](https://reef3d.wordpress.com/) is an open-source hydrodynamics framework specifically designed for coastal, marine, and hydraulic engineering applications. 
 Built with a modular programming approach, it offers multiphysics solvers tailored to address fluid flow problems, such as sediment transport and floating body dynamics, as well as wave modeling.
 
@@ -13,18 +12,18 @@ The modular programming approach allows the framework to incorporate a range of 
 - **REEF3D::FNPF** is a three-dimensional fully nonlinear potential flow solver. It is massively parallelized and can be used to create large-scale phase-resolved sea states at all water depths.
 - **REEF3D::SFLOW** is a depth-averaged model, solving the non-hydrostatic shallow water equations ideal for near-shore hydrodynamics and river flow.
 
-## Supported Versions
-Inductiva currently supports the following versions of REEF3D:
-- **v25.02** (Feb., 2025)
-- **v24.12** (Dec., 2024)
-- **v24.02** (Mar., 2024)
-
-If you need to use a version that is not listed, please [contact us](mailto:support@inductiva.ai).
-
 ## What You'll Find Here
 - **Tutorials:** Step-by-step guides to help you learn how to run REEF3D through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 - **Benchmarks:** A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how REEF3D performs on different hardware configurations.
 
+```{toctree}
+---
+caption: " "
+maxdepth: 1
+hidden: true
+---
+versions-and-containers
+```
 
 ```{toctree}
 ---

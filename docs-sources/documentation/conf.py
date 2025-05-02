@@ -40,9 +40,6 @@ myst_enable_extensions = [
     "dollarmath",
     # other MyST extensions
 ]
-
-# Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
 sphinx_tabs_valid_builders = ['html']
 
 # The suffix(es) of source filenames.
@@ -94,16 +91,21 @@ html_css_files = [
 ]
 pygments_style = "monokai"
 
-html_title = 'Documentation'
+# SEO - Add any paths that contain templates here, relative to this directory.
+templates_path = [os.path.relpath(os.path.join(os.path.dirname(__file__), "..", "_shared_templates/_templates"))]
+
+html_title = "Documentation"
+html_context = {
+    "project_name": "Inductiva.AI",
+    "project_description": "Inductiva.AI Documentation",
+    "project_url": "https://inductiva.ai/guides/documentation",
+    "ogp_image": "https://inductiva.ai/builds/documentation/_static/inductiva-social-banner.jpg",
+    "keywords": "documentation, Inductiva.AI"
+}
 
 # Google Analytics
 googleanalytics_id = "G-NHJ03C6M91"
 googleanalytics_enabled = True
-
-# OpenGraph protocol
-ogp_site_name = "Inductiva.AI Documentation"
-ogp_site_url = "https://inductiva.ai/guides/documentation"
-ogp_image = "https://inductiva.ai/builds/documentation/_static/inductiva-social-banner.jpg"
 
 # sitemap.xml
 # See https://sphinx-sitemap.readthedocs.io/

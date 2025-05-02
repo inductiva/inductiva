@@ -20,7 +20,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2d-standard-4",
+    machine_type="c2d-highcpu-4",
     spot=True)
 
 # Initialize the Simulator
@@ -52,22 +52,22 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 09/04, 10:35:24      0.74 s
-	In Queue                  at 09/04, 10:35:25      39.439 s
-	Preparing to Compute      at 09/04, 10:36:05      1.184 s
-	In Progress               at 09/04, 10:36:06      9.037 s
-		├> 0.981 s         cp /SPlisHSPlasH_CPU/bin/SPHSimulator .
-		├> 6.794 s         ./SPHSimulator DamBreakModel.json --no-gui --output-dir .
-		└> 1.054 s         rm SPHSimulator
-	Finalizing                at 09/04, 10:36:15      0.489 s
-	Success                   at 09/04, 10:36:15      
+	Waiting for Input         at 21/04, 19:49:20      1.116 s
+	In Queue                  at 21/04, 19:49:21      34.469 s
+	Preparing to Compute      at 21/04, 19:49:55      0.996 s
+	In Progress               at 21/04, 19:49:56      9.123 s
+		├> 0.982 s         cp /SPlisHSPlasH_CPU/bin/SPHSimulator .
+		├> 6.877 s         ./SPHSimulator DamBreakModel.json --no-gui --output-dir .
+		└> 1.064 s         rm SPHSimulator
+	Finalizing                at 21/04, 19:50:06      0.502 s
+	Success                   at 21/04, 19:50:06      
 
 Data:
 	Size of zipped output:    1.77 MB
 	Size of unzipped output:  6.98 MB
-	Number of output files:   6
+	Number of output files:   5
 
-Estimated computation cost (US$): 0.00012 US$
+Estimated computation cost (US$): 0.000099 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 

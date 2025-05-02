@@ -6,18 +6,18 @@ caption: Inductiva CLI
 maxdepth: 2
 hidden: true
 ---
-CLI/overview
-CLI/auth
-CLI/user
-CLI/tasks
-CLI/task-runner
-CLI/logs
-CLI/projects
-CLI/storage
-CLI/resources
-CLI/simulators
-CLI/containers
-CLI/faq
+cli/overview
+cli/auth
+cli/user
+cli/tasks
+cli/task-runner
+cli/logs
+cli/projects
+cli/storage
+cli/resources
+cli/simulators
+cli/containers
+cli/faq
 ```
 
 ```{toctree}

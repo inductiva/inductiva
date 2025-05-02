@@ -20,7 +20,7 @@ We will cover the `Single point Water SCF energy` use case from the examples of 
  end
  task scf
  ```
-2. Create a file named `Water_SCF.nw` and paste the above input into it.
+2. Create a file named `water_scf.nw` and paste the above input into it.
 3. Save this file inside a folder named `SimulationFiles`.
 
 Once these steps are complete, you’ll be ready to send your simulation to the Cloud.
@@ -35,7 +35,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c3d-standard-16",
+    machine_type="c2d-highcpu-16",
     spot=True)
 
 
@@ -69,23 +69,23 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 10/04, 15:46:51      0.768 s
-	In Queue                  at 10/04, 15:46:51      37.174 s
-	Preparing to Compute      at 10/04, 15:47:29      2.224 s
-	In Progress               at 10/04, 15:47:31      3.16 s
-		└> 3.06 s          /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus --np 8 nwchem water_scf.nw
-	Finalizing                at 10/04, 15:47:34      0.483 s
-	Success                   at 10/04, 15:47:34      
+	Waiting for Input         at 21/04, 15:23:46      0.815 s
+	In Queue                  at 21/04, 15:23:47      36.562 s
+	Preparing to Compute      at 21/04, 15:24:23      3.109 s
+	In Progress               at 21/04, 15:24:27      2.355 s
+		└> 2.253 s         /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus --np 8 nwchem water_scf.nw
+	Finalizing                at 21/04, 15:24:29      0.39 s
+	Success                   at 21/04, 15:24:29      
 
 Data:
-	Size of zipped output:    N/A until task ends
+	Size of zipped output:    19.64 KB
 	Size of unzipped output:  824.11 KB
-	Number of output files:   11
+	Number of output files:   10
 
-Estimated computation cost (US$): 0.00031 US$
+Estimated computation cost (US$): 0.00020 US$
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 3 seconds.
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of 
+the simulation, the core computation time of this simulation was approximately 2 seconds.
 
 It's that simple!

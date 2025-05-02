@@ -16,7 +16,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c3d-standard-16",
+    machine_type="c2d-highcpu-4",
 	spot=True)
 
 # Initialize the Simulator
@@ -48,24 +48,24 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 08/04, 17:29:30      1.013 s
-	In Queue                  at 08/04, 17:29:31      44.577 s
-	Preparing to Compute      at 08/04, 17:30:16      5.274 s
-	In Progress               at 08/04, 17:30:21      20.31 s
-		├> 1.059 s         dd if=/dev/stdin of=machinefile
-		└> 19.08 s         swanrun -input ring.swn -mpi 16
-	Finalizing                at 08/04, 17:30:42      0.477 s
-	Success                   at 08/04, 17:30:42      
+	Waiting for Input         at 21/04, 18:56:15      1.571 s
+	In Queue                  at 21/04, 18:56:17      38.79 s
+	Preparing to Compute      at 21/04, 18:56:56      2.99 s
+	In Progress               at 21/04, 18:56:59      55.349 s
+		├> 1.095 s         dd if=/dev/stdin of=machinefile
+		└> 54.101 s        swanrun -input ring.swn -mpi 4
+	Finalizing                at 21/04, 18:57:54      0.416 s
+	Success                   at 21/04, 18:57:54      
 
 Data:
-	Size of zipped output:    175.63 KB
-	Size of unzipped output:  639.49 KB
-	Number of output files:   43
+	Size of zipped output:    118.60 KB
+	Size of unzipped output:  488.62 KB
+	Number of output files:   19
 
-Estimated computation cost (US$): 0.0014 US$
+Estimated computation cost (US$): 0.00053 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was 20.3 seconds.
+the core computation time of this simulation was 55.3 seconds.
 
 It's that simple!

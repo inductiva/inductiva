@@ -22,7 +22,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c3d-standard-16",
+    machine_type="c2d-highcpu-8",
     spot=True)
 
 # Initialize the Simulator
@@ -56,24 +56,24 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 21/03, 13:38:59      0.855 s
-	In Queue                  at 21/03, 13:38:59      21.405 s
-	Preparing to Compute      at 21/03, 13:39:21      9.66 s
-	In Progress               at 21/03, 13:39:31      18.315 s
-		├> 1.064 s         /DIVEMesh/bin/DiveMESH
-		└> 17.078 s        /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus /REEF3D/bin/REEF3D
-	Finalizing                at 21/03, 13:39:49      0.888 s
-	Success                   at 21/03, 13:39:50      
+	Waiting for Input         at 21/04, 18:27:21      1.094 s
+	In Queue                  at 21/04, 18:27:22      63.809 s
+	Preparing to Compute      at 21/04, 18:28:26      7.884 s
+	In Progress               at 21/04, 18:28:34      20.295 s
+		├> 1.061 s         /DIVEMesh/bin/DiveMESH
+		└> 19.075 s        /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus /REEF3D/bin/REEF3D
+	Finalizing                at 21/04, 18:28:54      1.283 s
+	Success                   at 21/04, 18:28:56      
 
 Data:
-	Size of zipped output:    14.98 MB
-	Size of unzipped output:  41.30 MB
-	Number of output files:   1421
+	Size of zipped output:    14.24 MB
+	Size of unzipped output:  40.16 MB
+	Number of output files:   764
 
-Estimated computation cost (US$): 0.0015 US$
+Estimated computation cost (US$): 0.00051 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 18 seconds.
+the core computation time of this simulation was approximately 20 seconds.
 
 It's that simple!

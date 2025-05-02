@@ -4,7 +4,7 @@
 
 # FAQ
 
-## Why is my NWChem simulation running slowly?
+## 1. Why is my NWChem simulation running slowly?
 Several factors could contribute to your NWChem simulation running slower than expected. 
 One common reason is that the simulation might be too large for the machine you're using. If this is the case, try running the 
 simulation on a more powerful machine or a different machine type. Additionally, optimizing your simulation setup can improve performance.

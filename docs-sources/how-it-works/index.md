@@ -1,10 +1,10 @@
-# How it works
+# How It Works
 
 At Inductiva, we want to provide you with the knowledge and tools you need to scale your simulations.
 
 We've prepared a collection of helpful guides to support you navigating Inductiva's platform
 with ease.
-We offer **The Basic** to get you started, **In-Depth Recipes** with practical scripts to solve specific problems, and **Best Practices** to help you optimize your workflow, save time and money, and use the platform more efficiently.
+We offer **The Basic** to get you started, **Recipes** with practical scripts to solve specific problems, and **Best Practices** to help you optimize your workflow, save time and money, and use the platform more efficiently.
 
 Whether you're a beginner or an advanced user, this page is designed to support you at every step.
 
@@ -20,20 +20,22 @@ hidden: true
 💲 How much compute time does 5$US provide <basics/compute-5USD>
 💰 How much does a simulation cost in Inductiva? <basics/how-much-does-it-cost>
 💥 How many cores can be used? <basics/how-many-cores>
-📌 Pick a cloud machine for your simulation <basics/pick_cloud_machine>
+📌 Pick a cloud machine for your simulation <basics/pick-cloud-machine>
 ✈️ Start your first cloud machine with Inductiva <basics/start-first-machine>
 
 ```
 
 ```{toctree}
 ---
-caption: In-Depth Recipes
-maxdepth: 2
+caption: Recipes
+maxdepth: 3
 hidden: true
 ---
 
-⬇️ Download specific files from a group of tasks <recipes/download_file_from_project>
-🔨 Build custom docker images with cached models <cache-models/diffdock_cached_inference>
+⬇️ Download specific files from a group of tasks <recipes/download-file-from-project>
+📤 Export your files to AWS S3 <recipes/export-files-to-aws/index>
+⚡️ Run simulations on your local machine <recipes/use-local-task-runner/index>
+🔨 Build custom docker images with cached models <cache-models/diffdock-cached-inference/index>
 
 ```
 

@@ -4,7 +4,7 @@ to efficiently scale up computational experiments. Now it's time to retrieve all
 
 | Simulation with water depth of 100 | Simulation with water depth of 200 |
 |:---------------:|:-----------------:|
-| <img src="./_static/openfast_animation_30_fps_100.gif" alt="OpenFAST simulation visualization"> |<img src="./_static/openfast_animation_30_fps_200.gif" alt="OpenFAST simulation visualization">|
+| <img src="../../_static/openfast_animation_30_fps_100.gif" alt="OpenFAST simulation visualization"> |<img src="../../_static/openfast_animation_30_fps_200.gif" alt="OpenFAST simulation visualization">|
 
 ## Project Summary and Output Download
 Using the Inductiva package, it is easy to get a project summary and download all the output files. The following code snippet demonstrates how to do this:

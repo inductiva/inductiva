@@ -3,24 +3,22 @@ Your resource hub for all things SWASH at Inductiva. Whether you're just startin
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check!
 
-<h3>About SWASH</h3>
-
+## About SWASH
 [SWASH](https://swash.sourceforge.io) (Simulating WAves till SHore) is a numerical tool that simulates unsteady, non-hydrostatic, free-surface, rotational flow and transport phenomena in coastal waters. 
 It’s mainly used to predict wave transformation, ocean circulation, tides and storm surges.
-
-## Supported Versions
-Inductiva currently supports the following versions of SWASH:
-- **v11.01** (Jan., 2025)
-- **v10.05** (May, 2024)
-- **v10.01** (Apr., 2024)
-- **v9.01** (Apr., 2023)
-
-If you need to use a version that is not listed, please [contact us](mailto:support@inductiva.ai).
 
 ## What You'll Find Here
 - **Tutorials:** Step-by-step guides to help you learn how to run SWASH through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 - **Benchmarks:** A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how SWASH performs on different hardware configurations.
 
+```{toctree}
+---
+caption: " "
+maxdepth: 1
+hidden: true
+---
+versions-and-containers
+```
 
 ```{toctree}
 ---

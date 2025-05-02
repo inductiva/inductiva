@@ -3,22 +3,21 @@ Your resource hub for all things GROMACS at Inductiva. Whether you're just start
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check!
 
-<h3>About GROMACS</h3>
-
+## About GROMACS
 [GROMACS](https://www.gromacs.org/index.html) is an open-source software suite widely used for simulating biochemical molecules such as proteins, lipids, and nucleic acids, but its speed and efficiency make it suitable for a range of non-biological systems, including polymers and fluid dynamics.
-
-## Supported Versions
-Inductiva currently supports the following versions of GROMACS:
-- **v2025.1** (Mar., 2025) - with GPU support
-- **v2025.0** (Feb., 2025) - with GPU support
-- **v2022.2** (Jun., 2022) - with GPU support
-
-If you need to use a version that is not listed, please [contact us](mailto:support@inductiva.ai).
 
 ## What You'll Find Here
 - **Tutorials:** Step-by-step guides to help you learn how to run GROMACS through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 - **Benchmarks:** A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how GROMACS performs on different hardware configurations.
 
+```{toctree}
+---
+caption: " "
+maxdepth: 1
+hidden: true
+---
+versions-and-containers
+```
 
 ```{toctree}
 ---

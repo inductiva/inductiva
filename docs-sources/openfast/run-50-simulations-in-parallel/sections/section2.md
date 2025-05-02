@@ -1,4 +1,4 @@
-# Run the Simulation
+# Run 1 Simulation
 First, we will run a single OpenFAST simulation using the `5MW_OC4Semi_WSt_WavesWN` case. This should be straightforward as all 
 the necessary input files are already prepared.
 
