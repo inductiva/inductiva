@@ -12,7 +12,7 @@ import signal
 import urllib3
 import decimal
 from contextlib import contextmanager
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 import logging
 
@@ -114,21 +114,6 @@ def upload_file(api_instance: ApiClient, input_path: str, method: str, url: str,
             raise ApiException(status=resp.status, reason=resp.reason)
 
 
-def notify_upload_complete(api_endpoint,
-                           query_params: Dict[str, str] = None,
-                           path_params: Dict[str, str] = None):
-    """
-    Notifies the API that the file upload is complete.
-    """
-    params = {}
-    if query_params is not None:
-        params["query_params"] = query_params
-    if path_params is not None:
-        params["path_params"] = path_params
-
-    api_endpoint(**params)
-
-
 def upload_input(api_instance: TasksApi, input_dir, params, task_id,
                  storage_path_prefix):
     """Uploads the inputs of a given task to the API.
@@ -157,11 +142,7 @@ def upload_input(api_instance: TasksApi, input_dir, params, task_id,
                        unit_scale=True,
                        unit_divisor=1000) as progress_bar:
             upload_file(api_instance, input_zip_path, "PUT", url, progress_bar)
-            notify_upload_complete(
-                api_instance.notify_input_uploaded,
-                path_params={"task_id": task_id},
-            )
-
+            api_instance.notify_input_uploaded(path_params={"task_id": task_id})
         logging.info("Local input directory successfully uploaded.")
         logging.info("")
 
@@ -323,7 +304,8 @@ def submit_task(simulator,
                 container_image: Optional[str] = None,
                 simulator_name_alias: Optional[str] = None,
                 simulator_obj=None,
-                remote_assets: Optional[List[str]] = None):
+                remote_assets: Optional[List[str]] = None,
+                project_name: Optional[str] = None):
     """Submit a task and send input files to the API.
     
     Args:
@@ -342,15 +324,12 @@ def submit_task(simulator,
         simulator_obj: Optional simulator object with additional configuration
         remote_assets: Additional input files that will be copied to the
                 simulation from a bucket or from another task output.
+        project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project.
     Return:
         Returns the task id.
     """
-
-    current_project = inductiva.projects.get_current_project()
-    if current_project is not None:
-        if not current_project.opened:
-            raise RuntimeError("Trying to submit a task to a closed project.")
-        current_project = current_project.name
 
     if not remote_assets:
         remote_assets = []
@@ -360,7 +339,7 @@ def submit_task(simulator,
 
     task_request = TaskRequest(simulator=simulator,
                                params=params,
-                               project=current_project,
+                               project=project_name,
                                resource_pool=machine_group.id,
                                container_image=container_image,
                                storage_path_prefix=storage_path_prefix,
@@ -395,9 +374,7 @@ def submit_task(simulator,
     #  ZIP inputs and send them via "POST task/{task_id}/input".
     if task_submitted_info["status"] == "pending-input":
         # Use the blocking task context
-        with blocking_task_context(
-                task_api_instance, task_id,
-                "input upload"):  # Use the blocking task context
+        with blocking_task_context(task_api_instance, task_id, "input upload"):
             upload_input(
                 api_instance=task_api_instance,
                 input_dir=input_dir,

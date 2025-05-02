@@ -12,8 +12,6 @@ import pytest
 from inductiva import simulators, resources
 import inductiva
 
-inductiva.set_api_key("dummy")
-
 
 @pytest.fixture(name="list_available_fixture")
 def _list_available_fixture():
@@ -45,12 +43,14 @@ def new_machine_init(self, machine_type):
 
 
 def test_simulator__wrong_version__raises_error():
+    inductiva.set_api_key("dummy")
     with pytest.raises(ValueError) as excinfo:
         inductiva.simulators.CaNS(version="999")
     assert "not available" in str(excinfo.value)
 
 
 def test_get_simulator_image_based_on_resource__dev():
+    inductiva.set_api_key("dummy")
     #has both cpu and gpu versions
     gmx = inductiva.simulators.GROMACS(use_dev=True)
 
@@ -68,6 +68,7 @@ def test_get_simulator_image_based_on_resource__dev():
 
 
 def test_get_simulator_image_based_on_resource__not_dev():
+    inductiva.set_api_key("dummy")
     #has both cpu and gpu versions
     gmx = inductiva.simulators.GROMACS(use_dev=False)
 
@@ -86,6 +87,7 @@ def test_validate_computational_resources__unsupported_resource__raise_error(
 
     Goal: Verify that simulators without the mpi_enabled decorator raise an
     error stating that MPICluster is not available for this simulator."""
+    inductiva.set_api_key("dummy")
     mock_instance = mpi_cluster_mock()
 
     simulator = TesterSimulator()
@@ -102,6 +104,7 @@ def test_mpi_enabled__dummy_simulator():
     Goal: Verify that adding the mpi_enabled decorator to a dummy simulator
     adds a new resource (MPICluster) to the _standard_resources tuple.
     """
+    inductiva.set_api_key("dummy")
 
     mpi_enabled_sim = simulators.simulator.mpi_enabled(TesterSimulator)
 
@@ -118,6 +121,7 @@ def test_valid_resources__non_mpi_simulators(simulator):
     Goal: Verify that the non MPI-compatible simulators are not decorated with
     the mpi_enabled function and that the _standard_resources only contains
     the standard machines."""
+    inductiva.set_api_key("dummy")
 
     assert resources.MPICluster not in simulator.get_supported_resources()
 
@@ -125,6 +129,7 @@ def test_valid_resources__non_mpi_simulators(simulator):
 def test_validate_computational_resources__none_resource__no_wrapper(
         list_available_fixture):  # pylint: disable=unused-argument
     """Verify that resource cannot be None for a standard simulator."""
+    inductiva.set_api_key("dummy")
 
     with pytest.raises(ValueError) as excinfo:
         simulator = TesterSimulator()
@@ -136,6 +141,7 @@ def test_validate_computational_resources__none_resource__no_wrapper(
 def test_validate_computational_resources__none_resource_mpi_wrapped(
         list_available_fixture):  # pylint: disable=unused-argument
     """Verify that resource cannot be None with the mpi_enabled decorator."""
+    inductiva.set_api_key("dummy")
 
     with pytest.raises(ValueError) as excinfo:
         simulator = simulators.simulator.mpi_enabled(TesterSimulator)()
@@ -150,6 +156,7 @@ def test_validate_computational_resources__valid_machine_group__no_error(
 
     Goal: Verify that simulators with and without the mpi_enabled decorator run
     normally with a standard machine group."""
+    inductiva.set_api_key("dummy")
 
     error_message = "'validate_computational_resources' raised an exception."
 
@@ -175,6 +182,7 @@ def test_validate_computational_resources__valid_mpi_cluster__no_error(
     """Check mpi-enabled simulator runs correctly with a standard MPICluster.
 
     Goal: Verify that an mpi simulator correctly validated the MPI Cluster"""
+    inductiva.set_api_key("dummy")
 
     error_message = "'validate_computational_resources' raised an exception."
 
@@ -199,12 +207,14 @@ def test_valid_resources__mpi_simulators(simulator):
     Goal: Verify that the MPI-compatible simulators are decorated with
     the mpi_enabled function and that the _standard_resources is updated
     correctly."""
+    inductiva.set_api_key("dummy")
 
     assert resources.MPICluster in simulator.get_supported_resources()
 
 
 @mark.parametrize("resubmit_on_preemption", [None, False, True])
 def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
+    inductiva.set_api_key("dummy")
     # Check that the `resubmit_on_preemption` parameter is present in the
     # `run` method of the simulator and that it is passed correctly to the
     # final api call.
@@ -244,6 +254,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
     mock_mg = mock.Mock()
     mock_mg.id = uuid.uuid4()
     mock_mg.has_gpu.return_value = True
+    mock_mg.available_vcpus = 16
 
     for sim_name, simcls in sim_classes:
 

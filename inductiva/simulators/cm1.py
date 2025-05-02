@@ -28,19 +28,18 @@ class CM1(simulators.Simulator):
             input_dir: Optional[str],
             *,
             on: types.ComputationalResources,
-            mode: str = "mpi",
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
             sim_config_filename: Optional[str] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
+            project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
         Args:
             input_dir: Path to the directory of the simulation input files.
-            mode (str): The execution mode, either 'mpi' or 'openmp'.
             on: The computational resource to launch the simulation on.
             sim_config_filename: Name of the simulation configuration file.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
@@ -55,21 +54,20 @@ class CM1(simulators.Simulator):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project.
             other arguments: See the documentation of the base class.
         """
-        mode = mode.lower()
-        executable = "cm1.exe" if mode == "mpi" else "cm1_openmp.exe"
         mpi_config = None
 
-        if mode == "mpi":
-            mpi_kwargs = {"use_hwthread_cpus": use_hwthread}
-            if n_vcpus is not None:
-                mpi_kwargs["np"] = n_vcpus
-            mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
+        mpi_kwargs = {"use_hwthread_cpus": use_hwthread}
+        if n_vcpus is not None:
+            mpi_kwargs["np"] = n_vcpus
+        mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
 
         commands = [
-            Command(f"{executable} {sim_config_filename}",
-                    mpi_config=mpi_config)
+            Command(f"cm1.exe {sim_config_filename}", mpi_config=mpi_config)
         ]
 
         return super().run(input_dir,
@@ -78,4 +76,5 @@ class CM1(simulators.Simulator):
                            storage_dir=storage_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project=project,
                            **kwargs)

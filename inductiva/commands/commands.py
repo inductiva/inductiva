@@ -1,10 +1,13 @@
 """Wrapper class for simulator commands."""
+import re
 from inductiva import types
 from .mpiconfig import MPIConfig
 
 
 class Command:
     """Abstraction class for commands."""
+    SPECIAL_CHARACTERS = r"[|><&;*?~$]"
+    SPECIAL_CHARACTERS_PRETTY_PRINT = r"| > < & ; * ? ~ $"
 
     def __init__(self, cmd: str, *prompts: str, mpi_config: MPIConfig = None):
         """
@@ -23,10 +26,24 @@ class Command:
 
         if mpi_config and not isinstance(mpi_config, MPIConfig):
             raise TypeError("'mpi_config' must be an instance of MPIConfig.")
-
+        if self._has_special_chars(cmd):
+            raise ValueError(
+                "Command contains unsupported characters.\n"
+                "Please avoid using any of the following characters:\n"
+                f"{self.SPECIAL_CHARACTERS_PRETTY_PRINT}\n")
         self.cmd = cmd
         self.prompts = list(prompts)
         self.mpi_config = mpi_config
+
+    def _has_special_chars(self, command):
+        """Checks if the command contains special characters.
+        Args:
+            command: The command to check.
+        Returns:
+            True if the command contains special characters, False otherwise.
+            """
+
+        return bool(re.search(self.SPECIAL_CHARACTERS, command))
 
     def to_dict(self):
         """

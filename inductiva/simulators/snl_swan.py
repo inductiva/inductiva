@@ -36,6 +36,7 @@ class SNLSWAN(simulators.Simulator):
         sim_config_filename: Optional[str] = None,
         *,
         remote_assets: Optional[List[str]] = None,
+        project: Optional[str] = None,
         resubmit_on_preemption: bool = False,
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
@@ -65,6 +66,9 @@ class SNLSWAN(simulators.Simulator):
                 The user can also specify 'swan.exe'.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project.
         """
 
         if command not in ("swanrun", "swan.exe"):
@@ -97,7 +101,8 @@ class SNLSWAN(simulators.Simulator):
 
             commands.append(machinefile_command)
 
-            mpi_flag = f"-mpi {n_vcpus}" if n_vcpus else ""
+            #if the user does not provide n_vcpus use all available by default
+            mpi_flag = f"-mpi {n_vcpus or on.available_vcpus}"
 
             swanrun_command = Command(
                 f"swanrun -input {config_file_only} {mpi_flag}")
@@ -108,6 +113,7 @@ class SNLSWAN(simulators.Simulator):
         elif command == "swan.exe":
 
             mpi_kwargs = {}
+            #If the user does not provide n_vcpus mpi will use all available
             if n_vcpus is not None:
                 mpi_kwargs["np"] = n_vcpus
             mpi_kwargs["use_hwthread_cpus"] = use_hwthread
@@ -116,7 +122,6 @@ class SNLSWAN(simulators.Simulator):
             swan_exe_command = Command(f"swan.exe {sim_config_filename}",
                                        mpi_config=mpi_config)
             commands.append(swan_exe_command)
-
         return super().run(input_dir,
                            on=on,
                            storage_dir=storage_dir,
@@ -124,4 +129,5 @@ class SNLSWAN(simulators.Simulator):
                            run_subprocess_dir=str(working_dir),
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project=project,
                            **kwargs)

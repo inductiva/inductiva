@@ -42,3 +42,7 @@ class TopUpType(schemas.EnumBase, schemas.StrSchema):
     @schemas.classproperty
     def STRIPE_PAYMENT(cls):
         return cls("stripe_payment")
+
+    @schemas.classproperty
+    def BOOST(cls):
+        return cls("boost")
