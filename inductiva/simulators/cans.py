@@ -1,5 +1,5 @@
 """CaNS module of the API for numerical simulations of fluid flows."""
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 from inductiva import types, tasks, simulators
 from inductiva.commands.commands import Command
@@ -12,7 +12,11 @@ class CaNS(simulators.Simulator):
 
     """
 
-    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
+    def __init__(self,
+                 /,
+                 version: Optional[str] = None,
+                 use_dev: bool = False,
+                 device: Literal["auto", "cpu", "gpu"] = "auto"):
         """Initialize the CaNS simulator.
 
         Args:
@@ -21,8 +25,11 @@ class CaNS(simulators.Simulator):
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
+            device (str): Select between CPU or GPU for running the simulation.
+                Default is "auto", which will auto-detect if the machine has a
+                GPU and use if it available, otherwise use the CPU.
         """
-        super().__init__(version=version, use_dev=use_dev)
+        super().__init__(version=version, use_dev=use_dev, device=device)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "cans"
 
