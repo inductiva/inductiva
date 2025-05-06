@@ -32,10 +32,8 @@ False
 True
 ```
 
-**NOTE:** A default project is automatically created when a new user account is added.
-Typically, the default project is named after the user's username with some random
-characters appended to it. This project is used when no project is explicitly used
-in the task submission and ensures that no orphaned tasks are created.
+**NOTE:** A 'default' project is automatically created when a new user account is added.
+This project is used when no project is explicitly used in the task submission.
 
 ## Listing existing projects
 
@@ -62,45 +60,33 @@ $ inductiva projects list
  userab1cdef2   241     # default project
 ```
 
-## Adding a Task to a Project
+## Adding a Task to an existing Project
 
-Any task that is submitted to the Inductiva API must belong to a project.
-When the user is not explicit about the project to which the task is to be added,
-the default one is used. This ensures that no orphaned tasks are created.
-To add a task to a project other than the default one, the user needs to create
-a new project (or reference an existing one) and open it for task submission. However,
-the project can only be opened for task submission if it gets instantiated with
-an explicit `append=True` argument in the constructor or, otherwise, a RunTime
-error will be raised. This mechanism is meant to work as a security measure that
-ensures that the user is explicitly aware that new tasks are being appended to the
-project, which is particularly useful to ensure the consistency of the project's
-content.
+To add a task to an existing project, e.g. "demo", the user can simply pass
+the name of the project as an argument to the ```simulator.run``` method.
 
 ```python
->>> import inductiva
->>> project = inductiva.projects.Project("demo", append=False)
->>> project.open() # <-- An exception will be raised because the project is appendable
-...
-RuntimeError: Trying to open a project with `append=False`.
-A Project can only be opened when instantiated with the `append=True` option.
+task = simulator.run(input_dir=input_dir,
+                     sim_config_filename="params.txt",
+                     on=machine_group,
+                     project="demo")
+
 ```
 
-Whenever the `run` method of a `Simulator` object is called, the resulting task
-will be created under the project that is currently open, even though the project
-is not explicitly specified as an argument to the `run` method. It will be inferred
-from the context where the `run` method is being called.
+Alternatively, if you have a `Task` and a `Project` objects, you can call the `add_task`
+method explicitely:
 
-The client library offers two mechanisms to manage how tasks are added to a
-project: by manually opening and closing a `project` or via a context manager.
+```python
 
-### Explicit management
+my_demo_project.add_task(task_1)
 
-Explicit management requires that the user opens and closes the project manually
-using the `open` and `close` methods of the `Project` class. The project needs to
-be instantiated, opened for task submission and then closed to prevent further tasks
-from being appended to it. Any task submitted between the opening and closing of
-the project will be added to it. The following snippet demonstrates how to add a
-task to a project using explicit management:
+```
+
+
+### Full Example
+
+The following snippet demonstrates how to add a task to a new project
+and another one to the default project.
 
 ```python
 import inductiva
@@ -114,18 +100,16 @@ input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "xbeach-input-example.zip", unzip=True)
 
-project = inductiva.projects.Project("my_xbeach_project", append=True)
-
-project.open() # <-- open the project for task submission
+project = inductiva.projects.Project("my_xbeach_project")
 
 simulator = inductiva.simulators.XBeach()
 
-# add a task to the "my_xbeach_project" project
 task1 = simulator.run(input_dir=input_dir,
                       sim_config_filename="params.txt",
                       on=machine_group)
 
-project.close() # <-- close the project
+# add a task to the "my_xbeach_project" project
+project.add_task(task_1)
 
 # task2 will be added to the default project
 task2 = simulator.run(input_dir=input_dir,
@@ -133,32 +117,21 @@ task2 = simulator.run(input_dir=input_dir,
                       on=machine_group)
 
 print(task1.get_info().project) # "my_xbeach_project"
-print(task2.get_info().project) # "userab1cdef2" (default project)
+print(task2.get_info().project) # "default"
 
 machine_group.terminate()
 ```
 
-### Using a Context Manager
+### [Deprecated] Using a Context Manager
 
-Alternatively, the project can be managed using a context manager that automatically
-opens and closes the project for task submission, and helps clarify the scope of
-the project. The manager ensures that the project is opened for task submission
-by calling the `open` and `close` methods when entering and exiting the context
-of the `with` block, respectively. Any task that is created inside the `with` block
-will be appended to the project managed in that context; tasks submitted outside
-will be added to the default one:
+Until inductiva version 0.15.9 Projects needed to be "opened" and "closed"
+and there was a syntax using Python context managers to call these operators
+under the hood.
+These mechanisms were deprectated with version 0.16.0, in favour of the simpler
+alternatives documented above. 
 
+**DEPRECATED**
 ```python
-import inductiva
-
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup("c2-standard-4")
-machine_group.start()
-
-# get example input data
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "xbeach-input-example.zip", unzip=True)
 
 with inductiva.projects.Project("my_xbeach_project", append=True) as project:
     simulator = inductiva.simulators.XBeach()
@@ -167,27 +140,6 @@ with inductiva.projects.Project("my_xbeach_project", append=True) as project:
     task1 = simulator.run(input_dir=input_dir,
                           sim_config_filename="params.txt",
                           on=machine_group)
-
-# task2 will be added to the default project
-task2 = simulator.run(input_dir=input_dir,
-                      sim_config_filename="params.txt",
-                      on=machine_group)
-
-print(task1.get_info().project) # "my_xbeach_project"
-print(task2.get_info().project) # "userab1cdef2" (default project)
-
-machine_group.terminate()
-```
-
-At any moment, the user can query what project is currently **open** for task submission
-by calling the `get_current_project` function from the `projects` module:
-
-```python
->>> inductiva.projects.get_current_project()
-None
->>> with inductiva.projects.Project("my_xbeach_project", append=True):
-...     inductiva.projects.get_current_project().name
-my_xbeach_project
 ```
 
 ## Listing Tasks in a Project
@@ -216,60 +168,4 @@ Showing tasks for project: my_xbeach_project.
  [...]
  q3k3ad1etqdwwfw31die00orw   xbeach      success    24 May, 13:11:21   24 May, 13:11:21   0:00:06              GCP c2-standard-4
 
-```
-
-## Thread awareness of Projects
-
-Projects are thread-aware. Multiple threads can define and use different
-projects simultaneously. A project opened in one thread will not affect the
-project opened in another thread. If a thread does not open a project, the default
-one will be used, even though the main thread might have opened a project other
-than the default one.
-
-At any point, the user can get a reference to the currently active project in
-the calling thread using the `inductiva.projects.get_current_project()` function.
-This function will return the project that is currently open for task submission,
-or `None` if the default project is being used. The following snippet demonstrates
-how to use this function:
-
-```python
->>> import inductiva
->>> # so far, no project is open, hence "None" is returned
->>> inductiva.projects.get_current_project() is None
-True
->>> # open the "demo" project and get a reference to it
->>> with inductiva.projects.Project('demo', append=True) as p:
-...     print(inductiva.projects.get_current_project().name)
-...     print(inductiva.projects.get_current_project().num_tasks)
-...     print(inductiva.projects.get_current_project() is p)
-demo
-4
-True
->>> # the "demo" project is closed, hence "None" is returned again
->>> inductiva.projects.get_current_project() is None
-True
-```
-
-To illustrate the thread-awareness of projects, consider the following example.
-The main thread opens a project, and a new thread is created in the context of the
-opened project. The new thread retrieves the current project and prints its object
-just to find out that the default project is being used therein, even though
-the main thread has opened a project other than the default one:
-
-```python
-import inductiva
-import threading
-
-def run():
-    print(f"Thread 1: {inductiva.projects.get_current_project()=}")
-
-with inductiva.projects.Project("demo", append=True):
-    print(f"Main thread: {inductiva.projects.get_current_project()=}")
-    thread = threading.Thread(target=run)
-    thread.start()
-    thread.join()
-
-# would print:
-# Main thread: inductiva.projects.get_current_project()=<inductiva.projects.project.Project object at 0x1242be910>
-# Thread 1: inductiva.projects.get_current_project()=None
 ```
