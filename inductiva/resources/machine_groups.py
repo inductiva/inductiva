@@ -69,7 +69,6 @@ class BaseMachineGroup(ABC):
 
     # Internal attributes
     _free_space_threshold_gb = 5
-    _size_increment_gb = 10
     _id = None
     _name = None
     _started = False
@@ -112,12 +111,10 @@ class BaseMachineGroup(ABC):
                 raise ValueError(
                     "`auto_resize_disk_max_gb` must be a positive integer.")
 
-            if self.auto_resize_disk_max_gb < (self.data_disk_gb +
-                                               self._size_increment_gb):
+            if self.auto_resize_disk_max_gb < self.data_disk_gb:
                 raise ValueError(
                     "`auto_resize_disk_max_gb` must be greater than \
-                    or equal to "
-                    f"`data_disk_gb + {self._size_increment_gb}GB`.")
+                    or equal to `data_disk_gb GB`.")
 
         if self.threads_per_core not in [1, 2]:
             raise ValueError("`threads_per_core` must be either 1 or 2.")
@@ -232,7 +229,6 @@ class BaseMachineGroup(ABC):
 
         return {
             "free_space_threshold_gb": self._free_space_threshold_gb,
-            "size_increment_gb": self._size_increment_gb,
             "max_disk_size_gb": self.auto_resize_disk_max_gb
         }
 
