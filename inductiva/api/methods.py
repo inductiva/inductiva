@@ -335,7 +335,7 @@ def submit_task(simulator,
         remote_assets = []
 
     stream_zip = params.pop("stream_zip", True)
-    compress_with = params.pop("compress_with", CompressionMethod.AUTO)
+    compress_with = params.pop("compress_with", CompressionMethod.SEVEN_Z)
 
     task_request = TaskRequest(simulator=simulator,
                                params=params,
