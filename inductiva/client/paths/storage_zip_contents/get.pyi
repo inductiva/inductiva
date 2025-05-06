@@ -29,6 +29,19 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
 ZipRelativePathSchema = schemas.StrSchema
+
+
+class RecursiveSchema(schemas.EnumBase, schemas.StrSchema):
+
+    @schemas.classproperty
+    def TRUE(cls):
+        return cls("true")
+
+    @schemas.classproperty
+    def FALSE(cls):
+        return cls("false")
+
+
 PathSchema = schemas.StrSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
@@ -36,6 +49,10 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams', {
         'zip_relative_path': typing.Union[
             ZipRelativePathSchema,
+            str,
+        ],
+        'recursive': typing.Union[
+            RecursiveSchema,
             str,
         ],
         'path': typing.Union[
@@ -55,6 +72,12 @@ request_query_zip_relative_path = api_client.QueryParameter(
     name="zip_relative_path",
     style=api_client.ParameterStyle.FORM,
     schema=ZipRelativePathSchema,
+    explode=True,
+)
+request_query_recursive = api_client.QueryParameter(
+    name="recursive",
+    style=api_client.ParameterStyle.FORM,
+    schema=RecursiveSchema,
     explode=True,
 )
 request_query_path = api_client.QueryParameter(
@@ -166,6 +189,7 @@ class BaseApi(api_client.Api):
         prefix_separator_iterator = None
         for parameter in (
                 request_query_zip_relative_path,
+                request_query_recursive,
                 request_query_path,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
