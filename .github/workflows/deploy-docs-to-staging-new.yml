@@ -1,0 +1,35 @@
+name: Deploy Docs to Staging (via development branch)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  merge-and-push:
+    name: Merge docs updates from selected branch into development
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ensure full history
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Checkout development branch
+        run: |
+          git checkout development  # Checkout the development branch
+
+      - name: Checkout only docs-sources from current branch
+        run: |
+          git checkout ${{ github.ref }} -- docs-sources  # Checkout only docs-sources from current branch
+
+      - name: Commit and push changes
+        run: |
+          git add docs-sources/*  # Stage docs-sources changes
+          git commit -m "Update docs from ${{ github.ref }}" || echo "No changes to commit"  # Commit changes
+          git push origin development  # Push to development branch
