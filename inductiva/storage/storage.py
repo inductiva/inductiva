@@ -189,6 +189,7 @@ class ZipArchiveInfo:
 def get_zip_contents(
     path: str,
     zip_relative_path: str = "",
+    recursive: bool = False,
 ) -> ZipArchiveInfo:
     """
     Retrieve the contents of a ZIP archive from a given path.
@@ -198,6 +199,10 @@ def get_zip_contents(
         zip_relative_path (str, optional): A relative path inside the ZIP 
             archive to filter the contents. Defaults to an empty string, 
             which lists all files within the archive.
+        recursive (bool, optional): If True, list contents recursively within
+            the specified `zip_relative_path`. If False, list only top-level 
+            files and directories within the specified `zip_relative_path`.
+            Defaults to False.
 
     Returns:
         ZipArchiveInfo: An object containing the total size of the ZIP archive
@@ -205,7 +210,11 @@ def get_zip_contents(
             within the specified ZIP archive.
     """
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
-    query_params = {"path": path, "zip_relative_path": zip_relative_path}
+    query_params = {
+        "path": path,
+        "zip_relative_path": zip_relative_path,
+        "recursive": str(recursive).lower()
+    }
     response_body = api_instance.get_zip_contents(query_params).body
     files = [ZipFileInfo(
         name=str(file["name"]),
