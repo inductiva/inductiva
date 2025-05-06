@@ -4,8 +4,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c3d-highcpu-180",
-    spot=True)
+    machine_type="c3d-highcpu-180")
 
 # Initialize the Simulator
 delft3d = inductiva.simulators.Delft3D( \
