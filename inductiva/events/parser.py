@@ -5,6 +5,7 @@ from typing import Union, Any
 
 class ActionEmailInfo:
     """Model for the email action."""
+
     def __init__(self, action_type: str, email_address: str):
         self.action_type = action_type
         self.email_address = email_address
@@ -18,6 +19,7 @@ class ActionEmailInfo:
 
 class ActionWebhookInfo:
     """Model for the webhook action."""
+
     def __init__(self, action_type: str, webhook_url: str):
         self.action_type = action_type
         self.webhook_url = webhook_url
@@ -31,6 +33,7 @@ class ActionWebhookInfo:
 
 class TriggerTaskInfo:
     """ Model for the task trigger."""
+
     def __init__(self, trigger_type: str, task_id: str):
         self.trigger_type = trigger_type
         self.task_id = task_id
@@ -44,6 +47,7 @@ class TriggerTaskInfo:
 
 class TriggerMachineGroupInfo:
     """Model for the machine group trigger."""
+
     def __init__(self, trigger_type: str, machine_group_id: int):
         self.trigger_type = trigger_type
         self.machine_group_id = machine_group_id
@@ -61,6 +65,7 @@ TriggerInfoUnion = Union[TriggerTaskInfo, TriggerMachineGroupInfo]
 
 class EventInfo:
     """Model for the event."""
+
     def __init__(self, event_id: str, trigger: TriggerInfoUnion,
                  action: ActionInfoUnion):
         self.event_id = uuid.UUID(event_id)
