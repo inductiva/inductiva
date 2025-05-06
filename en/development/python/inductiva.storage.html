@@ -617,7 +617,7 @@ or folder if it is compressed. Defaults to True.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="inductiva.storage.storage.get_zip_contents">
-<span class="sig-name descname"><span class="pre">get_zip_contents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zip_relative_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#inductiva.storage.storage.ZipArchiveInfo" title="inductiva.storage.storage.ZipArchiveInfo"><span class="pre">ZipArchiveInfo</span></a></span></span><a class="headerlink" href="#inductiva.storage.storage.get_zip_contents" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_zip_contents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zip_relative_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#inductiva.storage.storage.ZipArchiveInfo" title="inductiva.storage.storage.ZipArchiveInfo"><span class="pre">ZipArchiveInfo</span></a></span></span><a class="headerlink" href="#inductiva.storage.storage.get_zip_contents" title="Link to this definition">#</a></dt>
 <dd><p>Retrieve the contents of a ZIP archive from a given path.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -626,6 +626,10 @@ or folder if it is compressed. Defaults to True.</p></li>
 <li><p><strong>zip_relative_path</strong> (<em>str</em><em>, </em><em>optional</em>) – A relative path inside the ZIP
 archive to filter the contents. Defaults to an empty string,
 which lists all files within the archive.</p></li>
+<li><p><strong>recursive</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, list contents recursively within
+the specified <cite>zip_relative_path</cite>. If False, list only top-level
+files and directories within the specified <cite>zip_relative_path</cite>.
+Defaults to False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
