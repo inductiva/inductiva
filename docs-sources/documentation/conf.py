@@ -23,16 +23,16 @@ project = 'Inductiva.AI'
 copyright = '2025, Inductiva.AI'
 author = 'Inductiva.AI'
 
-
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc', 'myst_parser', 'sphinx.ext.mathjax', 'sphinx.ext.napoleon',
-    'sphinxcontrib.mermaid', 'sphinx_tabs.tabs', 'sphinx_togglebutton',
-    'sphinxcontrib.googleanalytics', 'sphinxext.opengraph', 'sphinx_sitemap', 'sphinx_reredirects'
+    'sphinx.ext.autodoc', 'myst_parser', 'sphinx.ext.mathjax',
+    'sphinx.ext.napoleon', 'sphinxcontrib.mermaid', 'sphinx_tabs.tabs',
+    'sphinx_togglebutton', 'sphinxcontrib.googleanalytics',
+    'sphinxext.opengraph', 'sphinx_sitemap', 'sphinx_reredirects'
 ]
 
 myst_enable_extensions = [
@@ -82,25 +82,32 @@ html_theme_options = {
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-shared_static_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "_shared_static"))
+shared_static_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "_shared_static"))
 html_static_path = ['_static', shared_static_path]
 
-html_css_files = [
-    'css/custom.css',
-    'css/enable_sidebar_focus.css'
-]
+html_css_files = ['css/custom.css', 'css/enable_sidebar_focus.css']
 pygments_style = "monokai"
 
 # SEO - Add any paths that contain templates here, relative to this directory.
-templates_path = [os.path.relpath(os.path.join(os.path.dirname(__file__), "..", "_shared_templates/_templates"))]
+templates_path = [
+    os.path.relpath(
+        os.path.join(os.path.dirname(__file__), "..",
+                     "_shared_templates/_templates"))
+]
 
 html_title = "Documentation"
 html_context = {
-    "project_name": "Inductiva.AI",
-    "project_description": "Inductiva.AI Documentation",
-    "project_url": "https://inductiva.ai/guides/documentation",
-    "ogp_image": "https://inductiva.ai/builds/documentation/_static/inductiva-social-banner.jpg",
-    "keywords": "documentation, Inductiva.AI"
+    "project_name":
+        "Inductiva.AI",
+    "project_description":
+        "Inductiva.AI Documentation",
+    "project_url":
+        "https://inductiva.ai/guides/documentation",
+    "ogp_image":
+        "https://inductiva.ai/builds/documentation/_static/inductiva-social-banner.jpg",
+    "keywords":
+        "documentation, Inductiva.AI"
 }
 
 # Google Analytics
