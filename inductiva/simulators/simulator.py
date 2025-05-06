@@ -196,7 +196,9 @@ class Simulator(ABC):
         :return: A string of suffixes.
         """
         dev_suffix = "_dev" if self._use_dev else ""
-        gpu_suffix = "_gpu" if resource.has_gpu() else ""
+        gpu_suffix = "_gpu" if resource.has_gpu() and (
+            f"{self.version}_gpu"
+            in self._supported_versions_with_suffixes) else ""
 
         # Overwrites the gpu suffix if the user passed a specific
         # device
