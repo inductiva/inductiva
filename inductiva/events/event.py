@@ -25,24 +25,24 @@ def list_events():
         print(resp)
 
 
-def remove(event_id: int):
+def remove(event_id: str):
     """Removes an event with the given ID."""
     try:
         _logger.debug("Trying to remove event %s", event_id)
         api = events_api.EventsApi(inductiva_api.get_client())
-        api.delete_event(event_id)
+        api.delete_event({"event_id": event_id})
     except ApiException as ex:
         _logger.error("Failed to remove event %s", event_id, exc_info=ex)
         raise ex
     print(f"Event {event_id} removed.")
 
 
-def get(event_id: int):
+def get(event_id: str):
     """Gets the event with the given ID."""
     try:
         _logger.debug("Trying to get event %s", event_id)
         api = events_api.EventsApi(inductiva_api.get_client())
-        response = api.get_event(event_id)
+        response = api.get_event({"event_id": event_id})
     except ApiException as ex:
         _logger.error("Failed to get event %s", event_id, exc_info=ex)
         raise ex
