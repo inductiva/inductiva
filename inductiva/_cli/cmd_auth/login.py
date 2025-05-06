@@ -1,6 +1,7 @@
 """Register CLI command for login."""
-import argparse
 from typing import List
+from tqdm import tqdm
+import argparse
 import requests
 import getpass
 import pkgutil
@@ -28,7 +29,10 @@ def download_example_scripts() -> List[str]:
 
     os.makedirs("inductiva_examples", exist_ok=True)
     downloaded = []
-    for module in modules:
+    for module in tqdm(modules,
+                       leave=False,
+                       desc="Downloading example scripts",
+                       unit="script"):
         url = constants.INDUCTIVA_GIT_EXAMPLES_URL + f"{module}/{module}.py"
 
         response = requests.get(url, timeout=10)
@@ -80,21 +84,21 @@ def login(args):
     if first_log_in:
         print(f"Welcome back {user_name}!")
     else:
+        print("\n")
+        print(f" ■ Welcome {user_name}!\n"
+              "Since this is your first time logging in, we will download "
+              "some example scripts for you to get started.\n")
 
         downloaded = download_example_scripts()
 
-        print("\n")
-        print(f"Welcome {user_name}!\n"
-              "Since this is your first time logging in, we have downloaded "
-              "some example scripts for you to get started.\n"
-              "The examples are located in the `inductiva_examples` folder.\n"
+        print("The examples are located in the `inductiva_examples` folder.\n"
               "You can run them using the command "
-              "`python inductiva_examples/<example.py>`.\n\n")
-        print("Available examples:\n")
+              "`python inductiva_examples/<example.py>`.\n")
+        print("Available examples:")
         for i in range(0, len(downloaded), 3):
             line = [word.ljust(25) for word in downloaded[i:i + 3]]
             print("".join(line))
-        print("\n\nRun your first simulation with "
+        print("\nRun your first simulation with "
               "`python inductiva_examples/openfoam_esi.py`\n")
 
 

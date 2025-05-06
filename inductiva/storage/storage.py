@@ -1,4 +1,5 @@
 """Methods to interact with the user storage resources."""
+import datetime
 import itertools
 import logging
 import math
@@ -171,9 +172,10 @@ def get_signed_urls(
 class ZipFileInfo:
     """Represents information about a file within a ZIP archive."""
     name: str
-    size: int
-    compressed_size: int
+    size: Optional[int]
+    compressed_size: Optional[int]
     range_start: Optional[int]
+    creation_time: Optional[datetime.datetime]
     compress_type: Optional[int]
 
 
@@ -187,6 +189,7 @@ class ZipArchiveInfo:
 def get_zip_contents(
     path: str,
     zip_relative_path: str = "",
+    recursive: bool = False,
 ) -> ZipArchiveInfo:
     """
     Retrieve the contents of a ZIP archive from a given path.
@@ -196,6 +199,10 @@ def get_zip_contents(
         zip_relative_path (str, optional): A relative path inside the ZIP 
             archive to filter the contents. Defaults to an empty string, 
             which lists all files within the archive.
+        recursive (bool, optional): If True, list contents recursively within
+            the specified `zip_relative_path`. If False, list only top-level 
+            files and directories within the specified `zip_relative_path`.
+            Defaults to False.
 
     Returns:
         ZipArchiveInfo: An object containing the total size of the ZIP archive
@@ -203,7 +210,11 @@ def get_zip_contents(
             within the specified ZIP archive.
     """
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
-    query_params = {"path": path, "zip_relative_path": zip_relative_path}
+    query_params = {
+        "path": path,
+        "zip_relative_path": zip_relative_path,
+        "recursive": str(recursive).lower()
+    }
     response_body = api_instance.get_zip_contents(query_params).body
     files = [ZipFileInfo(
         name=str(file["name"]),
@@ -213,6 +224,8 @@ def get_zip_contents(
             if file["compressed_size"] else None,
         range_start=int(file["range_start"]) \
             if file["range_start"] else None,
+        creation_time=datetime.datetime.fromisoformat(file["creation_time"])
+            if file["creation_time"] else None,
         compress_type=int(file["compress_type"])
             if file["compress_type"] else None
     ) for file in response_body["contents"]]
@@ -344,13 +357,6 @@ def upload(
             try:
                 methods.upload_file(api_instance, local_file_path, "PUT", url,
                                     progress_bar)
-
-                methods.notify_upload_complete(
-                    api_instance.notify_upload_file,
-                    query_params={
-                        "path": remote_file_path,
-                    },
-                )
             except exceptions.ApiException as e:
                 raise e
 
@@ -616,6 +622,20 @@ def remove_workspace(remote_dir) -> bool:
         remote_dir = remote_dir + "/"
     api.delete_file(query_params={"path": remote_dir},)
     logging.info("Workspace file(s) removed successfully.")
+
+
+def copy(source: str, target: str):
+    """
+    Copies a file or folder from a source path in storage to a target path.
+
+    Args:
+        source (str): The source path of the file or directory to copy.
+        target (str): The destination path where the file or directory 
+                      should be copied to.
+    """
+    api = storage_api.StorageApi(inductiva.api.get_client())
+    api.copy(query_params={"source": source, "target": target})
+    logging.info("Copied %s to %s successfully.", source, target)
 
 
 class StorageOperation():

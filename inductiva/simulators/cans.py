@@ -1,5 +1,5 @@
 """CaNS module of the API for numerical simulations of fluid flows."""
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 from inductiva import types, tasks, simulators
 from inductiva.commands.commands import Command
@@ -12,7 +12,11 @@ class CaNS(simulators.Simulator):
 
     """
 
-    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
+    def __init__(self,
+                 /,
+                 version: Optional[str] = None,
+                 use_dev: bool = False,
+                 device: Literal["auto", "cpu", "gpu"] = "auto"):
         """Initialize the CaNS simulator.
 
         Args:
@@ -21,8 +25,11 @@ class CaNS(simulators.Simulator):
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
+            device (str): Select between CPU or GPU for running the simulation.
+                Default is "auto", which will auto-detect if the machine has a
+                GPU and use if it available, otherwise use the CPU.
         """
-        super().__init__(version=version, use_dev=use_dev)
+        super().__init__(version=version, use_dev=use_dev, device=device)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "cans"
 
@@ -36,6 +43,7 @@ class CaNS(simulators.Simulator):
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
+            project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -53,6 +61,9 @@ class CaNS(simulators.Simulator):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project.
             other arguments: See the documentation of the base class.
         """
         mpi_kwargs = {}
@@ -71,4 +82,5 @@ class CaNS(simulators.Simulator):
                            storage_dir=storage_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project=project,
                            **kwargs)

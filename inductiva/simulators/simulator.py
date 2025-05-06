@@ -196,7 +196,9 @@ class Simulator(ABC):
         :return: A string of suffixes.
         """
         dev_suffix = "_dev" if self._use_dev else ""
-        gpu_suffix = "_gpu" if resource.has_gpu() else ""
+        gpu_suffix = "_gpu" if resource.has_gpu() and (
+            f"{self.version}_gpu"
+            in self._supported_versions_with_suffixes) else ""
 
         # Overwrites the gpu suffix if the user passed a specific
         # device
@@ -243,6 +245,7 @@ class Simulator(ABC):
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
         remote_assets: Optional[List[str]] = None,
+        project: Optional[str] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -261,6 +264,9 @@ class Simulator(ABC):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project.
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
@@ -305,6 +311,7 @@ class Simulator(ABC):
             resubmit_on_preemption=resubmit_on_preemption,
             remote_assets=remote_assets,
             simulator_name_alias=self.simulator_name_alias,
+            project_name=project,
             **kwargs,
         )
 

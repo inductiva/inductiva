@@ -32,34 +32,24 @@ class DynamicDiskResizeConfig(schemas.DictSchema):
     class MetaOapg:
         required = {
             "free_space_threshold_gb",
-            "size_increment_gb",
             "max_disk_size_gb",
         }
 
         class properties:
             free_space_threshold_gb = schemas.IntSchema
-            size_increment_gb = schemas.IntSchema
             max_disk_size_gb = schemas.IntSchema
             __annotations__ = {
                 "free_space_threshold_gb": free_space_threshold_gb,
-                "size_increment_gb": size_increment_gb,
                 "max_disk_size_gb": max_disk_size_gb,
             }
 
     free_space_threshold_gb: MetaOapg.properties.free_space_threshold_gb
-    size_increment_gb: MetaOapg.properties.size_increment_gb
     max_disk_size_gb: MetaOapg.properties.max_disk_size_gb
 
     @typing.overload
     def __getitem__(
         self, name: typing_extensions.Literal["free_space_threshold_gb"]
     ) -> MetaOapg.properties.free_space_threshold_gb:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["size_increment_gb"]
-    ) -> MetaOapg.properties.size_increment_gb:
         ...
 
     @typing.overload
@@ -74,7 +64,6 @@ class DynamicDiskResizeConfig(schemas.DictSchema):
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "free_space_threshold_gb",
-        "size_increment_gb",
         "max_disk_size_gb",
     ], str]):
         # dict_instance[name] accessor
@@ -84,12 +73,6 @@ class DynamicDiskResizeConfig(schemas.DictSchema):
     def get_item_oapg(
         self, name: typing_extensions.Literal["free_space_threshold_gb"]
     ) -> MetaOapg.properties.free_space_threshold_gb:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["size_increment_gb"]
-    ) -> MetaOapg.properties.size_increment_gb:
         ...
 
     @typing.overload
@@ -106,7 +89,6 @@ class DynamicDiskResizeConfig(schemas.DictSchema):
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "free_space_threshold_gb",
-        "size_increment_gb",
         "max_disk_size_gb",
     ], str]):
         return super().get_item_oapg(name)
@@ -119,11 +101,6 @@ class DynamicDiskResizeConfig(schemas.DictSchema):
         ],
         free_space_threshold_gb: typing.Union[
             MetaOapg.properties.free_space_threshold_gb,
-            decimal.Decimal,
-            int,
-        ],
-        size_increment_gb: typing.Union[
-            MetaOapg.properties.size_increment_gb,
             decimal.Decimal,
             int,
         ],
@@ -142,7 +119,6 @@ class DynamicDiskResizeConfig(schemas.DictSchema):
             cls,
             *_args,
             free_space_threshold_gb=free_space_threshold_gb,
-            size_increment_gb=size_increment_gb,
             max_disk_size_gb=max_disk_size_gb,
             _configuration=_configuration,
             **kwargs,
