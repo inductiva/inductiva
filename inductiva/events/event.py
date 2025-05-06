@@ -7,6 +7,7 @@ from inductiva.client import ApiException
 from inductiva.client.apis.tags import events_api
 from inductiva.events.triggers import Trigger
 from inductiva.events.actions import Action
+from inductiva.events.parser import parse_event_info
 
 _logger = logging.getLogger(__name__)
 
@@ -22,7 +23,7 @@ def list_events():
         raise ex
 
     for resp in response.body:
-        print(resp)
+        print(parse_event_info(resp))
 
 
 def remove(event_id: str):
@@ -46,7 +47,7 @@ def get(event_id: str):
     except ApiException as ex:
         _logger.error("Failed to get event %s", event_id, exc_info=ex)
         raise ex
-    return response.body
+    print(parse_event_info(response.body))
 
 
 def register(trigger: Trigger, action: Action):
