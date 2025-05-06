@@ -230,6 +230,14 @@ def block_until_status_is(api_instance: TasksApi,
     return status
 
 
+def _configure_sigint_handler(handler):
+    try:
+        return signal.signal(signal.SIGINT, handler)
+    except ValueError:
+        # If the signal is not supported, ignore it
+        pass
+
+
 @contextmanager
 def blocking_task_context(api_instance: TasksApi,
                           task_id: str,
@@ -248,7 +256,7 @@ def blocking_task_context(api_instance: TasksApi,
     # Other imported modules can make changes to the SIGINT handler, so we set
     # the default int handler to make sure that KeyboardInterrupt is raised
     # if the user presses Ctrl+C.
-    original_sig = signal.signal(signal.SIGINT, signal.default_int_handler)
+    original_sig = _configure_sigint_handler(signal.default_int_handler)
 
     try:
         yield None
@@ -262,7 +270,7 @@ def blocking_task_context(api_instance: TasksApi,
         sys.exit(1)
     finally:
         # Reset original SIGINT handler
-        signal.signal(signal.SIGINT, original_sig)
+        _configure_sigint_handler(original_sig)
 
 
 def task_info_str(
@@ -307,7 +315,7 @@ def submit_task(simulator,
                 remote_assets: Optional[List[str]] = None,
                 project_name: Optional[str] = None):
     """Submit a task and send input files to the API.
-    
+
     Args:
         simulator: The simulator to use
         input_dir: Directory containing the input files to be uploaded.
