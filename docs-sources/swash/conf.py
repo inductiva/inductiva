@@ -22,16 +22,16 @@ project = 'Inductiva.AI'
 copyright = '2025, Inductiva.AI'
 author = 'Inductiva.AI'
 
+
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc', 'myst_parser', 'sphinx.ext.mathjax',
-    'sphinx.ext.napoleon', 'sphinxcontrib.mermaid', 'sphinx_tabs.tabs',
-    'sphinx_togglebutton', 'sphinxcontrib.googleanalytics',
-    'sphinxext.opengraph', 'sphinx_sitemap', 'sphinx_reredirects'
+    'sphinx.ext.autodoc', 'myst_parser', 'sphinx.ext.mathjax', 'sphinx.ext.napoleon',
+    'sphinxcontrib.mermaid', 'sphinx_tabs.tabs', 'sphinx_togglebutton',
+    'sphinxcontrib.googleanalytics', 'sphinxext.opengraph', 'sphinx_sitemap', 'sphinx_reredirects'
 ]
 
 myst_enable_extensions = [
@@ -76,6 +76,7 @@ myst_heading_anchors = 3
 html_permalinks_icon = '<span>#</span>'
 html_theme = 'sphinxawesome_theme'
 
+
 html_theme_options = {
     "collapse_navigation": False,
     "show_nav_level": 1,
@@ -83,8 +84,7 @@ html_theme_options = {
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-shared_static_path = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "_shared_static"))
+shared_static_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "_shared_static"))
 html_static_path = ['_static', shared_static_path]
 
 html_css_files = [

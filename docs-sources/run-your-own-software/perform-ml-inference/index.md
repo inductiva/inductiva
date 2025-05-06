@@ -1,10 +1,4 @@
-# Run Generic Scientific Software on Inductiva
-Inductiva is a flexible API platform designed to make it easy to run a wide range of pre-configured 
-simulation software. However, with a little preparation, Inductiva can also be used to run any 
-scientific software, making it a powerful tool for researchers and developers. The platform supports
-the use of **custom Apptainer images** (formerly known as Singularity), which allow users to package and upload any software 
-required for their tasks. These images can then be efficiently deployed on cloud GPUs.
-
+# Perform Machine Learning Inference
 To showcase the flexibility of Inductiva, this guide walks you through the process of preparing and running [DiffDock](https://github.com/gcorso/DiffDock) — a well-known and somewhat 
 complex **Machine Learning model** for molecular docking.
 

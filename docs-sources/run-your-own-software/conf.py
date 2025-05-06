@@ -77,6 +77,7 @@ myst_heading_anchors = 3
 html_permalinks_icon = Icons.permalinks_icon
 html_theme = 'sphinxawesome_theme'
 
+
 html_theme_options = {
     'show_prev_next': True,
     'show_scrolltop': True,
@@ -87,24 +88,25 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 shared_static_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "_shared_static"))
 html_static_path = ['_static', shared_static_path]
+
 html_css_files = [
     'css/custom.css',
 ]
 pygments_style = "monokai"
 
-html_title = 'OpenFOAM'
+html_title = 'Run Your Own Software'
 
 # Google Analytics
-googleanalytics_id = "G-N6GVDZ3621"
+googleanalytics_id = "G-NHJ03C6M91"
 googleanalytics_enabled = True
 
 # OpenGraph protocol
-ogp_site_name = "Inductiva.AI OpenFOAM"
-ogp_site_url = "https://inductiva.ai/guides/openfoam"
-ogp_image = "https://inductiva.ai/builds/openfoam/_static/inductiva-social-banner.jpg"
+ogp_site_name = "Inductiva.AI Run Your Own Software"
+ogp_site_url = "https://inductiva.ai/guides/run-your-own-software"
+ogp_image = "https://inductiva.ai/builds/run-your-own-software/_static/inductiva-social-banner.jpg"
 
 # sitemap.xml
 # See https://sphinx-sitemap.readthedocs.io/
 language = 'en'
 version = 'local'
-html_baseurl = 'https://inductiva.ai/guides/openfoam'
+html_baseurl = 'https://inductiva.ai/guides/run-your-own-software'
