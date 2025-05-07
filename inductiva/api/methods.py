@@ -231,9 +231,13 @@ def block_until_status_is(api_instance: TasksApi,
 
 
 def _configure_sigint_handler(handler):
+    if not handler:
+        return None
+
     try:
         return signal.signal(signal.SIGINT, handler)
-    except ValueError:
+    except ValueError as e:
+        logging.warning("Custom SIGINT handler not configured: %s", e)
         # If the signal is not supported, ignore it
         pass
 
