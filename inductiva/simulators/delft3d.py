@@ -27,6 +27,7 @@ class Delft3D(simulators.Simulator):
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[list[str]] = None,
+            project: Optional[str] = None,
             **kwargs):
 
         if commands is None and shell_script is None:
@@ -37,6 +38,11 @@ class Delft3D(simulators.Simulator):
                              "can be provided.")
 
         if shell_script is not None:
+            #Check if the shell script exists
+
+            self._input_files_exist(input_dir=input_dir,
+                                    remote_assets=remote_assets,
+                                    shell_script=shell_script)
             commands = [f"bash {shell_script}"]
 
         return super().run(input_dir,
@@ -45,4 +51,5 @@ class Delft3D(simulators.Simulator):
                            storage_dir=storage_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project=project,
                            **kwargs)

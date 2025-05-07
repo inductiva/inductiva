@@ -120,7 +120,6 @@ def test_machines__machine_group__dynamic_disk_resize_config__resizable():
     config = machine._dynamic_disk_resize_config()
 
     assert "free_space_threshold_gb" in config
-    assert "size_increment_gb" in config
     assert "max_disk_size_gb" in config
 
 

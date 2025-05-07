@@ -38,6 +38,7 @@ class DualSPHysics(simulators.Simulator):
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
         remote_assets: Optional[List[str]] = None,
+        project: Optional[str] = None,
         **kwargs,
     ) -> tasks.Task:
         """Executes a DualSPHysics simulation.
@@ -53,10 +54,19 @@ class DualSPHysics(simulators.Simulator):
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project. If the project does not exist, it will be
+                created.
 
         Returns:
             tasks.Task: An object representing the simulation task.
         """
+
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                shell_script=shell_script)
+
         commands = [f"bash {shell_script}"]
 
         return super().run(input_dir,
@@ -65,4 +75,5 @@ class DualSPHysics(simulators.Simulator):
                            storage_dir=storage_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project=project,
                            **kwargs)

@@ -254,6 +254,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
     mock_mg = mock.Mock()
     mock_mg.id = uuid.uuid4()
     mock_mg.has_gpu.return_value = True
+    mock_mg.available_vcpus = 16
 
     for sim_name, simcls in sim_classes:
 
@@ -292,20 +293,26 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             args = ([],) * (len(args_spec) - 2)  # -2 for self and input_dir
 
             test_input_dir = Path(__file__).parent / "test_input_dir"
-            run_kwargs = {"on": mock_mg}
+            run_kwargs = {
+                "on": mock_mg,
+                "remote_assets": [],
+            }
             if resubmit_on_preemption is not None:
                 run_kwargs[resubmit_key] = resubmit_on_preemption
             if sim_name in ("OpenFOAM", "Delft3D"):
                 run_kwargs["commands"] = ["ls"]
+            if sim_name in ("CP2K", "OpenSees", "AmrWind"):
+                run_kwargs["sim_config_filename"] = "test_config_file"
 
             # pass remote_assets to coawst to avoid our internal checks
             # that check if the input files are present
             if sim_name == "COAWST":
-                run_kwargs["remote_assets"] = ["temp"]
                 run_kwargs["build_coawst_script"] = "hello_world.sh"
+                run_kwargs["compile_simulator"] = False
 
             if sim_name in ("SWAN", "SWASH", "SNLSWAN"):
-                args = ("test_folder",)
+                args = []
+                run_kwargs["sim_config_filename"] = "test_config_file"
 
             sim_obj.run(test_input_dir, *args, **run_kwargs)
 
