@@ -1,5 +1,5 @@
 """AmrWind module of the API for numerical simulations of fluid flows."""
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 from inductiva import types, tasks, simulators
 from inductiva.commands import MPIConfig, Command
@@ -10,7 +10,11 @@ class AmrWind(simulators.Simulator):
     """Class to invoke a generic AmrWind simulation on the API.
     """
 
-    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
+    def __init__(self,
+                 /,
+                 version: Optional[str] = None,
+                 use_dev: bool = False,
+                 device: Literal["auto", "cpu", "gpu"] = "auto"):
         """Initialize the AmrWind simulator.
 
         Args:
@@ -20,7 +24,7 @@ class AmrWind(simulators.Simulator):
                 the simulator. By default (False), the production version
                 is used.
         """
-        super().__init__(version=version, use_dev=use_dev)
+        super().__init__(version=version, use_dev=use_dev, device=device)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "amrwind"
 
