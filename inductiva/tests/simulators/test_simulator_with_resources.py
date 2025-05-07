@@ -293,11 +293,18 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             args = ([],) * (len(args_spec) - 2)  # -2 for self and input_dir
 
             test_input_dir = Path(__file__).parent / "test_input_dir"
-            run_kwargs = {"on": mock_mg}
+            run_kwargs = {
+                "on": mock_mg,
+                "remote_assets": [],
+            }
             if resubmit_on_preemption is not None:
                 run_kwargs[resubmit_key] = resubmit_on_preemption
             if sim_name in ("OpenFOAM", "Delft3D"):
                 run_kwargs["commands"] = ["ls"]
+            if sim_name in ("AmrWind"):
+                args = ["test_config_file"]
+            if sim_name in ("CP2K", "OpenSees"):
+                run_kwargs["sim_config_filename"] = "test_config_file"
 
             # pass remote_assets to coawst to avoid our internal checks
             # that check if the input files are present
