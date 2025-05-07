@@ -66,6 +66,11 @@ class CaNS(simulators.Simulator):
                 the default project.
             other arguments: See the documentation of the base class.
         """
+
+        if remote_assets is None:
+            self._input_files_exist(input_dir=input_dir,
+                                    sim_config_filename=sim_config_filename)
+
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
         if n_vcpus is not None:

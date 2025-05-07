@@ -49,6 +49,10 @@ class GX(simulators.Simulator):
                 the default project.
         """
 
+        if remote_assets is None:
+            self._input_files_exist(input_dir=input_dir,
+                                    sim_config_filename=sim_config_filename)
+
         commands = [f"gx {sim_config_filename}"]
 
         return super().run(input_dir,

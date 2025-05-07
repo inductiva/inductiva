@@ -38,6 +38,10 @@ class Delft3D(simulators.Simulator):
                              "can be provided.")
 
         if shell_script is not None:
+            #Check if the shell script exists
+            if remote_assets is None:
+                self._input_files_exist(input_dir=input_dir,
+                                        shell_script=shell_script)
             commands = [f"bash {shell_script}"]
 
         return super().run(input_dir,

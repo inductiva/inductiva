@@ -72,9 +72,9 @@ class OpenSees(simulators.Simulator):
             input_dir: Optional[str],
             *,
             on: types.ComputationalResources,
+            sim_config_filename: Optional[str],
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
-            sim_config_filename: Optional[str] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
@@ -115,6 +115,10 @@ class OpenSees(simulators.Simulator):
                     " an interface. Please use `interface='tcl'`.")
 
         self._check_vcpus(n_vcpus, on)
+
+        if remote_assets is None:
+            self._input_files_exist(input_dir=input_dir,
+                                    sim_config_filename=sim_config_filename)
 
         mpi_config = self._build_mpi_config(n_vcpus, use_hwthread)
 
