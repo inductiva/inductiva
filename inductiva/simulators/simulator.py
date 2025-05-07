@@ -86,10 +86,13 @@ class Simulator(ABC):
         """Get the image URI for this simulator."""
         return self._image_uri
 
-    def _input_files_exist(self, input_dir, **kwargs):
+    def _input_files_exist(self, input_dir, remote_assets, **kwargs):
         """
         Checks if all the files in kwargs are present in the input_dir.
         """
+        if remote_assets is not None:
+            return
+
         missing_files = []
 
         for _, file_path in kwargs.items():

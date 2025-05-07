@@ -55,6 +55,10 @@ class SplishSplash(simulators.Simulator):
             Task object representing the simulation task.
         """
 
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
+
         commands = [
             "cp /SPlisHSPlasH_CPU/bin/SPHSimulator .",
             f"./SPHSimulator {sim_config_filename} --no-gui --output-dir .",

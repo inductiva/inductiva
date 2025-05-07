@@ -31,8 +31,8 @@ class AmrWind(simulators.Simulator):
 
     def run(self,
             input_dir: Optional[str],
-            sim_config_filename: str,
             *,
+            sim_config_filename: str,
             on: types.ComputationalResources,
             use_hwthread: bool = True,
             n_vcpus: Optional[int] = None,
@@ -62,6 +62,11 @@ class AmrWind(simulators.Simulator):
                 the default project. If the project does not exist, it will be
                 created.
         """
+
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
+
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
         if n_vcpus is not None:

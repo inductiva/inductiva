@@ -62,6 +62,11 @@ class DualSPHysics(simulators.Simulator):
         Returns:
             tasks.Task: An object representing the simulation task.
         """
+
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                shell_script=shell_script)
+
         commands = [f"bash {shell_script}"]
 
         return super().run(input_dir,

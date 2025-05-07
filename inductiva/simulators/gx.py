@@ -50,6 +50,10 @@ class GX(simulators.Simulator):
                 created.
         """
 
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
+
         commands = [f"gx {sim_config_filename}"]
 
         return super().run(input_dir,

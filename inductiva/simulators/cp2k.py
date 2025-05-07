@@ -35,9 +35,9 @@ class CP2K(simulators.Simulator):
             input_dir: Optional[str],
             *,
             on: types.ComputationalResources,
+            sim_config_filename: Optional[str],
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
-            sim_config_filename: Optional[str] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
@@ -67,6 +67,11 @@ class CP2K(simulators.Simulator):
                 created.
             other arguments: See the documentation of the base class.
         """
+
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
+
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
         if n_vcpus is not None:

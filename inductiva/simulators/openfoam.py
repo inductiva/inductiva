@@ -88,6 +88,10 @@ class OpenFOAM(simulators.Simulator):
                              " must be provided.")
 
         if shell_script:
+
+            self._input_files_exist(input_dir=input_dir,
+                                    remote_assets=remote_assets,
+                                    shell_script=shell_script)
             commands = [f"bash {shell_script}"]
 
         return super().run(input_dir,

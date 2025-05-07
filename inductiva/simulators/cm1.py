@@ -60,6 +60,13 @@ class CM1(simulators.Simulator):
                 created.
             other arguments: See the documentation of the base class.
         """
+        if sim_config_filename is None:
+            sim_config_filename = "namelist.input"
+
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
+
         mpi_config = None
 
         mpi_kwargs = {"use_hwthread_cpus": use_hwthread}
@@ -67,9 +74,13 @@ class CM1(simulators.Simulator):
             mpi_kwargs["np"] = n_vcpus
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
 
-        commands = [
-            Command(f"cm1.exe {sim_config_filename}", mpi_config=mpi_config)
-        ]
+        commands = [Command("cm1.exe", mpi_config=mpi_config)]
+
+        # if sim_config_filename is not equal to "namelist.input" we need to
+        # move the file to "namelist.input" before running the simulation
+        if (sim_config_filename is not None) and (sim_config_filename
+                                                  != "namelist.input"):
+            commands.insert(0, f"mv {sim_config_filename} namelist.input")
 
         return super().run(input_dir,
                            on=on,

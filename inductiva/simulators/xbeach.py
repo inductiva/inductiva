@@ -60,6 +60,11 @@ class XBeach(simulators.Simulator):
                 created.
             other arguments: See the documentation of the base class.
         """
+
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
+
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
         if n_vcpus is not None:
