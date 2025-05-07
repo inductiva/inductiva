@@ -27,7 +27,7 @@ cans = inductiva.simulators.CaNS(\
     version="2.4.0")
 
 # Run simulation
-task = cans.run(input_dir=inputdir,
+task = cans.run(input_dir=input_dir,
     sim_config_filename="input.nml",
     on=cloud_machine)
 
