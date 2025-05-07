@@ -301,7 +301,7 @@ class Simulator(ABC):
             logging.warning("Attention: The machine you selected has a GPU, but"
                             " the simulator you picked will run on the CPU "
                             "only.\n")
-        
+
         # This will create the project if it doesn't exist
         projects.Project(project)
 
