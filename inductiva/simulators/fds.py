@@ -59,9 +59,9 @@ class FDS(simulators.Simulator):
                 the default project.
         """
 
-        if remote_assets is None:
-            self._input_files_exist(input_dir=input_dir,
-                                    sim_config_filename=sim_config_filename)
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
 
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread

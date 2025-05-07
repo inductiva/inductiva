@@ -80,9 +80,9 @@ class SWASH(simulators.Simulator):
             raise ValueError("sim_config_filename must be a path relative to "
                              "the input directory.")
 
-        if remote_assets is None:
-            self._input_files_exist(input_dir=input_dir,
-                                    sim_config_filename=sim_config_filename)
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
 
         working_dir = path_config_filename.parent
         config_file_only = path_config_filename.name

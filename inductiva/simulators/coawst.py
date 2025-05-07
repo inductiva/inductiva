@@ -124,17 +124,19 @@ class COAWST(simulators.Simulator):
         self._check_vcpus(n_vcpus, on)
 
         #only runs checks if we dont use remote assets
-        if remote_assets is None:
+
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
+
+        # only validates the build script if we are going to compile
+        if compile_simulator:
             self._input_files_exist(input_dir=input_dir,
-                                    sim_config_filename=sim_config_filename)
+                                    remote_assets=remote_assets,
+                                    build_coawst_script=build_coawst_script)
 
-            # only validates the build script if we are going to compile
-            if compile_simulator:
-                self._input_files_exist(input_dir=input_dir,
-                                        build_coawst_script=build_coawst_script)
-
-                build_script = os.path.join(input_dir, build_coawst_script)
-                self._validate_build_script(build_script=str(build_script))
+            build_script = os.path.join(input_dir, build_coawst_script)
+            self._validate_build_script(build_script=str(build_script))
 
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
