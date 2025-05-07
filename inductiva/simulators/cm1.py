@@ -75,11 +75,12 @@ class CM1(simulators.Simulator):
 
         mv_command = f"mv {sim_config_filename} namelist.input"
 
-        commands = [Command(f"cm1.exe", mpi_config=mpi_config)]
+        commands = [Command("cm1.exe", mpi_config=mpi_config)]
 
         # if sim_config_filename is not equal to "namelist.input" we need to
         # move the file to "namelist.input" before running the simulation
-        if sim_config_filename is not None and sim_config_filename != "namelist.input":
+        if (sim_config_filename is not None) and (sim_config_filename
+                                                  != "namelist.input"):
             commands.insert(0, mv_command)
 
         return super().run(input_dir,
