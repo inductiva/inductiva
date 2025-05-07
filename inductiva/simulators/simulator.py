@@ -7,7 +7,7 @@ import re
 
 import pathlib
 
-from inductiva import types, tasks, resources
+from inductiva import projects, types, tasks, resources
 from .methods import list_available_images
 from inductiva import commands
 
@@ -266,7 +266,8 @@ class Simulator(ABC):
                 the simulation directory.
             project: Name of the project to which the task will be
                 assigned. If None, the task will be assigned to
-                the default project.
+                the default project. If the project does not exist, it will be
+                created.
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
@@ -300,6 +301,10 @@ class Simulator(ABC):
             logging.warning("Attention: The machine you selected has a GPU, but"
                             " the simulator you picked will run on the CPU "
                             "only.\n")
+
+        # This will create the project if it doesn't exist
+        if project:
+            projects.Project(project)
 
         return tasks.run_simulation(
             self.simulator,

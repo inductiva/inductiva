@@ -56,7 +56,8 @@ class XBeach(simulators.Simulator):
                 the simulation directory.
             project: Name of the project to which the task will be
                 assigned. If None, the task will be assigned to
-                the default project.
+                the default project. If the project does not exist, it will be
+                created.
             other arguments: See the documentation of the base class.
         """
         mpi_kwargs = {}

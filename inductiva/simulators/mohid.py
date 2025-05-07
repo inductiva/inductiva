@@ -62,7 +62,8 @@ class MOHID(simulators.Simulator):
                 the simulation directory.
             project: Name of the project to which the task will be
                 assigned. If None, the task will be assigned to
-                the default project.
+                the default project. If the project does not exist, it will be
+                created.
         """
 
         self._check_vcpus(n_vcpus, on)

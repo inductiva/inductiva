@@ -56,7 +56,8 @@ class FDS(simulators.Simulator):
                 `spot=True`.
             project: Name of the project to which the task will be
                 assigned. If None, the task will be assigned to
-                the default project.
+                the default project. If the project does not exist, it will be
+                created.
         """
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
