@@ -2,17 +2,3 @@
 pylint>=2.17,<3.0
 pytest
 yapf
-sphinx
-sphinx-autobuild
-sphinx_rtd_theme
-sphinx-book-theme
-sphinxcontrib-mermaid
-myst-parser @ git+https://github.com/executablebooks/MyST-Parser@fc64840b5f009021d64173d81c2f244fb0d8a43d
-sphinx-copybutton
-sphinx-tabs
-sphinx-togglebutton
-sphinxcontrib-googleanalytics
-sphinxext.opengraph
-sphinx-sitemap
-sphinx-reredirects
-sphinxawesome-theme
