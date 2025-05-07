@@ -303,7 +303,8 @@ class Simulator(ABC):
                             "only.\n")
 
         # This will create the project if it doesn't exist
-        projects.Project(project)
+        if project:
+            projects.Project(project)
 
         return tasks.run_simulation(
             self.simulator,
