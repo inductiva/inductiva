@@ -28,8 +28,8 @@ class SWAN(simulators.Simulator):
     def run(
         self,
         input_dir: Optional[str],
-        sim_config_filename: Optional[str],
         *,
+        sim_config_filename: Optional[str],
         remote_assets: Optional[List[str]] = None,
         project: Optional[str] = None,
         resubmit_on_preemption: bool = False,
