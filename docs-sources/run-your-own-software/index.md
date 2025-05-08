@@ -10,10 +10,12 @@ To help you get started and make the most of Inductiva's capabilities, we've cre
 ```{toctree}
 ---
 caption: " "
-maxdepth: 3
+maxdepth: 5
 hidden: true
 ---
+how-it-works
 run-simulation-with-custom-docker-image
+run-sfincs-directly-from-deltares-repository
 integrate-your-docker-container
 perform-ml-inference/index
 ```
