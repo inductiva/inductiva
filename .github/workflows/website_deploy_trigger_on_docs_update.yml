@@ -20,7 +20,6 @@ jobs:
             WEBHOOK_URL="${GCP_UPDATE_WEBSITE_DOCS_WEBHOOK_URL}"
             else
             WEBHOOK_URL="${GCP_UPDATE_WEBSITE_DOCS_WEBHOOK_URL_DEV}"
-            exit 1
             fi
 
             curl -X POST -H "Content-Type: application/json" \
