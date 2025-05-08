@@ -7,11 +7,21 @@ while maintaining reliable accuracy.
 This tutorial shows you how to run SFINCS through the Inductiva API using 
 Deltares' publicly available [container image](https://hub.docker.com/r/deltares/sfincs-cpu) directly from their repository.
 
-The use case covered in this tutorial is featured in the following publication: *Camila Gaido Lasserre, Kees Nederhoff, Curt D. Storlazzi, Borja G. Reguero, Michael W. Beck (2024). "Improved efficient physics-based computational modeling of regional wave-driven coastal flooding for reef-lined coastlines." Ocean Modelling.*
+The use case covered in this tutorial is featured in the following publication: *[Camila Gaido Lasserre, Kees Nederhoff, Curt D. Storlazzi, Borja G. Reguero, Michael W. Beck (2024). "Improved efficient physics-based computational modeling of regional wave-driven coastal flooding for reef-lined coastlines." Ocean Modelling.](https://www.sciencedirect.com/science/article/pii/S1463500324000453#refdata001)*
 
 ## Prerequisites
 Download the use case [here](https://zenodo.org/records/10805615) and copy 
 the `sfincs_netbndbzsbzifile.nc` file from `Models/HighReliefArea/SFINCS/BoundaryConditions/rp_000_SLR000` to the `InputFiles` folder.
+
+The `InputFiles` folder should contain the following files:
+
+```
+sfincs.dep			sfincs.man
+sfincs.gms			sfincs.msk
+sfincs.ind			sfincs.obs
+sfincs.inp			sfincs.obs.bak
+sfincs.inp.bak		sfincs_netbndbzsbzifile.nc
+```
 
 ## Run Simulations using SFINCS Docker Container
 You can reference the Deltares’ Docker image directly in your simulation script using the `inductiva.simulators.CustomImage`class, as shown below:
