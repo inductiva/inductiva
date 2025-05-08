@@ -14,9 +14,6 @@ jobs:
     runs-on: ubuntu-latest  # The job will run on the latest Ubuntu environment
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2  # Checkout the code from the repository
-
       - name: Send webhook to Cloud Build
         run: |
             if [ "${{ github.ref }}" = "refs/heads/main" ]; then
