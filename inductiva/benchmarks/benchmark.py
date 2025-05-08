@@ -158,6 +158,10 @@ class Benchmark(projects.Project):
                               silent_mode=True,
                               **kwargs)
         self.runs.clear()
+        logging.info(
+            "Benchmark \033[1m%s\033[0m has started...\n"
+            "Go to https://console.inductiva.ai/projects/%s?project=%s for more details.\n",
+            self.name, self.name, self.name)
         return self
 
     def wait(self) -> Self:
@@ -169,10 +173,8 @@ class Benchmark(projects.Project):
         """
         running_tasks = self.get_tasks()
 
-        logging.info(
-            "Waiting for Benchmark \033[1m%s\033[0m to complete...\n"
-            "Go to https://console.inductiva.ai/projects/%s?project=%s for more details.\n",
-            self.name, self.name, self.name)
+        logging.info("Waiting for Benchmark \033[1m%s\033[0m to complete...\n",
+                     self.name)
 
         with tqdm.tqdm(total=len(running_tasks),
                        desc="Processing tasks") as pbar:
