@@ -1,0 +1,27 @@
+name: Trigger Website Deployment on Docs Update
+
+# This workflow is triggered when there are changes in the 'docs-sources' folder.
+on:
+  push:
+    paths:
+      - 'docs-sources/**'  # Trigger only when files in the 'docs-sources' folder are modified
+    branches:
+      - development 
+      - main       
+
+jobs:
+  trigger-build:
+    runs-on: ubuntu-latest  # The job will run on the latest Ubuntu environment
+
+    steps:
+      - name: Send webhook to Cloud Build
+        run: |
+            if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            WEBHOOK_URL="${GCP_UPDATE_WEBSITE_DOCS_WEBHOOK_URL}"
+            else
+            WEBHOOK_URL="${GCP_UPDATE_WEBSITE_DOCS_WEBHOOK_URL_DEV}"
+            fi
+
+            curl -X POST -H "Content-Type: application/json" \
+            "$WEBHOOK_URL" \
+            -d '{}'
