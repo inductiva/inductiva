@@ -19,7 +19,7 @@ jobs:
 
       - name: Send webhook to Cloud Build
         run: |
-            if [[ "$GITHUB_REF_NAME" == "main" ]]; then
+            if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             WEBHOOK_URL="${GCP_UPDATE_WEBSITE_DOCS_WEBHOOK_URL}"
             else
             WEBHOOK_URL="${GCP_UPDATE_WEBSITE_DOCS_WEBHOOK_URL_DEV}"
