@@ -5,6 +5,7 @@ import csv
 import logging
 from typing import Optional, Union
 import tqdm
+from tqdm.contrib.logging import logging_redirect_tqdm
 from typing_extensions import Self
 from collections import defaultdict
 from inductiva import types, resources, projects, simulators, client
@@ -176,7 +177,8 @@ class Benchmark(projects.Project):
                      self.name)
 
         with tqdm.tqdm(total=len(running_tasks),
-                       desc="Processing tasks") as pbar:
+                       desc="Processing tasks",
+                       bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt}') as pbar:
             with ThreadPoolExecutor(max_workers=len(running_tasks)) as executor:
                 future_to_task = {
                     executor.submit(
@@ -186,19 +188,20 @@ class Benchmark(projects.Project):
                 }
 
                 for future in as_completed(future_to_task):
-                    task = future_to_task[future]
-                    status = future.result()
-                    logging.info("Task %s completed with status: %s", task.id,
-                                 status)
+                    with logging_redirect_tqdm():
+                        task = future_to_task[future]
+                        status = future.result()
+                        logging.info("Task %s completed with status: %s",
+                                     task.id, status)
 
-                    if status != TaskStatusCode.SUCCESS:
-                        logging.error(
-                            "   · To understand why the task did not complete successfully "
-                            "go to https://console.inductiva.ai/tasks/%s",
-                            task.id)
+                        if status != TaskStatusCode.SUCCESS:
+                            logging.info(
+                                "   · To understand why the task did not complete "
+                                "successfully go to https://console.inductiva.ai/tasks/%s",
+                                task.id)
 
-                    # Update progress bar for each completed task
-                    pbar.update(1)
+                        # Update progress bar for each completed task
+                        pbar.update(1)
 
         return self
 
