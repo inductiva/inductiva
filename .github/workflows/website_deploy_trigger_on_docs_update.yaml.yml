@@ -1,0 +1,27 @@
+name: Trigger Website Deployment on Docs Update
+
+# This workflow is triggered when there are changes in the 'docs-sources' folder.
+on:
+  push:
+    paths:
+      - 'docs-sources/**'  # Trigger only when files in the 'docs-sources' folder are modified
+    branches:
+      - development 
+      - main       
+
+jobs:
+  trigger-build:
+    runs-on: ubuntu-latest  # The job will run on the latest Ubuntu environment
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2  # Checkout the code from the repository
+
+      - name: Send webhook to Cloud Build
+        run: |
+          curl -X POST "$WEBHOOK_URL" \  # Send the POST request to Cloud Build
+            -H "Authorization: Bearer ${{ secrets.GCP_UPDATE_WEBSITE_DOCS_SECRET }}" \  # Authentication with the secret
+            -H "Content-Type: application/json" \
+            -d '{}'
+        env:
+          WEBHOOK_URL: ${{ secrets.GCP_UPDATE_WEBSITE_DOCS_SECRET }}  # Get the webhook URL from GitHub secrets
