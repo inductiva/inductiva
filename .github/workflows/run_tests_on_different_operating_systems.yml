@@ -68,7 +68,6 @@ jobs:
               $env:INDUCTIVA_API_KEY = "${{ secrets.API_DEV_TEST_KEY }}"
               $env:INDUCTIVA_API_URL = "https://api-dev.inductiva.ai"
             }
-            python -m pip install --upgrade certifi
             python -m pytest --suppress-no-test-exit-code
   run_on_windows_x64:
     runs-on: Windows_x64_8cores
