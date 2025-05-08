@@ -70,7 +70,6 @@ simulator = inductiva.simulators.CustomImage(container_image=inductiva_image)
 
 # Run the simulation
 task = simulator.run(
-
    input_dir="./input_dir",                    
    commands=["echo Hello World!"],             
    on=mg                                       
