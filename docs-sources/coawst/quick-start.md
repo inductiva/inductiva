@@ -299,12 +299,13 @@ Therefore, to scale up the simulation, you'll need to modify the following three
   - Set `nproc_x * nproc_y` equal to `NnodesATM` to take full
   advantage of the virtual cores assigned to the atmosferic model.
 
+#### Results
 Below is a list of the simulations with their respective results:
 
-|   Machine Type  | Virtual CPUs |     Execution Time     |   Cost   |
-|:---------------:|:------------:|:----------------------:|:--------:|
-|  c2-standard-4  |       4      | 9 hours and 47 minutes | 0.71 US$ |
-|  c2-standard-60 |      60      |  1 hour and 3 seconds  | 1.37 US$ |
+|   Machine Type  | Virtual CPUs |     Execution Time     | Estimated Cost |
+|:---------------:|:------------:|:----------------------:|:--------------:|
+|  c2-standard-4  |       4      | 9 hours and 47 minutes |     0.71 US$   |
+|  c2-standard-60 |      60      |  1 hour and 3 seconds  |     1.37 US$   |
 
 For these simulations, we divided the number of virtual CPUs available on each machine equally among the three models (1, 20, and 36 virtual CPUs, respectively).
 We used the following values for `Ntile` and `nproc`: (1 1), (4 5), and (6 6), respectively.
