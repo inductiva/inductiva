@@ -35,7 +35,6 @@ intro/computational-infrastructure
 intro/benchmarking
 intro/templating
 intro/configuring-simulators
-intro/private-dockers
 intro/projects
 setup/system/system-requirements
 setup/troubleshooting

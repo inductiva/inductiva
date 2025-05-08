@@ -48,23 +48,23 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 16/04, 14:31:00      0.872 s
-	In Queue                  at 16/04, 14:31:01      33.07 s
-	Preparing to Compute      at 16/04, 14:31:34      1.673 s
-	In Progress               at 16/04, 14:31:35      2.954 s
-		└> 2.832 s         /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus amr_wind abl_amd_wenoz.inp
-	Finalizing                at 16/04, 14:31:38      1.547 s
-	Success                   at 16/04, 14:31:40      
+	Waiting for Input         at 08/05, 12:06:28      0.862 s
+	In Queue                  at 08/05, 12:06:29      38.528 s
+	Preparing to Compute      at 08/05, 12:07:08      2.173 s
+	In Progress               at 08/05, 12:07:10      8.116 s
+		└> 8.01 s          /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus amr_wind abl_amd_wenoz.inp
+	Finalizing                at 08/05, 12:07:18      0.959 s
+	Success                   at 08/05, 12:07:19      
 
 Data:
-	Size of zipped output:    13.33 MB
-	Size of unzipped output:  52.24 MB
-	Number of output files:   92
+	Size of zipped output:    39.72 MB
+	Size of unzipped output:  67.75 MB
+	Number of output files:   128
 
-Estimated computation cost (US$): 0.000063 US$
+Estimated computation cost (US$): 0.00011 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 3 seconds.
+the core computation time of this simulation was approximately 8 seconds.
 
 It's that simple!

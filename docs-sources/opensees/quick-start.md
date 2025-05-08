@@ -80,7 +80,7 @@ to 9.4 seconds.
 
 Here are the results of running the same simulation on a few machines:
 
-|  Machine Type  | Virtual CPUs |     Time     | Estimated Cost |
+|  Machine Type  | Virtual CPUs |Execution Time| Estimated Cost |
 |:--------------:|:------------:|:------------:|:--------------:|
 |  c2d-highcpu-4 |       4      | 27.2 seconds | 0.00031 US$    |
 |  c2d-highcpu-8 |       8      | 14.2 seconds | 0.00034 US$    |
