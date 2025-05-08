@@ -1,5 +1,4 @@
 """API for Benchmarking"""
-from datetime import time
 import enum
 import json
 import csv
@@ -160,8 +159,8 @@ class Benchmark(projects.Project):
         self.runs.clear()
         logging.info(
             "Benchmark \033[1m%s\033[0m has started...\n"
-            "Go to https://console.inductiva.ai/projects/%s?project=%s for more details.\n",
-            self.name, self.name, self.name)
+            "Go to https://console.inductiva.ai/projects/%s?project=%s "
+            "for more details.\n", self.name, self.name, self.name)
         return self
 
     def wait(self) -> Self:
@@ -189,12 +188,13 @@ class Benchmark(projects.Project):
                 for future in as_completed(future_to_task):
                     task = future_to_task[future]
                     status = future.result()
-                    logging.info(
-                        f"Task {task.id} completed with status: {status}")
+                    logging.info("Task %s completed with status: %s", task.id,
+                                 status)
 
                     if status != TaskStatusCode.SUCCESS:
                         logging.error(
-                            "   · To understand why the task did not complete successfully go to https://console.inductiva.ai/tasks/%s",
+                            "   · To understand why the task did not complete successfully "
+                            "go to https://console.inductiva.ai/tasks/%s",
                             task.id)
 
                     # Update progress bar for each completed task
