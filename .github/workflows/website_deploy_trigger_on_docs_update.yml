@@ -20,7 +20,7 @@ jobs:
       - name: Send webhook to Cloud Build
         run: |
           curl -X POST -H "Content-type: application/json" 
-          "https://cloudbuild.googleapis.com/v1/projects/${PROJECT_ID}/locations/${REGION}/triggers/${TRIGGER_NAME}:webhook?key=${API_KEY}&secret=${SECRET_VALUE}&trigger=${TRIGGER_NAME}&projectId=${PROJECT_ID}" 
+          "https://cloudbuild.googleapis.com/v1/projects/${PROJECT_ID}/triggers/${TRIGGER_NAME}:webhook?key=${API_KEY}&secret=${SECRET_VALUE}" 
           -d "{}"
         env:
           WEBHOOK_URL: ${{ secrets.GCP_UPDATE_WEBSITE_DOCS_SECRET }}  # Get the webhook URL from GitHub secrets
