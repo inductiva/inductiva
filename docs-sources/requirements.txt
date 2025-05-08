@@ -13,4 +13,4 @@ sphinx-sitemap
 sphinx-reredirects
 sphinxawesome-theme
 snowballstemmer
-matplotlib 
+matplotlib
