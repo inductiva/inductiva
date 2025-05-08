@@ -178,7 +178,7 @@ class Benchmark(projects.Project):
 
         with tqdm.tqdm(total=len(running_tasks),
                        desc="Processing tasks",
-                       bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt}') as pbar:
+                       bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}") as pbar:
             with ThreadPoolExecutor(max_workers=len(running_tasks)) as executor:
                 future_to_task = {
                     executor.submit(
@@ -196,8 +196,8 @@ class Benchmark(projects.Project):
 
                         if status != TaskStatusCode.SUCCESS:
                             logging.info(
-                                "   · To understand why the task did not complete "
-                                "successfully go to https://console.inductiva.ai/tasks/%s",
+                                "   · To understand why the task did not "
+                                "complete successfully go to https://console.inductiva.ai/tasks/%s",
                                 task.id)
 
                         # Update progress bar for each completed task
