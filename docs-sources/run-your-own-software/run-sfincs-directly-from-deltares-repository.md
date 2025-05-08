@@ -28,15 +28,18 @@ You can reference the Deltares’ Docker image directly in your simulation scrip
 
 ```python
 import inductiva
+
 cloud_machine = inductiva.resources.MachineGroup("c2d-highcpu-8",data_disk_gb=100)
+
 custom_simulator = inductiva.simulators.CustomImage(
-container_image="deltares/sfincs-cpu:latest")
+	container_image="deltares/sfincs-cpu:latest")
 
 input_dir = "/Path/to/Models/HighReliefArea/SFINCS/InputFiles"
+
 task = custom_simulator.run(
-input_dir=input_dir,
-commands=["sfincs"],
-on=cloud_machine)
+	input_dir=input_dir,
+	commands=["sfincs"],
+	n=cloud_machine)
 ```
 
 The `CustomImage` simulator enables you to run simulations using any Docker image of your choice by specifying the `container_image` parameter. 
