@@ -134,6 +134,46 @@ with task.sync_context():
                  #     interrupted while waiting for the wait() call to return
 ```
 
+## Task Metadata
+
+Many Inductiva API users generate extensive datasets by running hundreds or thousands of
+simulation tasks, each with different input parameters. Previously, tracking these parameters
+required maintaining external mechanisms — either local files or databases — to associate task IDs
+with their corresponding parameter sets.
+
+Now, it is possible to store these parameters as `task metadata` directly on the Inductiva platform:
+
+```python
+# Run a SpliSHSPlasH simulation
+task = splishsplash_simulator.run(input_dir="splishsplash-input-example",
+                                  sim_config_filename="config.json",
+                                  on=machine_group)
+
+# Store simulation parameters as metadata
+task.set_metadata({
+    "fluid_viscosity": "0.01",
+    "particle_radius": "0.025",
+    "simulation_time": "5.0",
+    "run_number": "2",
+})
+```
+
+It is important to note that both metadata keys and values must be strings. Any numeric values,
+booleans, or other data types should be converted to strings before being stored as metadata.
+
+And the metadata can later be retrieved by doing:
+
+```python
+metadata = task.get_metadata()
+```
+
+You can also manipulate the metadata in the Task's page on the Web Console:
+
+<div align="center">
+   <img src="../_static/task-metadata.png" alt="Task Metadata">
+   <figcaption align="center"><b>Task Metadata</b></figcaption>
+</div>
+
 ## Task Lifecycle
 
 As a `Task` progresses through its lifecycle, its status changes to reflect
