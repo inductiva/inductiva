@@ -197,12 +197,14 @@ class Benchmark(projects.Project):
                         if status != TaskStatusCode.SUCCESS:
                             logging.info(
                                 "   · To understand why the task did not "
-                                "complete successfully go to https://console.inductiva.ai/tasks/%s",
+                                "complete successfully go to "
+                                "https://console.inductiva.ai/tasks/%s",
                                 task.id)
 
                         # Update progress bar for each completed task
                         pbar.update(1)
 
+        print("\n")
         return self
 
     def export(
