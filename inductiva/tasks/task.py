@@ -692,10 +692,11 @@ class Task:
         prev_status = None
         is_tty = sys.stdout.isatty()
 
-        logging.info(
-            "Waiting for task %s to complete...\n"
-            "Go to https://console.inductiva.ai/tasks/%s for more details.",
-            self.id, self.id)
+        if not silent_mode:
+            logging.info(
+                "Waiting for task %s to complete...\n"
+                "Go to https://console.inductiva.ai/tasks/%s for more details.",
+                self.id, self.id)
 
         requires_newline = False
         previous_duration_l = 0
@@ -719,7 +720,8 @@ class Task:
                 if requires_newline:
                     requires_newline = False
                     sys.stdout.write("\n")
-                self._handle_status_change(status, description)
+                if not silent_mode:
+                    self._handle_status_change(status, description)
 
                 if (status == models.TaskStatusCode.COMPUTATIONSTARTED) and (
                         not silent_mode):
@@ -735,13 +737,14 @@ class Task:
             elif (status != models.TaskStatusCode.SUBMITTED and
                   not task_info.is_terminal):
 
-                #clear previous line
-                print(" " * previous_duration_l, end="\r")
+                if not silent_mode:
+                    #clear previous line
+                    print(" " * previous_duration_l, end="\r")
 
-                duration = f"Duration: {duration}"
-                print(duration, end="\r")
+                    duration = f"Duration: {duration}"
+                    print(duration, end="\r")
 
-                previous_duration_l = len(duration)
+                    previous_duration_l = len(duration)
 
             prev_status = status
 

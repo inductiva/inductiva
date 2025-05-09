@@ -4,11 +4,15 @@ import json
 import csv
 import logging
 from typing import Optional, Union
+import tqdm
+from tqdm.contrib.logging import logging_redirect_tqdm
 from typing_extensions import Self
 from collections import defaultdict
 from inductiva import types, resources, projects, simulators, client
 from inductiva.client.models import TaskStatusCode
 from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
+
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 class ExportFormat(enum.Enum):
@@ -151,8 +155,13 @@ class Benchmark(projects.Project):
                 simulator.run(input_dir=input_dir,
                               on=machine_group,
                               project=self.name,
+                              silent_mode=True,
                               **kwargs)
         self.runs.clear()
+        logging.info(
+            "Benchmark \033[1m%s\033[0m has started...\n"
+            "Go to https://console.inductiva.ai/projects/%s?project=%s "
+            "for more details.\n", self.name, self.name, self.name)
         return self
 
     def wait(self) -> Self:
@@ -162,9 +171,40 @@ class Benchmark(projects.Project):
         Returns:
             Self: The current instance for method chaining.
         """
-        tasks = self.get_tasks()
-        for task in tasks:
-            task.wait(download_std_on_completion=False)
+        running_tasks = self.get_tasks()
+
+        logging.info("Waiting for Benchmark \033[1m%s\033[0m to complete...\n",
+                     self.name)
+
+        with tqdm.tqdm(total=len(running_tasks),
+                       desc="Processing tasks",
+                       bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}") as pbar:
+            with ThreadPoolExecutor(max_workers=len(running_tasks)) as executor:
+                future_to_task = {
+                    executor.submit(
+                        lambda t: t.wait(download_std_on_completion=False,
+                                         silent_mode=True), task):
+                        task for task in running_tasks
+                }
+
+                for future in as_completed(future_to_task):
+                    with logging_redirect_tqdm():
+                        task = future_to_task[future]
+                        status = future.result()
+                        logging.info("Task %s completed with status: %s",
+                                     task.id, status)
+
+                        if status != TaskStatusCode.SUCCESS:
+                            logging.info(
+                                "   · To understand why the task did not "
+                                "complete successfully go to "
+                                "https://console.inductiva.ai/tasks/%s",
+                                task.id)
+
+                        # Update progress bar for each completed task
+                        pbar.update(1)
+
+        print("\n")
         return self
 
     def export(

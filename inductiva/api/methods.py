@@ -295,7 +295,7 @@ def task_info_str(
 
     info_str += (f"\t· Local input directory: {local_input_dir}\n"
                  "\t· Submitting to the following computational resources:\n")
-    info_str += f" \t\t· {resource_pool}\n"
+    info_str += f" \t\t· {resource_pool}"
 
     if task_submitted_info is not None:
         ttl_seconds = task_submitted_info.get("time_to_live_seconds")
@@ -381,6 +381,8 @@ def submit_task(simulator,
             simulator_obj,
             task_submitted_info,
         ))
+    logging.info("■ Task %s submitted to the queue of the %s.\n", task_id,
+                 machine_group)
 
     # If the status returned by the previous HTTP request is "pending-input",
     #  ZIP inputs and send them via "POST task/{task_id}/input".
