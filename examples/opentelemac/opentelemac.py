@@ -4,7 +4,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2d-highcpu-16")
+    machine_type="c3d-highcpu-180")
 
 # Initialize the Simulator
 telemac2d = inductiva.simulators.OpenTelemac( \
@@ -12,10 +12,8 @@ telemac2d = inductiva.simulators.OpenTelemac( \
 
 #  List of commands to run
 commands = [
-    # Run the simulation using 32 cores
-    "telemac2d.py t2d_malpasset-fine.cas --ncsize=16",
-    # Convert the results to VTK format
-    "converter.py srf2vtk r2d_malpasset-fine.slf t2d_malpasset.vtk",
+    # List the OpenTelemac commands
+    # you wish to execute
 ]
 
 # Run simulation
