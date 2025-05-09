@@ -9,10 +9,10 @@ The goal of this tutorial is to demonstrate how to run the `09_Turbine` use case
 ## Prerequisites
 
 ### Download the DualSPHysics package
-Download the required files from `DualSPHysics_v5.2.2.zip`
-[here](https://dual.sphysics.org/downloads/) and save them into a folder named `DualSPHysics_v5.2`. You will be working within this directory and writing the Inductiva Python script there.
+Download the required files from `DualSPHysics_v5.4.2.zip` [here](https://dual.sphysics.org/downloads/). You will be working within this directory and 
+writing the Inductiva Python script there.
 
-### Update the simulation script** of the example `09_Turbine`
+### Update the simulation script of the example `09_Turbine`
 Before running the simulation, you will need to adjust the simulation script located
 at `examples/chrono/09_Turbine/xCaseTurbine_linux64_GPU.sh`.
 
@@ -20,10 +20,10 @@ Make the following adjustments:
 1. **Update the `dirbin` variable:**
    Modify the `xCaseTurbine_linux64_GPU.sh` script to point to the correct binaries directory:
    ```bash
-   export dirbin=/DualSPHysics_v5.2/bin/linux/
+   export dirbin=/DualSPHysics/bin/linux/
    ```
 2. **Remove user input prompt:**
-  To enable automated execution, delete the final line in the script, which waits for user input:
+   To enable automated execution, delete the final line in the script, which waits for user input:
    ```bash
    read -n1 -r -p "Press any key to continue..." key
    ```
@@ -46,7 +46,7 @@ cloud_machine = inductiva.resources.MachineGroup(
 
 # Initialize the Simulator
 dualsphysics = inductiva.simulators.DualSPHysics( \
-    version="5.2.1")
+    version="5.4.1")
 
 # Run simulation
 task = dualsphysics.run(
@@ -74,26 +74,25 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 09/04, 10:42:46      1.06 s
-	In Queue                  at 09/04, 10:42:47      48.271 s
-	Preparing to Compute      at 09/04, 10:43:35      8.664 s
-	In Progress               at 09/04, 10:43:44      92.35 s
-		└> 92.173 s        bash xCaseTurbine_linux64_GPU.sh
-	Finalizing                at 09/04, 10:45:16      182.603 s
-	Success                   at 09/04, 10:48:19      
+	Waiting for Input         at 08/05, 16:23:13      0.968 s
+	In Queue                  at 08/05, 16:23:14      73.641 s
+	Preparing to Compute      at 08/05, 16:24:28      21.629 s
+	In Progress               at 08/05, 16:24:49      64.281 s
+		└> 64.128 s        bash xCaseTurbine_linux64_GPU.sh
+	Finalizing                at 08/05, 16:25:54      16.345 s
+	Success                   at 08/05, 16:26:10      
 
 Data:
 	Size of zipped output:    3.52 GB
-	Size of unzipped output:  5.34 GB
-	Number of output files:   2532
+	Size of unzipped output:  4.92 GB
+	Number of output files:   2033
 
-Estimated computation cost (US$): 0.054 US$
-
-Go to https://console.inductiva.ai/tasks/cbce9n8u0cpezp6d94dtmq6jy for more details.
+Estimated computation cost (US$): 0.018 US$
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, the core computation time 
-of this simulation was approximately 92.3 seconds (around 1 minute and 32 seconds).
+As you can see in the "In Progress" line, the part of the timeline that 
+represents the actual execution of the simulation, the core computation time 
+of this simulation was approximately 64.2 seconds.
 
 ## Download the Results to Your Local Machine
 You can donwload the results to your local machine using Inductiva's CLI:
