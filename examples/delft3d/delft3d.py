@@ -11,7 +11,10 @@ delft3d = inductiva.simulators.Delft3D( \
     version="6.04.00")
 
 # List of commands to run
-commands = ["mpirun -np 4 d_hydro.exe config_d_hydro.xml"]
+commands = [
+    # List the Delft3D commands
+    # you wish to execute
+]
 
 # Run simulation
 task = delft3d.run( \
