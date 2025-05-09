@@ -1,4 +1,4 @@
-# How It Works?
+# How It Works
 Inductiva provides a collection of open-source simulation containers, 
 publicly available through our Docker Hub repository, [Kutu](https://hub.docker.com/r/inductiva/kutu).
 
