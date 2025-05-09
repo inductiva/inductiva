@@ -30,3 +30,12 @@ hidden: true
 setup-test
 quick-start
 ```
+
+```{toctree}
+---
+caption: " "
+maxdepth: 1
+hidden: true
+---
+faq
+```
