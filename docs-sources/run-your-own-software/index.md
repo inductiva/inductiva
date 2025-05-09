@@ -5,7 +5,9 @@ A key feature of Inductiva is its support for **custom Apptainer images** (forme
 
 To help you get started and make the most of Inductiva's capabilities, we've created a series of tutorials. These guides are designed to walk you through setting up and running different types of scientific software, giving you the tools and knowledge you need to succeed.
 
-> For technical details on how Apptainer images work within the Inductiva platform, please refer to our [documentation](https://website-staging.inductiva.ai/guides/documentation/intro/private-dockers).
+> Note: This feature is available exclusively with Inductiva's **Enterprise** 
+plan and also included in our **Academia** subscription. For full details, 
+please visit our [Pricing](https://inductiva.ai/pricing) page.
 
 ```{toctree}
 ---
