@@ -98,7 +98,7 @@ task.download_outputs()
 
 task.print_summary()
 ```
-This simulation runs on a `c2d-highcpu-112` machine with a 20 GB disk. Automatic disk resizing is enabled, so the disk size will increase as needed,
+This simulation runs on a `c2d-highcpu-56` machine with a 20 GB disk. Automatic disk resizing is enabled, so the disk size will increase as needed,
 up to the specified maximum of `auto_resize_disk_max_gb`.
 
 > **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
@@ -109,24 +109,24 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 28/03, 10:11:56      0.816 s
-	In Queue                  at 28/03, 10:11:57      24.275 s
-	Preparing to Compute      at 28/03, 10:12:21      7.256 s
-	In Progress               at 28/03, 10:12:29      719.496 s
-		├> 2.062 s         /DIVEMesh/bin/DiveMESH
-		└> 715.778 s       /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus /REEF3D/bin/REEF3D
-	Finalizing                at 28/03, 10:24:28      441.386 s
-	Success                   at 28/03, 10:31:49      
+	Waiting for Input         at 08/05, 14:33:28      0.755 s
+	In Queue                  at 08/05, 14:33:29      42.905 s
+	Preparing to Compute      at 08/05, 14:34:12      4.373 s
+	In Progress               at 08/05, 14:34:16      718.599 s
+		├> 1.151 s         /DIVEMesh/bin/DiveMESH
+		└> 715.815 s       /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus /REEF3D/bin/REEF3D
+	Finalizing                at 08/05, 14:46:15      70.855 s
+	Success                   at 08/05, 14:47:25      
 
 Data:
-	Size of zipped output:    12.79 GB
+	Size of zipped output:    11.69 GB
 	Size of unzipped output:  29.95 GB
-	Number of output files:   142624
+	Number of output files:   142625
 
-Estimated computation cost (US$): 0.13 US$
+Estimated computation cost (US$): 0.081 US$
 ```
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, the core computation time 
-of this simulation was approximately 719.5 seconds (approximately 12 minutes).
+of this simulation was approximately 718.6 seconds (approximately 12 minutes).
 
 It's that simple! 🚀
 

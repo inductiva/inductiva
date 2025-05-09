@@ -4,7 +4,10 @@ Your resource hub for all things SWAN at Inductiva. Whether you're just starting
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check! 
 
 ## About SWAN
-[SWAN](https://swanmodel.sourceforge.io) is a modification of the SWAN (Simulating WAves Nearshore) model that includes a validated Wave Energy Converter (WEC) module to improve how SWAN accounts for power performance of Wave Energy Converters (WECs) and their effect on the wave field.
+[SWAN](https://swanmodel.sourceforge.io) (Simulating WAves Nearshore) is a numerical wave model designed to simulate the propagation and transformation 
+of waves in coastal and nearshore areas. It is widely used in coastal 
+engineering, oceanography, and environmental studies to predict wave 
+patterns and interactions with the shoreline.
 
 ## What You'll Find Here
 - **Tutorials:** Step-by-step guides to help you learn how to run SWAN through the Inductiva API. From getting started to advanced tutorials, we have you covered.
