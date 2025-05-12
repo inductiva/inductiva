@@ -1,6 +1,7 @@
 """Test examples download."""
 import os
 import ssl
+import sys
 import shutil
 import zipfile
 import platform
@@ -19,7 +20,8 @@ def test_download_from_url_unzip_false():
 
     # exposes windows native system certificate stores
     # Solves issues with SSLCertVerificationError
-    if platform.system() == "Windows":
+    # truststore is only available for python 3.10 and above
+    if platform.system() == "Windows" and sys.version_info >= (3, 10):
         import truststore  # pylint: disable=C0415
         truststore.inject_into_ssl()
     # Download file from url.
