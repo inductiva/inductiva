@@ -71,7 +71,7 @@ Estimated total cost (per machine): 0.919 (0.230) $/h.
 When you don't need the MPI cluster anymore, you can easily kill it with the name:
 
 ```bash
-inductiva resources terminate api-agn23rtnv0qnfn03nv93nc
+$ inductiva resources terminate api-agn23rtnv0qnfn03nv93nc
 ```
 
 MPI cluster on demand without any hassle.
