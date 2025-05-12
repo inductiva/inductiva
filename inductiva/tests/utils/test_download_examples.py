@@ -20,7 +20,7 @@ def test_download_from_url_unzip_false():
     # exposes windows native system certificate stores
     # Solves issues with SSLCertVerificationError
     if platform.system() == "Windows":
-        import truststore # pylint: disable=C0415
+        import truststore  # pylint: disable=C0415
         truststore.inject_into_ssl()
     # Download file from url.
     download_path = inductiva.utils.files.download_from_url(_URL)
