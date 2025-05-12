@@ -1,4 +1,4 @@
-# MPICluster Class
+# `MPICluster` Class
 
 An MPI cluster is a set of machines that work together to solve a problem. These
 machines are configured to communicate with each other using the [Message Passing
