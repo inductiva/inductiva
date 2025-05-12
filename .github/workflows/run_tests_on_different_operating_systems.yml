@@ -70,6 +70,8 @@ jobs:
             }
             python -m ensurepip --upgrade
             python -m pip --use-feature=truststore install certifi
+
+            python -m pip install pip-system-certs
             
             python -m pytest --suppress-no-test-exit-code
   run_on_windows_x64:
