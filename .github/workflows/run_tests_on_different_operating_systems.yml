@@ -69,7 +69,7 @@ jobs:
               $env:INDUCTIVA_API_URL = "https://api-dev.inductiva.ai"
             }
             python -m ensurepip --upgrade
-            python -m pip install certifi
+            python -m pip --use-feature=truststore install certifi
             
             python -m pytest --suppress-no-test-exit-code
   run_on_windows_x64:
