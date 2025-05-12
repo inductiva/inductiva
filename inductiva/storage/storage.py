@@ -855,7 +855,8 @@ def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):
     except Exception:  # pylint: disable=broad-exception-caught
         print(f"Bucket {bucket_name} not found. Make sure the bucket exists "
               "and you have the correct permissions: "
-              "https://tutorials.inductiva.ai/how_to/export-files-aws.html")
+              "https://inductiva.ai/guides/how-it-works/recipes"
+              "/export-files-to-aws/index")
         return
 
     region_name = boto3.Session().region_name
