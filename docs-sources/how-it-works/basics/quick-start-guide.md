@@ -45,7 +45,7 @@ Alternatively, go to the [web Console](https://console.inductiva.ai/machine-grou
 
 Inductiva provides you access to hundreds of cutting-edge cloud machines and empowers you to select the best option for your simulation use-case.
 These machines cover a wide range of specifications, and provide you with options at different levels of performance and cost.
-Learn how to navigate performance and price options - <a href="pick_cloud_machine.html">Pick a cloud machine for your simulation case</a>
+Learn how to navigate performance and price options - <a href="pick-cloud-machine.html">Pick a cloud machine for your simulation case</a>
 
 ### Allocate your exclusive cloud machine
 

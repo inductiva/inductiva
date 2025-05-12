@@ -32,7 +32,6 @@ This triggers a webhook that notifies the website repository to start a new depl
 
 To update documentation on the website, follow this process:
 
-1. **Make changes** in the relevant Markdown files inside `docs-sources/`.
-2. To preview the changes on the **[staging website](https://website-staging.inductiva.ai/)**, create a pull request and then merge the changes to **`development`**.
+1. **Make changes** the necessary changes to the Markdown files inside `docs-sources/`.
+2. To preview the changes on the **staging website**, create a pull request and then merge the changes to **`development`**.
 3. To publish the changes to the **[production website](https://inductiva.ai/)**, create a pull request and then merge the changes to **`main`**.
-
