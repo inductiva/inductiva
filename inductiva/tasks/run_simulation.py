@@ -19,7 +19,7 @@ def run_simulation(
     remote_assets: Optional[List[str]] = None,
     simulator_name_alias: Optional[str] = None,
     project_name: Optional[str] = None,
-    silent_mode: bool = False,
+    verbose: bool = True,
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
@@ -62,7 +62,7 @@ def run_simulation(
     else:
         pos_info = f"Task {task_id} does not have queue information."
 
-    if not silent_mode:
+    if verbose:
         logging.info(
             "%s\n"
             "· Consider tracking the status of the task via CLI:"

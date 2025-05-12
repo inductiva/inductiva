@@ -155,7 +155,7 @@ class Benchmark(projects.Project):
                 simulator.run(input_dir=input_dir,
                               on=machine_group,
                               project=self.name,
-                              silent_mode=True,
+                              verbose=False,
                               **kwargs)
         self.runs.clear()
         logging.info(
