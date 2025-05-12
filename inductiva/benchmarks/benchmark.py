@@ -204,7 +204,7 @@ class Benchmark(projects.Project):
                         # Update progress bar for each completed task
                         pbar.update(1)
 
-        print("\n")
+        logging.info("\n")
         return self
 
     def export(
