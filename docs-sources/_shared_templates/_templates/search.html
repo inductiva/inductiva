@@ -1,0 +1,23 @@
+{% extends "!layout.html" %}
+
+{% block content %}
+<div class="searchbox">
+    <h1>{{ _('Search results') }}</h1>
+    {% if results %}
+    <ul class="search-results">
+        {% for result in results %}
+        <li class="search-result">
+            <a href="{{ result.url }}">
+                <h3>{{ result.title }}</h3>
+            </a>
+            <p class="search-context">
+                {{ result.context | striptags }}
+            </p>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>{{ _('No results found.') }}</p>
+    {% endif %}
+</div>
+{% endblock %}

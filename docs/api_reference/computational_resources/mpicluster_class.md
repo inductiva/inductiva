@@ -1,5 +1,7 @@
 # `MPICluster` Class
 
+teste
+
 An MPI cluster is a set of machines that work together to solve a problem. These
 machines are configured to communicate with each other using the [Message Passing
 Interface (MPI)](https://en.wikipedia.org/wiki/Message_Passing_Interface) protocol.
@@ -9,6 +11,7 @@ is configured automatically to run your simulations in a distributed manner acro
 the machines.
 
 To instantiate an `MPICluster` object the following parameters can be configured:
+
 - the `machine_type` defines the type of CPU used for each machine. This parameter
 follows the naming convention set by
 [Google Cloud](https://cloud.google.com/compute/docs/machine-types),
@@ -70,7 +73,7 @@ Estimated total cost (per machine): 0.919 (0.230) $/h.
 When you don't need the MPI cluster anymore, you can easily kill it with the name:
 
 ```bash
-$ inductiva resources terminate api-agn23rtnv0qnfn03nv93nc
+inductiva resources terminate api-agn23rtnv0qnfn03nv93nc
 ```
 
 MPI cluster on demand without any hassle.
