@@ -68,9 +68,6 @@ jobs:
               $env:INDUCTIVA_API_KEY = "${{ secrets.API_DEV_TEST_KEY }}"
               $env:INDUCTIVA_API_URL = "https://api-dev.inductiva.ai"
             }
-            python -m ensurepip --upgrade
-            python -m pip --use-feature=truststore install certifi
-
             python -m pip install pip-system-certs
             
             python -m pytest --suppress-no-test-exit-code
