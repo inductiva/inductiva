@@ -179,7 +179,7 @@ class Benchmark(projects.Project):
         with tqdm.tqdm(total=len(running_tasks),
                        desc="Processing tasks",
                        bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}") as pbar:
-            with ThreadPoolExecutor(max_workers=len(running_tasks)) as executor:
+            with ThreadPoolExecutor() as executor:
                 future_to_task = {
                     executor.submit(
                         lambda t: t.wait(download_std_on_completion=False,
