@@ -1,8 +1,10 @@
 """Test examples download."""
 import os
 import ssl
+import sys
 import shutil
 import zipfile
+import platform
 import inductiva
 
 _URL = "https://storage.googleapis.com/inductiva-api-demo-files/" \
@@ -15,6 +17,13 @@ def test_download_from_url_unzip_false():
                                           "openfoam-input-example.zip")
     # Check that the file does not exist yet.
     assert not os.path.exists(expected_download_path)
+
+    # exposes windows native system certificate stores
+    # Solves issues with SSLCertVerificationError
+    # truststore is only available for python 3.10 and above
+    if platform.system() == "Windows" and sys.version_info >= (3, 10):
+        import truststore  # pylint: disable=C0415
+        truststore.inject_into_ssl()
     # Download file from url.
     download_path = inductiva.utils.files.download_from_url(_URL)
     # Check if the file exists.
