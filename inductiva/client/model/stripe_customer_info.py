@@ -90,8 +90,10 @@ class StripeCustomerInfo(schemas.DictSchema):
                         **kwargs,
                     )
 
+            requires_customer = schemas.BoolSchema
             __annotations__ = {
                 "id": id,
+                "requires_customer": requires_customer,
             }
 
     @typing.overload
@@ -101,13 +103,19 @@ class StripeCustomerInfo(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["requires_customer"]
+    ) -> MetaOapg.properties.requires_customer:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self,
-                    name: typing.Union[typing_extensions.Literal[
-                        "id",
-                    ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
+        "id",
+        "requires_customer",
+    ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -119,14 +127,20 @@ class StripeCustomerInfo(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["requires_customer"]
+    ) -> typing.Union[MetaOapg.properties.requires_customer, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(self,
-                      name: typing.Union[typing_extensions.Literal[
-                          "id",
-                      ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
+        "id",
+        "requires_customer",
+    ], str]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -140,6 +154,8 @@ class StripeCustomerInfo(schemas.DictSchema):
                          decimal.Decimal, bool, None, list, tuple, bytes,
                          io.FileIO, io.BufferedReader,
                          schemas.Unset] = schemas.unset,
+        requires_customer: typing.Union[MetaOapg.properties.requires_customer,
+                                        bool, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -150,6 +166,7 @@ class StripeCustomerInfo(schemas.DictSchema):
             cls,
             *_args,
             id=id,
+            requires_customer=requires_customer,
             _configuration=_configuration,
             **kwargs,
         )
