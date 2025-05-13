@@ -24,6 +24,7 @@ from . import tasks
 from . import users
 from . import logs
 from . import api
+from . import events
 from .templating import TemplateManager
 
 logs.setup(getattr(logging, os.environ.get("INDUCTIVA_LOG_LEVEL", "INFO")))
