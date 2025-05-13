@@ -69,7 +69,7 @@ def upload_container(args):
             print(f"'{output_path}' exists - will overwrite it "
                   "(because --overwrite).")
             try:
-                storage.remove_workspace(f"{folder_name}/{filename}")
+                storage.remove(f"{folder_name}/{filename}")
             except ApiException as e:
                 print(f"Failed to delete old file: {e}", file=sys.stderr)
                 return
@@ -84,7 +84,7 @@ def upload_container(args):
             if not confirm:
                 print("Operation cancelled.")
                 return
-            storage.remove_workspace(f"{folder_name}/{filename}")
+            storage.remove(f"{folder_name}/{filename}")
 
     # Create temp folder to hold .sif
     try:
