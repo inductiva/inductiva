@@ -79,7 +79,7 @@ def prepare_input(task_id, input_dir):
             raise ValueError(
                 f"Invalid file name: '{constants.TASK_OUTPUT_ZIP}'")
 
-    input_zip_path = inductiva.utils.data.pack_input(input_dir, 
+    input_zip_path = inductiva.utils.data.pack_input(input_dir,
                                                      zip_name=task_id)
 
     zip_file_size = os.path.getsize(input_zip_path)
@@ -111,7 +111,7 @@ def upload_file(api_instance: ApiClient, input_path: str, method: str, url: str,
             raise ApiException(status=resp.status, reason=resp.reason)
 
 
-def upload_input(api_instance: TasksApi, input_dir, task_id, 
+def upload_input(api_instance: TasksApi, input_dir, task_id,
                  storage_path_prefix):
     """Uploads the inputs of a given task to the API.
 
