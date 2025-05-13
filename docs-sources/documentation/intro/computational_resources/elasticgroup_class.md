@@ -1,4 +1,4 @@
-# `ElasticMachineGroup` Class
+# ElasticMachineGroup Class
 
 An Elastic machine group is similar to the [Machine group](./machinegroup_class.md)
 with the extra property that scales up and down the number of active machines based

@@ -72,7 +72,7 @@ target_dir = f"variations/params_for_depth_{water_depth}"
 # the value of WtrDpth in the modified config file
 # 5MW_OC4Semi_WSt_WavesWN.fst.jinja
 inductiva.TemplateManager.render_dir(
-   source_dir="openfast-5MW_OC4Semi_WSt_WavesWN",
+   source_dir="input_files",
    target_dir=target_dir,
    overwrite=True,
    water_depth=water_depth)
