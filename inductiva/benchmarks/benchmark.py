@@ -160,7 +160,7 @@ class Benchmark(projects.Project):
         self.runs.clear()
         logging.info(
             "Benchmark \033[1m%s\033[0m has started...\n"
-            "Go to https://console.inductiva.ai/projects/%s?project=%s "
+            "Go to https://console.inductiva.ai/projects/%s "
             "for more details.\n", self.name, self.name, self.name)
         return self
 
