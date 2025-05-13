@@ -11,7 +11,6 @@ in the previous parts of this tutorial.
 
 ```python
 import inductiva
-import time
 
 # Allocate 50 cloud machines
 # Note that we are using an ElasticMachineGroup
@@ -22,10 +21,6 @@ cloud_machine = inductiva.resources.ElasticMachineGroup(
    min_machines=1,
    max_machines=50)
 
-openfast_project = inductiva.projects.Project(
-   name="Openfast_WavesWN",
-   append=True)
-openfast_project.open()
 
 for depth in range(100, 200, 2):
 
@@ -53,11 +48,11 @@ for depth in range(100, 200, 2):
        commands=[
        "openfast 5MW_OC4Semi_WSt_WavesWN/"
        "5MW_OC4Semi_WSt_WavesWN.fst"],
-       on=cloud_machine)
+       on=cloud_machine,
+       project="Openfast_WavesWN")
 
 
-openfast_project.wait()
-openfast_project.close()
+inductiva.projects.Project("Openfast_WavesWN").wait()
 cloud_machine.terminate()
 ```
 
@@ -81,29 +76,14 @@ cloud_machine = inductiva.resources.ElasticMachineGroup(
    max_machines=50)
 ```
 
-## Code Section 2: Setting up the Project
-To keep your simulations organized, we use a project-based approach. Setting up a project is straightforward: we create it with **append mode enabled**, 
-indicating that we'll be adding tasks to the project rather than just querying its data. Once the project is created and opened, all subsequent 
-simulations will automatically be associated with our `Openfast_WavesWN` project.
-
-```python
-openfast_project = inductiva.projects.Project(
-   name="Openfast_WavesWN",
-   append=True
-)
-openfast_project.open()
-``` 
-
-This ensures that all simulations remain structured and easily accessible within the project.
-
-## Code Section 3: Loop over parameter assignment and Start Simulation
+## Code Section 2: Loop over parameter assignment and Start Simulation
 We now enter a loop that is responsible for generating new input files and running each simulation.
 
 First, we iterate over the specified water depths. For each depth, we generate input files using the `render_dir` method, which replaces the `water_depth` 
 variable in our `5MW_OC4Semi_WSt_WavesWN.fst.jinja` template with the corresponding depth value. The generated input files are then stored 
 in a special folder, `target_dir` (`variations/params_for_depth_{depth}`). For more details on managing template files, check out the `TemplateManager` [documentation](https://docs.inductiva.ai/en/latest/intro_to_api/templating.html).
 
-Next, we initialize the OpenFAST simulator and run the simulation using the newly created input directory. Each simulation task is stored in a list, 
+Next, we initialize the OpenFAST simulator and run the simulation using the newly created input directory. Each simulation task is added to the project, 
 allowing us to track and wait for all tasks to be completed.
 
 ```python
@@ -136,19 +116,19 @@ for depth in range(100, 200, 2):
            "openfast 5MW_OC4Semi_WSt_WavesWN/"
            "5MW_OC4Semi_WSt_WavesWN.fst"
        ],
-       on=cloud_machine
+       on=cloud_machine,
+       project="Openfast_WavesWN"
    )
 ```
 
-## Code Section 4: Waiting for the Simulations to finish
+## Code Section 3: Waiting for the Simulations to finish
 In this last part of the code we just wait for all the tasks to finish.
 
-Once all the tasks are done, we close our project and turn off our cloud machines.
+Once all the tasks are done, we turn off our cloud machines.
 
 ```python
-openfast_project.wait()
+inductiva.projects.Project("Openfast_WavesWN").wait()
 
-openfast_project.close()
 cloud_machine.terminate()
 ```
 
