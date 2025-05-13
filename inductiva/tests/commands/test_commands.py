@@ -24,6 +24,29 @@ def test_to_dict__without_prompts():
     }
 
 
+@mark.parametrize("command,should_fail", [
+    ("ls", False),
+    ("ls -l", False),
+    ("ls | wc", True),
+    ("ls > file.txt", True),
+    ("sort < file.txt", True),
+    ("ls & ls", True),
+    ("ls ; ls", True),
+    ("ls *", True),
+    ("ls ?", True),
+    ("ls ~", True),
+    ("ls $HOME", True),
+    ("ls $PATH", True),
+])
+def test_has_special_chars(command, should_fail):
+    if should_fail:
+        with pytest.raises(ValueError):
+            commands.Command(command)
+    else:
+        # No exception should be raised
+        commands.Command(command)
+
+
 @mark.parametrize("cmd,prompts,expected_message", [
     ("fails on prompts", ["y", 42], "Prompts must be all strings."),
     (0, ["fails on cmd"], "cmd argument must be a string."),

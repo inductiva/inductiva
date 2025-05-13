@@ -30,6 +30,7 @@ class SplishSplash(simulators.Simulator):
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
         remote_assets: Optional[List[str]] = None,
+        project: Optional[str] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run the SPlisHSPlasH simulation.
@@ -46,9 +47,17 @@ class SplishSplash(simulators.Simulator):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project. If the project does not exist, it will be
+                created.
         Returns:
             Task object representing the simulation task.
         """
+
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
 
         commands = [
             "cp /SPlisHSPlasH_CPU/bin/SPHSimulator .",
@@ -62,5 +71,6 @@ class SplishSplash(simulators.Simulator):
             on=on,
             resubmit_on_preemption=resubmit_on_preemption,
             remote_assets=remote_assets,
+            project=project,
             **kwargs,
         )

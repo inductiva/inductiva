@@ -69,7 +69,6 @@ from inductiva.client.apis.paths.storage_cost import StorageCost
 from inductiva.client.apis.paths.storage_contents import StorageContents
 from inductiva.client.apis.paths.storage_zip_contents import StorageZipContents
 from inductiva.client.apis.paths.storage_signed_urls import StorageSignedUrls
-from inductiva.client.apis.paths.storage_input_notify import StorageInputNotify
 from inductiva.client.apis.paths.storage_input_remote import StorageInputRemote
 from inductiva.client.apis.paths.storage_ import Storage
 from inductiva.client.apis.paths.storage_copy import StorageCopy
@@ -241,8 +240,6 @@ PathToApi = typing_extensions.TypedDict(
             StorageZipContents,
         PathValues.STORAGE_SIGNEDURLS:
             StorageSignedUrls,
-        PathValues.STORAGE_INPUT_NOTIFY:
-            StorageInputNotify,
         PathValues.STORAGE_INPUT_REMOTE:
             StorageInputRemote,
         PathValues.STORAGE_:
@@ -446,8 +443,6 @@ path_to_api = PathToApi({
         StorageZipContents,
     PathValues.STORAGE_SIGNEDURLS:
         StorageSignedUrls,
-    PathValues.STORAGE_INPUT_NOTIFY:
-        StorageInputNotify,
     PathValues.STORAGE_INPUT_REMOTE:
         StorageInputRemote,
     PathValues.STORAGE_:

@@ -36,6 +36,7 @@ class SWASH(simulators.Simulator):
             on: types.ComputationalResources,
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
+            project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -57,6 +58,10 @@ class SWASH(simulators.Simulator):
             storage_dir: Directory for storing simulation results.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project. If the project does not exist, it will be
+                created.
         """
 
         if command not in ("swashrun", "swash.exe"):
@@ -75,6 +80,10 @@ class SWASH(simulators.Simulator):
         if path_config_filename.is_absolute():
             raise ValueError("sim_config_filename must be a path relative to "
                              "the input directory.")
+
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
 
         working_dir = path_config_filename.parent
         config_file_only = path_config_filename.name
@@ -118,4 +127,5 @@ class SWASH(simulators.Simulator):
                            run_subprocess_dir=str(working_dir),
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project=project,
                            **kwargs)

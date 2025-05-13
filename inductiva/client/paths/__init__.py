@@ -74,7 +74,6 @@ class PathValues(str, enum.Enum):
     STORAGE_CONTENTS = "/storage/contents"
     STORAGE_ZIPCONTENTS = "/storage/zip-contents"
     STORAGE_SIGNEDURLS = "/storage/signed-urls"
-    STORAGE_INPUT_NOTIFY = "/storage/input_notify"
     STORAGE_INPUT_REMOTE = "/storage/input_remote"
     STORAGE_ = "/storage/"
     STORAGE_COPY = "/storage/copy"

@@ -24,6 +24,7 @@ from . import tasks
 from . import users
 from . import logs
 from . import api
+from . import events
 from .templating import TemplateManager
 
 logs.setup(getattr(logging, os.environ.get("INDUCTIVA_LOG_LEVEL", "INFO")))
@@ -42,7 +43,7 @@ _api_key = contextvars.ContextVar("INDUCTIVA_API_KEY",
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.15.9"
+__version__ = "0.16.0"
 
 
 def set_output_dir(new_output_dir):

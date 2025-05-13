@@ -7,7 +7,7 @@ import re
 
 import pathlib
 
-from inductiva import types, tasks, resources
+from inductiva import projects, types, tasks, resources
 from .methods import list_available_images
 from inductiva import commands
 
@@ -86,10 +86,13 @@ class Simulator(ABC):
         """Get the image URI for this simulator."""
         return self._image_uri
 
-    def _input_files_exist(self, input_dir, **kwargs):
+    def _input_files_exist(self, input_dir, remote_assets, **kwargs):
         """
         Checks if all the files in kwargs are present in the input_dir.
         """
+        if remote_assets is not None:
+            return
+
         missing_files = []
 
         for _, file_path in kwargs.items():
@@ -196,7 +199,9 @@ class Simulator(ABC):
         :return: A string of suffixes.
         """
         dev_suffix = "_dev" if self._use_dev else ""
-        gpu_suffix = "_gpu" if resource.has_gpu() else ""
+        gpu_suffix = "_gpu" if resource.has_gpu() and (
+            f"{self.version}_gpu"
+            in self._supported_versions_with_suffixes) else ""
 
         # Overwrites the gpu suffix if the user passed a specific
         # device
@@ -243,6 +248,7 @@ class Simulator(ABC):
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
         remote_assets: Optional[List[str]] = None,
+        project: Optional[str] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -261,6 +267,10 @@ class Simulator(ABC):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project. If the project does not exist, it will be
+                created.
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
@@ -295,6 +305,10 @@ class Simulator(ABC):
                             " the simulator you picked will run on the CPU "
                             "only.\n")
 
+        # This will create the project if it doesn't exist
+        if project:
+            projects.Project(project)
+
         return tasks.run_simulation(
             self.simulator,
             input_dir_path,
@@ -305,6 +319,7 @@ class Simulator(ABC):
             resubmit_on_preemption=resubmit_on_preemption,
             remote_assets=remote_assets,
             simulator_name_alias=self.simulator_name_alias,
+            project_name=project,
             **kwargs,
         )
 

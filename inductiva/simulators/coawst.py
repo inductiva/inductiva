@@ -68,6 +68,7 @@ class COAWST(simulators.Simulator):
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
+            project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -111,6 +112,10 @@ class COAWST(simulators.Simulator):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project. If the project does not exist, it will be
+                created.
         """
 
         if build_coawst_script is None and compile_simulator:
@@ -120,17 +125,19 @@ class COAWST(simulators.Simulator):
         self._check_vcpus(n_vcpus, on)
 
         #only runs checks if we dont use remote assets
-        if remote_assets is None:
+
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
+
+        # only validates the build script if we are going to compile
+        if compile_simulator:
             self._input_files_exist(input_dir=input_dir,
-                                    sim_config_filename=sim_config_filename)
+                                    remote_assets=remote_assets,
+                                    build_coawst_script=build_coawst_script)
 
-            # only validates the build script if we are going to compile
-            if compile_simulator:
-                self._input_files_exist(input_dir=input_dir,
-                                        build_coawst_script=build_coawst_script)
-
-                build_script = os.path.join(input_dir, build_coawst_script)
-                self._validate_build_script(build_script=str(build_script))
+            build_script = os.path.join(input_dir, build_coawst_script)
+            self._validate_build_script(build_script=str(build_script))
 
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
@@ -180,4 +187,5 @@ class COAWST(simulators.Simulator):
                            storage_dir=storage_dir,
                            remote_assets=remote_assets,
                            resubmit_on_preemption=resubmit_on_preemption,
+                           project=project,
                            **kwargs)

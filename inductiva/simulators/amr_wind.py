@@ -1,5 +1,5 @@
 """AmrWind module of the API for numerical simulations of fluid flows."""
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 from inductiva import types, tasks, simulators
 from inductiva.commands import MPIConfig, Command
@@ -10,7 +10,11 @@ class AmrWind(simulators.Simulator):
     """Class to invoke a generic AmrWind simulation on the API.
     """
 
-    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
+    def __init__(self,
+                 /,
+                 version: Optional[str] = None,
+                 use_dev: bool = False,
+                 device: Literal["auto", "cpu", "gpu"] = "auto"):
         """Initialize the AmrWind simulator.
 
         Args:
@@ -20,7 +24,7 @@ class AmrWind(simulators.Simulator):
                 the simulator. By default (False), the production version
                 is used.
         """
-        super().__init__(version=version, use_dev=use_dev)
+        super().__init__(version=version, use_dev=use_dev, device=device)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "amrwind"
 
@@ -31,14 +35,15 @@ class AmrWind(simulators.Simulator):
 
     def run(self,
             input_dir: Optional[str],
-            sim_config_filename: str,
             *,
+            sim_config_filename: str,
             on: types.ComputationalResources,
             use_hwthread: bool = True,
             n_vcpus: Optional[int] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
+            project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:
@@ -56,7 +61,16 @@ class AmrWind(simulators.Simulator):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project. If the project does not exist, it will be
+                created.
         """
+
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
+
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
         if n_vcpus is not None:
@@ -73,4 +87,5 @@ class AmrWind(simulators.Simulator):
                            commands=commands,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project=project,
                            **kwargs)

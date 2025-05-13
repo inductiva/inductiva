@@ -12,7 +12,7 @@ import signal
 import urllib3
 import decimal
 from contextlib import contextmanager
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 import logging
 
@@ -111,22 +111,7 @@ def upload_file(api_instance: ApiClient, input_path: str, method: str, url: str,
             raise ApiException(status=resp.status, reason=resp.reason)
 
 
-def notify_upload_complete(api_endpoint,
-                           query_params: Dict[str, str] = None,
-                           path_params: Dict[str, str] = None):
-    """
-    Notifies the API that the file upload is complete.
-    """
-    params = {}
-    if query_params is not None:
-        params["query_params"] = query_params
-    if path_params is not None:
-        params["path_params"] = path_params
-
-    api_endpoint(**params)
-
-
-def upload_input(api_instance: TasksApi, input_dir, task_id,
+def upload_input(api_instance: TasksApi, input_dir, params, task_id,
                  storage_path_prefix):
     """Uploads the inputs of a given task to the API.
 
@@ -152,11 +137,7 @@ def upload_input(api_instance: TasksApi, input_dir, task_id,
                        unit_scale=True,
                        unit_divisor=1000) as progress_bar:
             upload_file(api_instance, input_zip_path, "PUT", url, progress_bar)
-            notify_upload_complete(
-                api_instance.notify_input_uploaded,
-                path_params={"task_id": task_id},
-            )
-
+            api_instance.notify_input_uploaded(path_params={"task_id": task_id})
         logging.info("Local input directory successfully uploaded.")
         logging.info("")
 
@@ -244,6 +225,18 @@ def block_until_status_is(api_instance: TasksApi,
     return status
 
 
+def _configure_sigint_handler(handler):
+    if not handler:
+        return None
+
+    try:
+        return signal.signal(signal.SIGINT, handler)
+    except ValueError as e:
+        logging.warning("Custom SIGINT handler not configured: %s", e)
+        # If the signal is not supported, ignore it
+        pass
+
+
 @contextmanager
 def blocking_task_context(api_instance: TasksApi,
                           task_id: str,
@@ -262,7 +255,7 @@ def blocking_task_context(api_instance: TasksApi,
     # Other imported modules can make changes to the SIGINT handler, so we set
     # the default int handler to make sure that KeyboardInterrupt is raised
     # if the user presses Ctrl+C.
-    original_sig = signal.signal(signal.SIGINT, signal.default_int_handler)
+    original_sig = _configure_sigint_handler(signal.default_int_handler)
 
     try:
         yield None
@@ -276,7 +269,7 @@ def blocking_task_context(api_instance: TasksApi,
         sys.exit(1)
     finally:
         # Reset original SIGINT handler
-        signal.signal(signal.SIGINT, original_sig)
+        _configure_sigint_handler(original_sig)
 
 
 def task_info_str(
@@ -321,7 +314,7 @@ def submit_task(simulator,
                 remote_assets: Optional[List[str]] = None,
                 project_name: Optional[str] = None):
     """Submit a task and send input files to the API.
-    
+
     Args:
         simulator: The simulator to use
         input_dir: Directory containing the input files to be uploaded.
@@ -338,6 +331,9 @@ def submit_task(simulator,
         simulator_obj: Optional simulator object with additional configuration
         remote_assets: Additional input files that will be copied to the
                 simulation from a bucket or from another task output.
+        project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project.
     Return:
         Returns the task id.
     """
@@ -346,7 +342,7 @@ def submit_task(simulator,
         remote_assets = []
 
     stream_zip = extra_params.pop("stream_zip", True)
-    compress_with = extra_params.pop("compress_with", CompressionMethod.AUTO)
+    compress_with = extra_params.pop("compress_with", CompressionMethod.SEVEN_Z)
 
     task_request = TaskRequest(simulator=simulator,
                                extra_params=extra_params,

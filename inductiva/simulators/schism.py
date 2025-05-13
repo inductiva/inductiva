@@ -34,6 +34,7 @@ class SCHISM(simulators.Simulator):
             n_vcpus: Optional[int] = None,
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
+            project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:
@@ -52,6 +53,10 @@ class SCHISM(simulators.Simulator):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project. If the project does not exist, it will be
+                created.
         """
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
@@ -72,4 +77,5 @@ class SCHISM(simulators.Simulator):
                            storage_dir=storage_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project=project,
                            **kwargs)
