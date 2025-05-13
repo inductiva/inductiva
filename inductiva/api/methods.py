@@ -65,7 +65,7 @@ def submit_request(task_api_instance: TasksApi,
     return api_response.body
 
 
-def prepare_input(task_id, input_dir, params):
+def prepare_input(task_id, input_dir):
     """Prepare the input files for a task submission."""
 
     # If the input directory is empty, do not zip it
@@ -79,11 +79,8 @@ def prepare_input(task_id, input_dir, params):
             raise ValueError(
                 f"Invalid file name: '{constants.TASK_OUTPUT_ZIP}'")
 
-    input_zip_path = inductiva.utils.data.pack_input(
-        input_dir,
-        params,
-        zip_name=task_id,
-    )
+    input_zip_path = inductiva.utils.data.pack_input(input_dir, 
+                                                     zip_name=task_id)
 
     zip_file_size = os.path.getsize(input_zip_path)
     logging.info("Input archive size: %s",
@@ -114,7 +111,7 @@ def upload_file(api_instance: ApiClient, input_path: str, method: str, url: str,
             raise ApiException(status=resp.status, reason=resp.reason)
 
 
-def upload_input(api_instance: TasksApi, input_dir, params, task_id,
+def upload_input(api_instance: TasksApi, input_dir, task_id, 
                  storage_path_prefix):
     """Uploads the inputs of a given task to the API.
 
@@ -122,14 +119,12 @@ def upload_input(api_instance: TasksApi, input_dir, params, task_id,
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task.
         input_dir: Directory containing the input files to be uploaded.
-        params: Additional parameters to be sent to the API.
         storage_path_prefix: Path to the storage bucket.
         """
     input_zip_path = None
 
     try:
-        input_zip_path, zip_file_size = prepare_input(task_id, input_dir,
-                                                      params)
+        input_zip_path, zip_file_size = prepare_input(task_id, input_dir)
 
         remote_input_zip_path = f"{storage_path_prefix}/{task_id}/input.zip"
         url = storage.get_signed_urls(
@@ -392,7 +387,6 @@ def submit_task(simulator,
             upload_input(
                 api_instance=task_api_instance,
                 input_dir=input_dir,
-                params=params,
                 task_id=task_id,
                 storage_path_prefix=storage_path_prefix,
             )
