@@ -271,6 +271,10 @@ class Benchmark(projects.Project):
         """
 
         def get_task_input_params(task):
+            info_as_dict = task.info.to_dict()
+            extra_params = info_as_dict.get("extra_params")
+            if extra_params is not None:
+                return extra_params
             input_filename = "input.json"
             input_dir_path = task.download_inputs(filenames=[input_filename])
             input_file_path = input_dir_path.joinpath(input_filename)

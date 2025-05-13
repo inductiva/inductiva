@@ -350,7 +350,7 @@ def submit_task(simulator,
     compress_with = params.pop("compress_with", CompressionMethod.SEVEN_Z)
 
     task_request = TaskRequest(simulator=simulator,
-                               params=params,
+                               extra_params=params,
                                project=project_name,
                                resource_pool=machine_group.id,
                                container_image=container_image,
