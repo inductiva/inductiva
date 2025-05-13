@@ -6,7 +6,7 @@ such as the `DISCON_OC3Hywind.dll` file. By the end of this section you'll have 
 Let’s get started!
 
 ### Step 1: Download your simulation files
-Download the required [`5MW_OC4Semi_WSt_WavesWN`](https://github.com/OpenFAST/r-test/tree/main/glue-codes/openfast/5MW_OC4Semi_WSt_WavesWN) and [`5MW_Baseline`](https://github.com/OpenFAST/r-test/tree/main/glue-codes/openfast/5MW_Baseline) folders and place them in your working directory. Your `input_files` should now look like this:
+Download the required [`5MW_OC4Semi_WSt_WavesWN`](https://github.com/OpenFAST/r-test/tree/v4.0.2/glue-codes/openfast/5MW_OC4Semi_WSt_WavesWN) and [`5MW_Baseline`](https://github.com/OpenFAST/r-test/tree/v4.0.2/glue-codes/openfast/5MW_Baseline) folders and place them in your working directory. Your `input_files` should now look like this:
 - input_files
     - 5MW_Baseline
     - 5MW_OC4Semi_WSt_WavesWN
