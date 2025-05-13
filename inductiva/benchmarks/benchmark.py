@@ -171,12 +171,12 @@ class Benchmark(projects.Project):
         Returns:
             Self: The current instance for method chaining.
         """
-        running_tasks = self.get_tasks()
+        tasks = self.get_tasks()
 
         logging.info("Waiting for Benchmark \033[1m%s\033[0m to complete...\n",
                      self.name)
 
-        with tqdm.tqdm(total=len(running_tasks),
+        with tqdm.tqdm(total=len(tasks),
                        desc="Processing tasks",
                        bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}") as pbar:
             with ThreadPoolExecutor() as executor:
@@ -184,7 +184,7 @@ class Benchmark(projects.Project):
                     executor.submit(
                         lambda t: t.wait(download_std_on_completion=False,
                                          silent_mode=True), task):
-                        task for task in running_tasks
+                        task for task in tasks
                 }
 
                 for future in as_completed(future_to_task):
