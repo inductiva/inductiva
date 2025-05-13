@@ -17,7 +17,7 @@ Now we need to build the `DISCON_OC3Hywind.dll` file and place it in `5MW_Baseli
 **Want to skip this step?** Download the DLL file [here](https://storage.googleapis.com/inductiva-simulators-sources/DISCON_OC3Hywind.dll). 
 Don't forget to place it in the `5MW_Baseline/ServoData` folder.
 
-If you wish to build the file yourself, please follow the steps outlined in this [tutorial](https://inductiva.ai/guides/openfast/CreateDLL).
+If you wish to build the file yourself, please follow the steps outlined in this [tutorial](https://inductiva.ai/guides/openfast/build-dll-file).
 
 Your input directory should look like this:
 - input_files
