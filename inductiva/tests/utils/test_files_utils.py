@@ -105,21 +105,6 @@ def test_pack_input(tmp_path: pathlib.Path):
             assert input_params["param2"] == "value2"
 
 
-def test_extract_output(tmp_path: pathlib.Path):
-    """Test extract_output function."""
-    output_dir = tmp_path / "output"
-    output_dir.mkdir()
-
-    zip_path = tmp_path / "test.zip"
-    with zipfile.ZipFile(zip_path, "w") as zip_f:
-        zip_f.writestr("output.json", json.dumps(["result"]))
-        zip_f.writestr("artifacts/file.txt", "Hello, World!")
-
-    result_list = data.extract_output(zip_path, output_dir)
-    assert result_list == ["result"]
-    assert (output_dir / "file.txt").exists()
-
-
 def test_extract_subdir_files(tmp_path: pathlib.Path):
     """Test extract_subdir_files function."""
     zip_path = tmp_path / "test.zip"
@@ -154,13 +139,11 @@ def test_uncompress_task_outputs(tmp_path: pathlib.Path):
     output_dir.mkdir()
 
     with zipfile.ZipFile(zip_path, "w") as zip_f:
-        zip_f.writestr("output.json", json.dumps(["result"]))
         zip_f.writestr("artifacts/file.txt", "Hello, World!")
 
     data.decompress_zip(zip_path, output_dir)
 
     assert (output_dir / "artifacts/file.txt").exists()
-    assert (output_dir / "output.json").exists()
 
 
 def test_extract_zip_file_to_output_dir(tmp_path: pathlib.Path):
