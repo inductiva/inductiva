@@ -1,4 +1,4 @@
-# `MPICluster` Class
+# MPICluster Class
 
 An MPI cluster is a set of machines that work together to solve a problem. These
 machines are configured to communicate with each other using the [Message Passing
@@ -9,6 +9,7 @@ is configured automatically to run your simulations in a distributed manner acro
 the machines.
 
 To instantiate an `MPICluster` object the following parameters can be configured:
+
 - the `machine_type` defines the type of CPU used for each machine. This parameter
 follows the naming convention set by
 [Google Cloud](https://cloud.google.com/compute/docs/machine-types),

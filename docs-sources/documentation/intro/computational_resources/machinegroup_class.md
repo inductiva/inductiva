@@ -1,4 +1,4 @@
-# `MachineGroup` Class
+# MachineGroup Class
 
 A Machine group is a pool of homogeneous machines that work individually and 
 which do not communicate with each other in any way. Launching a machine group
