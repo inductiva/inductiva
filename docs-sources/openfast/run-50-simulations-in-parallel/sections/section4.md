@@ -121,7 +121,7 @@ for depth in range(100, 200, 2):
    )
 ```
 
-## Code Section 4: Waiting for the Simulations to finish
+## Code Section 3: Waiting for the Simulations to finish
 In this last part of the code we just wait for all the tasks to finish.
 
 Once all the tasks are done, we turn off our cloud machines.
