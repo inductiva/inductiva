@@ -10,7 +10,7 @@ run dozens of simulations in parallel.
 
 <p align="center"><img src="../_static/openfast_animation_30_fps.gif" alt="OpenFAST simulation visualization" width="700"></p>
 
-To demonstrate this, we will use the `5MW_OC4Semi_WSt_WavesWN` example, available on the [OpenFAST GitHub repository](https://github.com/openfast).
+To demonstrate this, we will use the [`5MW_OC4Semi_WSt_WavesWN`](https://github.com/OpenFAST/r-test/tree/main/glue-codes/openfast/5MW_OC4Semi_WSt_WavesWN) example, available on the [OpenFAST GitHub repository](https://github.com/openfast).
 
 This example is an extension of the reference case described in ["Definition of a 5-MW Reference Wind Turbine for Offshore
 System Development"](https://www.nrel.gov/docs/fy09osti/38060.pdf).
