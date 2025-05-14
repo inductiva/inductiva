@@ -1,5 +1,6 @@
 """API for Benchmarking"""
 import enum
+import inspect
 import json
 import csv
 import logging
@@ -155,6 +156,7 @@ class Benchmark(projects.Project):
                 simulator.run(input_dir=input_dir,
                               on=machine_group,
                               project=self.name,
+                              resubmit_on_preemption=True,
                               verbose=False,
                               **kwargs)
         self.runs.clear()
