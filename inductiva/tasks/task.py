@@ -606,9 +606,9 @@ class Task:
         """
         n = constants.TASK_FAILED_LINES_TO_DUMP
         std_out_lines = self._get_last_n_lines_from_file(
-            f"{out_dir}/stdout.txt", n)
+            pathlib.Path(out_dir) / "stdout.txt", n)
         std_err_lines = self._get_last_n_lines_from_file(
-            f"{out_dir}/stderr.txt", n)
+            pathlib.Path(out_dir) / "stderr.txt", n)
 
         logging.error("")
 
