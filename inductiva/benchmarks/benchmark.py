@@ -1,6 +1,5 @@
 """API for Benchmarking"""
 import enum
-import inspect
 import json
 import csv
 import logging
