@@ -296,7 +296,8 @@ class Benchmark(projects.Project):
             task_input_params = get_task_input_params(task)
             task_info = task.info
             task_machine_type = task_info.executer.vm_type \
-                if task_info.executer.vm_type != "n/a" else task_info.executer.vm_name
+                if task_info.executer.vm_type != "n/a" else \
+                    task_info.executer.vm_name
             task_time = task_info.time_metrics.computation_seconds.value
             task_cost = task_info.estimated_computation_cost
             info.append({
