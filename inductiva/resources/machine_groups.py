@@ -61,6 +61,7 @@ class BaseMachineGroup(ABC):
     max_idle_time: Union[datetime.timedelta, int] = 3
     auto_terminate_ts: Optional[datetime.datetime] = None
     auto_terminate_minutes: Optional[int] = None
+    spot: bool = True
 
     create_time = None
     num_machines = 0
@@ -321,6 +322,7 @@ class BaseMachineGroup(ABC):
         machine_group.data_disk_gb = resp["disk_size_gb"]
         machine_group.provider = resp["provider_id"]
         machine_group.create_time = resp["creation_timestamp"]
+        machine_group.spot = bool(resp["spot"])
         machine_group._started = bool(resp["started"])
         machine_group.__dict__["machines"] = resp["machines"]
         machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
@@ -562,7 +564,7 @@ class BaseMachineGroup(ABC):
 @dataclass(repr=False)
 class MachineGroup(BaseMachineGroup):
     """Create a MachineGroup object.
-    
+
     A machine group is a collection of homogenous machines with given the
     configurations that are launched in Google Cloud.
     Note: The machine group will be available only after calling 'start' method.
@@ -602,7 +604,6 @@ class MachineGroup(BaseMachineGroup):
     # Constructor arguments
     auto_resize_disk_max_gb: Optional[int] = None
     num_machines: int = 1
-    spot: bool = True
 
     # Internal attributes
     _is_elastic = False
@@ -635,7 +636,6 @@ class MachineGroup(BaseMachineGroup):
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
         machine_group.num_machines = int(resp["max_vms"])
-        machine_group.spot = bool(resp["spot"])
         return machine_group
 
     def __str__(self):
@@ -699,7 +699,6 @@ class ElasticMachineGroup(BaseMachineGroup):
     auto_resize_disk_max_gb: Optional[int] = None
     min_machines: int = 1
     max_machines: int = 2
-    spot: bool = True
 
     # Internal attributes
     _is_elastic = True
@@ -739,7 +738,6 @@ class ElasticMachineGroup(BaseMachineGroup):
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
-        machine_group.spot = bool(resp["spot"])
         machine_group.max_machines = int(resp["max_vms"])
         machine_group.min_machines = int(resp["min_vms"])
         return machine_group
@@ -791,7 +789,6 @@ class MPICluster(BaseMachineGroup):
     """
     # Constructor arguments
     num_machines: int = 2
-    spot: bool = True
 
     # Internal attributes
     auto_resize_disk_max_gb = None
