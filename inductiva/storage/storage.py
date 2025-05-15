@@ -67,7 +67,7 @@ def get_space_used():
 
 def listdir(
     path="/",
-    max_results: int = 10,
+    max_results: Optional[int] = 10,
     order_by: Literal["size", "creation_time"] = "creation_time",
     sort_order: Literal["asc", "desc"] = "desc",
     print_results: bool = True,
@@ -75,7 +75,8 @@ def listdir(
     """List and display the contents of the user's storage.
     Args:
         path (str): Storage directory to list. Default is root.
-        max_results (int): The maximum number of results to return.
+        max_results (int): The maximum number of results to return. If not set,
+            all entries are returned.
         order_by (str): The field to sort the contents by.
         sort_order (str): Whether to sort the contents in ascending or
         descending order.
@@ -102,12 +103,16 @@ def listdir(
     if len(path.split("/")) < 2:
         path += "/"
 
-    contents = api.list_storage_contents({
+    query_params = {
         "path": path,
-        "max_results": max_results,
         "sort_by": order_by,
-        "order": sort_order
-    }).body
+        "order": sort_order,
+    }
+
+    if max_results is not None:
+        query_params["max_results"] = max_results
+
+    contents = api.list_storage_contents(query_params).body
     all_contents = []
     for content_name, info in contents.items():
         size = info["size_bytes"]
