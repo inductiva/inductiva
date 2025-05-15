@@ -112,7 +112,6 @@ def listdir(
     if max_results is not None:
         query_params["max_results"] = max_results
 
-
     contents = api.list_storage_contents(query_params).body
     all_contents = []
     for content_name, info in contents.items():

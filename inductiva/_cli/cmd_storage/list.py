@@ -39,9 +39,7 @@ def register(parser):
                            type=str,
                            choices=["desc", "asc"],
                            help="Sorting order (desc or asc).")
-    subparser.add_argument(
-        "--all",
-        action="store_true",
-        help="List all results, ignoring --max-results."
-    )
+    subparser.add_argument("--all",
+                           action="store_true",
+                           help="List all results, ignoring --max-results.")
     subparser.set_defaults(func=listdir)
