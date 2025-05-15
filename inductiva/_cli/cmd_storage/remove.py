@@ -1,77 +1,50 @@
 """Remove the user's remote storage contents via CLI."""
 import argparse
-import sys
 
 import inductiva
-from inductiva.tasks.methods import get_all
 from ...localization import translator as __
 from inductiva.utils.input_functions import user_confirmation_prompt
 
 
 def remove(args):
     """Remove user's remote storage contents."""
-    is_all = args.all
-    task_ids = args.id
-    confirm = args.confirm
-
-    if is_all and task_ids:
-        print(
-            "inductiva storage remove: error: "
-            "argument id(s) not allowed with argument --all/-a",
-            file=sys.stderr)
-        return 1
-    if not is_all and not task_ids:
-        print(
-            "inductiva storage remove: error: "
-            "argument id(s) or --all/-a required",
-            file=sys.stderr)
-        return 1
-
-    task_ids = set(task_ids)
-
-    if is_all:
-        all_tasks = get_all()
-        task_ids = [task.id for task in all_tasks]
-
-    if not confirm:
+    if not args.confirm:
         confirm = user_confirmation_prompt(
-            task_ids, __("storage-prompt-remove-all"),
-            __("storage-prompt-remove-big", len(task_ids)),
-            __("storage-prompt-remove-small"), is_all)
+            args.paths,
+            __("storage-prompt-remove-all"),
+            __("storage-prompt-remove-big", len(args.paths)),
+            __("storage-prompt-remove-small"),
+            args.all,
+        )
+        if not confirm:
+            return
 
-    if not confirm:
-        return 0
+    if args.all:
+        root_dir_info = inductiva.storage.listdir(max_results=None)
+        args.paths = [dir_info["content_name"] for dir_info in root_dir_info]
 
-    failed = False
-    for task_id in task_ids:
-        if not inductiva.tasks.Task(task_id).remove_remote_files(verbose=False):
-            print(f"Failed to remove the following task storage: {task_id}\n",
-                  file=sys.stderr)
-            failed = True
+    for path in args.paths:
+        inductiva.storage.remove(remote_path=path)
 
-    if failed:
-        return 1
-
-    print("All tasks storage removed successfully.")
-    return 0
+    print("Successfully removed all data from remote storage.")
 
 
 def register(parser):
-    subparser = parser.add_parser("remove",
-                                  aliases=["rm"],
-                                  help="Remove remote storage entries.",
-                                  formatter_class=argparse.RawTextHelpFormatter)
+    subparser = parser.add_parser(
+        "remove",
+        aliases=["rm"],
+        help="Remove files or directories from remote storage.",
+        formatter_class=argparse.RawTextHelpFormatter)
     subparser.description = (
-        "The `inductiva storage remove` command deletes specified data"
-        " from the platform.\n"
-        "It targets a specific task files for removal. Use with caution as "
-        "this action is irreversible.\n\n")
-    subparser.add_argument("id",
+        "The `inductiva storage remove` command deletes specified remote paths "
+        "from the platform.\n"
+        "Use with caution — this action is irreversible and will permanently "
+        "remove the selected files or directories from remote storage.\n\n")
+
+    subparser.add_argument("paths",
                            type=str,
                            nargs="*",
-                           help="Id(s) of the task(s) to remove from remote "
-                           "storage.")
-
+                           help="Remote path(s) to remove from storage.")
     subparser.add_argument(
         "-y",
         "--yes",
@@ -81,11 +54,10 @@ def register(parser):
         help="Sets any confirmation values to \"yes\" "
         "automatically. Users will not be asked for "
         "confirmation to remove path(s) from remote storage.")
-
     subparser.add_argument("-a",
                            "--all",
                            action="store_true",
                            default=False,
-                           help="Remove all tasks from remote storage.")
+                           help="Remove all data from remote storage.")
 
     subparser.set_defaults(func=remove)
