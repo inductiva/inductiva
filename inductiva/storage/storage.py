@@ -71,6 +71,7 @@ def listdir(
     order_by: Literal["size", "creation_time"] = "creation_time",
     sort_order: Literal["asc", "desc"] = "desc",
     print_results: bool = True,
+    recursive: bool = True,
 ):
     """List and display the contents of the user's storage.
     Args:
@@ -106,7 +107,8 @@ def listdir(
         "path": path,
         "max_results": max_results,
         "sort_by": order_by,
-        "order": sort_order
+        "order": sort_order,
+        "recursive": str(recursive).lower()
     }).body
     all_contents = []
     for content_name, info in contents.items():

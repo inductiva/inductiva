@@ -7,7 +7,7 @@ import re
 
 import pathlib
 
-from inductiva import projects, types, tasks, resources
+from inductiva import projects, types, tasks, resources, storage
 from .methods import list_available_images
 from inductiva import commands
 
@@ -90,9 +90,25 @@ class Simulator(ABC):
         """
         Checks if all the files in kwargs are present in the input_dir.
         """
+
+        for remote in remote_assets:
+            if remote.endswith(".zip"):
+                zip_files_info = storage.get_zip_contents(remote,recursive="True")
+                for zip_file_info in zip_files_info.files:
+                    name = zip_file_info.name
+                    size = zip_file_info.size
+                    # if it has size its a file and not a folder
+                    if size:
+                        print(f"File: {name}")
+            else:
+                res = storage.listdir(remote,recursive=True)
+                print(res)
+            print("----")
+        print("###")
+        asd
         if remote_assets is not None:
             return
-
+        
         missing_files = []
 
         for _, file_path in kwargs.items():
