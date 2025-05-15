@@ -15,23 +15,29 @@ simulation results folder. In the results folder, navigate to `CaseDambreak3D_FS
 and select the three Groups called `PartFluid_..vtk`, `PartGate_..vtk` and `PartStructure_..vtk`
 
 ![File -> Open](../../_static/file-open.png)
+<p align="center"><em>Figure 1: File -> Open</em></p>
+
 
 ![Selecting the files](../../_static/select-files.png)
+<p align="center"><em>Figure 2: Selecting the files</em></p>
 
 Once all files are loaded you need to make them visible by clicking the `eye` icon
 in the `Pipeline Browser` on the left side of the screen.
 
 ![Make files visible](../../_static/eye.png)
+<p align="center"><em>Figure 3: Make files visible</em></p>
 
 Followinf that, you need to place your camera in the right position. You can do this
 by clicking the `set view direction +Y` button in the toolbar.
 
 ![Move the camera to the correct position](../../_static/camera.png)
+<p align="center"><em>Figure 4: Move the camera to the correct position</em></p>
 
 You are now able to hit the `play` button in the toolbar and see your simulation
 running in real time.
 
 ![Simulation running](../../_static/sim.png)
+<p align="center"><em>Figure 5: Simulation running</em></p>
 
 ## Choosing what data to visualize
 
@@ -45,6 +51,7 @@ To do that, click the `PartFluid_0000.vtk*` in the Pipeline Browser and change
 from `idp` to `Vel` in the dropdown menu above.
 
 ![Simulation running with velocity visible](../../_static/sim_vel.png)
+<p align="center"><em>Figure 6: Simulation running with velocity visible</em></p>
 
 You can now sabe your animation by clicking `File` > `Save Animation...` and choosing
 the format you want to save it in.
