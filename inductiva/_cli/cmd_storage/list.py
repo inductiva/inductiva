@@ -7,7 +7,8 @@ from inductiva import storage
 
 def listdir(args):
     """List the user's remote storage contents."""
-    storage.listdir(args.path, args.max_results, args.order_by, args.sort_order)
+    max_results = None if args.all else args.max_results
+    storage.listdir(args.path, max_results, args.order_by, args.sort_order)
 
 
 def register(parser):
@@ -38,5 +39,9 @@ def register(parser):
                            type=str,
                            choices=["desc", "asc"],
                            help="Sorting order (desc or asc).")
-
+    subparser.add_argument(
+        "--all",
+        action="store_true",
+        help="List all results, ignoring --max-results."
+    )
     subparser.set_defaults(func=listdir)
