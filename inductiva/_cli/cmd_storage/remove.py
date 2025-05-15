@@ -20,8 +20,8 @@ def remove(args):
             return
 
     if args.all:
-        root_dir_info = inductiva.storage.listdir(max_results=None)
-        args.paths = [dir_info["content_name"] for dir_info in root_dir_info]
+        root_dir = inductiva.storage.listdir(max_results=None)
+        args.paths = [directory["content_name"] for directory in root_dir]
 
     for path in args.paths:
         inductiva.storage.remove(remote_path=path)
