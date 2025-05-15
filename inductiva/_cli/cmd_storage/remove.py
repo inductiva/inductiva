@@ -26,8 +26,6 @@ def remove(args):
     for path in args.paths:
         inductiva.storage.remove(remote_path=path)
 
-    print("Successfully removed all data from remote storage.")
-
 
 def register(parser):
     subparser = parser.add_parser(
