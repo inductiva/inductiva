@@ -1,4 +1,4 @@
-resources sub-package
+resources module
 ===========================
 
 .. automodule:: inductiva.resources.machine_groups

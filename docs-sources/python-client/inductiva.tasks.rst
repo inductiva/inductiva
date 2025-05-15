@@ -1,4 +1,4 @@
-tasks sub-package
+tasks module
 =======================
 
 

@@ -1,4 +1,4 @@
-projects sub-package
+projects module
 ==========================
 
 .. automodule:: inductiva.projects.project

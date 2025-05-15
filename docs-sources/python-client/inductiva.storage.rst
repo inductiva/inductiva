@@ -1,4 +1,4 @@
-storage sub-package
+storage module
 =========================
 
 .. automodule:: inductiva.storage.storage

@@ -60,8 +60,9 @@ def test_get_simulator_image_based_on_resource__dev():
     mg_no_gpu = mock.Mock()
     mg_no_gpu.has_gpu.return_value = False
 
-    sim_image_gpu = gmx.get_simulator_image_based_on_resource(mg_gpu)
-    sim_image_no_gpu = gmx.get_simulator_image_based_on_resource(mg_no_gpu)
+    # pylint: disable=protected-access
+    sim_image_gpu = gmx._get_simulator_image_based_on_resource(mg_gpu)
+    sim_image_no_gpu = gmx._get_simulator_image_based_on_resource(mg_no_gpu)
 
     assert sim_image_gpu.endswith("_gpu_dev")
     assert sim_image_no_gpu.endswith("_dev")
@@ -75,7 +76,8 @@ def test_get_simulator_image_based_on_resource__not_dev():
     mg_gpu = mock.Mock()
     mg_gpu.has_gpu.return_value = True
 
-    sim_image_gpu = gmx.get_simulator_image_based_on_resource(mg_gpu)
+    # pylint: disable=protected-access
+    sim_image_gpu = gmx._get_simulator_image_based_on_resource(mg_gpu)
 
     assert sim_image_gpu.endswith("_gpu")
 
@@ -93,7 +95,8 @@ def test_validate_computational_resources__unsupported_resource__raise_error(
     simulator = TesterSimulator()
 
     with pytest.raises(ValueError) as excinfo:
-        simulator.validate_computational_resources(mock_instance)
+        # pylint: disable=protected-access
+        simulator._validate_computational_resources(mock_instance)
 
     assert "The computational resource is invalid" in str(excinfo.value)
 
@@ -108,7 +111,8 @@ def test_mpi_enabled__dummy_simulator():
 
     mpi_enabled_sim = simulators.simulator.mpi_enabled(TesterSimulator)
 
-    assert resources.MPICluster in mpi_enabled_sim.get_supported_resources()
+    # pylint: disable=protected-access
+    assert resources.MPICluster in mpi_enabled_sim._get_supported_resources()
 
 
 @mark.parametrize("simulator", [
@@ -133,7 +137,8 @@ def test_validate_computational_resources__none_resource__no_wrapper(
 
     with pytest.raises(ValueError) as excinfo:
         simulator = TesterSimulator()
-        simulator.validate_computational_resources(None)
+        # pylint: disable=protected-access
+        simulator._validate_computational_resources(None)
 
     assert "The computational resource is invalid" in str(excinfo.value)
 
@@ -145,7 +150,8 @@ def test_validate_computational_resources__none_resource_mpi_wrapped(
 
     with pytest.raises(ValueError) as excinfo:
         simulator = simulators.simulator.mpi_enabled(TesterSimulator)()
-        simulator.validate_computational_resources(None)
+        # pylint: disable=protected-access
+        simulator._validate_computational_resources(None)
 
     assert "The computational resource is invalid" in str(excinfo.value)
 
@@ -165,14 +171,16 @@ def test_validate_computational_resources__valid_machine_group__no_error(
         machine = inductiva.resources.MachineGroup("c2-standard-16")
 
         try:
-            TesterSimulator().validate_computational_resources(machine)
+            # pylint: disable=protected-access
+            TesterSimulator()._validate_computational_resources(machine)
         except ValueError:
             assert False, error_message
 
         simulator = simulators.simulator.mpi_enabled(TesterSimulator)
 
         try:
-            simulator().validate_computational_resources(machine)
+            # pylint: disable=protected-access
+            simulator()._validate_computational_resources(machine)
         except ValueError:
             assert False, error_message
 
@@ -193,7 +201,8 @@ def test_validate_computational_resources__valid_mpi_cluster__no_error(
         simulator = simulators.simulator.mpi_enabled(TesterSimulator)
 
         try:
-            simulator().validate_computational_resources(machine)
+            # pylint: disable=protected-access
+            simulator()._validate_computational_resources(machine)
         except ValueError:
             assert False, error_message
 
