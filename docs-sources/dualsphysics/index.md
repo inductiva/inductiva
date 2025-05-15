@@ -29,5 +29,7 @@ hidden: true
 setup-test
 quick-start
 run-chrono-example
+multiple_gpus
+Visualization <visualization/index>
 ```
 
