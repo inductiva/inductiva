@@ -231,7 +231,7 @@ To fix this, we'll write a small Blender script:
 2. Create a new script and paste the following:
 
 <div align="center">
-   <img src="../../_static/script.png" alt="Create a blender script">
+   <img src="../../_static/scripting.png" alt="Create a blender script">
    <p><em>Figure 7: Create a blender script</em></p>
 </div>
 
