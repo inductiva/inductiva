@@ -648,25 +648,29 @@ within the specified ZIP archive.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="inductiva.storage.storage.listdir">
-<span class="sig-name descname"><span class="pre">listdir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'size'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'creation_time'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'creation_time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'asc'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'desc'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'desc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.listdir" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">listdir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'size'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'creation_time'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'creation_time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'asc'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'desc'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'desc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.listdir" title="Link to this definition">#</a></dt>
 <dd><p>List and display the contents of the user’s storage.
 :param path: Storage directory to list. Default is root.
 :type path: str
-:param max_results: The maximum number of results to return.
-:type max_results: int
-:param order_by: The field to sort the contents by.
-:type order_by: str
-:param sort_order: Whether to sort the contents in ascending or
-:type sort_order: str
-:param descending order.:</p>
+:param max_results: The maximum number of results to return. If not set,</p>
+<blockquote>
+<div><p>all entries are returned.</p>
+</div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A list of dictionaries containing information about
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>order_by</strong> (<em>str</em>) – The field to sort the contents by.</p></li>
+<li><p><strong>sort_order</strong> (<em>str</em>) – Whether to sort the contents in ascending or</p></li>
+<li><p><strong>order.</strong> (<em>descending</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of dictionaries containing information about
 the size, the name and the creation time of each content that can
 easily be converted to a dataframe.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>list of dict</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of dict</p>
 </dd>
 </dl>
 <dl class="simple">
