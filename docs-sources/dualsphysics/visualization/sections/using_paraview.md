@@ -50,8 +50,11 @@ data you decide to save during the simulation).
 To do that, click the `PartFluid_0000.vtk*` in the Pipeline Browser and change
 from `idp` to `Vel` in the dropdown menu above.
 
+![Changing idp to Vel](../../_static/pick_vel.png)
+<p align="center"><em>Figure 6: Changing idp to Vel</em></p>
+
 ![Simulation running with velocity visible](../../_static/sim_vel.png)
-<p align="center"><em>Figure 6: Simulation running with velocity visible</em></p>
+<p align="center"><em>Figure 7: Simulation running with velocity visible</em></p>
 
 You can now sabe your animation by clicking `File` > `Save Animation...` and choosing
 the format you want to save it in.
