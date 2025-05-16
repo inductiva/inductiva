@@ -1489,8 +1489,7 @@ class Task:
                 self.id,
             )
         try:
-            # TODO: rename the function to a more generic name
-            storage.remove_workspace(remote_dir=self.id)
+            storage.remove(remote_path=self.id)
             if verbose:
                 logging.info("Remote task files removed successfully.")
         except exceptions.ApiException as e:

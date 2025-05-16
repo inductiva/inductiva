@@ -610,23 +610,24 @@ def _list_files(root_path: str) -> Tuple[List[str], int]:
     return file_paths, total_size
 
 
-def remove_workspace(remote_dir) -> bool:
+def remove(remote_path: str):
     """
-    Removes path from a remote directory.
+    Removes a file or directory from the remote location.
 
     Parameters:
-    - remote_dir (str): The path to the remote directory.
+    - remote_path (str): The path to the remote file or directory.
     """
-    api = storage_api.StorageApi(inductiva.api.get_client())
-
-    logging.info("Removing workspace file(s)...")
+    logging.info("Removing '%s' from remote storage...", remote_path)
 
     # Since we don't allow root files in workspaces it must be a directory
     # otherwise path validation in the backend will give error
-    if "/" not in remote_dir:
-        remote_dir = remote_dir + "/"
-    api.delete_file(query_params={"path": remote_dir},)
-    logging.info("Workspace file(s) removed successfully.")
+    if "/" not in remote_path:
+        remote_path += "/"
+
+    api = storage_api.StorageApi(inductiva.api.get_client())
+    api.delete_file(query_params={"path": remote_path})
+
+    logging.info("Successfully removed '%s' from remote storage.", remote_path)
 
 
 def copy(source: str, target: str):
