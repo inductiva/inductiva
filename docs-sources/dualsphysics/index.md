@@ -23,11 +23,13 @@ versions-and-containers
 ```{toctree}
 ---
 caption: Tutorials
-maxdepth: 3
+maxdepth: 4
 hidden: true
 ---
 setup-test
 quick-start
 run-chrono-example
+multiple_gpus
+Visualizing Simulation Data <visualization/index>
 ```
 
