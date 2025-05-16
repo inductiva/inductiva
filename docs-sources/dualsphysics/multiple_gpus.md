@@ -130,4 +130,4 @@ Here are the results of running the same simulation on those machines:
 
 
 Keep reading to learn how to [visualize the results of your simulation using
-Paraview or Blender](./sections/index).
+Paraview or Blender](./visualization/index).
