@@ -2,12 +2,20 @@ tasks
 =======================
 
 
-.. automodule:: inductiva.tasks.task
+
+
+tasks module methods
+-------------------------
+
+.. automodule:: inductiva.tasks.methods
    :members:
    :show-inheritance:
    :undoc-members:
 
-.. automodule:: inductiva.tasks.methods
+Tasks class
+-------------------------
+
+.. automodule:: inductiva.tasks.task
    :members:
    :show-inheritance:
    :undoc-members:
