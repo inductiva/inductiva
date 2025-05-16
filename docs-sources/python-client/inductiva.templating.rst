@@ -1,4 +1,4 @@
-templating module
+templating
 ============================
 
 .. automodule:: inductiva.templating.manager

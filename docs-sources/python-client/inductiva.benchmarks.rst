@@ -1,4 +1,4 @@
-benchmarks module
+benchmarks
 ============================
 
 .. automodule:: inductiva.benchmarks.benchmark
