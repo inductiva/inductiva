@@ -384,11 +384,6 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task"><code class="docutils literal notranslate"><span class="pre">Task</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.FAILED_STATUSES"><code class="docutils literal notranslate"><span class="pre">Task.FAILED_STATUSES</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.KILLABLE_STATUSES"><code class="docutils literal notranslate"><span class="pre">Task.KILLABLE_STATUSES</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.KILL_VERBOSITY_LEVELS"><code class="docutils literal notranslate"><span class="pre">Task.KILL_VERBOSITY_LEVELS</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.RUNNING_STATUSES"><code class="docutils literal notranslate"><span class="pre">Task.RUNNING_STATUSES</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.STANDARD_OUTPUT_FILES"><code class="docutils literal notranslate"><span class="pre">Task.STANDARD_OUTPUT_FILES</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.__init__"><code class="docutils literal notranslate"><span class="pre">Task.__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.close_stream"><code class="docutils literal notranslate"><span class="pre">Task.close_stream()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.download_inputs"><code class="docutils literal notranslate"><span class="pre">Task.download_inputs()</span></code></a></li>
@@ -446,39 +441,14 @@ document.write(`
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Represents a running/completed task on the Inductiva API.</p>
 <p>Example usage:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="o">=</span> <span class="n">scenario</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="n">final_status</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">task</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 <span class="n">info</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">get_info</span><span class="p">()</span> <span class="c1"># dictionary with info about the task</span>
 <span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">(</span>
     <span class="n">filenames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;file1.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;file2.dat&quot;</span><span class="p">]</span> <span class="c1"># download only these files</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="inductiva.tasks.task.Task.FAILED_STATUSES">
-<span class="sig-name descname"><span class="pre">FAILED_STATUSES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{&lt;DynamicSchema:</span> <span class="pre">'executer-failed'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'executer-terminated'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'executer-terminated-by-user'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'executer-terminated-ttl-exceeded'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'failed'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'killed'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'spot-instance-preempted'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'ttl-exceeded'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'zombie'&gt;}</span></em><a class="headerlink" href="#inductiva.tasks.task.Task.FAILED_STATUSES" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="inductiva.tasks.task.Task.KILLABLE_STATUSES">
-<span class="sig-name descname"><span class="pre">KILLABLE_STATUSES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{&lt;DynamicSchema:</span> <span class="pre">'computation-ended'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'computation-started'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'pending-input'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'started'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'submitted'&gt;}</span></em><a class="headerlink" href="#inductiva.tasks.task.Task.KILLABLE_STATUSES" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="inductiva.tasks.task.Task.KILL_VERBOSITY_LEVELS">
-<span class="sig-name descname"><span class="pre">KILL_VERBOSITY_LEVELS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">2]</span></em><a class="headerlink" href="#inductiva.tasks.task.Task.KILL_VERBOSITY_LEVELS" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="inductiva.tasks.task.Task.RUNNING_STATUSES">
-<span class="sig-name descname"><span class="pre">RUNNING_STATUSES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{&lt;DynamicSchema:</span> <span class="pre">'computation-ended'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'computation-started'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'pending-input'&gt;,</span> <span class="pre">&lt;DynamicSchema:</span> <span class="pre">'started'&gt;}</span></em><a class="headerlink" href="#inductiva.tasks.task.Task.RUNNING_STATUSES" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="inductiva.tasks.task.Task.STANDARD_OUTPUT_FILES">
-<span class="sig-name descname"><span class="pre">STANDARD_OUTPUT_FILES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">['stdout.txt',</span> <span class="pre">'stderr.txt']</span></em><a class="headerlink" href="#inductiva.tasks.task.Task.STANDARD_OUTPUT_FILES" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="inductiva.tasks.task.Task.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.tasks.task.Task.__init__" title="Link to this definition">#</a></dt>
@@ -1015,11 +985,6 @@ all the tasks. Example: { “ID”: [1, 2, 3],
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task"><code class="docutils literal notranslate"><span class="pre">Task</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.FAILED_STATUSES"><code class="docutils literal notranslate"><span class="pre">Task.FAILED_STATUSES</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.KILLABLE_STATUSES"><code class="docutils literal notranslate"><span class="pre">Task.KILLABLE_STATUSES</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.KILL_VERBOSITY_LEVELS"><code class="docutils literal notranslate"><span class="pre">Task.KILL_VERBOSITY_LEVELS</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.RUNNING_STATUSES"><code class="docutils literal notranslate"><span class="pre">Task.RUNNING_STATUSES</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.STANDARD_OUTPUT_FILES"><code class="docutils literal notranslate"><span class="pre">Task.STANDARD_OUTPUT_FILES</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.__init__"><code class="docutils literal notranslate"><span class="pre">Task.__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.close_stream"><code class="docutils literal notranslate"><span class="pre">Task.close_stream()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.download_inputs"><code class="docutils literal notranslate"><span class="pre">Task.download_inputs()</span></code></a></li>
