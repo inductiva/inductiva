@@ -280,7 +280,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             mock.patch("inductiva.api.methods.submit_request") \
                 as submit_mock, \
             mock.patch.object(inductiva.simulators.simulator.Simulator,
-                 "validate_computational_resources",) \
+                 "_validate_computational_resources",) \
                 as validate_resources_mock:
 
             validate_resources_mock.return_value = None
