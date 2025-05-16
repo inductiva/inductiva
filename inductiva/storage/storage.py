@@ -617,7 +617,7 @@ def remove(remote_path: str):
     Parameters:
     - remote_path (str): The path to the remote file or directory.
     """
-    logging.info("Removing '%s'...", remote_path)
+    logging.info("Removing '%s' from remote storage...", remote_path)
 
     # Since we don't allow root files in workspaces it must be a directory
     # otherwise path validation in the backend will give error
@@ -627,7 +627,7 @@ def remove(remote_path: str):
     api = storage_api.StorageApi(inductiva.api.get_client())
     api.delete_file(query_params={"path": remote_path})
 
-    logging.info("Successfully removed '%s'.", remote_path)
+    logging.info("Successfully removed '%s' from remote storage.", remote_path)
 
 
 def copy(source: str, target: str):
