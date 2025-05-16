@@ -112,7 +112,7 @@ def test_mpi_enabled__dummy_simulator():
     mpi_enabled_sim = simulators.simulator.mpi_enabled(TesterSimulator)
 
     # pylint: disable=protected-access
-    assert resources.MPICluster in mpi_enabled_sim._get_supported_resources()
+    assert resources.MPICluster in mpi_enabled_sim.get_supported_resources()
 
 
 @mark.parametrize("simulator", [
