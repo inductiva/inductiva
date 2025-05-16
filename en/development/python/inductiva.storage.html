@@ -418,7 +418,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_zip_contents"><code class="docutils literal notranslate"><span class="pre">get_zip_contents()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.listdir"><code class="docutils literal notranslate"><span class="pre">listdir()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.multipart_upload"><code class="docutils literal notranslate"><span class="pre">multipart_upload()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.remove_workspace"><code class="docutils literal notranslate"><span class="pre">remove_workspace()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.remove"><code class="docutils literal notranslate"><span class="pre">remove()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.upload"><code class="docutils literal notranslate"><span class="pre">upload()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.upload_from_url"><code class="docutils literal notranslate"><span class="pre">upload_from_url()</span></code></a></li>
 </ul>
@@ -694,11 +694,11 @@ class.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="inductiva.storage.storage.remove_workspace">
-<span class="sig-name descname"><span class="pre">remove_workspace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remote_dir</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#inductiva.storage.storage.remove_workspace" title="Link to this definition">#</a></dt>
-<dd><p>Removes path from a remote directory.</p>
+<dt class="sig sig-object py" id="inductiva.storage.storage.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remote_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.remove" title="Link to this definition">#</a></dt>
+<dd><p>Removes a file or directory from the remote location.</p>
 <p>Parameters:
-- remote_dir (str): The path to the remote directory.</p>
+- remote_path (str): The path to the remote file or directory.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -826,7 +826,7 @@ If not specified, the name will be extracted from the URL.</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_zip_contents"><code class="docutils literal notranslate"><span class="pre">get_zip_contents()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.listdir"><code class="docutils literal notranslate"><span class="pre">listdir()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.multipart_upload"><code class="docutils literal notranslate"><span class="pre">multipart_upload()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.remove_workspace"><code class="docutils literal notranslate"><span class="pre">remove_workspace()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.remove"><code class="docutils literal notranslate"><span class="pre">remove()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.upload"><code class="docutils literal notranslate"><span class="pre">upload()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.upload_from_url"><code class="docutils literal notranslate"><span class="pre">upload_from_url()</span></code></a></li>
 </ul>
