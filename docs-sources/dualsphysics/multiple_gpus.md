@@ -1,4 +1,4 @@
-# Testing different GPUS on the Cloud
+# 3-D dam break impacting an elastic plate
 
 In order to test the performance of DualSPHysics on different GPUs, we will run one
 of the simulations present at
@@ -118,7 +118,7 @@ changing the `machine_type` parameter in the code above to `a2-highgpu-1g` or
 `a3-highgpu-1g`. This machines have 1 Nvidia A100 and 1 Nvidia H100 GPU respectively.
 
 **NOTE:** you also have to add `zone="europe-west4-b"` to the machine creation due to
-the fact that the A100 and H100 GPUs are not available in our default zone.
+the fact that the A100 and H100 GPUs are not yet available on our default zone.
 
 
 Here are the results of running the same simulation on those machines:
