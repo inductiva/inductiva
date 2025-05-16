@@ -314,7 +314,7 @@ class Task:
         )
     """
 
-    FAILED_STATUSES = {
+    _FAILED_STATUSES = {
         models.TaskStatusCode.FAILED,
         models.TaskStatusCode.KILLED,
         models.TaskStatusCode.EXECUTERFAILED,
@@ -365,7 +365,7 @@ class Task:
 
         This method issues a request to the API.
         """
-        return self.get_status() in self.FAILED_STATUSES
+        return self.get_status() in self._FAILED_STATUSES
 
     def is_terminal(self) -> bool:
         """Check if the task is in a terminal status.
