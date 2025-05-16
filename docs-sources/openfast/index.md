@@ -27,6 +27,9 @@ hidden: true
 ---
 setup-test
 quick-start
+Generate TurbSim dataset
+<generate-turbsim-dataset/index>
+turbsim-visualization
 Run 50 Simulations in Parallel <run-50-simulations-in-parallel/index>
 build-dll-file
 ```

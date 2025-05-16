@@ -49,7 +49,8 @@ for depth in range(100, 200, 2):
        "openfast 5MW_OC4Semi_WSt_WavesWN/"
        "5MW_OC4Semi_WSt_WavesWN.fst"],
        on=cloud_machine,
-       project="Openfast_WavesWN")
+       project="Openfast_WavesWN",
+       resubmit_on_preemption=True)
 
 
 inductiva.projects.Project("Openfast_WavesWN").wait()
@@ -86,6 +87,8 @@ in a special folder, `target_dir` (`variations/params_for_depth_{depth}`). For m
 Next, we initialize the OpenFAST simulator and run the simulation using the newly created input directory. Each simulation task is added to the project, 
 allowing us to track and wait for all tasks to be completed.
 
+Note: we use `resubmit_on_preemption=True` when submitting a task to ensure that, if a machine is preempted, the task is automatically resubmited on another machine. ªreemptions can occur when using `spot` machines, which are significantly cheaper (up to 5x less expensive than regural instances), but come with the risk of possibly being interrupted at any time.
+
 ```python
 for depth in range(100, 200, 2):
 
@@ -117,8 +120,8 @@ for depth in range(100, 200, 2):
            "5MW_OC4Semi_WSt_WavesWN.fst"
        ],
        on=cloud_machine,
-       project="Openfast_WavesWN"
-   )
+       project="Openfast_WavesWN",
+       resubmit_on_preemption=True)
 ```
 
 ## Code Section 3: Waiting for the Simulations to finish
