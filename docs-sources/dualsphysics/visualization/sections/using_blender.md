@@ -15,7 +15,7 @@ data into mesh representations or volumetric formats that Blender can understand
 This often involves using scripts or external tools to bridge the gap between
 the raw simulation output and Blender's rendering system.
 
-<p align="center"><img src="./_static/dam_break_elastic.gif" alt="Visualization created with Blender." width="700"></p>
+<p align="center"><img src="../../_static/dam_break_elastic.gif" alt="Visualization created with Blender." width="700"></p>
 
 
 ```{toctree}

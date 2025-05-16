@@ -1,4 +1,4 @@
-## Converting VTK Files to Blender-Compatible Formats
+# Converting VTK Files to Blender-Compatible Formats
 
 To visualize DualSPHysics simulations in Blender, the raw particle data
 (typically stored in `.vtk` files) must first be converted into a mesh format
