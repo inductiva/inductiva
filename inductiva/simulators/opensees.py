@@ -6,7 +6,7 @@ from inductiva import types, tasks, simulators
 from inductiva.commands.commands import Command
 from inductiva.commands.mpiconfig import MPIConfig
 
-AVAILABLE_OPENSEES_INTERFACES = ["python", "tcl"]
+AVAILABLE_OPENSEES_INTERFACES = ["python", "tcl", "eesd"]
 
 
 @simulators.simulator.mpi_enabled
@@ -17,7 +17,7 @@ class OpenSees(simulators.Simulator):
                  /,
                  version: Optional[str] = None,
                  use_dev: bool = False,
-                 interface: Literal["python", "tcl"] = "python"):
+                 interface: Literal["python", "tcl", "eesd"] = "python"):
         """Initialize the OpenSees simulator.
 
         Args:
@@ -44,6 +44,8 @@ class OpenSees(simulators.Simulator):
         """Get the name of the simulator."""
         if self._interface == "python":
             return "OpenSeesPy"
+        elif self._interface == "eesd":
+            return "OpenSees-EESD"
         else:
             return "OpenSees"
 
@@ -55,6 +57,12 @@ class OpenSees(simulators.Simulator):
             return [
                 Command(f"python {sim_config_filename}", mpi_config=mpi_config)
             ]
+        
+        if self._interface == "eesd":
+            return [
+                Command(f"OpenSees {sim_config_filename}")
+            ]
+        
         return [
             Command(f"OpenSeesMP {sim_config_filename}", mpi_config=mpi_config)
         ]
