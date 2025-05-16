@@ -29,7 +29,8 @@ def kill_task(args):
         tasks = [{"task_id": id} for id in ids]
     else:
         tasks = []
-        for status in inductiva.tasks.Task.KILLABLE_STATUSES:
+        # pylint: disable=protected-access
+        for status in inductiva.tasks.Task._KILLABLE_STATUSES:
             tasks.extend([{
                 "task_id": task.id
             } for task in get_all(status=status)])

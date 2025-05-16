@@ -306,15 +306,15 @@ class Task:
     
     .. code-block:: python
 
-        task = scenario.simulate(...)
-        final_status = task.wait()
+        task = simulator.run(...)
+        task.wait()
         info = task.get_info() # dictionary with info about the task
         task.download_outputs(
             filenames=["file1.txt", "file2.dat"] # download only these files
         )
     """
 
-    FAILED_STATUSES = {
+    _FAILED_STATUSES = {
         models.TaskStatusCode.FAILED,
         models.TaskStatusCode.KILLED,
         models.TaskStatusCode.EXECUTERFAILED,
@@ -326,18 +326,18 @@ class Task:
         models.TaskStatusCode.TTLEXCEEDED,
     }
 
-    RUNNING_STATUSES = {
+    _RUNNING_STATUSES = {
         models.TaskStatusCode.PENDINGINPUT, models.TaskStatusCode.STARTED,
         models.TaskStatusCode.COMPUTATIONSTARTED,
         models.TaskStatusCode.COMPUTATIONENDED
     }
 
-    KILLABLE_STATUSES = {models.TaskStatusCode.SUBMITTED
-                        }.union(RUNNING_STATUSES)
+    _KILLABLE_STATUSES = {models.TaskStatusCode.SUBMITTED
+                         }.union(_RUNNING_STATUSES)
 
-    KILL_VERBOSITY_LEVELS = [0, 1, 2]
+    _KILL_VERBOSITY_LEVELS = [0, 1, 2]
 
-    STANDARD_OUTPUT_FILES = ["stdout.txt", "stderr.txt"]
+    _STANDARD_OUTPUT_FILES = ["stdout.txt", "stderr.txt"]
 
     def __init__(self, task_id: str):
         """Initialize the instance from a task ID."""
@@ -365,7 +365,7 @@ class Task:
 
         This method issues a request to the API.
         """
-        return self.get_status() in self.FAILED_STATUSES
+        return self.get_status() in self._FAILED_STATUSES
 
     def is_terminal(self) -> bool:
         """Check if the task is in a terminal status.
@@ -666,7 +666,7 @@ class Task:
         if download_std_on_completion:
             self._called_from_wait = True
             out_dir = self.download_outputs(
-                filenames=self.STANDARD_OUTPUT_FILES)
+                filenames=self._STANDARD_OUTPUT_FILES)
             if status == models.TaskStatusCode.FAILED:
                 self._print_failed_message(out_dir)
 
@@ -886,9 +886,9 @@ class Task:
                 raise ValueError("Wait timeout must be a positive number"
                                  " or None.")
 
-        if verbosity_level not in self.KILL_VERBOSITY_LEVELS:
+        if verbosity_level not in self._KILL_VERBOSITY_LEVELS:
             raise ValueError(f"Verbosity {verbosity_level} level not allowed. "
-                             f"Choose from {self.KILL_VERBOSITY_LEVELS}")
+                             f"Choose from {self._KILL_VERBOSITY_LEVELS}")
 
         self._send_kill_request(constants.TASK_KILL_MAX_API_REQUESTS)
 
@@ -960,7 +960,7 @@ class Task:
         """
         output_files = list(output_dir.iterdir())
         return all(
-            file.name in self.STANDARD_OUTPUT_FILES for file in output_files)
+            file.name in self._STANDARD_OUTPUT_FILES for file in output_files)
 
     def _request_download_output_url(self) -> Optional[str]:
         try:
@@ -1057,7 +1057,7 @@ class Task:
 
         download_message = "Downloading simulation files to %s..."
 
-        if filenames is self.STANDARD_OUTPUT_FILES:
+        if filenames is self._STANDARD_OUTPUT_FILES:
             download_message = "Downloading stdout and stderr files to %s..."
 
         if filenames:
