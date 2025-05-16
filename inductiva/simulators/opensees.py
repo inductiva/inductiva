@@ -57,12 +57,10 @@ class OpenSees(simulators.Simulator):
             return [
                 Command(f"python {sim_config_filename}", mpi_config=mpi_config)
             ]
-        
+
         if self._interface == "eesd":
-            return [
-                Command(f"OpenSees {sim_config_filename}")
-            ]
-        
+            return [Command(f"OpenSees {sim_config_filename}")]
+
         return [
             Command(f"OpenSeesMP {sim_config_filename}", mpi_config=mpi_config)
         ]
