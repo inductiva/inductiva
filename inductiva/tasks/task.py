@@ -333,7 +333,7 @@ class Task:
     }
 
     _KILLABLE_STATUSES = {models.TaskStatusCode.SUBMITTED
-                        }.union(_RUNNING_STATUSES)
+                         }.union(_RUNNING_STATUSES)
 
     _KILL_VERBOSITY_LEVELS = [0, 1, 2]
 
