@@ -6,7 +6,6 @@ Additionally, it contains some global constant variables defining
 configurations related to paths where certain files are expected to be.
 """
 import os
-import json
 import pathlib
 import zipfile
 import tempfile
@@ -18,12 +17,11 @@ import urllib3
 
 import logging
 
-INPUT_FILENAME = "input.json"
 ARTIFACTS_DIRNAME = "artifacts"
 INPUT_DIRNAME = "sim_dir"
 
 
-def pack_input(input_dir, kwargs, zip_name) -> str:
+def pack_input(input_dir, zip_name) -> str:
     """Pack all inputs into a zip file.
 
     Pack all input params and compress all files into a zip file.
@@ -33,8 +31,6 @@ def pack_input(input_dir, kwargs, zip_name) -> str:
 
     Args:
         input_dir: Directory containing the input files to be uploaded.
-        kwargs: Dict with the params that are passed into
-            the request by the user.
         zip_name: Name of the zip file to be created.
 
     Return:
@@ -47,11 +43,6 @@ def pack_input(input_dir, kwargs, zip_name) -> str:
 
         if input_dir:
             shutil.copytree(input_dir, dst_fullpath)
-
-        # Write input dictionary with packed params to a JSON file
-        input_json_path = os.path.join(tmpdir_path, INPUT_FILENAME)
-        with open(input_json_path, "w", encoding="UTF-8") as fp:
-            json.dump(kwargs, fp)
 
         # Zip everything in the temporary directory into a single zip file
         zip_path = shutil.make_archive(
