@@ -17,6 +17,19 @@ the raw simulation output and Blender's rendering system.
 
 <p align="center"><img src="../../_static/dam_break_elastic.gif" alt="Visualization created with Blender." width="700"></p>
 
+Certainly! Here's the final section rewritten in bullet-point style:
+
+---
+
+To simplify the process, this guide is divided into two main parts:
+
+* [Part 1: Converting `.vtk` to `.obj`](convert_to_obj.md)
+* [Part 2: Rendering in Blender](render_in_blender.md)
+
+This two-step workflow bridges the gap between raw simulation output and
+high-quality scientific visualizations using Blender.
+
+
 
 ```{toctree}
 :hidden:

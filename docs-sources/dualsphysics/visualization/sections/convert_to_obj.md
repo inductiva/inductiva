@@ -117,4 +117,4 @@ cases—ranging from quick previews to high-quality final renders.
 
 > **Note:** Make sure to install the required dependencies before running the script (e.g., `pip install vtk scikit-image numba`). Also, if you have multiple sets of `.vtk` files from different simulation outputs, you may need to run the script separately for each group.
 
-Here's a clearer, more polished version of your tutorial. I've improved the flow, readability, and tone while keeping the structure and technical details intact:
+See how you can visualize the results in Blender in the next section [Rendering in Blender](render_in_blender.md).
