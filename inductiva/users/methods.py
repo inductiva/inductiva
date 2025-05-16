@@ -1,8 +1,13 @@
 """Methods to interact with the user info on the API."""
+import argparse
 import json
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
+import inductiva
 from inductiva import api
+from inductiva._cli.cmd_auth.login import login as login_cmd
+from inductiva._cli.cmd_auth.logout import logout as logout_cmd
+
 from inductiva.client.apis.tags.users_api import UsersApi
 
 
@@ -78,3 +83,30 @@ def get_costs(start_year: int,
 
         request = api_instance.get_user_costs(query_params=query_params)
     return request.body["costs"]
+
+
+def login(api_key: Optional[str] = None, private: bool = False) -> None:
+    """Logs the user in to the Inductiva platform.
+
+    This function handles user login, either by using a provided API key
+    or by prompting the user to log in via the command line.
+
+    Args:
+        api_key: The API key to use for authentication. If provided,
+            the user will be logged in using this key. If not provided,
+            the user will be prompted to log in via the command line.
+        private:  If True, no api_key will be printed to the console.
+    """
+
+    if not api_key:
+        args = argparse.Namespace(private=private)
+        login_cmd(args)
+    else:
+        inductiva.set_api_key(api_key)
+        get_info()
+        print("Login successful.")
+
+
+def logout():
+    """Logs the user out by removing the stored API key."""
+    logout_cmd(None)

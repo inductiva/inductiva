@@ -85,7 +85,9 @@ def _set_key_and_check_version():
     is_auth_cli = len(sys.argv) > 1 and sys.argv[1] == "auth"
     if not utils.format_utils.getenv_bool("GITHUB_ACTIONS", False) \
             and not is_auth_cli:
-        set_api_key(get_api_key())
+        key = get_api_key()
+        if key:
+            set_api_key(key)
 
     # Perform version check only on first invocation
     if not hasattr(_set_key_and_check_version, "version_checked"):
@@ -184,6 +186,14 @@ def set_api_key(api_key, login_message=True):
 def get_api_key():
     """Returns the value of inductiva._api_key or the stored API key."""
     api_key = _api_key.get() or utils.authentication.get_stored_api_key()
+    return api_key
+
+
+def get_validated_api_key():
+    """Returns the value of inductiva._api_key or the stored API key.
+    Raises ValueError if the API key is invalid.
+    """
+    api_key = get_api_key()
     _validate_api_key(api_key)
     return api_key
 
@@ -231,4 +241,8 @@ ansi_enabled = _supports_ansi()
 
 _set_key_and_check_version()
 
-_check_user_info()
+try:
+    get_validated_api_key()
+    _check_user_info()
+except ValueError:
+    pass

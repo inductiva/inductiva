@@ -27,7 +27,7 @@ from inductiva.utils import format_utils, files
 
 def get_api_config() -> Configuration:
     """Returns an API configuration object."""
-    api_key = inductiva.get_api_key()
+    api_key = inductiva.get_validated_api_key()
 
     api_config = Configuration(host=inductiva.api_url)
     api_config.api_key["APIKeyHeader"] = api_key
