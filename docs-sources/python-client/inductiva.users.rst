@@ -1,4 +1,4 @@
-users sub-package
+users
 =======================
 
 .. automodule:: inductiva.users.methods
