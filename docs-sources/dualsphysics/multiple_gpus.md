@@ -1,11 +1,10 @@
 # 3-D dam break impacting an elastic plate
 
-In order to test the performance of DualSPHysics on different GPUs, we will run one
-of the simulations present at
+To evaluate the performance of DualSPHysics across different GPUs, we will run a benchmark simulation based on one presented in the paper
 [A fluid–structure interaction model for free-surface flows and flexible structures using smoothed particle hydrodynamics on a GPU](https://www.sciencedirect.com/science/article/pii/S0889974621000955?via%3Dihub).
-Of the simulations presented in the paper we decided to stick with `3-D dam break impacting an elastic plate`.
+Among the various simulations discussed, we focus on the `3-D dam break impacting an elastic plate` scenario.
 
-## 3-D dam break impacting an elastic plate
+## Simulation Overview
 
 This simulation showcases the well known dam break problem, where a column of
 water is released from a height. The catch here is the fact that there is an elastic

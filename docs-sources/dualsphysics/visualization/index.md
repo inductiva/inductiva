@@ -21,6 +21,6 @@ best tools for your visualization needs.
 
 ```{toctree}
 :hidden:
-sections/using_paraview.md
-sections/using_blender.md
+DualSPHysics with ParaView <sections/using_paraview.md>
+DualSPHysics with Blender <sections/using_blender.md>
 ```

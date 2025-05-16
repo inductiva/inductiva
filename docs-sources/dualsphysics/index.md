@@ -23,7 +23,7 @@ versions-and-containers
 ```{toctree}
 ---
 caption: Tutorials
-maxdepth: 3
+maxdepth: 4
 hidden: true
 ---
 setup-test

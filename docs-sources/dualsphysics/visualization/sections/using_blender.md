@@ -20,6 +20,6 @@ the raw simulation output and Blender's rendering system.
 
 ```{toctree}
 :hidden:
-convert_to_obj.md
-render_in_blender.md
+Convert vtk to obj <convert_to_obj.md>
+Using Blender <render_in_blender.md>
 ```
