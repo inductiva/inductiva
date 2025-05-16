@@ -127,3 +127,7 @@ Here are the results of running the same simulation on those machines:
 |  g2-standard-16| Nvidia L4   | 1 hour 36 minutes      | 0.66 US$    |
 |  a2-highgpu-1g | Nvidia A100 | 1 hour 2 minutes       | 0.61 US$    |
 |  a3-highgpu-1g | Nvidia H100 | 34 minutes 33 seconds  | 1.55 US$    |
+
+
+Keep reading to learn how to [visualize the results of your simulation using
+Paraview or Blender](./sections/index).
