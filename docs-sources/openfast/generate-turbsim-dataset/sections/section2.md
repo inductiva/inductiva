@@ -6,7 +6,6 @@ The Python code required to run a TurbSIM simulation using the Inductiva API fol
 
 
 ```python
-
 import inductiva
 
 # Allocate cloud machine on Google Cloud Platform
@@ -16,7 +15,7 @@ cloud_machine = inductiva.resources.MachineGroup( \
     spot=True)
 
 # Initialize OpenFast stack, which includes turbosim
-openfast = inductiva.simulators.OpenFAST(version="3.5.2", use_dev=True)
+openfast = inductiva.simulators.OpenFAST()
 
 # Run turbosim command on the 90m_12mps_twr.inp input file.
 task = openfast.run(input_dir="input_files/",
@@ -38,21 +37,26 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-        Waiting for Input         at 16/05, 08:13:38      0.902 s
-        In Queue                  at 16/05, 08:13:39      38.301 s
-        Preparing to Compute      at 16/05, 08:14:18      1.592 s
-        In Progress               at 16/05, 08:14:19      458.398 s
-                └> 458.262 s       turbsim 90m_12mps_twr.inp
-        Finalizing                at 16/05, 08:21:58      0.606 s
-        Success                   at 16/05, 08:21:58      
+        Waiting for Input         at 19/05, 10:30:46      1.078 s
+        In Queue                  at 19/05, 10:30:47      33.417 s
+        Preparing to Compute      at 19/05, 10:31:20      61.376 s
+        In Progress               at 19/05, 10:32:22      136.385 s
+                └> 136.186 s       turbsim 90m_12mps_twr.inp
+        Finalizing                at 19/05, 10:34:38      0.655 s
+        Success                   at 19/05, 10:34:39      
 
 Data:
         Size of zipped output:    8.16 MB
         Size of unzipped output:  8.39 MB
         Number of output files:   6
 
-Estimated computation cost (US$): 0.0022 US$
+Estimated computation cost (US$): 0.0010 US$
 ```
+
+You can also check the [Inductiva Web Console](https://console.inductiva.ai/) for more task information. You can check task details, navigate the task filesystem and even read the logs in real time!
+
+![console timeline](../../_static/console_timeline.png)
+![console logs](../../_static/console_logs.png)
 
 ## Performance and Cost Analysis
 Given that TurbSIM does not benefit from multiple CPU cores, we chose the `n2-highcpu-2` virtual machine (VM) with 2 virtual CPUs (equivalent to 1 physical core). 

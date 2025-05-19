@@ -96,7 +96,7 @@ inductiva.TemplateManager.render_dir(
    URef=URef)
 
 # Initialize OpenFAST simulator
-turbsim = inductiva.simulators.OpenFAST(version="3.5.2")
+turbsim = inductiva.simulators.OpenFAST()
 
 task = openfast.run(
    input_dir=target_dir,

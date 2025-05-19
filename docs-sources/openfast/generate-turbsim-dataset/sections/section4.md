@@ -22,19 +22,20 @@ cloud_machine = inductiva.resources.ElasticMachineGroup(
    machine_type="n2-highcpu-2",
    spot=True,
    min_machines=1,
-   max_machines=50)
+   max_machines=5)
 
 # Turbosim takes seeds from -2147483648 to 2147483647
 MIN_INT = -2_147_483_648
 MAX_INT = 2_147_483_647
-URef_MIN = 1
-URef_MAX = 20
+UREF_MIN = 7
+UREF_MAX = 17
+DATASET_SIZE = 25
 
-for i in range(50):
+for i in range(DATASET_SIZE):
     # Sample the parameters
     seed_1 = random.randint(MIN_INT, MAX_INT)
     seed_2 = random.randint(MIN_INT, MAX_INT)
-    URef = random.randint(URef_MIN, URef_MAX)
+    URef = random.randint(UREF_MIN, UREF_MAX)
 
     print(f"Preparing files for TurbSim with "\
           f"seed1 = {seed_1}, seed_2 = {seed_2}, "\
@@ -49,7 +50,7 @@ for i in range(50):
         URef=URef)
 
     # Initialize the Simulator
-    turbsim = inductiva.simulators.OpenFAST(version="3.5.2", use_dev=True)
+    turbsim = inductiva.simulators.OpenFAST()
 
     # Run simulation
     task = turbsim.run(
@@ -108,11 +109,11 @@ We now enter a loop that is responsible for generating new input files and runni
 First, we sample the values for `seed_1`, `seed_2` and `URef`. For each triplet of values, we generate input files using the `render_dir` method as we saw in the previous section:
 
 ```python
-for i in range(50):
+for i in range(DATASET_SIZE):
     # Sample the parameters
     seed_1 = random.randint(MIN_INT, MAX_INT)
     seed_2 = random.randint(MIN_INT, MAX_INT)
-    URef = random.randint(URef_MIN, URef_MAX)
+    URef = random.randint(UREF_MIN, UREF_MAX)
 
     print(f"Preparing files for TurbSim with "\
           f"seed1 = {seed_1}, seed_2 = {seed_2}, "\
@@ -135,7 +136,7 @@ Note: we use `resubmit_on_preemption=True` when submitting a task to ensure that
 ```python
     ...
     # Initialize the Simulator
-    turbsim = inductiva.simulators.OpenFAST(version="3.5.2", use_dev=True)
+    turbsim = inductiva.simulators.OpenFAST()
 
     # Run simulation
     task = turbsim.run(
@@ -168,8 +169,12 @@ project.wait()
 cloud_machine.terminate()
 ```
 
->Note: You can list the tasks from this project by running this command on
+You can list the tasks from this project by running this command on
 your command line interface `inductiva tasks list -p turbsim_dataset`
+
+Alternatively, you can also check the tasks projects in the [Inductiva Web Console](https://console.inductiva.ai/) on the "Projects" tab:
+
+![console project](../../_static/console_projects.png)
 
 
 
