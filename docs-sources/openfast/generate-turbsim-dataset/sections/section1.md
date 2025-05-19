@@ -1,5 +1,5 @@
 # Prerequisites
-> Before running a TurbSIM simulation, ensure all the necessary files are correctly set up.  
+> Before running a TurbSim simulation, ensure all the necessary files are correctly set up.  
 This guide will walk you through the preparation process.
 
 Let’s get started!

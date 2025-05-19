@@ -179,9 +179,9 @@ Alternatively, you can also check the tasks projects in the [Inductiva Web Conso
 
 
 ## Summary
-We demonstrated how Inductiva can be used to efficiently run multiple TurbSIM simulations in parallel and generate a dataset. 
+We demonstrated how Inductiva can be used to efficiently run multiple TurbSim simulations in parallel and generate a dataset. 
 
-While a single TurbSIM simulation may run faster on a local machine with high processing power, scaling up to dozens or hundreds of simulations is where Inductiva excels. By automating input file modifications
+While a single TurbSim simulation may run faster on a local machine with high processing power, scaling up to dozens or hundreds of simulations is where Inductiva excels. By automating input file modifications
 and distributing simulations across inexpensive cloud machines, you can drastically reduce overall computation time and streamline large-scale studies.
 
 With just a few lines of Python, you can effortlessly scale your OpenFAST projects - saving time, optimising resources and accelerating your research. 🚀

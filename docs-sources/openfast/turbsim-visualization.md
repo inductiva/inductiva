@@ -6,12 +6,12 @@ System Development"](https://www.nrel.gov/docs/fy09osti/38060.pdf).
 
 In this section we will show you how to visualize the output.
 
-<p align="center"><img src="_static/turbsim_animation_30_fps.gif" alt="TurbSIM simulation visualization" width="700"></p>
+<p align="center"><img src="_static/turbsim_animation_30_fps.gif" alt="TurbSim simulation visualization" width="700"></p>
 
 ## Requirements
 
 ### `Openfast_toolbox` 
-Library used to load TurbSIM output files via the TurbSimFile class.
+Library used to load TurbSim output files via the TurbSimFile class.
 
 ```
 git clone http://github.com/OpenFAST/openfast_toolbox

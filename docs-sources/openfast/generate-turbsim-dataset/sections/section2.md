@@ -1,8 +1,8 @@
 # Run a Single Simulation
-First, we will run a single TurbSIM simulation using the [`90m_12mps_twr.inp`](https://github.com/OpenFAST/r-test/tree/v4.0.2/glue-codes/openfast/5MW_Baseline) wind example available in the OpenFAST repository. This should be straightforward as all the necessary input files are already prepared as described in the previous section.
+First, we will run a single TurbSim simulation using the [`90m_12mps_twr.inp`](https://github.com/OpenFAST/r-test/tree/v4.0.2/glue-codes/openfast/5MW_Baseline) wind example available in the OpenFAST repository. This should be straightforward as all the necessary input files are already prepared as described in the previous section.
 
 ## Code Overview
-The Python code required to run a TurbSIM simulation using the Inductiva API follows a consistent structure. We adapt it for this specific use case, as shown below.
+The Python code required to run a TurbSim simulation using the Inductiva API follows a consistent structure. We adapt it for this specific use case, as shown below.
 
 
 ```python
@@ -60,8 +60,8 @@ You can also check the [Inductiva Web Console](https://console.inductiva.ai/) fo
 ![console logs](../../_static/console_logs.png)
 
 ## Performance and Cost Analysis
-Given that TurbSIM does not benefit from multiple CPU cores, we chose the `n2-highcpu-2` virtual machine (VM) with 2 virtual CPUs (equivalent to 1 physical core). 
+Given that TurbSim does not benefit from multiple CPU cores, we chose the `n2-highcpu-2` virtual machine (VM) with 2 virtual CPUs (equivalent to 1 physical core). 
 This is one of the cheapest options on Google Cloud, costing just US$0.0081 per hour in spot mode.
 
-In the next part of this tutorial, we'll take things to the next level by running dozens of TurbSIM simulations in parallel on Inductiva, demonstrating 
+In the next part of this tutorial, we'll take things to the next level by running dozens of TurbSim simulations in parallel on Inductiva, demonstrating 
 the true power of cloud-based scalability. Stay tuned!

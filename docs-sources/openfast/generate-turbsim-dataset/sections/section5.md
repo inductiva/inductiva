@@ -1,9 +1,9 @@
 # Results and Key Takeaways
-We successfully generated a TurbSIM dataset in parallel by sampling the seeds and the wind speed.
+We successfully generated a TurbSim dataset in parallel by sampling the seeds and the wind speed.
 This demonstrates the power of using cloud resources to efficiently scale up computational experiments. 
 Now it's time to retrieve all the results and analyze the data to extract meaningful insights from our simulations.
 
-<p align="center"><img src="../../_static/turbsim_animation_30_fps.gif" alt="TurbSIM simulation visualization" width="700"></p>
+<p align="center"><img src="../../_static/turbsim_animation_30_fps.gif" alt="TurbSim simulation visualization" width="700"></p>
 
 
 ## Project Summary and Output Download
@@ -71,7 +71,7 @@ Task metadata: {'URef': '13', 'seed_1': '-124466270', 'seed_2': '-864712422', 'l
 
 ## Key Takeaways
 In summary, using cloud computing for generating datasets of large-scale simulations not only increases efficiency, but also significantly reduces computational time and cost. 
-By running 25 simulations in parallel, we were able to overcome one of the limitations of TurbSIM, which is that it does not scale with multiple CPU cores.
+By running 25 simulations in parallel, we were able to overcome one of the limitations of TurbSim, which is that it does not scale with multiple CPU cores.
 
 Inductiva makes it possible and convenient to run hundreds or thousands of simulations. For example, you could now change the code for:
 
