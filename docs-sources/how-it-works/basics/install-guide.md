@@ -43,19 +43,8 @@ This will display your account information, confirming that the API key has been
 
 ### Option 2: Using the Python API
 
-Alternatively, you can authenticate directly within your Python scripts in a couple of ways:
+Alternatively, you can authenticate directly within your Python script:
 
-1. Providing the API Key as an Argument:
-
-```python
-import inductiva
-
-inductiva.users.login(api_key="<your_api_key>")
-```
-
-<br>
-
-2. Enter the API Key in the Terminal (when prompted by the Python script):
 ```python
 import inductiva
 

@@ -85,26 +85,18 @@ def get_costs(start_year: int,
     return request.body["costs"]
 
 
-def login(api_key: Optional[str] = None, private: bool = False) -> None:
+def login(private: bool = False) -> None:
     """Logs the user in to the Inductiva platform.
 
-    This function handles user login, either by using a provided API key
-    or by prompting the user to log in via the command line.
+    This function handles user login by prompting the user to log in via the
+      command line.
 
     Args:
-        api_key: The API key to use for authentication. If provided,
-            the user will be logged in using this key. If not provided,
-            the user will be prompted to log in via the command line.
         private:  If True, no api_key will be printed to the console.
     """
 
-    if not api_key:
-        args = argparse.Namespace(private=private)
-        login_cmd(args)
-    else:
-        inductiva.set_api_key(api_key)
-        get_info()
-        print("Login successful.")
+    args = argparse.Namespace(private=private)
+    login_cmd(args)
 
 
 def logout():
