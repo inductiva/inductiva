@@ -18,9 +18,10 @@ cloud_machine = inductiva.resources.MachineGroup( \
 openfast = inductiva.simulators.OpenFAST()
 
 # Run turbosim command on the 90m_12mps_twr.inp input file.
-task = openfast.run(input_dir="input_files/",
-                    commands=["turbsim 90m_12mps_twr.inp"],
-                    on=cloud_machine)
+task = openfast.run( \
+    input_dir="input_files/",
+    commands=["turbsim 90m_12mps_twr.inp"],
+    on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
 task.wait()
