@@ -37,6 +37,7 @@ class SCHISM(simulators.Simulator):
             project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
+        
         Args:
             input_dir: Path to the directory of the simulation input files.
             on: The computational resource to launch the simulation on.
@@ -44,8 +45,8 @@ class SCHISM(simulators.Simulator):
             https://schism-dev.github.io/schism/master/getting-started/running-model.html
             storage_dir: Directory for storing simulation results.
             use_hwthread: If specified Open MPI will attempt to discover the
-            number of hardware threads on the node, and use that as the
-            number of slots available.
+                number of hardware threads on the node, and use that as the
+                number of slots available.
             n_vcpus: Number of virtual cpus
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when

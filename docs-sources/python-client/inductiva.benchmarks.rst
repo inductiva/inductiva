@@ -1,4 +1,4 @@
-benchmarks sub-package
+benchmarks
 ============================
 
 .. automodule:: inductiva.benchmarks.benchmark

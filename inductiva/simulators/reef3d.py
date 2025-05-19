@@ -42,10 +42,10 @@ class REEF3D(simulators.Simulator):
             input_dir: Path to the directory of the simulation input files.
             on: The computational resource to launch the simulation on.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
-            (default), all vCPUs will be used.
+                (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
-            number of hardware threads on the node, and use that as the
-            number of slots available.
+                number of hardware threads on the node, and use that as the
+                number of slots available.
             sim_config_filename: Name of the simulation configuration file.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when

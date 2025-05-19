@@ -155,6 +155,7 @@ class Benchmark(projects.Project):
                 simulator.run(input_dir=input_dir,
                               on=machine_group,
                               project=self.name,
+                              resubmit_on_preemption=True,
                               verbose=False,
                               **kwargs)
         self.runs.clear()
@@ -271,6 +272,10 @@ class Benchmark(projects.Project):
         """
 
         def get_task_input_params(task):
+            info_as_dict = task.info.to_dict()
+            extra_params = info_as_dict.get("extra_params")
+            if extra_params is not None:
+                return extra_params
             input_filename = "input.json"
             input_dir_path = task.download_inputs(filenames=[input_filename])
             input_file_path = input_dir_path.joinpath(input_filename)
@@ -295,7 +300,8 @@ class Benchmark(projects.Project):
             task_input_params = get_task_input_params(task)
             task_info = task.info
             task_machine_type = task_info.executer.vm_type \
-                if task_info.executer else None
+                if task_info.executer.vm_type != "n/a" else \
+                    task_info.executer.vm_name
             task_time = task_info.time_metrics.computation_seconds.value
             task_cost = task_info.estimated_computation_cost
             info.append({

@@ -72,11 +72,6 @@ class Simulator(ABC):
         return self._version
 
     @property
-    def use_dev(self):
-        """Get whether the development version of the simulator is used."""
-        return self._use_dev
-
-    @property
     def name(self):
         """Get the name of the simulator."""
         return self.__class__.__name__
@@ -221,7 +216,7 @@ class Simulator(ABC):
         suffix = f"{suffix}{dev_suffix}"
         return suffix
 
-    def get_simulator_image_based_on_resource(
+    def _get_simulator_image_based_on_resource(
             self, resource: types.ComputationalResources):
         """
         Get the simulator image for the simulation, based on the resourced used.
@@ -286,7 +281,7 @@ class Simulator(ABC):
                 "run-parallel_simulations.html "
                 "to learn how to create your own computational resource.")
 
-        self.validate_computational_resources(on)
+        self._validate_computational_resources(on)
 
         if "commands" in kwargs:
             cmds = commands.Command.commands_to_dicts(kwargs["commands"])
@@ -298,7 +293,7 @@ class Simulator(ABC):
 
         # CustomImage does not use suffixes. We can the image as is
         if self.__class__.__name__ != "CustomImage":
-            self._image_uri = self.get_simulator_image_based_on_resource(on)
+            self._image_uri = self._get_simulator_image_based_on_resource(on)
 
         if on.has_gpu() and "_gpu" not in self._image_uri:
             logging.warning("Attention: The machine you selected has a GPU, but"
@@ -323,7 +318,7 @@ class Simulator(ABC):
             **kwargs,
         )
 
-    def validate_computational_resources(self, resource):
+    def _validate_computational_resources(self, resource):
         """Validate the computational resources passed to the run method.
 
         Args:

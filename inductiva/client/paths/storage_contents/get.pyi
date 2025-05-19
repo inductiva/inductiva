@@ -142,7 +142,17 @@ class OrderSchema(
         )
 
 
-RecursiveSchema = schemas.BoolSchema
+class RecursiveSchema(schemas.EnumBase, schemas.StrSchema):
+
+    @schemas.classproperty
+    def TRUE(cls):
+        return cls("true")
+
+    @schemas.classproperty
+    def FALSE(cls):
+        return cls("false")
+
+
 PathSchema = schemas.StrSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
@@ -197,7 +207,7 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
         'recursive':
             typing.Union[
                 RecursiveSchema,
-                bool,
+                str,
             ],
         'path':
             typing.Union[

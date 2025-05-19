@@ -50,9 +50,10 @@ $ inductiva storage remove hodbisrxjxhdbkknv60xmy6ti/
 You are about to remove the following paths from your remote storage space:
   - 0bet8jrpp2gz974n42nsd9n2p/
 Are you sure you want to proceed (y/[N])? y
-Removing 0bet8jrpp2gz974n42nsd9n2p/ in the user's remote storage.
-Successfully removed remote path '0bet8jrpp2gz974n42nsd9n2p/'.
+Removing '0bet8jrpp2gz974n42nsd9n2p/' from remote storage...
+Successfully removed '0bet8jrpp2gz974n42nsd9n2p/' from remote storage.
 ```
+
 You can alternatively clear all storage by adding the `--all` flag to the `remove` command.
 Such commands will always be followed with a confirmation prompt to ensure user intention
 and prevent irreversible loss.

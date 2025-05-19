@@ -1,4 +1,4 @@
-# Run Your First Simulation
+# Run Your First OpenFAST Simulation
 This tutorial will show you how to run OpenFAST simulations using the Inductiva API. 
 
 We will cover a quick start use case available in the [OpenFAST GitHub repository](https://github.com/openfast) to help you get started with simulations.

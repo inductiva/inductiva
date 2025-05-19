@@ -9,7 +9,7 @@ from .storage import (
     get_space_used,
     get_zip_contents,
     listdir,
-    remove_workspace,
+    remove,
     upload,
     upload_from_url,
     ZipArchiveInfo,

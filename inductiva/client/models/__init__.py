@@ -66,6 +66,7 @@ from inductiva.client.model.organization_update import OrganizationUpdate
 from inductiva.client.model.organization_users import OrganizationUsers
 from inductiva.client.model.project import Project
 from inductiva.client.model.project_create import ProjectCreate
+from inductiva.client.model.project_update import ProjectUpdate
 from inductiva.client.model.providers import Providers
 from inductiva.client.model.quota import Quota
 from inductiva.client.model.quota_scope import QuotaScope

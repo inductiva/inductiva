@@ -19,7 +19,6 @@ import urllib3
 import logging
 
 INPUT_FILENAME = "input.json"
-OUTPUT_FILENAME = "output.json"
 ARTIFACTS_DIRNAME = "artifacts"
 INPUT_DIRNAME = "sim_dir"
 
@@ -61,15 +60,6 @@ def pack_input(input_dir, kwargs, zip_name) -> str:
         logging.debug("Compressed inputs to %s", zip_path)
 
     return zip_path
-
-
-def extract_output(zip_path, output_dir):
-    with zipfile.ZipFile(zip_path, "r") as zip_fp:
-        output_json = zip_fp.read(OUTPUT_FILENAME)
-        result_list = json.loads(output_json)
-
-        extract_subdir_files(zip_fp, ARTIFACTS_DIRNAME, output_dir)
-    return result_list
 
 
 def extract_subdir_files(zip_fp: zipfile.ZipFile, dir_name: str,
