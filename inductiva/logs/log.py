@@ -181,10 +181,10 @@ def suppress_benchmark_logging():
     for frame_info in stack[1:]:
         local_vars = frame_info.frame.f_locals
 
-        for var_name, var_value in local_vars.items():
+        for _, var_value in local_vars.items():
             class_name = var_value.__class__.__name__
 
-            if class_name == 'Benchmark':
+            if class_name == "Benchmark":
                 in_benchmark = True
                 verbose = var_value.verbose
                 break
@@ -192,13 +192,14 @@ def suppress_benchmark_logging():
     original_level = root_logger.level
     original_stdout = sys.stdout
     original_stderr = sys.stderr
+    null_out = None
 
     if in_benchmark and not verbose:
         # Suppress logging, except for errors
         root_logger.setLevel(logging.ERROR)
 
         # Suppress stdout/stderr for tqdm
-        null_out = open(os.devnull, 'w')
+        null_out = open(os.devnull, "w", encoding="utf-8")
         sys.stdout = sys.stderr = null_out
 
     try:
