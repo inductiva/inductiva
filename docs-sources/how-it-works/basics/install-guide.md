@@ -48,6 +48,6 @@ Alternatively, you can authenticate directly within your Python script:
 ```python
 import inductiva
 
-inductiva.users.login()
+inductiva.auth.login()
 ```
 When prompted, paste your unique API key, which you can retrieve from [Inductiva's web Console](https://console.inductiva.ai/account/details).
