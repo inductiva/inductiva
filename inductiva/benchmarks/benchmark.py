@@ -130,8 +130,8 @@ class Benchmark(projects.Project):
             logging.info(
                 "Setting up resources for Benchmark. "
                 "This may take a few minutes.\n"
-                "Note that stopping this process will \033[1minterrupt\033[0m the "
-                "creation of the resources. Please wait...\n")
+                "Note that stopping this process will \033[1minterrupt\033[0m "
+                "the creation of the resources. Please wait...\n")
             self._resource_setup_message_shown = True
 
         self.runs.append((
@@ -168,7 +168,7 @@ class Benchmark(projects.Project):
             logging.info(
                 "Preparing tasks for Benchmark to start. "
                 "This may take a few minutes.\n"
-                "Note that stopping this process will \033[1minterrupt\033[0m the "
+                "Note that stopping this process will \033[1minterrupt\033[0m "
                 "the submission of the tasks. Please wait...\n")
         for simulator, input_dir, machine_group, kwargs in self.runs:
             if not machine_group.started:

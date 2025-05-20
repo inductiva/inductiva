@@ -17,6 +17,7 @@ def benchmark_fixture():
     mocked_benchmark.open = mock.MagicMock(return_value=None)
     mocked_benchmark.name = "test_benchmark"
     mocked_benchmark.verbose = False
+    mocked_benchmark._resource_setup_message_shown = False
     return mocked_benchmark
 
 
