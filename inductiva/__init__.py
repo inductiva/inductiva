@@ -108,6 +108,10 @@ class VersionError(Exception):
     pass
 
 
+class ApiKeyError(Exception):
+    pass
+
+
 def compare_client_and_backend_versions(client_version: str):
     """
     Compares the provided client version with the backend API version.
@@ -163,11 +167,11 @@ def _validate_api_key(api_key, login_message=True):
 
     if not api_key:
         error = f"No API Key specified.{message}"
-        raise ApiException(error)
+        raise ApiKeyError(error)
 
     if not utils.authentication.is_valid_token(api_key):
         error = f"Invalid API Key format.{message}"
-        raise ApiException(error)
+        raise ApiKeyError(error)
 
 
 def set_api_key(api_key, login_message=True):
@@ -236,5 +240,5 @@ _set_key_and_check_version()
 try:
     get_validated_api_key()
     _check_user_info()
-except ApiException:
+except ApiKeyError:
     pass
