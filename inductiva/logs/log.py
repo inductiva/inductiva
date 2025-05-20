@@ -101,6 +101,9 @@ def _handle_api_exception(exc_type, exc_value, exc_traceback,
     if issubclass(exc_type, inductiva.VersionError):
         root_logger.error(exc_value)
         return True
+    if issubclass(exc_type, inductiva.ApiKeyError):
+        root_logger.error(exc_value)
+        return True
 
     return False
 
