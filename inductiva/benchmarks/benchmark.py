@@ -57,12 +57,14 @@ class Benchmark(projects.Project):
         self.input_dir = None
         self.on = None
         self.kwargs = {}
+        self.verbose = False
 
     def set_default(
         self,
         simulator: Optional[simulators.Simulator] = None,
         input_dir: Optional[str] = None,
         on: Optional[types.ComputationalResources] = None,
+        verbose: Optional[bool] = None,
         **kwargs,
     ) -> Self:
         """
@@ -80,6 +82,9 @@ class Benchmark(projects.Project):
             on (Optional[types.ComputationalResources]): The computational
                 resources to use for running the simulations. If not specified,
                 the current resources will remain unchanged.
+            verbose (Optional[bool]): If `True`, enables extensive logging for
+                debug purposes. If not provided, the current verbosity setting
+                will remain unchanged.
             **kwargs: Additional keyword arguments to set as default parameters 
                 for the simulations. These will update any existing parameters
                 with the same names.
@@ -91,6 +96,7 @@ class Benchmark(projects.Project):
         self.input_dir = input_dir or self.input_dir
         self.on = on or self.on
         self.kwargs = {**self.kwargs, **kwargs}
+        self.verbose = verbose or self.verbose
         return self
 
     def add_run(
@@ -148,6 +154,11 @@ class Benchmark(projects.Project):
         Returns:
             Self: The current instance for method chaining.
         """
+        if not self.verbose:
+            logging.info(
+                "Setting up resources for Benchmark to start. This may take a few minutes.\n"
+                "Note that stopping this process will not interrupt the "
+                "the creation of the resources. Please wait...\n")
         for simulator, input_dir, machine_group, kwargs in self.runs:
             if not machine_group.started:
                 machine_group.start(wait_for_quotas=wait_for_quotas)
@@ -160,8 +171,8 @@ class Benchmark(projects.Project):
                               **kwargs)
         self.runs.clear()
         logging.info(
-            "Benchmark \033[1m%s\033[0m has started...\n"
-            "Go to https://console.inductiva.ai/projects/%s "
+            "■ Benchmark \033[1m%s\033[0m has started.\n"
+            "  Go to https://console.inductiva.ai/projects/%s "
             "for more details.\n", self.name, self.name)
         return self
 
@@ -299,6 +310,8 @@ class Benchmark(projects.Project):
         for task in tasks:
             task_input_params = get_task_input_params(task)
             task_info = task.info
+            if not task_info.executer:
+                continue
             task_machine_type = task_info.executer.vm_type \
                 if task_info.executer.vm_type != "n/a" else \
                     task_info.executer.vm_name

@@ -22,6 +22,7 @@ from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.models import (TaskRequest, TaskStatus, TaskSubmittedInfo,
                                      CompressionMethod)
 from inductiva import constants, storage
+from inductiva.logs.log import benchmark_aware_logging
 from inductiva.utils import format_utils, files
 
 
@@ -307,6 +308,7 @@ def task_info_str(
     return info_str
 
 
+@benchmark_aware_logging
 def submit_task(simulator,
                 input_dir,
                 machine_group,

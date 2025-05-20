@@ -1,4 +1,7 @@
 """Custom logging functions"""
+import contextlib
+import functools
+import inspect
 import traceback
 import json
 import os
@@ -163,3 +166,58 @@ def setup(level=logging.INFO):
         ip.set_custom_exc((Exception,), ipy_handle_uncaught_exception)
     else:
         sys.excepthook = handle_uncaught_exception
+
+
+@contextlib.contextmanager
+def suppress_benchmark_logging():
+    """
+    Context manager that temporarily disables logging and console output 
+    in benchmark contexts unless verbose mode is enabled.
+    """
+    in_benchmark = False
+    verbose = False
+    stack = inspect.stack()
+
+    for frame_info in stack[1:]:
+        local_vars = frame_info.frame.f_locals
+
+        for var_name, var_value in local_vars.items():
+            class_name = var_value.__class__.__name__
+
+            if class_name == 'Benchmark':
+                in_benchmark = True
+                verbose = var_value.verbose
+                break
+
+    original_level = root_logger.level
+    original_stdout = sys.stdout
+    original_stderr = sys.stderr
+
+    if in_benchmark and not verbose:
+        # Suppress logging, except for errors
+        root_logger.setLevel(logging.ERROR)
+
+        # Suppress stdout/stderr for tqdm
+        null_out = open(os.devnull, 'w')
+        sys.stdout = sys.stderr = null_out
+
+    try:
+        yield
+    finally:
+        # Restore logging levels
+        root_logger.setLevel(original_level)
+        sys.stdout = original_stdout
+        sys.stderr = original_stderr
+
+        if null_out:
+            null_out.close()
+
+
+def benchmark_aware_logging(func):
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        with suppress_benchmark_logging():
+            return func(*args, **kwargs)
+
+    return wrapper
