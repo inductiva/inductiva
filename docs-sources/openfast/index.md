@@ -21,16 +21,25 @@ versions-and-containers
 
 ```{toctree}
 ---
-caption: Tutorials
+caption: OpenFast Tutorials
 maxdepth: 4
 hidden: true
 ---
 setup-test
 quick-start
-Generate TurbSim dataset <generate-turbsim-dataset/index>
-turbsim-visualization
 Run 50 Simulations in Parallel <run-50-simulations-in-parallel/index>
 build-dll-file
+```
+
+
+```{toctree}
+---
+caption: TurbSim Tutorials
+maxdepth: 4
+hidden: true
+---
+Generate TurbSim dataset <generate-turbsim-dataset/index>
+turbsim-visualization
 ```
 
 ```{toctree}

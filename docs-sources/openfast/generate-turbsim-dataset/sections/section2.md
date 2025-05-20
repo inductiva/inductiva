@@ -11,7 +11,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2d-highcpu-2",
+    machine_type="n2-highcpu-2",
     spot=True)
 
 # Initialize OpenFast stack, which includes turbosim
