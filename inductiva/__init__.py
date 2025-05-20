@@ -163,11 +163,11 @@ def _validate_api_key(api_key, login_message=True):
 
     if not api_key:
         error = f"No API Key specified.{message}"
-        raise ValueError(error)
+        raise ApiException(error)
 
     if not utils.authentication.is_valid_token(api_key):
         error = f"Invalid API Key format.{message}"
-        raise ValueError(error)
+        raise ApiException(error)
 
 
 def set_api_key(api_key, login_message=True):
@@ -236,5 +236,5 @@ _set_key_and_check_version()
 try:
     get_validated_api_key()
     _check_user_info()
-except ValueError:
+except ApiException:
     pass
