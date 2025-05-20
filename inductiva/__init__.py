@@ -108,6 +108,10 @@ class VersionError(Exception):
     pass
 
 
+class ApiKeyError(Exception):
+    pass
+
+
 def compare_client_and_backend_versions(client_version: str):
     """
     Compares the provided client version with the backend API version.
@@ -158,23 +162,16 @@ def compare_client_and_backend_versions(client_version: str):
                 f"Failed to compare client and API versions. {e}") from e
 
 
-def _raise_api_key_error(message):
-    if logs.is_cli():
-        print(f"Error: {message}")
-        sys.exit(1)
-    raise ValueError(message)
-
-
 def _validate_api_key(api_key, login_message=True):
     message = f" {constants.LOGIN_MESSAGE}" if login_message else ""
 
     if not api_key:
         error = f"No API Key specified.{message}"
-        _raise_api_key_error(error)
+        raise ApiKeyError(error)
 
     if not utils.authentication.is_valid_token(api_key):
         error = f"Invalid API Key format.{message}"
-        _raise_api_key_error(error)
+        raise ApiKeyError(error)
 
 
 def set_api_key(api_key, login_message=True):
@@ -240,9 +237,8 @@ def _check_user_info():
 ansi_enabled = _supports_ansi()
 
 _set_key_and_check_version()
-
 try:
     get_validated_api_key()
     _check_user_info()
-except ValueError:
+except ApiKeyError:
     pass
