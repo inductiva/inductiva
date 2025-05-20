@@ -1,11 +1,8 @@
 """Methods to interact with the user info on the API."""
-import argparse
 import json
 from typing import Any, Dict
 
 from inductiva import api
-from inductiva._cli.cmd_auth.login import login as login_cmd
-from inductiva._cli.cmd_auth.logout import logout as logout_cmd
 
 from inductiva.client.apis.tags.users_api import UsersApi
 
