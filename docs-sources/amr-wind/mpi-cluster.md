@@ -68,7 +68,7 @@ task.download_outputs()
 ```
 
 This setup allows you to seamlessly scale your simulations across multiple
-nodes—getting results faster, and tackling larger and more detailed CFD problems
+nodes, getting results faster, and tackling larger and more detailed CFD problems
 than ever before.
 
 ## Results
