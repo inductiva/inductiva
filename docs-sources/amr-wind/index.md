@@ -28,6 +28,16 @@ hidden: true
 ---
 setup-test
 quick-start
+Flow around a circular cylinder <flow-cylinder>
+```
+
+```{toctree}
+---
+caption: Visualization
+maxdepth: 2
+hidden: true
+---
+Using yt <using-yt>
 ```
 
 ```{toctree}
