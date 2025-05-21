@@ -14,7 +14,7 @@ import logging
 import inductiva
 import inductiva.client.models
 from inductiva import api, users
-from inductiva.logs.log import benchmark_aware_logging
+from inductiva.logs.log import mute_if_benchmark
 from inductiva.resources.utils import ProviderType
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
@@ -272,7 +272,7 @@ class BaseMachineGroup(ABC):
         self.auto_resize_disk_max_gb = dynamic_disk_resize_config.get(
             "max_disk_size_gb")
 
-    @benchmark_aware_logging
+    @mute_if_benchmark
     def _register_machine_group(self, **kwargs):
         """Register machine group configuration in API.
 
@@ -366,7 +366,7 @@ class BaseMachineGroup(ABC):
 
         return is_cost_ok and is_vcpu_ok and is_instance_ok
 
-    @benchmark_aware_logging
+    @mute_if_benchmark
     def start(self, wait_for_quotas: bool = False):
         """Starts a machine group.
 

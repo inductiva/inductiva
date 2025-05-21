@@ -168,57 +168,64 @@ def setup(level=logging.INFO):
         sys.excepthook = handle_uncaught_exception
 
 
-@contextlib.contextmanager
-def suppress_benchmark_logging():
+def is_inside_non_verbose_bechmark() -> bool:
     """
-    Context manager that temporarily disables logging and console output 
-    in benchmark contexts unless verbose mode is enabled.
+    Checks if the current context is inside a non-verbose benchmark.
+
+    Returns:
+        bool: True if inside a benchmark and not in verbose mode,
+        False otherwise.
     """
-    in_benchmark = False
-    verbose = False
     stack = inspect.stack()
 
     for frame_info in stack[1:]:
         local_vars = frame_info.frame.f_locals
-
         for _, var_value in local_vars.items():
-            class_name = var_value.__class__.__name__
+            try:
+                class_name = var_value.__class__.__name__
+                if class_name == "Benchmark":
+                    return True and not var_value.verbose
+            except (AttributeError, TypeError):
+                continue
 
-            if class_name == "Benchmark":
-                in_benchmark = True
-                verbose = var_value.verbose
-                break
+    return False
 
+
+@contextlib.contextmanager
+def mute_logging_in_benchmark():
+    """
+    Context manager that temporarily disables logging 
+    in benchmark contexts unless verbose mode is enabled.
+    """
     original_level = root_logger.level
-    original_stdout = sys.stdout
-    original_stderr = sys.stderr
-    null_out = None
 
-    if in_benchmark and not verbose:
-        # Suppress logging, except for errors
+    if is_inside_non_verbose_bechmark():
+        # Supress logging messages, except for errors
         root_logger.setLevel(logging.ERROR)
-
-        # Suppress stdout/stderr for tqdm
-        null_out = open(os.devnull, "w", encoding="utf-8")
-        sys.stdout = sys.stderr = null_out
-
-    try:
         yield
-    finally:
-        # Restore logging levels
-        root_logger.setLevel(original_level)
-        sys.stdout = original_stdout
-        sys.stderr = original_stderr
+    else:
+        yield
 
-        if null_out:
-            null_out.close()
+    root_logger.setLevel(original_level)
 
 
-def benchmark_aware_logging(func):
+def mute_if_benchmark(func):
+    """
+    Decorator to mute logging in benchmark contexts
+    unless Benchmark.verbose mode is enabled.
+
+    Example:
+        The `my_function`, if called inside a benchmark method, will
+        have its logging muted unless verbose mode is enabled.
+
+        @mute_if_benchmark
+        def my_function():
+            pass
+    """
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        with suppress_benchmark_logging():
+        with mute_logging_in_benchmark():
             return func(*args, **kwargs)
 
     return wrapper
