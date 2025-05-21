@@ -829,9 +829,7 @@ class MPICluster(BaseMachineGroup):
         """
         Returns the number of GPUs available in the resource.
         """
-        if self._gpu_info is None:
-            return 0
-        return self._gpu_info.get("gpu_count", 0) * self.num_machines
+        return super().gpu_count() * self.num_machines
 
     @property
     def available_vcpus(self):
