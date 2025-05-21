@@ -95,6 +95,7 @@ def convert_image(args, fout: TextIO = sys.stdout):
                                          delete=False,
                                          dir=constants.TMP_DIR) as tmp:
             tmp_tar_path = tmp.name
+            os.chmod(tmp_tar_path, 0o644)
             with open(tmp_tar_path, "wb") as f:
                 for chunk in image_obj.save(named=True):
                     f.write(chunk)
