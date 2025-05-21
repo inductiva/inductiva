@@ -185,7 +185,7 @@ def is_inside_non_verbose_bechmark() -> bool:
                 class_name = var_value.__class__.__name__
                 if class_name == "Benchmark":
                     return True and not var_value.verbose
-            except (AttributeError, TypeError):
+            except Exception:
                 continue
 
     return False
