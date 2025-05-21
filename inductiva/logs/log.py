@@ -168,7 +168,7 @@ def setup(level=logging.INFO):
         sys.excepthook = handle_uncaught_exception
 
 
-def is_inside_non_verbose_bechmark() -> bool:
+def is_inside_non_verbose_benchmark() -> bool:
     """
     Checks if the current context is inside a non-verbose benchmark.
 
@@ -184,8 +184,8 @@ def is_inside_non_verbose_bechmark() -> bool:
             try:
                 class_name = var_value.__class__.__name__
                 if class_name == "Benchmark":
-                    return True and not var_value.verbose
-            except Exception:
+                    return not var_value.verbose
+            except Exception:  # pylint: disable=broad-except
                 continue
 
     return False
@@ -199,7 +199,7 @@ def mute_logging_in_benchmark():
     """
     original_level = root_logger.level
 
-    if is_inside_non_verbose_bechmark():
+    if is_inside_non_verbose_benchmark():
         # Supress logging messages, except for errors
         root_logger.setLevel(logging.ERROR)
         yield

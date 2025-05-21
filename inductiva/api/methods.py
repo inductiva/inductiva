@@ -22,7 +22,7 @@ from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.models import (TaskRequest, TaskStatus, TaskSubmittedInfo,
                                      CompressionMethod)
 from inductiva import constants, storage
-from inductiva.logs.log import is_inside_non_verbose_bechmark, mute_if_benchmark
+from inductiva.logs.log import is_inside_non_verbose_benchmark, mute_if_benchmark
 from inductiva.utils import format_utils, files
 
 
@@ -143,7 +143,7 @@ def upload_input(api_instance: TasksApi, input_dir, params, task_id,
                 unit="B",
                 unit_scale=True,
                 unit_divisor=1000,
-                disable=is_inside_non_verbose_bechmark()) as progress_bar:
+                disable=is_inside_non_verbose_benchmark()) as progress_bar:
             upload_file(api_instance, input_zip_path, "PUT", url, progress_bar)
             api_instance.notify_input_uploaded(path_params={"task_id": task_id})
         logging.info("Local input directory successfully uploaded.")
