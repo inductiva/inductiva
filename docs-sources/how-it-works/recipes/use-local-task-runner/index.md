@@ -8,11 +8,11 @@ In this guide, you’ll learn how to:
 - Configure and run simulations locally
 - Manage the local task-runner
 
-## Prerequisites 
+## Prerequisites
 Before getting started, make sure the following are installed on your computer:
 - [Docker](https://www.docker.com/)
 - Inductiva Python package (`pip install inductiva`)
-- Inductiva Python package with Task-Runner support (`pip install inductiva[task-runner]`)
+- Inductiva Python package with Task-Runner support (`pip install "inductiva[task-runner]"`)
 
 ```{toctree}
 :hidden:
