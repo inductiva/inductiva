@@ -6,7 +6,7 @@ This tutorial will simulate a flow over a cylinder case using amr-wind. The `ib_
 
   <img src="_static/Re100.gif" alt="Demo Animation" width="400"/>  <img src="_static/Re10000.gif" alt="Demo Animation" width="400"/>
 
-# Case description
+## Case description
 The flow around a circular cylinder is a classic problem in fluid dynamics, with behavior that changes dramatically depending on the Reynolds number (Re), which compares inertial and viscous forces. At very low Re (< 5), the flow remains steady and symmetric. As Re increases, flow separation occurs, followed by the formation of steady recirculation zones . Beyond Re ≈ 47, the flow becomes unsteady, exhibiting periodic vortex shedding that leads to the formation of a von Kármán vortex street [1]. At Re = 300, the flow is fully three-dimensional and unsteady, making it a widely used benchmark for validating CFD solvers, immersed boundary methods, and mesh refinement strategies [2].
 
 ### References
@@ -160,13 +160,13 @@ When the simulation is complete the machine group will be automatically terminat
 
 Once the simulation is done, the output files will automotically downloaded to the local machine (if the simulation was run on terminal). If not the files can be downloaded from the 'tasks' tab in the console. 
 
-# Post-Processing
+## Post-Processing
 
 After running the simulation, AMR-Wind generates output files for each time step, typically of the format `plt00000`. These plotfiles contain the simulation data and can be visualized directly using tools like [ParaView](https://www.paraview.org/), which supports AMReX plotfiles natively. To analyze the data programmatically, Python-based tools such as [yt](https://yt-project.org/) can be employed, allowing for custom visualizations and data extraction. Additionally, if the sampling feature is enabled in your simulation setup, selected data can be exported in standard formats like NetCDF, typically saved in the `post_processing/` directory for easy access and compatibility with other tools.
 
-Checkout how you can use `yt` to generate custom slice plots and animations [here](post-processing.md).
+Checkout how you can use `yt` to generate custom slice plots and animations [here](using-yt.md).
 
-# Speedup
+## Speedup
 
 The above simulation uses a [C2D machine](https://cloud.google.com/compute/docs/compute-optimized-machines#c2d_series) with 56 CPU cores from Google Cloud. This simulation can be run much faster by increasing the number of CPUs or by running the simulation on a GPU machine. The definition for a GPU machine is provided below.
 
@@ -195,7 +195,7 @@ task = amr_wind.run(input_dir=input_dir,
 ```
 If you're wondering how much faster the simulation can run on different machines—or what the cost trade-offs look like— we have benchmarked a [20-million-cell CFD simulation](input_fine_Re10000.inp) across a variety of CPU and GPU instances. The results provided below offer a practical comparison of run time and cost efficiency across platforms. Whether you're optimizing for speed, budget, or a balance of both, this data can help you decide what kind of machine is best suited for your needs.
 
-# Benchmark Performance Comparison: CPU vs. GPU Configurations 📈
+## Benchmark Performance Comparison: CPU vs. GPU Configurations 📈
 
 This page summarizes the results of a comprehensive benchmark test comparing execution time, cost, and performance across multiple CPU and GPU configurations. 
 The goal is to provide insights into the optimal hardware setup for this workload, balancing speed, resource utilization, and cost-effectiveness. A 20M-cell CFD simulation 

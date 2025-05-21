@@ -28,7 +28,7 @@ hidden: true
 ---
 setup-test
 quick-start
-flow-cylinder
+Flow around a circular cylinder <flow-cylinder>
 ```
 
 ```{toctree}
