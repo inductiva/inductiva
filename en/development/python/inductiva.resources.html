@@ -397,6 +397,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.ElasticMachineGroup.data_disk_gb"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup.data_disk_gb</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.ElasticMachineGroup.estimate_cloud_cost"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup.estimate_cloud_cost()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.ElasticMachineGroup.from_api_response"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup.from_api_response()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.ElasticMachineGroup.gpu_count"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup.gpu_count()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.ElasticMachineGroup.has_gpu"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup.has_gpu()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.ElasticMachineGroup.id"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup.id</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.ElasticMachineGroup.idle_time"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup.idle_time</span></code></a></li>
@@ -434,6 +435,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MPICluster.data_disk_gb"><code class="docutils literal notranslate"><span class="pre">MPICluster.data_disk_gb</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MPICluster.estimate_cloud_cost"><code class="docutils literal notranslate"><span class="pre">MPICluster.estimate_cloud_cost()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MPICluster.from_api_response"><code class="docutils literal notranslate"><span class="pre">MPICluster.from_api_response()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MPICluster.gpu_count"><code class="docutils literal notranslate"><span class="pre">MPICluster.gpu_count()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MPICluster.has_gpu"><code class="docutils literal notranslate"><span class="pre">MPICluster.has_gpu()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MPICluster.id"><code class="docutils literal notranslate"><span class="pre">MPICluster.id</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MPICluster.idle_time"><code class="docutils literal notranslate"><span class="pre">MPICluster.idle_time</span></code></a></li>
@@ -469,6 +471,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MachineGroup.data_disk_gb"><code class="docutils literal notranslate"><span class="pre">MachineGroup.data_disk_gb</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MachineGroup.estimate_cloud_cost"><code class="docutils literal notranslate"><span class="pre">MachineGroup.estimate_cloud_cost()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MachineGroup.from_api_response"><code class="docutils literal notranslate"><span class="pre">MachineGroup.from_api_response()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MachineGroup.gpu_count"><code class="docutils literal notranslate"><span class="pre">MachineGroup.gpu_count()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MachineGroup.has_gpu"><code class="docutils literal notranslate"><span class="pre">MachineGroup.has_gpu()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MachineGroup.id"><code class="docutils literal notranslate"><span class="pre">MachineGroup.id</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MachineGroup.idle_time"><code class="docutils literal notranslate"><span class="pre">MachineGroup.idle_time</span></code></a></li>
@@ -646,6 +649,12 @@ depending on the total usage of the machines.</p>
 <dt class="sig sig-object py" id="inductiva.resources.machine_groups.ElasticMachineGroup.from_api_response">
 <em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_api_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.resources.machine_groups.ElasticMachineGroup.from_api_response" title="Link to this definition">#</a></dt>
 <dd><p>Creates a MachineGroup object from an API response.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.resources.machine_groups.ElasticMachineGroup.gpu_count">
+<span class="sig-name descname"><span class="pre">gpu_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#inductiva.resources.machine_groups.ElasticMachineGroup.gpu_count" title="Link to this definition">#</a></dt>
+<dd><p>Returns the number of GPUs available in the resource.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -890,6 +899,12 @@ depending on the total usage of the machines.</p>
 <dt class="sig sig-object py" id="inductiva.resources.machine_groups.MPICluster.from_api_response">
 <em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_api_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.resources.machine_groups.MPICluster.from_api_response" title="Link to this definition">#</a></dt>
 <dd><p>Creates a MachineGroup object from an API response.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.resources.machine_groups.MPICluster.gpu_count">
+<span class="sig-name descname"><span class="pre">gpu_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#inductiva.resources.machine_groups.MPICluster.gpu_count" title="Link to this definition">#</a></dt>
+<dd><p>Returns the number of GPUs available in the resource.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1138,6 +1153,12 @@ depending on the total usage of the machines.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="inductiva.resources.machine_groups.MachineGroup.gpu_count">
+<span class="sig-name descname"><span class="pre">gpu_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#inductiva.resources.machine_groups.MachineGroup.gpu_count" title="Link to this definition">#</a></dt>
+<dd><p>Returns the number of GPUs available in the resource.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="inductiva.resources.machine_groups.MachineGroup.has_gpu">
 <span class="sig-name descname"><span class="pre">has_gpu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#inductiva.resources.machine_groups.MachineGroup.has_gpu" title="Link to this definition">#</a></dt>
 <dd><p>Check if the machine group has a GPU.</p>
@@ -1374,6 +1395,7 @@ on-demand instances.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.ElasticMachineGroup.data_disk_gb"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup.data_disk_gb</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.ElasticMachineGroup.estimate_cloud_cost"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup.estimate_cloud_cost()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.ElasticMachineGroup.from_api_response"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup.from_api_response()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.ElasticMachineGroup.gpu_count"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup.gpu_count()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.ElasticMachineGroup.has_gpu"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup.has_gpu()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.ElasticMachineGroup.id"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup.id</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.ElasticMachineGroup.idle_time"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup.idle_time</span></code></a></li>
@@ -1411,6 +1433,7 @@ on-demand instances.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MPICluster.data_disk_gb"><code class="docutils literal notranslate"><span class="pre">MPICluster.data_disk_gb</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MPICluster.estimate_cloud_cost"><code class="docutils literal notranslate"><span class="pre">MPICluster.estimate_cloud_cost()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MPICluster.from_api_response"><code class="docutils literal notranslate"><span class="pre">MPICluster.from_api_response()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MPICluster.gpu_count"><code class="docutils literal notranslate"><span class="pre">MPICluster.gpu_count()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MPICluster.has_gpu"><code class="docutils literal notranslate"><span class="pre">MPICluster.has_gpu()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MPICluster.id"><code class="docutils literal notranslate"><span class="pre">MPICluster.id</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MPICluster.idle_time"><code class="docutils literal notranslate"><span class="pre">MPICluster.idle_time</span></code></a></li>
@@ -1446,6 +1469,7 @@ on-demand instances.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MachineGroup.data_disk_gb"><code class="docutils literal notranslate"><span class="pre">MachineGroup.data_disk_gb</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MachineGroup.estimate_cloud_cost"><code class="docutils literal notranslate"><span class="pre">MachineGroup.estimate_cloud_cost()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MachineGroup.from_api_response"><code class="docutils literal notranslate"><span class="pre">MachineGroup.from_api_response()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MachineGroup.gpu_count"><code class="docutils literal notranslate"><span class="pre">MachineGroup.gpu_count()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MachineGroup.has_gpu"><code class="docutils literal notranslate"><span class="pre">MachineGroup.has_gpu()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MachineGroup.id"><code class="docutils literal notranslate"><span class="pre">MachineGroup.id</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.resources.machine_groups.MachineGroup.idle_time"><code class="docutils literal notranslate"><span class="pre">MachineGroup.idle_time</span></code></a></li>
