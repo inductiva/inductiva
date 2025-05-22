@@ -136,7 +136,7 @@ cloud_machine = inductiva.resources.MachineGroup( \
 
 # Initialize the Simulator
 cans = inductiva.simulators.CaNS(\
-    version="2.4.0")
+    version="3.0.0")
 
 # Run simulation
 task = cans.run(input_dir="/Path/to/SimulationFiles",
@@ -192,17 +192,21 @@ You need to only change the argument `machine_type` in your MachineGroup creatio
 
 Here are the results of the same simulation running on multiple machines:
 
-| Machine Type     | vCPUs | GPU           | GPU Count | Duration | Cost    |
-|------------------|-------|---------------|-----------|----------|---------|
-| a3-highgpu-1     | 26 | NVIDIA H100 (80gb)| 1        |8 minutes 1 second| 0.63 US$|
-| a3-highgpu-2     | 52 | NVIDIA H100 (80gb)| 2        |9 minutes 1 second| 1.25 US$|
-| a3-highgpu-4     | 104| NVIDIA H100 (80gb)| 4        |6 minutes 5 seconds| 2.05 US$|
-| a3-highgpu-8     | 208| NVIDIA H100 (80gb)| 8        |6 minutes 8 seconds| 3.99 US$|
+| Machine Type    | vCPUs | GPU                | GPU Count | Duration          | Cost      | Speed-up |
+| --------------- | ----- | ------------------ | --------- | ----------------- | --------- | -------- |
+| c3d-highcpu-90  | 90    | -                  | 0         | 28 minutes 11 sec | 0.49 US$ | 0.28x    |
+| c3d-highcpu-180 | 180   | -                  | 0         | 17 minutes 16 sec | 0.64 US$ | 0.46x    |
+| c3d-highcpu-360 | 360   | -                  | 0         | 10 minutes 20 sec | 0.89 US$ | 0.78x    |
+| a3-highgpu-1    | 26    | NVIDIA H100 (80GB) | 1         | 8 minutes 1 sec   | 0.63 US$ | 1.00x    |
+| a3-highgpu-2    | 52    | NVIDIA H100 (80GB) | 2         | 9 minutes 1 sec   | 1.25 US$ | 0.89x    |
+| a3-highgpu-4    | 104   | NVIDIA H100 (80GB) | 4         | 6 minutes 5 sec   | 2.05 US$ | 1.32x    |
+| a3-highgpu-8    | 208   | NVIDIA H100 (80GB) | 8         | 6 minutes 8 sec   | 3.99 US$ | 1.30x    |
+
 
 It's important to note that we only ran 1% of the original CaNS simulation.
 Any performance improvements observed here would be even more pronounced when
 running the full simulation. However, these results also highlight that scaling
-up does not always lead to linear speedups — in some cases, it can even lead to
+up does not always lead to linear speedups, in some cases, it can even lead to
 longer runtimes. This is often due to overheads such as communication between
 GPUs or underutilization of available resources.
 
