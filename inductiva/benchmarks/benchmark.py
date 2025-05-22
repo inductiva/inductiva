@@ -81,9 +81,6 @@ class Benchmark(projects.Project):
             on (Optional[types.ComputationalResources]): The computational
                 resources to use for running the simulations. If not specified,
                 the current resources will remain unchanged.
-            verbose (Optional[bool]): If `True`, enables extensive logging for
-                debug purposes. If not provided, the current verbosity setting
-                will remain unchanged.
             **kwargs: Additional keyword arguments to set as default parameters 
                 for the simulations. These will update any existing parameters
                 with the same names.
