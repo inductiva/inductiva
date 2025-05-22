@@ -174,33 +174,37 @@ class Benchmark(projects.Project):
         """
         tasks = self.get_tasks()
 
+        completed_tasks = [task for task in tasks if task.info.is_terminal]
+        running_tasks = [task for task in tasks if not task.info.is_terminal]
+
         logging.info("Waiting for Benchmark \033[1m%s\033[0m to complete...\n",
                      self.name)
 
         with tqdm.tqdm(total=len(tasks),
-                       desc="Processing tasks",
-                       bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}") as pbar:
+                       desc="Running Benchmark",
+                       bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} {unit}",
+                       initial=len(completed_tasks),
+                       unit="tasks") as pbar:
             with ThreadPoolExecutor() as executor:
                 future_to_task = {
                     executor.submit(
                         lambda t: t.wait(download_std_on_completion=False,
                                          silent_mode=True), task):
-                        task for task in tasks
+                        task for task in running_tasks
                 }
 
                 for future in as_completed(future_to_task):
                     with logging_redirect_tqdm():
                         task = future_to_task[future]
                         status = future.result()
-                        logging.info("Task %s completed with status: %s",
-                                     task.id, status)
 
                         if status != TaskStatusCode.SUCCESS:
                             logging.info(
+                                "Task %s completed with status: %s\n"
                                 "   · To understand why the task did not "
                                 "complete successfully go to "
                                 "https://console.inductiva.ai/tasks/%s",
-                                task.id)
+                                task.id, status, task.id)
 
                         # Update progress bar for each completed task
                         pbar.update(1)
