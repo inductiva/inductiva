@@ -366,7 +366,7 @@ class BaseMachineGroup(ABC):
         return is_cost_ok and is_vcpu_ok and is_instance_ok
 
     @mute_logging()
-    def start(self, wait_for_quotas: bool = False, verbose: bool = True):
+    def start(self, wait_for_quotas: bool = False, verbose: bool = True):  # pylint: disable=unused-argument
         """Starts a machine group.
 
         Args:

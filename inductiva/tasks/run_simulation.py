@@ -19,6 +19,7 @@ def run_simulation(
     remote_assets: Optional[List[str]] = None,
     simulator_name_alias: Optional[str] = None,
     project_name: Optional[str] = None,
+    verbose: bool = True,
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
@@ -32,7 +33,6 @@ def run_simulation(
         remote_assets = []
 
     container_image = kwargs.get("container_image", None)
-    verbose = kwargs.get("verbose", True)
 
     if (machine_group.allow_auto_start and not machine_group.started):
         logging.info("\n■ The computational resource is not started."

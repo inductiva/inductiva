@@ -1,7 +1,5 @@
 """Custom logging functions"""
-import contextlib
 import functools
-import inspect
 import traceback
 import json
 import os
@@ -185,7 +183,7 @@ def mute_logging():
         def wrapper(*args, **kwargs):
             original_level = root_logger.level
 
-            verbose = kwargs.get('verbose', True)
+            verbose = kwargs.get("verbose", True)
 
             if not verbose:
                 root_logger.setLevel(logging.ERROR)
