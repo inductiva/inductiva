@@ -185,16 +185,16 @@ class Benchmark(projects.Project):
                        bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} {unit}",
                        initial=len(completed_tasks),
                        unit='tasks') as pbar:
-            with logging_redirect_tqdm():
-                with ThreadPoolExecutor() as executor:
-                    future_to_task = {
-                        executor.submit(
-                            lambda t: t.wait(download_std_on_completion=False,
-                                             silent_mode=True), task):
-                            task for task in running_tasks
-                    }
+            with ThreadPoolExecutor() as executor:
+                future_to_task = {
+                    executor.submit(
+                        lambda t: t.wait(download_std_on_completion=False,
+                                         silent_mode=True), task):
+                        task for task in running_tasks
+                }
 
-                    for future in as_completed(future_to_task):
+                for future in as_completed(future_to_task):
+                    with logging_redirect_tqdm():
                         task = future_to_task[future]
                         status = future.result()
 
