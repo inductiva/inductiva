@@ -1,8 +1,8 @@
 # Running AMR-Wind Simulations Across Multiple Machines Using MPI
 
 As computational fluid dynamics (CFD) problems grow in complexity and scale, so
-does the demand for computing power. **AMR-Wind**—a high-performance, structured
-adaptive mesh refinement (AMR) solver developed for wind energy applications—is
+does the demand for computing power. **AMR-Wind**, a high-performance, structured
+adaptive mesh refinement (AMR) solver developed for wind energy applications, is
 built to scale efficiently across thousands of cores. However, even the most
 powerful single machine can eventually become a bottleneck, particularly when
 dealing with large domains or fine mesh resolutions.
@@ -14,7 +14,18 @@ increasing the total number of virtual CPUs (vCPUs) available to your simulation
 and accelerating runtime.
 
 With **Inductiva**, running your simulations on a multi-node MPI cluster becomes
-as easy as using any other resource.
+as easy as using any other single node option.
+
+**Changing MachineGroup to MPICluster**
+```diff
+# Allocate a multi-machine MPI cluster on Google Cloud Platform
+- cloud_machine = inductiva.resources.MachineGroup(
++ cloud_machine = inductiva.resources.MPICluster(
+    machine_type="c2d-highcpu-112",
++   num_machines=2,
+    data_disk_gb=100,
+    spot=True)
+```
 
 ## Prerequisites
 
@@ -34,7 +45,7 @@ You're now ready to launch your simulation.
 
 ## Running the Simulation
 
-Here's how to launch your AMR-Wind simulation on a multi-machine MPI cluster
+Here's how to launch your AMR-Wind simulation on a 2 machines MPI cluster
 using the Inductiva Python API:
 
 ```python
@@ -71,19 +82,23 @@ This setup allows you to seamlessly scale your simulations across multiple
 nodes, getting results faster, and tackling larger and more detailed CFD problems
 than ever before.
 
+You can see [here](quick-start) an example on how to run your simulation on a
+single machine.
+
 ## Results
 
-Here are the results of running this simulation on multiple MPI cluster with
-a different number of machines and vcpus.
+Here are the results of running this simulation on multiple MPI cluster compared
+with the baseline of running in a single node configuration.
 
-| Machine Type      | Num Machines | vCPUs | Duration (s) |
-|-------------------|--------------|-------|---------------|
-| c2d-highcpu-112   | 1            | 112   | 1472          |
-| c2d-highcpu-112   | 2            | 224   | 1404          |
-| c2d-highcpu-112   | 4            | 448   | 1461          |
-| c2d-highcpu-112   | 8            | 896   | 977           |
-| c2d-highcpu-112   | 12           | 1344  | 1408          |
-| c2d-highcpu-112   | 16           | 1792  | 1001          |
+| Machine Type    | Num Machines | vCPUs | Duration (s) | Speedup |
+| --------------- | ------------ | ----- | ------------ | ------- |
+| c2d-highcpu-112 | 1            | 112   | 1472         | 1.00x   |
+| c2d-highcpu-112 | 2            | 224   | 1404         | 1.05x   |
+| c2d-highcpu-112 | 4            | 448   | 1461         | 1.01x   |
+| c2d-highcpu-112 | 8            | 896   | 977          | 1.51x   |
+| c2d-highcpu-112 | 12           | 1344  | 1408         | 1.05x   |
+| c2d-highcpu-112 | 16           | 1792  | 1001         | 1.47x   |
+
 
 For this simulation setup, the **fastest configuration** was achieved using a
 cluster with **8 machines (896 vCPUs)**, completing in **977 seconds**.
@@ -118,17 +133,18 @@ compute time, which improves scalability.
 We'll now compare the performance across the same cluster configurations under
 this higher-resolution setup.
 
-| Machine Type    | Num Machines | Cores | Duration (s) |
-| --------------- | ------------ | ----- | ------------ |
-| c2d-highmem-112 | 1            | 112   | 8640         |
-| c2d-highmem-112 | 2            | 224   | 5400         |
-| c2d-highmem-112 | 4            | 448   | 3550         |
-| c2d-highmem-112 | 8            | 896   | 2532         |
-| c2d-highmem-112 | 12           | 1344  | 2055         |
-| c2d-highmem-112 | 16           | 1792  | 1848         |
+| Machine Type    | Num Machines | Cores | Duration (s) | Speedup |
+| --------------- | ------------ | ----- | ------------ | ------- |
+| c2d-highmem-112 | 1            | 112   | 8640         | 1.00x   |
+| c2d-highmem-112 | 2            | 224   | 5400         | 1.60x   |
+| c2d-highmem-112 | 4            | 448   | 3550         | 2.43x   |
+| c2d-highmem-112 | 8            | 896   | 2532         | 3.41x   |
+| c2d-highmem-112 | 12           | 1344  | 2055         | 4.20x   |
+| c2d-highmem-112 | 16           | 1792  | 1848         | 4.68x   |
+
 
 The results show that, with the higher-resolution grid, simulation runtimes
-decreased consistently as more machines were added—unlike in the lower-resolution
+decreased consistently as more machines were added, unlike in the lower-resolution
 case, where gains plateaued beyond 8 machines. The best performance was observed
 using 16 machines (1792 vCPUs), bringing the runtime down to just 1848 seconds,
 a significant improvement compared to the single-machine setup at 8640 seconds.
