@@ -8,6 +8,7 @@ import re
 import pathlib
 
 from inductiva import projects, types, tasks, resources
+from inductiva.logs.log import mute_logging
 from .methods import list_available_images
 from inductiva import commands
 
@@ -235,6 +236,7 @@ class Simulator(ABC):
 
         return f"{self._image_uri}{suffixes}"
 
+    @mute_logging()
     def run(
         self,
         input_dir: Optional[str],

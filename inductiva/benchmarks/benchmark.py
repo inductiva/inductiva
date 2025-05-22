@@ -44,7 +44,7 @@ class Benchmark(projects.Project):
         TIME = f"computation_time ({TIME_UNIT})"
         COST = f"estimated_computation_cost ({CURRENCY_SYMBOL})"
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, verbose: bool = False):
         """
         Initializes a new Benchmark instance.
 
@@ -57,6 +57,7 @@ class Benchmark(projects.Project):
         self.input_dir = None
         self.on = None
         self.kwargs = {}
+        self.verbose = verbose
 
     def set_default(
         self,
@@ -148,20 +149,27 @@ class Benchmark(projects.Project):
         Returns:
             Self: The current instance for method chaining.
         """
+        if not self.verbose:
+            logging.info(
+                "Preparing tasks for Benchmark to start. "
+                "This may take a few minutes.\n"
+                "Note that stopping this process will \033[1minterrupt\033[0m "
+                "the submission of the tasks. Please wait...\n")
         for simulator, input_dir, machine_group, kwargs in self.runs:
             if not machine_group.started:
-                machine_group.start(wait_for_quotas=wait_for_quotas)
+                machine_group.start(wait_for_quotas=wait_for_quotas,
+                                    verbose=self.verbose)
             for _ in range(num_repeats):
                 simulator.run(input_dir=input_dir,
                               on=machine_group,
                               project=self.name,
                               resubmit_on_preemption=True,
-                              verbose=False,
+                              verbose=self.verbose,
                               **kwargs)
         self.runs.clear()
         logging.info(
-            "Benchmark \033[1m%s\033[0m has started...\n"
-            "Go to https://console.inductiva.ai/projects/%s "
+            "■ Benchmark \033[1m%s\033[0m has started.\n"
+            "  Go to https://console.inductiva.ai/projects/%s "
             "for more details.\n", self.name, self.name)
         return self
 
@@ -303,6 +311,8 @@ class Benchmark(projects.Project):
         for task in tasks:
             task_input_params = get_task_input_params(task)
             task_info = task.info
+            if not task_info.executer:
+                continue
             task_machine_type = task_info.executer.vm_type \
                 if task_info.executer.vm_type != "n/a" else \
                     task_info.executer.vm_name
