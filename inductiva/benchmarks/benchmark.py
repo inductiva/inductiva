@@ -59,8 +59,6 @@ class Benchmark(projects.Project):
         self.kwargs = {}
         self.verbose = False
 
-        self._resource_setup_message_shown = False
-
     def set_default(
         self,
         simulator: Optional[simulators.Simulator] = None,
@@ -126,14 +124,6 @@ class Benchmark(projects.Project):
         Returns:
             Self: The current instance for method chaining.
         """
-        if not self._resource_setup_message_shown and not self.verbose:
-            logging.info(
-                "Setting up resources for Benchmark. "
-                "This may take a few minutes.\n"
-                "Note that stopping this process will \033[1minterrupt\033[0m "
-                "the creation of the resources. Please wait...\n")
-            self._resource_setup_message_shown = True
-
         self.runs.append((
             simulator or self.simulator,
             input_dir or self.input_dir,
@@ -172,13 +162,14 @@ class Benchmark(projects.Project):
                 "the submission of the tasks. Please wait...\n")
         for simulator, input_dir, machine_group, kwargs in self.runs:
             if not machine_group.started:
-                machine_group.start(wait_for_quotas=wait_for_quotas)
+                machine_group.start(wait_for_quotas=wait_for_quotas,
+                                    verbose=self.verbose)
             for _ in range(num_repeats):
                 simulator.run(input_dir=input_dir,
                               on=machine_group,
                               project=self.name,
                               resubmit_on_preemption=True,
-                              verbose=False,
+                              verbose=self.verbose,
                               **kwargs)
         self.runs.clear()
         logging.info(

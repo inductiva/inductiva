@@ -22,7 +22,6 @@ from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.models import (TaskRequest, TaskStatus, TaskSubmittedInfo,
                                      CompressionMethod)
 from inductiva import constants, storage
-from inductiva.logs.log import is_inside_non_verbose_benchmark, mute_if_benchmark
 from inductiva.utils import format_utils, files
 
 
@@ -116,7 +115,7 @@ def upload_file(api_instance: ApiClient, input_path: str, method: str, url: str,
 
 
 def upload_input(api_instance: TasksApi, input_dir, params, task_id,
-                 storage_path_prefix):
+                 storage_path_prefix, verbose):
     """Uploads the inputs of a given task to the API.
 
     Args:
@@ -138,12 +137,11 @@ def upload_input(api_instance: TasksApi, input_dir, params, task_id,
             operation="upload",
         )[0]
 
-        with tqdm.tqdm(
-                total=zip_file_size,
-                unit="B",
-                unit_scale=True,
-                unit_divisor=1000,
-                disable=is_inside_non_verbose_benchmark()) as progress_bar:
+        with tqdm.tqdm(total=zip_file_size,
+                       unit="B",
+                       unit_scale=True,
+                       unit_divisor=1000,
+                       disable=not verbose) as progress_bar:
             upload_file(api_instance, input_zip_path, "PUT", url, progress_bar)
             api_instance.notify_input_uploaded(path_params={"task_id": task_id})
         logging.info("Local input directory successfully uploaded.")
@@ -310,12 +308,12 @@ def task_info_str(
     return info_str
 
 
-@mute_if_benchmark
 def submit_task(simulator,
                 input_dir,
                 machine_group,
                 params,
                 storage_path_prefix,
+                verbose,
                 resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
                 simulator_name_alias: Optional[str] = None,
@@ -399,6 +397,7 @@ def submit_task(simulator,
                 params=params,
                 task_id=task_id,
                 storage_path_prefix=storage_path_prefix,
+                verbose=verbose,
             )
 
     # Return task_id and leaves the simulation on the queue until resources

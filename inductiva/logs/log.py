@@ -168,64 +168,33 @@ def setup(level=logging.INFO):
         sys.excepthook = handle_uncaught_exception
 
 
-def is_inside_non_verbose_benchmark() -> bool:
+def mute_logging():
     """
-    Checks if the current context is inside a non-verbose benchmark.
-
-    Returns:
-        bool: True if inside a benchmark and not in verbose mode,
-        False otherwise.
-    """
-    stack = inspect.stack()
-
-    for frame_info in stack[1:]:
-        local_vars = frame_info.frame.f_locals
-        for _, var_value in local_vars.items():
-            try:
-                class_name = var_value.__class__.__name__
-                if class_name == "Benchmark":
-                    return not var_value.verbose
-            except Exception:  # pylint: disable=broad-except
-                continue
-
-    return False
-
-
-@contextlib.contextmanager
-def mute_logging_in_benchmark():
-    """
-    Context manager that temporarily disables logging 
-    in benchmark contexts unless verbose mode is enabled.
-    """
-    original_level = root_logger.level
-
-    if is_inside_non_verbose_benchmark():
-        # Supress logging messages, except for errors
-        root_logger.setLevel(logging.ERROR)
-        yield
-    else:
-        yield
-
-    root_logger.setLevel(original_level)
-
-
-def mute_if_benchmark(func):
-    """
-    Decorator to mute logging in benchmark contexts
-    unless Benchmark.verbose mode is enabled.
-
+    Decorator to temporarily set logging level to ERROR
+    during function execution and restore it afterward.
+    
     Example:
-        The `my_function`, if called inside a benchmark method, will
-        have its logging muted unless verbose mode is enabled.
-
-        @mute_if_benchmark
+        @mute_logging()
         def my_function():
             pass
     """
 
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        with mute_logging_in_benchmark():
-            return func(*args, **kwargs)
+    def decorator(func):
 
-    return wrapper
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            original_level = root_logger.level
+
+            verbose = kwargs.get('verbose', True)
+
+            if not verbose:
+                root_logger.setLevel(logging.ERROR)
+
+            try:
+                return func(*args, **kwargs)
+            finally:
+                root_logger.setLevel(original_level)
+
+        return wrapper
+
+    return decorator
