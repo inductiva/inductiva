@@ -29,6 +29,7 @@ hidden: true
 --- 
 setup-test
 quick-start
+temporal-boundary
 ```
 
 ```{toctree}

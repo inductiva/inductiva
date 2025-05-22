@@ -139,7 +139,7 @@ cloud_machine = inductiva.resources.MachineGroup( \
 
 # Initialize the Simulator
 amr_wind = inductiva.simulators.AmrWind(\
-    version="3.4.1")
+    version="2.4.0")
 
 # Run simulation
 task = amr_wind.run(input_dir="/Path/to/SimulationFiles",
