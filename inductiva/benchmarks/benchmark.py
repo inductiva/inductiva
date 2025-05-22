@@ -184,7 +184,7 @@ class Benchmark(projects.Project):
                        desc="Running Benchmark",
                        bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} {unit}",
                        initial=len(completed_tasks),
-                       unit='tasks') as pbar:
+                       unit="tasks") as pbar:
             with ThreadPoolExecutor() as executor:
                 future_to_task = {
                     executor.submit(
