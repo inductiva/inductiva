@@ -44,7 +44,7 @@ class Benchmark(projects.Project):
         TIME = f"computation_time ({TIME_UNIT})"
         COST = f"estimated_computation_cost ({CURRENCY_SYMBOL})"
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, verbose: bool = False):
         """
         Initializes a new Benchmark instance.
 
@@ -57,14 +57,13 @@ class Benchmark(projects.Project):
         self.input_dir = None
         self.on = None
         self.kwargs = {}
-        self.verbose = False
+        self.verbose = verbose
 
     def set_default(
         self,
         simulator: Optional[simulators.Simulator] = None,
         input_dir: Optional[str] = None,
         on: Optional[types.ComputationalResources] = None,
-        verbose: Optional[bool] = None,
         **kwargs,
     ) -> Self:
         """
@@ -96,7 +95,6 @@ class Benchmark(projects.Project):
         self.input_dir = input_dir or self.input_dir
         self.on = on or self.on
         self.kwargs = {**self.kwargs, **kwargs}
-        self.verbose = verbose or self.verbose
         return self
 
     def add_run(
