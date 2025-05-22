@@ -123,7 +123,7 @@ keeping the original values.
 Here is the code required to run your simulation using the Inductiva API:
 
 ```python
-"""AMR-Wind example."""
+"""CaNS example."""
 import inductiva
 
 # Allocate cloud machine on Google Cloud Platform
@@ -135,11 +135,11 @@ cloud_machine = inductiva.resources.MachineGroup( \
         spot=True)
 
 # Initialize the Simulator
-amr_wind = inductiva.simulators.AmrWind(\
+cans = inductiva.simulators.CaNS(\
     version="2.4.0")
 
 # Run simulation
-task = amr_wind.run(input_dir="/Path/to/SimulationFiles",
+task = cans.run(input_dir="/Path/to/SimulationFiles",
     sim_config_filename="input.nml",
     on=cloud_machine)
 
@@ -199,7 +199,7 @@ Here are the results of the same simulation running on multiple machines:
 | a3-highgpu-4     | 104| NVIDIA H100 (80gb)| 4        |6 minutes 5 seconds| 2.05 US$|
 | a3-highgpu-8     | 208| NVIDIA H100 (80gb)| 8        |6 minutes 8 seconds| 3.99 US$|
 
-It's important to note that we only ran 1% of the original AMR-Wind simulation.
+It's important to note that we only ran 1% of the original CaNS simulation.
 Any performance improvements observed here would be even more pronounced when
 running the full simulation. However, these results also highlight that scaling
 up does not always lead to linear speedups — in some cases, it can even lead to

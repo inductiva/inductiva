@@ -29,7 +29,6 @@ hidden: true
 setup-test
 quick-start
 Flow around a circular cylinder <flow-cylinder>
-temporal-boundary
 Using an MPI cluster <mpi-cluster>
 ```
 
