@@ -33,7 +33,12 @@ By simulating these different stratification conditions, you will gain insight
 into how buoyancy and turbulence interact to shape the wind boundary layer
 evolution.
 
-  <img src="_static/tempField_neutralTDBL_Re1000-13863.gif" alt="Demo Animation"/>  <img src="_static/tempField_neutralTDBL_Re1000-13863.gif" alt="Demo Animation"/>
+**Stable Case**
+<img src="_static/tempField_neutralTDBL_Re1000-13863.gif" alt="Demo Animation"/>
+
+**Neutral Case**
+
+<img src="_static/tempField_neutralTDBL_Re1000-13863.gif" alt="Demo Animation"/>
 
 ## Simulation Files
 
