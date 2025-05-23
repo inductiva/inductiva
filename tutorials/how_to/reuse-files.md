@@ -127,7 +127,7 @@ Inductiva API or CLI.
 
 ## Reuse Task Outputs in Simulations
 
-To reuse task outputs, simply include the task’s `storage_path` in the remote_assets parameter.
+To reuse task outputs, simply include the task’s `storage_output_path` in the remote_assets parameter.
 
 ```python
 previous_task = inductiva.tasks.Task("<task_id>")
@@ -135,7 +135,7 @@ task = gromacs.run(
     input_dir=None,
     commands=commands,
     on=machine_group,
-    remote_assets=[previous_task.info.storage_path])
+    remote_assets=[previous_task.info.storage_output_path])
 ```
 
 You can also reference multiple tasks:
@@ -147,11 +147,11 @@ task = gromacs.run(
     commands=commands,
     on=machine_group,
     remote_assets=[
-        previous_task_1.info.storage_path,
-        previous_task_2.info.storage_path])
+        previous_task_1.info.storage_output_path,
+        previous_task_2.info.storage_output_path])
 ```
 
-All task output files are stored in the <task_id> path. For example, if you want 
+All task output files are stored in the `<task_id>` path. For example, if you want 
 to use the file `topol.top` from a specific task `<task_id>`, you need to update 
 the path in your command as follows:
 
