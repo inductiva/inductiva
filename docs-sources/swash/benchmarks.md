@@ -18,7 +18,7 @@ The software versions used in this benchmark were the following:
 Faster execution times are better. Units in seconds.
 
 ```{raw} html
-<div style="width: 60%; margin: 0 auto;">
+<div style="width: 60%;">
 ```
 
 ```{raw} html
