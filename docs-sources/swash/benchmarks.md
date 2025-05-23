@@ -16,4 +16,5 @@ The software versions used in this benchmark were the following:
 
 ### Execution times comparison
 Faster execution times are better. Units in seconds.
-{% include time_graph.html %}
+
+time_graph.html
