@@ -1,4 +1,4 @@
-# test
+# Run Your First Simulation
 This tutorial will show you how to run SWASH simulations using the Inductiva API. 
 
 We will cover the `Berkhoff shoal` use case from the [official SWASH documentation](https://swash.sourceforge.io/), to help you get started with simulations.
