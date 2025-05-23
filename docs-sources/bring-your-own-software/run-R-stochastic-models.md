@@ -83,12 +83,12 @@ N, nsweeps, burnin, thin = 100, 10000, 1000, 10
 Here we tell Inductiva Client to spin up as many machines as we have temperatures (one per T). These machines will each run their own R script concurrently.
 
 ```python
-mg = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-4",
-    num_machines=len(all_temps),
+mg = inductiva.resources.ElasticMachineGroup(
+    machine_type="c2d-highcpu-4",
     spot=True,
+    min_machines=1,
+    max_machines=len(all_temps),
 )
-mg.start()
 ```
 
 ### 3. Assign one temperature per machine
@@ -106,8 +106,7 @@ For each temperature, we build the appropriate Rscript command and submit it. We
 
 ```python
 sim = inductiva.simulators.CustomImage(container_image="docker://r-base:latest")
-
-tasks = []
+project = inductiva.projects.Project("2d-ising-model")
 
 for idx, temps in enumerate(temp_chunks, start=1):
     out_csv = f"ising_results_chunk{idx}.csv"
@@ -117,34 +116,42 @@ for idx, temps in enumerate(temp_chunks, start=1):
         f'--nsweeps {nsweeps} --burnin {burnin} --thin {thin} '
         f'--output {out_csv}'
     )
-    task = sim.run(input_dir=input_dir, on=mg, commands=[cmd])
+    task = sim.run(input_dir=input_dir, 
+                   on=mg, 
+                   commands=[cmd],
+                   project=project.name,
+    )
     print(f"→ Submitted T={temps} on task {task.id}")
-    tasks.append((task, out_csv))
 ```
 
 ### 5. Wait for completion and download
 
 Finally, we block on each task until it finishes, then download its CSV into the default inductiva output folder.
+In this case, the output folder wil be `inductiva_output/2d-ising-model/`.
 
 
 ```python
-for idx, task, out_file in tasks:
-    print(f"Waiting for chunk {idx} …", end="", flush=True)
-    task.wait()
-    print(" done.")
+# Wait for all tasks in the project to end
+project.wait()
 
-    task.download_outputs()
+# Download all outputs from the project
+project.download_outputs()
 ```
 
 At this point you’ll have all of the CSV per temperature, ready to merge and visualize. Each step is clear and keeps logic flow obvious: configure → launch machines → assign work → submit jobs → collect outputs.
 
 
+## Visualization
 
-### 6. Merge and plot
-
-The final step is to merge them and make a quick plot of magnetization vs. sweep. Here’s how:
+Now that all the tasks have finished, we can use their outputs to generate a visualization of the magnetization vs. sweep. Here’s how:
 
 ```python
+
+# Read all .csv files from the output
+pattern = os.path.join("inductiva_output", project.name, "*", "outputs",
+                       "ising_results_chunk*.csv")
+files = glob.glob(pattern)
+csv_files = sorted(files)
 
 # Read all of the csv output files
 df = pd.concat([pd.read_csv(f) for f in csv_files], ignore_index=True)
