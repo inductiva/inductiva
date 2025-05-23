@@ -1,71 +1,77 @@
-# 2D Ising Model with R and Inductiva
+# How to Run Statistical Ensembles with Inductiva
 
-This tutorial shows how to run a parallel 2D ising-model Metropolis Monte Carlo simulation on R using the Inductiva API. 
+In this recipe-style tutorial, you’ll learn how to run *statistical ensembles* in parallel using Inductiva, so you can turn any parameter sweep or distribution into dozens (or hundreds!) of simultaneous simulations. We’ll demonstrate with a classic 2D Ising-model Metropolis Monte Carlo in R, but the same pattern works for *any* function or simulation script that takes parameters and spits out results.
 
 <img src=_static/animation.gif></img>
 
+> **Why Inductiva?**  
+> Instead of looping over parameters one by one, Inductiva lets you spin up a machine group, dispatch each task concurrently, and collect all outputs automatically, so you get your ensemble results back *minutes* instead of *hours*.
 
-In this tutorial we will: 
+**What you’ll do in this tutorial:**
 
-1. Prepare the R script
-2. Setup the python script to call the Inductiva Python Client
-3. Partition the temperatures across multiple machines and submit tasks
-4. Collect and concatenate results
-5. Plot magnetization curves
+1. **Package your simulation**  
+   Wrap your code (here, an R script) so it reads parameters from the command line and writes its results to CSV.
+
+2. **Define your ensemble**  
+   Specify a list or distribution of parameters (e.g. temperatures, initial seeds, reaction rates) that you want to explore.
+
+3. **Launch an Inductiva machine group**  
+   Spin up as many workers as tasks in your ensemble.
+
+4. **Dispatch tasks in parallel**  
+   Send each parameter set off as its own job; Inductiva handles queuing, scaling, retries, and logging.
+
+5. **Gather and merge outputs**  
+   Automatically download every CSV, stitch them together, and import into R (or Python) for analysis.
+
+6. **Visualize ensemble results**  
+   Plot summary statistics (means, variances, distributions) across your ensemble in a few lines of code.
 
 
-## Model description
+> **Model link:** If you need the 2D Ising-model details, see [2D Ising model description »](https://en.wikipedia.org/wiki/Ising_model)  
 
-The 2D Ising model is a simple yet powerful way to explore how local interactions give rise to large-scale order in magnetic materials. Imagine a square grid (lattice) of tiny “spins,” each of which can point either up (+1) or down (–1). Neighbors prefer to align—spins that point the same direction lower the system’s energy, while oppositely oriented neighbors increase it. The total energy of the lattice is simply the sum of all neighbor‐to‐neighbor interactions.
 
-We drive the system forward using the Metropolis Monte Carlo algorithm: at each step we pick a random spin, calculate how flipping it would change the energy, and then decide probabilistically whether to accept that flip based on the temperature T. At low T, flips that increase energy are very unlikely, so the lattice quickly settles into a nearly uniform state (most spins aligned), producing a large overall magnetization. At high T, thermal agitation overwhelms the alignment preference and the lattice remains disordered, with roughly equal up and down spins.
+## Prepare your ensemble script
 
-Between these extremes lies a critical temperature $T_c$, where the system undergoes a phase transition: below T_c, it spontaneously “chooses” one of the two aligned states (positive or negative magnetization), while above T_c it stays essentially unmagnetized. Near T_c, the simulation exhibits rich behavior—very large clusters of aligned spins form and dissolve, and the time to reach equilibrium grows dramatically. In this tutorial, by sweeping T across a range of values and tracking the average magnetization over Monte Carlo sweeps, we will clearly see how order emerges and disappears in this classic model of statistical physics.
+First, wrap your ensemble script logic into a command-line script that:
 
-## R script
+- **Reads** one or more parameter values from the CLI  
+- **Runs** your script over those parameters  
+- **Writes** its results to an output (in this case a csv)
 
-The `run_ising_model.R` is a simple command-line tool that simulates how a grid of magnetic “spins” flips and settles over time at different temperatures. You can pass in a few options when you run it:
+Below is an example layout for [run_ising_model.R](bring-your-own-software/_static/run_ising_model.R). In this tutorial it takes a list of “temperature” values, but you can swap in *any* numeric parameter (reaction rate, random seed, boundary condition,).
 
-1. **Pick your grid size**  
-   Use `--N 100` to make a 100×100 grid of spins. Bigger grids give prettier patterns but take longer to compute.
+```bash
+Rscript run_ising_model.R \
+  --temps "1.5,2.0,2.5" \
+  --grid-size 100 \
+  --n-sweeps 20000 \
+  --burn-in 2000 \
+  --thin 20 \
+  --output results.csv
+```
 
-2. **Choose your temperatures**  
-   Use `--temps "1.5,2.0,2.5"` to run three temperatures in one go.  
-   - Lower values (e.g. 1.5) mean “colder” spins that like to line up.  
-   - Higher values (e.g. 2.5) add more random flipping.
+| Flag           | Description                                                      |
+| -------------- | ---------------------------------------------------------------- |
+| `--temps`      | Comma-separated values to sweep (e.g. `"1.5,2.0,2.5"`).          |
+| `--grid-size`  | Size of your simulation grid (e.g. `100` ⇒ 100×100).             |
+| `--n-sweeps`   | Total sweeps per run (e.g. `20000`).                             |
+| `--burn-in`    | Number of initial sweeps to skip before recording (e.g. `2000`). |
+| `--thin`       | Record one snapshot every *n* sweeps after burn-in (e.g. `20`).  |
+| `--output`     | CSV filename for your results (e.g. `results.csv`).              |
 
-3. **Decide how long to run**  
-   - `--nsweeps 20000` makes the script attempt to flip every spin 20 000 times.  
-   - `--burnin 2000` skips the first 2 000 sweeps so you only record data after the system has “warmed up.”  
-   - `--thin 20` means “after burn-in, keep one measurement every 20 sweeps” to keep the output file manageable.
 
-4. **What happens under the hood**  
-   - Start with a random mix of up/down spins.  
-   - Repeatedly pick each spin and ask:  
-     1. “If I flip this spin, will its neighbors be happier (lower energy)?”  
-     2. “If yes, always flip. If not, flip with a small chance that depends on **temperature**.”  
-   - Over many sweeps, this ruleset naturally drives the grid toward full alignment at low T, or disorder at high T.
+>💡 Pro tip: Any script that reads --param-list and writes a CSV with columns ParamValue, Sweep, Output1, Output2, … can slot into this same Inductiva workflow.
 
-5. **What it records**  
-   Every time you hit a “keep” sweep (after burn-in, every `thin` sweeps), it measures:  
-   - **Magnetization**: how aligned the whole grid is (a number between –1 and +1).  
-   - **Energy**: a single number that decreases as more spins agree with their neighbors.  
+## Launching your ensemble with Inductiva
 
-These measurements are written to a CSV with one row per snapshot:
-
-`Temperature, SweepNumber, Magnetization, Energy`
-
-> You can get the R script from this [link](bring-your-own-software/_static/run_ising_model.R).
-
-## Python script
-
-Below is a concise, step-by-step breakdown of how we drive the R simulation on Inductiva and retrieve the results.
+Below is a concise, step-by-step breakdown of how you can drive the R simulation on Inductiva and retrieve the results.
 
 ---
 
 ### 1. Setup and configuration
 
-We begin by importing the Inductiva client, defining where our R script lives (`input_dir`), and where to stash results (`results_dir`). We also list all the temperatures we want to try and set our simulation parameters.
+We begin by importing the Inductiva client, defining where our R script lives (`input_dir`), and where to stash results (`results_dir`). We also list all the temperatures we want to try and set our ensemble parameters.
 
 ```python
 import os, math, inductiva
@@ -141,7 +147,7 @@ project.download_outputs()
 At this point you’ll have all of the CSV per temperature, ready to merge and visualize. Each step is clear and keeps logic flow obvious: configure → launch machines → assign work → submit jobs → collect outputs.
 
 
-## Visualization
+## Visualize ensemble results
 
 Now that all the tasks have finished, we can use their outputs to generate a visualization of the magnetization vs. sweep. Here’s how:
 
