@@ -18,13 +18,5 @@ The software versions used in this benchmark were the following:
 Faster execution times are better. Units in seconds.
 
 ```{raw} html
-<div style="width: 20%;">
-```
-
-```{raw} html
 :file: time_graph.html
-```
-
-```{raw} html
-</div>
 ```
