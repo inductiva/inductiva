@@ -39,6 +39,14 @@ class DualSPHysics(simulators.Simulator):
         resubmit_on_preemption: bool = False,
         remote_assets: Optional[List[str]] = None,
         project: Optional[str] = None,
+        vtk_to_obj: Optional[bool] = False,
+        vtk_dir: Optional[str] = None,
+        prefix: Optional[str] = "PartFluid_",
+        out_dir: Optional[str] = None,
+        particle_radius: Optional[float] = None,
+        smoothing_length: Optional[float] = 2.0,
+        cube_size: Optional[float] = 1.0,
+        surface_threshold: Optional[float] = 0.6,
         **kwargs,
     ) -> tasks.Task:
         """Executes a DualSPHysics simulation.
@@ -58,7 +66,25 @@ class DualSPHysics(simulators.Simulator):
                 assigned. If None, the task will be assigned to
                 the default project. If the project does not exist, it will be
                 created.
-
+            vtk_to_obj: Whether to convert the output VTK files to OBJ meshes
+                using marching cubes.
+            vtk_dir: Directory containing VTK files to be converted.
+            out_dir: Directory where the generated OBJ files will be stored.
+            prefix: Prefix of the VTK files that will be converted.
+                Default: PartFluid_ 
+            particle_radius: The particle radius of the input data.
+            smoothing_length: The smoothing length radius used for the SPH
+                kernel, the kernel compact support radius will be twice the
+                smoothing length (in multiplies of the particle radius).
+                Default: 2.0
+            cube_size: The cube edge length used for marching cubes in
+                multiplies of the particle radius, corresponds to the cell size
+                of the implicit background grid.
+                Default: 1.0
+            surface_threshold: The iso-surface threshold for the density, i.e.
+                the normalized value of the reconstructed density level that
+                indicates the fluid surface (in multiplies of the rest density).
+                Default: 0.6
         Returns:
             tasks.Task: An object representing the simulation task.
         """
@@ -67,8 +93,27 @@ class DualSPHysics(simulators.Simulator):
                                 remote_assets=remote_assets,
                                 shell_script=shell_script)
 
+        if vtk_to_obj and (vtk_dir is None or out_dir is None or particle_radius is None):
+            raise ValueError("When using `vtk_to_obj=True` `vtk_dir` and "
+                             "`out_dir` and `particle_radius` need to be "
+                             "defined.")
+
         commands = [f"bash {shell_script}"]
 
+        if vtk_to_obj:
+            commands.append(
+                f"splashsurf reconstruct {vtk_dir}/{prefix}"
+                "{}.vtk "
+                f"-r={particle_radius} "
+                f"-l={smoothing_length} "
+                f"-c={cube_size} "
+                f"-t={surface_threshold} "
+                "--subdomain-grid=on --mesh-cleanup=on "
+                "--mesh-smoothing-weights=on --mesh-smoothing-iters=25 "
+                "--normals=on --normals-smoothing-iters=10 "
+                f"-o {out_dir}/{prefix}_surface"
+                "{}.obj"
+            )
         return super().run(input_dir,
                            on=on,
                            commands=commands,
