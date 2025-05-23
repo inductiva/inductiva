@@ -97,10 +97,16 @@ To fix this, we'll write a small Blender script:
 
 ```python
 import bpy
+import re
+
+# Helper function to extract the number from the object name
+def extract_number(obj):
+    match = re.search(r'\d+', obj.name)
+    return int(match.group()) if match else -1
 
 # Select all fluid mesh objects
 imported_objs = [obj for obj in bpy.data.objects if obj.type == 'MESH' and obj.name.startswith("PartFluid")]
-imported_objs.sort(key=lambda o: o.name)  # Sort by name to ensure frame order
+imported_objs.sort(key=extract_number)
 
 # Hide all objects initially
 for obj in imported_objs:
