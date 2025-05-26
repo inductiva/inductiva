@@ -11,7 +11,7 @@ The use case covered in this tutorial is featured in the following publication: 
 
 ## Prerequisites
 Download the use case [here](https://zenodo.org/records/10805615) and copy 
-the `sfincs_netbndbzsbzifile.nc` file from `Models/HighReliefArea/SFINCS/BoundaryConditions/rp_000_SLR000` to the `InputFiles` folder.
+the `sfincs_netbndbzsbzifile.nc` file from `Models/HighReliefArea/SFINCS/BoundaryConditions/rp_000_SLR000` to the `Models/HighReliefArea/SFINCS/InputFiles` folder.
 
 The `InputFiles` folder should contain the following files:
 
@@ -29,7 +29,9 @@ You can reference the Deltares’ Docker image directly in your simulation scrip
 ```python
 import inductiva
 
-cloud_machine = inductiva.resources.MachineGroup("c2d-highcpu-8",data_disk_gb=100)
+cloud_machine = inductiva.resources.MachineGroup(
+	"c2d-highcpu-8",
+	data_disk_gb=100)
 
 custom_simulator = inductiva.simulators.CustomImage(
 	container_image="deltares/sfincs-cpu:latest")
@@ -39,7 +41,7 @@ input_dir = "/Path/to/Models/HighReliefArea/SFINCS/InputFiles"
 task = custom_simulator.run(
 	input_dir=input_dir,
 	commands=["sfincs"],
-	n=cloud_machine)
+	on=cloud_machine)
 ```
 
 The `CustomImage` simulator enables you to run simulations using any Docker image of your choice by specifying the `container_image` parameter. 
