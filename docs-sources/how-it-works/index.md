@@ -47,12 +47,14 @@ hidden: true
 💢 Minimize simulation data <best-practices/save_storage>
 
 ```
+
 ```{toctree}
 ---
 caption: "Bring Your Own Software"
 maxdepth: 5
 hidden: true
 ---
+bring-your-own-software/index
 bring-your-own-software/how-it-works
 bring-your-own-software/run-simulation-with-custom-docker-image
 bring-your-own-software/run-sfincs-directly-from-deltares-repository
