@@ -47,3 +47,11 @@ hidden: true
 💢 Minimize simulation data <best-practices/save_storage>
 
 ```
+
+```{toctree}
+---
+caption: "Bring Your Own Software"
+maxdepth: 5
+hidden: true
+---
+bring-your-own-software/index
