@@ -39,7 +39,7 @@ task.print_summary()
 ```
 
 ## Step 2: Verify the Task Status
-After the simulation completes, a task summary will be displayed in your terminal. If the task status shows **Success**, congratulations! You've successfully run an XBeach simulation.
+After the simulation completes, a task summary will be displayed in your terminal. If the task status shows **Success**, congratulations! You've successfully run an SFINCS simulation.
 
 You're ready to start running simulations seamlessly!
 
