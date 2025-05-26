@@ -62,9 +62,15 @@ dualsphysics = inductiva.simulators.DualSPHysics( \
     version="5.4.1")
 
 # Run simulation
-task = dualsphysics.run(
-    input_dir="Path/to/01_DamBreak",
+task = dualsphysics.run( \
+    input_dir=input_dir,
     shell_script="xCaseDambreak3D_FSI_linux64_GPU.sh",
+    vtk_to_obj=True,
+    vtk_to_obj_vtk_dir="CaseDambreak3D_FSI_out/particles/",
+    vtk_to_obj_vtk_prefix="PartFluid_",
+    vtk_to_obj_particle_radius=0.002,
+    vtk_to_obj_smoothing_length=2,
+    vtk_to_obj_cube_size=1,
     on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
@@ -84,25 +90,7 @@ This simulation runs on a `g2-standard-16` machine on spot mode, which has 16 vi
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
 ```
-Task status: Success
-
-Timeline:
-	Waiting for Input         at 12/05, 15:47:41      0.836 s
-	In Queue                  at 12/05, 15:47:42      58.49 s
-	Preparing to Compute      at 12/05, 15:48:40      13.809 s
-	In Progress               at 12/05, 15:48:54      5750.479 s
-		└> 5750.347 s      bash xCaseDambreak3D_FSI_linux64_GPU.sh
-	Finalizing                at 12/05, 17:24:44      90.906 s
-	Success                   at 12/05, 17:26:15      
-
-Data:
-	Size of zipped output:    15.06 GB
-	Size of unzipped output:  31.94 GB
-	Number of output files:   1029
-
-Estimated computation cost (US$): 0.67 US$
-
-Go to https://console.inductiva.ai/tasks/mmxoeshep1t2j2rcootdrrx5s for more details.
+update this
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that 

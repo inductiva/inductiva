@@ -32,13 +32,13 @@ class SplishSplash(simulators.Simulator):
         remote_assets: Optional[List[str]] = None,
         project: Optional[str] = None,
         vtk_to_obj: Optional[bool] = False,
-        vtk_dir: Optional[str] = None,
-        prefix: Optional[str] = "PartFluid_",
-        out_dir: Optional[str] = None,
-        particle_radius: Optional[float] = None,
-        smoothing_length: Optional[float] = 2.0,
-        cube_size: Optional[float] = 1.0,
-        surface_threshold: Optional[float] = 0.6,
+        vtk_to_obj_vtk_dir: Optional[str] = None,
+        vtk_to_obj_vtk_prefix: Optional[str] = "PartFluid_",
+        vtk_to_obj_out_dir: Optional[str] = None,
+        vtk_to_obj_particle_radius: Optional[float] = None,
+        vtk_to_obj_smoothing_length: Optional[float] = 2.0,
+        vtk_to_obj_cube_size: Optional[float] = 1.0,
+        vtk_to_obj_surface_threshold: Optional[float] = 0.6,
         **kwargs,
     ) -> tasks.Task:
         """Run the SPlisHSPlasH simulation.
@@ -61,22 +61,25 @@ class SplishSplash(simulators.Simulator):
                 created.
             vtk_to_obj: Whether to convert the output VTK files to OBJ meshes
                 using marching cubes.
-            vtk_dir: Directory containing VTK files to be converted.
-            out_dir: Directory where the generated OBJ files will be stored.
-            prefix: Prefix of the VTK files that will be converted.
+            vtk_to_obj_vtk_dir: Directory containing VTK files to be converted.
+            vtk_to_obj_out_dir: Directory where the generated OBJ files will be
+                stored.
+            vtk_to_obj_vtk_prefix: Prefix of the VTK files that will be
+                converted.
                 Default: PartFluid_ 
-            particle_radius: The particle radius of the input data.
-            smoothing_length: The smoothing length radius used for the SPH
-                kernel, the kernel compact support radius will be twice the
-                smoothing length (in multiplies of the particle radius).
+            vtk_to_obj_particle_radius: The particle radius of the input data.
+            vtk_to_obj_smoothing_length: The smoothing length radius used for
+                the SPH kernel, the kernel compact support radius will be twice
+                the smoothing length (in multiplies of the particle radius).
                 Default: 2.0
-            cube_size: The cube edge length used for marching cubes in
-                multiplies of the particle radius, corresponds to the cell size
-                of the implicit background grid.
+            vtk_to_obj_cube_size: The cube edge length used for marching cubes
+                in multiplies of the particle radius, corresponds to the cell
+                size of the implicit background grid.
                 Default: 1.0
-            surface_threshold: The iso-surface threshold for the density, i.e.
-                the normalized value of the reconstructed density level that
-                indicates the fluid surface (in multiplies of the rest density).
+            vtk_to_obj_surface_threshold: The iso-surface threshold for the
+                density, i.e. the normalized value of the reconstructed density
+                level that indicates the fluid surface (in multiplies of the
+                rest density).
                 Default: 0.6
         Returns:
             Task object representing the simulation task.
@@ -86,7 +89,8 @@ class SplishSplash(simulators.Simulator):
                                 remote_assets=remote_assets,
                                 sim_config_filename=sim_config_filename)
 
-        if vtk_to_obj and (vtk_dir is None or particle_radius is None):
+        if vtk_to_obj and (vtk_to_obj_vtk_dir is None or
+                           vtk_to_obj_particle_radius is None):
             raise ValueError("When using `vtk_to_obj=True` `vtk_dir`, "
                              "`out_dir` and `particle_radius` need to be "
                              "defined.")
@@ -101,20 +105,21 @@ class SplishSplash(simulators.Simulator):
 
             # If out_dir is not provided, will save in the same directory as
             # the vtk files
-            if out_dir is None:
-                out_dir = vtk_dir
+            if vtk_to_obj_out_dir is None:
+                vtk_to_obj_out_dir = vtk_to_obj_vtk_dir
 
             commands.append(
-                f"splashsurf reconstruct {vtk_dir}/{prefix}"
+                "splashsurf reconstruct "
+                f"{vtk_to_obj_vtk_dir}/{vtk_to_obj_vtk_prefix}"
                 "{}.vtk "
-                f"-r={particle_radius} "
-                f"-l={smoothing_length} "
-                f"-c={cube_size} "
-                f"-t={surface_threshold} "
+                f"-r={vtk_to_obj_particle_radius} "
+                f"-l={vtk_to_obj_smoothing_length} "
+                f"-c={vtk_to_obj_cube_size} "
+                f"-t={vtk_to_obj_surface_threshold} "
                 "--subdomain-grid=on --mesh-cleanup=on "
                 "--mesh-smoothing-weights=on --mesh-smoothing-iters=25 "
                 "--normals=on --normals-smoothing-iters=10 "
-                f"-o {out_dir}/{prefix}_surface"
+                f"-o {vtk_to_obj_out_dir}/{vtk_to_obj_vtk_prefix}_surface"
                 "{}.obj")
 
         return super().run(
