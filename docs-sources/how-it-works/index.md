@@ -22,6 +22,7 @@ hidden: true
 💥 How many cores can be used? <basics/how-many-cores>
 📌 Pick a cloud machine for your simulation <basics/pick-cloud-machine>
 ✈️ Start your first cloud machine with Inductiva <basics/start-first-machine>
+💻 Bring your own software <bring-your-own-software>
 
 ```
 
