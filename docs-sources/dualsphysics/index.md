@@ -38,6 +38,6 @@ caption: Visualization
 maxdepth: 4
 hidden: true
 ---
-DualSPHysics with ParaView <sections/using_paraview.md>
-DualSPHysics with Blender <sections/using_blender.md>
+DualSPHysics with ParaView <visualization/sections/using_paraview.md>
+DualSPHysics with Blender <visualization/sections/using_blender.md>
 ```
