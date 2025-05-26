@@ -30,14 +30,14 @@ setup-test
 quick-start
 run-chrono-example
 multiple_gpus
-Visualizing Simulation Data <visualization/index>
 ```
 
 ```{toctree}
 ---
-caption: Post-Processing
+caption: Visualization
 maxdepth: 4
 hidden: true
 ---
-splashsurf
+DualSPHysics with ParaView <sections/using_paraview.md>
+DualSPHysics with Blender <sections/using_blender.md>
 ```
