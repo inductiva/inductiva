@@ -1318,3 +1318,7 @@ li.toctree-l2 a.reference.internal{
 footer {
     display: none;
 }
+
+.note > p:first-child {
+	display: none;
+}
