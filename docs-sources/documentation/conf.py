@@ -30,7 +30,6 @@ autodoc_mock_imports = [
     "pytest",  # Mock pytest to avoid import failures in test-related files
 ]
 
-
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
