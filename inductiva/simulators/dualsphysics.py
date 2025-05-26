@@ -93,8 +93,7 @@ class DualSPHysics(simulators.Simulator):
                                 remote_assets=remote_assets,
                                 shell_script=shell_script)
 
-        if vtk_to_obj and (vtk_dir is None or
-                           particle_radius is None):
+        if vtk_to_obj and (vtk_dir is None or particle_radius is None):
             raise ValueError("When using `vtk_to_obj=True` `vtk_dir`, "
                              "`out_dir` and `particle_radius` need to be "
                              "defined.")
@@ -102,7 +101,7 @@ class DualSPHysics(simulators.Simulator):
         commands = [f"bash {shell_script}"]
 
         if vtk_to_obj:
-            
+
             # If out_dir is not provided, will save in the same directory as
             # the vtk files
             if out_dir is None:

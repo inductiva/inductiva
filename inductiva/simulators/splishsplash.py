@@ -86,8 +86,7 @@ class SplishSplash(simulators.Simulator):
                                 remote_assets=remote_assets,
                                 sim_config_filename=sim_config_filename)
 
-        if vtk_to_obj and (vtk_dir is None or
-                           particle_radius is None):
+        if vtk_to_obj and (vtk_dir is None or particle_radius is None):
             raise ValueError("When using `vtk_to_obj=True` `vtk_dir`, "
                              "`out_dir` and `particle_radius` need to be "
                              "defined.")
