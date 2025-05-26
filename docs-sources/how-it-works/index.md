@@ -54,9 +54,4 @@ caption: "Bring Your Own Software"
 maxdepth: 5
 hidden: true
 ---
-
-bring-your-own-software/how-it-works
-bring-your-own-software/run-simulation-with-custom-docker-image
-bring-your-own-software/run-sfincs-directly-from-deltares-repository
-bring-your-own-software/integrate-your-docker-container
-bring-your-own-software/perform-ml-inference/index
+bring-your-own-software/index
