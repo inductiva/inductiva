@@ -23,23 +23,61 @@ project = 'Inductiva.AI'
 copyright = '2025, Inductiva.AI'
 author = 'Inductiva.AI'
 
+# Mock imports for modules that may not be available or cause issues
+autodoc_mock_imports = [
+    "setup",  # Prevents issues with `setup.py` executing sys.exit()
+    "conftest",  # Avoids errors if pytest isn't installed
+    "pytest",  # Mock pytest to avoid import failures in test-related files
+]
+
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc', 'myst_parser', 'sphinx.ext.mathjax',
-    'sphinx.ext.napoleon', 'sphinxcontrib.mermaid', 'sphinx_tabs.tabs',
-    'sphinx_togglebutton', 'sphinxcontrib.googleanalytics',
-    'sphinxext.opengraph', 'sphinx_sitemap', 'sphinx_reredirects'
+    "sphinx.ext.autodoc",  # Auto-generates docs from docstrings
+    "sphinx.ext.napoleon",  # Supports Google/NumPy-style docstrings
+    #    "sphinx.ext.viewcode",      # Adds links to source code
+    "sphinx.ext.autosummary",  # Auto-generates a summary for modules
+    'sphinx.ext.mathjax',
+    'myst_parser',
+    'sphinxcontrib.mermaid',
+    'sphinx_copybutton',
+    'sphinx_tabs.tabs',
+    'sphinx_togglebutton',
+    'sphinxcontrib.googleanalytics',
+    'sphinxext.opengraph',
+    'sphinx_sitemap',
+    'sphinx_reredirects'
 ]
+
+# Enable automatic docstring discovery
+autosummary_generate = True
+
+# Treat warnings as errors
+nitpicky = True
+
+autodoc_default_options = {
+    "members": True,  # Include all public functions/methods
+    "undoc-members": False,  # Include methods even if they lack docstrings?
+    "private-members": False,  # Exclude private methods (_method_name)
+    "special-members":
+        "__init__",  # Ensure constructors (__init__) are documented
+    "show-inheritance": True,  # Show class hierarchy
+    "inherited-members": True,  # Show inherited methods from base classes
+    "module-first": True,  # Show modules before class names
+}
 
 myst_enable_extensions = [
     "amsmath",
     "dollarmath",
     # other MyST extensions
 ]
+
+# Hides the full module name in class/method documentation
+add_module_names = False
+
 sphinx_tabs_valid_builders = ['html']
 
 # The suffix(es) of source filenames.
