@@ -5,7 +5,7 @@ This benchmark focuses on the _S1 simulation_ as outlined in the paper "[Modeled
 
 
 ```{note}
-The original input files can be found [here](https://zenodo.org/records/4091612).
+_The original input files can be found [here](https://zenodo.org/records/4091612)._
 ```
 
 
