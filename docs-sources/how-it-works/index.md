@@ -22,7 +22,6 @@ hidden: true
 💥 How many cores can be used? <basics/how-many-cores>
 📌 Pick a cloud machine for your simulation <basics/pick-cloud-machine>
 ✈️ Start your first cloud machine with Inductiva <basics/start-first-machine>
-💻 Bring your own software <bring-your-own-software>
 
 ```
 
@@ -48,13 +47,14 @@ hidden: true
 💢 Minimize simulation data <best-practices/save_storage>
 
 ```
-
 ```{toctree}
 ---
-caption: Bring Your Own Software
-maxdepth: 2
+caption: "Bring Your Own Software"
+maxdepth: 5
 hidden: true
 ---
-
-<bring-your-own-software/index>
-```
+bring-your-own-software/how-it-works
+bring-your-own-software/run-simulation-with-custom-docker-image
+bring-your-own-software/run-sfincs-directly-from-deltares-repository
+bring-your-own-software/integrate-your-docker-container
+bring-your-own-software/perform-ml-inference/index
