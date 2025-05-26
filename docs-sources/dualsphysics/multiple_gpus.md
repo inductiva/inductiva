@@ -65,6 +65,7 @@ dualsphysics = inductiva.simulators.DualSPHysics( \
 task = dualsphysics.run( \
     input_dir=input_dir,
     shell_script="xCaseDambreak3D_FSI_linux64_GPU.sh",
+    # Convert VTK files to OBJ files for visualization
     vtk_to_obj=True,
     vtk_to_obj_vtk_dir="CaseDambreak3D_FSI_out/particles/",
     vtk_to_obj_vtk_prefix="PartFluid_",

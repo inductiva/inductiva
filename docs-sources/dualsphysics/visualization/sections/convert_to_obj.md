@@ -3,10 +3,10 @@
 To visualize DualSPHysics simulations in Blender, the raw particle data
 (typically stored in `.vtk` files) must first be converted into a mesh format
 that Blender understands, such as `.obj`. This process can be easily done with
-Inductiva.
+Inductiva with just a few lines of code.
 
 Let's use the [3D dam break](../../multiple_gpus.md) tutorial as an example. In
-this simulation we run this simulation with the following parameters:
+this simulation we convert the `vtk` files to `obj` with the following parameters:
 
 ```python
 # Run simulation
@@ -22,11 +22,11 @@ task = dualsphysics.run( \
     on=cloud_machine)
 ```
 
-This will use a tool called **splashsurf** to convert the VTK files into `.obj`.
+This will use a tool called **splashsurf** to automaticly covert the files to `obj`.
 
 ## Splashsurf
 
-(Splashsurf)[https://github.com/InteractiveComputerGraphics/splashsurf] is an
+[Splashsurf](https://github.com/InteractiveComputerGraphics/splashsurf) is an
 open-source Rust-based tool designed for reconstructing surface
 meshes from Smoothed Particle Hydrodynamics (SPH) simulation data.
 
