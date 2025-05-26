@@ -86,8 +86,9 @@ class SplishSplash(simulators.Simulator):
                                 remote_assets=remote_assets,
                                 sim_config_filename=sim_config_filename)
 
-        if vtk_to_obj and (vtk_dir is None or out_dir is None or particle_radius is None):
-            raise ValueError("When using `vtk_to_obj=True` `vtk_dir` and "
+        if vtk_to_obj and (vtk_dir is None or
+                           particle_radius is None):
+            raise ValueError("When using `vtk_to_obj=True` `vtk_dir`, "
                              "`out_dir` and `particle_radius` need to be "
                              "defined.")
 
@@ -98,6 +99,12 @@ class SplishSplash(simulators.Simulator):
         ]
 
         if vtk_to_obj:
+
+            # If out_dir is not provided, will save in the same directory as
+            # the vtk files
+            if out_dir is None:
+                out_dir = vtk_dir
+
             commands.append(
                 f"splashsurf reconstruct {vtk_dir}/{prefix}"
                 "{}.vtk "
@@ -109,9 +116,8 @@ class SplishSplash(simulators.Simulator):
                 "--mesh-smoothing-weights=on --mesh-smoothing-iters=25 "
                 "--normals=on --normals-smoothing-iters=10 "
                 f"-o {out_dir}/{prefix}_surface"
-                "{}.obj"
-            )
-            
+                "{}.obj")
+
         return super().run(
             input_dir,
             commands=commands,

@@ -33,3 +33,11 @@ multiple_gpus
 Visualizing Simulation Data <visualization/index>
 ```
 
+```{toctree}
+---
+caption: Post-Processing
+maxdepth: 4
+hidden: true
+---
+splashsurf
+```
