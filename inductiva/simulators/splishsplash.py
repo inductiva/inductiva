@@ -91,9 +91,9 @@ class SplishSplash(simulators.Simulator):
 
         if vtk_to_obj and (vtk_to_obj_vtk_dir is None or
                            vtk_to_obj_particle_radius is None):
-            raise ValueError("When using `vtk_to_obj=True` `vtk_dir`, "
-                             "`out_dir` and `particle_radius` need to be "
-                             "defined.")
+            raise ValueError("When using `vtk_to_obj=True`, "
+                             "`vtk_to_obj_vtk_dir` and "
+                             "`vtk_to_obj_particle_radius` need to be defined.")
 
         commands = [
             "cp /SPlisHSPlasH_CPU/bin/SPHSimulator .",
