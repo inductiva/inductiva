@@ -9,7 +9,6 @@ _The original input files can be found [here](https://zenodo.org/records/4091612
 ```
 
 
-
 ### Software Versions
 The software versions used in this benchmark were the following:
 
@@ -24,12 +23,12 @@ The software versions used in this benchmark were the following:
 Faster execution times are better. Units in seconds.
 
 ```{raw} html
-:file: time_graph.html
+:file: /_static/time_graph.html
 ```
 
 ### Cost vs Time
 The following plot shows how the execution times and costs vary with the number of cores for each machine family.
 
 ```{raw} html
-:file: cost_time_graph.html
+:file: /_static/cost_time_graph.html
 ```
