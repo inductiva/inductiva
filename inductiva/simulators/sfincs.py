@@ -54,9 +54,7 @@ class SFINCS(simulators.Simulator):
                                 remote_assets=remote_assets,
                                 sim_config_filename="sfincs.inp")
 
-        commands = [
-            "sfincs"
-        ]
+        commands = ["sfincs"]
 
         return super().run(input_dir,
                            on=on,
