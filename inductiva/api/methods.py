@@ -295,7 +295,7 @@ def task_info_str(
 
     info_str += (f"\t· Local input directory: {local_input_dir}\n"
                  "\t· Submitting to the following computational resources:\n")
-    info_str += f" \t\t· {resource_pool}"
+    info_str += f" \t\t· {resource_pool}\n"
 
     if task_submitted_info is not None:
         ttl_seconds = task_submitted_info.get("time_to_live_seconds")
@@ -303,6 +303,10 @@ def task_info_str(
             ttl_seconds = format_utils.seconds_formatter(ttl_seconds)
             info_str += (f" \t\t· Task will be killed after the computation "
                          f"time exceeds {ttl_seconds} (h:m:s).\n")
+        if resource_pool.spot:
+            preemption = task_submitted_info.get(
+                "resubmit_on_preemption") or False
+            info_str += (f"\t· Restart On Preemption: {preemption}\n")
     info_str += "\n"
     return info_str
 
