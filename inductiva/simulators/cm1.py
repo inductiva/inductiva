@@ -26,6 +26,7 @@ class CM1(simulators.Simulator):
 
     def run(self,
             input_dir: Optional[str],
+            sim_config_filename: str,
             *,
             base: str = None,
             init3d: str = None,
@@ -36,7 +37,6 @@ class CM1(simulators.Simulator):
             on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
-            sim_config_filename: Optional[str] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
@@ -92,19 +92,17 @@ class CM1(simulators.Simulator):
 
         self._check_vcpus(n_vcpus, on)
 
-        #only runs checks if we dont use remote assets
-        if remote_assets is None:
-            files_to_check = {}
-            # Check only files that are not None from:
-            # base, init3d, init_terrain, init_surface, input_sounding, and
-            # landuse
-            for file in [
-                    base, init3d, init_terrain, init_surface, input_sounding,
-                    landuse
-            ]:
-                if file:
-                    files_to_check[file] = file
-            self._input_files_exist(input_dir=input_dir, **files_to_check)
+        files_to_check = {}
+        # Check only files that are not None from:
+        # base, init3d, init_terrain, init_surface, input_sounding, and
+        # landuse
+        for file in [
+                base, init3d, init_terrain, init_surface, input_sounding,
+                landuse, sim_config_filename
+        ]:
+            if file:
+                files_to_check[file] = file
+        self._input_files_exist(input_dir=input_dir,remote_assets=remote_assets, **files_to_check)
 
         # create Mpi config
         mpi_kwargs = {"use_hwthread_cpus": use_hwthread}
