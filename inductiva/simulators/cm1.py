@@ -102,7 +102,9 @@ class CM1(simulators.Simulator):
         ]:
             if file:
                 files_to_check[file] = file
-        self._input_files_exist(input_dir=input_dir,remote_assets=remote_assets, **files_to_check)
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                **files_to_check)
 
         # create Mpi config
         mpi_kwargs = {"use_hwthread_cpus": use_hwthread}
