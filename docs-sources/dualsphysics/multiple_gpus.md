@@ -62,9 +62,16 @@ dualsphysics = inductiva.simulators.DualSPHysics( \
     version="5.4.1")
 
 # Run simulation
-task = dualsphysics.run(
-    input_dir="Path/to/01_DamBreak",
+task = dualsphysics.run( \
+    input_dir=input_dir,
     shell_script="xCaseDambreak3D_FSI_linux64_GPU.sh",
+    # Convert VTK files to OBJ files for visualization
+    vtk_to_obj=True,
+    vtk_to_obj_vtk_dir="CaseDambreak3D_FSI_out/particles/",
+    vtk_to_obj_vtk_prefix="PartFluid_",
+    vtk_to_obj_particle_radius=0.002,
+    vtk_to_obj_smoothing_length=2,
+    vtk_to_obj_cube_size=1,
     on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
@@ -87,27 +94,28 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 12/05, 15:47:41      0.836 s
-	In Queue                  at 12/05, 15:47:42      58.49 s
-	Preparing to Compute      at 12/05, 15:48:40      13.809 s
-	In Progress               at 12/05, 15:48:54      5750.479 s
-		└> 5750.347 s      bash xCaseDambreak3D_FSI_linux64_GPU.sh
-	Finalizing                at 12/05, 17:24:44      90.906 s
-	Success                   at 12/05, 17:26:15      
+	Waiting for Input         at 26/05, 16:53:23      1.581 s
+	In Queue                  at 26/05, 16:53:25      67.698 s
+	Preparing to Compute      at 26/05, 16:54:32      9.148 s
+	In Progress               at 26/05, 16:54:41      6861.774 s
+		├> 5862.434 s      bash xCaseDambreak3D_FSI_linux64_GPU.sh
+		└> 999.117 s       splashsurf reconstruct CaseDambreak3D_FSI_out/particles//PartFluid_{}.vtk -r=0.002 -l=2 -c=1 -t=0.6 --subdomain-grid=on --mesh-cleanup=on --mesh-smoothing-weights=on --mesh-smoothing-iters=25 --normals=on --normals-smoothing-iters=10 -o CaseDambreak3D_FSI_out/particles//PartFluid__surface{}.obj
+	Finalizing                at 26/05, 18:49:03      95.911 s
+	Success                   at 26/05, 18:50:39      
 
 Data:
-	Size of zipped output:    15.06 GB
-	Size of unzipped output:  31.94 GB
-	Number of output files:   1029
+	Size of zipped output:    15.88 GB
+	Size of unzipped output:  34.95 GB
+	Number of output files:   1230
 
-Estimated computation cost (US$): 0.67 US$
+Estimated computation cost (US$): 0.82 US$
 
-Go to https://console.inductiva.ai/tasks/mmxoeshep1t2j2rcootdrrx5s for more details.
+Go to https://console.inductiva.ai/tasks/cb7eswodnkzjboi22k50t44s3 for more details.
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that 
 represents the actual execution of the simulation, the core computation time 
-of this simulation was approximately 1 hour and 36 minutes (5750 seconds).
+of this simulation was approximately 1 hour and 37 minutes (5862 seconds).
 
 ## Testing different GPUS
 
@@ -127,6 +135,9 @@ Here are the results of running the same simulation on those machines:
 |  g2-standard-16| Nvidia L4   | 1 hour 36 minutes      | 0.66 US$    |
 |  a2-highgpu-1g | Nvidia A100 | 1 hour 2 minutes       | 0.61 US$    |
 |  a3-highgpu-1g | Nvidia H100 | 34 minutes 33 seconds  | 1.55 US$    |
+
+> **Note**: the times and costs above are only related with running the simulation, not the
+> time it takes to convert the VTK files to OBJ files. That step is optional.
 
 
 Keep reading to learn how to [visualize the results of your simulation using

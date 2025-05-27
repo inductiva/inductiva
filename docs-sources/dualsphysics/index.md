@@ -30,6 +30,14 @@ setup-test
 quick-start
 run-chrono-example
 multiple_gpus
-Visualizing Simulation Data <visualization/index>
 ```
 
+```{toctree}
+---
+caption: Visualization
+maxdepth: 4
+hidden: true
+---
+DualSPHysics with ParaView <visualization/sections/using_paraview.md>
+DualSPHysics with Blender <visualization/sections/using_blender.md>
+```

@@ -41,6 +41,8 @@ myst_enable_extensions = [
     # other MyST extensions
 ]
 
+# Add any paths that contain templates here, relative to this directory.
+templates_path = ['_templates']
 sphinx_tabs_valid_builders = ['html']
 
 # The suffix(es) of source filenames.
@@ -75,7 +77,6 @@ myst_heading_anchors = 3
 html_permalinks_icon = Icons.permalinks_icon
 html_theme = 'sphinxawesome_theme'
 
-html_title = "How It Works"
 html_theme_options = {
     'show_prev_next': True,
     'show_scrolltop': True,
@@ -87,36 +88,24 @@ html_theme_options = {
 shared_static_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "_shared_static"))
 html_static_path = ['_static', shared_static_path]
-
-html_css_files = ['css/custom.css', 'css/enable_sidebar_focus.css']
+html_css_files = [
+    'css/custom.css',
+]
 pygments_style = "monokai"
 
-# SEO - Add any paths that contain templates here, relative to this directory.
-templates_path = [
-    os.path.relpath(
-        os.path.join(os.path.dirname(__file__), "..",
-                     "_shared_templates/_templates"))
-]
-
-html_context = {
-    "project_name":
-        "Inductiva.AI",
-    "project_description":
-        "Inductiva.AI How It Works",
-    "project_url":
-        "https://inductiva.ai/guides/how-it-works",
-    "ogp_image":
-        "https://inductiva.ai/builds/how-it-works/_static/inductiva-social-banner.jpg",
-    "keywords":
-        "how-it-works, Inductiva.AI"
-}
+html_title = 'SFINCS'
 
 # Google Analytics
 googleanalytics_id = "G-NHJ03C6M91"
 googleanalytics_enabled = True
 
+# OpenGraph protocol
+ogp_site_name = "Inductiva.AI SFINCS"
+ogp_site_url = "https://inductiva.ai/guides/sfincs"
+ogp_image = "https://inductiva.ai/builds/sfincs/_static/inductiva-social-banner.jpg"
+
 # sitemap.xml
 # See https://sphinx-sitemap.readthedocs.io/
 language = 'en'
 version = 'local'
-html_baseurl = 'https://inductiva.ai/guides/how-it-works'
+html_baseurl = 'https://inductiva.ai/guides/sfincs'

@@ -2,119 +2,68 @@
 
 To visualize DualSPHysics simulations in Blender, the raw particle data
 (typically stored in `.vtk` files) must first be converted into a mesh format
-that Blender understands, such as `.obj`. This process involves several steps:
-- Reading the particle data
-- Constructing a volumetric density field
-- Extracting a surface mesh from that field
-- Exporting the mesh to an OBJ file.
+that Blender understands, such as `.obj`. This process can be easily done with
+Inductiva with just a few lines of code.
 
-Below is a Python script that automates this process. It reads `.vtk` files
-containing particle positions, creates a 3D density field using a Gaussian kernel,
-extracts an isosurface using the marching cubes algorithm, and saves the result
-as a `.obj` file that can be imported directly into Blender.
+Let's use the [3D dam break](../../multiple_gpus.md) tutorial as an example. In
+this simulation we convert the `vtk` files to `obj` with the following parameters:
 
 ```python
-import vtk
-import numpy as np
-from numba import njit, prange
-from vtk.util.numpy_support import vtk_to_numpy
-from scipy.ndimage import gaussian_filter
-from skimage import measure
-import os
-
-def vtk_to_points(vtk_file):
-    reader = vtk.vtkPolyDataReader()
-    reader.SetFileName(vtk_file)
-    reader.Update()
-    data = reader.GetOutput()
-    points = vtk_to_numpy(data.GetPoints().GetData())
-    return points
-
-@njit(parallel=True)
-def create_density_field(points, grid_size=500, radius=0.005):
-    field = np.zeros((grid_size, grid_size, grid_size), dtype=np.float32)
-    spacing = 1.0 / grid_size
-    r2 = radius * radius
-    sigma2 = (radius / 2) ** 2
-    n_points = points.shape[0]
-
-    for p_idx in prange(n_points):
-        px, py, pz = points[p_idx]
-        i, j, k = int(px / spacing), int(py / spacing), int(pz / spacing)
-        for dx in range(-2, 3):
-            for dy in range(-2, 3):
-                for dz in range(-2, 3):
-                    ni, nj, nk = i + dx, j + dy, k + dz
-                    if 0 <= ni < grid_size and 0 <= nj < grid_size and 0 <= nk < grid_size:
-                        gx = ni * spacing
-                        gy = nj * spacing
-                        gz = nk * spacing
-                        dist2 = (gx - px)**2 + (gy - py)**2 + (gz - pz)**2
-                        if dist2 < r2:
-                            field[ni, nj, nk] += np.exp(-dist2 / (2 * sigma2))
-    return field
-
-def mesh_from_field(field, iso=0.5):
-    verts, faces, _, _ = measure.marching_cubes(field, level=iso)
-    return verts, faces
-
-def save_obj(filename, verts, faces):
-    with open(filename, 'w') as f:
-        for v in verts:
-            f.write(f"v {v[0]} {v[1]} {v[2]}\n")
-        for face in faces:
-            f.write(f"f {int(face[0]+1)} {int(face[1]+1)} {int(face[2]+1)}\n")
-
-def convert_vtk_dir_to_meshes(vtk_dir, out_dir):
-    os.makedirs(out_dir, exist_ok=True)
-    for file in sorted(os.listdir(vtk_dir)):
-        print(f"Checking file {file}...")
-        if file.endswith('.vtk') and file.startswith("PartFluid"):
-            print("It's vtk and PartFluid ...")
-            path = os.path.join(vtk_dir, file)
-            print("Starting vtk to points...")
-            points = vtk_to_points(path)
-            print("Starting create density field...")
-            field = create_density_field(points)
-            print("Starting mesh from field...")
-            verts, faces = mesh_from_field(field)
-            frame_id = os.path.splitext(file)[0]
-            save_obj(os.path.join(out_dir, f"{frame_id}.obj"), verts, faces)
-            print(f"Converted {file} → mesh")
-
-# Example usage
-convert_vtk_dir_to_meshes(
-    "/Path/to/particles/folder",
-    "/Path/to/store/the/results"
-)
+# Run simulation
+task = dualsphysics.run( \
+    input_dir=input_dir,
+    shell_script="xCaseDambreak3D_FSI_linux64_GPU.sh",
+    vtk_to_obj=True,
+    vtk_to_obj_vtk_dir="CaseDambreak3D_FSI_out/particles/",
+    vtk_to_obj_vtk_prefix="PartFluid_",
+    vtk_to_obj_particle_radius=0.002,
+    vtk_to_obj_smoothing_length=2,
+    vtk_to_obj_cube_size=1,
+    on=cloud_machine)
 ```
 
-This script automates the conversion of `.vtk` files—typically named like
-`PartFluid_000000.vtk`—into `.obj` mesh files, which can be easily imported and
-rendered in Blender. Since Blender cannot directly visualize particle-based data,
-this conversion step is essential for creating meaningful and visually appealing
-representations of DualSPHysics simulations.
+This will use a tool called **splashsurf** to automaticly covert the files to `obj`.
 
-The core of the script involves converting particle positions into a volumetric
-density field using a Gaussian kernel, then extracting a surface using the
-marching cubes algorithm. The resulting mesh is saved as an `.obj` file, ready
-for use in Blender.
+## Splashsurf
 
-Several parameters in the script allow you to control the quality, appearance,
-and performance of the mesh generation process:
+[Splashsurf](https://github.com/InteractiveComputerGraphics/splashsurf) is an
+open-source Rust-based tool designed for reconstructing surface
+meshes from Smoothed Particle Hydrodynamics (SPH) simulation data.
 
-* **`grid_size`** - Sets the resolution of the 3D density grid.
-  Higher values produce smoother and more detailed surfaces but increase memory usage and runtime. Lower values are faster but result in coarser meshes.
+We have integrated **splashsurf** as a post-processing tool that enables users
+to convert VTK files containing SPH particle data into high-quality surface
+meshes. These meshes will be saved as `.obj` files, making it easy for users to
+import and render their simulation results in visualization tools such as Blender.
+This integration streamlines the workflow from simulation to visualization,
+providing a powerful bridge between numerical data and rendering.
 
-* **`radius`** - Defines how far each particle influences the density field.
-  A smaller radius results in sharper, more detailed features, while a larger radius yields smoother, more continuous surfaces.
+### Splashsurf Post-Processing Options
 
-* **`iso`** - The threshold used by the marching cubes algorithm to define the surface.
-  Higher values generate thinner, more compact meshes; lower values produce thicker and more voluminous ones.
+* **`vtk_to_obj`** *(bool)*:
+  Enables the conversion of VTK particle data files into surface meshes using the marching cubes algorithm.
 
-By tweaking these parameters, you can tailor the output for different use
-cases—ranging from quick previews to high-quality final renders.
+* **`vtk_to_obj_vtk_dir`** *(str, mandatory if `vtk_to_obj=True`)*:
+  Path to the directory containing the input VTK files.
 
-> **Note:** Make sure to install the required dependencies before running the script (e.g., `pip install vtk scikit-image numba`). Also, if you have multiple sets of `.vtk` files from different simulation outputs, you may need to run the script separately for each group.
+* **`vtk_to_obj_out_dir`** *(str, default: same as `vtk_dir`)*:
+  Directory where the generated `.obj` mesh files will be saved. If not provided,
+  saves the `.obj` files in the same folder as the `.vtk`files
+
+* **`vtk_to_obj_vtk_prefix`** *(str, default: `"PartFluid_"`)*:
+  Prefix of the VTK files to be converted. Only files starting with this prefix
+  will be processed. This will iterate over `PartFluid_1.vtk`, `PartFluid_2.vtk`
+  etc.
+
+* **`vtk_to_obj_particle_radius`** *(float, mandatory if `vtk_to_obj=True`)*:
+  Radius of each SPH particle in the input data.
+
+* **`vtk_to_obj_smoothing_length`** *(float, default: `2.0`)*:
+  Smoothing length used in the SPH kernel, defined in multiples of the particle radius. The kernel’s compact support radius is twice this value.
+
+* **`vtk_to_obj_cube_size`** *(float, default: `1.0`)*:
+  Edge length of the marching cubes grid cells, also in multiples of the particle radius. This defines the resolution of the reconstructed surface.
+
+* **`vtk_to_obj_surface_threshold`** *(float, default: `0.6`)*:
+  Iso-surface threshold for the fluid density field, expressed in multiples of the SPH rest density. Determines the surface level used for mesh extraction.
 
 See how you can visualize the results in Blender in the next section [Rendering in Blender](render_in_blender.md).
