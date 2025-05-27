@@ -1,9 +1,10 @@
 # Run a Single Simulation
-First, we will run a single TurbSim simulation using the [`90m_12mps_twr.inp`](https://github.com/OpenFAST/r-test/tree/v4.0.2/glue-codes/openfast/5MW_Baseline) wind example available in the OpenFAST repository. This should be straightforward as all the necessary input files are already prepared as described in the previous section.
+First, we will run a single TurbSim simulation using the `90m_12mps_twr.inp` 
+case. This should be straightforward as all the necessary input files are 
+already prepared, as described in the previous section.
 
 ## Code Overview
 The Python code required to run a TurbSim simulation using the Inductiva API follows a consistent structure. We adapt it for this specific use case, as shown below.
-
 
 ```python
 import inductiva
@@ -14,11 +15,11 @@ cloud_machine = inductiva.resources.MachineGroup( \
     machine_type="n2-highcpu-2",
     spot=True)
 
-# Initialize OpenFast stack, which includes turbosim
-openfast = inductiva.simulators.OpenFAST()
+# Initialize OpenFast stack, which includes TurbSim
+turbsim = inductiva.simulators.OpenFAST()
 
-# Run turbosim command on the 90m_12mps_twr.inp input file.
-task = openfast.run( \
+# Run TurbSim command on the 90m_12mps_twr.inp input file
+task = turbsim.run( \
     input_dir="input_files/",
     commands=["turbsim 90m_12mps_twr.inp"],
     on=cloud_machine)
@@ -32,7 +33,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown as follows.
+When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as follows.
 
 ```
 Task status: Success
