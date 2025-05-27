@@ -59,7 +59,7 @@ cloud_machine.terminate()
 
 Let's break this script into parts.
 
-## Code Section 1: Allocating the Cloud Machine Group
+### Code Section 1: Allocating the Cloud Machine Group
 We will allocate an elastic machine group to run our simulations. This group has a minimum number of active machines and a maximum capacity. 
 Machines are dynamically turned on or off as demanded, ensuring efficient resource utilization.
 
@@ -77,7 +77,7 @@ cloud_machine = inductiva.resources.ElasticMachineGroup(
    max_machines=50)
 ```
 
-## Code Section 2: Loop over parameter assignment and Start Simulation
+### Code Section 2: Loop over parameter assignment and Start Simulation
 We now enter a loop that is responsible for generating new input files and running each simulation.
 
 First, we iterate over the specified water depths. For each depth, we generate input files using the `render_dir` method, which replaces the `water_depth` 
@@ -87,7 +87,7 @@ in a special folder, `target_dir` (`variations/params_for_depth_{depth}`). For m
 Next, we initialize the OpenFAST simulator and run the simulation using the newly created input directory. Each simulation task is added to the project, 
 allowing us to track and wait for all tasks to be completed.
 
-Note: we use `resubmit_on_preemption=True` when submitting a task to ensure that, if a machine is preempted, the task is automatically resubmited on another machine. ªreemptions can occur when using `spot` machines, which are significantly cheaper (up to 5x less expensive than regural instances), but come with the risk of possibly being interrupted at any time.
+> **Note**: we use `resubmit_on_preemption=True` when submitting a task to ensure that, if a machine is preempted, the task is automatically resubmited on another machine. Reemptions can occur when using `spot` machines, which are significantly cheaper (up to 5x less expensive than regural instances), but come with the risk of possibly being interrupted at any time.
 
 ```python
 for depth in range(100, 200, 2):
@@ -124,7 +124,7 @@ for depth in range(100, 200, 2):
        resubmit_on_preemption=True)
 ```
 
-## Code Section 3: Waiting for the Simulations to finish
+### Code Section 3: Waiting for the Simulations to finish
 In this last part of the code we just wait for all the tasks to finish.
 
 Once all the tasks are done, we turn off our cloud machines.
@@ -135,7 +135,7 @@ inductiva.projects.Project("Openfast_WavesWN").wait()
 cloud_machine.terminate()
 ```
 
->Note: You can list all the tasks from this project by running this command on
+You can list all the tasks from this project by running this command on
 your command line interface `inductiva tasks list -p Openfast_WavesWN -n 50`
 
 ```

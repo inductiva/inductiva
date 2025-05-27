@@ -16,7 +16,7 @@ import inductiva
 
 project = inductiva.projects.Project("turbsim_dataset")
 
-# Allocate cloud machine
+# Allocate cloud machine group
 cloud_machine = inductiva.resources.ElasticMachineGroup(
    provider="GCP",
    machine_type="n2-highcpu-2",
@@ -24,7 +24,7 @@ cloud_machine = inductiva.resources.ElasticMachineGroup(
    min_machines=1,
    max_machines=5)
 
-# Turbosim takes seeds from -2147483648 to 2147483647
+# TurbSim takes seeds from -2147483648 to 2147483647
 MIN_INT = -2_147_483_648
 MAX_INT = 2_147_483_647
 UREF_MIN = 7
@@ -77,15 +77,14 @@ cloud_machine.terminate()
 
 Let's break this script into parts.
 
-## Code section 1: Creating the Project
-
+### Code Section 1: Creating the Project
 We will use a project to group all the tasks. This allows us to wait for all tasks to complete and provides additional information, such as the project’s total cost.
 
 ```python
 project = inductiva.projects.Project("turbsim_dataset")
 ```
 
-## Code Section 2: Allocating the Cloud Machine Group
+### Code Section 2: Allocating the Cloud Machine Group
 We will allocate an elastic machine group to run our simulations. This group has a minimum number of active machines and a maximum capacity. 
 Machines are dynamically turned on or off as demanded, ensuring efficient resource utilization.
 
@@ -100,10 +99,10 @@ cloud_machine = inductiva.resources.ElasticMachineGroup(
    machine_type="n2-highcpu-2",
    spot=True,
    min_machines=1,
-   max_machines=50)
+   max_machines=5)
 ```
 
-## Code Section 3: Use Inductiva Templating to Generate Input Variations
+### Code Section 3: Use Inductiva Templating to Generate Input Variations
 We now enter a loop that is responsible for generating new input files and running each simulation.
 
 First, we sample the values for `seed_1`, `seed_2` and `URef`. For each triplet of values, we generate input files using the `render_dir` method as we saw in the previous section:
@@ -128,10 +127,10 @@ for i in range(DATASET_SIZE):
         URef=URef)
 ```
 
-## Code Section 4: Starting Simulation
+### Code Section 4: Starting the Simulation
 Next, we initialize the OpenFAST simulator and run the simulation using the newly created input directory. Each simulation task is added to the project, allowing us to track and wait for all tasks to be completed. We also save some task metadata to keep track of the input parameters.
 
-Note: we use `resubmit_on_preemption=True` when submitting a task to ensure that, if a machine is preempted, the task is automatically resubmited on another machine. ªreemptions can occur when using `spot` machines, which are significantly cheaper (up to 5x less expensive than regural instances), but come with the risk of possibly being interrupted at any time.
+> **Note**: we use `resubmit_on_preemption=True` when submitting a task to ensure that, if a machine is preempted, the task is automatically resubmited on another machine. Reemptions can occur when using `spot` machines, which are significantly cheaper (up to 5x less expensive than regural instances), but come with the risk of possibly being interrupted at any time.
 
 ```python
     ...
@@ -158,8 +157,7 @@ Note: we use `resubmit_on_preemption=True` when submitting a task to ensure that
     })
 ```
 
-
-## Code Section 5: Waiting for the Simulations to finish
+### Code Section 5: Waiting for the Simulations to finish
 In this last part of the code we just wait for all the tasks to finish.
 
 Once all the tasks are done, we turn off our cloud machines.
@@ -170,13 +168,11 @@ cloud_machine.terminate()
 ```
 
 You can list the tasks from this project by running this command on
-your command line interface `inductiva tasks list -p turbsim_dataset`
+your command line interface `inductiva tasks list -p turbsim_dataset`.
 
 Alternatively, you can also check the tasks projects in the [Inductiva Web Console](https://console.inductiva.ai/) on the "Projects" tab:
 
 ![console project](../../_static/console_projects.png)
-
-
 
 ## Summary
 We demonstrated how Inductiva can be used to efficiently run multiple TurbSim simulations in parallel and generate a dataset. 

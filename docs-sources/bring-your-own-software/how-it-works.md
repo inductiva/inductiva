@@ -31,7 +31,7 @@ Or, to reference a remote Docker Hub image directly:
 inductiva containers convert docker://username/my-private-image:latest private-image.sif
 ```
 
-### What Happens During Conversion:
+### What Happens During Conversion
 - The command locates the specified Docker image in your local Docker registry (or pulls it from Docker Hub if prefixed with `docker://`);
 - A conversion container is launched with **Apptainer** pre-installed;
 - The Docker image is then converted into a `.sif` file, ready for use in HPC environments.
@@ -45,7 +45,7 @@ While manual upload is possible, the easiest way is to convert and upload in a s
 inductiva containers upload <DOCKER IMAGE NAME/ID/URL>
 ```
 
-### What This Command Does:
+### What This Command Does
 - Convert the Docker image to the `.sif` format;
 - Upload the resulting file directly to your private storage on Inductiva.
 
