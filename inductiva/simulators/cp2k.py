@@ -1,5 +1,5 @@
 """CP2K module of the API."""
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 from inductiva import types, tasks, simulators
 from inductiva.commands.commands import Command
@@ -10,7 +10,11 @@ from inductiva.commands.mpiconfig import MPIConfig
 class CP2K(simulators.Simulator):
     """Class to invoke a generic CP2K simulation on the API."""
 
-    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
+    def __init__(self,
+                 /,
+                 version: Optional[str] = None,
+                 use_dev: bool = False,
+                 device: Literal["auto", "cpu", "gpu"] = "auto"):
         """Initialize the CP2K simulator.
 
         Args:
@@ -19,8 +23,11 @@ class CP2K(simulators.Simulator):
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
+            device (str): Select between CPU or GPU for running the simulation.
+                Default is "auto", which will auto-detect if the machine has a
+                GPU and use if it available, otherwise use the CPU.
         """
-        super().__init__(version=version, use_dev=use_dev)
+        super().__init__(version=version, use_dev=use_dev, device=device)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "cp2k"
 
@@ -28,12 +35,13 @@ class CP2K(simulators.Simulator):
             input_dir: Optional[str],
             *,
             on: types.ComputationalResources,
+            sim_config_filename: Optional[str],
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
-            sim_config_filename: Optional[str] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
+            project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -53,8 +61,17 @@ class CP2K(simulators.Simulator):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project. If the project does not exist, it will be
+                created.
             other arguments: See the documentation of the base class.
         """
+
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
+
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
         if n_vcpus is not None:
@@ -71,4 +88,5 @@ class CP2K(simulators.Simulator):
                            storage_dir=storage_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project=project,
                            **kwargs)

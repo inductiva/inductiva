@@ -36,6 +36,7 @@ class SWASH(simulators.Simulator):
             on: types.ComputationalResources,
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
+            project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -44,10 +45,10 @@ class SWASH(simulators.Simulator):
             sim_config_filename: Name of the simulation configuration file.
             on: The computational resource to launch the simulation on.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
-            (default), all vCPUs will be used.
+                (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
-            number of hardware threads on the node, and use that as the
-            number of slots available.
+                number of hardware threads on the node, and use that as the
+                number of slots available.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
@@ -57,6 +58,10 @@ class SWASH(simulators.Simulator):
             storage_dir: Directory for storing simulation results.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project. If the project does not exist, it will be
+                created.
         """
 
         if command not in ("swashrun", "swash.exe"):
@@ -76,6 +81,10 @@ class SWASH(simulators.Simulator):
             raise ValueError("sim_config_filename must be a path relative to "
                              "the input directory.")
 
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
+
         working_dir = path_config_filename.parent
         config_file_only = path_config_filename.name
 
@@ -89,7 +98,8 @@ class SWASH(simulators.Simulator):
 
             commands.append(machinefile_command)
 
-            mpi_flag = f"-mpi {n_vcpus}" if n_vcpus else ""
+            #if the user does not provide n_vcpus use all available by default
+            mpi_flag = f"-mpi {n_vcpus or on.available_vcpus}"
 
             swashrun_command = Command(
                 f"swashrun -input {config_file_only} {mpi_flag}")
@@ -100,6 +110,7 @@ class SWASH(simulators.Simulator):
         elif command == "swash.exe":
 
             mpi_kwargs = {}
+            #If the user does not provide n_vcpus mpi will use all available
             if n_vcpus is not None:
                 mpi_kwargs["np"] = n_vcpus
             mpi_kwargs["use_hwthread_cpus"] = use_hwthread
@@ -116,4 +127,5 @@ class SWASH(simulators.Simulator):
                            run_subprocess_dir=str(working_dir),
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project=project,
                            **kwargs)

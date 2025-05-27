@@ -6,7 +6,7 @@ from inductiva import types, tasks, simulators
 from inductiva.commands.commands import Command
 from inductiva.commands.mpiconfig import MPIConfig
 
-AVAILABLE_OPENSEES_INTERFACES = ["python", "tcl"]
+AVAILABLE_OPENSEES_INTERFACES = ["python", "tcl", "eesd"]
 
 
 @simulators.simulator.mpi_enabled
@@ -17,7 +17,7 @@ class OpenSees(simulators.Simulator):
                  /,
                  version: Optional[str] = None,
                  use_dev: bool = False,
-                 interface: Literal["python", "tcl"] = "python"):
+                 interface: Literal["python", "tcl", "eesd"] = "python"):
         """Initialize the OpenSees simulator.
 
         Args:
@@ -27,7 +27,7 @@ class OpenSees(simulators.Simulator):
                 the simulator. By default (False), the production version
                 is used.
             interface (str): The interface to use for interacting with the
-                simulator. Can be either "python" (default) or "tcl". 
+                simulator. Can be either "python" (default) or "tcl".
         """
         if interface.lower() not in AVAILABLE_OPENSEES_INTERFACES:
             raise ValueError(
@@ -44,6 +44,8 @@ class OpenSees(simulators.Simulator):
         """Get the name of the simulator."""
         if self._interface == "python":
             return "OpenSeesPy"
+        elif self._interface == "eesd":
+            return "OpenSees-EESD"
         else:
             return "OpenSees"
 
@@ -55,6 +57,10 @@ class OpenSees(simulators.Simulator):
             return [
                 Command(f"python {sim_config_filename}", mpi_config=mpi_config)
             ]
+
+        if self._interface == "eesd":
+            return [Command(f"OpenSees {sim_config_filename}")]
+
         return [
             Command(f"OpenSeesMP {sim_config_filename}", mpi_config=mpi_config)
         ]
@@ -72,12 +78,13 @@ class OpenSees(simulators.Simulator):
             input_dir: Optional[str],
             *,
             on: types.ComputationalResources,
+            sim_config_filename: Optional[str],
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
-            sim_config_filename: Optional[str] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
+            project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -97,6 +104,10 @@ class OpenSees(simulators.Simulator):
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project. If the project does not exist, it will be
+                created.
             other arguments: See the documentation of the base class.
         """
 
@@ -111,6 +122,10 @@ class OpenSees(simulators.Simulator):
                     " an interface. Please use `interface='tcl'`.")
 
         self._check_vcpus(n_vcpus, on)
+
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
 
         mpi_config = self._build_mpi_config(n_vcpus, use_hwthread)
 
@@ -134,4 +149,5 @@ class OpenSees(simulators.Simulator):
                            storage_dir=storage_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project=project,
                            **kwargs)

@@ -208,11 +208,130 @@ class FileInfo(schemas.DictSchema):
                         **kwargs,
                     )
 
+            class creation_time(
+                    schemas.DateTimeBase,
+                    schemas.ComposedSchema,
+            ):
+
+                class MetaOapg:
+                    format = 'date-time'
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'creation_time':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
+            class compress_type(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.IntSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'compress_type':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             __annotations__ = {
                 "name": name,
                 "size": size,
                 "compressed_size": compressed_size,
                 "range_start": range_start,
+                "creation_time": creation_time,
+                "compress_type": compress_type,
             }
 
     name: MetaOapg.properties.name
@@ -242,6 +361,18 @@ class FileInfo(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["creation_time"]
+    ) -> MetaOapg.properties.creation_time:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["compress_type"]
+    ) -> MetaOapg.properties.compress_type:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -250,6 +381,8 @@ class FileInfo(schemas.DictSchema):
         "size",
         "compressed_size",
         "range_start",
+        "creation_time",
+        "compress_type",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -280,6 +413,18 @@ class FileInfo(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["creation_time"]
+    ) -> typing.Union[MetaOapg.properties.creation_time, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["compress_type"]
+    ) -> typing.Union[MetaOapg.properties.compress_type, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -289,6 +434,8 @@ class FileInfo(schemas.DictSchema):
         "size",
         "compressed_size",
         "range_start",
+        "creation_time",
+        "compress_type",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -319,6 +466,18 @@ class FileInfo(schemas.DictSchema):
                                   None, list, tuple, bytes, io.FileIO,
                                   io.BufferedReader,
                                   schemas.Unset] = schemas.unset,
+        creation_time: typing.Union[MetaOapg.properties.creation_time, dict,
+                                    frozendict.frozendict, str, date, datetime,
+                                    uuid.UUID, int, float, decimal.Decimal,
+                                    bool, None, list, tuple, bytes, io.FileIO,
+                                    io.BufferedReader,
+                                    schemas.Unset] = schemas.unset,
+        compress_type: typing.Union[MetaOapg.properties.compress_type, dict,
+                                    frozendict.frozendict, str, date, datetime,
+                                    uuid.UUID, int, float, decimal.Decimal,
+                                    bool, None, list, tuple, bytes, io.FileIO,
+                                    io.BufferedReader,
+                                    schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -332,6 +491,8 @@ class FileInfo(schemas.DictSchema):
             size=size,
             compressed_size=compressed_size,
             range_start=range_start,
+            creation_time=creation_time,
+            compress_type=compress_type,
             _configuration=_configuration,
             **kwargs,
         )

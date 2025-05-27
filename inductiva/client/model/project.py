@@ -48,6 +48,7 @@ class Project(schemas.DictSchema):
             id = schemas.UUIDSchema
             created_at = schemas.DateTimeSchema
             num_tasks = schemas.IntSchema
+            estimated_computation_cost = schemas.NumberSchema
 
             class task_status_overview(schemas.DictSchema):
 
@@ -88,12 +89,84 @@ class Project(schemas.DictSchema):
                         **kwargs,
                     )
 
+            class project_metadata(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    additional_properties = schemas.StrSchema
+                    any_of_0 = schemas.DictSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __getitem__(
+                        self, name: typing.Union[
+                            str,
+                        ]) -> MetaOapg.additional_properties:
+                    # dict_instance[name] accessor
+                    return super().__getitem__(name)
+
+                def get_item_oapg(
+                        self, name: typing.Union[
+                            str,
+                        ]) -> MetaOapg.additional_properties:
+                    return super().get_item_oapg(name)
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[
+                        MetaOapg.additional_properties,
+                        str,
+                    ],
+                ) -> 'project_metadata':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             __annotations__ = {
                 "name": name,
                 "id": id,
                 "created_at": created_at,
                 "num_tasks": num_tasks,
+                "estimated_computation_cost": estimated_computation_cost,
                 "task_status_overview": task_status_overview,
+                "project_metadata": project_metadata,
             }
 
     num_tasks: MetaOapg.properties.num_tasks
@@ -127,8 +200,20 @@ class Project(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["estimated_computation_cost"]
+    ) -> MetaOapg.properties.estimated_computation_cost:
+        ...
+
+    @typing.overload
+    def __getitem__(
         self, name: typing_extensions.Literal["task_status_overview"]
     ) -> MetaOapg.properties.task_status_overview:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["project_metadata"]
+    ) -> MetaOapg.properties.project_metadata:
         ...
 
     @typing.overload
@@ -140,7 +225,9 @@ class Project(schemas.DictSchema):
         "id",
         "created_at",
         "num_tasks",
+        "estimated_computation_cost",
         "task_status_overview",
+        "project_metadata",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -171,8 +258,21 @@ class Project(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["estimated_computation_cost"]
+    ) -> typing.Union[MetaOapg.properties.estimated_computation_cost,
+                      schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["task_status_overview"]
     ) -> typing.Union[MetaOapg.properties.task_status_overview, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["project_metadata"]
+    ) -> typing.Union[MetaOapg.properties.project_metadata, schemas.Unset]:
         ...
 
     @typing.overload
@@ -186,7 +286,9 @@ class Project(schemas.DictSchema):
         "id",
         "created_at",
         "num_tasks",
+        "estimated_computation_cost",
         "task_status_overview",
+        "project_metadata",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -215,9 +317,18 @@ class Project(schemas.DictSchema):
             str,
             uuid.UUID,
         ],
+        estimated_computation_cost: typing.Union[
+            MetaOapg.properties.estimated_computation_cost, decimal.Decimal,
+            int, float, schemas.Unset] = schemas.unset,
         task_status_overview: typing.Union[
             MetaOapg.properties.task_status_overview, dict,
             frozendict.frozendict, schemas.Unset] = schemas.unset,
+        project_metadata: typing.Union[MetaOapg.properties.project_metadata,
+                                       dict, frozendict.frozendict, str, date,
+                                       datetime, uuid.UUID, int, float,
+                                       decimal.Decimal, bool, None, list, tuple,
+                                       bytes, io.FileIO, io.BufferedReader,
+                                       schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -231,7 +342,9 @@ class Project(schemas.DictSchema):
             name=name,
             created_at=created_at,
             id=id,
+            estimated_computation_cost=estimated_computation_cost,
             task_status_overview=task_status_overview,
+            project_metadata=project_metadata,
             _configuration=_configuration,
             **kwargs,
         )

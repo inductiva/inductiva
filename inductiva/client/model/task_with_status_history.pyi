@@ -37,6 +37,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
             "project",
             "task_id",
             "machine_operations",
+            "num_retries",
             "is_terminated",
             "status",
         }
@@ -52,6 +53,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
             simulator = schemas.StrSchema
             project = schemas.StrSchema
             is_terminated = schemas.BoolSchema
+            num_retries = schemas.IntSchema
 
             class status_history(schemas.ListSchema):
 
@@ -1060,6 +1062,187 @@ class TaskWithStatusHistory(schemas.DictSchema):
 
             stream_zip = schemas.BoolSchema
 
+            class compress_with(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            CompressionMethod,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'compress_with':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
+            class task_metadata(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    additional_properties = schemas.StrSchema
+                    any_of_0 = schemas.DictSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __getitem__(
+                        self, name: typing.Union[
+                            str,
+                        ]) -> MetaOapg.additional_properties:
+                    # dict_instance[name] accessor
+                    return super().__getitem__(name)
+
+                def get_item_oapg(
+                        self, name: typing.Union[
+                            str,
+                        ]) -> MetaOapg.additional_properties:
+                    return super().get_item_oapg(name)
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[
+                        MetaOapg.additional_properties,
+                        str,
+                    ],
+                ) -> 'task_metadata':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
+            class extra_params(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.DictSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'extra_params':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             class steps(schemas.ListSchema):
 
                 class MetaOapg:
@@ -1091,6 +1274,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
                 "simulator": simulator,
                 "project": project,
                 "is_terminated": is_terminated,
+                "num_retries": num_retries,
                 "status_history": status_history,
                 "machine_operations": machine_operations,
                 "storage_path": storage_path,
@@ -1111,6 +1295,9 @@ class TaskWithStatusHistory(schemas.DictSchema):
                 "error_detail": error_detail,
                 "input_resources": input_resources,
                 "stream_zip": stream_zip,
+                "compress_with": compress_with,
+                "task_metadata": task_metadata,
+                "extra_params": extra_params,
                 "steps": steps,
             }
 
@@ -1120,6 +1307,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
     project: MetaOapg.properties.project
     task_id: MetaOapg.properties.task_id
     machine_operations: MetaOapg.properties.machine_operations
+    num_retries: MetaOapg.properties.num_retries
     is_terminated: MetaOapg.properties.is_terminated
     status: 'TaskStatusCode'
 
@@ -1157,6 +1345,12 @@ class TaskWithStatusHistory(schemas.DictSchema):
     def __getitem__(
         self, name: typing_extensions.Literal["is_terminated"]
     ) -> MetaOapg.properties.is_terminated:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["num_retries"]
+    ) -> MetaOapg.properties.num_retries:
         ...
 
     @typing.overload
@@ -1281,6 +1475,24 @@ class TaskWithStatusHistory(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["compress_with"]
+    ) -> MetaOapg.properties.compress_with:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["task_metadata"]
+    ) -> MetaOapg.properties.task_metadata:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["extra_params"]
+    ) -> MetaOapg.properties.extra_params:
+        ...
+
+    @typing.overload
+    def __getitem__(
             self, name: typing_extensions.Literal["steps"]
     ) -> MetaOapg.properties.steps:
         ...
@@ -1296,6 +1508,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
         "simulator",
         "project",
         "is_terminated",
+        "num_retries",
         "status_history",
         "machine_operations",
         "storage_path",
@@ -1316,6 +1529,9 @@ class TaskWithStatusHistory(schemas.DictSchema):
         "error_detail",
         "input_resources",
         "stream_zip",
+        "compress_with",
+        "task_metadata",
+        "extra_params",
         "steps",
     ], str]):
         # dict_instance[name] accessor
@@ -1355,6 +1571,12 @@ class TaskWithStatusHistory(schemas.DictSchema):
     def get_item_oapg(
         self, name: typing_extensions.Literal["is_terminated"]
     ) -> MetaOapg.properties.is_terminated:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["num_retries"]
+    ) -> MetaOapg.properties.num_retries:
         ...
 
     @typing.overload
@@ -1481,6 +1703,24 @@ class TaskWithStatusHistory(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["compress_with"]
+    ) -> typing.Union[MetaOapg.properties.compress_with, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["task_metadata"]
+    ) -> typing.Union[MetaOapg.properties.task_metadata, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["extra_params"]
+    ) -> typing.Union[MetaOapg.properties.extra_params, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["steps"]
     ) -> typing.Union[MetaOapg.properties.steps, schemas.Unset]:
         ...
@@ -1498,6 +1738,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
         "simulator",
         "project",
         "is_terminated",
+        "num_retries",
         "status_history",
         "machine_operations",
         "storage_path",
@@ -1518,6 +1759,9 @@ class TaskWithStatusHistory(schemas.DictSchema):
         "error_detail",
         "input_resources",
         "stream_zip",
+        "compress_with",
+        "task_metadata",
+        "extra_params",
         "steps",
     ], str]):
         return super().get_item_oapg(name)
@@ -1553,6 +1797,11 @@ class TaskWithStatusHistory(schemas.DictSchema):
             MetaOapg.properties.machine_operations,
             list,
             tuple,
+        ],
+        num_retries: typing.Union[
+            MetaOapg.properties.num_retries,
+            decimal.Decimal,
+            int,
         ],
         is_terminated: typing.Union[
             MetaOapg.properties.is_terminated,
@@ -1657,6 +1906,24 @@ class TaskWithStatusHistory(schemas.DictSchema):
                                       tuple, schemas.Unset] = schemas.unset,
         stream_zip: typing.Union[MetaOapg.properties.stream_zip, bool,
                                  schemas.Unset] = schemas.unset,
+        compress_with: typing.Union[MetaOapg.properties.compress_with, dict,
+                                    frozendict.frozendict, str, date, datetime,
+                                    uuid.UUID, int, float, decimal.Decimal,
+                                    bool, None, list, tuple, bytes, io.FileIO,
+                                    io.BufferedReader,
+                                    schemas.Unset] = schemas.unset,
+        task_metadata: typing.Union[MetaOapg.properties.task_metadata, dict,
+                                    frozendict.frozendict, str, date, datetime,
+                                    uuid.UUID, int, float, decimal.Decimal,
+                                    bool, None, list, tuple, bytes, io.FileIO,
+                                    io.BufferedReader,
+                                    schemas.Unset] = schemas.unset,
+        extra_params: typing.Union[MetaOapg.properties.extra_params, dict,
+                                   frozendict.frozendict, str, date, datetime,
+                                   uuid.UUID, int, float, decimal.Decimal, bool,
+                                   None, list, tuple, bytes, io.FileIO,
+                                   io.BufferedReader,
+                                   schemas.Unset] = schemas.unset,
         steps: typing.Union[MetaOapg.properties.steps, list, tuple,
                             schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -1674,6 +1941,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
             project=project,
             task_id=task_id,
             machine_operations=machine_operations,
+            num_retries=num_retries,
             is_terminated=is_terminated,
             status=status,
             storage_path=storage_path,
@@ -1694,12 +1962,16 @@ class TaskWithStatusHistory(schemas.DictSchema):
             error_detail=error_detail,
             input_resources=input_resources,
             stream_zip=stream_zip,
+            compress_with=compress_with,
+            task_metadata=task_metadata,
+            extra_params=extra_params,
             steps=steps,
             _configuration=_configuration,
             **kwargs,
         )
 
 
+from inductiva.client.model.compression_method import CompressionMethod
 from inductiva.client.model.executer import Executer
 from inductiva.client.model.task_machine_operation import TaskMachineOperation
 from inductiva.client.model.task_metrics import TaskMetrics

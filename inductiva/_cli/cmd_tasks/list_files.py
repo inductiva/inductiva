@@ -2,28 +2,26 @@
 from typing import TextIO
 import argparse
 import sys
-import asyncio
 
 from inductiva import _cli, tasks
-from inductiva._cli.cmd_tasks import task_utils
 
 
 def list_files(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
-    valid, err_msg = task_utils.validate_task_computation_started(task)
-    if not valid:
-        print(err_msg, file=sys.stderr)
-        return 1
-    directories = asyncio.run(task.list_files())  # pylint: disable=protected-access
-    print(directories, file=fout)
-    return 0
+
+    directories, ret_code = task.list_files()
+    if directories:
+        print(directories, file=fout)
+    return ret_code
 
 
 def register(parser):
     """Register the info tasks command."""
-    subparser = parser.add_parser("list-files",
-                                  formatter_class=argparse.RawTextHelpFormatter)
+    subparser = parser.add_parser(
+        "list-files",
+        help="Lists the current files of a running task.",
+        formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = ("The `inductiva tasks list-files` command lists "
                              "the contents of a task's working directory while "

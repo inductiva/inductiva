@@ -1,8 +1,9 @@
 sphinx
+sphinx-autobuild
 sphinx_rtd_theme
 sphinx-book-theme
 sphinxcontrib-mermaid
-myst-parser @ git+https://github.com/executablebooks/MyST-Parser@fc64840b5f009021d64173d81c2f244fb0d8a43d
+myst-parser
 sphinx-copybutton
 sphinx-tabs
 sphinx-togglebutton

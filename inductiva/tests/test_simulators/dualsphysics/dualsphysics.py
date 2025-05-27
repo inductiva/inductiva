@@ -4,7 +4,7 @@ import inductiva
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2-standard-4")
+    machine_type="c2d-highcpu-4")
 
 # Download the configuration files into a folder
 input_dir = inductiva.utils.download_from_url(
@@ -13,7 +13,8 @@ input_dir = inductiva.utils.download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-dualsphysics = inductiva.simulators.DualSPHysics()
+dualsphysics = inductiva.simulators.DualSPHysics( \
+    version="5.2.1")
 
 # Run simulation with config files in the input directory
 task = dualsphysics.run( \

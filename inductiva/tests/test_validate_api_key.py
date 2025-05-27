@@ -4,12 +4,12 @@ import pytest
 import inductiva
 from unittest.mock import patch
 from inductiva.api.methods import get_api_config
-from inductiva import _set_key_and_check_version
+from inductiva import ApiKeyError, _set_key_and_check_version
 
 
 # Test for API key validation
 def test_set_api_key_config_without_api_key():
-    with pytest.raises(ValueError):
+    with pytest.raises(ApiKeyError):
         inductiva.set_api_key(None)
 
 

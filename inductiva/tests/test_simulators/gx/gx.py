@@ -11,7 +11,8 @@ input_dir = inductiva.utils.download_from_url(
     "gx-input-example.zip",
     unzip=True)
 
-gx = inductiva.simulators.GX()
+gx = inductiva.simulators.GX( \
+    version="11-2024")
 
 task = gx.run( \
     input_dir=input_dir,

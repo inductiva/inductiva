@@ -33,9 +33,10 @@ class SNLSWAN(simulators.Simulator):
     def run(
         self,
         input_dir: Optional[str],
-        sim_config_filename: Optional[str] = None,
         *,
+        sim_config_filename: Optional[str],
         remote_assets: Optional[List[str]] = None,
+        project: Optional[str] = None,
         resubmit_on_preemption: bool = False,
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
@@ -51,10 +52,10 @@ class SNLSWAN(simulators.Simulator):
             sim_config_filename: Name of the simulation configuration file.
                 Mandatory when using 'swanrun' command.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
-            (default), all vCPUs will be used.
+                (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
-            number of hardware threads on the node, and use that as the
-            number of slots available.
+                number of hardware threads on the node, and use that as the
+                number of slots available.
             on: The computational resource to launch the simulation on.
             storage_dir: Directory for storing simulation results.
             resubmit_on_preemption (bool): Resubmit task for execution when
@@ -65,6 +66,10 @@ class SNLSWAN(simulators.Simulator):
                 The user can also specify 'swan.exe'.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project. If the project does not exist, it will be
+                created.
         """
 
         if command not in ("swanrun", "swan.exe"):
@@ -84,6 +89,10 @@ class SNLSWAN(simulators.Simulator):
             raise ValueError("sim_config_filename must be a path relative to "
                              "the input directory.")
 
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                sim_config_filename=sim_config_filename)
+
         working_dir = path_config_filename.parent
         config_file_only = path_config_filename.name
 
@@ -97,7 +106,8 @@ class SNLSWAN(simulators.Simulator):
 
             commands.append(machinefile_command)
 
-            mpi_flag = f"-mpi {n_vcpus}" if n_vcpus else ""
+            #if the user does not provide n_vcpus use all available by default
+            mpi_flag = f"-mpi {n_vcpus or on.available_vcpus}"
 
             swanrun_command = Command(
                 f"swanrun -input {config_file_only} {mpi_flag}")
@@ -108,6 +118,7 @@ class SNLSWAN(simulators.Simulator):
         elif command == "swan.exe":
 
             mpi_kwargs = {}
+            #If the user does not provide n_vcpus mpi will use all available
             if n_vcpus is not None:
                 mpi_kwargs["np"] = n_vcpus
             mpi_kwargs["use_hwthread_cpus"] = use_hwthread
@@ -116,7 +127,6 @@ class SNLSWAN(simulators.Simulator):
             swan_exe_command = Command(f"swan.exe {sim_config_filename}",
                                        mpi_config=mpi_config)
             commands.append(swan_exe_command)
-
         return super().run(input_dir,
                            on=on,
                            storage_dir=storage_dir,
@@ -124,4 +134,5 @@ class SNLSWAN(simulators.Simulator):
                            run_subprocess_dir=str(working_dir),
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project=project,
                            **kwargs)

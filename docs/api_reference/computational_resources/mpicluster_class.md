@@ -9,6 +9,7 @@ is configured automatically to run your simulations in a distributed manner acro
 the machines.
 
 To instantiate an `MPICluster` object the following parameters can be configured:
+
 - the `machine_type` defines the type of CPU used for each machine. This parameter
 follows the naming convention set by
 [Google Cloud](https://cloud.google.com/compute/docs/machine-types),

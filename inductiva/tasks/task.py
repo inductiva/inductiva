@@ -1,13 +1,16 @@
 """Manage running/completed tasks on the Inductiva API."""
+import io
 import sys
 import time
 import json
+import asyncio
 import pathlib
 import logging
 import datetime
 import contextlib
+import nest_asyncio
 from typing_extensions import TypedDict
-from typing import Callable, Dict, Any, List, Optional, Tuple, Union
+from typing import AsyncGenerator, Callable, Dict, Any, List, Optional, TextIO, Tuple, Union
 
 import urllib3
 import tabulate
@@ -30,13 +33,19 @@ import warnings
 
 @dataclass
 class Metric:
-    """Represents a single metric with a value and a label."""
+    """Represents a single metric with a value and a label.
+    
+    :meta private:
+    """
     label: str
     value: Optional[float] = None
 
 
 class TaskInfo:
-    """Represents the task information."""
+    """Represents the task information.
+
+    :meta private:
+    """
 
     MISSING_UNTIL_TASK_STARTED = "N/A until task is started"
     MISSING_UNTIL_TASK_ENDED = "N/A until task ends"
@@ -294,19 +303,18 @@ class Task:
     """Represents a running/completed task on the Inductiva API.
 
     Example usage:
-        task = scenario.simulate(...)
-        final_status = task.wait()
+    
+    .. code-block:: python
+
+        task = simulator.run(...)
+        task.wait()
         info = task.get_info() # dictionary with info about the task
         task.download_outputs(
             filenames=["file1.txt", "file2.dat"] # download only these files
         )
-
-    Attributes:
-        id: The task ID.
-        _api: Instance of TasksApi (from the generated API client).
     """
 
-    FAILED_STATUSES = {
+    _FAILED_STATUSES = {
         models.TaskStatusCode.FAILED,
         models.TaskStatusCode.KILLED,
         models.TaskStatusCode.EXECUTERFAILED,
@@ -318,18 +326,18 @@ class Task:
         models.TaskStatusCode.TTLEXCEEDED,
     }
 
-    RUNNING_STATUSES = {
+    _RUNNING_STATUSES = {
         models.TaskStatusCode.PENDINGINPUT, models.TaskStatusCode.STARTED,
         models.TaskStatusCode.COMPUTATIONSTARTED,
         models.TaskStatusCode.COMPUTATIONENDED
     }
 
-    KILLABLE_STATUSES = {models.TaskStatusCode.SUBMITTED
-                        }.union(RUNNING_STATUSES)
+    _KILLABLE_STATUSES = {models.TaskStatusCode.SUBMITTED
+                         }.union(_RUNNING_STATUSES)
 
-    KILL_VERBOSITY_LEVELS = [0, 1, 2]
+    _KILL_VERBOSITY_LEVELS = [0, 1, 2]
 
-    STANDARD_OUTPUT_FILES = ["stdout.txt", "stderr.txt"]
+    _STANDARD_OUTPUT_FILES = ["stdout.txt", "stderr.txt"]
 
     def __init__(self, task_id: str):
         """Initialize the instance from a task ID."""
@@ -357,7 +365,7 @@ class Task:
 
         This method issues a request to the API.
         """
-        return self.get_status() in self.FAILED_STATUSES
+        return self.get_status() in self._FAILED_STATUSES
 
     def is_terminal(self) -> bool:
         """Check if the task is in a terminal status.
@@ -598,9 +606,9 @@ class Task:
         """
         n = constants.TASK_FAILED_LINES_TO_DUMP
         std_out_lines = self._get_last_n_lines_from_file(
-            f"{out_dir}/stdout.txt", n)
+            pathlib.Path(out_dir) / "stdout.txt", n)
         std_err_lines = self._get_last_n_lines_from_file(
-            f"{out_dir}/stderr.txt", n)
+            pathlib.Path(out_dir) / "stderr.txt", n)
 
         logging.error("")
 
@@ -658,12 +666,13 @@ class Task:
         if download_std_on_completion:
             self._called_from_wait = True
             out_dir = self.download_outputs(
-                filenames=self.STANDARD_OUTPUT_FILES)
+                filenames=self._STANDARD_OUTPUT_FILES)
             if status == models.TaskStatusCode.FAILED:
                 self._print_failed_message(out_dir)
 
     def wait(self,
              polling_period: int = 1,
+             silent_mode: bool = False,
              download_std_on_completion: bool = True) -> models.TaskStatusCode:
         """Wait for the task to complete.
 
@@ -671,6 +680,8 @@ class Task:
 
         Args:
             polling_period: How often to poll the API for the task status.
+            silent_mode: If True, do not print the task logs (stdout and stderr)
+                to the console.
             download_std_on_completion: Request immediate download of the
                 standard files (stdout and stderr) after the task completes.
 
@@ -681,10 +692,11 @@ class Task:
         prev_status = None
         is_tty = sys.stdout.isatty()
 
-        logging.info(
-            "Waiting for task %s to complete...\n"
-            "Go to https://console.inductiva.ai/tasks/%s for more details.",
-            self.id, self.id)
+        if not silent_mode:
+            logging.info(
+                "Waiting for task %s to complete...\n"
+                "Go to https://console.inductiva.ai/tasks/%s for more details.",
+                self.id, self.id)
 
         requires_newline = False
         previous_duration_l = 0
@@ -708,18 +720,31 @@ class Task:
                 if requires_newline:
                     requires_newline = False
                     sys.stdout.write("\n")
-                self._handle_status_change(status, description)
+                if not silent_mode:
+                    self._handle_status_change(status, description)
+
+                if (status == models.TaskStatusCode.COMPUTATIONSTARTED) and (
+                        not silent_mode):
+                    try:
+                        self.tail_files(["stdout.txt", "stderr.txt"], 50, True,
+                                        sys.stdout)
+                    # pylint: disable=broad-except
+                    except Exception as _:
+                        # Ignore errors while tailing files
+                        pass
+
             # Print timer
             elif (status != models.TaskStatusCode.SUBMITTED and
                   not task_info.is_terminal):
 
-                #clear previous line
-                print(" " * previous_duration_l, end="\r")
+                if not silent_mode:
+                    #clear previous line
+                    print(" " * previous_duration_l, end="\r")
 
-                duration = f"Duration: {duration}"
-                print(duration, end="\r")
+                    duration = f"Duration: {duration}"
+                    print(duration, end="\r")
 
-                previous_duration_l = len(duration)
+                    previous_duration_l = len(duration)
 
             prev_status = status
 
@@ -737,6 +762,47 @@ class Task:
                 return status
 
             time.sleep(polling_period)
+
+    def _validate_task_computation_started(self) -> Tuple[bool, Optional[str]]:
+        info = self.get_info()
+        if info.is_terminal:
+            print(
+                f"Task {self.id} has terminated.\n"
+                "Access its output using:\n\n"
+                f"  inductiva tasks download --id {self.id}",
+                file=sys.stderr)
+            return False
+        if not info.status == "computation-started":
+            print(
+                f"Task {self.id} has not started yet.\n"
+                "Wait for computation to start.",
+                file=sys.stderr)
+            return False
+
+        return True
+
+    def tail_files(self,
+                   tail_files: List[str],
+                   lines: int,
+                   follow: bool,
+                   fout: TextIO = sys.stdout):
+        """
+        Prints the result of tailing a list of files.
+
+        Args:
+            tail_files: A list of files to tail.
+            lines: The number of lines to print.
+            follow: Whether to keep tailing a file or not. If True, tail_files
+                will keep printing the new lines in the selected files as they
+                are changed in real time. If False, it will print the tail and
+                end.
+            fout: The file object to print the result to. Default is stdout.
+        """
+        return self._run_multiple_streaming_commands([
+            lambda filename=filename: self._run_tail_on_machine(
+                filename, lines, follow) for filename in tail_files
+        ],
+                                                     fout=fout)
 
     def _send_kill_request(self, max_api_requests: int) -> None:
         """Send a kill request to the API.
@@ -820,9 +886,9 @@ class Task:
                 raise ValueError("Wait timeout must be a positive number"
                                  " or None.")
 
-        if verbosity_level not in self.KILL_VERBOSITY_LEVELS:
+        if verbosity_level not in self._KILL_VERBOSITY_LEVELS:
             raise ValueError(f"Verbosity {verbosity_level} level not allowed. "
-                             f"Choose from {self.KILL_VERBOSITY_LEVELS}")
+                             f"Choose from {self._KILL_VERBOSITY_LEVELS}")
 
         self._send_kill_request(constants.TASK_KILL_MAX_API_REQUESTS)
 
@@ -894,7 +960,7 @@ class Task:
         """
         output_files = list(output_dir.iterdir())
         return all(
-            file.name in self.STANDARD_OUTPUT_FILES for file in output_files)
+            file.name in self._STANDARD_OUTPUT_FILES for file in output_files)
 
     def _request_download_output_url(self) -> Optional[str]:
         try:
@@ -991,7 +1057,7 @@ class Task:
 
         download_message = "Downloading simulation files to %s..."
 
-        if filenames is self.STANDARD_OUTPUT_FILES:
+        if filenames is self._STANDARD_OUTPUT_FILES:
             download_message = "Downloading stdout and stderr files to %s..."
 
         if filenames:
@@ -1022,7 +1088,7 @@ class Task:
 
         if uncompress:
             logging.info("Uncompressing the files to %s...", dir_path)
-            data.uncompress_zip(zip_path, dir_path)
+            data.decompress_zip(zip_path, dir_path)
             if rm_downloaded_zip_archive:
                 zip_path.unlink()
 
@@ -1148,16 +1214,128 @@ class Task:
         if self.file_tracker is not None:
             await self.file_tracker.cleanup()
 
-    async def list_files(self) -> str:
-        """List the files in the task's working directory."""
+    def list_files(self) -> Tuple[Optional[str], int]:
+        """List the files in the task's working directory.
+        
+        This method will list the files, in real time, in the task's working
+        directory. It will also print the files in a tree-like structure.
 
-        directory = [
-            files async for files in self._file_operation(
-                Operations.LIST, formatter=self._format_directory_listing)
+        returns:
+            A string with the formatted directory listing.
+            The return code for the command. 0 if successful, 1 if failed.
+        """
+
+        result, return_code = self._run_streaming_command(
+            lambda: self._file_operation(
+                Operations.LIST, formatter=self._format_directory_listing))
+
+        return result, return_code
+
+    async def _gather_and_consume(self, generators: List[AsyncGenerator],
+                                  fout: TextIO):
+        """
+        Helper method to gather and consume multiple asynchronous generators.
+        """
+        tasks = [
+            asyncio.create_task(self._consume(generator, fout))
+            for generator in generators
         ]
-        return directory[0]
+        try:
+            await asyncio.gather(*tasks)
+        except asyncio.CancelledError:
+            for task in tasks:
+                task.cancel()
+            await self.close_stream()
 
-    async def tail_file(self, filename: str, n_lines: int = 10, follow=False):
+    async def _consume_modified_file(self, generator: AsyncGenerator,
+                                     fout: TextIO):
+        """
+        Consume and write the formatted output from an asynchronous generator to
+        a file-like object.
+
+        This function iterates over the provided asynchronous generator, writing 
+        each line of output to the specified file-like object.
+
+        Example:
+            Most Recent File: /workdir/io9od5da6xh131inmsno0fapm/stdin.txt
+            Modification Time: 2025-04-01 09:28:33
+            Current Time on Machine: 2025-04-01 09:29:17
+
+            Time Since Last Modification: 0:00:43
+        """
+        try:
+            async for generator_data in generator:
+
+                # Convert timestamps to readable datetime
+                most_recent_time = datetime.datetime.fromtimestamp(
+                    generator_data["most_recent_timestamp"]).strftime(
+                        "%Y-%m-%d %H:%M:%S")
+                now_time = datetime.datetime.fromtimestamp(
+                    generator_data["now_timestamp"]).strftime(
+                        "%Y-%m-%d %H:%M:%S")
+
+                # Print the information
+                recent_file = generator_data["most_recent_file"]
+                formatted_seconds = format_utils.seconds_formatter(
+                    generator_data["time_since_last_mod"])
+                print(
+                    "\n"
+                    f"Most Recent File: {recent_file}\n"
+                    f"Modification Time: {most_recent_time}\n"
+                    f"Current Time on Machine: {now_time}\n"
+                    "\n"
+                    f"Time Since Last Modification: {formatted_seconds}",
+                    file=fout)
+        except asyncio.CancelledError:
+            pass
+
+    def _last_modified_file_formatter(self, generator_data: dict) -> str:
+        """
+        Formats the outputs of the last_modified_file command.
+        Args:
+            generator_data: The data returned by the last_modified_file
+                command.
+        """
+        # Convert timestamps to readable datetime
+        most_recent_time = datetime.datetime.fromtimestamp(
+            generator_data["most_recent_timestamp"]).strftime(
+                "%Y-%m-%d %H:%M:%S")
+        now_time = datetime.datetime.fromtimestamp(
+            generator_data["now_timestamp"]).strftime("%Y-%m-%d %H:%M:%S")
+
+        # Print the information
+        recent_file = generator_data["most_recent_file"]
+        formatted_seconds = format_utils.seconds_formatter(
+            generator_data["time_since_last_mod"])
+        return ("\n"
+                f"Most Recent File: {recent_file}\n"
+                f"Modification Time: {most_recent_time}\n"
+                f"Current Time on Machine: {now_time}\n"
+                "\n"
+                f"Time Since Last Modification: {formatted_seconds}")
+
+    def last_modified_file(self):
+        """
+        Display the last modified file for a given task.
+
+        This function retrieves and prints information about the most recently 
+        modified file associated with a specified task. It validates that the 
+        task computation has started before proceeding. If the task is invalid 
+        or not started, an error message is printed to `stderr`.
+        """
+
+        result, return_code = self._run_streaming_command(
+            lambda: self._file_operation(
+                Operations.LAST_MODIFIED_FILE,
+                formatter=self._last_modified_file_formatter,
+            ))
+
+        return result, return_code
+
+    async def _run_tail_on_machine(self,
+                                   filename: str,
+                                   n_lines: int = 10,
+                                   follow=False):
         """Get the last n_lines lines of a 
         file in the task's working directory."""
 
@@ -1173,6 +1351,38 @@ class Task:
                                                 lines=n_lines,
                                                 follow=follow):
             yield lines
+
+    async def _consume(self, generator: AsyncGenerator, fout: TextIO):
+        """
+        Consume and write the output from an asynchronous generator to a
+        file-like object.
+
+        This function iterates over the provided asynchronous generator, writing 
+        each line of output to the specified file-like object.
+        """
+        try:
+            async for lines in generator:
+                print(lines, file=fout, end="", flush=True)
+        except asyncio.CancelledError:
+            pass
+
+    def _top(self) -> Tuple[Optional[str], int]:
+        """Prints the result of the `top -b -H -n 1` command.
+    
+        This command will list the processes and threads (-H) in batch mode
+        (-b).
+        This command will run only once (-n 1) instead of running continuously.
+        The result is an instant snapshot of the machine CPU and RAM metrics.
+
+        Returns:
+            A string with the formatted directory listing. 
+            The return code for the command. 0 if successful, 1 if failed.
+        """
+        result, return_code = self._run_streaming_command(
+            lambda: self._file_operation(
+                Operations.TOP, formatter=lambda _: _, follow=False))
+
+        return result, return_code
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""
@@ -1279,8 +1489,7 @@ class Task:
                 self.id,
             )
         try:
-            # TODO: rename the function to a more generic name
-            storage.remove_workspace(remote_dir=self.id)
+            storage.remove(remote_path=self.id)
             if verbose:
                 logging.info("Remote task files removed successfully.")
         except exceptions.ApiException as e:
@@ -1303,6 +1512,36 @@ class Task:
         self._summary = str(info)
         return self._summary
 
+    def _run_multiple_streaming_commands(
+            self,
+            generator_factories: List[Callable[[], AsyncGenerator]],
+            fout: TextIO = sys.stdout):
+        if not self._validate_task_computation_started():
+            return 1
+
+        if inductiva.is_notebook():
+            nest_asyncio.apply()
+
+        asyncio.run(
+            self._gather_and_consume([gen() for gen in generator_factories],
+                                     fout))
+        return 0
+
+    def _run_streaming_command(
+        self, generator_factory: Callable[[], AsyncGenerator]
+    ) -> Tuple[Optional[str], int]:
+        if not self._validate_task_computation_started():
+            return None, 1
+
+        if inductiva.is_notebook():
+            nest_asyncio.apply()
+
+        buffer = io.StringIO()
+
+        asyncio.run(self._gather_and_consume([generator_factory()], buffer))
+
+        return buffer.getvalue(), 0
+
     @property
     def summary(self) -> str:
         """It returns cached information about the task summary."""
@@ -1312,3 +1551,47 @@ class Task:
 
     def print_summary(self, fhandle=sys.stdout):
         print(self._get_summary(), file=fhandle)
+
+    def set_metadata(self, metadata: Dict[str, str]):
+        """Set metadata for the task.
+        
+        Metadata is stored as key-value pairs, where both
+        keys and values must be strings.
+        Metadata can be useful for categorizing, searching,
+        and filtering tasks.
+
+        Example usage:
+            task = simulator.run(...)
+            # Add experiment information to the task
+            task.set_metadata({
+                "study": "study_1",
+                "experiment": "experiment_1",
+                "description": "This is a test experiment",
+                "parameters": "param1=1,param2=2",
+            })
+
+        Args:
+            metadata: A dictionary with the metadata to set.
+        """
+        # Validate metadata
+        if not isinstance(metadata, Dict):
+            raise TypeError("Metadata must be a dictionary.")
+
+        for key, value in metadata.items():
+            if not isinstance(key, str) or not isinstance(value, str):
+                raise TypeError("Metadata keys and values must be strings.")
+            if not key or not value:
+                raise ValueError(
+                    "Metadata keys and values cannot be empty strings.")
+
+        self._api.set_metadata(path_params={"task_id": self.id}, body=metadata)
+
+    def get_metadata(self) -> Dict[str, str]:
+        """Get the metadata associated with the task.
+            
+        Returns:
+            A dictionary with the custom metadata previously set on this task.
+        """
+        response = self._api.get_metadata(path_params={"task_id": self.id})
+
+        return dict(response.body)

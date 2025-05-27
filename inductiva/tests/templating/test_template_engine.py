@@ -9,7 +9,7 @@ from pytest import mark
 import pytest
 
 from inductiva import TemplateManager
-from inductiva.templating import manager
+from inductiva.templating import helpers
 
 ASSETS_DIR = pathlib.Path(__file__).parent / "assets"
 
@@ -68,15 +68,26 @@ def test_render_dir__target_dir_exists_overwites__renders_correctly(
     # Determine if the directory is rendered when the target
     # exists and the overwrite flag is set.
 
-    # Copy a file to the target directory, in order to cause a conflict.
-    shutil.copyfile(ASSETS_DIR / "non_template.txt",
-                    tmp_target_dir / "non_template.txt")
-    assert os.path.isfile(tmp_target_dir / "non_template.txt")
+    # Create a file in the target directory.
+    new_file_path = tmp_target_dir / "existing_file.txt"
+    with open(new_file_path, "w", encoding="utf-8") as new_file:
+        new_file.write("This is the first line.\n")
+    assert os.path.isfile(tmp_target_dir / "existing_file.txt")
+
     # With overwrite=True, the directory should be rendered.
     TemplateManager.render_dir(ASSETS_DIR,
                                tmp_target_dir,
                                overwrite=True,
                                text="world")
+
+    # The existing_file should no longer exist, because "overwrite"
+    # set to True, the function should delete the existing files.
+    assert not os.path.isfile(new_file_path)
+    # And the new ones should appear there.
+    assert os.path.isfile(tmp_target_dir / "template.txt")
+    assert os.path.isfile(tmp_target_dir / "non_template.txt")
+    assert os.path.isfile(tmp_target_dir / "folder/nested_template.txt")
+    assert os.path.isfile(tmp_target_dir / "folder/nested_non_template.txt")
 
 
 @mark.parametrize(
@@ -91,8 +102,8 @@ def test_render_file__correctly_renders_files(tmp_target_dir, template_name,
 
     TemplateManager.render_dir(ASSETS_DIR, tmp_target_dir, text="world")
 
-    if manager.is_template(template_name):
-        template_name = manager.strip_extension(template_name)
+    if helpers.is_template(template_name):
+        template_name = helpers.strip_extension(template_name)
     current = _get_file_contents(tmp_target_dir / template_name)
     assert current == expected
 
@@ -103,7 +114,7 @@ def test_render_file__correctly_renders_files(tmp_target_dir, template_name,
                    ("folder/nested_template.txt.jinja", True)])
 def test_is_template__correctly_identifies_templates(filename, is_template):
     # Determine if template files are correctly identified.
-    assert manager.is_template(filename) == is_template
+    assert helpers.is_template(filename) == is_template
 
 
 @mark.parametrize("filename, expected",
@@ -114,7 +125,7 @@ def test_is_template__correctly_identifies_templates(filename, is_template):
 def test_strip_extension__correctly_removes_extension(filename, expected):
     # Determine if the template extension is correctly stripped from a
     # template filename.
-    assert manager.strip_extension(filename) == expected
+    assert helpers.strip_extension(filename) == expected
 
 
 def test_render_file__missing_parameter__raises_exception(tmp_target_dir):

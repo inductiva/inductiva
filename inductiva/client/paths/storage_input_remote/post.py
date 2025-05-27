@@ -46,15 +46,13 @@ RequestRequiredQueryParams = typing_extensions.TypedDict(
             UrlSchema,
             str,
         ],
-    })
-RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams', {
         'path': typing.Union[
             PathSchema,
             str,
         ],
-    },
-    total=False)
+    })
+RequestOptionalQueryParams = typing_extensions.TypedDict(
+    'RequestOptionalQueryParams', {}, total=False)
 
 
 class RequestQueryParams(RequestRequiredQueryParams,
@@ -73,12 +71,13 @@ request_query_path = api_client.QueryParameter(
     name="path",
     style=api_client.ParameterStyle.FORM,
     schema=PathSchema,
+    required=True,
     explode=True,
 )
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor200ResponseBodyApplicationJson = schemas.IntSchema
+SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
 @dataclass

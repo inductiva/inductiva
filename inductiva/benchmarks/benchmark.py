@@ -3,14 +3,16 @@ import enum
 import json
 import csv
 import logging
-import concurrent.futures
-import contextvars
 from typing import Optional, Union
+import tqdm
+from tqdm.contrib.logging import logging_redirect_tqdm
 from typing_extensions import Self
 from collections import defaultdict
 from inductiva import types, resources, projects, simulators, client
 from inductiva.client.models import TaskStatusCode
 from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
+
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 class ExportFormat(enum.Enum):
@@ -32,23 +34,24 @@ class Benchmark(projects.Project):
     """Represents the benchmark runner."""
 
     class InfoKey:
-        """Constant keys for the info used in the benchmark runs."""
+        """Constant keys for the info used in the benchmark runs.
+
+        :meta private:
+        """
         TASK_ID = "task_id"
         SIMULATOR = "simulator"
         MACHINE_TYPE = "machine_type"
         TIME = f"computation_time ({TIME_UNIT})"
         COST = f"estimated_computation_cost ({CURRENCY_SYMBOL})"
 
-    def __init__(self, name: str, append: bool = True):
+    def __init__(self, name: str):
         """
         Initializes a new Benchmark instance.
 
         Args:
             name (str): The name of the benchmark runner.
-            append (bool): Indicates whether to allow adding runs to the 
-            existing benchmark (default is True).
         """
-        super().__init__(name=name, append=append)
+        super().__init__(name=name)
         self.runs = []
         self.simulator = None
         self.input_dir = None
@@ -145,23 +148,21 @@ class Benchmark(projects.Project):
         Returns:
             Self: The current instance for method chaining.
         """
-
-        def _run(params):
-            simulator, input_dir, machine_group, kwargs = params
+        for simulator, input_dir, machine_group, kwargs in self.runs:
             if not machine_group.started:
                 machine_group.start(wait_for_quotas=wait_for_quotas)
             for _ in range(num_repeats):
-                simulator.run(input_dir=input_dir, on=machine_group, **kwargs)
-
-        def _initializer(ctx):
-            for var, val in ctx.items():
-                var.set(val)
-
-        with self, concurrent.futures.ThreadPoolExecutor(
-                initializer=_initializer,
-                initargs=(contextvars.copy_context(),)) as executor:
-            _ = list(executor.map(_run, self.runs))
+                simulator.run(input_dir=input_dir,
+                              on=machine_group,
+                              project=self.name,
+                              resubmit_on_preemption=True,
+                              verbose=False,
+                              **kwargs)
         self.runs.clear()
+        logging.info(
+            "Benchmark \033[1m%s\033[0m has started...\n"
+            "Go to https://console.inductiva.ai/projects/%s "
+            "for more details.\n", self.name, self.name)
         return self
 
     def wait(self) -> Self:
@@ -172,8 +173,43 @@ class Benchmark(projects.Project):
             Self: The current instance for method chaining.
         """
         tasks = self.get_tasks()
-        for task in tasks:
-            task.wait(download_std_on_completion=False)
+
+        completed_tasks = [task for task in tasks if task.info.is_terminal]
+        running_tasks = [task for task in tasks if not task.info.is_terminal]
+
+        logging.info("Waiting for Benchmark \033[1m%s\033[0m to complete...\n",
+                     self.name)
+
+        with tqdm.tqdm(total=len(tasks),
+                       desc="Running Benchmark",
+                       bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} {unit}",
+                       initial=len(completed_tasks),
+                       unit="tasks") as pbar:
+            with ThreadPoolExecutor() as executor:
+                future_to_task = {
+                    executor.submit(
+                        lambda t: t.wait(download_std_on_completion=False,
+                                         silent_mode=True), task):
+                        task for task in running_tasks
+                }
+
+                for future in as_completed(future_to_task):
+                    with logging_redirect_tqdm():
+                        task = future_to_task[future]
+                        status = future.result()
+
+                        if status != TaskStatusCode.SUCCESS:
+                            logging.info(
+                                "Task %s completed with status: %s\n"
+                                "   · To understand why the task did not "
+                                "complete successfully go to "
+                                "https://console.inductiva.ai/tasks/%s",
+                                task.id, status, task.id)
+
+                        # Update progress bar for each completed task
+                        pbar.update(1)
+
+        logging.info("\n")
         return self
 
     def export(
@@ -240,6 +276,10 @@ class Benchmark(projects.Project):
         """
 
         def get_task_input_params(task):
+            info_as_dict = task.info.to_dict()
+            extra_params = info_as_dict.get("extra_params")
+            if extra_params is not None:
+                return extra_params
             input_filename = "input.json"
             input_dir_path = task.download_inputs(filenames=[input_filename])
             input_file_path = input_dir_path.joinpath(input_filename)
@@ -264,7 +304,8 @@ class Benchmark(projects.Project):
             task_input_params = get_task_input_params(task)
             task_info = task.info
             task_machine_type = task_info.executer.vm_type \
-                if task_info.executer else None
+                if task_info.executer.vm_type != "n/a" else \
+                    task_info.executer.vm_name
             task_time = task_info.time_metrics.computation_seconds.value
             task_cost = task_info.estimated_computation_cost
             info.append({

@@ -23,9 +23,10 @@ def pretty_print_machines_info(machines_dict):
         "GPUS": [],
         "Memory (GB)": [],
         "Price/Hour (USD)": [],
+        "Zone": []
     }
     first_line = True
-    for machine_type, details in machines_dict.items():
+    for machine_type, zones in machines_dict.items():
         if not first_line:
             # Add's an empty line between the machine types
             final_table["Machine Type"].append("")
@@ -33,16 +34,19 @@ def pretty_print_machines_info(machines_dict):
             final_table["GPUS"].append("")
             final_table["Memory (GB)"].append("")
             final_table["Price/Hour (USD)"].append("")
+            final_table["Zone"].append("")
         first_line = False
 
-        final_table["Machine Type"].append(machine_type)
-        for i, vcpu in enumerate(details["vcpus"]):
-            final_table["vCPUS"].append(vcpu)
-            final_table["GPUS"].append(
-                f"{details['gpus'][i]} x {details['gpu_name']}"
-                if details["gpus"] else "n/a")
-            final_table["Memory (GB)"].append(details["memory"])
-            final_table["Price/Hour (USD)"].append(details["price"])
+        for zone, details in zones.items():
+            for i, vcpu in enumerate(details["vcpus"]):
+                final_table["Machine Type"].append(machine_type)
+                final_table["vCPUS"].append(vcpu)
+                final_table["GPUS"].append(
+                    f"{details['gpus'][i]} x {details['gpu_name']}"
+                    if details["gpus"] else "n/a")
+                final_table["Memory (GB)"].append(details["memory"])
+                final_table["Price/Hour (USD)"].append(details["price"])
+                final_table["Zone"].append(zone)
 
     res_table = format_utils.get_tabular_str(
         final_table, header_formatters=header_formatters, indentation_level=4)
@@ -69,13 +73,17 @@ def list_machine_types_available(args):
 
         machine_type = machine["machine_type"]
 
+        if machine_type not in machines_dict:
+            machines_dict[machine_type] = {}
+
         memory = machine.ram_gb
         price = machine.price
         vcpus = machine.num_vcpus
         gpus = machine.num_gpus if machine.num_gpus else None
         gpu_name = machine.gpu_name if machine.num_gpus else None
+        zone = machine.zone
 
-        machines_dict[machine_type] = {
+        machines_dict[machine_type][zone] = {
             "vcpus": [],
             "gpus": [],
             "memory": memory,
@@ -83,9 +91,9 @@ def list_machine_types_available(args):
             "gpu_name": gpu_name
         }
 
-        machines_dict[machine_type]["vcpus"].append(int(vcpus))
+        machines_dict[machine_type][zone]["vcpus"].append(int(vcpus))
         if gpus is not None:
-            machines_dict[machine_type]["gpus"].append(int(gpus))
+            machines_dict[machine_type][zone]["gpus"].append(int(gpus))
     pretty_print_machines_info(machines_dict)
 
 
@@ -122,7 +130,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
         ])
 
     formatters = {
-        "Started at (UTC)": [format_utils.datetime_formatter],
+        "Created at (UTC)": [format_utils.datetime_formatter],
     }
 
     emph_formatter = format_utils.get_ansi_formatter()

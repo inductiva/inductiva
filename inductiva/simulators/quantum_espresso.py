@@ -9,7 +9,7 @@ from inductiva import types, tasks, simulators
 class QuantumEspresso(simulators.Simulator):
     """Class to run commands on Quantum Espresso."""
 
-    COMMANDS = [
+    _COMMANDS = [
         "alpha2f", "dvscf_q2r", "head", "matdyn", "plan_avg", "pw", "rism1d",
         "turbo_spectrum", "average", "dynmat", "hp", "molecularnexafs",
         "plotband", "pw2bgw", "scan_ibrav", "upfconv", "band_interpolation",
@@ -57,7 +57,7 @@ class QuantumEspresso(simulators.Simulator):
                      "names (e.g., pw_openmp.x).\n"
                      "For the MPI version, just use the normal command names "
                      " (e.g., pw.x).")
-        return self.COMMANDS
+        return self._COMMANDS
 
     def run(self,
             input_dir: Optional[str],
@@ -68,6 +68,7 @@ class QuantumEspresso(simulators.Simulator):
             extra_metadata: Optional[dict] = None,
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
+            project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:
@@ -75,13 +76,17 @@ class QuantumEspresso(simulators.Simulator):
             commands: List of commands to run.
             on: The computatißonal resource to launch the simulation on.
             storage_dir: Parent directory for storing simulation
-                               results.
+                results.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project. If the project does not exist, it will be
+                created.
         """
         return super().run(input_dir,
                            on=on,
@@ -91,4 +96,5 @@ class QuantumEspresso(simulators.Simulator):
                            container_image=self._image_uri,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project=project,
                            **kwargs)

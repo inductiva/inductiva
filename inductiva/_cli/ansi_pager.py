@@ -293,6 +293,7 @@ class PagedOutput(io.TextIOBase):
             start = len(self._buffer)
             lines = text.splitlines()
             self._buffer.extend(lines)
+            self._render_header()
             self._render_body(start)
             self._render_footer()
             return len(self._buffer) - start

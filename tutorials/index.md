@@ -66,38 +66,6 @@ quick-start/run-your-first-simulation
 
 ```{toctree}
 ---
-caption: Built-in Simulators
-maxdepth: 1
-hidden: true
----
-simulators/overview
-simulators/AmrWind
-simulators/CaNS
-simulators/CM1
-simulators/COAWST
-simulators/CP2K
-simulators/DualSPHysics
-simulators/FDS
-simulators/FVCOM
-simulators/GROMACS
-simulators/GX
-simulators/NWChem
-simulators/OpenFOAM
-simulators/OpenFAST
-simulators/OpenFASTAdvanced_Part1
-simulators/OpenSees
-simulators/QuantumEspresso
-simulators/Reef3D
-simulators/SCHISM
-simulators/SPlisHSPlasH
-simulators/SWAN
-simulators/SWASH
-simulators/XBeach
-simulators/CustomImage
-```
-
-```{toctree}
----
 caption: Quick Recipes
 maxdepth: 1
 hidden: true
@@ -110,9 +78,7 @@ how_to/manage-remote-storage
 how_to/manage_tasks
 how_to/manage_and_retrieve_results
 how_to/reuse-files
-how_to/export-files-aws
 how_to/run-benchmarks
-how_to/use-local-task-runner
 ```
 
 ```{toctree}

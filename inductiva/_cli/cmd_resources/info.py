@@ -1,10 +1,35 @@
 """Prints a machine group information via CLI."""
+from collections import defaultdict
 from typing import TextIO
 import argparse
 import sys
 
 from inductiva import resources, _cli
 from inductiva.utils import format_utils
+
+
+def get_machine_dict(machines):
+    """Get a dictionary with the information of the machines."""
+    column_names = [
+        "Host Name",
+        "Started",
+        "Status",
+        "Last seen",
+        "Running task",
+    ]
+    table = defaultdict(list, {key: [] for key in column_names})
+    for machine in machines:
+        status = "Off" if isinstance(machine["terminated_at"],
+                                     str) else "Active"
+        task_id = machine["current_task_id"] if isinstance(
+            machine["current_task_id"], str) else None
+        table["Host Name"].append(machine["host_name"])
+        table["Started"].append(machine["started_at"])
+        table["Status"].append(status)
+        table["Last seen"].append(machine["last_seen_at"])
+        table["Running task"].append(task_id)
+
+    return table
 
 
 def machine_group_info(args, fout: TextIO = sys.stdout):
@@ -15,7 +40,7 @@ def machine_group_info(args, fout: TextIO = sys.stdout):
 
     print(f"Showing machines of machine group: {machine_group_name}", file=fout)
 
-    table_dict = resources.utils.get_machine_dict(machines)
+    table_dict = get_machine_dict(machines)
 
     formatters = {
         "Started": [format_utils.datetime_formatter,],

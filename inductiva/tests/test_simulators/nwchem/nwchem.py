@@ -4,14 +4,15 @@ import inductiva
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2-standard-4")
+    machine_type="c2d-highcpu-4")
 
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "nwchem-input-example.zip",
     unzip=True)
 
-nwchem = inductiva.simulators.NWChem()
+nwchem = inductiva.simulators.NWChem( \
+    version="7.2.3")
 
 task = nwchem.run( \
     input_dir=input_dir,

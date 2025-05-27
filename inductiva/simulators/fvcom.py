@@ -40,6 +40,7 @@ class FVCOM(simulators.Simulator):
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
+            project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -58,22 +59,22 @@ class FVCOM(simulators.Simulator):
                 - 'estuary': Uses the fvcom_estuary binary.
                 The modules used to compile each binary can be found in the
                 kutu repository, in the make.inc and make_estuary.inc files
-        (https://github.com/inductiva/kutu/tree/main/simulators/fvcom/v5.1.0).
+                https://github.com/inductiva/kutu/tree/main/simulators/fvcom/
 
             create_namelist: Used to create a namelist file for the simulation.
                 Example: 'create_namelist=hello' will create hello_run.nml in
-                    the working_dir.
+                the working_dir.
 
             working_dir: Path (relative to the input directory) to the directory
                 where the simulation nml file is located. If not provided, the
                 input directory is used.
 
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
-            (default), all vCPUs will be used.
+                (default), all vCPUs will be used.
 
             use_hwthread: If specified Open MPI will attempt to discover the
-            number of hardware threads on the node, and use that as the
-            number of slots available.
+                number of hardware threads on the node, and use that as the
+                number of slots available.
 
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
@@ -82,6 +83,11 @@ class FVCOM(simulators.Simulator):
 
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
+            
+            project: Name of the project to which the task will be
+                assigned. If None, the task will be assigned to
+                the default project. If the project does not exist, it will be
+                created.
 
             other arguments: See the documentation of the base class.
         """
@@ -114,4 +120,5 @@ class FVCOM(simulators.Simulator):
                            run_subprocess_dir=working_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
+                           project=project,
                            **kwargs)
