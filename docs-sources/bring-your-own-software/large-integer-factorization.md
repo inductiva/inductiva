@@ -149,19 +149,19 @@ rsa_numbers = [
     "155089812478348440509606754370011861770654545830995430655466945774312632703463465954363335027577729025391453996787414027003501631772186840890795964683",
 ]
 
-mg = inductiva.resources.ElasticMachineGroup(
+cloud_machine = inductiva.resources.ElasticMachineGroup(
     "c2d-highcpu-112",
     max_machines=len(rsa_numbers),
 )
-sim = inductiva.simulators.CustomImage(
+cado_nfs = inductiva.simulators.CustomImage(
     "inductiva://my-containers/cado-nfs.sif")
 
 for rsa_number in rsa_numbers:
-    task = sim.run(
-        on=mg,
+    task = cado_nfs.run(
+        on=cloud_machine,
         input_dir="empty",
         commands=[f"cado-nfs.py {rsa_number}"],
-        project="cado-nfs",
+        project="cado-nfs-2",
     )
     task.set_metadata({
         "rsa_number": str(len(rsa_number)),
