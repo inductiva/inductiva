@@ -16,10 +16,10 @@ cloud_machine = inductiva.resources.MachineGroup( \
     spot=True)
 
 # Initialize OpenFast stack, which includes TurbSim
-openfast = inductiva.simulators.OpenFAST()
+turbsim = inductiva.simulators.OpenFAST()
 
 # Run TurbSim command on the 90m_12mps_twr.inp input file
-task = openfast.run( \
+task = turbsim.run( \
     input_dir="input_files/",
     commands=["turbsim 90m_12mps_twr.inp"],
     on=cloud_machine)
