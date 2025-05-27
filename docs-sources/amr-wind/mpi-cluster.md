@@ -1,11 +1,10 @@
 # Running AMR-Wind Simulations Across Multiple Machines Using MPI
 
 As computational fluid dynamics (CFD) problems grow in complexity and scale, so
-does the demand for computing power. **AMR-Wind**, a high-performance, structured
-adaptive mesh refinement (AMR) solver developed for wind energy applications, is
-built to scale efficiently across thousands of cores. However, even the most
-powerful single machine can eventually become a bottleneck, particularly when
-dealing with large domains or fine mesh resolutions.
+does the demand for computing power. **AMR-Wind** was built to scale efficiently
+across thousands of cores. However, even the most powerful single machine can
+eventually become a bottleneck, particularly when dealing with large domains or
+fine mesh resolutions.
 
 To overcome these limitations, you can run AMR-Wind simulations across
 **multiple machines** using an **MPI (Message Passing Interface) cluster**. This
@@ -82,8 +81,7 @@ This setup allows you to seamlessly scale your simulations across multiple
 nodes, getting results faster, and tackling larger and more detailed CFD problems
 than ever before.
 
-You can see [here](quick-start) an example on how to run your simulation on a
-single machine.
+You can find an example of how to run your simulation on a single machine [here](quick-start).
 
 ## Results
 
