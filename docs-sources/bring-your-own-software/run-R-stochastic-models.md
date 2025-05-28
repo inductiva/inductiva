@@ -1,6 +1,6 @@
 # How to Run Statistical Ensembles with Inductiva
 
-In this recipe-style tutorial, you’ll learn how to run *statistical ensembles* in parallel using Inductiva, so you can turn any parameter sweep or distribution into dozens (or hundreds!) of simultaneous simulations. We’ll demonstrate with a classic 2D Ising-model Metropolis Monte Carlo in R, but the same pattern works for *any* function or simulation script that takes parameters and spits out results.
+In this recipe-style tutorial, you’ll learn how to run *statistical ensembles* in parallel using Inductiva, so you can turn any parameter sweep or distribution into dozens (or hundreds!) of simultaneous simulations. We’ll demonstrate with a classic 2D Ising-model Metropolis Monte Carlo in R, but the same pattern works for *any* function or simulation script that takes parameters and outputs results.
 
 <img src=_static/animation.gif></img>
 
@@ -32,11 +32,11 @@ In this recipe-style tutorial, you’ll learn how to run *statistical ensembles*
 
 ## Prepare your ensemble script
 
-First, wrap your ensemble script logic into a command-line script that:
+First, wrap your ensemble script logic into a command line script that:
 
-- **Reads** one or more parameter values from the CLI  
+- **Reads** one or more parameter values from the command line  
 - **Runs** your script over those parameters  
-- **Writes** its results to an output (in this case a csv)
+- **Writes** its results to an output file (in this case a csv)
 
 Below is an example layout for [run_ising_model.R](bring-your-own-software/_static/run_ising_model.R). In this tutorial it takes a list of “temperature” values, but you can swap in *any* numeric parameter (reaction rate, random seed, boundary condition,).
 
@@ -101,7 +101,7 @@ THIN = 10
 os.makedirs(RESULTS_DIR, exist_ok=True)
 ```
 
-### 2. Sample a Normal cloud around each T0
+### 2. Sample Temperatures from a Normal Distribution around T0
 
 For a base temperature T₀, draw n_samples points from 𝒩(T₀, σ²). That gives you one “central” run at T₀ plus a spread around it.
 
