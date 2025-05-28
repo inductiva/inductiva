@@ -1193,6 +1193,7 @@ class Task(schemas.DictSchema):
                         **kwargs,
                     )
 
+            resubmit_on_preemption = schemas.BoolSchema
             __annotations__ = {
                 "task_id": task_id,
                 "status": status,
@@ -1222,6 +1223,7 @@ class Task(schemas.DictSchema):
                 "compress_with": compress_with,
                 "task_metadata": task_metadata,
                 "extra_params": extra_params,
+                "resubmit_on_preemption": resubmit_on_preemption,
             }
 
     simulator: MetaOapg.properties.simulator
@@ -1401,6 +1403,12 @@ class Task(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["resubmit_on_preemption"]
+    ) -> MetaOapg.properties.resubmit_on_preemption:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -1433,6 +1441,7 @@ class Task(schemas.DictSchema):
         "compress_with",
         "task_metadata",
         "extra_params",
+        "resubmit_on_preemption",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -1609,6 +1618,13 @@ class Task(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["resubmit_on_preemption"]
+    ) -> typing.Union[MetaOapg.properties.resubmit_on_preemption,
+                      schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -1642,6 +1658,7 @@ class Task(schemas.DictSchema):
         "compress_with",
         "task_metadata",
         "extra_params",
+        "resubmit_on_preemption",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -1793,6 +1810,9 @@ class Task(schemas.DictSchema):
                                    None, list, tuple, bytes, io.FileIO,
                                    io.BufferedReader,
                                    schemas.Unset] = schemas.unset,
+        resubmit_on_preemption: typing.Union[
+            MetaOapg.properties.resubmit_on_preemption, bool,
+            schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -1830,6 +1850,7 @@ class Task(schemas.DictSchema):
             compress_with=compress_with,
             task_metadata=task_metadata,
             extra_params=extra_params,
+            resubmit_on_preemption=resubmit_on_preemption,
             _configuration=_configuration,
             **kwargs,
         )
