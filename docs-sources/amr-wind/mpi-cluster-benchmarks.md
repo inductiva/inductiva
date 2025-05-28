@@ -1,68 +1,141 @@
+# Evaluating AMR-Wind Performance on Multi-Machine Clusters
+This page presents detailed performance benchmarks of AMR-Wind simulations run across various multi-node MPI cluster configurations. We compare runtimes and speedups against a baseline single-node setup, and explore how increasing simulation complexity affects scalability.
 
-## Results
+We benchmark the neutral Atmospheric Boundary Layer case from the [AMR-Wind GitHub repository](https://github.com/Exawind/amr-wind/tree/v3.4.0).
 
-Here are the results of running this simulation on multiple MPI cluster compared
-with the baseline of running in a single node configuration.
+> Interested in running AMR-Wind simulations across multiple machines using MPI? Check out this tutorial. 
 
-| Machine Type    | Num Machines | vCPUs | Duration (s) | Speedup |
-| --------------- | ------------ | ----- | ------------ | ------- |
-| c2d-highcpu-112 | 1            | 112   | 1472         | 1.00x   |
-| c2d-highcpu-112 | 2            | 224   | 1404         | 1.05x   |
-| c2d-highcpu-112 | 4            | 448   | 1461         | 1.01x   |
-| c2d-highcpu-112 | 8            | 896   | 977          | 1.51x   |
-| c2d-highcpu-112 | 12           | 1344  | 1408         | 1.05x   |
-| c2d-highcpu-112 | 16           | 1792  | 1001         | 1.47x   |
+## Benchmark Results: Baseline Simulation
+The following table summarizes simulation runtimes and speedups for the baseline configuration, run on clusters of varying sizes:
 
+<table>
+  <tr>
+    <td>Machine Type</td>
+    <td>Num Machines</td>
+    <td>vCPUs</td>
+    <td>Duration (s)</td>
+    <td>Speedup</td>
+  </tr>
+  <tr>
+    <td>c2d-highcpu-112</td>
+    <td>1</td>
+    <td>112</td>
+    <td>1472</td>
+    <td>1.00x</td>
+  </tr>
+  <tr>
+    <td>c2d-highcpu-112</td>
+    <td>2</td>
+    <td>224</td>
+    <td>1404</td>
+    <td>1.05x</td>
+  </tr>
+  <tr>
+    <td>c2d-highcpu-112</td>
+    <td>4</td>
+    <td>448</td>
+    <td>1461</td>
+    <td>1.01x</td>
+  </tr>
+  <tr>
+    <td>c2d-highcpu-112</td>
+    <td>8</td>
+    <td>896</td>
+    <td>977</td>
+    <td>1.51x</td>
+  </tr>
+  <tr>
+    <td>c2d-highcpu-112</td>
+    <td>12</td>
+    <td>1344</td>
+    <td>1408</td>
+    <td>1.05x</td>
+  </tr>
+  <tr>
+    <td>c2d-highcpu-112</td>
+    <td>16</td>
+    <td>1792</td>
+    <td>1001</td>
+    <td>1.47x</td>
+  </tr>
+</table>
 
-For this simulation setup, the **fastest configuration** was achieved using a
-cluster with **8 machines (896 vCPUs)**, completing in **977 seconds**.
-Interestingly, increasing the number of machines beyond this point did
-**not lead to better performance**. This can be attributed to the diminishing
-returns of parallelization for smaller or moderately sized problems, where
-communication overhead between nodes begins to offset the gains from additional
-compute resources.
+The fastest runtime (977 seconds) was achieved with an **8-machine cluster (896 vCPUs)**. Increasing beyond 8 machines did not further improve performance, highlighting the overhead costs of communication between nodes in moderate-sized simulations.
 
-## What Happens When We Increase the Simulation Complexity?
-
-To investigate how performance scales with problem size, we increased the
-simulation complexity by refining the grid resolution. Specifically, we changed:
+## Scaling with Increased Simulation Complexity
+To evaluate scalability under heavier workloads, we increased the grid resolution from:
 
 ```
 amr.n_cell              = 512 512 184 # Grid cells at coarsest AMRlevel
 ```
 
-to
+to:
 
 ```
 amr.n_cell              = 1024 1024 368 # Grid cells at coarsest AMRlevel
 ```
 
-This effectively **increased the total number of grid cells by a factor of 8**,
-leading to a significantly more computationally demanding simulation. In these
-cases, **larger clusters with more vCPUs are expected to perform better**, as
-the computational workload can be more effectively distributed across machines.
-The communication overhead becomes relatively smaller compared to the total
-compute time, which improves scalability.
+This change increases the **total number of grid cells** by a **factor of 8**, significantly boosting computational demands. Under this higher-resolution setup, we expect larger clusters with more vCPUs to better distribute the workload, improving scalability as communication overhead becomes comparatively less impactful.
 
-We'll now compare the performance across the same cluster configurations under
-this higher-resolution setup.
+The performance results are summarized below:
 
-| Machine Type    | Num Machines | Cores | Duration (s) | Speedup |
-| --------------- | ------------ | ----- | ------------ | ------- |
-| c2d-highmem-112 | 1            | 112   | 8640         | 1.00x   |
-| c2d-highmem-112 | 2            | 224   | 5400         | 1.60x   |
-| c2d-highmem-112 | 4            | 448   | 3550         | 2.43x   |
-| c2d-highmem-112 | 8            | 896   | 2532         | 3.41x   |
-| c2d-highmem-112 | 12           | 1344  | 2055         | 4.20x   |
-| c2d-highmem-112 | 16           | 1792  | 1848         | 4.68x   |
+<table>
+  <tr>
+    <td>Machine Type</td>
+    <td>Num Machines</td>
+    <td>Cores</td>
+    <td>Duration (s)</td>
+    <td>Speedup</td>
+  </tr>
+  <tr>
+    <td>c2d-highmem-112</td>
+    <td>1</td>
+    <td>112</td>
+    <td>8640</td>
+    <td>1.00x</td>
+  </tr>
+  <tr>
+    <td>c2d-highmem-112</td>
+    <td>2</td>
+    <td>224</td>
+    <td>5400</td>
+    <td>1.60x</td>
+  </tr>
+  <tr>
+    <td>c2d-highmem-112</td>
+    <td>4</td>
+    <td>448</td>
+    <td>3550</td>
+    <td>2.43x</td>
+  </tr>
+  <tr>
+    <td>c2d-highmem-112</td>
+    <td>8</td>
+    <td>896</td>
+    <td>2532</td>
+    <td>3.41x</td>
+  </tr>
+  <tr>
+    <td>c2d-highmem-112</td>
+    <td>12</td>
+    <td>1344</td>
+    <td>2055</td>
+    <td>4.20x</td>
+  </tr>
+  <tr>
+    <td>c2d-highmem-112</td>
+    <td>16</td>
+    <td>1792</td>
+    <td>1848</td>
+    <td>4.68x</td>
+  </tr>
+</table>
 
+Unlike the baseline case, runtime consistently decreased as the cluster size grew. The best performance was recorded with 16 machines (1792 vCPUs), completing the simulation in 1848 seconds — a major improvement over the single-machine runtime of 8640 seconds.
 
-The results show that, with the higher-resolution grid, simulation runtimes
-decreased consistently as more machines were added, unlike in the lower-resolution
-case, where gains plateaued beyond 8 machines. The best performance was observed
-using 16 machines (1792 vCPUs), bringing the runtime down to just 1848 seconds,
-a significant improvement compared to the single-machine setup at 8640 seconds.
+However, the speedup does not scale linearly with the number of vCPUs. While the 4 and 8 machine setups showed solid performance gains, adding more machines beyond that point yielded diminishing returns.
 
-However, the speedup does not scale linearly with the number of vCPUs. While the
-4 and 8 machine setups provided solid performance gains, adding more machines
-beyond that point yielded diminishing returns.
+## Summary
+- When increasing simulation complexity by refining the grid (increasing total cells by a factor of 8), larger clusters showed consistent runtime improvements.
+- Despite improvements, speedup gains do not scale linearly; diminishing returns occur at higher node counts due to overhead.
+- Overall, AMR-Wind scales better with increased computational workload, while communication costs limit scaling for smaller problems.

@@ -22,10 +22,11 @@ All you need to do is update the resource allocation from `MachineGroup` to `MPI
     spot=True)
 ```
 
-In this tutorial, we’ll demonstrate how leveraging an MPI cluster can impact the performance of your AMR-Wind simulation.
+In this tutorial, we’ll demonstrate how leveraging an MPI cluster can impact the performance of your AMR-Wind simulation 
+by using the neutral Atmospheric Boundary Layer case from the [AMR-Wind GitHub repository](https://github.com/Exawind/amr-wind/tree/v3.4.0).
 
 ## Prerequisites
-Download the necessary input files from the official
+Download the required input files from the official
 [ExaWind Benchmarks repository](https://github.com/Exawind/exawind-benchmarks/tree/main/amr-wind/atmospheric_boundary_layer/neutral/input_files) and place them in a folder named `SimulationFiles`.
 
 Make sure to update the simulation configuration file by
