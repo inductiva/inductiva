@@ -24,6 +24,7 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.project_type import ProjectType
 from inductiva.client.model.project import Project
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
@@ -38,20 +39,95 @@ class PerPageSchema(schemas.IntSchema):
     pass
 
 
+class ProjectTypeSchema(
+        schemas.ComposedSchema,):
+
+    class MetaOapg:
+
+        @classmethod
+        @functools.lru_cache()
+        def all_of(cls):
+            # we need this here to make our import statements work
+            # we must store _composed_schemas in here so the code is only run
+            # when we invoke this method. If we kept this at the class
+            # level we would get an error because the class level
+            # code would be run when this module is imported, and these composed
+            # classes don't exist yet because their module has not finished
+            # loading
+            return [
+                ProjectType,
+            ]
+
+    def __new__(
+        cls,
+        *_args: typing.Union[
+            dict,
+            frozendict.frozendict,
+            str,
+            date,
+            datetime,
+            uuid.UUID,
+            int,
+            float,
+            decimal.Decimal,
+            bool,
+            None,
+            list,
+            tuple,
+            bytes,
+            io.FileIO,
+            io.BufferedReader,
+        ],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+        **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                               frozendict.frozendict, str, date, datetime,
+                               uuid.UUID, int, float, decimal.Decimal, None,
+                               list, tuple, bytes],
+    ) -> 'ProjectTypeSchema':
+        return super().__new__(
+            cls,
+            *_args,
+            _configuration=_configuration,
+            **kwargs,
+        )
+
+
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams', {
-        'page': typing.Union[
-            PageSchema,
-            decimal.Decimal,
-            int,
-        ],
-        'per_page': typing.Union[
-            PerPageSchema,
-            decimal.Decimal,
-            int,
-        ],
+        'page':
+            typing.Union[
+                PageSchema,
+                decimal.Decimal,
+                int,
+            ],
+        'per_page':
+            typing.Union[
+                PerPageSchema,
+                decimal.Decimal,
+                int,
+            ],
+        'project_type':
+            typing.Union[
+                ProjectTypeSchema,
+                dict,
+                frozendict.frozendict,
+                str,
+                date,
+                datetime,
+                uuid.UUID,
+                int,
+                float,
+                decimal.Decimal,
+                bool,
+                None,
+                list,
+                tuple,
+                bytes,
+                io.FileIO,
+                io.BufferedReader,
+            ],
     },
     total=False)
 
@@ -71,6 +147,12 @@ request_query_per_page = api_client.QueryParameter(
     name="per_page",
     style=api_client.ParameterStyle.FORM,
     schema=PerPageSchema,
+    explode=True,
+)
+request_query_project_type = api_client.QueryParameter(
+    name="project_type",
+    style=api_client.ParameterStyle.FORM,
+    schema=ProjectTypeSchema,
     explode=True,
 )
 
@@ -199,6 +281,7 @@ class BaseApi(api_client.Api):
         for parameter in (
                 request_query_page,
                 request_query_per_page,
+                request_query_project_type,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
