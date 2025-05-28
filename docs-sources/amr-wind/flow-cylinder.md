@@ -1,24 +1,27 @@
-# Flow around a circular cylinder 🌀
-This tutorial will show you how to run AMR-Wind simulations using the Inductiva API. 
+# Flow Around a Circular Cylinder 🌀
+This tutorial will simulate a flow over a cylinder case using AMR-Wind. This classic fluid dynamics problem reveals the changes in flow behavior depending on the Reynolds number (Re).
 
-This tutorial will simulate a flow over a cylinder case using amr-wind. The `ib_cylinder_Re_300` use case from the test files folder of the [AMR-Wind GitHub repository](https://github.com/Exawind/amr-wind/tree/) to help you get started with simulations.
+We will cover the `ib_cylinder_Re_300` use case from the test files folder of the [AMR-Wind GitHub repository](https://github.com/Exawind/amr-wind/tree/v3.4.0).
+
+<img src="_static/Re100.gif" alt="Demo Animation" width="400"/>  <img src="_static/Re10000.gif" alt="Demo Animation" width="400"/>
+
+## Case Description
+The flow around a circular cylinder has been extensively studied because it captures fundamental fluid dynamics phenomena. At very low Reynolds numbers (Re < 5), the flow remains steady and symmetric. As Re increases, the flow begins to separate and forms steady recirculation zones. 
+
+When the Reynolds number surpasses approximately 47, the flow transitions to an unsteady regime. Here, periodic vortex shedding develops, creating the characteristic von Kármán vortex street [1].
+
+At Re = 300, the flow becomes fully three-dimensional and unsteady. This makes it a popular benchmark for validating CFD solvers, immersed boundary methods, and mesh refinement strategies [2].
 
 
-  <img src="_static/Re100.gif" alt="Demo Animation" width="400"/>  <img src="_static/Re10000.gif" alt="Demo Animation" width="400"/>
+[1] *[Kármán vortex street – Wikipedia]*(https://en.wikipedia.org/wiki/K%C3%A1rm%C3%A1n_vortex_street)
+[2] *[Williamson, C.H.K. (1996). Vortex dynamics in the cylinder wake. Annual Review of Fluid Mechanics.]*(https://doi.org/10.1146/annurev.fl.28.010196.002401)
 
-## Case description
-The flow around a circular cylinder is a classic problem in fluid dynamics, with behavior that changes dramatically depending on the Reynolds number (Re), which compares inertial and viscous forces. At very low Re (< 5), the flow remains steady and symmetric. As Re increases, flow separation occurs, followed by the formation of steady recirculation zones . Beyond Re ≈ 47, the flow becomes unsteady, exhibiting periodic vortex shedding that leads to the formation of a von Kármán vortex street [1]. At Re = 300, the flow is fully three-dimensional and unsteady, making it a widely used benchmark for validating CFD solvers, immersed boundary methods, and mesh refinement strategies [2].
+## Run the Circular Cylinder Case
 
-### References
-[1] [Kármán vortex street – Wikipedia](https://en.wikipedia.org/wiki/K%C3%A1rm%C3%A1n_vortex_street)
+### Prerequisites
+Download the required files [here](https://github.com/Exawind/amr-wind/tree/main/test/test_files/ib_cylinder_Re_300) and place them in a folder called `SimulationFiles`. 
 
-[2] [Williamson, C.H.K. (1996). Vortex dynamics in the cylinder wake. Annual Review of Fluid Mechanics.](https://doi.org/10.1146/annurev.fl.28.010196.002401)
-
-## Prerequisites
-Download the required files [here](https://github.com/Exawind/amr-wind/tree/main/test/test_files/ib_cylinder_Re_300) and place them in a folder called `SimulationFiles`. Then, you’ll be ready to send your simulation to the Cloud.
-
-## Case Modifications
-
+### Case Modifications
 To improve the visibility of vortex shedding and optimize computational efficiency, the original case setup was modified with the following changes:
 
 *    Increased domain length in the x-direction to 2.0 units for better capture of the wake development
@@ -124,8 +127,8 @@ mac_proj.mg_atol = 1.0e-12
 - -0.0625 -0.0625 -0.125 0.0625 0.0625 0.125 #Defining the boundaries of refinement box <xlo ylo zlo xhi yhi zhi>
 ```
 
-## Running an AMR-Wind Simulation
-Here is the code required to run a AMR-Wind simulation using the Inductiva API:
+## Running the Simulation
+Here is the code required to run the simulation using the Inductiva API:
 
 ```python
 """AMR-Wind example."""
@@ -156,19 +159,24 @@ task.print_summary()
 
 ```
 
-When the simulation is complete the machine group will be automatically terminated by the `terminate()` command. 
+> **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
 
-Once the simulation is done, the output files will automotically downloaded to the local machine (if the simulation was run on terminal). If not the files can be downloaded from the 'tasks' tab in the console. 
+In this example, we're using a cloud machine (`c2d-highcpu-56`) equipped with 56 virtual CPUs.
 
-## Post-Processing
+When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
-After running the simulation, AMR-Wind generates output files for each time step, typically of the format `plt00000`. These plotfiles contain the simulation data and can be visualized directly using tools like [ParaView](https://www.paraview.org/), which supports AMReX plotfiles natively. To analyze the data programmatically, Python-based tools such as [yt](https://yt-project.org/) can be employed, allowing for custom visualizations and data extraction. Additionally, if the sampling feature is enabled in your simulation setup, selected data can be exported in standard formats like NetCDF, typically saved in the `post_processing/` directory for easy access and compatibility with other tools.
+<include task print summary>
 
-Checkout how you can use `yt` to generate custom slice plots and animations [here](using-yt.md).
+As you can see in the "In Progress" line, the part of the timeline that
+represents the actual execution of the simulation, 
+the core computation time of this simulation was approximately <include>.
 
-## Speedup
+To analyze the simulation data programmatically, Python-based tools like **yt** can be used, enabling custom visualizations and data extraction. For step-by-step guidance on creating slice plots and animations, be sure to check out our[post-processing yt tutorial](https://inductiva.ai/guides/amr-wind/using-yt).
 
-The above simulation uses a [C2D machine](https://cloud.google.com/compute/docs/compute-optimized-machines#c2d_series) with 56 CPU cores from Google Cloud. This simulation can be run much faster by increasing the number of CPUs or by running the simulation on a GPU machine. The definition for a GPU machine is provided below.
+## Scalling Up the Simulation
+One of the key advantages of using Inductiva is the ease with which you can scale your simulations to larger, more powerful machines with minimal changes to your code. Scaling up simply involves updating the `machine_type` parameter when creating your MachineGroup.
+
+Rather than increasing the number of vCPUs on the existing c2d cloud machine, we chose to rerun the simulation on a cloud GPU machine to leverage accelerated hardware. In the following code example, we use the `g2-standard-4` instance type.
 
 ```python
 import inductiva
@@ -193,141 +201,5 @@ task = amr_wind.run(input_dir=input_dir,
     n_vcpus=1,
     on=cloud_machine)
 ```
-If you're wondering how much faster the simulation can run on different machines—or what the cost trade-offs look like— we have benchmarked a [20-million-cell CFD simulation](input_fine_Re10000.inp) across a variety of CPU and GPU instances. The results provided below offer a practical comparison of run time and cost efficiency across platforms. Whether you're optimizing for speed, budget, or a balance of both, this data can help you decide what kind of machine is best suited for your needs.
 
-## Benchmark Performance Comparison: CPU vs. GPU Configurations 📈
-
-This page summarizes the results of a comprehensive benchmark test comparing execution time, cost, and performance across multiple CPU and GPU configurations. 
-The goal is to provide insights into the optimal hardware setup for this workload, balancing speed, resource utilization, and cost-effectiveness. A 20M-cell CFD simulation 
-of flow over a cylinder at Re=10,000 was used for this purpose. The input file used for this simulation is provided [here](input_fine_Re10000.inp) for reproducibility.
-
-
-<table>
-    <tr>
-        <td>Platform</td>
-        <td>Machine Type</td>
-        <td>Machines</td>
-        <td>Cores</td>
-        <td>GPUS</td>
-        <td>Duration</td>
-        <td>Cost (USD)</td>
-    </tr>
-    <tr>
-        <td rowspan="4">AMD Epyc Milan</td>
-        <td>c2d-highcpu-16</td>
-        <td>1</td>
-        <td>16</td>
-        <td>0</td>
-        <td>2 hours, 8 minutes</td>
-        <td>0.23 US$</td>
-    </tr>
-    <tr>
-        <td>c2d-highcpu-32</td>
-        <td>1</td>
-        <td>32</td>
-        <td>0</td>
-        <td>1 hour, 14 minutes</td>
-        <td>0.26 US$</td>
-    </tr>
-    <tr>
-        <td>c2d-highcpu-56</td>
-        <td>1</td>
-        <td>56</td>
-        <td>0</td>
-        <td>53 minutes, 29 seconds</td>
-        <td>0.32 US$</td>
-    </tr>
-    <tr>
-        <td>c2d-highcpu-112</td>
-        <td>1</td>
-        <td>112</td>
-        <td>0</td>
-        <td>27 minutes, 48 seconds</td>
-        <td>0.33 US$</td>
-    </tr>
-    <tr>
-        <td rowspan="4">Nvidia L4 Cuda Cores 7680;  Tensor Cores 240</td>
-        <td>g2-standard-4</td>
-        <td>1</td>
-        <td>1</td>
-        <td>1</td>
-        <td>55 minutes, 26 seconds</td>
-        <td>0.26 US$</td>
-    </tr>
-    <tr>
-        <td>g2-standard-24</td>
-        <td>1</td>
-        <td>2</td>
-        <td>2</td>
-        <td>40 minutes, 43 seconds</td>
-        <td>0.54 US$</td>
-    </tr>
-    <tr>
-        <td>g2-standard-48</td>
-        <td>1</td>
-        <td>4</td>
-        <td>4</td>
-        <td>25 minutes, 7 seconds</td>
-        <td>0.66 US$</td>
-    </tr>
-    <tr>
-        <td>g2-standard-96</td>
-        <td>1</td>
-        <td>8</td>
-        <td>8</td>
-        <td>18 minutes, 14 seconds</td>
-        <td>0.96 US$</td>
-    </tr>
-<tr>
-        <td rowspan="4">Nvidia a100 Cuda Cores 6912;  Tensor Cores 432</td>
-        <td>a2-highgpu-1g</td>
-        <td>1</td>
-        <td>1</td>
-        <td>1</td>
-        <td>20 minutes, 42 seconds</td>
-        <td>0.51 US$</td>
-    </tr>
-    <tr>
-        <td>a2-highgpu-2g</td>
-        <td>1</td>
-        <td>2</td>
-        <td>2</td>
-        <td>24 minutes, 50 seconds</td>
-        <td>1.23 US$</td>
-    </tr>
-    <tr>
-        <td>a2-highgpu-4g</td>
-        <td>1</td>
-        <td>4</td>
-        <td>4</td>
-        <td>17 minutes, 56 seconds</td>
-        <td>1.78 US$</td>
-    </tr>
-    <tr>
-        <td>a2-highgpu-8g</td>
-        <td>1</td>
-        <td>8</td>
-        <td>8</td>
-        <td>16 minutes, 45 seconds</td>
-        <td>3.33 US$</td>
-    </tr>
-    <tr>
-        <td rowspan="2">Nvidia H100 Cuda Cores 14592</td>
-        <td>a3-highgpu-1g</td>
-        <td>1</td>
-        <td>1</td>
-        <td>1</td>
-        <td>13 minutes, 59 seconds</td>
-        <td>0.58 US$</td>
-    </tr>
-    <tr>
-        <td>a3-highgpu-2g</td>
-        <td>1</td>
-        <td>2</td>
-        <td>2</td>
-        <td>16 minutes, 15 seconds</td>
-        <td>1.36 US$</td>
-    </tr>
-</table>
-
-May your residuals drop fast and your vortices stay coherent — happy simulating!
+<table both results and compare them in a sentence>
