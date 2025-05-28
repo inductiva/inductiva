@@ -135,7 +135,7 @@ Unlike the baseline case, runtime consistently decreased as the cluster size gre
 
 However, the speedup does not scale linearly with the number of vCPUs. While the 4 and 8 machine setups showed solid performance gains, adding more machines beyond that point yielded diminishing returns.
 
-## Summary
+## Key Takeaways
 - When increasing simulation complexity by refining the grid (increasing total cells by a factor of 8), larger clusters showed consistent runtime improvements.
 - Despite improvements, speedup gains do not scale linearly; diminishing returns occur at higher node counts due to overhead.
 - Overall, AMR-Wind scales better with increased computational workload, while communication costs limit scaling for smaller problems.
