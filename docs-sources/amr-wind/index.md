@@ -28,7 +28,7 @@ hidden: true
 ---
 setup-test
 quick-start
-Flow around a circular cylinder <flow-cylinder>
+Flow Around a Circular Cylinder <run-flow-cylinder-case>
 Using an MPI cluster <mpi-cluster>
 ```
 
@@ -38,7 +38,7 @@ caption: Visualization
 maxdepth: 2
 hidden: true
 ---
-Using yt <using-yt>
+yt for Post-processing <yt-for-post-processing>
 ```
 
 ```{toctree}
