@@ -1,7 +1,6 @@
-# Temporal boundary layer with stable stratification
-
-*by Pedro Simoes (P.SimoesCosta@tudelft.nl) & Inductiva Team*
-
+# Run a Temporal Boundary Layer with Stable Stratification Case
+---
+*This tutorial was written by* **[Pedro Simões]**(P.SimoesCosta@tudelft.nl) *in collaboration with the* **Inductiva Team**
 
 The numerical simulation of a temporally evolving, stably stratified boundary
 layer offers a clear computational sandbox for exploring fundamental fluid
@@ -14,35 +13,30 @@ for understanding boundary layer turbulence at high Reynolds numbers typical of
 atmospheric flows. The higher the Reynolds number of a wind flow boundary layer,
 the more "locally parallel" the flow is. The TBL flow consists of a moving bottom
 wall with constant velocity, with turbulence being entrained to the flow vertically
-and parallel to the wall. This asymptotically approximates the devlopment of
+and parallel to the wall. This asymptotically approximates the development of
 windflow over a surface as it approaches a parallel state, allowing simple
 interpretation of turbulent processes.
 
-We will introduce stable stratification - where warmer air overlies cooler
-air - is important because it closely resembles common atmospheric conditions,
-especially during nighttime due to radiative cooling of the land surface, or in
-stable weather conditions. Stability significantly alters boundary layer dynamics:
+Stability plays a crucial role in altering boundary layer dynamics. To better understand its effects, let's examine the types of stratification conditions:
 
 - **Neutral stratification** (no vertical temperature gradient) provides a baseline scenario where temperature doesn't affect the wind turbulence dynamics.
 
-- In **stable stratification**, temperature decreases with the height (or denser air in the bottom, lighter air at the top), and buoyancy suppresses vertical movements, reducing turbulent mixing, and overall boundary layer growth.
-
-- Conversely, in **unstable stratification** (cooler air above warmer air), buoyancy amplifies vertical motions, enhancing turbulence and thickening the boundary layer
-
-By simulating these different stratification conditions, you will gain insight
-into how buoyancy and turbulence interact to shape the wind boundary layer
-evolution.
-
-**Stable Case**
 <img src="_static/tempField_neutralTDBL_Re1000-13863.gif" alt="Demo Animation"/>
 
-**Neutral Case**
+- In **stable stratification**, temperature decreases with the height (that is, denser air near the surface and lighter air above), and buoyancy suppresses vertical movements, reducing turbulent mixing, and overall boundary layer growth.
 
 <img src="_static/tempField_neutralTDBL_Re1000-13863.gif" alt="Demo Animation"/>
 
-## Simulation Files
+- Conversely, in **unstable stratification** (cooler air above warmer air), buoyancy amplifies vertical motions, enhancing turbulence and thickening the boundary layer.
 
-In order to run this simulation you will need to create the `input.nml` with the
+Simulating these different stratification conditions provides insight into how buoyancy and turbulence interact to shape the wind boundary layer.
+
+This tutorial focuses on simulating **stable stratification**, where warmer air overlies cooler air, as it closely reflects common atmospheric conditions - particularly at night due to radiative cooling of the land surface or during stable weather patterns.
+
+## Simulate Stable Stratification
+
+### Prerequisites
+To run this use case, begin by creating the `input.nml` with the
 following contents:
 
 ```
@@ -100,8 +94,6 @@ is_debug = T, is_timing = T
 /
 ```
 
-## Case Modifications
-
 To shorten the simulation time, we will run only 1% of the original simulation.
 To do this, update the following line:
 
@@ -115,12 +107,10 @@ to:
 nstep = 400, time_max = 20., tw_max = 0.1  
 ```
 
-This change significantly reduces the simulation duration while preserving the
-configuration structure. If you prefer, you can run the full simulation by
-keeping the original values.
+This adjustment significantly reduces the simulation duration while maintaining the overall configuration. If desired, the full simulation can be run by keeping the original values.
 
-## Running the Simulation
-Here is the code required to run your simulation using the Inductiva API:
+### Running the Simulation
+Here is the code required to run the simulation using the Inductiva API:
 
 ```python
 """CaNS example."""
@@ -184,13 +174,10 @@ the core computation time of this simulation was approximately 8 minutes and 13 
 
 It's that simple!
 
-## Scalling up the simulation
+### Scalling Up the Simulation
+One of the benefits of using Inductiva is the ability to scale simulations to bigger and faster machines with minimal code changes. In this case, only the `machine_type` argument needs to be updated during MachineGroup creation.
 
-One of the benefits of using Inductiva is the fact that you can scale your simulations
-to bigger and faster machines with minimal changes to your code. In this case,
-You need to only change the argument `machine_type` in your MachineGroup creation.
-
-Here are the results of the same simulation running on multiple machines:
+Below are the results of the same simulation executed on multiple machines:
 
 | Machine Type    | vCPUs | GPU                | GPU Count | Duration          | Cost      | Speed-up |
 | --------------- | ----- | ------------------ | --------- | ----------------- | --------- | -------- |
@@ -202,11 +189,12 @@ Here are the results of the same simulation running on multiple machines:
 | a3-highgpu-4    | 104   | NVIDIA H100 (80GB) | 4         | 6 minutes 5 sec   | 2.05 US$ | 1.32x    |
 | a3-highgpu-8    | 208   | NVIDIA H100 (80GB) | 8         | 6 minutes 8 sec   | 3.99 US$ | 1.30x    |
 
-
 It's important to note that we only ran 1% of the original CaNS simulation.
 Any performance improvements observed here would be even more pronounced when
-running the full simulation. However, these results also highlight that scaling
-up does not always lead to linear speedups, in some cases, it can even lead to
+running the full simulation. 
+
+These results also highlight that scaling
+up does not always lead to linear speedups. In some cases, it can even lead to
 longer runtimes. This is often due to overheads such as communication between
 GPUs or underutilization of available resources.
 
