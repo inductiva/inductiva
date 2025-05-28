@@ -3,7 +3,7 @@ This page presents detailed performance benchmarks of AMR-Wind simulations run a
 
 We benchmark the neutral Atmospheric Boundary Layer case from the [AMR-Wind GitHub repository](https://github.com/Exawind/amr-wind/tree/v3.4.0).
 
-> Interested in running AMR-Wind simulations across multiple machines using MPI? Check out this tutorial. 
+> Interested in running AMR-Wind simulations across multiple machines using MPI? Check out this [tutorial](https://inductiva.ai/guides/amr-wind/flow-cylinder). 
 
 ## Benchmark Results: Baseline Simulation
 The following table summarizes simulation runtimes and speedups for the baseline configuration, run on clusters of varying sizes:
