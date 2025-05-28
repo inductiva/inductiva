@@ -1,4 +1,4 @@
-# Run 1 Simulation
+# Run a Single Simulation
 First, we will run a single OpenFAST simulation using the `5MW_OC4Semi_WSt_WavesWN` case. This should be straightforward as all 
 the necessary input files are already prepared.
 
@@ -36,7 +36,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown as follows.
+When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as follows.
 
 ```
 inductiva tasks info hk8fmb4dif05c5vf5saurocxp

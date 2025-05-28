@@ -27,7 +27,7 @@ from inductiva.utils import format_utils, files
 
 def get_api_config() -> Configuration:
     """Returns an API configuration object."""
-    api_key = inductiva.get_api_key()
+    api_key = inductiva.get_validated_api_key()
 
     api_config = Configuration(host=inductiva.api_url)
     api_config.api_key["APIKeyHeader"] = api_key
@@ -112,7 +112,7 @@ def upload_file(api_instance: ApiClient, input_path: str, method: str, url: str,
 
 
 def upload_input(api_instance: TasksApi, input_dir, task_id,
-                 storage_path_prefix):
+                 storage_path_prefix, verbose):
     """Uploads the inputs of a given task to the API.
 
     Args:
@@ -135,7 +135,8 @@ def upload_input(api_instance: TasksApi, input_dir, task_id,
         with tqdm.tqdm(total=zip_file_size,
                        unit="B",
                        unit_scale=True,
-                       unit_divisor=1000) as progress_bar:
+                       unit_divisor=1000,
+                       disable=not verbose) as progress_bar:
             upload_file(api_instance, input_zip_path, "PUT", url, progress_bar)
             api_instance.notify_input_uploaded(path_params={"task_id": task_id})
         logging.info("Local input directory successfully uploaded.")
@@ -290,7 +291,7 @@ def task_info_str(
 
     info_str += (f"\t· Local input directory: {local_input_dir}\n"
                  "\t· Submitting to the following computational resources:\n")
-    info_str += f" \t\t· {resource_pool}"
+    info_str += f" \t\t· {resource_pool}\n"
 
     if task_submitted_info is not None:
         ttl_seconds = task_submitted_info.get("time_to_live_seconds")
@@ -298,6 +299,10 @@ def task_info_str(
             ttl_seconds = format_utils.seconds_formatter(ttl_seconds)
             info_str += (f" \t\t· Task will be killed after the computation "
                          f"time exceeds {ttl_seconds} (h:m:s).\n")
+        if resource_pool.spot:
+            preemption = task_submitted_info.get(
+                "resubmit_on_preemption") or False
+            info_str += (f"\t· Restart On Preemption: {preemption}\n")
     info_str += "\n"
     return info_str
 
@@ -307,6 +312,7 @@ def submit_task(simulator,
                 machine_group,
                 params,
                 storage_path_prefix,
+                verbose,
                 resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
                 simulator_name_alias: Optional[str] = None,
@@ -389,6 +395,7 @@ def submit_task(simulator,
                 input_dir=input_dir,
                 task_id=task_id,
                 storage_path_prefix=storage_path_prefix,
+                verbose=verbose,
             )
 
     # Return task_id and leaves the simulation on the queue until resources

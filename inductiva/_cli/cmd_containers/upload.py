@@ -59,9 +59,12 @@ def upload_container(args):
     try:
         contents = storage.listdir(folder_name, print_results=False)
     except ApiException as e:
-        print(f"Error accessing remote folder '{folder_name}': {e}",
-              file=sys.stderr)
-        return
+        if e.status == 404:
+            contents = []
+        else:
+            print(f"Error accessing remote folder '{folder_name}': {e}",
+                  file=sys.stderr)
+            return
 
     already_there = any(c["content_name"] == filename for c in contents)
     if already_there:
@@ -69,7 +72,7 @@ def upload_container(args):
             print(f"'{output_path}' exists - will overwrite it "
                   "(because --overwrite).")
             try:
-                storage.remove_workspace(f"{folder_name}/{filename}")
+                storage.remove(f"{folder_name}/{filename}")
             except ApiException as e:
                 print(f"Failed to delete old file: {e}", file=sys.stderr)
                 return
@@ -84,7 +87,7 @@ def upload_container(args):
             if not confirm:
                 print("Operation cancelled.")
                 return
-            storage.remove_workspace(f"{folder_name}/{filename}")
+            storage.remove(f"{folder_name}/{filename}")
 
     # Create temp folder to hold .sif
     try:

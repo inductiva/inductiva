@@ -39,7 +39,6 @@ class OpenFAST(simulators.Simulator):
             input_dir: Path to the directory of the simulation input files.
             commands: List of commands to run using the OpenFAST simulator.
             on: The computational resource to launch the simulation on.
-            other arguments: See the documentation of the base class.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with

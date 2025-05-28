@@ -51,10 +51,10 @@ class CaNS(simulators.Simulator):
             input_dir: Path to the directory of the simulation input files.
             on: The computational resource to launch the simulation on.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
-            (default), all vCPUs will be used.
+                (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
-            number of hardware threads on the node, and use that as the
-            number of slots available.
+                number of hardware threads on the node, and use that as the
+                number of slots available.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
@@ -72,6 +72,10 @@ class CaNS(simulators.Simulator):
                                 remote_assets=remote_assets,
                                 sim_config_filename=sim_config_filename)
 
+        #To run cans on gpu the n_vcpus must be equal to the number of gpus
+        if on.has_gpu and n_vcpus is None:
+            n_vcpus = on.gpu_count()
+
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
         if n_vcpus is not None:
@@ -79,6 +83,7 @@ class CaNS(simulators.Simulator):
 
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
         commands = [
+            "mkdir -p data",
             Command(f"cans {sim_config_filename}", mpi_config=mpi_config)
         ]
 

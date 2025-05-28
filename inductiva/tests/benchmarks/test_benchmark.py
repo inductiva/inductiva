@@ -16,6 +16,7 @@ def benchmark_fixture():
     mocked_benchmark.kwargs = {}
     mocked_benchmark.open = mock.MagicMock(return_value=None)
     mocked_benchmark.name = "test_benchmark"
+    mocked_benchmark.verbose = False
     return mocked_benchmark
 
 
@@ -148,7 +149,8 @@ def test_benchmark_run(benchmark, num_repeats, wait_for_quotas):
     assert benchmark.runs == []
 
     m4.start.assert_not_called()
-    m8.start.assert_called_once_with(wait_for_quotas=wait_for_quotas)
+    m8.start.assert_called_once_with(wait_for_quotas=wait_for_quotas,
+                                     verbose=False)
 
     simulator_run_calls = [
         mock.call(input_dir="dir",
@@ -156,18 +158,21 @@ def test_benchmark_run(benchmark, num_repeats, wait_for_quotas):
                   a=1,
                   b=1,
                   project="test_benchmark",
+                  resubmit_on_preemption=True,
                   verbose=False),
         mock.call(input_dir="dir",
                   on=m4,
                   a=1,
                   b=4,
                   project="test_benchmark",
+                  resubmit_on_preemption=True,
                   verbose=False),
         mock.call(input_dir="dir",
                   on=m8,
                   a=1,
                   b=8,
                   project="test_benchmark",
+                  resubmit_on_preemption=True,
                   verbose=False),
     ] * num_repeats
     simulator.run.assert_has_calls(calls=simulator_run_calls, any_order=True)

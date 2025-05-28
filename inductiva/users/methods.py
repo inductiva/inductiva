@@ -3,6 +3,7 @@ import json
 from typing import Any, Dict
 
 from inductiva import api
+
 from inductiva.client.apis.tags.users_api import UsersApi
 
 

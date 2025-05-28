@@ -44,7 +44,7 @@ class Benchmark(projects.Project):
         TIME = f"computation_time ({TIME_UNIT})"
         COST = f"estimated_computation_cost ({CURRENCY_SYMBOL})"
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, verbose: bool = False):
         """
         Initializes a new Benchmark instance.
 
@@ -57,6 +57,7 @@ class Benchmark(projects.Project):
         self.input_dir = None
         self.on = None
         self.kwargs = {}
+        self.verbose = verbose
 
     def set_default(
         self,
@@ -148,19 +149,27 @@ class Benchmark(projects.Project):
         Returns:
             Self: The current instance for method chaining.
         """
+        if not self.verbose:
+            logging.info(
+                "Preparing tasks for Benchmark to start. "
+                "This may take a few minutes.\n"
+                "Note that stopping this process will \033[1minterrupt\033[0m "
+                "the submission of the tasks. Please wait...\n")
         for simulator, input_dir, machine_group, kwargs in self.runs:
             if not machine_group.started:
-                machine_group.start(wait_for_quotas=wait_for_quotas)
+                machine_group.start(wait_for_quotas=wait_for_quotas,
+                                    verbose=self.verbose)
             for _ in range(num_repeats):
                 simulator.run(input_dir=input_dir,
                               on=machine_group,
                               project=self.name,
-                              verbose=False,
+                              resubmit_on_preemption=True,
+                              verbose=self.verbose,
                               **kwargs)
         self.runs.clear()
         logging.info(
-            "Benchmark \033[1m%s\033[0m has started...\n"
-            "Go to https://console.inductiva.ai/projects/%s "
+            "■ Benchmark \033[1m%s\033[0m has started.\n"
+            "  Go to https://console.inductiva.ai/projects/%s "
             "for more details.\n", self.name, self.name)
         return self
 
@@ -173,33 +182,37 @@ class Benchmark(projects.Project):
         """
         tasks = self.get_tasks()
 
+        completed_tasks = [task for task in tasks if task.info.is_terminal]
+        running_tasks = [task for task in tasks if not task.info.is_terminal]
+
         logging.info("Waiting for Benchmark \033[1m%s\033[0m to complete...\n",
                      self.name)
 
         with tqdm.tqdm(total=len(tasks),
-                       desc="Processing tasks",
-                       bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt}") as pbar:
+                       desc="Running Benchmark",
+                       bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} {unit}",
+                       initial=len(completed_tasks),
+                       unit="tasks") as pbar:
             with ThreadPoolExecutor() as executor:
                 future_to_task = {
                     executor.submit(
                         lambda t: t.wait(download_std_on_completion=False,
                                          silent_mode=True), task):
-                        task for task in tasks
+                        task for task in running_tasks
                 }
 
                 for future in as_completed(future_to_task):
                     with logging_redirect_tqdm():
                         task = future_to_task[future]
                         status = future.result()
-                        logging.info("Task %s completed with status: %s",
-                                     task.id, status)
 
                         if status != TaskStatusCode.SUCCESS:
                             logging.info(
+                                "Task %s completed with status: %s\n"
                                 "   · To understand why the task did not "
                                 "complete successfully go to "
                                 "https://console.inductiva.ai/tasks/%s",
-                                task.id)
+                                task.id, status, task.id)
 
                         # Update progress bar for each completed task
                         pbar.update(1)
@@ -282,6 +295,9 @@ class Benchmark(projects.Project):
                 return json.load(file)
 
         def select_distinct(info):
+            if len(info) <= 1:
+                return info
+
             attrs_lsts = defaultdict(list)
             for attrs in info:
                 for attr, value in attrs.items():
@@ -298,8 +314,11 @@ class Benchmark(projects.Project):
         for task in tasks:
             task_input_params = get_task_input_params(task)
             task_info = task.info
+            if not task_info.executer:
+                continue
             task_machine_type = task_info.executer.vm_type \
-                if task_info.executer else None
+                if task_info.executer.vm_type != "n/a" else \
+                    task_info.executer.vm_name
             task_time = task_info.time_metrics.computation_seconds.value
             task_cost = task_info.estimated_computation_cost
             info.append({
@@ -310,7 +329,6 @@ class Benchmark(projects.Project):
                 Benchmark.InfoKey.COST: task_cost,
                 **task_input_params,
             })
-
         return select_distinct(info) \
             if select == SelectMode.DISTINCT \
             else info

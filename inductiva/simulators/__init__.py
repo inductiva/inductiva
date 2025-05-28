@@ -15,6 +15,7 @@ from .gromacs import GROMACS
 from .reef3d import REEF3D
 from .xbeach import XBeach
 from .schism import SCHISM
+from .sfincs import SFINCS
 from .nwchem import NWChem
 from .coawst import COAWST
 from .mohid import MOHID

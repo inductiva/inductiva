@@ -52,10 +52,10 @@ class SNLSWAN(simulators.Simulator):
             sim_config_filename: Name of the simulation configuration file.
                 Mandatory when using 'swanrun' command.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
-            (default), all vCPUs will be used.
+                (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
-            number of hardware threads on the node, and use that as the
-            number of slots available.
+                number of hardware threads on the node, and use that as the
+                number of slots available.
             on: The computational resource to launch the simulation on.
             storage_dir: Directory for storing simulation results.
             resubmit_on_preemption (bool): Resubmit task for execution when

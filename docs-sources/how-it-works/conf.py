@@ -75,7 +75,7 @@ myst_heading_anchors = 3
 html_permalinks_icon = Icons.permalinks_icon
 html_theme = 'sphinxawesome_theme'
 
-html_title = "How it works"
+html_title = "How It Works"
 html_theme_options = {
     'show_prev_next': True,
     'show_scrolltop': True,
@@ -102,7 +102,7 @@ html_context = {
     "project_name":
         "Inductiva.AI",
     "project_description":
-        "Inductiva.AI How it works",
+        "Inductiva.AI How It Works",
     "project_url":
         "https://inductiva.ai/guides/how-it-works",
     "ogp_image":

@@ -122,8 +122,8 @@ Inductiva API or CLI.
 
 ### Remove Files or Directories
 
-- Remove an entire directory: `inductiva.storage.remove_workspace(remote_dir="gromacs_bucket")`
-- Remove a single file from a remote directory: `inductiva.storage.remove_workspace(remote_dir="gromacs_bucket/file1.txt")`
+- Remove an entire directory: `inductiva.storage.remove(remote_path="gromacs_bucket")`
+- Remove a single file from a remote directory: `inductiva.storage.remove(remote_path="gromacs_bucket/file1.txt")`
 
 ## Reuse Task Outputs in Simulations
 
@@ -208,7 +208,7 @@ commands = [
 
 **8. I need to change one file in a directory I uploaded. Do I need to re-upload the entire directory?**
 
-*No, you don’t have to re-upload everything. Simply remove the specific file using `inductiva.storage.remove_workspace()` and upload the updated version. Alternatively, you can overwrite the file by uploading it via `input_dir`. Refer to question 10.
+*No, you don’t have to re-upload everything. Simply remove the specific file using `inductiva.storage.remove()` and upload the updated version. Alternatively, you can overwrite the file by uploading it via `input_dir`. Refer to question 10.
 
 ---
 

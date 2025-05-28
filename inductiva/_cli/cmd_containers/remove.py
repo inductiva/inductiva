@@ -44,7 +44,7 @@ def rm_container(args):
             return 0
 
     try:
-        storage.remove_workspace(container_path)
+        storage.remove(container_path)
         print(f"✅ Container '{container_name}' removed.")
         return 0
     except Exception as e:  # pylint: disable=broad-except

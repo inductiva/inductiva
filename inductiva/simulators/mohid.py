@@ -52,8 +52,7 @@ class MOHID(simulators.Simulator):
                 simulation ends. This will combine the results of the multiple
                 MPI processes into one.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
-            (default), all vCPUs will be used.
-            other arguments: See the documentation of the base class.
+                (default), all vCPUs will be used.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with

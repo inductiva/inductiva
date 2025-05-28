@@ -25,6 +25,7 @@ from . import users
 from . import logs
 from . import api
 from . import events
+from . import auth
 from .templating import TemplateManager
 
 logs.setup(getattr(logging, os.environ.get("INDUCTIVA_LOG_LEVEL", "INFO")))
@@ -43,7 +44,7 @@ _api_key = contextvars.ContextVar("INDUCTIVA_API_KEY",
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.16.1"
+__version__ = "0.16.4"
 
 
 def set_output_dir(new_output_dir):
@@ -85,7 +86,9 @@ def _set_key_and_check_version():
     is_auth_cli = len(sys.argv) > 1 and sys.argv[1] == "auth"
     if not utils.format_utils.getenv_bool("GITHUB_ACTIONS", False) \
             and not is_auth_cli:
-        set_api_key(get_api_key())
+        key = get_api_key()
+        if key:
+            set_api_key(key)
 
     # Perform version check only on first invocation
     if not hasattr(_set_key_and_check_version, "version_checked"):
@@ -103,6 +106,10 @@ def get_api_agent():
 
 
 class VersionError(Exception):
+    pass
+
+
+class ApiKeyError(Exception):
     pass
 
 
@@ -156,23 +163,16 @@ def compare_client_and_backend_versions(client_version: str):
                 f"Failed to compare client and API versions. {e}") from e
 
 
-def _raise_api_key_error(message):
-    if logs.is_cli():
-        print(f"Error: {message}")
-        sys.exit(1)
-    raise ValueError(message)
-
-
 def _validate_api_key(api_key, login_message=True):
     message = f" {constants.LOGIN_MESSAGE}" if login_message else ""
 
     if not api_key:
         error = f"No API Key specified.{message}"
-        _raise_api_key_error(error)
+        raise ApiKeyError(error)
 
     if not utils.authentication.is_valid_token(api_key):
         error = f"Invalid API Key format.{message}"
-        _raise_api_key_error(error)
+        raise ApiKeyError(error)
 
 
 def set_api_key(api_key, login_message=True):
@@ -184,6 +184,14 @@ def set_api_key(api_key, login_message=True):
 def get_api_key():
     """Returns the value of inductiva._api_key or the stored API key."""
     api_key = _api_key.get() or utils.authentication.get_stored_api_key()
+    return api_key
+
+
+def get_validated_api_key():
+    """Returns the value of inductiva._api_key or the stored API key.
+    Raises ValueError if the API key is invalid.
+    """
+    api_key = get_api_key()
     _validate_api_key(api_key)
     return api_key
 
@@ -230,5 +238,8 @@ def _check_user_info():
 ansi_enabled = _supports_ansi()
 
 _set_key_and_check_version()
-
-_check_user_info()
+try:
+    get_validated_api_key()
+    _check_user_info()
+except ApiKeyError:
+    pass

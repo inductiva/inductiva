@@ -1,4 +1,5 @@
 """Custom logging functions"""
+import functools
 import traceback
 import json
 import os
@@ -101,6 +102,9 @@ def _handle_api_exception(exc_type, exc_value, exc_traceback,
     if issubclass(exc_type, inductiva.VersionError):
         root_logger.error(exc_value)
         return True
+    if issubclass(exc_type, inductiva.ApiKeyError):
+        root_logger.error(exc_value)
+        return True
 
     return False
 
@@ -163,3 +167,35 @@ def setup(level=logging.INFO):
         ip.set_custom_exc((Exception,), ipy_handle_uncaught_exception)
     else:
         sys.excepthook = handle_uncaught_exception
+
+
+def mute_logging():
+    """
+    Decorator to temporarily set logging level to ERROR
+    during function execution and restore it afterward.
+    
+    Example:
+        @mute_logging()
+        def my_function():
+            pass
+    """
+
+    def decorator(func):
+
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            original_level = root_logger.level
+
+            verbose = kwargs.get("verbose", True)
+
+            if not verbose:
+                root_logger.setLevel(logging.ERROR)
+
+            try:
+                return func(*args, **kwargs)
+            finally:
+                root_logger.setLevel(original_level)
+
+        return wrapper
+
+    return decorator

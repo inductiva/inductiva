@@ -13,7 +13,7 @@ import logging
 
 import inductiva
 import inductiva.client.models
-from inductiva import api, users
+from inductiva import api, users, logs
 from inductiva.resources.utils import ProviderType
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
@@ -61,6 +61,7 @@ class BaseMachineGroup(ABC):
     max_idle_time: Union[datetime.timedelta, int] = 3
     auto_terminate_ts: Optional[datetime.datetime] = None
     auto_terminate_minutes: Optional[int] = None
+    spot: bool = True
 
     create_time = None
     num_machines = 0
@@ -140,6 +141,14 @@ class BaseMachineGroup(ABC):
         if self._gpu_info is None:
             return False
         return self._gpu_info.get("gpu_count") > 0
+
+    def gpu_count(self) -> bool:
+        """
+        Returns the number of GPUs available in the resource.
+        """
+        if self._gpu_info is None:
+            return 0
+        return self._gpu_info.get("gpu_count", 0)
 
     @property
     def id(self):
@@ -321,6 +330,7 @@ class BaseMachineGroup(ABC):
         machine_group.data_disk_gb = resp["disk_size_gb"]
         machine_group.provider = resp["provider_id"]
         machine_group.create_time = resp["creation_timestamp"]
+        machine_group.spot = bool(resp["spot"])
         machine_group._started = bool(resp["started"])
         machine_group.__dict__["machines"] = resp["machines"]
         machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
@@ -362,7 +372,8 @@ class BaseMachineGroup(ABC):
 
         return is_cost_ok and is_vcpu_ok and is_instance_ok
 
-    def start(self, wait_for_quotas: bool = False):
+    @logs.mute_logging()
+    def start(self, wait_for_quotas: bool = False, verbose: bool = True):  # pylint: disable=unused-argument
         """Starts a machine group.
 
         Args:
@@ -562,7 +573,7 @@ class BaseMachineGroup(ABC):
 @dataclass(repr=False)
 class MachineGroup(BaseMachineGroup):
     """Create a MachineGroup object.
-    
+
     A machine group is a collection of homogenous machines with given the
     configurations that are launched in Google Cloud.
     Note: The machine group will be available only after calling 'start' method.
@@ -602,7 +613,6 @@ class MachineGroup(BaseMachineGroup):
     # Constructor arguments
     auto_resize_disk_max_gb: Optional[int] = None
     num_machines: int = 1
-    spot: bool = True
 
     # Internal attributes
     _is_elastic = False
@@ -635,7 +645,6 @@ class MachineGroup(BaseMachineGroup):
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
         machine_group.num_machines = int(resp["max_vms"])
-        machine_group.spot = bool(resp["spot"])
         return machine_group
 
     def __str__(self):
@@ -699,7 +708,6 @@ class ElasticMachineGroup(BaseMachineGroup):
     auto_resize_disk_max_gb: Optional[int] = None
     min_machines: int = 1
     max_machines: int = 2
-    spot: bool = True
 
     # Internal attributes
     _is_elastic = True
@@ -739,7 +747,6 @@ class ElasticMachineGroup(BaseMachineGroup):
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
-        machine_group.spot = bool(resp["spot"])
         machine_group.max_machines = int(resp["max_vms"])
         machine_group.min_machines = int(resp["min_vms"])
         return machine_group
@@ -791,7 +798,6 @@ class MPICluster(BaseMachineGroup):
     """
     # Constructor arguments
     num_machines: int = 2
-    spot: bool = True
 
     # Internal attributes
     auto_resize_disk_max_gb = None
@@ -819,6 +825,12 @@ class MPICluster(BaseMachineGroup):
         return VCPUCount(
             self._cpu_info["cpu_cores_logical"] * self.num_machines,
             self._cpu_info["cpu_cores_logical"])
+
+    def gpu_count(self) -> bool:
+        """
+        Returns the number of GPUs available in the resource.
+        """
+        return super().gpu_count() * self.num_machines
 
     @property
     def available_vcpus(self):
