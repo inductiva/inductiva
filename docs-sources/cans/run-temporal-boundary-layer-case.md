@@ -189,7 +189,6 @@ Below are the results of the same simulation executed on multiple machines:
 | a3-highgpu-4    | 104   | NVIDIA H100 (80GB) | 4         | 6 minutes 5 sec   | 2.05 US$ | 1.32x    |
 | a3-highgpu-8    | 208   | NVIDIA H100 (80GB) | 8         | 6 minutes 8 sec   | 3.99 US$ | 1.30x    |
 
-
 It's important to note that we only ran 1% of the original CaNS simulation.
 Any performance improvements observed here would be even more pronounced when
 running the full simulation. 
