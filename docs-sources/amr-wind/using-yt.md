@@ -1,37 +1,36 @@
 # AMR-Wind Post-Processing
+Getting started with post-processing AMR-Wind simulation results is straightforward using [yt](https://yt-project.org/doc/visualizing/plots.html#slice-plots), a powerful Python package designed for analyzing and visualizing volumetric simulation data. It supports AMReX plotfiles out of the box and is ideal for scripting and automation.
 
-The easiest way to get started with post-processing AMR-Wind results is by using [yt](https://yt-project.org/doc/visualizing/plots.html#slice-plots), 
-a Python-based package designed for analyzing and visualizing volumetric simulation data. 
-It supports AMReX plotfiles out of the box and is ideal for scripting and automation. 
-Alternatively, [Paraview](https://www.paraview.org/) also natively supports AMReX plotfiles and provides an interactive, GUI-based approach for quickly exploring and visualizing simulation results.
+Alternatively, if you prefer an interactive graphical interface, Paraview also offers native support for AMReX plotfiles and provides an easy way to explore and visualize your simulation results.
 
-## Using `yt` for Post-Processing
+In this tutorial, we’ll guide you step-by-step through using yt to load your AMR-Wind simulation data, generate visualizations like slice plots, and automate the creation of animations to better understand your results.
 
-yt is ideal for scripting and automated analysis of AMR data. It allows quick generation of slices, projections, and derived fields with just a few lines of Python code.
+## Using yt for Post-Processing
+**yt** is ideal for scripting and automated analysis of AMR data. With just a few lines of Python, you can generate slice plots, projections, and derived fields quickly.
 
-### 1. Install yt (if not installed already)
+### Step 1: Install yt 
+If you don’t have yt installed yet, you can add it easily with pip:
 
 ```bash
 pip install yt
 ```
 
-### 2. Basic yt script to load and plot a slice from the volume data
+### Step 2: Load Data and Create a Slice Plot
+Here’s a simple example to load a plotfile and generate a 2D slice of the x-velocity field along the z-axis:
 
 ```python
 import yt
 
-ds = yt.load("plt01000")  # Load the time step of choosing from the provided path
-slc = yt.SlicePlot(ds, "z", ("boxlib", "velocityx")) # Create slice plot of x velocity - normal to z-axis
-slc.set_cmap(("boxlib", "velocityx"), "plasma") # Choosing colormap
-slc.set_log(("boxlib", "velocityx"), False) # To opt linear scale- log scale is default
+ds = yt.load("plt01000") # Load a time step of your choice from the provided path
+slc = yt.SlicePlot(ds, "z", ("boxlib", "velocityx")) # Create a slice plot of x velocity normal to z-axis
+slc.set_cmap(("boxlib", "velocityx"), "plasma") # Choose colormap
+slc.set_log(("boxlib", "velocityx"), False) # Use linear scale (log scale is default)
 slc.annotate_title("Velocity field slice")
 slc.save("xvelocity_plot.png")
-
 ```
 
-### 3. Loop over time steps to plot slices
-
-The below script can be used to loop over all `plt00000`files (time steps) and extract a data slice to save it as a 2D plot.
+### 3. Automate Plotting Across Multiple Time Steps
+You can easily loop over all `plt00000` files (time steps), extracting a data slice and saving it as a 2D plot.
 
 ```python
 import glob, os
@@ -44,11 +43,12 @@ for pf in plotfiles:
     slc.set_cmap(("boxlib", "mag_vorticity"), "plasma")
     slc.set_log(("boxlib", "mag_vorticity"), False)
     slc.annotate_title(f"Time = {float(ds.current_time):.2f} s")
-    slc.save() # will save the plot files to the same folder as the plt files
+    slc.save() # Saves plot files in the same folder as the plt files
 
 ```
 
-### Sample script- Create an animation from plt files
+### Creating Animations from Plotfiles
+To visualize temporal evolution, you can generate a series of slice plots and compile them into an animation (GIF). Below is a sample script demonstrating this process:
 
 ```python
 import yt
@@ -66,7 +66,7 @@ def plot_variable_slices(data_path, output_path, variable, case_title):
         variable (str): Variable to plot (e.g., 'velocityx', 'mag_vorticity').
         case_title (str): Case name or description to use in plot titles.
     """
-    vmin, vmax = 0, 50  # Minimum and maximum values for color scale
+    vmin, vmax = 0, 50  # Color scale limits
 
     os.makedirs(output_path, exist_ok=True)
 
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     case_title = "Title of the plot"
     data_path = "path/to/plt-files"
     output_path = "path/to/save/results"
-    variable_name = "mag_vorticity" #Variable to be plotted (eg: velocityx, velocityy, mag_vorticity)
+    variable_name = "mag_vorticity" #Variable to plot 
 
     # Run plotting
     plot_variable_slices(data_path, output_path, variable_name, case_title)
