@@ -48,6 +48,15 @@ with open(filename, mode='r', newline='') as csvfile:
             input_dir="my_rendered_files",
             sim_config_filename="DamBreakModel.json",
             on=cloud_machine)
+        
+        # set metadata for the task
+        task.set_metadata(
+            {
+                "density0":f"{density0}",
+                "particleRadius":f"{particleRadius}",
+                "viscosity":f"{viscosity}"
+            }
+        )
 ```
 
 This recipe requires you to use our [templaing system](https://docs.inductiva.ai/en/latest/intro_to_api/templating.html)
