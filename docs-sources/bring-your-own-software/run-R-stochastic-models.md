@@ -64,7 +64,7 @@ Rscript run_ising_model.R \
 
 ## Launching your ensemble with Inductiva
 
-Suppose we want to examine how minor perturbations around a few base temperatures affect the behavior of our Ising model. With Inductiva, we can sample a normal distribution around each base temperature, run each simulation in parallel, and collect the full set of results—without manually managing infrastructure.
+Suppose we want to examine how minor perturbations around a temperature affect the behavior of our Ising model. With Inductiva, we can sample a normal distribution around the base temperature, run each simulation in parallel, and collect the full set of results—without manually managing infrastructure.
 
 Here's how to do that in a single, self-contained Python script:
 
@@ -85,11 +85,11 @@ import inductiva
 INPUT_DIR = "./input"
 RESULTS_DIR = "./results"
 OUTPUT_ROOT = "inductiva_output"
-PROJECT_NAME = "temperature_ensemble"
+PROJECT_NAME = "temperature_ensemble_3_0"
 
-BASE_TEMPERATURES = [1.5, 2.0, 2.5]
-NUM_SAMPLES = 5
-TEMPERATURE_SIGMA = 0.2
+BASE_TEMPERATURE = 3.0
+NUM_SAMPLES = 50
+TEMPERATURE_SIGMA = 0.05
 RNG_SEED = 123
 
 NSWEEPS = 10000
@@ -103,16 +103,14 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 
 ### 2. Sample a Normal cloud around each T0
 
-For each base temperature T₀, draw n_samples points from 𝒩(T₀, σ²). That gives you one “central” run at T₀ plus a small spread around it.
+For a base temperature T₀, draw n_samples points from 𝒩(T₀, σ²). That gives you one “central” run at T₀ plus a spread around it.
 
 ```python
 np.random.seed(RNG_SEED)
-jobs_by_base = {
-    T0: sorted(np.random.normal(loc=T0, 
-                                scale=TEMPERATURE_SIGMA, 
-                                size=NUM_SAMPLES))
-         for T0 in BASE_TEMPERATURES
-}
+sampled_temps = sorted(
+    np.random.normal(loc=BASE_TEMPERATURE,
+                     scale=TEMPERATURE_SIGMA,
+                     size=NUM_SAMPLES))
 ```
 
 ### 3. Spin up the cloud machines
@@ -120,13 +118,14 @@ jobs_by_base = {
 Compute the total number of runs (one for each T₀ plus its samples) and use Inductiva API to spin up that many machines. Here we use an ElasticMachineGroup, which grows automatically based on how many tasks are being executed, you can control how many machines you want to have using the `max_machines` parameter.
 
 ```python
-total_jobs = sum(1 + len(samples) for samples in jobs_by_base.values())
+all_temps = [BASE_TEMPERATURE] + sampled_temps
+max_machines = len(all_temps)
 
 machine_group = inductiva.resources.ElasticMachineGroup(
     machine_type="c2-standard-8",
     spot=True,
     min_machines=1,
-    max_machines=total_jobs,
+    max_machines=max_machines,
 )
 
 # Use the R docker container simulator
@@ -138,40 +137,34 @@ project = inductiva.projects.Project(project_name)
 
 ### 4. Submit every temperature as its own task
 
-Loop over each base T₀ and its sampled neighbors, round each temperature, build the Rscript command, and submit. We can attach metadata so we can later pull out exactly which runs belong to which T₀.
+Loop over each sample of T₀, round each temperature, build the Rscript command, and submit. We can attach metadata so we can later pull out information about the run.
 
 
 ```python
-for T0, samples in jobs_by_base.items():
-    # include the base temperature itself plus the sampled ones
-    for temp in [T0] + samples:
-        temp_rounded = round(temp, 3)
-        output_filename = f"ising_base{T0:.1f}_sample{temp_rounded:.3f}.csv"
+for temp in all_temps:
+    t_val = round(temp, 3)
+    output_filename = f"ising_T0_{BASE_TEMPERATURE:.1f}_samp{t_val:.3f}.csv"
 
-        command = (f'Rscript run_ising_model.R '
-                   f'--N {N_SPINS} '
-                   f'--temps "{temp_rounded}" '
-                   f'--nsweeps {NSWEEPS} '
-                   f'--burnin {BURNIN} '
-                   f'--thin {THIN} '
-                   f'--output {output_filename}')
+    command = (f'Rscript run_ising_model.R '
+               f'--N {N_SPINS} --temps "{t_val}" '
+               f'--nsweeps {NSWEEPS} --burnin {BURNIN} --thin {THIN} '
+               f'--output {output_filename}')
 
-        task = simulator.run(
-            input_dir=INPUT_DIR,
-            on=machine_group,
-            commands=[command],
-            project=PROJECT_NAME,
-        )
+    task = simulator.run(
+        input_dir=INPUT_DIR,
+        on=machine_group,
+        commands=[command],
+        project=PROJECT_NAME,
+    )
 
-        task.set_metadata({
-            "base_temperature": str(T0),
-            "sample_temperature": str(temp_rounded),
-            "output_file": output_filename,
-            "task_id": task.id,
-        })
+    task.set_metadata({
+        "base_temperature": str(BASE_TEMPERATURE),
+        "sample_temperature": str(t_val),
+        "output_file": output_filename,
+        "task_id": task.id,
+    })
 
-        print(
-            f"Submitted task: T0={T0} temp={temp_rounded} → {output_filename}")
+    print(f"Submitted: T₀={BASE_TEMPERATURE} temp={t_val} → {output_filename}")
 ```
 
 ### 5. Wait for completion and download
@@ -193,48 +186,63 @@ At this point we'll have all of the CSV per temperature, ready to merge and visu
 
 ## Visualize ensemble results
 
-Finally, for each base temperature T₀, collect its CSVs, merge them, and plot the mean magnetization ⟨M⟩ vs sweep:
+In the final step, we pull in every CSV produced around our base temperature, stack them into one DataFrame, and compute at each sweep:
+
+1. ⟨M⟩ (mean magnetization) across all sampled runs
+
+2. Lower (2.5%) and upper (97.5%) percentiles of M
+
+We then plot the mean curve over sweep number and “shade in” the region between those percentiles—that shaded band is the envelope, showing the spread or uncertainty of the Monte Carlo realizations around T₀. This gives us both a central trend and a visual cue for how much individual runs deviate from it.
+
 
 ```python
 # Gather all metadata from the project
 all_tasks = project.get_tasks()
 metadata_list = [task.get_metadata() for task in all_tasks]
 
-for T0 in BASE_TEMPERATURES:
+csv_paths = []
+for meta in metadata_list:
+    if meta["base_temperature"] != str(BASE_TEMPERATURE):
+        continue
+    tid = meta["task_id"]
+    fname = meta["output_file"]
+    path = os.path.join(OUTPUT_ROOT, PROJECT_NAME, tid, "outputs", fname)
+    csv_paths.append(path)
 
-    # 1) Find all CSVs for this T0
-    csv_paths = []
-    for meta in metadata_list:
-        if meta["base_temperature"] != str(T0):
-            continue
-        tid = meta["task_id"]
-        fname = meta["output_file"]
-        path = os.path.join(OUTPUT_ROOT, PROJECT_NAME, tid, "outputs", fname)
-        csv_paths.append(path)
+# read & concatenate
+df = pd.concat((pd.read_csv(p) for p in csv_paths), ignore_index=True)
 
-    # 2) Read & concatenate
-    df = pd.concat((pd.read_csv(p) for p in csv_paths), ignore_index=True)
+# compute mean ± 95% CI of M by sweep
+summary = df.groupby("sweep")["M"].agg(
+    M_mean="mean",
+    M_lo=lambda x: x.quantile(0.025),
+    M_hi=lambda x: x.quantile(0.975)).reset_index()
 
-    # 3) Plot ⟨M⟩ vs sweep for each temperature
-    plt.figure()
-    for temp in sorted(df["T"].unique()):
-        mean_M = df[df["T"] == temp].groupby("sweep")["M"].mean()
-        plt.plot(mean_M.index, mean_M.values, label=f"T={temp}")
+# plot envelope
+plt.figure(figsize=(6, 4))
+plt.plot(summary["sweep"],
+         summary["M_mean"],
+         lw=2,
+         label=f"Base T₀ = {BASE_TEMPERATURE}")
 
-    plt.xlabel("Sweep")
-    plt.ylabel("Magnetization ⟨M⟩")
-    plt.title(f"Ising Magnetization for T₀={T0}")
-    plt.legend()
-    plt.tight_layout()
+plt.fill_between(summary["sweep"], summary["M_lo"], summary["M_hi"], alpha=0.3)
+plt.xlabel("Sweep #")
+plt.ylabel("Magnetization ⟨M⟩")
+plt.title(f"Ising: Envelope around T₀ = {BASE_TEMPERATURE}")
+plt.legend()
+plt.tight_layout()
 
-    plot_file = os.path.join(RESULTS_DIR, f"magnetization_T0_{T0}.png")
-    plt.savefig(plot_file)
-    plt.close()
+out_png = os.path.join(RESULTS_DIR, f"magnetization_T0_{BASE_TEMPERATURE}.png")
+plt.savefig(out_png)
+plt.close()
 
-    print(f"✔ Saved plot for T₀={T0} → {plot_file}")
+print(f"✔ Saved envelope plot for T₀={BASE_TEMPERATURE} → {out_png}")
 ```
 
-<img src=_static/combined_magnetization.png></img>
+The following image represents the result of this ensemble run.
+
+
+<img src=_static/magnetization_T0_3.0.png></img>
 
 
 And that completes our end-to-end workflow:
