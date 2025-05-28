@@ -35,7 +35,7 @@ This tutorial focuses on simulating **stable stratification**, where warmer air 
 
 ## Simulate Stable Stratification
 
-### Requirements
+### Prerequisites
 To run this use case, begin by creating the `input.nml` with the
 following contents:
 
