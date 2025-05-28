@@ -291,6 +291,9 @@ class Benchmark(projects.Project):
                 return json.load(file)
 
         def select_distinct(info):
+            if len(info) <= 1:
+                return info
+
             attrs_lsts = defaultdict(list)
             for attrs in info:
                 for attr, value in attrs.items():
@@ -322,7 +325,6 @@ class Benchmark(projects.Project):
                 Benchmark.InfoKey.COST: task_cost,
                 **task_input_params,
             })
-
         return select_distinct(info) \
             if select == SelectMode.DISTINCT \
             else info
