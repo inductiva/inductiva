@@ -203,3 +203,5 @@ task = amr_wind.run(input_dir=input_dir,
 ```
 
 <table both results and compare them in a sentence>
+
+May your residuals drop fast and your vortices stay coherent. Happy simulating!

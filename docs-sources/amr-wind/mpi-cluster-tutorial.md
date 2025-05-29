@@ -99,6 +99,6 @@ returns of parallelization for smaller or moderately sized problems, where the
 communication overhead between nodes begins to offset the gains from additional
 compute resources.
 
-To explore these results in more detail, check out our [benchmarks page](https://website-staging.inductiva.ai/guides/amr-wind/mpi-cluster-benchmarks).
+To explore these results in more detail, check out our [benchmarks page](https://inductiva.ai/guides/amr-wind/mpi-cluster-benchmarks).
 
 

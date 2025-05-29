@@ -1,9 +1,9 @@
 # Evaluating AMR-Wind Performance on Multi-Machine Clusters
 This page presents detailed performance benchmarks of AMR-Wind simulations run across various multi-node MPI cluster configurations. We compare runtimes and speedups against a baseline single-node setup, and explore how increasing simulation complexity affects scalability.
 
-We benchmark the neutral Atmospheric Boundary Layer case from the [AMR-Wind GitHub repository](https://github.com/Exawind/amr-wind/tree/v3.4.0).
+We benchmark the neutral Atmospheric Boundary Layer case from the [AMR-Wind GitHub repository](https://github.com/Exawind/exawind-benchmarks/tree/main/amr-wind/atmospheric_boundary_layer/neutral/input_files).
 
-> Interested in running AMR-Wind simulations across multiple machines using MPI? Check out this [tutorial](https://inductiva.ai/guides/amr-wind/flow-cylinder). 
+> 🛠️ Interested in running AMR-Wind simulations across multiple machines using MPI? Check out this [tutorial](https://inductiva.ai/guides/amr-wind/flow-cylinder). 
 
 ## Benchmark Results: Baseline Simulation
 The following table summarizes simulation runtimes and speedups for the baseline configuration, run on clusters of varying sizes:
@@ -135,7 +135,7 @@ Unlike the baseline case, runtime consistently decreased as the cluster size gre
 
 However, the speedup does not scale linearly with the number of vCPUs. While the 4 and 8 machine setups showed solid performance gains, adding more machines beyond that point yielded diminishing returns.
 
-## Key Takeaways
+## Key Insights
 - When increasing simulation complexity by refining the grid (increasing total cells by a factor of 8), larger clusters showed consistent runtime improvements.
 - Despite improvements, speedup gains do not scale linearly; diminishing returns occur at higher node counts due to overhead.
 - Overall, AMR-Wind scales better with increased computational workload, while communication costs limit scaling for smaller problems.
