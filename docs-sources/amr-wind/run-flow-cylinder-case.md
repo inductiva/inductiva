@@ -24,6 +24,7 @@ Download the required files [here](https://github.com/Exawind/amr-wind/tree/main
 ### Case Modifications
 To improve the visibility of vortex shedding and optimize computational efficiency, the original case setup was modified with the following changes:
 
+* Changing stopping criteria from `max_steps` to `stop_time`, so that the simulation runs for a physical time of 10s.
 ```diff
 - time.stop_time               =   -10.0     # Max (simulated) time to evolve
 + time.stop_time               =   10.0 
