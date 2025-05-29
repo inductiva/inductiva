@@ -65,7 +65,7 @@ task.print_summary()
 
 > **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
 
-In this example, we're using a cloud machine (`c2d-highcpu-56`) equipped with 56 virtual CPUs.
+In this example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
