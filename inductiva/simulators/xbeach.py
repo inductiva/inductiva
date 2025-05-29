@@ -31,6 +31,7 @@ class XBeach(simulators.Simulator):
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
             sim_config_filename: Optional[str] = "params.txt",
+            export_vtk: bool = False,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
@@ -47,6 +48,8 @@ class XBeach(simulators.Simulator):
             use_hwthread: If specified Open MPI will attempt to discover the
                 number of hardware threads on the node, and use that as the
                 number of slots available.
+            export_vtk (bool): If True, after the XBeach simulation finishes 
+                generate the VTK file via `xbeach_animator --export-vtk`.
             storage_dir: Directory for storing simulation results.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
@@ -74,6 +77,12 @@ class XBeach(simulators.Simulator):
         commands = [
             Command(f"xbeach {sim_config_filename}", mpi_config=mpi_config)
         ]
+
+        # Conditionally append the VTK-export step
+        if export_vtk:
+            commands.append(
+                Command("python3 /usr/local/bin/xbeach_animator "
+                        "--input-dir . --output-dir . --export-vtk"))
 
         return super().run(input_dir,
                            on=on,
