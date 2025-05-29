@@ -6,7 +6,7 @@ We benchmark the *flow around a circular cylinder case* from the [AMR-Wind GitHu
 > 🛠️ Learn how to run AMR-Wind simulations on Inductiva in this [tutorial](https://inductiva.ai/guides/amr-wind/quick-start). 
 
 # Benchmark Results 📊
-Below is a comparison of execution time and cost across different machine types:
+Below is a detailed comparison of execution times and costs across different machine types:
 
 <table>
     <tr>
@@ -137,7 +137,7 @@ Below is a comparison of execution time and cost across different machine types:
 </table>
 
 ## How to Choose the Best Machine for Your CFD Workload
-The ideal compute instance for you depends on your priorities. 
+The right hardware configuration for you depends on your priorities. Here are key considerations to guide your choice:
 
 **If Speed Is Your Top Priority**: Opt for the fastest GPUs like the NVIDIA H100 or A100 instances to minimize simulation runtime. While these come at a higher hourly cost, the overall faster completion can reduce total expense.
 
