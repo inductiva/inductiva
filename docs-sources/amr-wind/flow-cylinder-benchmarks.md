@@ -145,4 +145,6 @@ The right hardware configuration for you depends on your priorities. Here are ke
 
 **If You Are Exploring or Just Getting Started**: Begin with modest configurations to profile your workload and use our benchmarks as a reference to make informed scaling decisions or decide whether GPU acceleration is worthwhile.
 
+**Consider the Scale of Your Simulation**: For computationally intensive cases with millions of cells and complex physics, simulations can be efficiently scaled by leveraging cloud-based GPU machines.
+
 Whatever your priorities, Inductiva takes care of the infrastructure, allowing you to focus on what matters most: your CFD projects.
