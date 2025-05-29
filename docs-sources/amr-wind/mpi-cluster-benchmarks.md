@@ -1,7 +1,7 @@
 # Evaluating AMR-Wind Performance on Multi-Machine Clusters
 This page presents detailed performance benchmarks of AMR-Wind simulations run across various multi-node MPI cluster configurations. We compare runtimes and speedups against a baseline single-node setup, and explore how increasing simulation complexity affects scalability.
 
-We benchmark the neutral Atmospheric Boundary Layer case from the [AMR-Wind GitHub repository](https://github.com/Exawind/exawind-benchmarks/tree/main/amr-wind/atmospheric_boundary_layer/neutral/input_files).
+We benchmark the *neutral Atmospheric Boundary Layer case* from the [AMR-Wind GitHub repository](https://github.com/Exawind/exawind-benchmarks/tree/main/amr-wind/atmospheric_boundary_layer/neutral/input_files).
 
 > 🛠️ Interested in running AMR-Wind simulations across multiple machines using MPI? Check out this [tutorial](https://inductiva.ai/guides/amr-wind/flow-cylinder). 
 

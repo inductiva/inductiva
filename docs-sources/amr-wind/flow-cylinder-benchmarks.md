@@ -1,7 +1,7 @@
 # Performance Comparison: CPU vs. GPU Configurations
 This benchmark report presents a performance and cost comparison across various CPU and GPU configurations. The goal is to identify the most effective hardware setup for running a computational fluid dynamics (CFD) workload, balancing speed, cost-efficiency, and resource utilization.
 
-We benchmark the flow around a circular cylinder case from the [AMR-Wind GitHub repository](https://github.com/Exawind/amr-wind/tree/main/test/test_files/ib_cylinder_Re_300). This case simulates flow over a cylinder at a Reynolds number of 10,000 using a 20-million-cell mesh.
+We benchmark the *flow around a circular cylinder case* from the [AMR-Wind GitHub repository](https://github.com/Exawind/amr-wind/tree/main/test/test_files/ib_cylinder_Re_300), simulating flow over a cylinder at a Reynolds number of 10,000 using a 20-million-cell mesh.
 
 > 🛠️ Learn how to run AMR-Wind simulations on Inductiva in this [tutorial](https://inductiva.ai/guides/amr-wind/quick-start). 
 
