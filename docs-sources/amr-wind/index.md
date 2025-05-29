@@ -29,7 +29,17 @@ hidden: true
 setup-test
 quick-start
 Flow Around a Circular Cylinder <run-flow-cylinder-case>
-Using an MPI cluster <mpi-cluster>
+mpi-cluster-tutorial
+```
+
+```{toctree}
+---
+caption: Benchmarks
+maxdepth: 2
+hidden: true
+---
+<flow-cylinder-benchmarks>
+<mpi-cluster-benchmarks>
 ```
 
 ```{toctree}
