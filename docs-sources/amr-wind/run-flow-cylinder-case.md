@@ -169,7 +169,7 @@ When the simulation is complete, we terminate the machine, download the results 
 
 As you can see in the "In Progress" line, the part of the timeline that
 represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately <include>.
+the core computation time of this simulation was approximately 386.5 s.
 
 To analyze the simulation data programmatically, Python-based tools like **yt** can be used, enabling custom visualizations and data extraction. For step-by-step guidance on creating slice plots and animations, be sure to check out our[post-processing yt tutorial](https://inductiva.ai/guides/amr-wind/using-yt).
 
