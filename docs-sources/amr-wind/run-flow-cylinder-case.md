@@ -24,71 +24,43 @@ Download the required files [here](https://github.com/Exawind/amr-wind/tree/main
 ### Case Modifications
 To improve the visibility of vortex shedding and optimize computational efficiency, the original case setup was modified with the following changes:
 
-*    Increased domain length in the x-direction to 2.0 units for better capture of the wake development
-*    Simplified mesh refinement, including removal of the second refinement level and corresponding updates in `static_box.refine`
-*    Adjusted simulation time and output frequency, increasing total simulation time while reducing save frequency
-*    Updated flow parameters by modifying viscosity to achieve a Reynolds number of 1000
-*    Added `mag_vorticity` to `io.derived_outputs` to visualize vortex structures
-
 ```diff
-## ib_cylinder_Re_300.inp ##
-
-#¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨#
-#            SIMULATION STOP            #
-#.......................................#
 - time.stop_time               =   -10.0     # Max (simulated) time to evolve
-+ time.stop_time               =   10.0      # Switched stop condition to physical time
++ time.stop_time               =   10.0 
 - time.max_step                =   20        # Max number of time steps
-+ time.max_step                =   -20       # Making the term negative to deactivate it
++ time.max_step                =   -20 
+```
 
-#¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨#
-#         TIME STEP COMPUTATION         #
-#.......................................#
-time.fixed_dt         =   -0.05        # Use this constant dt if > 0
+* Increasing time step size to reduce computation time
+```diff 
 - time.cfl              =   0.45         # CFL factor
 + time.cfl              =   1.0
+```
 
-#¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨#
-#            INPUT AND OUTPUT           #
-#.......................................#
+* Decreasing plotting frequency to reduce number of output files 
+```diff 
 - time.plot_interval            =  10       # Steps between plot files
 + time.plot_interval            =  100      # Reduced output frequency to limit file size
+```
 
-time.checkpoint_interval      =  -1       # Steps between checkpoint files
-
-#¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨#
-#               PHYSICS                 #
-#.......................................#
-ConstValue.density.value = 1.0
-ConstValue.velocity.value = 1.0 0.0 0.0
-
-io.output_default_variables = 0
-io.outputs = density p
+* Adding vorticity magnitude as a new derived output
+```diff 
 - io.derived_outputs = "components(velocity,0,1)" "components(gp,0,1)"
 + io.derived_outputs = "components(velocity,0,1)" "components(gp,0,1)" "mag_vorticity"
-incflo.use_godunov = 1
-incflo.diffusion_type = 2
-incflo.godunov_type = "weno_z"
-incflo.do_initial_proj = 1
-incflo.initial_iterations = 3
+```
+
+*  Changing Re from 100 to 1000 to induce faster formation of vortices
+```diff 
 - transport.viscosity = 1.0e-3   # Set for Re = D*v/mu = 100;
 + transport.viscosity = 1.0e-4   #Adjusted for Re = 1000
-transport.laminar_prandtl = 0.7
-transport.turbulent_prandtl = 0.3333
-turbulence.model = Laminar
+```
 
-incflo.physics = FreeStream IB
-IB.labels = IB1  
-IB.IB1.type = Cylinder 
-IB.IB1.center = 0.0 0.0 0.0
-IB.IB1.radius = 0.05 
-IB.IB1.height = 0.25
+* Adjusting the flow domain so that vortices are more visible, and  proportional modification is made on the mesh. Also, to reduce computation time, the mesh refinement is reduced from 2 levels to 1. 
+
+```diff 
 
 - amr.n_cell     = 64 64 16   # Grid cells at coarsest AMRlevel
-+ amr.n_cell     = 128 64 8 # Doubled x-divisions to match domain size
-tagging.labels = sr                                                                                                                
-tagging.sr.type = CartBoxRefinement                                                                                                                
-tagging.sr.static_refinement_def = static_box.refine                                                                                             
++ amr.n_cell     = 128 64 8 # Doubled x-divisions to match domain size                                                                                         
 - amr.max_level = 2
 + amr.max_level = 1
 
@@ -96,36 +68,19 @@ tagging.sr.static_refinement_def = static_box.refine
 + geometry.prob_lo        =   -0.3 -0.5 -0.0625 # Cylinder offset to extend wake region
 - geometry.prob_hi        =    0.5  0.5  0.125
 + geometry.prob_hi        =    1.7  0.5  0.0625  
-geometry.is_periodic    =   0   0   1   # Periodicity x y z (0/1)
-
-# Boundary conditions
-xlo.type = "mass_inflow"
-xlo.density = 1.0
-xlo.velocity = 1.0 0.0 0.0
-xhi.type = "pressure_outflow"
-ylo.type =   "slip_wall"
-yhi.type =   "slip_wall"
-
-incflo.verbose          =   0          # incflo_level
-nodal_proj.verbose = 0
-
-nodal_proj.mg_rtol = 1.0e-12
-nodal_proj.mg_atol = 1.0e-12
-mac_proj.mg_rtol = 1.0e-12
-mac_proj.mg_atol = 1.0e-12
-
 ```
+* Associated modifications have to be performed on the `static_box.refine` file as well.  Here, we remove the 2nd level of mesh refinement to reduce computation time
 
 ```diff
-## static_box.refine ##
 
 - 2 # Number of levels of refinement
 + 1
   1 # Number of refinement boxes in the first level
- -0.125 -0.125 -0.125 0.5 0.125 0.125 #Defining the boundaries of refinement box <xlo ylo zlo xhi yhi zhi>
+ -0.125 -0.125 -0.125 0.5 0.125 0.125 
 - 1 # Number of refinement boxes in the second level
-- -0.0625 -0.0625 -0.125 0.0625 0.0625 0.125 #Defining the boundaries of refinement box <xlo ylo zlo xhi yhi zhi>
+- -0.0625 -0.0625 -0.125 0.0625 0.0625 0.125 
 ```
+
 
 ## Running the Simulation
 Here is the code required to run the simulation using the Inductiva API:
