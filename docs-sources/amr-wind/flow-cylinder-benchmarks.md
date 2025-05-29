@@ -143,6 +143,6 @@ The ideal compute instance for you depends on your priorities.
 
 **If Cost Efficiency Is Most Important**: High-core-count CPUs such as the **AMD c2d-highcpu-112** provide solid performance for the lowest cost. Consider entry-level GPUs like the **NVIDIA L4** for some acceleration without significant cost increases.
 
-**If You Are Exploring or Just Getting Started**: Begin with modest configurations to profile your workload and use benchmarks as a reference to make informed scaling decisions or decide whether GPU acceleration is worthwhile.
+**If You Are Exploring or Just Getting Started**: Begin with modest configurations to profile your workload and use our benchmarks as a reference to make informed scaling decisions or decide whether GPU acceleration is worthwhile.
 
 Whatever your priorities, Inductiva takes care of the infrastructure, allowing you to focus on what matters most: your CFD projects.
