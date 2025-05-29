@@ -28,4 +28,5 @@ hidden: true
 ---
 setup-test
 quick-start
+benchmarks
 ```

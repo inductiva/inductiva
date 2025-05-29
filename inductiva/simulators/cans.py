@@ -72,6 +72,10 @@ class CaNS(simulators.Simulator):
                                 remote_assets=remote_assets,
                                 sim_config_filename=sim_config_filename)
 
+        #To run cans on gpu the n_vcpus must be equal to the number of gpus
+        if on.has_gpu and n_vcpus is None:
+            n_vcpus = on.gpu_count()
+
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
         if n_vcpus is not None:
@@ -79,6 +83,7 @@ class CaNS(simulators.Simulator):
 
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
         commands = [
+            "mkdir -p data",
             Command(f"cans {sim_config_filename}", mpi_config=mpi_config)
         ]
 

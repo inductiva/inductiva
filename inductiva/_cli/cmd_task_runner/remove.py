@@ -17,7 +17,7 @@ def remove_task_runner(_, fout: TextIO = sys.stdout):
     if not _docker_imported:
         print(
             "Docker Python API not installed, please run "
-            "'pip install inductiva[task-runner]' to install it",
+            "'pip install \"inductiva[task-runner]\"' to install it",
             file=fout)
         return
 

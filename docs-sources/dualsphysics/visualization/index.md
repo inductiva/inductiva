@@ -18,11 +18,3 @@ ray tracing and advanced rendering techniques allow for the creation of
 high-quality, cinematic visuals. In this section, we'll cover a range of
 available options — from the simple to the stunning — to help you choose the
 best tools for your visualization needs.
-
-```{toctree}
-:hidden:
-
-DualSPHysics with ParaView <sections/using_paraview.md>
-
-DualSPHysics with Blender <sections/using_blender.md>
-```

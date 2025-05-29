@@ -39,8 +39,63 @@ class ProjectCreate(schemas.DictSchema):
             class name(schemas.StrSchema):
                 pass
 
+            class project_type(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            ProjectType,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'project_type':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             __annotations__ = {
                 "name": name,
+                "project_type": project_type,
             }
 
     name: MetaOapg.properties.name
@@ -52,13 +107,19 @@ class ProjectCreate(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["project_type"]
+    ) -> MetaOapg.properties.project_type:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self,
-                    name: typing.Union[typing_extensions.Literal[
-                        "name",
-                    ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
+        "name",
+        "project_type",
+    ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -70,14 +131,20 @@ class ProjectCreate(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["project_type"]
+    ) -> typing.Union[MetaOapg.properties.project_type, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(self,
-                      name: typing.Union[typing_extensions.Literal[
-                          "name",
-                      ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
+        "name",
+        "project_type",
+    ], str]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -90,6 +157,12 @@ class ProjectCreate(schemas.DictSchema):
             MetaOapg.properties.name,
             str,
         ],
+        project_type: typing.Union[MetaOapg.properties.project_type, dict,
+                                   frozendict.frozendict, str, date, datetime,
+                                   uuid.UUID, int, float, decimal.Decimal, bool,
+                                   None, list, tuple, bytes, io.FileIO,
+                                   io.BufferedReader,
+                                   schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -100,6 +173,10 @@ class ProjectCreate(schemas.DictSchema):
             cls,
             *_args,
             name=name,
+            project_type=project_type,
             _configuration=_configuration,
             **kwargs,
         )
+
+
+from inductiva.client.model.project_type import ProjectType

@@ -9,7 +9,7 @@ prepare the scene properly.
 > **Note**: When you open Blender, feel free to delete the default cube from the
 Scene Collection.
 
-### 1. Set the Render Engine and Material
+## 1. Set the Render Engine and Material
 
 Since we'll be using ray tracing, first switch the render engine to **Cycles**:
 
@@ -57,7 +57,7 @@ change the viewport shading (top-right corner) to **Material Preview**.
    <p><em>Figure 4: Change the viewport</em></p>
 </div>
 
-### 2. Position the Camera
+## 2. Position the Camera
 
 To set up the camera:
 
@@ -79,7 +79,7 @@ Additionally, in the **Camera Data** tab, set the **End** value of the lens to `
    <p><em>Figure 6: Set camera End</em></p>
 </div>
 
-### 3. Set Up the Animation
+## 3. Set Up the Animation
 
 You might notice something odd: all frames are visible at once. That's because
 we've imported each animation frame as a separate object. What we want is to
@@ -97,10 +97,16 @@ To fix this, we'll write a small Blender script:
 
 ```python
 import bpy
+import re
+
+# Helper function to extract the number from the object name
+def extract_number(obj):
+    match = re.search(r'\d+', obj.name)
+    return int(match.group()) if match else -1
 
 # Select all fluid mesh objects
 imported_objs = [obj for obj in bpy.data.objects if obj.type == 'MESH' and obj.name.startswith("PartFluid")]
-imported_objs.sort(key=lambda o: o.name)  # Sort by name to ensure frame order
+imported_objs.sort(key=extract_number)
 
 # Hide all objects initially
 for obj in imported_objs:
@@ -129,7 +135,7 @@ This script will:
 * Hide all objects by default.
 * Animate them so that each one is visible only on its corresponding frame.
 
-### 4. Render the Animation
+## 4. Render the Animation
 
 To export the animation:
 
@@ -148,7 +154,7 @@ To export the animation:
 Then, in the top menu, go to **Render > Render Animation**. Blender will render
 each frame using ray tracing — this might take some time depending on your hardware.
 
-### Wrapping Up
+## Wrapping Up
 
 There's more you can explore, like adding an HDRI environment to enhance
 lighting and realism, but we'll save that for another tutorial. For now, feel

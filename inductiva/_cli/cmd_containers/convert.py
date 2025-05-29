@@ -40,18 +40,18 @@ def join_container_streams(*containers, fout: TextIO = sys.stdout):
 def convert_image(args, fout: TextIO = sys.stdout):
     """
     Converts a Docker image to an Apptainer .sif file.
-    
+
     The source image may be provided as:
       - a Docker Hub URL (e.g. docker://python:3.11-slim),
       - a local Docker image reference (by image name or ID),
       - or a path to a tar archive.
-    
+
     The output file will be saved to the specified location.
     """
     if docker is None:
         print(
             "Docker Python API not installed. Please run "
-            "'pip install inductiva[task-runner]' to install it.",
+            "'pip install \"inductiva[task-runner]\"' to install it.",
             file=fout,
         )
         return False
@@ -67,6 +67,7 @@ def convert_image(args, fout: TextIO = sys.stdout):
     outdir = os.path.dirname(output)
     if outdir and not os.path.exists(outdir):
         os.makedirs(outdir, exist_ok=True)
+    os.chmod(outdir, 0o777)
 
     source = args.image
     conversion_source = None
@@ -95,6 +96,7 @@ def convert_image(args, fout: TextIO = sys.stdout):
                                          delete=False,
                                          dir=constants.TMP_DIR) as tmp:
             tmp_tar_path = tmp.name
+            os.chmod(tmp_tar_path, 0o644)
             with open(tmp_tar_path, "wb") as f:
                 for chunk in image_obj.save(named=True):
                     f.write(chunk)

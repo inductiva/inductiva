@@ -13,7 +13,7 @@ import logging
 
 import inductiva
 import inductiva.client.models
-from inductiva import api, users
+from inductiva import api, users, logs
 from inductiva.resources.utils import ProviderType
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
@@ -141,6 +141,14 @@ class BaseMachineGroup(ABC):
         if self._gpu_info is None:
             return False
         return self._gpu_info.get("gpu_count") > 0
+
+    def gpu_count(self) -> bool:
+        """
+        Returns the number of GPUs available in the resource.
+        """
+        if self._gpu_info is None:
+            return 0
+        return self._gpu_info.get("gpu_count", 0)
 
     @property
     def id(self):
@@ -364,7 +372,8 @@ class BaseMachineGroup(ABC):
 
         return is_cost_ok and is_vcpu_ok and is_instance_ok
 
-    def start(self, wait_for_quotas: bool = False):
+    @logs.mute_logging()
+    def start(self, wait_for_quotas: bool = False, verbose: bool = True):  # pylint: disable=unused-argument
         """Starts a machine group.
 
         Args:
@@ -816,6 +825,12 @@ class MPICluster(BaseMachineGroup):
         return VCPUCount(
             self._cpu_info["cpu_cores_logical"] * self.num_machines,
             self._cpu_info["cpu_cores_logical"])
+
+    def gpu_count(self) -> bool:
+        """
+        Returns the number of GPUs available in the resource.
+        """
+        return super().gpu_count() * self.num_machines
 
     @property
     def available_vcpus(self):
