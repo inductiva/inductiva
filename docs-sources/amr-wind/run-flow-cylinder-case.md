@@ -69,7 +69,25 @@ In this example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
-<include task print summary>
+
+Task status: Success
+
+Timeline:
+        Waiting for Input         at 29/05, 12:53:41      0.647 s
+        In Queue                  at 29/05, 12:53:42      42.442 s
+        Preparing to Compute      at 29/05, 12:54:24      2.136 s
+        In Progress               at 29/05, 12:54:26      386.527 s
+                └> 386.39 s        /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus amr_wind ib_cylinder_Re_300.inp
+        Finalizing                at 29/05, 13:00:53      1.005 s
+        Success                   at 29/05, 13:00:54      
+
+Data:
+        Size of zipped output:    100.37 MB
+        Size of unzipped output:  205.39 MB
+        Number of output files:   940
+
+Estimated computation cost (US$): 0.012 US$
+
 
 As you can see in the "In Progress" line, the part of the timeline that
 represents the actual execution of the simulation, 
