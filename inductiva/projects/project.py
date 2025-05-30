@@ -97,7 +97,7 @@ class Project:
         project.add_task(task_2)
     """
 
-    def __init__(self, name: str, **kwargs):
+    def __init__(self, name: str):
         """
         Initialize the Project instance.
 
@@ -109,8 +109,11 @@ class Project:
         self._proj_data = self._get_project(name)
         # Else, we will create a new project.
         if not self._proj_data:
-            project_type = kwargs.get("project_type")
+            project_type = self._get_project_type()
             self._proj_data = self._create_project(name, project_type)
+
+    def _get_project_type(self):
+        return ProjectType.PROJECT
 
     def _get_project(self, name: str):
         """Fetches the project info from the backend."""
