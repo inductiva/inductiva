@@ -5,7 +5,7 @@ We benchmark the *flow around a circular cylinder case* from the [AMR-Wind GitHu
 
 > 🛠️ Learn how to run AMR-Wind simulations on Inductiva in this [tutorial](https://inductiva.ai/guides/amr-wind/quick-start). 
 
-# Benchmark Results 📊
+## Benchmark Results 📊
 Below is a detailed comparison of execution times and costs across different machine types:
 
 <table>
