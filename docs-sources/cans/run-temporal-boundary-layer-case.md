@@ -177,6 +177,6 @@ the core computation time of this simulation was approximately 8 minutes and 13 
 ### Scaling Up the Simulation
 One of the benefits of using Inductiva is the ability to scale simulations to bigger and faster machines with minimal code changes. In this case, only the `machine_type` argument needs to be updated during MachineGroup creation.
 
-To explore detailed results, visit our [benchmarks page](https://inductiva.ai/guides/amr-wind/mpi-cluster-benchmarks).
+To explore detailed results, visit our [Benchmarks page](https://inductiva.ai/guides/cans/benchmarks).
 
 Stay tunned for more!
