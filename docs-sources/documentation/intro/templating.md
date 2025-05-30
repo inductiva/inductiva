@@ -156,5 +156,5 @@ destination directory. Calls to the `render_dir` method will fail if
 any file already exist in the `target_dir`. This behavior is intended to prevent
 accidental overwriting of files that may have been generated in a previous run.
 
-To enforce deleting existing files and creating new one, you can set the 
+To enforce the deletion of existing files and creating new ones, you can set the 
 `overwrite` argument to `True` when calling the `renderdir` method.
