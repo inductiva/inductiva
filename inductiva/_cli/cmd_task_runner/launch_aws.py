@@ -98,7 +98,7 @@ def _create_key_pair(region, profile, key_format):
             file.write(key_pair["KeyMaterial"])
         os.chmod(key_file, 0o400)
         return key_name
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:  # pylint: disable=broad-exception-caught
         print(f"Error creating {key_format.upper()} key pair: {e}")
         return None
 
@@ -142,7 +142,7 @@ def create_iam_role_with_admin_access(role_name, profile):
     return instance_profile_name
 
 
-def launch_task_runner(args, fout: TextIO = sys.stdout):
+def launch_task_runner(args):
     ami_id = _fetch_ubuntu_ami_id(args.region, args.profile)
     security_group_id = _configure_default_security_group(
         args.region, args.profile)
@@ -165,7 +165,8 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
     )
 
     for i in range(args.num_machines):
-        unique_name = f"VM-{i + 1}-{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M')}"
+        unique_name = (f"VM-{i + 1}-"
+                       f"{datetime.datetime.now().strftime('%Y_%m_%d_%H_%M')}")
         try:
             response = ec2_client.run_instances(
                 ImageId=ami_id,
@@ -204,7 +205,7 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
             for instance in response["Instances"]:
                 print(f"Machine {i + 1} with Name '{unique_name}'"
                       f"and ID '{instance['InstanceId']}' launched at AWS.")
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:  # pylint: disable=broad-exception-caught
             print(f"Error launching VM: {e}")
 
 
