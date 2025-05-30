@@ -11,7 +11,7 @@ The following table summarizes simulation runtimes and speedups for the baseline
 <table>
   <tr>
     <td>Machine Type</td>
-    <td>Num Machines</td>
+    <td>Nº of Machines</td>
     <td>vCPUs</td>
     <td>Duration (s)</td>
     <td>Speedup</td>

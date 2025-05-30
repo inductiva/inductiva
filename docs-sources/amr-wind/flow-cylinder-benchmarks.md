@@ -12,7 +12,7 @@ Below is a detailed comparison of execution times and costs across different mac
     <tr>
         <td>Platform</td>
         <td>Machine Type</td>
-        <td>Machines</td>
+        <td>Nº of Machines</td>
         <td>Cores</td>
         <td>GPUS</td>
         <td>Duration</td>
