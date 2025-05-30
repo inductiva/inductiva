@@ -2,6 +2,8 @@
 
 *This tutorial was written by* [Pedro Simões](P.SimoesCosta@tudelft.nl) *in collaboration with the* **Inductiva Team**
 
+<br>
+
 The numerical simulation of a temporally evolving, stably stratified boundary
 layer offers a clear computational sandbox for exploring fundamental fluid
 dynamics relevant to atmospheric wind flows.
