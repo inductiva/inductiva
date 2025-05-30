@@ -1,6 +1,5 @@
 """WRF simulator module of the API."""
 
-import os
 from typing import List, Optional
 
 from inductiva import types, tasks, simulators
