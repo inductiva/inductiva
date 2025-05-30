@@ -73,6 +73,11 @@ def get_projects() -> List["Project"]:
     return [Project._from_api_response(resp) for resp in response.body]
 
 
+class ProjectType:
+    PROJECT = "project"
+    BENCHMARK = "benchmark"
+
+
 class Project:
     """
     Projects management class.
@@ -92,7 +97,7 @@ class Project:
         project.add_task(task_2)
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, **kwargs):
         """
         Initialize the Project instance.
 
@@ -104,7 +109,8 @@ class Project:
         self._proj_data = self._get_project(name)
         # Else, we will create a new project.
         if not self._proj_data:
-            self._proj_data = self._create_project(name)
+            type = kwargs.get("type")
+            self._proj_data = self._create_project(name, type)
 
     def _get_project(self, name: str):
         """Fetches the project info from the backend."""
@@ -117,10 +123,13 @@ class Project:
                 raise ex
         return None
 
-    def _create_project(self, name):
+    def _create_project(self, name, type):
         """Creates a project with the given name on the backend."""
         try:
-            response = self._api.create_project({"name": name})
+            args = {"name": name}
+            if type:
+                args["project_type"] = type
+            response = self._api.create_project(args)
             return response.body
         except ApiException as ex:
             _logger.error("Failed to create project %s", name, exc_info=ex)

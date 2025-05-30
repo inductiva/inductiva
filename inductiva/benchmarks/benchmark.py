@@ -10,6 +10,7 @@ from typing_extensions import Self
 from collections import defaultdict
 from inductiva import types, resources, projects, simulators, client
 from inductiva.client.models import TaskStatusCode
+from inductiva.projects.project import ProjectType
 from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -51,7 +52,7 @@ class Benchmark(projects.Project):
         Args:
             name (str): The name of the benchmark runner.
         """
-        super().__init__(name=name)
+        super().__init__(name=name, type=ProjectType.BENCHMARK)
         self.runs = []
         self.simulator = None
         self.input_dir = None
