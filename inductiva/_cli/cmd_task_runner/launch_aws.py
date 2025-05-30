@@ -4,9 +4,7 @@ import argparse
 import datetime
 import json
 import os
-import sys
 from string import Template
-from typing import TextIO
 
 import boto3
 import botocore
