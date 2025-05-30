@@ -109,8 +109,7 @@ class Project:
         self._proj_data = self._get_project(name)
         # Else, we will create a new project.
         if not self._proj_data:
-            project_type = self._get_project_type()
-            self._proj_data = self._create_project(name, project_type)
+            self._proj_data = self._create_project(name)
 
     def _get_project_type(self):
         return ProjectType.PROJECT
@@ -126,10 +125,10 @@ class Project:
                 raise ex
         return None
 
-    def _create_project(self, name, project_type):
+    def _create_project(self, name):
         """Creates a project with the given name on the backend."""
         try:
-            args = {"name": name, "project_type": project_type}
+            args = {"name": name, "project_type": self._get_project_type()}
             response = self._api.create_project(args)
             return response.body
         except ApiException as ex:
