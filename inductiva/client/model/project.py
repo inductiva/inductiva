@@ -32,6 +32,7 @@ class Project(schemas.DictSchema):
     class MetaOapg:
         required = {
             "num_tasks",
+            "project_type",
             "name",
             "created_at",
             "id",
@@ -44,6 +45,10 @@ class Project(schemas.DictSchema):
                 class MetaOapg:
                     max_length = 128
                     min_length = 1
+
+            @staticmethod
+            def project_type() -> typing.Type['ProjectType']:
+                return ProjectType
 
             id = schemas.UUIDSchema
             created_at = schemas.DateTimeSchema
@@ -161,6 +166,7 @@ class Project(schemas.DictSchema):
 
             __annotations__ = {
                 "name": name,
+                "project_type": project_type,
                 "id": id,
                 "created_at": created_at,
                 "num_tasks": num_tasks,
@@ -170,6 +176,7 @@ class Project(schemas.DictSchema):
             }
 
     num_tasks: MetaOapg.properties.num_tasks
+    project_type: 'ProjectType'
     name: MetaOapg.properties.name
     created_at: MetaOapg.properties.created_at
     id: MetaOapg.properties.id
@@ -178,6 +185,12 @@ class Project(schemas.DictSchema):
     def __getitem__(
             self, name: typing_extensions.Literal["name"]
     ) -> MetaOapg.properties.name:
+        ...
+
+    @typing.overload
+    def __getitem__(
+            self,
+            name: typing_extensions.Literal["project_type"]) -> 'ProjectType':
         ...
 
     @typing.overload
@@ -222,6 +235,7 @@ class Project(schemas.DictSchema):
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "name",
+        "project_type",
         "id",
         "created_at",
         "num_tasks",
@@ -236,6 +250,12 @@ class Project(schemas.DictSchema):
     def get_item_oapg(
             self, name: typing_extensions.Literal["name"]
     ) -> MetaOapg.properties.name:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+            self,
+            name: typing_extensions.Literal["project_type"]) -> 'ProjectType':
         ...
 
     @typing.overload
@@ -283,6 +303,7 @@ class Project(schemas.DictSchema):
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "name",
+        "project_type",
         "id",
         "created_at",
         "num_tasks",
@@ -303,6 +324,7 @@ class Project(schemas.DictSchema):
             decimal.Decimal,
             int,
         ],
+        project_type: 'ProjectType',
         name: typing.Union[
             MetaOapg.properties.name,
             str,
@@ -339,6 +361,7 @@ class Project(schemas.DictSchema):
             cls,
             *_args,
             num_tasks=num_tasks,
+            project_type=project_type,
             name=name,
             created_at=created_at,
             id=id,
@@ -348,3 +371,6 @@ class Project(schemas.DictSchema):
             _configuration=_configuration,
             **kwargs,
         )
+
+
+from inductiva.client.model.project_type import ProjectType

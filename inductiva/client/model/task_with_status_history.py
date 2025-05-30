@@ -1243,6 +1243,8 @@ class TaskWithStatusHistory(schemas.DictSchema):
                         **kwargs,
                     )
 
+            resubmit_on_preemption = schemas.BoolSchema
+
             class steps(schemas.ListSchema):
 
                 class MetaOapg:
@@ -1298,6 +1300,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
                 "compress_with": compress_with,
                 "task_metadata": task_metadata,
                 "extra_params": extra_params,
+                "resubmit_on_preemption": resubmit_on_preemption,
                 "steps": steps,
             }
 
@@ -1493,6 +1496,12 @@ class TaskWithStatusHistory(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["resubmit_on_preemption"]
+    ) -> MetaOapg.properties.resubmit_on_preemption:
+        ...
+
+    @typing.overload
+    def __getitem__(
             self, name: typing_extensions.Literal["steps"]
     ) -> MetaOapg.properties.steps:
         ...
@@ -1532,6 +1541,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
         "compress_with",
         "task_metadata",
         "extra_params",
+        "resubmit_on_preemption",
         "steps",
     ], str]):
         # dict_instance[name] accessor
@@ -1721,6 +1731,13 @@ class TaskWithStatusHistory(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["resubmit_on_preemption"]
+    ) -> typing.Union[MetaOapg.properties.resubmit_on_preemption,
+                      schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["steps"]
     ) -> typing.Union[MetaOapg.properties.steps, schemas.Unset]:
         ...
@@ -1762,6 +1779,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
         "compress_with",
         "task_metadata",
         "extra_params",
+        "resubmit_on_preemption",
         "steps",
     ], str]):
         return super().get_item_oapg(name)
@@ -1924,6 +1942,9 @@ class TaskWithStatusHistory(schemas.DictSchema):
                                    None, list, tuple, bytes, io.FileIO,
                                    io.BufferedReader,
                                    schemas.Unset] = schemas.unset,
+        resubmit_on_preemption: typing.Union[
+            MetaOapg.properties.resubmit_on_preemption, bool,
+            schemas.Unset] = schemas.unset,
         steps: typing.Union[MetaOapg.properties.steps, list, tuple,
                             schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -1965,6 +1986,7 @@ class TaskWithStatusHistory(schemas.DictSchema):
             compress_with=compress_with,
             task_metadata=task_metadata,
             extra_params=extra_params,
+            resubmit_on_preemption=resubmit_on_preemption,
             steps=steps,
             _configuration=_configuration,
             **kwargs,

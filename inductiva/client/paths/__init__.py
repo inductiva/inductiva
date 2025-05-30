@@ -49,6 +49,8 @@ class PathValues(str, enum.Enum):
     ADMIN_FEATUREFLAGS_NAME = "/admin/feature-flags/{name}"
     ADMIN_FEATUREFLAGS_ = "/admin/feature-flags/"
     ADMIN_ALERTS_CHECK_CREDITS = "/admin/alerts/check_credits"
+    ADMIN_ALERTS_CHECK_MACHINE_GROUPS = "/admin/alerts/check_machine_groups"
+    ADMIN_ALERTS_CHECK_MACHINES = "/admin/alerts/check_machines"
     ADMIN_ALERTS_CHECK_TASKS = "/admin/alerts/check_tasks"
     TASKRUNNER_REGISTER = "/task-runner/register"
     TASKRUNNER_MACHINE_ID = "/task-runner/{machine_id}"

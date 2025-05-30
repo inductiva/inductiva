@@ -44,6 +44,8 @@ from inductiva.client.apis.paths.admin_users_email_stripe_customer_id import Adm
 from inductiva.client.apis.paths.admin_feature_flags_name import AdminFeatureFlagsName
 from inductiva.client.apis.paths.admin_feature_flags_ import AdminFeatureFlags
 from inductiva.client.apis.paths.admin_alerts_check_credits import AdminAlertsCheckCredits
+from inductiva.client.apis.paths.admin_alerts_check_machine_groups import AdminAlertsCheckMachineGroups
+from inductiva.client.apis.paths.admin_alerts_check_machines import AdminAlertsCheckMachines
 from inductiva.client.apis.paths.admin_alerts_check_tasks import AdminAlertsCheckTasks
 from inductiva.client.apis.paths.task_runner_register import TaskRunnerRegister
 from inductiva.client.apis.paths.task_runner_machine_id import TaskRunnerMachineId
@@ -190,6 +192,10 @@ PathToApi = typing_extensions.TypedDict(
             AdminFeatureFlags,
         PathValues.ADMIN_ALERTS_CHECK_CREDITS:
             AdminAlertsCheckCredits,
+        PathValues.ADMIN_ALERTS_CHECK_MACHINE_GROUPS:
+            AdminAlertsCheckMachineGroups,
+        PathValues.ADMIN_ALERTS_CHECK_MACHINES:
+            AdminAlertsCheckMachines,
         PathValues.ADMIN_ALERTS_CHECK_TASKS:
             AdminAlertsCheckTasks,
         PathValues.TASKRUNNER_REGISTER:
@@ -393,6 +399,10 @@ path_to_api = PathToApi({
         AdminFeatureFlags,
     PathValues.ADMIN_ALERTS_CHECK_CREDITS:
         AdminAlertsCheckCredits,
+    PathValues.ADMIN_ALERTS_CHECK_MACHINE_GROUPS:
+        AdminAlertsCheckMachineGroups,
+    PathValues.ADMIN_ALERTS_CHECK_MACHINES:
+        AdminAlertsCheckMachines,
     PathValues.ADMIN_ALERTS_CHECK_TASKS:
         AdminAlertsCheckTasks,
     PathValues.TASKRUNNER_REGISTER:
