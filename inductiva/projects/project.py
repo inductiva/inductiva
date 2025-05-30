@@ -129,9 +129,7 @@ class Project:
     def _create_project(self, name, project_type):
         """Creates a project with the given name on the backend."""
         try:
-            args = {"name": name}
-            if project_type:
-                args["project_type"] = project_type
+            args = {"name": name, "project_type": project_type}
             response = self._api.create_project(args)
             return response.body
         except ApiException as ex:
