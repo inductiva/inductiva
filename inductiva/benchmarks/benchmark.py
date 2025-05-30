@@ -52,7 +52,7 @@ class Benchmark(projects.Project):
         Args:
             name (str): The name of the benchmark runner.
         """
-        super().__init__(name=name, type=ProjectType.BENCHMARK)
+        super().__init__(name=name, project_type=ProjectType.BENCHMARK)
         self.runs = []
         self.simulator = None
         self.input_dir = None
