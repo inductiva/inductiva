@@ -38,7 +38,7 @@ caption: " "
 maxdepth: 1
 hidden: true
 ---
-temporal-boundary-layer-benchmarks
+benchmarks
 ```
 
 ```{toctree}

@@ -1,4 +1,4 @@
-# Running AMR-Wind Simulations Across Multiple Machines Using MPI
+# Run AMR-Wind Simulations Across Multiple Machines Using MPI
 As computational fluid dynamics (CFD) problems increase in complexity and scale, so
 does the demand for computing power. **AMR-Wind** is designed to scale efficiently across thousands of cores, but even the most powerful single machine can become a bottleneck, particularly when handling large domains or very fine mesh resolutions.
 

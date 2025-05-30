@@ -34,4 +34,4 @@ Selecting the right hardware configuration for your CaNS simulations depends on 
 ### If You Are Exploring or Just Getting Started
 - Begin with modest configurations to profile your workload and use our benchmarks as a reference to make informed scaling decisions or decide whether GPU acceleration is worthwhile.
 
-Whatever your priorities, Inductiva takes care of the infrastructure, allowing you to focus on what matters most: your CFD projects.
+Whatever your priorities, Inductiva takes care of the infrastructure, allowing you to focus on what matters most: your CaNS projects.
