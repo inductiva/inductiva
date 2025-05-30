@@ -18,21 +18,42 @@ Open your Terminal (Linux/MacOS) or Command Prompt/PowerShell (Windows) and ente
 pip install inductiva
 ```
 
-## Step 2: Authenticate With Your API Key
+## Step 2: Authenticate Using Inductiva's CLI (Command Line Interface)
 
-You have multiple ways to authenticate with the Inductiva Python package:
-
-### Option 1: Using the Command Line
-
-In your Command Prompt, run the following authentication command:
+Now that the Inductiva package is installed, run the authentication command:
 
 ```python
 inductiva auth login
 ```
 
-When prompted, paste your unique API key, which you can retrieve from [Inductiva's web Console](https://console.inductiva.ai/account/details).
+> [!WARNING]
+> Windows users might experience an error when trying to authenticate this way, meaning that Inductiva's CLI (Command Line Interface) was not successfuly installed.  
+> In that case, follow the instructions to Authenticate Using the Python API. Otherwise, move to Step 3.
 
-To confirm your authentication and view user details, run:
+### Authenticate Using the Python API
+
+If you weren't able to authenticate using Inductiva's CLI (Command Line Interface), you can do it directly within your Python script.  
+
+On your Terminal (Linux/MacOS) or Command Prompt/PowerShell (Windows) start your Python interpreter:
+
+```python
+python
+```
+You should get a message with the Python version.  
+Then type:
+
+```python
+import inductiva
+inductiva.auth.login()
+```
+
+## Step 3: Authenticate With Your API Key
+
+Regardless if you used Inductiva's CLI or the Python API, you should now be getting a prompt "Please paste your API Key here:"  
+
+Retrieve your API Key from [Inductiva's web Console](https://console.inductiva.ai/account/details), and paste it in the Terminal.
+
+To confirm your authentication, type:
 
 ```python
 inductiva user info
@@ -40,14 +61,3 @@ inductiva user info
 
 This will display your account information, confirming that the API key has been stored successfully.
 
-
-### Option 2: Using the Python API
-
-Alternatively, you can authenticate directly within your Python script:
-
-```python
-import inductiva
-
-inductiva.auth.login()
-```
-When prompted, paste your unique API key, which you can retrieve from [Inductiva's web Console](https://console.inductiva.ai/account/details).
