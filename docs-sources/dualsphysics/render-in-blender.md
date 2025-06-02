@@ -1,21 +1,15 @@
 # Rendering the Mesh in Blender
-
-After generating your `.obj` files, you can import them into Blender by simply
-dragging them into the scene. This will create one object for each frame of your
-animation, resulting in many `.obj` files in your scene. While this isn't the
-standard Blender workflow for animations, it's workable — we just need to
-prepare the scene properly.
+Once you’ve generated your `.obj` files, importing them into Blender is straightforward: just drag and drop them into the scene. This creates one object per animation frame, resulting in many `.obj` files appearing simultaneously. While this isn’t Blender’s typical animation workflow, it works fine with some scene setup.
 
 > **Note**: When you open Blender, feel free to delete the default cube from the
 Scene Collection.
 
 ## 1. Set the Render Engine and Material
-
-Since we'll be using ray tracing, first switch the render engine to **Cycles**:
+Since we'll be using ray tracing, start by switching the render engine to **Cycles**:
 
 * Go to the **Render** tab in the Properties panel.
-* Set the **Render Engine** to `Cycles`.
-* Set the **Device** to `GPU Compute` (if available).
+* Set **Render Engine** to `Cycles`.
+* Set **Device** to `GPU Compute` (if available).
 
 <div align="center">
    <img src="../../_static/render_engine.png" alt="Select Cycles for renderer">
@@ -24,10 +18,9 @@ Since we'll be using ray tracing, first switch the render engine to **Cycles**:
 
 Next, assign a material to your objects:
 
-1. Select the first object in the scene — for example, `PartFluid_0000`.
-2. Go to the **Material** tab in the Properties panel.
-3. Click **New** to create a new material. Rename it to something like `Water`.
-4. Set the material properties:
+1. Select the first object in the scene  (e.g., `PartFluid_0000`).
+2. In the **Material** tab of the Properties panel, click **New** to create a material and rename it (e.g., Water).
+3. Set the material properties:
 
    * **Base Color**: Light blue
    * **Roughness**: `0.1`
@@ -39,27 +32,26 @@ Next, assign a material to your objects:
    <p><em>Figure 2: Creating the material</em></p>
 </div>
 
-To apply this material to all the `.obj` objects:
+To apply this material to all `.obj` objects:
 
 1. Select `PartFluid_0000`, then Shift-click to select the last object (e.g., `PartFluid_0200`) to select all.
 2. Press `Ctrl + L` and choose **Link Materials**.
 
 <div align="center">
    <img src="../../_static/material_all.png" alt="Link the material to all objects">
-   <p><em>Figure 3: Link the material to all objects</em></p>
+   <p><em>Figure 3: Linking the material across objects</em></p>
 </div>
 
-Now all your fluid objects share the same water material. To preview the look,
+Now all fluid objects share the same water material. To preview the effect,
 change the viewport shading (top-right corner) to **Material Preview**.
 
 <div align="center">
-   <img src="../../_static/viewport.png" alt="Change the viewport">
-   <p><em>Figure 4: Change the viewport</em></p>
+   <img src="../../_static/viewport.png" alt="Change viewport shading">
+   <p><em>Figure 4: Switching to Material Preview</em></p>
 </div>
 
 ## 2. Position the Camera
-
-To set up the camera:
+Set up the camera as follows:
 
 1. Select the camera in the **Scene Collection**.
 2. In the **Object** tab of the Properties panel, set:
@@ -69,8 +61,9 @@ To set up the camera:
 
 <div align="center">
    <img src="../../_static/blender_camera.png" alt="Position the camera">
-   <p><em>Figure 5: Position the camera</em></p>
+   <p><em>Figure 5: Camera positioning</em></p>
 </div>
+
 
 Additionally, in the **Camera Data** tab, set the **End** value of the lens to `1000`.
 
@@ -80,20 +73,16 @@ Additionally, in the **Camera Data** tab, set the **End** value of the lens to `
 </div>
 
 ## 3. Set Up the Animation
-
-You might notice something odd: all frames are visible at once. That's because
-we've imported each animation frame as a separate object. What we want is to
-show only the relevant object for each frame.
-
-To fix this, we'll write a small Blender script:
+Since each frame is imported as a separate object, all objects are visible simultaneously by default. To display only the relevant object for each frame, follow these instructions:
 
 1. Go to the **Scripting** workspace (top bar).
-2. Create a new script and paste the following:
 
 <div align="center">
    <img src="../../_static/scripting.png" alt="Create a blender script">
    <p><em>Figure 7: Create a blender script</em></p>
 </div>
+
+2. Create a new script and paste the following:
 
 ```python
 import bpy
@@ -130,13 +119,12 @@ for i, obj in enumerate(imported_objs):
     obj.keyframe_insert(data_path="hide_render", frame=frame + 1)
 ```
 
-This script will:
+This script:
 
-* Hide all objects by default.
-* Animate them so that each one is visible only on its corresponding frame.
+* Hides all objects by default.
+* Animates them so only one object is visible per frame.
 
 ## 4. Render the Animation
-
 To export the animation:
 
 1. Go to the **Output** tab in the Properties panel.
@@ -147,18 +135,15 @@ To export the animation:
    * **End Frame** to `200`
 
 <div align="center">
-   <img src="../../_static/output.png" alt="Set the blender output">
-   <p><em>Figure 8: Set the blender output</em></p>
+   <img src="../../_static/output.png" alt="Set the Blender output">
+   <p><em>Figure 8: Set the Blender output</em></p>
 </div>
 
-Then, in the top menu, go to **Render > Render Animation**. Blender will render
-each frame using ray tracing — this might take some time depending on your hardware.
+Finally, go to the top menu and select **Render > Render Animation**. Blender will render each frame 
+using ray tracing, which may take some time depending on your hardware.
 
 ## Wrapping Up
+There’s more to explore, like adding an HDRI environment to enhance
+lighting and realism, but we'll save that for another tutorial. For now, feel free to adjust the material and camera settings to get the visual effect you want.
 
-There's more you can explore, like adding an HDRI environment to enhance
-lighting and realism, but we'll save that for another tutorial. For now, feel
-free to tweak the material and camera settings to achieve your desired visual
-effect.
-
-**Happy rendering!**
+Happy rendering!

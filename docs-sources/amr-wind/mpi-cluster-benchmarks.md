@@ -82,7 +82,7 @@ The performance results are summarized below:
 <table>
   <tr>
     <td>Machine Type</td>
-    <td>Num Machines</td>
+    <td>Nº of Machines</td>
     <td>Cores</td>
     <td>Duration (s)</td>
     <td>Speedup</td>

@@ -81,7 +81,7 @@ enabling you to tackle larger, more detailed CFD problems than ever before.
 Here are the results of running this simulation on a multi-node MPI cluster compared to the 
 baseline single-node configuration.
 
-| Machine Type    | Nº Machines | vCPUs | Duration (s) | Speedup |
+| Machine Type    | Nº of Machines | vCPUs | Duration (s) | Speedup |
 | --------------- | ------------ | ----- | ------------ | ------- |
 | c2d-highcpu-112 | 1            | 112   | 1472         | 1.00x   |
 | c2d-highcpu-112 | 2            | 224   | 1404         | 1.05x   |
