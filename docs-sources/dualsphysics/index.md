@@ -29,7 +29,7 @@ hidden: true
 setup-test
 quick-start
 run-chrono-example
-multiple_gpus
+run-on-gpu-configuration
 ```
 
 ```{toctree}
@@ -38,6 +38,6 @@ caption: Visualization
 maxdepth: 4
 hidden: true
 ---
-DualSPHysics with ParaView <visualization/sections/using_paraview.md>
-DualSPHysics with Blender <visualization/sections/using_blender.md>
+DualSPHysics Data in ParaView <paraview-for-visualization.md>
+DualSPHysics Data in Blender <blender-for-visualization.md>
 ```

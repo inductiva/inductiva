@@ -24,6 +24,7 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.project_type import ProjectType
 from inductiva.client.model.project import Project
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
@@ -38,6 +39,7 @@ class PerPageSchema(schemas.IntSchema):
     pass
 
 
+ProjectTypeSchema = ProjectType
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
@@ -51,6 +53,9 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
             PerPageSchema,
             decimal.Decimal,
             int,
+        ],
+        'project_type': typing.Union[
+            ProjectTypeSchema,
         ],
     },
     total=False)
@@ -71,6 +76,12 @@ request_query_per_page = api_client.QueryParameter(
     name="per_page",
     style=api_client.ParameterStyle.FORM,
     schema=PerPageSchema,
+    explode=True,
+)
+request_query_project_type = api_client.QueryParameter(
+    name="project_type",
+    style=api_client.ParameterStyle.FORM,
+    schema=ProjectTypeSchema,
     explode=True,
 )
 
@@ -199,6 +210,7 @@ class BaseApi(api_client.Api):
         for parameter in (
                 request_query_page,
                 request_query_per_page,
+                request_query_project_type,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:

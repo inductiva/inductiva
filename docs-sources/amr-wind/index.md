@@ -28,7 +28,18 @@ hidden: true
 ---
 setup-test
 quick-start
-Flow around a circular cylinder <flow-cylinder>
+Flow Around a Circular Cylinder <run-flow-cylinder-case>
+Run AMR-Wind Simulations Across Multiple Machines <mpi-cluster-tutorial>
+```
+
+```{toctree}
+---
+caption: Benchmarks
+maxdepth: 2
+hidden: true
+---
+flow-cylinder-benchmarks
+mpi-cluster-benchmarks
 ```
 
 ```{toctree}
@@ -37,7 +48,7 @@ caption: Visualization
 maxdepth: 2
 hidden: true
 ---
-Using yt <using-yt>
+yt for Post-processing <yt-for-post-processing>
 ```
 
 ```{toctree}

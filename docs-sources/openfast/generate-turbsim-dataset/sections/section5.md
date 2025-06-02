@@ -5,7 +5,6 @@ Now it's time to retrieve all the results and analyze the data to extract meanin
 
 <p align="center"><img src="../../_static/turbsim_animation_30_fps.gif" alt="TurbSim simulation visualization" width="700"></p>
 
-
 ## Project Summary and Output Download
 Using the Inductiva package, it is easy to get a project summary and download all the output files. The following code snippet demonstrates how to do this:
 
@@ -22,7 +21,6 @@ print(turbsim_project)
 turbsim_project.download_outputs()
 ```
 
-
 Executing `print(turbsim_project)` gives a summary of the main project details:
 
 ```
@@ -38,9 +36,8 @@ Estimated total computation cost: 0.0067 US$
 
 Running `openfast_project.download_outputs()` creates a folder called `inductiva_output/turbsim_project` with one folder for each simulation.
 
-
 ## Retrieve Task Metadata
-Retrieving the previously set metadata is easy with Inductiva API.
+Retrieving the previously set metadata is easy with the Inductiva API.
 Below we show how you can retrieve the metadata of all the tasks in the project:
 
 ```python
@@ -67,7 +64,6 @@ Task metadata: {'URef': '13', 'seed_1': '-124466270', 'seed_2': '-864712422', 'l
 
 ..
 ```
-
 
 ## Key Takeaways
 In summary, using cloud computing for generating datasets of large-scale simulations not only increases efficiency, but also significantly reduces computational time and cost. 

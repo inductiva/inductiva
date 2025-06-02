@@ -1,4 +1,4 @@
-# How it works
+# How It Works
 
 At a very high-level, the functionalities of the API are quite simple. Using simple
 python scripts from your laptop, you can streamline your entire simulation workflow.

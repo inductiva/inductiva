@@ -13,7 +13,7 @@ import logging
 
 import inductiva
 import inductiva.client.models
-from inductiva import api, users
+from inductiva import api, users, logs
 from inductiva.resources.utils import ProviderType
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
@@ -372,7 +372,8 @@ class BaseMachineGroup(ABC):
 
         return is_cost_ok and is_vcpu_ok and is_instance_ok
 
-    def start(self, wait_for_quotas: bool = False):
+    @logs.mute_logging()
+    def start(self, wait_for_quotas: bool = False, verbose: bool = True):  # pylint: disable=unused-argument
         """Starts a machine group.
 
         Args:
