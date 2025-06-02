@@ -24,6 +24,7 @@ from .swash import SWASH
 from .cans import CaNS
 from .cp2k import CP2K
 from .swan import SWAN
+from .wrf import WRF
 from .fds import FDS
 from .cm1 import CM1
 from .gx import GX
