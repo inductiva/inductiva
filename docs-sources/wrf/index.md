@@ -43,6 +43,16 @@ setup-test
 quick-start
 ```
 
+
+```{toctree}
+---
+caption: "Visualization"
+maxdepth: 1
+hidden: true
+---
+visualization
+```
+
 ```{toctree}
 ---
 caption: " "

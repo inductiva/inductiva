@@ -67,7 +67,7 @@ class WRF(simulators.Simulator):
             gen_gif_files: Optional[List[str]] = None,
             gen_gif_output_dir: Optional[str] = ".",
             gen_gif_fps: int = 3,
-            gen_gif_variable: Optional[str] = "RAINNC",
+            gen_gif_variable: Optional[List[str]] = "RAINNC",
             project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
@@ -131,25 +131,27 @@ class WRF(simulators.Simulator):
             mpi_kwargs["np"] = n_vcpus
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
 
-        commands = [
-            Command("./wrf.exe", mpi_config=mpi_config),
+        commands = [f"/scripts/create_links.sh /WRF/test/{case_name}"]
 
-            #delete symbolic links
+        if init_commands:
+            commands += init_commands
+
+        commands += [
+            Command("./wrf.exe", mpi_config=mpi_config),
             "/scripts/delete_links.sh"
         ]
 
-        # Add init commands at the start
-        if init_commands is not None:
-            commands = [f"/scripts/create_links.sh /WRF/test/{case_name}"
-                       ] + init_commands + commands
-
         if gen_gif:
-            files = " ".join(gen_gif_files)
-            commands.append(f"conda run -n wrf-env python /scripts/gen_gif.py "
-                            f"--files {files} "
-                            f"--output-dir {gen_gif_output_dir} "
-                            f"--fps {gen_gif_fps} "
-                            f"--var {gen_gif_variable} ")
+            # if gen gif var is a single value turn it into a list
+            if isinstance(gen_gif_variable, str):
+                gen_gif_variable = [gen_gif_variable]
+            for var in gen_gif_variable:
+                files = " ".join(gen_gif_files)
+                commands.append(f"conda run -n wrf-env python /scripts/gen_gif.py "
+                                f"--files {files} "
+                                f"--output-dir {gen_gif_output_dir} "
+                                f"--fps {gen_gif_fps} "
+                                f"--var {var} ")
 
         return super().run(input_dir,
                            on=on,

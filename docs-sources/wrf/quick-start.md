@@ -4,6 +4,8 @@ This tutorial will show you how to run WRF simulations using the Inductiva API.
 We will cover the publicly available [WRF benchmark](https://www2.mmm.ucar.edu/wrf/users/benchmark/v44/benchdata_v44.html) 
 that is based on the [Pre-Thanksgiving Winter Storm of 2019](https://weather.com/storms/winter/news/2019-11-24-snowstorm-rockies-denver-plains-midwest-thanksgiving-week).
 
+<p align="center"><img src="./_static/RAINNC_animation.gif" alt="Animation with the RAINNC values of the simulation." width="700"></p>
+
 ## Prerequisites
 
 Download the required files [here](https://www2.mmm.ucar.edu/wrf/users/benchmark/v44/v4.4_bench_conus12km.tar.gz)
@@ -32,9 +34,27 @@ wrf = inductiva.simulators.WRF( \
 
 # Run simulation
 task = wrf.run( \
-    input_dir="/Path/to/SimulationFiles",
-    case_name="em_real",
-    on=cloud_machine)
+	input_dir=input_dir,
+	case_name="em_real",
+	# generate gif with the RAINNC values
+	gen_gif=True,
+	gen_gif_variable="RAINNC",
+	gen_gif_files=[
+		"wrfout_d01_2019-11-26_12:00:00",
+		"wrfout_d01_2019-11-26_13:00:00",
+		"wrfout_d01_2019-11-26_14:00:00",
+		"wrfout_d01_2019-11-26_15:00:00",
+		"wrfout_d01_2019-11-26_16:00:00",
+		"wrfout_d01_2019-11-26_17:00:00",
+		"wrfout_d01_2019-11-26_18:00:00",
+		"wrfout_d01_2019-11-26_19:00:00",
+		"wrfout_d01_2019-11-26_20:00:00",
+		"wrfout_d01_2019-11-26_21:00:00",
+		"wrfout_d01_2019-11-26_22:00:00",
+		"wrfout_d01_2019-11-26_23:00:00",
+		"wrfout_d01_2019-11-27_00:00:00",
+	],
+	on=cloud_machine)
 
 
 # Wait for the simulation to finish and download the results

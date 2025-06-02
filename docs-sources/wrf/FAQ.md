@@ -25,6 +25,8 @@ Here are the cases we currently support:
 * em\_squall2d\_y
 * em\_tropical\_cyclone
 
+<br>
+
 ## Is it possible to run any kind of pre-processing with WRF?
 
 Absolutely! We've included and compiled the WRF Pre-Processing System (WPS),
@@ -43,6 +45,8 @@ Here’s a list of the available pre-processing tools:
 * mod\_levs.exe
 * rd\_intermediate.exe
 
+<br>
+
 ## How does the process of selecting a use case work?
 
 We’ve compiled all available use cases, and your simulation will run inside the
@@ -56,6 +60,30 @@ However, if you send us custom input files, we’ll use yours instead.
 For instance, the `em_fire` case includes a file named `input_sounding_rain`.
 If you provide a file with the same name in your input set, it will override the
 default version.
+
+<br>
+
+## Why is my `gen_gif.py` command failing?
+
+If your `gen_gif.py` command fails with an error like this:
+
+```
+urllib.error.URLError: <urlopen error [Errno -3] Temporary failure in name resolution>
+
+ERROR conda.cli.main_run:execute(125): `conda run python /scripts/gen_gif.py --files ... --output-dir . --fps 3 --var RAINNC` failed. (See above for error)
+INFO:    Cleanup error: while stopping driver for /var/lib/apptainer/mnt/session/final: fuse-overlayfs exited: fuse: reading device: Software caused connection abort
+```
+
+It likely means that **Cartopy is trying to download map data**, but your
+machine **doesn’t have an internet connection**. Without access to these
+external resources, the script fails with the error shown above.
+
+### How to fix it
+
+Please let us know when this happens. We can update the simulator to include
+the necessary Cartopy files so they are cached locally and no internet access
+is needed during the GIF generation process.
+
 
 <br>
 <br>
