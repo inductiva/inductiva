@@ -38,5 +38,14 @@ caption: " "
 maxdepth: 1
 hidden: true
 ---
+benchmarks
+```
+
+```{toctree}
+---
+caption: " "
+maxdepth: 1
+hidden: true
+---
 faq
 ```

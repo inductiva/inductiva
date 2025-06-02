@@ -10,6 +10,7 @@ from typing_extensions import Self
 from collections import defaultdict
 from inductiva import types, resources, projects, simulators, client
 from inductiva.client.models import TaskStatusCode
+from inductiva.projects.project import ProjectType
 from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -58,6 +59,9 @@ class Benchmark(projects.Project):
         self.on = None
         self.kwargs = {}
         self.verbose = verbose
+
+    def _get_project_type(self):
+        return ProjectType.BENCHMARK
 
     def set_default(
         self,

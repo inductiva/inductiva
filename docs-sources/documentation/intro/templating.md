@@ -153,11 +153,8 @@ side: 1
 
 By default, the `TemplateManager` *will not overwrite* any existing files in the
 destination directory. Calls to the `render_dir` method will fail if
-any of the destination files already exist. Rendering and coping actions are
-transactional, meaning that the entire action will fail if any destination file
-exists. For example, consecutive calls to the same method will fail in the second
-call. This behavior is intended to prevent accidental overwriting of
-files that may have been generated in a previous run.
+any file already exist in the `target_dir`. This behavior is intended to prevent
+accidental overwriting of files that may have been generated in a previous run.
 
-To enforce the overwriting of existing files, you can set the `overwrite` argument
-to `True` when calling the `renderdir` method.
+To enforce the deletion of existing files and creating new ones, you can set the 
+`overwrite` argument to `True` when calling the `renderdir` method.
