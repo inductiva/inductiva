@@ -147,11 +147,12 @@ class WRF(simulators.Simulator):
                 gen_gif_variable = [gen_gif_variable]
             for var in gen_gif_variable:
                 files = " ".join(gen_gif_files)
-                commands.append(f"conda run -n wrf-env python /scripts/gen_gif.py "
-                                f"--files {files} "
-                                f"--output-dir {gen_gif_output_dir} "
-                                f"--fps {gen_gif_fps} "
-                                f"--var {var} ")
+                commands.append(
+                    f"conda run -n wrf-env python /scripts/gen_gif.py "
+                    f"--files {files} "
+                    f"--output-dir {gen_gif_output_dir} "
+                    f"--fps {gen_gif_fps} "
+                    f"--var {var} ")
 
         return super().run(input_dir,
                            on=on,
