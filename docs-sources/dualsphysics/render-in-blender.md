@@ -12,7 +12,7 @@ Since we'll be using ray tracing, start by switching the render engine to **Cycl
 * Set **Device** to `GPU Compute` (if available).
 
 <div align="center">
-   <img src="../../_static/render_engine.png" alt="Select Cycles for renderer">
+   <img src="./_static/render_engine.png" alt="Select Cycles for renderer">
    <p><em>Figure 1: Select Cycles for renderer</em></p>
 </div>
 
@@ -28,7 +28,7 @@ Next, assign a material to your objects:
    * **Transmission**: `1.0` (for full transparency)
 
 <div align="center">
-   <img src="../../_static/material.png" alt="Creating the material">
+   <img src="./_static/material.png" alt="Creating the material">
    <p><em>Figure 2: Creating the material</em></p>
 </div>
 
@@ -38,7 +38,7 @@ To apply this material to all `.obj` objects:
 2. Press `Ctrl + L` and choose **Link Materials**.
 
 <div align="center">
-   <img src="../../_static/material_all.png" alt="Link the material to all objects">
+   <img src="./_static/material_all.png" alt="Link the material to all objects">
    <p><em>Figure 3: Linking the material across objects</em></p>
 </div>
 
@@ -46,7 +46,7 @@ Now all fluid objects share the same water material. To preview the effect,
 change the viewport shading (top-right corner) to **Material Preview**.
 
 <div align="center">
-   <img src="../../_static/viewport.png" alt="Change viewport shading">
+   <img src="./_static/viewport.png" alt="Change viewport shading">
    <p><em>Figure 4: Switching to Material Preview</em></p>
 </div>
 
@@ -60,7 +60,7 @@ Set up the camera as follows:
    * **Rotation**: `X: 0.0`, `Y: 0.0`, `Z: 180.0`
 
 <div align="center">
-   <img src="../../_static/blender_camera.png" alt="Position the camera">
+   <img src="./_static/blender_camera.png" alt="Position the camera">
    <p><em>Figure 5: Camera positioning</em></p>
 </div>
 
@@ -68,7 +68,7 @@ Set up the camera as follows:
 Additionally, in the **Camera Data** tab, set the **End** value of the lens to `1000`.
 
 <div align="center">
-   <img src="../../_static/camera_end.png" alt="Set camera End">
+   <img src="./_static/camera_end.png" alt="Set camera End">
    <p><em>Figure 6: Set camera End</em></p>
 </div>
 
@@ -78,7 +78,7 @@ Since each frame is imported as a separate object, all objects are visible simul
 1. Go to the **Scripting** workspace (top bar).
 
 <div align="center">
-   <img src="../../_static/scripting.png" alt="Create a blender script">
+   <img src="./_static/scripting.png" alt="Create a blender script">
    <p><em>Figure 7: Create a blender script</em></p>
 </div>
 
@@ -135,7 +135,7 @@ To export the animation:
    * **End Frame** to `200`
 
 <div align="center">
-   <img src="../../_static/output.png" alt="Set the Blender output">
+   <img src="./_static/output.png" alt="Set the Blender output">
    <p><em>Figure 8: Set the Blender output</em></p>
 </div>
 
