@@ -1,54 +1,42 @@
-# Visualizing DualSPHysics Simulations with ParaView
+# DualSPHysics Visualizations with ParaView
+As an example, consider the [3D Dam Break](https://inductiva.ai/guides/dualsphysics/run-on-gpu-configuration) tutorial. 
 
-Let's pick up where we left off in the section
-[Testing different GPUS on the Cloud](../../multiple_gpus.md).
+By the end of that tutorial, your simulation will have completed, and the results will be downloaded to the `inductiva_output` folder on your local machine.
 
-Your simulation is now finished and your simulation results should be downloaded
-to your local machine. You can find the results in the `inductiva_output` folder.
+This guide will focus on creating a ParaView visualization from those simulation results.
 
 ## Visualizing the Results with ParaView
+Visualizing your simulation with ParaView is simple and straightforward.
 
-Visualizing your simulation with ParaView should be simple and straightforward.
-
-First, open ParaView and click in the menu `File` > `Open...` and navigate to your
-simulation results folder. In the results folder, navigate to `CaseDambreak3D_FSI_out/particles`
-and select the three Groups called `PartFluid_..vtk`, `PartGate_..vtk` and `PartStructure_..vtk`
+First, open ParaView and go to the menu `File` > `Open...`. Navigate to your
+simulation results folder, then to `CaseDambreak3D_FSI_out/particles`, and select the three Groups named `PartFluid_..vtk`, `PartGate_..vtk` and `PartStructure_..vtk`.
 
 ![File -> Open](../../_static/file-open.png)
 <p align="center"><em>Figure 1: File -> Open</em></p>
 
-
 ![Selecting the files](../../_static/select-files.png)
 <p align="center"><em>Figure 2: Selecting the files</em></p>
 
-Once all files are loaded you need to make them visible by clicking the `eye` icon
-in the `Pipeline Browser` on the left side of the screen.
+Once all files are loaded, make them visible by clicking the **eye** icon in the **Pipeline Browser** 
+on the left side of the screen.
 
 ![Make files visible](../../_static/eye.png)
 <p align="center"><em>Figure 3: Make files visible</em></p>
 
-Followinf that, you need to place your camera in the right position. You can do this
-by clicking the `set view direction +Y` button in the toolbar.
+Next, position your camera by clicking the `set view direction +Y` button in the toolbar.
 
 ![Move the camera to the correct position](../../_static/camera.png)
 <p align="center"><em>Figure 4: Move the camera to the correct position</em></p>
 
-You are now able to hit the `play` button in the toolbar and see your simulation
-running in real time.
+Now you can press the **Play** button in the toolbar to watch your simulation run in real time.
 
 ![Simulation running](../../_static/sim.png)
 <p align="center"><em>Figure 5: Simulation running</em></p>
 
-## Choosing what data to visualize
+## Choosing What Data to Visualize
+In the previous section, we visualized the particles using ParaView’s default settings. A key part of analyzing your simulation is choosing which data to visualize. For example, DualSPHysics allows you to visualize particle velocity, depending on what data was saved during the simulation.
 
-In the previous section we visualized the particles of the simulation. Using the 
-default values picked by ParaView. One key aspect of visualizing your simulation
-is to choose what data you want to visualize. In the case of DualSPHysics, you can
-visualize the particles speed, as an example (this will vary depending on the
-data you decide to save during the simulation).
-
-To do that, click the `PartFluid_0000.vtk*` in the Pipeline Browser and change
-from `idp` to `Vel` in the dropdown menu above.
+To do this, select `PartFluid_0000.vtk*` in the **Pipeline Browser** and change the dropdown menu above from `idp` to `Vel`.
 
 ![Changing idp to Vel](../../_static/pick_vel.png)
 <p align="center"><em>Figure 6: Changing idp to Vel</em></p>
@@ -56,8 +44,4 @@ from `idp` to `Vel` in the dropdown menu above.
 ![Simulation running with velocity visible](../../_static/sim_vel.png)
 <p align="center"><em>Figure 7: Simulation running with velocity visible</em></p>
 
-You can now sabe your animation by clicking `File` > `Save Animation...` and choosing
-the format you want to save it in.
-
-Stay tunned for the next section, where we will show you how to visualize your simulation
-using Blender.
+You can save your animation by going to **File > Save Animation...** and choosing your preferred format.

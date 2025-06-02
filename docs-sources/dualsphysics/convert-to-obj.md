@@ -2,15 +2,7 @@
 To visualize DualSPHysics simulations in Blender, the raw particle data (typically stored in `.vtk` files) 
 must first be converted into a mesh format that Blender can interpret, such as `.obj`. This conversion can be easily performed using Inductiva with just a few lines of code.
 
-As an example, consider the [3D dam break](../../multiple_gpus.md) tutorial. In this simulation, we convert the .vtk files to .obj using the following parameters:
-
-To visualize DualSPHysics simulations in Blender, the raw particle data
-(typically stored in `.vtk` files) must first be converted into a mesh format
-that Blender understands, such as `.obj`. This process can be easily done with
-Inductiva with just a few lines of code.
-
-Let's use the [3D Dam Break]() tutorial as an example. In
-this simulation we convert the `vtk` files to `obj` with the following parameters:
+As an example, consider the [3D Dam Break](https://inductiva.ai/guides/dualsphysics/run-on-gpu-configuration) tutorial. In this simulation, we convert the .vtk files to .obj using the following parameters:
 
 ```python
 # Run simulation
