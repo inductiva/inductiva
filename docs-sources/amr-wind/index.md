@@ -29,7 +29,7 @@ hidden: true
 setup-test
 quick-start
 Flow Around a Circular Cylinder <run-flow-cylinder-case>
-mpi-cluster-tutorial
+Run AMR-Wind Simulations Across Multiple Machines <mpi-cluster-tutorial>
 ```
 
 ```{toctree}
