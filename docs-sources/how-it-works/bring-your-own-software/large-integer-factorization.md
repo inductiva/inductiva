@@ -103,7 +103,7 @@ For this initial test, we use a `cd2-standard-4` machine, which has 4 vCPUs and 
 
 We are using the `CustomImage` simulator, which lets us select any Docker image, either one publicly available on Docker Hub or one we’ve uploaded to our Inductiva storage, as demonstrated earlier.
 
-In this case, we are using an `empty` input directory because `cado-nfs` does not require any input files for this task. (note that this is actually a directory called empty in my local machine, should we start allowing running tasks without any inputs?).
+In this case, we are using an `empty` input directory because `cado-nfs` does not require any input files for this task.
 
 The `commands` parameter specifies the command to run inside the container. Here, it's the `cado-nfs.py` script followed by the number we want to factor.
 
