@@ -26,15 +26,20 @@ Now that the Inductiva package is installed, run the authentication command:
 inductiva auth login
 ```
 
-> [!WARNING]
+You should see the INDUCTIVA text art:
+<div align="left">
+    <img src="../_static/inductiva_authenticate.png" alt="inductiva_authenticate" width="700">
+</div>
+<br>
+
+> ⚠️ **Warning**  
 > Windows users might experience an error when trying to authenticate this way, meaning that Inductiva's CLI (Command Line Interface) was not successfuly installed.  
-> In that case, follow the instructions to Authenticate Using the Python API. Otherwise, move to Step 3.
+> If this is the case, follow the instructions to Authenticate Using the Python API. Otherwise, move to Step 3.
 
-### Authenticate Using the Python API
+#### If you got an error and did not get the INDUCTIVA text art
+If you weren't able to authenticate using Inductiva's CLI (Command Line Interface), you can do it directly within a Python script.  
 
-If you weren't able to authenticate using Inductiva's CLI (Command Line Interface), you can do it directly within your Python script.  
-
-On your Terminal (Linux/MacOS) or Command Prompt/PowerShell (Windows) start your Python interpreter:
+On your Command Prompt/PowerShell start your Python interpreter:
 
 ```python
 python
@@ -46,18 +51,19 @@ Then type:
 import inductiva
 inductiva.auth.login()
 ```
+You should now see the INDUCTIVA text art. Proceed to Step 3.
 
-## Step 3: Authenticate With Your API Key
 
-Regardless if you used Inductiva's CLI or the Python API, you should now be getting a prompt "Please paste your API Key here:"  
+## Step 3: Complete your authentication with your API Key 
 
-Retrieve your API Key from [Inductiva's web Console](https://console.inductiva.ai/account/details), and paste it in the Terminal.
+Right below the INDUCTIVA text art, you are prompted to "Please paste your API Key here:".
+Retrieve your API Key from [Inductiva's web Console](https://console.inductiva.ai/account/details), and paste it there.
 
 To confirm your authentication, type:
 
 ```python
 inductiva user info
 ```
+This will display your account information, confirming that the API key has been stored successfully.  
 
-This will display your account information, confirming that the API key has been stored successfully.
 
