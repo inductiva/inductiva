@@ -1,44 +1,34 @@
-# How to Run Statistical Ensembles with Inductiva
-
-In this recipe-style tutorial, you’ll learn how to run *statistical ensembles* in parallel using Inductiva, so you can turn any parameter sweep or distribution into dozens (or hundreds!) of simultaneous simulations. We’ll demonstrate with a classic 2D Ising-model Metropolis Monte Carlo in R, but the same pattern works for *any* function or simulation script that takes parameters and outputs results.
+# Run Statistical Ensembles with Inductiva
+In this guide, you’ll learn how to run **statistical ensembles** in parallel using Inductiva, so you can turn any parameter sweep or distribution into dozens (or hundreds!) of simultaneous simulations. We’ll demonstrate with a classic 2D Ising-model Metropolis Monte Carlo in R, but this workflow works with *any* function or simulation script that takes parameters and outputs results.
 
 <img src=_static/animation.gif></img>
 
-> **Why Inductiva?**  
-> Instead of looping through parameters one at a time, Inductiva lets you launch a group of machines, run tasks concurrently, and collect outputs automatically. This means you can get ensemble results in **minutes** instead of **hours**.
+Rather than looping through parameters one at a time, Inductiva lets you launch a group of machines, run tasks concurrently, and collect outputs automatically. This means you can get ensemble results in **minutes** instead of **hours**.
 
+## What You'll Accomplish
 
-**What you’ll do in this tutorial:**
+1. **Package your simulation** – Convert your simulation code (in this case, an R script) 
+to accept parameters  from the command line and output results to CSV.
+2. **Define your ensemble** – Specify a list or distribution of parameters (e.g., temperatures, 
+seeds, reaction rates) to explore.
+3. **Launch cloud machines** – Allocate as many workers as ensemble tasks.
+4. **Dispatch parallel jobs** – SSend each parameter set as an individual job. Inductiva manages 
+queuing, scaling, retries, and logging.
+5. **Visualize ensemble output** – Plot summary statistics like means, variances, or distributions 
+using a few lines of code.
 
-1. **Package your simulation**  
-   Convert your simulation code (in this case, an R script) to accept parameters from the command line and output results to CSV.
+Need a refresher on the Ising model? See 2D Ising model on Wikipedia
 
-2. **Define your ensemble**  
-   Specify a list or distribution of parameters (e.g., temperatures, seeds, reaction rates) to explore.
+> For more on the the 2D Ising-model details, see the [2D Ising model description](https://en.wikipedia.org/wiki/Ising_model)  
 
-3. **Launch an Inductiva machine group**  
-   Allocate as many workers as ensemble tasks.
-
-4. **Dispatch tasks in parallel**  
-   Send each parameter set as an individual job. Inductiva manages queuing, scaling, retries, and logging.
-
-5. **Visualize ensemble results**  
-   Plot summary statistics like means, variances, or distributions using a few lines of code.
-
-
-
-> **Model link:** If you need the 2D Ising-model details, see [2D Ising model description »](https://en.wikipedia.org/wiki/Ising_model)  
-
-
-## Prepare your ensemble script
-
-First, wrap your ensemble script logic into a command line script that:
-
+## Prepare Your Ensemble Script
+First, wrap your simulation logic in a script that:
 - **Reads** one or more parameter values from the command line  
 - **Runs** your script over those parameters  
-- **Writes** its results to an output file (in this case a csv)
+- **Writes** its results to an output file (in this case a CSV)
 
-Below is an example layout for [run_ising_model.R](bring-your-own-software/_static/run_ising_model.R). In this tutorial it takes a list of “temperature” values, but you can swap in *any* numeric parameter (reaction rate, random seed, boundary condition,).
+Here’s an example for [run_ising_model.R](bring-your-own-software/_static/run_ising_model.R). The example takes a list of “temperature” values, but you can swap in *any* numeric parameter (reaction rate, 
+seed, boundary condition, etc.).
 
 ```bash
 Rscript run_ising_model.R \
@@ -60,20 +50,15 @@ Rscript run_ising_model.R \
 | `--output`     | CSV filename for your results (e.g. `results.csv`).              |
 
 
->💡 Pro tip: Any script that reads --param-list and writes a CSV with columns ParamValue, Sweep, Output1, Output2, … can slot into this same Inductiva workflow.
+>💡 **Pro tip**: Any script that reads `--param-list` and writes a CSV with columns like `ParamValue`, `Sweep`, `Output1`, `Output2`, … can slot into this Inductiva workflow.
 
 ## Launching your ensemble with Inductiva
+Suppose you want to examine how minor perturbations around a temperature affect the Ising model. With Inductiva, you can sample from a normal distribution around the base temperature, run all simulations in parallel, and collect the full set of results — without managing infrastructure.
 
-Suppose we want to examine how minor perturbations around a temperature affect the behavior of our Ising model. With Inductiva, we can sample a normal distribution around the base temperature, run each simulation in parallel, and collect the full set of results—without manually managing infrastructure.
+Below here's how to do that in a single Python script.
 
-Here's how to do that in a single, self-contained Python script:
-
-
----
-
-### 1. Setup and configuration
-
-Import the necessary libraries, point to your R script folder (input_dir), and pick where to save results (results_dir). Define the base temperatures, the number of samples around each, and the Normal‐sampling spread (sigma).
+### 1. Setup and Configuration
+Import the necessary libraries, point to your R script folder (`INPUT_DIR`), and pick where to save results (`RESULTS_DIR`). Define the base temperatures, the number of samples around each, and the Normal‐sampling spread (sigma).
 
 ```python
 import os
@@ -102,8 +87,7 @@ os.makedirs(RESULTS_DIR, exist_ok=True)
 ```
 
 ### 2. Sample Temperatures from a Normal Distribution around T0
-
-For a base temperature T₀, draw n_samples points from 𝒩(T₀, σ²). That gives you one “central” run at T₀ plus a spread around it.
+For a base temperature T₀, draw n_samples points from 𝒩(T₀, σ²). That gives you one “central” run at T₀, plus a spread of values around it.
 
 ```python
 np.random.seed(RNG_SEED)
@@ -113,9 +97,8 @@ sampled_temps = sorted(
                      size=NUM_SAMPLES))
 ```
 
-### 3. Spin up the cloud machines
-
-Compute the total number of runs (one for each T₀ plus its samples) and use Inductiva API to spin up that many machines. Here we use an ElasticMachineGroup, which grows automatically based on how many tasks are being executed, you can control how many machines you want to have using the `max_machines` parameter.
+### 3. Spin Up the Cloud Machines
+Next, calculate the total number of runs (one for each T₀ plus all its samples), and use the Inductiva API to spin up that many machines. We’ll use an `ElasticMachineGroup`, which automatically grows to match task load. You can control the maximum number of machines via the `max_machines` parameter.
 
 ```python
 all_temps = [BASE_TEMPERATURE] + sampled_temps
@@ -135,10 +118,8 @@ sim = inductiva.simulators.CustomImage(container_image="docker://r-base:latest")
 project = inductiva.projects.Project(project_name)
 ```
 
-### 4. Submit every temperature as its own task
-
-Loop over each sample of T₀, round each temperature, build the Rscript command, and submit. We can attach metadata so we can later pull out information about the run.
-
+### 4. Submit Every Temperature as Its Own Task
+Loop over each sample of T₀, round each temperature, build the Rscript command, and submit. You can also attach metadata for easy information retrieval later.
 
 ```python
 for temp in all_temps:
@@ -167,11 +148,8 @@ for temp in all_temps:
     print(f"Submitted: T₀={BASE_TEMPERATURE} temp={t_val} → {output_filename}")
 ```
 
-### 5. Wait for completion and download
-
-Block until every task in the project finishes, then pull down all their CSV outputs into the default inductiva_output/... folder.
-In this case, the output folder wil be `inductiva_output/<PROJECT_NAME>/`.
-
+### 5. Wait for Completion and Download Results
+Block until every task in the project finishes. Then, pull down all their CSV outputs into the default `inductiva_output/<PROJECT_NAME>/` folder.
 
 ```python
 # Wait for all tasks in the project to end
@@ -181,19 +159,19 @@ project.wait()
 project.download_outputs()
 ```
 
-At this point we'll have all of the CSV per temperature, ready to merge and visualize.
+At this point, you’ll have one CSV per temperature value, ready to merge and analyze.
 
-
-## Visualize ensemble results
-
-In the final step, we pull in every CSV produced around our base temperature, stack them into one DataFrame, and compute at each sweep:
+## Visualize Ensemble Results
+Finally, pull in every CSV produced around our base temperature, stack them into one DataFrame, and compute at each sweep:
 
 1. ⟨M⟩ (mean magnetization) across all sampled runs
 
 2. Lower (2.5%) and upper (97.5%) percentiles of M
 
-We then plot the mean curve over sweep number and “shade in” the region between those percentiles—that shaded band is the envelope, showing the spread or uncertainty of the Monte Carlo realizations around T₀. This gives us both a central trend and a visual cue for how much individual runs deviate from it.
+Plotting the mean curve with this confidence band shows the central behavior and the spread across simulations.
 
+
+We then plot the mean curve across sweep numbers and shade the region between those percentiles. This shaded area, called the envelope, captures the spread or uncertainty in the Monte Carlo realizations around T₀, providing both a central trend and a visual indication of variability across runs.
 
 ```python
 # Gather all metadata from the project
@@ -239,17 +217,16 @@ plt.close()
 print(f"✔ Saved envelope plot for T₀={BASE_TEMPERATURE} → {out_png}")
 ```
 
-The following image represents the result of this ensemble run.
-
+The image below shows the result of this ensemble run:
 
 <img src=_static/magnetization_T0_3.0.png></img>
 
+## Wrapping Up
+And that wraps up our end-to-end workflow:
 
-And that completes our end-to-end workflow:
-
-1. Prepared the R Monte Carlo script
+1. Prepared the R-based Monte Carlo script
 2. Orchestrated parallel runs via Python + Inductiva
-3. Collected every run's output
-4. Merged and visualized the results
+3. Collected output from every run
+4. Merged and visualized the ensemble results
 
-We can now observe how magnetization evolves across sweeps for each base temperature and its nearby samples.
+You can now observe how magnetization evolves across sweeps for each base temperature and its nearby samples.
