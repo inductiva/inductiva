@@ -55,7 +55,7 @@ Rscript run_ising_model.R \
 ## Launching your ensemble with Inductiva
 Suppose you want to examine how minor perturbations around a temperature affect the Ising model. With Inductiva, you can sample from a normal distribution around the base temperature, run all simulations in parallel, and collect the full set of results — without managing infrastructure.
 
-Below here's how to do that in a single Python script.
+In this section we will explore step by step how you can create a python script with Inductiva to easily create the ensemble.
 
 ### 1. Setup and Configuration
 Import the necessary libraries, point to your R script folder (`INPUT_DIR`), and pick where to save results (`RESULTS_DIR`). Define the base temperatures, the number of samples around each, and the Normal‐sampling spread (sigma).
@@ -149,7 +149,7 @@ for temp in all_temps:
 ```
 
 ### 5. Wait for Completion and Download Results
-Block until every task in the project finishes. Then, pull down all their CSV outputs into the default `inductiva_output/<PROJECT_NAME>/` folder.
+Now that every task was submitted we can wait until every task in the project finishes. Then, pull down all their CSV outputs into the default `inductiva_output/<PROJECT_NAME>/` folder.
 
 ```python
 # Wait for all tasks in the project to end
