@@ -260,8 +260,8 @@ class Project:
 
         all_tasks = self.get_tasks()
         for task in all_tasks:
-           base_path = output_dir or files.resolve_output_path(self.name)
-           task.download_outputs(output_dir=f"{base_path}/{task.id}")
+            base_path = output_dir or files.resolve_output_path(self.name)
+            task.download_outputs(output_dir=f"{base_path}/{task.id}")
 
     def __eq__(self, other) -> bool:
         return (isinstance(other, Project) and self.name == other.name and
