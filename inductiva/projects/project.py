@@ -54,7 +54,7 @@ from inductiva.client import ApiException
 
 # from inductiva.client import models
 from inductiva.client.apis.tags import projects_api
-from inductiva.utils import format_utils
+from inductiva.utils import files, format_utils
 
 _logger = logging.getLogger(__name__)
 
@@ -245,17 +245,26 @@ class Project:
             time.sleep(5)
         print("All tasks in the project terminated.")
 
-    def download_outputs(self):
-        """
-        Downloads all the outputs for all the tasks in the project.
+    def download_outputs(self, output_dir: Optional[str] = None):
+        """Downloads all the outputs for all the tasks in the project.
 
-        All the files will be stored inside
-        `inductiva_output/<project_name>/<task_id's>`.
+        All task outputs will be organized within the specified `output_dir`.
+        If `output_dir` is not provided, outputs will be saved to a default
+        location under `inductiva_output/<project_name>/<task_id>/`.
+        Otherwise, they will be stored in `<output_dir>/<task_id>/`.
+
+        Args:
+            output_dir (str, optional): The base directory where project outputs
+                                        will be downloaded..
         """
+
         all_tasks = self.get_tasks()
-
         for task in all_tasks:
-            task.download_outputs(output_dir=f"{self.name}/{task.id}")
+            if not output_dir:
+                task.download_outputs(output_dir=files.resolve_output_path(
+                    f"{self.name}/{task.id}"))
+            else:
+                task.download_outputs(output_dir=f"{output_dir}/{task.id}")
 
     def __eq__(self, other) -> bool:
         return (isinstance(other, Project) and self.name == other.name and
