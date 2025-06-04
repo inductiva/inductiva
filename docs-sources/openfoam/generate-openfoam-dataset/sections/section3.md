@@ -2,70 +2,52 @@
 Inductiva enables the parallel execution of numerous simulations, making it ideal for conducting parameter studies at scale. For example, suppose you are interested in analyzing how varying a specific input parameter influences the simulation results.
 
 
-As a demonstration, consider studying the impact of changes in the reference free-stream velocity, denoted as magUInf, which appears in the forceCoeffs1 dictionary of the OpenFOAM case. This parameter represents the magnitude of the incoming flow velocity used for nondimensionalizing force coefficients. In the current configuration, magUInf is set to 20 m/s.
+As a demonstration, consider studying the impact of changes in the reference free-stream velocity, denoted as `flowVelocity`, which appears in the `initialConditions` file of the OpenFOAM case. This parameter represents the magnitude of the incoming flow velocity used for nondimensionalizing force coefficients. In the current configuration, flowVelocity is set to 20 m/s on the x axis:
 
 ```
-forceCoeffs1
-{
-    type            forceCoeffs;
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  8
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
 
-    libs            ("libforces.so");
+flowVelocity         (20 0 0);
+pressure             0;
+turbulentKE          0.24;
+turbulentOmega       1.78;
 
-    writeControl    timeStep;
-    timeInterval    1;
+// ************************************************************************* //
 
-    log             yes;
-
-    patches         (motorBikeGroup);
-    rho             rhoInf;      // Indicates incompressible
-    rhoInf          1;           // Redundant for incompressible
-    liftDir         (0 0 1);
-    dragDir         (1 0 0);
-    CofR            (0.72 0 0);  // Axle midpoint on ground
-    pitchAxis       (0 1 0);
-    magUInf         20;
-    lRef            1.42;        // Wheelbase length
-    Aref            0.75;        // Estimated
-    /*
-    binData
-    {
-        nBin        20;          // output data into 20 bins
-        direction   (1 0 0);     // bin direction
-        cumulative  yes;
-    }
-    */
-}
 ```
 
-We will use Inductiva’s templating system to generalize the base simulation by randomly sampling values for `magUInf`, representing the wind speed in the OpenFOAM case. This allows generating a broad set of simulation conditions efficiently.
+We will use Inductiva’s templating system to generalize the base simulation by randomly sampling values for `flowVelocity`, representing the wind speed in the OpenFOAM case. This allows generating a broad set of simulation conditions efficiently.
 
 ## Parametrize the system/forceCoeffs file
 Inductiva allows you to convert fixed parameters in your simulation configuration files into variables that can be programmatically controlled via Python scripting.
 
-This means that instead of hardcoding the wind speed in `input_files/system/forceCoeffs` as:
+This means that instead of hardcoding the wind speed in `input_files/0/include/initialConditions` as:
 ```
 ...
-    magUInf         20;
-...
-```
-
-
-you will update the file to include a variable placeholder such as:
-
-```
-...
-    magUInf         {{ wind_speed }};
+    flowVelocity         (20 0 0);
 ...
 ```
 
 
+you can update the file to include a variable placeholder such as:
 
+```
+...
+    flowVelocity         ({{ wind_speed }} 0 0);
+...
+```
 
-After this small edit, you will need to save your input file as `forceCoeffs.jinja` (note the ".jinja" extension). 
-This will tell Inductiva's templating engine that Python variable called "wind_speed" should be used to set the correct scalar value in `forceCoeffs`.
+After this small edit, you will need to save your input file as `initialConditions.jinja` (note the ".jinja" extension). 
+This will tell Inductiva's templating engine that Python variable called "wind_speed" should be used to set the correct x axis flow velocity.
 
 ## Code Overview
-The script below shows how we can now set the value of the `forceCoeffs` parameters from Python:
+The script below shows how we can now set the value of the `flowVelocity` parameter from Python:
 
 ```python
 import inductiva
