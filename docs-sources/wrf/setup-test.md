@@ -38,7 +38,6 @@ cloud_machine.terminate()
 task.download_outputs()
 
 task.print_summary()
-
 ```
 
 ## Step 2: Verify the Task Status

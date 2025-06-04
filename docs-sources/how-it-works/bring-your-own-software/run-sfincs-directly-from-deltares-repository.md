@@ -24,7 +24,7 @@ sfincs.inp.bak		sfincs_netbndbzsbzifile.nc
 ```
 
 ## Run Simulations using SFINCS Docker Container
-You can reference the Deltares’ Docker image directly in your simulation script using the `inductiva.simulators.CustomImage`class, as shown below:
+You can reference the Deltares’ Docker image directly in your simulation script using the `inductiva.simulators.CustomImage` class, as shown below:
 
 ```python
 import inductiva

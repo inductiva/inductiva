@@ -1,21 +1,18 @@
 # Run Your First Simulation
 This tutorial will show you how to run WRF simulations using the Inductiva API.
 
-We will cover the publicly available [WRF benchmark](https://www2.mmm.ucar.edu/wrf/users/benchmark/v44/benchdata_v44.html) 
-that is based on the [Pre-Thanksgiving Winter Storm of 2019](https://weather.com/storms/winter/news/2019-11-24-snowstorm-rockies-denver-plains-midwest-thanksgiving-week).
+We will cover the publicly available [WRF benchmark](https://www2.mmm.ucar.edu/wrf/users/benchmark/v44/benchdata_v44.html), based on the [Pre-Thanksgiving Winter Storm of 2019](https://weather.com/storms/winter/news/2019-11-24-snowstorm-rockies-denver-plains-midwest-thanksgiving-week), to help you get started with simulations.
+
+We will also demonstrate Inductiva’s ability to efficiently scale this use case on a more powerful machine.
 
 <p align="center"><img src="./_static/RAINNC_animation.gif" alt="Animation with the RAINNC values of the simulation." width="700"></p>
 
 ## Prerequisites
-
 Download the required files [here](https://www2.mmm.ucar.edu/wrf/users/benchmark/v44/v4.4_bench_conus12km.tar.gz)
-and place them in a folder called SimulationFiles. Then, you’ll be ready to send
+and place them in a folder called `SimulationFiles`. Then, you’ll be ready to send
 your simulation to the Cloud.
----
 
-## Running an WRF Simulation
-You're now ready to send your simulation to the Cloud!
-
+## Running a WRF Simulation
 Here is the code required to run a WRF simulation using the Inductiva API:
 
 ```python
@@ -36,7 +33,7 @@ wrf = inductiva.simulators.WRF( \
 task = wrf.run( \
 	input_dir=input_dir,
 	case_name="em_real",
-	# generate gif with the RAINNC values
+	# generate GIF with the RAINNC values
 	gen_gif=True,
 	gen_gif_variable="RAINNC",
 	gen_gif_files=[
@@ -67,15 +64,16 @@ task.print_summary()
 
 **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
 
-To adapt this script for other WRF simulations, replace input_dir with the path
-to your WRF input files and set the `case_name` accordingly to your case.
+For visualization purposes, this script also optionally generates a GIF directly from the simulation outputs.
+Check out this [tutorial](https://inductiva.ai/guides/wrf/gif-generation) for more details.
 
-Once the simulation is complete, we terminate the machine, download the results
-and print a summary of the simulation as shown below.
+To adapt this script for other WRF simulations, replace input_dir with the path
+to your WRF input files and set the `case_name` accordingly.
+
+When the simulation is complete, we terminate the machine, download the results and 
+print a summary of the simulation as shown below.
 
 ```
-inductiva tasks info 7ehaq6vopvkdigp4zjpsu4g0m
-
 Task status: Success
 
 Timeline:
@@ -95,16 +93,16 @@ Data:
 	Number of output files:   52
 
 Estimated computation cost (US$): 0.072 US$
-
-Go to https://console.inductiva.ai/tasks/7ehaq6vopvkdigp4zjpsu4g0m for more details.
 ```
 
 As you can see in the “In Progress” line, the part of the timeline that
 represents the actual execution of the simulation, the core computation time of
-this simulation was approximately 32 minutes (1924 seconds). 🚀
+this simulation was approximately 1924.8 seconds (32 minutes).
 
-## Scale Up Your Simulation
+Although it's short, there's still room for improvement to reduce the processing
+time.
 
+## Scaling Up Your Simulation
 Scaling up your simulation is as simple as updating the `machine_type` parameter to a 56 vCPU machine (`c2d-highcpu-56`).
 
 By increasing the number of vCPUs, we can substantially decrease the simulation time.
@@ -121,10 +119,10 @@ Still in the testing phase? No problem! Just skip this step for now and start
 with a machine with fewer vCPUs. Once you're satisfied with your results, you
 can seamlessly scale your WRF simulation.
 
-## Conclusion
-We’ve covered the key steps for setting up and running a **WRF** simulation using the **Inductiva API**.
+## Summary
+We’ve walked through the essential steps for setting up and running a WRF simulation using the **Inductiva API**.
 
-By following this guide, you now have a clearer understanding of how to configure
-and efficiently run WRF simulations on Inductiva's platform.
+By following this guide, you should now have a clear understanding of how to configure and efficiently 
+run WRF simulations on Inductiva.
 
-Happy simulations! 🚀
+Happy simulationg! 🌪️
