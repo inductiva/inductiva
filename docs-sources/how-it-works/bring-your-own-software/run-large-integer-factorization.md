@@ -103,13 +103,13 @@ For this initial test, we use a `cd2-standard-4` machine, which has 4 vCPUs and 
 
 We are using the `CustomImage` simulator, which lets us select any Docker image, either one publicly available on Docker Hub or one we’ve uploaded to our Inductiva storage, as demonstrated earlier.
 
-In this case, we are using an `empty` input directory because `cado-nfs` does not require any input files for this task.
+In this case, we are using a local directory called `empty` without any files as the input directory, because `cado-nfs` does not require any input files for this task.
 
 The `commands` parameter specifies the command to run inside the container. Here, it's the `cado-nfs.py` script followed by the number we want to factor.
 
-To keep things organized, we’ve assigned the project name `cado-nfs` to this task, making it easier to manage and retrieve related runs later on.
+To keep things organized, we've assigned the project name `cado-nfs` to this task, making it easier to manage and retrieve related runs later on.
 
-Calling `task.wait()` will block execution until the task completes, showing the command's output in real time. Once done, task.print_summary() will display a summary of the task, as follows:
+Calling `task.wait()` will block execution until the task completes, showing the command's output in real time. Once done, `task.print_summary()` will display a summary of the task, as follows:
 
 ```
 Task status: Success
@@ -182,9 +182,9 @@ To tackle the computation, we created an `ElasticMachineGroup` using the `c2d-hi
 
 The machine group is configured to allow up to as many machines as there are RSA numbers, ensuring that each number can be processed in parallel on a separate machine.
 
-Thanks to the elastic nature of this setup, a new machine is provisioned as soon as a task starts and is automatically shut down upon completion. This ensures efficient resource usage: machines don’t idle while waiting for others to complete their assigned job.
+Thanks to the elastic nature of this setup, a new machine is provisioned as soon as a task starts and is automatically shut down upon completion. This ensures efficient resource usage: machines don't idle while waiting for others to complete their assigned job.
 
-Here’s a summary of the performance and cost of the RSA factorization tasks:
+Here's a summary of the performance and cost of the RSA factorization tasks:
 
 |   RSA Number  |     Execution Time     |   Estimated Cost   |
 |:-------------:|:----------------------:|:--------:|
