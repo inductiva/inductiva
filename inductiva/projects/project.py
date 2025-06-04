@@ -255,7 +255,7 @@ class Project:
 
         Args:
             output_dir (str, optional): The base directory where project outputs
-                                        will be downloaded..
+                                        will be downloaded.
         """
 
         all_tasks = self.get_tasks()
