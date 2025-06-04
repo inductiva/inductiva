@@ -39,25 +39,26 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-        Waiting for Input         at 19/05, 10:30:46      1.078 s
-        In Queue                  at 19/05, 10:30:47      33.417 s
-        Preparing to Compute      at 19/05, 10:31:20      61.376 s
-        In Progress               at 19/05, 10:32:22      136.385 s
-                └> 136.186 s       turbsim 90m_12mps_twr.inp
-        Finalizing                at 19/05, 10:34:38      0.655 s
-        Success                   at 19/05, 10:34:39      
+        Waiting for Input         at 03/06, 10:31:51      1.346 s
+        In Queue                  at 03/06, 10:31:52      41.149 s
+        Preparing to Compute      at 03/06, 10:32:34      4.007 s
+        In Progress               at 03/06, 10:32:38      156.559 s
+                └> 156.233 s       bash ./Allrun
+        Finalizing                at 03/06, 10:35:14      1.23 s
+        Success                   at 03/06, 10:35:15      
 
 Data:
-        Size of zipped output:    8.16 MB
-        Size of unzipped output:  8.39 MB
-        Number of output files:   6
+        Size of zipped output:    115.53 MB
+        Size of unzipped output:  184.12 MB
+        Number of output files:   110
 
-Estimated computation cost (US$): 0.0010 US$
+Estimated computation cost (US$): 0.0080 US$
 ```
 
 You can also check the [Inductiva Web Console](https://console.inductiva.ai/) for more task information. You can check task details, navigate the task filesystem and even read the logs in real time!
 
 ![console timeline](../../_static/console_timeline.png)
+
 ![console logs](../../_static/console_logs.png)
 
 

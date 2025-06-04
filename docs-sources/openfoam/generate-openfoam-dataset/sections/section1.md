@@ -14,9 +14,10 @@ import inductiva
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "openfoam-input-example.zip",
-    path="input_files/"
     unzip=True)
 ```
+
+You might need to rename the directory `openfoam-input-example` to `input_files`.
 
 Your directory structure should look like this:
 

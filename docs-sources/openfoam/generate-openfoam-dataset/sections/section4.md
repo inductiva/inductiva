@@ -39,7 +39,6 @@ for i in range(DATASET_SIZE):
         source_dir="input_files",
         target_dir=target_dir,
         overwrite=True,
-        rotation=rotation,
         wind_speed=wind_speed)
 
     # Initialize the Simulator

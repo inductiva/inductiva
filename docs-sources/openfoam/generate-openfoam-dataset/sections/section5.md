@@ -24,14 +24,14 @@ openfoam_project.download_outputs()
 Executing `print(openfoam_project)` gives a summary of the main project details:
 
 ```
-Project 'turbsim_dataset' created at 2025-05-16 14:50.
+Project 'openfoam_dataset' created at 2025-06-03 11:02.
 
 Total number of tasks: 25
 
 Tasks by status:
   success: 25
 
-Estimated total computation cost: 0.0067 US$
+Estimated total computation cost: 0.20 US$
 ```
 
 Running `openfoam_project.download_outputs()` creates a folder called `inductiva_output/openfoam_project` with one folder for each simulation.
@@ -44,7 +44,7 @@ Below we show how you can retrieve the metadata of all the tasks in the project:
 import inductiva
 
 openfoam_project = inductiva.projects.Project(
-   name="openfoam_project")
+   name="openfoam_dataset")
 
 for task in openfoam_project.get_tasks():
     print(f"Task ID: {task.id}")
@@ -53,14 +53,14 @@ for task in openfoam_project.get_tasks():
 ```
 
 ```
-Task ID: 37a3qp59b11g2kjvhttuhh004
-Task metadata: {'URef': '12', 'seed_1': '1945058503', 'seed_2': '-1709420770', 'local_template_dir': 'variations/s1_1945058503/s2_-1709420770/URef_12'}
+Task ID: 3b9n21xqqt97nbec07yzr6wzr
+Task metadata: {'wind_speed': '46', 'local_template_dir': 'variations/wind_speed_46'}
 
-Task ID: 88c0w2bigcaim0bwdzejitsth
-Task metadata: {'URef': '12', 'seed_1': '144736085', 'seed_2': '-2036154925', 'local_template_dir': 'variations/s1_144736085/s2_-2036154925/URef_12'}
+Task ID: d5r521g6igus8wh9c3yy8fbry
+Task metadata: {'wind_speed': '15', 'local_template_dir': 'variations/wind_speed_15'}
 
-Task ID: 1vp0ajszufcang0qct0vt2ytb
-Task metadata: {'URef': '13', 'seed_1': '-124466270', 'seed_2': '-864712422', 'local_template_dir': 'variations/s1_-124466270/s2_-864712422/URef_13'}
+Task ID: iqf11voamuizebwt1edukkfw9
+Task metadata: {'wind_speed': '7', 'local_template_dir': 'variations/wind_speed_7'}
 
 ..
 ```
