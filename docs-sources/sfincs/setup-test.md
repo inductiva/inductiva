@@ -10,7 +10,7 @@ When you run the script, all the necessary simulation artifacts and configuratio
 """SFINCS example."""
 import inductiva
 
-# Instantiate machine group
+# Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
     machine_type="c2d-highcpu-4")
@@ -25,11 +25,12 @@ input_dir = inductiva.utils.download_from_url(
 sfincs = inductiva.simulators.SFINCS( \
     version="2.2.1")
 
-# Run simulation with configuration files in the input directory
+# Run simulation
 task = sfincs.run( \
     input_dir=input_dir,
     on=cloud_machine)
 
+# Wait for the simulation to finish and download the results
 task.wait()
 cloud_machine.terminate()
 

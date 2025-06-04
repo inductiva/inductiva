@@ -4,19 +4,9 @@ Your resource hub for all things WRF at Inductiva. Whether you're just starting 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check!
 
 ## About WRF
+The [Weather Research and Forecasting (WRF) Model](https://www.mmm.ucar.edu/models/wrf) is a state-of-the-art numerical weather prediction system developed to meet both atmospheric research and operational forecasting demands. It offers a flexible, scalable platform capable of simulating a broad spectrum of meteorological phenomena — from large-scale global patterns to localized events like thunderstorms and hurricanes. 
 
-The [**Weather Research and Forecasting (WRF) Model**](https://www.mmm.ucar.edu/models/wrf)
-is a state-of-the-art numerical weather prediction system designed for both
-atmospheric research and operational forecasting needs. Developed collaboratively
-by the [National Center for Atmospheric Research](https://ncar.ucar.edu/), the
-[National Oceanic and Atmospheric Administration](https://www.noaa.gov/), and
-several other agencies and research institutions, WRF provides a flexible and
-scalable platform for simulating a wide range of meteorological phenomena, from
-large-scale global patterns to small-scale localized events such as thunderstorms
-and hurricanes. The model supports high-resolution simulations and is capable of
-capturing complex interactions between the atmosphere and other Earth system
-components, including the land surface and oceans.
-
+WRF supports high-resolution simulations and effectively captures the complex interactions between the atmosphere and other Earth system components, including land surfaces and oceans.
 
 ## What You'll Find Here
 - **Tutorials:** Step-by-step guides to help you learn how to run WRF through the Inductiva API. From getting started to advanced tutorials, we have you covered.
@@ -50,7 +40,7 @@ caption: "Visualization"
 maxdepth: 1
 hidden: true
 ---
-visualization
+gif-generation
 ```
 
 ```{toctree}

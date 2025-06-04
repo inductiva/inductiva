@@ -134,8 +134,3 @@ The performance results are summarized below:
 Unlike the baseline case, runtime consistently decreased as the cluster size grew. The best performance was recorded with 16 machines (1792 vCPUs), completing the simulation in 1848 seconds — a major improvement over the single-machine runtime of 8640 seconds.
 
 However, the speedup does not scale linearly with the number of vCPUs. While the 4 and 8 machine setups showed solid performance gains, adding more machines beyond that point yielded diminishing returns.
-
-## Key Insights
-- When increasing simulation complexity by refining the grid (increasing total cells by a factor of 8), larger clusters showed consistent runtime improvements.
-- Despite improvements, speedup gains do not scale linearly; diminishing returns occur at higher node counts due to overhead.
-- Overall, AMR-Wind scales better with increased computational workload, while communication costs limit scaling for smaller problems.
