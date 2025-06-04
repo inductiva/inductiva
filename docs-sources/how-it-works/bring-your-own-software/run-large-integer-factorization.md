@@ -14,9 +14,9 @@ and the open-source software [CADO-NFS](https://gitlab.inria.fr/cado-nfs/cado-nf
 the Number Field Sieve (NFS) — one of the most efficient known algorithms for factoring large integers.
 
 We’ll walk through:
-	1.	Building a Docker container image with CADO-NFS
-	2.	Uploading it to Inductiva
-	3.	Executing the factorization on cloud machines
+1.	Building a Docker container image with CADO-NFS
+2.	Uploading it to Inductiva
+3.	Executing the factorization on cloud machines
 
 ## Building the Docker Image
 First, create a Dockerfile that installs `cado-nfs` and its dependencies:
