@@ -21,4 +21,5 @@ run-sfincs-directly-from-deltares-repository
 integrate-your-docker-container
 perform-ml-inference/index
 run-large-integer-factorization
+run-R-stochastic-models
 ```
