@@ -7,7 +7,7 @@ We will cover the `Test_HydraulicStruct` use case from the verification tests co
 Download the required files [here](https://columbia.vims.edu/schism/schism_verification_tests/Test_HydraulicStruct/) and place them in a folder called `SimulationFiles`. Then, you’ll be ready to send your simulation to the Cloud.
 
 ## Running an SCHISM Simulation
-Here is the code required to run a SCHISM simulation using the Inductiva API:
+Here is the code required to run an SCHISM simulation using the Inductiva API:
 
 ```python
 """SCHISM example"""

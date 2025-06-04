@@ -135,16 +135,3 @@ Below is a detailed comparison of execution times and costs across different mac
         <td>1.36 US$</td>
     </tr>
 </table>
-
-## How to Choose the Best Machine for Your CFD Workload
-The right hardware configuration for you depends on your priorities. Here are key considerations to guide your choice:
-
-**If Speed Is Your Top Priority**: Opt for the fastest GPUs like the NVIDIA H100 or A100 instances to minimize simulation runtime. While these come at a higher hourly cost, the overall faster completion can reduce total expense.
-
-**If Cost Efficiency Is Most Important**: High-core-count CPUs such as the **AMD c2d-highcpu-112** provide solid performance for the lowest cost. Consider entry-level GPUs like the **NVIDIA L4** for some acceleration without significant cost increases.
-
-**If You Are Exploring or Just Getting Started**: Begin with modest configurations to profile your workload and use our benchmarks as a reference to make informed scaling decisions or decide whether GPU acceleration is worthwhile.
-
-**Consider the Scale of Your Simulation**: For computationally intensive cases with millions of cells and complex physics, simulations can be efficiently scaled by leveraging cloud-based GPU machines.
-
-Whatever your priorities, Inductiva takes care of the infrastructure, allowing you to focus on what matters most: your CFD projects.

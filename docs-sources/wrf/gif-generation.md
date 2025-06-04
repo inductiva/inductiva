@@ -1,13 +1,11 @@
 # Automatically Generate GIFs from Your Simulation
-
-You can now easily generate animated GIFs from your simulation outputs! This
-feature provides a quick and convenient way to visualize your results without
-any additional post-processing.
+You can now easily create animated GIFs directly from your simulation outputs! 
+This feature offers a fast and convenient way to visualize your results without any additional post-processing.
 
 <p align="center"><img src="./_static/RAINNC_animation.gif" alt="Animation with the RAINNC values of the simulation." width="700"></p>
 
-We'll pick up from the [quick-start tutorial](quick-start), where you can find
-the following code snippet:
+Let’s continue from the [quick-start tutorial](quick-start), where the following code snippet demonstrates 
+how to enable GIF generation:
 
 ```python
 task = wrf.run(
@@ -37,8 +35,7 @@ task = wrf.run(
 ```
 
 ### GIF Generation Parameters
-
-You can customize GIF creation using the following parameters:
+Customize the GIF output using these parameters:
 
 | Parameter            | Type        | Description                                                                             |
 | -------------------- | ----------- | --------------------------------------------------------------------------------------- |
@@ -48,7 +45,5 @@ You can customize GIF creation using the following parameters:
 | `gen_gif_output_dir` | `str`       | Directory to save the generated GIF. Defaults to the current directory.                 |
 | `gen_gif_fps`        | `int`       | Frames per second. Controls the playback speed. Default is `3`.                         |
 
-This feature is perfect for quick diagnostics, presentations, or simply getting
-a visual feel for your simulation results.
-
-Happy simulating!
+This feature is ideal for quick diagnostics, presentations, or simply gaining a visual understanding 
+of your simulation results.

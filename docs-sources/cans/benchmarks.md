@@ -19,19 +19,3 @@ Below is a detailed comparison of execution times and costs across different mac
 Speed-ups and cost-efficiency gains are expected to be even more significant when running the full simulation.
 
 The data illustrates that scaling up hardware resources does not always translate into linear performance improvements. In some cases, increased overhead, such as inter-GPU communication or suboptimal resource utilization, can lead to even longer runtimes. Careful benchmarking is therefore essential to find the right balance between speed, cost, and efficiency for your specific computational needs.
-
-## How To Choose the Best Machine
-Selecting the right hardware configuration for your CaNS simulations depends on balancing performance, cost, and project requirements. Use these key considerations to guide your choice:
-
-### Define Your Priorities: Speed vs. Cost
-- **If time is critical**: GPUs, especially NVIDIA H100-based instances, offer the fastest runtimes, though at a higher cost.
-- **If budget is limited**: High-CPU machines are more cost-effective but come with longer runtimes.
-
-### Consider the Scale of Your Simulation
-- For **small to medium workloads** (like the 1% case benchmarked here), single or dual GPU setups often provide the best balance.
-- For **large-scale simulations**, multi-GPU machines can deliver improved speedups, though watch for diminishing returns due to overhead.
-
-### If You Are Exploring or Just Getting Started
-- Begin with modest configurations to profile your workload and use our benchmarks as a reference to make informed scaling decisions or decide whether GPU acceleration is worthwhile.
-
-Whatever your priorities, Inductiva takes care of the infrastructure, allowing you to focus on what matters most: your CaNS projects.
