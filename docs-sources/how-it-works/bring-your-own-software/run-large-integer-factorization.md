@@ -1,16 +1,16 @@
 # Run Large Integer Factorization
-Every integer can be expressed as a product of prime numbers — a principle known as the Fundamental 
+Every integer can be expressed as a product of prime numbers — a principle known as the Fundamental
 Theorem of Arithmetic.
 
-Integers with more than one prime factor are called composite numbers, while those with only themselves as 
+Integers with more than one prime factor are called composite numbers, while those with only themselves as
 a prime factor are called prime numbers.
 
 Determining the prime factors of a number is known as **factorization**, a core problem in number theory.
-Modern cryptographic algorithms, such as RSA, rely on the computational difficulty of factorizing large 
+Modern cryptographic algorithms, such as RSA, rely on the computational difficulty of factorizing large
 composite numbers to ensure security.
 
-In this guide, we will demonstrate how to factor one of the RSA test numbers using the Inductiva API 
-and the open-source software [CADO-NFS](https://gitlab.inria.fr/cado-nfs/cado-nfs.git), which implements 
+In this guide, we will demonstrate how to factor one of the RSA test numbers using the Inductiva API
+and the open-source software [CADO-NFS](https://gitlab.inria.fr/cado-nfs/cado-nfs.git), which implements
 the Number Field Sieve (NFS) — one of the most efficient known algorithms for factoring large integers.
 
 We’ll walk through:
@@ -45,7 +45,7 @@ RUN make -j
 RUN make install
 ```
 
-To build the image and save it with the tag `cado-nfs`, run the following command in the directory 
+To build the image and save it with the tag `cado-nfs`, run the following command in the directory
 where the Dockerfile is located:
 
 ```bash
@@ -61,7 +61,7 @@ Upload the Docker image to Inductiva storage by running the following command:
 inductiva containers upload cado-nfs
 ```
 
-This command will convert the image to Singularity Image Format (SIF) and upload it to your Inductiva storage, 
+This command will convert the image to Singularity Image Format (SIF) and upload it to your Inductiva storage,
 making it available for use in simulations.
 
 Note that `cado-nfs` is the name of the image you built in the previous step.
@@ -69,7 +69,7 @@ Note that `cado-nfs` is the name of the image you built in the previous step.
 Run `inductiva containers list` to verify that the image has been uploaded successfully:
 
 ```bash
-> inductiva containers list                                                                                                                                                          py inductiva lpcunha@lithium
+> inductiva containers list
 
  NAME           SIZE        CREATION TIME
  cado-nfs.sif   337.56 MB   26/05, 10:27:51
@@ -137,7 +137,7 @@ The factorization result can be found in the `stdout.txt` file, which is accessi
 
 ```
 260938498861057 588120598053661 760926063870977 773951836515617
-````
+```
 
 So, `90377629292003121684002147101760858109247336549001090677693` can be factorized into the product of these four prime numbers.
 
@@ -193,10 +193,10 @@ Here’s a summary of the performance and cost of the RSA factorization tasks:
 |  RSA-120 | 16 minutes and 39 seconds   | 0.19 US$ |
 |  RSA-130 |   42 minutes and 1 second  | 0.50 US$ |
 |  RSA-140 |  2 hours and 12 minutes    | 1.58 US$ |
-|  RSA-150 |    ----  | --- |
+|  RSA-150 |    6 hours and 39 minutes  | 4.87 US$ |
 
 ## Wrapping Up
-In this guide, you learned how to use the Inductiva API to run arbitrary computational tasks in the cloud. As a concrete example, we used the CADO-NFS software to factor large semiprime integers, including several from the RSA Challenge. 
+In this guide, you learned how to use the Inductiva API to run arbitrary computational tasks in the cloud. As a concrete example, we used the CADO-NFS software to factor large semiprime integers, including several from the RSA Challenge.
 
 This demonstrates how easily custom workloads can be executed with Inductiva, unlocking access to powerful computational resources with minimal setup.
 
