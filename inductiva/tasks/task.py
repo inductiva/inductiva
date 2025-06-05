@@ -1045,13 +1045,9 @@ class Task:
 
         logging.debug("\nDownload URL: %s\n", download_url)
 
-        if dest_dir is None:
-            dir_path = files.resolve_output_path(self.id)
-        else:
-            dir_path = pathlib.Path(dest_dir)
-
-        if sub_dir is not None:
-            dir_path = dir_path.joinpath(sub_dir)
+        base_path = pathlib.Path(
+            dest_dir) if dest_dir else files.resolve_output_path(self.id)
+        dir_path = base_path.joinpath(sub_dir) if sub_dir else base_path
 
         if (dir_path.exists() and not self._contains_only_std_files(dir_path)):
             warnings.warn("Path already exists, files may be overwritten.")
