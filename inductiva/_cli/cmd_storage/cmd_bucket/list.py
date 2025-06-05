@@ -7,11 +7,11 @@ from inductiva.client.apis.tags import storage_api
 from inductiva.utils import format_utils
 
 
-def list_buckets(args):
+def list_buckets(_):
     """List the user's buckets accessible via the Inductiva API."""
     api = storage_api.StorageApi(inductiva.api.get_client())
     response = api.list_buckets()
-    
+
     buckets = [dict(schema) for schema in response.body]
     for bucket in buckets:
         bucket["is_internal"] = "yes" if bucket["is_internal"] else "no"
@@ -19,7 +19,6 @@ def list_buckets(args):
 
     cols = list(buckets[0].keys())
     rows = [list(bucket.values()) for bucket in buckets]
-
 
     ansi_formatter = format_utils.get_ansi_formatter()
     headers = [lambda x: ansi_formatter(x.upper(), format_utils.Emphasis.BOLD)]
@@ -38,8 +37,7 @@ def register(parser):
         "list",
         aliases=["ls"],
         help="List all your storage buckets accessible via the Inductiva API.",
-        formatter_class=argparse.RawTextHelpFormatter
-    )
+        formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = (
         "The `inductiva storage bucket list` command retrieves and displays "
@@ -47,7 +45,6 @@ def register(parser):
         "This includes information such as the bucket name, region, provider, "
         "and whether it is internally managed by Inductiva.\n"
         "Example:\n"
-        "  inductiva storage bucket list\n"
-    )
+        "  inductiva storage bucket list\n")
 
     subparser.set_defaults(func=list_buckets)

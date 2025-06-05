@@ -5,6 +5,7 @@ import os
 from inductiva import constants
 from inductiva._cli import loader, utils
 
+
 def register(root_parser):
     parser = root_parser.add_parser(
         "bucket",
@@ -16,8 +17,7 @@ def register(root_parser):
         "Storage bucket management utilities.\n\n"
         "The `inductiva storage bucket` command provides tools for "
         "managing with cloud storage buckets.\n"
-        "Use it to manage cloud storage buckets linked to your account."
-    )
+        "Use it to manage cloud storage buckets linked to your account.")
 
     utils.show_help_msg(parser)
 
