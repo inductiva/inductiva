@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -25,10 +24,13 @@ from inductiva.client.models.project_type import ProjectType
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class Project(BaseModel):
     """
     Project
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     name: Annotated[str, Field(min_length=1, strict=True, max_length=128)]
     project_type: ProjectType
     id: StrictStr
@@ -37,14 +39,16 @@ class Project(BaseModel):
     estimated_computation_cost: Optional[StrictStr] = '0'
     task_status_overview: Optional[Dict[str, StrictInt]] = None
     project_metadata: Optional[Dict[str, StrictStr]] = None
-    __properties: ClassVar[List[str]] = ["name", "project_type", "id", "created_at", "num_tasks", "estimated_computation_cost", "task_status_overview", "project_metadata"]
+    __properties: ClassVar[List[str]] = [
+        "name", "project_type", "id", "created_at", "num_tasks",
+        "estimated_computation_cost", "task_status_overview", "project_metadata"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -70,8 +74,7 @@ class Project(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -95,15 +98,22 @@ class Project(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "name": obj.get("name"),
-            "project_type": obj.get("project_type"),
-            "id": obj.get("id"),
-            "created_at": obj.get("created_at"),
-            "num_tasks": obj.get("num_tasks"),
-            "estimated_computation_cost": obj.get("estimated_computation_cost") if obj.get("estimated_computation_cost") is not None else '0',
-            "task_status_overview": obj.get("task_status_overview"),
-            "project_metadata": obj.get("project_metadata")
+            "name":
+                obj.get("name"),
+            "project_type":
+                obj.get("project_type"),
+            "id":
+                obj.get("id"),
+            "created_at":
+                obj.get("created_at"),
+            "num_tasks":
+                obj.get("num_tasks"),
+            "estimated_computation_cost":
+                obj.get("estimated_computation_cost")
+                if obj.get("estimated_computation_cost") is not None else '0',
+            "task_status_overview":
+                obj.get("task_status_overview"),
+            "project_metadata":
+                obj.get("project_metadata")
         })
         return _obj
-
-

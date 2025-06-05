@@ -1,7 +1,8 @@
 """Base class for machine groups."""
+import decimal
 from collections import defaultdict, namedtuple
 from dataclasses import dataclass
-from typing import Optional, Union
+from typing import Optional, Union, List
 from abc import ABC, abstractmethod
 import datetime
 import time
@@ -140,7 +141,7 @@ class BaseMachineGroup(ABC):
         """Check if the machine group has a GPU."""
         if self._gpu_info is None:
             return False
-        return self._gpu_info.get("gpu_count") > 0
+        return self._gpu_info.gpu_count > 0
 
     def gpu_count(self) -> bool:
         """
@@ -256,28 +257,24 @@ class BaseMachineGroup(ABC):
             return dt
         return None
 
-    def _update_attributes_from_response(self, resp: dict):
+    def _update_attributes_from_response(
+            self, resp: inductiva.client.models.VMGroupConfig):
         """Update machine group attributes with values from the API response."""
-        self._id = resp["id"]
-        self._name = resp["name"]
-        self.quota_usage = resp.get("quota_usage") or {}
+        self._id = resp.id
+        self._name = resp.name
+        self.quota_usage = resp.quota_usage
         # Lifecycle configuration parameters are updated with default values
         # from the API response if they were not provided by the user
-        self.max_idle_time = self._seconds_to_timedelta(
-            resp.get("max_idle_time"))
-        self._idle_seconds = self._seconds_to_timedelta(
-            resp.get("idle_seconds"))
-        self.auto_terminate_ts = self._iso_to_datetime(
-            resp.get("auto_terminate_ts"))
-        self._total_ram_gb = resp.get("total_ram_gb")
-        self._cost_per_hour = resp.get("cost_per_hour")
-        self._cpu_info = resp.get("cpu_info")
-        self._gpu_info = resp.get("gpu_info")
-        self.zone = resp.get("zone")
-        dynamic_disk_resize_config = resp.get(
-            "dynamic_disk_resize_config") or {}
-        self.auto_resize_disk_max_gb = dynamic_disk_resize_config.get(
-            "max_disk_size_gb")
+        self.max_idle_time = self._seconds_to_timedelta(resp.max_idle_time)
+        self._idle_seconds = self._seconds_to_timedelta(resp.idle_seconds)
+        self.auto_terminate_ts = self._iso_to_datetime(resp.auto_terminate_ts)
+        self._total_ram_gb = resp.total_ram_gb
+        self._cost_per_hour = resp.cost_per_hour
+        self._cpu_info = resp.cpu_info
+        self._gpu_info = resp.gpu_info
+        self.zone = resp.zone
+        dynamic_disk_resize_config = resp.dynamic_disk_resize_config
+        self.auto_resize_disk_max_gb = dynamic_disk_resize_config.max_disk_size_gb if dynamic_disk_resize_config else None
 
     def _register_machine_group(self, **kwargs):
         """Register machine group configuration in API.
@@ -300,11 +297,8 @@ class BaseMachineGroup(ABC):
             **kwargs,
         )
 
-        resp = self._api.register_vm_group(
-            body=instance_group_config,
-            skip_deserialization=True,
-        )
-        body = json.loads(resp.response.data)
+        body = self._api.register_vm_group(
+            register_vm_group_request=instance_group_config,)
 
         self._update_attributes_from_response(body)
 
@@ -320,20 +314,20 @@ class BaseMachineGroup(ABC):
         return f"{self._active_machines}/{self.num_machines}"
 
     @classmethod
-    def from_api_response(cls, resp: dict):
+    def from_api_response(cls, resp: inductiva.client.models.VMGroupConfig):
         """Creates a MachineGroup object from an API response."""
 
         # Do not call __init__ to prevent registration of the machine group
         machine_group = cls.__new__(cls)
         machine_group._api = inductiva.client.ComputeApi(api.get_client())
-        machine_group.machine_type = resp["machine_type"]
-        machine_group.data_disk_gb = resp["disk_size_gb"]
-        machine_group.provider = resp["provider_id"]
-        machine_group.create_time = resp["creation_timestamp"]
-        machine_group.spot = bool(resp["spot"])
-        machine_group._started = bool(resp["started"])
-        machine_group.__dict__["machines"] = resp["machines"]
-        machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
+        machine_group.machine_type = resp.machine_type
+        machine_group.data_disk_gb = resp.disk_size_gb
+        machine_group.provider = resp.provider_id
+        machine_group.create_time = resp.creation_timestamp
+        machine_group.spot = bool(resp.spot)
+        machine_group._started = bool(resp.started)
+        machine_group.__dict__["machines"] = resp.machines
+        machine_group.__dict__["_active_machines"] = int(resp.num_vms)
 
         machine_group._update_attributes_from_response(resp)
 
@@ -401,7 +395,7 @@ class BaseMachineGroup(ABC):
             while not self.can_start_resource():
                 time.sleep(self.QUOTAS_EXCEEDED_SLEEP_SECONDS)
 
-        self._api.start_vm_group(query_params={"machine_group_id": self.id})
+        self._api.start_vm_group(machine_group_id=self.id)
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
         quota_usage_table_str = self.quota_usage_table_str("used by resource")
@@ -419,8 +413,7 @@ class BaseMachineGroup(ABC):
             return
 
         try:
-            self._api.delete_vm_group(
-                query_params={"machine_group_id": self.id})
+            self._api.delete_vm_group(machine_group_id=self.id)
             if verbose:
                 logging.info("Successfully requested termination of %s.",
                              repr(self))
@@ -470,9 +463,15 @@ class BaseMachineGroup(ABC):
         }
 
         for name, value in self.quota_usage.items():
-            max_allowed = quotas.get(name, {}).get("max_allowed", "n/a")
-            full_name = quotas.get(name, {}).get("label", "n/a")
-            in_use = quotas.get(name, {}).get("in_use", "n/a")
+            quota = quotas.get(name)
+            if not quota:
+                max_allowed = "n/a"
+                full_name = "n/a"
+                in_use = "n/a"
+
+            max_allowed = quota.max_allowed
+            full_name = quota.label
+            in_use = quota.in_use
 
             table[""].append(full_name)
             table[resource_usage_header].append(value)
@@ -544,8 +543,8 @@ class BaseMachineGroup(ABC):
         maximum number of machines up in the cloud. The final cost will vary
         depending on the total usage of the machines."""
 
-        min_cost_per_hour = self._cost_per_hour.get("min")
-        max_cost_per_hour = self._cost_per_hour.get("max")
+        min_cost_per_hour = decimal.Decimal(self._cost_per_hour.min)
+        max_cost_per_hour = decimal.Decimal(self._cost_per_hour.max)
 
         if not verbose:
             return max_cost_per_hour
@@ -556,8 +555,8 @@ class BaseMachineGroup(ABC):
                 max_cost_per_hour,
             )
         else:
-            min_reason = self._cost_per_hour.get("min_reason").rstrip(".")
-            max_reason = self._cost_per_hour.get("max_reason").rstrip(".")
+            min_reason = self._cost_per_hour.min_reason.rstrip(".")
+            max_reason = self._cost_per_hour.max_reason.rstrip(".")
 
             logging.info("\t· Estimated cloud cost of machine group:")
             logging.info("\t\t· Minimum: %.3f $/h (%s)", min_cost_per_hour,
@@ -634,17 +633,16 @@ class MachineGroup(BaseMachineGroup):
 
     @property
     def n_vcpus(self):
-        return VCPUCount(
-            self._cpu_info["cpu_cores_logical"] * self.num_machines,
-            self._cpu_info["cpu_cores_logical"])
+        return VCPUCount(self._cpu_info.cpu_cores_logical * self.num_machines,
+                         self._cpu_info.cpu_cores_logical)
 
     def short_name(self) -> str:
         return "MachineGroup"
 
     @classmethod
-    def from_api_response(cls, resp: dict):
+    def from_api_response(cls, resp: inductiva.client.models.VMGroupConfig):
         machine_group = super().from_api_response(resp)
-        machine_group.num_machines = int(resp["max_vms"])
+        machine_group.num_machines = int(resp.max_vms)
         return machine_group
 
     def __str__(self):
@@ -737,9 +735,8 @@ class ElasticMachineGroup(BaseMachineGroup):
 
     @property
     def n_vcpus(self):
-        return VCPUCount(
-            self._cpu_info["cpu_cores_logical"] * self.max_machines,
-            self._cpu_info["cpu_cores_logical"])
+        return VCPUCount(self._cpu_info.cpu_cores_logical * self.max_machines,
+                         self._cpu_info.cpu_cores_logical)
 
     def short_name(self) -> str:
         return "ElasticMachineGroup"
@@ -747,8 +744,8 @@ class ElasticMachineGroup(BaseMachineGroup):
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
-        machine_group.max_machines = int(resp["max_vms"])
-        machine_group.min_machines = int(resp["min_vms"])
+        machine_group.max_machines = int(resp.max_vms)
+        machine_group.min_machines = int(resp.min_vms)
         return machine_group
 
     def active_machines_to_str(self) -> str:
@@ -822,9 +819,8 @@ class MPICluster(BaseMachineGroup):
 
     @property
     def n_vcpus(self):
-        return VCPUCount(
-            self._cpu_info["cpu_cores_logical"] * self.num_machines,
-            self._cpu_info["cpu_cores_logical"])
+        return VCPUCount(self._cpu_info.cpu_cores_logical * self.num_machines,
+                         self._cpu_info.cpu_cores_logical)
 
     def gpu_count(self) -> bool:
         """
@@ -848,7 +844,7 @@ class MPICluster(BaseMachineGroup):
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
-        machine_group.num_machines = int(resp["max_vms"])
+        machine_group.num_machines = int(resp.max_vms)
         return machine_group
 
     def __str__(self):
@@ -865,25 +861,27 @@ class MPICluster(BaseMachineGroup):
         return
 
 
-def _fetch_machine_groups_from_api():
+def _fetch_machine_groups_from_api(
+) -> List[inductiva.client.models.VMGroupConfig]:
     """Get all active machine groups of a user from the API."""
     try:
         api_compute = inductiva.client.ComputeApi(inductiva.api.get_client())
-        response = api_compute.list_active_user_instance_groups()
-
-        return json.loads(response.response.data)
+        return api_compute.list_active_user_instance_groups()
 
     except inductiva.client.ApiException as api_exception:
         raise api_exception
 
 
-def _get_machine_group_class(machine_type: str, is_elastic: bool):
+def _get_machine_group_class(
+    machine_type: inductiva.client.models.MachineGroupType,
+    is_elastic: bool,
+):
     """Returns the class of the machine group"""
     if is_elastic:
         mg_class = ElasticMachineGroup
-    elif machine_type == "standard":
+    elif machine_type == inductiva.client.models.MachineGroupType.STANDARD:
         mg_class = MachineGroup
-    elif machine_type == "mpi":
+    elif machine_type == inductiva.client.models.MachineGroupType.MPI:
         mg_class = MPICluster
     else:
         raise ValueError("Unknown resource configuration.")
@@ -894,10 +892,8 @@ def get_by_name(machine_name: str):
     """Returns the machine group corresponding to `machine_name`."""
     try:
         api_compute = inductiva.client.ComputeApi(inductiva.api.get_client())
-        response = api_compute.get_vm_group_by_name({"name": machine_name})
-        response = json.loads(response.response.data)
-        mg_class = _get_machine_group_class(response["type"],
-                                            response["is_elastic"])
+        response = api_compute.get_vm_group_by_name(name=machine_name)
+        mg_class = _get_machine_group_class(response.type, response.is_elastic)
         return mg_class.from_api_response(response)
     except inductiva.client.ApiException as api_exception:
         raise api_exception
@@ -911,7 +907,7 @@ def get():
     machine_group_list = []
 
     for mg in machine_groups:
-        mg_class = _get_machine_group_class(mg["type"], mg["is_elastic"])
+        mg_class = _get_machine_group_class(mg.type, mg.is_elastic)
         machine_group_list.append(mg_class.from_api_response(mg))
 
     return machine_group_list

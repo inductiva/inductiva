@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -24,22 +23,26 @@ from inductiva.client.models.task_status_code import TaskStatusCode
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class TaskStatus(BaseModel):
     """
     TaskStatus
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     id: StrictStr
     status: TaskStatusCode
     position_in_queue: Optional[TaskPositionInQueue] = None
     is_terminated: StrictBool
-    __properties: ClassVar[List[str]] = ["id", "status", "position_in_queue", "is_terminated"]
+    __properties: ClassVar[List[str]] = [
+        "id", "status", "position_in_queue", "is_terminated"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -65,8 +68,7 @@ class TaskStatus(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -93,11 +95,14 @@ class TaskStatus(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "id": obj.get("id"),
-            "status": obj.get("status"),
-            "position_in_queue": TaskPositionInQueue.from_dict(obj["position_in_queue"]) if obj.get("position_in_queue") is not None else None,
-            "is_terminated": obj.get("is_terminated")
+            "id":
+                obj.get("id"),
+            "status":
+                obj.get("status"),
+            "position_in_queue":
+                TaskPositionInQueue.from_dict(obj["position_in_queue"])
+                if obj.get("position_in_queue") is not None else None,
+            "is_terminated":
+                obj.get("is_terminated")
         })
         return _obj
-
-

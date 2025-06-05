@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -24,10 +23,13 @@ from inductiva.client.models.currency_code import CurrencyCode
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class UserCosts(BaseModel):
     """
     UserCosts
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     currency: Optional[CurrencyCode] = None
     credits: StrictStr
     costs: List[CostDetail]
@@ -38,7 +40,6 @@ class UserCosts(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -64,8 +65,7 @@ class UserCosts(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -91,10 +91,11 @@ class UserCosts(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "currency": obj.get("currency"),
-            "credits": obj.get("credits"),
-            "costs": [CostDetail.from_dict(_item) for _item in obj["costs"]] if obj.get("costs") is not None else None
+            "currency":
+                obj.get("currency"),
+            "credits":
+                obj.get("credits"),
+            "costs": [CostDetail.from_dict(_item) for _item in obj["costs"]]
+                     if obj.get("costs") is not None else None
         })
         return _obj
-
-

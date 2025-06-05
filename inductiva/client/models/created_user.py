@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -23,23 +22,27 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class CreatedUser(BaseModel):
     """
     CreatedUser
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     username: StrictStr
     email: StrictStr
     name: Optional[StrictStr] = None
     expiry_ts: datetime
     bucket_name: StrictStr
-    __properties: ClassVar[List[str]] = ["username", "email", "name", "expiry_ts", "bucket_name"]
+    __properties: ClassVar[List[str]] = [
+        "username", "email", "name", "expiry_ts", "bucket_name"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -65,8 +68,7 @@ class CreatedUser(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -97,5 +99,3 @@ class CreatedUser(BaseModel):
             "bucket_name": obj.get("bucket_name")
         })
         return _obj
-
-

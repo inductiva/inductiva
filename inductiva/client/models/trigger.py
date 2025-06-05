@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import json
 import pprint
@@ -25,6 +24,7 @@ from typing_extensions import Literal, Self
 
 TRIGGER_ONE_OF_SCHEMAS = ["TriggerMachineGroupCreate", "TriggerTaskCreate"]
 
+
 class Trigger(BaseModel):
     """
     Trigger
@@ -33,24 +33,29 @@ class Trigger(BaseModel):
     oneof_schema_1_validator: Optional[TriggerTaskCreate] = None
     # data type: TriggerMachineGroupCreate
     oneof_schema_2_validator: Optional[TriggerMachineGroupCreate] = None
-    actual_instance: Optional[Union[TriggerMachineGroupCreate, TriggerTaskCreate]] = None
-    one_of_schemas: Set[str] = { "TriggerMachineGroupCreate", "TriggerTaskCreate" }
+    actual_instance: Optional[Union[TriggerMachineGroupCreate,
+                                    TriggerTaskCreate]] = None
+    one_of_schemas: Set[str] = {
+        "TriggerMachineGroupCreate", "TriggerTaskCreate"
+    }
 
     model_config = ConfigDict(
         validate_assignment=True,
         protected_namespaces=(),
     )
 
-
-    discriminator_value_class_map: Dict[str, str] = {
-    }
+    discriminator_value_class_map: Dict[str, str] = {}
 
     def __init__(self, *args, **kwargs) -> None:
         if args:
             if len(args) > 1:
-                raise ValueError("If a position argument is used, only 1 is allowed to set `actual_instance`")
+                raise ValueError(
+                    "If a position argument is used, only 1 is allowed to set `actual_instance`"
+                )
             if kwargs:
-                raise ValueError("If a position argument is used, keyword arguments cannot be used.")
+                raise ValueError(
+                    "If a position argument is used, keyword arguments cannot be used."
+                )
             super().__init__(actual_instance=args[0])
         else:
             super().__init__(**kwargs)
@@ -62,20 +67,27 @@ class Trigger(BaseModel):
         match = 0
         # validate data type: TriggerTaskCreate
         if not isinstance(v, TriggerTaskCreate):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `TriggerTaskCreate`")
+            error_messages.append(
+                f"Error! Input type `{type(v)}` is not `TriggerTaskCreate`")
         else:
             match += 1
         # validate data type: TriggerMachineGroupCreate
         if not isinstance(v, TriggerMachineGroupCreate):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `TriggerMachineGroupCreate`")
+            error_messages.append(
+                f"Error! Input type `{type(v)}` is not `TriggerMachineGroupCreate`"
+            )
         else:
             match += 1
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when setting `actual_instance` in Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerTaskCreate. Details: " + ", ".join(error_messages))
+            raise ValueError(
+                "Multiple matches found when setting `actual_instance` in Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerTaskCreate. Details: "
+                + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when setting `actual_instance` in Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerTaskCreate. Details: " + ", ".join(error_messages))
+            raise ValueError(
+                "No match found when setting `actual_instance` in Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerTaskCreate. Details: "
+                + ", ".join(error_messages))
         else:
             return v
 
@@ -98,17 +110,22 @@ class Trigger(BaseModel):
             error_messages.append(str(e))
         # deserialize data into TriggerMachineGroupCreate
         try:
-            instance.actual_instance = TriggerMachineGroupCreate.from_json(json_str)
+            instance.actual_instance = TriggerMachineGroupCreate.from_json(
+                json_str)
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
 
         if match > 1:
             # more than 1 match
-            raise ValueError("Multiple matches found when deserializing the JSON string into Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerTaskCreate. Details: " + ", ".join(error_messages))
+            raise ValueError(
+                "Multiple matches found when deserializing the JSON string into Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerTaskCreate. Details: "
+                + ", ".join(error_messages))
         elif match == 0:
             # no match
-            raise ValueError("No match found when deserializing the JSON string into Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerTaskCreate. Details: " + ", ".join(error_messages))
+            raise ValueError(
+                "No match found when deserializing the JSON string into Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerTaskCreate. Details: "
+                + ", ".join(error_messages))
         else:
             return instance
 
@@ -117,17 +134,22 @@ class Trigger(BaseModel):
         if self.actual_instance is None:
             return "null"
 
-        if hasattr(self.actual_instance, "to_json") and callable(self.actual_instance.to_json):
+        if hasattr(self.actual_instance, "to_json") and callable(
+                self.actual_instance.to_json):
             return self.actual_instance.to_json()
         else:
             return json.dumps(self.actual_instance)
 
-    def to_dict(self) -> Optional[Union[Dict[str, Any], TriggerMachineGroupCreate, TriggerTaskCreate]]:
+    def to_dict(
+        self
+    ) -> Optional[Union[Dict[str, Any], TriggerMachineGroupCreate,
+                        TriggerTaskCreate]]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None
 
-        if hasattr(self.actual_instance, "to_dict") and callable(self.actual_instance.to_dict):
+        if hasattr(self.actual_instance, "to_dict") and callable(
+                self.actual_instance.to_dict):
             return self.actual_instance.to_dict()
         else:
             # primitive type
@@ -136,5 +158,3 @@ class Trigger(BaseModel):
     def to_str(self) -> str:
         """Returns the string representation of the actual instance"""
         return pprint.pformat(self.model_dump())
-
-

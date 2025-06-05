@@ -12,7 +12,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 # import models into model package
 from inductiva.client.models.action import Action
 from inductiva.client.models.action1 import Action1

@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -25,22 +24,27 @@ from inductiva.client.models.top_up_type import TopUpType
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class UserCredits(BaseModel):
     """
     UserCredits
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     amount: Amount
-    idempotency_key: Optional[Annotated[str, Field(min_length=1, strict=True, max_length=255)]] = None
+    idempotency_key: Optional[Annotated[
+        str, Field(min_length=1, strict=True, max_length=255)]] = None
     ignore_fees: Optional[StrictBool] = True
     top_up_type: Optional[TopUpType] = None
-    __properties: ClassVar[List[str]] = ["amount", "idempotency_key", "ignore_fees", "top_up_type"]
+    __properties: ClassVar[List[str]] = [
+        "amount", "idempotency_key", "ignore_fees", "top_up_type"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -66,8 +70,7 @@ class UserCredits(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -94,11 +97,15 @@ class UserCredits(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "amount": Amount.from_dict(obj["amount"]) if obj.get("amount") is not None else None,
-            "idempotency_key": obj.get("idempotency_key"),
-            "ignore_fees": obj.get("ignore_fees") if obj.get("ignore_fees") is not None else True,
-            "top_up_type": obj.get("top_up_type")
+            "amount":
+                Amount.from_dict(obj["amount"])
+                if obj.get("amount") is not None else None,
+            "idempotency_key":
+                obj.get("idempotency_key"),
+            "ignore_fees":
+                obj.get("ignore_fees")
+                if obj.get("ignore_fees") is not None else True,
+            "top_up_type":
+                obj.get("top_up_type")
         })
         return _obj
-
-

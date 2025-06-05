@@ -1,4 +1,5 @@
 """Event module"""
+import json
 import logging
 
 import inductiva.client
@@ -17,13 +18,14 @@ def list_events():
     try:
         _logger.debug("Trying to get events")
         api = inductiva.client.EventsApi(inductiva_api.get_client())
-        response = api.get_events()
+        resp = api.get_events_without_preload_content()
+        body = json.loads(resp.data)
     except ApiException as ex:
         _logger.error("Failed to get events", exc_info=ex)
         raise ex
 
-    for resp in response.body:
-        print(parse_event_info(resp))
+    for event in body:
+        print(parse_event_info(event))
 
 
 def remove(event_id: str):
@@ -31,7 +33,7 @@ def remove(event_id: str):
     try:
         _logger.debug("Trying to remove event %s", event_id)
         api = inductiva.client.EventsApi(inductiva_api.get_client())
-        api.delete_event({"event_id": event_id})
+        api.delete_event(event_id=event_id)
     except ApiException as ex:
         _logger.error("Failed to remove event %s", event_id, exc_info=ex)
         raise ex
@@ -43,11 +45,12 @@ def get(event_id: str):
     try:
         _logger.debug("Trying to get event %s", event_id)
         api = inductiva.client.EventsApi(inductiva_api.get_client())
-        response = api.get_event({"event_id": event_id})
+        response = api.get_event_without_preload_content(event_id=event_id)
+        body = json.loads(response.data)
     except ApiException as ex:
         _logger.error("Failed to get event %s", event_id, exc_info=ex)
         raise ex
-    print(parse_event_info(response.body))
+    print(parse_event_info(json.loads(body)))
 
 
 def register(trigger: Trigger, action: Action):
@@ -60,11 +63,11 @@ def register(trigger: Trigger, action: Action):
             trigger=trigger.get_trigger(),
             action=action.get_action(),
         )
-        response = api.create_event(event)
+        response = api.create_event_without_preload_content(event)
     except ApiException as ex:
         _logger.error("Failed to register trigger %s and action %s",
                       trigger,
                       action,
                       exc_info=ex)
         raise ex
-    return response.body
+    return json.loads(response.data)

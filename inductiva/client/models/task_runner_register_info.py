@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -23,10 +22,13 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class TaskRunnerRegisterInfo(BaseModel):
     """
     Info for creating a task-runner.
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     machine_group_id: StrictStr
     create_time: datetime
     cpu_count_logical: StrictInt
@@ -35,14 +37,16 @@ class TaskRunnerRegisterInfo(BaseModel):
     mpi_cluster: Optional[StrictBool] = False
     host_name: StrictStr
     host_id: StrictStr
-    __properties: ClassVar[List[str]] = ["machine_group_id", "create_time", "cpu_count_logical", "cpu_count_physical", "memory", "mpi_cluster", "host_name", "host_id"]
+    __properties: ClassVar[List[str]] = [
+        "machine_group_id", "create_time", "cpu_count_logical",
+        "cpu_count_physical", "memory", "mpi_cluster", "host_name", "host_id"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -68,8 +72,7 @@ class TaskRunnerRegisterInfo(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -88,15 +91,22 @@ class TaskRunnerRegisterInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "machine_group_id": obj.get("machine_group_id"),
-            "create_time": obj.get("create_time"),
-            "cpu_count_logical": obj.get("cpu_count_logical"),
-            "cpu_count_physical": obj.get("cpu_count_physical"),
-            "memory": obj.get("memory"),
-            "mpi_cluster": obj.get("mpi_cluster") if obj.get("mpi_cluster") is not None else False,
-            "host_name": obj.get("host_name"),
-            "host_id": obj.get("host_id")
+            "machine_group_id":
+                obj.get("machine_group_id"),
+            "create_time":
+                obj.get("create_time"),
+            "cpu_count_logical":
+                obj.get("cpu_count_logical"),
+            "cpu_count_physical":
+                obj.get("cpu_count_physical"),
+            "memory":
+                obj.get("memory"),
+            "mpi_cluster":
+                obj.get("mpi_cluster")
+                if obj.get("mpi_cluster") is not None else False,
+            "host_name":
+                obj.get("host_name"),
+            "host_id":
+                obj.get("host_id")
         })
         return _obj
-
-

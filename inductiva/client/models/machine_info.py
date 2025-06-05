@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -23,10 +22,13 @@ from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class MachineInfo(BaseModel):
     """
     MachineInfo
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     uuid: StrictStr
     cpu_count_logical: StrictInt
     cpu_count_physical: StrictInt
@@ -37,14 +39,17 @@ class MachineInfo(BaseModel):
     last_seen_at: Optional[datetime] = None
     current_task_id: Optional[StrictStr] = None
     disk_size_gb: Optional[Union[StrictFloat, StrictInt]] = None
-    __properties: ClassVar[List[str]] = ["uuid", "cpu_count_logical", "cpu_count_physical", "memory_bytes", "host_name", "started_at", "terminated_at", "last_seen_at", "current_task_id", "disk_size_gb"]
+    __properties: ClassVar[List[str]] = [
+        "uuid", "cpu_count_logical", "cpu_count_physical", "memory_bytes",
+        "host_name", "started_at", "terminated_at", "last_seen_at",
+        "current_task_id", "disk_size_gb"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -70,8 +75,7 @@ class MachineInfo(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -132,5 +136,3 @@ class MachineInfo(BaseModel):
             "disk_size_gb": obj.get("disk_size_gb")
         })
         return _obj
-
-

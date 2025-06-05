@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -23,10 +22,13 @@ from typing import Any, ClassVar, Dict, List, Union
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class UserCostsOverTime(BaseModel):
     """
     UserCostsOverTime
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     var_date: date = Field(alias="date")
     cost: Union[StrictFloat, StrictInt]
     __properties: ClassVar[List[str]] = ["date", "cost"]
@@ -36,7 +38,6 @@ class UserCostsOverTime(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -62,8 +63,7 @@ class UserCostsOverTime(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -86,5 +86,3 @@ class UserCostsOverTime(BaseModel):
             "cost": obj.get("cost")
         })
         return _obj
-
-

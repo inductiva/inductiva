@@ -5,7 +5,9 @@ import uuid
 import enum
 import logging
 import warnings
+import inductiva.client
 from inductiva import constants
+import inductiva.client.models
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     import aiortc
@@ -62,30 +64,39 @@ class FileTracker:
         self.peer_connections.append(pc)
         return pc
 
-    async def connect_to_task(self, api, pc, task_id):
+    async def connect_to_task(
+        self,
+        api: inductiva.client.TasksApi,
+        pc,
+        task_id,
+    ):
         connection_id = str(uuid.uuid4())
-        path_params = {"task_id": task_id}
-        api.register_task(body={"sender_id": connection_id},
-                          path_params=path_params)
+        api.register_task(
+            task_connection=inductiva.client.models.TaskConnection(
+                sender_id=connection_id),
+            task_id=task_id,
+        )
 
         offer = await pc.createOffer()
         await pc.setLocalDescription(offer)
 
-        api.offer_task(body={
-            "sender_id": connection_id,
-            "receiver_id": task_id,
-            "type": "offer",
-            "sdp": pc.localDescription.sdp
-        },
-                       path_params=path_params)
+        api.offer_task(
+            task_connection=inductiva.client.models.TaskConnection(
+                sender_id=connection_id,
+                receiver_id=task_id,
+                type="offer",
+                sdp=pc.localDescription.sdp,
+            ),
+            task_id=task_id,
+        )
 
-        resp = api.get_message(query_params={"client": connection_id},
-                               path_params=path_params)
+        resp = api.get_message_without_preload_content(client=connection_id,
+                                                       task_id=task_id)
 
-        if resp.response.status == 204:
+        if resp.status == 204:
             return False
 
-        data = resp.body
+        data = json.loads(resp.data)
         if data["type"] == "answer":
             await pc.setRemoteDescription(
                 aiortc.RTCSessionDescription(sdp=data["sdp"],

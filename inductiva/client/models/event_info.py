@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -24,10 +23,13 @@ from inductiva.client.models.trigger1 import Trigger1
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class EventInfo(BaseModel):
     """
     EventInfo
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     event_id: StrictStr
     trigger: Trigger1
     action: Action1
@@ -38,7 +40,6 @@ class EventInfo(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -64,8 +65,7 @@ class EventInfo(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -90,10 +90,13 @@ class EventInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "event_id": obj.get("event_id"),
-            "trigger": Trigger1.from_dict(obj["trigger"]) if obj.get("trigger") is not None else None,
-            "action": Action1.from_dict(obj["action"]) if obj.get("action") is not None else None
+            "event_id":
+                obj.get("event_id"),
+            "trigger":
+                Trigger1.from_dict(obj["trigger"])
+                if obj.get("trigger") is not None else None,
+            "action":
+                Action1.from_dict(obj["action"])
+                if obj.get("action") is not None else None
         })
         return _obj
-
-

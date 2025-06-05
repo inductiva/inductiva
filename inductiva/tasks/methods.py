@@ -62,10 +62,11 @@ def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
     return table
 
 
-def _fetch_tasks_from_api(status: Optional[str] = None,
-                          page=1,
-                          per_page=10,
-                          project: Optional[str] = None) -> List[Dict]:
+def _fetch_tasks_from_api(
+        status: Optional[str] = None,
+        page=1,
+        per_page=10,
+        project: Optional[str] = None) -> List[inductiva.client.models.Task]:
     """Get information about a user's tasks on the API.
 
     Tags can be filtered by a status. Results are paginated indexed from 1.
@@ -73,30 +74,16 @@ def _fetch_tasks_from_api(status: Optional[str] = None,
 
     with inductiva.api.methods.get_client() as client:
         api_instance = inductiva.client.TasksApi(client)
-
-        query_params = {
-            "page": page,
-            "per_page": per_page,
-        }
-
-        if project is not None:
-            query_params["project"] = project
-
-        if status is not None:
-            query_params["status"] = models.TaskStatusCode(status)
-
         try:
             # Get User Tasks
-            resp = api_instance.get_user_tasks(
-                query_params=query_params,
-                skip_deserialization=True,  # avoid deserializing to model,
-                # leave as dict which we'll later serialize to our own
-                # dataclasses
-            ).response
+            tasks = api_instance.get_user_tasks(
+                page=page,
+                per_page=per_page,
+                project=project,
+                status=models.TaskStatusCode(status),
+            )
 
-            response_body = json.loads(resp.data.decode("utf-8"))
-
-            return [{**task} for task in response_body]
+            return tasks
 
         except ApiException as e:
             raise e

@@ -100,11 +100,16 @@ def get_ansi_formatter():
     return emphasis_formatter
 
 
-def datetime_formatter(dt: str) -> str:
+def datetime_formatter(dt: Union[datetime.datetime, str]) -> str:
     # get time in local timezone
     if dt is None:
         return None
-    local_dt = datetime.datetime.fromisoformat(dt).astimezone()
+
+    if isinstance(dt, str):
+        local_dt = datetime.datetime.fromisoformat(dt).astimezone()
+    else:
+        local_dt = dt
+
     return local_dt.strftime("%d/%m, %H:%M:%S")
 
 

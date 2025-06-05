@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -24,10 +23,13 @@ from inductiva.client.models.user_costs_details import UserCostsDetails
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class OrganizationCostComponents(BaseModel):
     """
     OrganizationCostComponents
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     total: List[CostDetail]
     users: List[UserCostsDetails]
     infrastructure: List[CostDetail]
@@ -38,7 +40,6 @@ class OrganizationCostComponents(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -64,8 +65,7 @@ class OrganizationCostComponents(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -105,10 +105,13 @@ class OrganizationCostComponents(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "total": [CostDetail.from_dict(_item) for _item in obj["total"]] if obj.get("total") is not None else None,
-            "users": [UserCostsDetails.from_dict(_item) for _item in obj["users"]] if obj.get("users") is not None else None,
-            "infrastructure": [CostDetail.from_dict(_item) for _item in obj["infrastructure"]] if obj.get("infrastructure") is not None else None
+            "total": [CostDetail.from_dict(_item) for _item in obj["total"]]
+                     if obj.get("total") is not None else None,
+            "users": [
+                UserCostsDetails.from_dict(_item) for _item in obj["users"]
+            ] if obj.get("users") is not None else None,
+            "infrastructure": [
+                CostDetail.from_dict(_item) for _item in obj["infrastructure"]
+            ] if obj.get("infrastructure") is not None else None
         })
         return _obj
-
-

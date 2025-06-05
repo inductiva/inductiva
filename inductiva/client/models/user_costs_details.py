@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -23,23 +22,27 @@ from inductiva.client.models.cost_detail import CostDetail
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class UserCostsDetails(BaseModel):
     """
     UserCostsDetails
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     email: StrictStr
     name: Optional[StrictStr] = None
     tier_id: StrictStr
     expired: StrictBool
     costs: List[CostDetail]
-    __properties: ClassVar[List[str]] = ["email", "name", "tier_id", "expired", "costs"]
+    __properties: ClassVar[List[str]] = [
+        "email", "name", "tier_id", "expired", "costs"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -65,8 +68,7 @@ class UserCostsDetails(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -97,12 +99,15 @@ class UserCostsDetails(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "email": obj.get("email"),
-            "name": obj.get("name"),
-            "tier_id": obj.get("tier_id"),
-            "expired": obj.get("expired"),
-            "costs": [CostDetail.from_dict(_item) for _item in obj["costs"]] if obj.get("costs") is not None else None
+            "email":
+                obj.get("email"),
+            "name":
+                obj.get("name"),
+            "tier_id":
+                obj.get("tier_id"),
+            "expired":
+                obj.get("expired"),
+            "costs": [CostDetail.from_dict(_item) for _item in obj["costs"]]
+                     if obj.get("costs") is not None else None
         })
         return _obj
-
-

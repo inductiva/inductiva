@@ -59,10 +59,10 @@ def submit_request(task_api_instance: inductiva.client.TasksApi,
         Contains two fields, "id" and "status".
     """
     # Submit task using provided or temporary instance
-    api_response = task_api_instance.submit_task(body=request)
-    logging.debug("Request status: %s", api_response.body["status"])
+    resp = task_api_instance.submit_task(task_request=request)
+    logging.debug("Request status: %s", resp.status)
 
-    return api_response.body
+    return resp
 
 
 def prepare_input(task_id, input_dir):
@@ -138,7 +138,7 @@ def upload_input(api_instance: inductiva.client.TasksApi, input_dir, task_id,
                        unit_divisor=1000,
                        disable=not verbose) as progress_bar:
             upload_file(api_instance, input_zip_path, "PUT", url, progress_bar)
-            api_instance.notify_input_uploaded(path_params={"task_id": task_id})
+            api_instance.notify_input_uploaded(task_id=task_id)
         logging.info("Local input directory successfully uploaded.")
         logging.info("")
 
@@ -173,7 +173,7 @@ def kill_task(api_instance: inductiva.client.TasksApi, task_id: str):
         task_id: ID of the task to kill.
    """
     logging.debug("Sending kill task request ...")
-    api_instance.kill_task(path_params={"task_id": task_id},)
+    api_instance.kill_task(task_id=task_id)
     logging.info("Task with ID %s was terminated.", task_id)
 
 
@@ -181,12 +181,7 @@ def get_task_status(api_instance: inductiva.client.TasksApi,
                     task_id: str) -> TaskStatus:
     """Check the status of a task."""
 
-    api_response = api_instance.get_task_status(
-        path_params={"task_id": task_id})
-
-    status = api_response.body["status"]
-
-    return status
+    return api_instance.get_task_status(task_id=task_id)
 
 
 def block_until_status_is(api_instance: inductiva.client.TasksApi,
@@ -280,6 +275,7 @@ def task_info_str(
     local_input_dir,
     resource_pool,
     simulator,
+    task_request: TaskRequest,
     task_submitted_info: TaskSubmittedInfo,
 ) -> str:
     """Generate a string with the main components of a task submission."""
@@ -296,14 +292,13 @@ def task_info_str(
     info_str += f" \t\t· {resource_pool}\n"
 
     if task_submitted_info is not None:
-        ttl_seconds = task_submitted_info.get("time_to_live_seconds")
+        ttl_seconds = task_submitted_info.time_to_live_seconds
         if ttl_seconds is not None and isinstance(ttl_seconds, decimal.Decimal):
             ttl_seconds = format_utils.seconds_formatter(ttl_seconds)
             info_str += (f" \t\t· Task will be killed after the computation "
                          f"time exceeds {ttl_seconds} (h:m:s).\n")
         if resource_pool.spot:
-            preemption = task_submitted_info.get(
-                "resubmit_on_preemption") or False
+            preemption = task_request.resubmit_on_preemption or False
             info_str += (f"\t· Restart On Preemption: {preemption}\n")
     info_str += "\n"
     return info_str
@@ -375,13 +370,14 @@ def submit_task(simulator,
         request=task_request,
     )
 
-    task_id = task_submitted_info["id"]
+    task_id = task_submitted_info.id
     logging.info(
         task_info_str(
             task_id,
             input_dir,
             machine_group,
             simulator_obj,
+            task_request,
             task_submitted_info,
         ))
     logging.info("■ Task %s submitted to the queue of the %s.\n", task_id,
@@ -389,7 +385,7 @@ def submit_task(simulator,
 
     # If the status returned by the previous HTTP request is "pending-input",
     #  ZIP inputs and send them via "POST task/{task_id}/input".
-    if task_submitted_info["status"] == "pending-input":
+    if task_submitted_info.status == "pending-input":
         # Use the blocking task context
         with blocking_task_context(task_api_instance, task_id, "input upload"):
             upload_input(

@@ -1,4 +1,6 @@
 """Methods to interact with the user storage resources."""
+import decimal
+import json
 import datetime
 import itertools
 import logging
@@ -20,6 +22,7 @@ import inductiva
 from inductiva import constants
 from inductiva import utils
 from inductiva.api import methods
+import inductiva.client.models
 import inductiva.client
 from inductiva.client import exceptions, models
 from inductiva.utils import format_utils
@@ -41,12 +44,12 @@ def _print_storage_size_and_cost() -> int:
     return the storage size in bytes.
     """
     api = inductiva.client.StorageApi(inductiva.api.get_client())
-    storage_total_size_bytes = api.get_storage_size().body
+    storage_total_size_bytes = api.get_storage_size()
     estimated_storage_cost = api.get_storage_monthly_cost(
-    ).body["estimated_monthly_cost"]
+    ).estimated_monthly_cost
 
     estimated_storage_cost = format_utils.currency_formatter(
-        estimated_storage_cost)
+        decimal.Decimal(estimated_storage_cost))
     storage_total_size = format_utils.bytes_formatter(storage_total_size_bytes)
 
     print("Total storage size used:")
@@ -103,20 +106,14 @@ def listdir(
     if len(path.split("/")) < 2:
         path += "/"
 
-    query_params = {
-        "path": path,
-        "sort_by": order_by,
-        "order": sort_order,
-    }
-
-    if max_results is not None:
-        query_params["max_results"] = max_results
-
-    contents = api.list_storage_contents(query_params).body
+    contents = api.list_storage_contents(path=path,
+                                         sort_by=order_by,
+                                         order=sort_order,
+                                         max_results=max_results)
     all_contents = []
     for content_name, info in contents.items():
-        size = info["size_bytes"]
-        creation_time = info["creation_time"]
+        size = info.size_bytes
+        creation_time = info.creation_time
         all_contents.append({
             "content_name": content_name,
             "size": round(float(size), 3),
@@ -166,11 +163,12 @@ def get_signed_urls(
     operation: Literal["upload", "download"],
 ) -> List[str]:
     api_instance = inductiva.client.StorageApi(inductiva.api.get_client())
-    signed_urls = api_instance.get_signed_urls(query_params={
-        "paths": paths,
-        "operation": operation,
-    }).body
-    return signed_urls
+    resp = api_instance.get_signed_urls_without_preload_content(
+        paths=paths,
+        operation=inductiva.client.models.OperationType(operation),
+    )
+
+    return [signed_url for signed_url in json.loads(resp.data)]
 
 
 @dataclass
@@ -215,26 +213,21 @@ def get_zip_contents(
             within the specified ZIP archive.
     """
     api_instance = inductiva.client.StorageApi(inductiva.api.get_client())
-    query_params = {
-        "path": path,
-        "zip_relative_path": zip_relative_path,
-        "recursive": str(recursive).lower()
-    }
-    response_body = api_instance.get_zip_contents(query_params).body
-    files = [ZipFileInfo(
-        name=str(file["name"]),
-        size=int(file["size"]) \
-            if file["size"] else None,
-        compressed_size=int(file["compressed_size"]) \
-            if file["compressed_size"] else None,
-        range_start=int(file["range_start"]) \
-            if file["range_start"] else None,
-        creation_time=datetime.datetime.fromisoformat(file["creation_time"])
-            if file["creation_time"] else None,
-        compress_type=int(file["compress_type"])
-            if file["compress_type"] else None
-    ) for file in response_body["contents"]]
-    return ZipArchiveInfo(size=int(response_body["size"]), files=files)
+    archive_info = api_instance.get_zip_contents(
+        path=path,
+        zip_relative_path=zip_relative_path,
+        recursive=str(recursive).lower())
+    files = [
+        ZipFileInfo(
+            name=file.name,
+            size=file.size,
+            compressed_size=file.compressed_size,
+            range_start=file.range_start,
+            creation_time=file.creation_time,
+            compress_type=file.compress_type,
+        ) for file in archive_info.contents
+    ]
+    return ZipArchiveInfo(size=archive_info.size, files=files)
 
 
 def upload_from_url(
@@ -263,10 +256,7 @@ def upload_from_url(
 
     remote_path = os.path.join(remote_dir, file_name)
 
-    api_instance.upload_from_url(query_params={
-        "url": url,
-        "path": remote_path,
-    },)
+    api_instance.upload_from_url(url=url, path=remote_path)
     logging.info("File is being uploaded...")
     logging.info("You can use 'inductiva storage ls' to check the status.")
 
@@ -625,7 +615,7 @@ def remove(remote_path: str):
         remote_path += "/"
 
     api = inductiva.client.StorageApi(inductiva.api.get_client())
-    api.delete_file(query_params={"path": remote_path})
+    api.delete_file(path=remote_path)
 
     logging.info("Successfully removed '%s' from remote storage.", remote_path)
 
@@ -640,24 +630,24 @@ def copy(source: str, target: str):
                       should be copied to.
     """
     api = inductiva.client.StorageApi(inductiva.api.get_client())
-    api.copy(query_params={"source": source, "target": target})
+    api.copy(source=source, target=target)
     logging.info("Copied %s to %s successfully.", source, target)
 
 
 class StorageOperation():
     """Represents a storage operation running remotely via Inductiva API."""
 
-    def __init__(self, api, id_):
+    def __init__(self, api: inductiva.client.StorageApi, id_):
         self._api = api
         self.id = id_
 
-    def _update_from_api_response(self, response):
-        self._name = response["name"]
-        self._status = response["status"]
-        self._attributes = response["attributes"]
-        self._start_time = response["start_time"]
-        self._end_time = response["end_time"]
-        self._error_message = response["error_message"]
+    def _update_from_api_response(self, response: models.StorageOperation):
+        self._name = response.name
+        self._status = response.status
+        self._attributes = response.attributes
+        self._start_time = response.start_time
+        self._end_time = response.end_time
+        self._error_message = response.error_message
 
     @classmethod
     def from_api_response(cls, api, response):
@@ -667,9 +657,7 @@ class StorageOperation():
         return op
 
     def _refresh(self):
-        resp = self._api.get_operation(path_params={
-            "operation_id": self.id
-        }).body
+        resp = self._api.get_operation(operation_id=self.id)
 
         self._update_from_api_response(resp)
 
@@ -775,15 +763,12 @@ def _generate_complete_multipart_upload_signed_url(
 def _get_file_size(file_path):
     api = inductiva.client.StorageApi(inductiva.api.get_client())
 
-    contents = api.list_storage_contents({
-        "path": file_path,
-        "max_results": 2,
-    }).body
+    contents = api.list_storage_contents(path=file_path, max_results=2)
     if len(contents) > 1:
         raise ValueError(f"Multiple files found at {file_path}. "
                          "Please specify a single file.")
 
-    return list(contents.values())[0]["size_bytes"]
+    return list(contents.values())[0].size_bytes
 
 
 def _get_multipart_parts(size: int,

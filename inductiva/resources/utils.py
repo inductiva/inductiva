@@ -1,6 +1,7 @@
 """Functions to manage or retrieve user resources."""
 from dataclasses import dataclass
 import json
+import decimal
 from typing import List, Optional, Tuple, Union
 
 import inductiva
@@ -78,31 +79,17 @@ def get_available_machine_types(
     """
 
     provider = ProviderType(provider)
-
     api_client = inductiva.client.ComputeApi(inductiva.api.get_client())
 
-    query_params = {"provider_id": provider.value}
-
-    if machine_families:
-        query_params["machine_families"] = machine_families
-
-    if machine_configs:
-        query_params["machine_configs"] = machine_configs
-
-    if vcpus_range:
-        query_params["vcpus_range"] = vcpus_range
-
-    if memory_range:
-        query_params["memory_range"] = memory_range
-
-    if price_range:
-        query_params["price_range"] = price_range
-
-    if spot is not None:
-        query_params["spot"] = str(spot).lower()
-
     try:
-        resp = api_client.list_available_machine_types(query_params).response
+        resp = api_client.list_available_machine_types_without_preload_content(
+            provider_id=provider.value,
+            machine_families=machine_families,
+            machine_configs=machine_configs,
+            vcpus_range=vcpus_range,
+            memory_range=memory_range,
+            price_range=price_range,
+            spot=str(spot).lower())
 
         response_body = json.loads(resp.data.decode("utf-8"))
         return [
@@ -127,14 +114,13 @@ def estimate_machine_cost(machine_type: str,
 
     api = inductiva.client.ComputeApi(inductiva.api.get_client())
 
-    instance_price = api.get_instance_price({
-        "machine_type": machine_type,
-        "zone": zone
-    })
+    instance_price = api.get_instance_price(machine_type=machine_type,
+                                            zone=zone)
 
     if spot:
-        estimated_cost = instance_price.body["preemptible_price"]
+        estimated_cost = decimal.Decimal(
+            instance_price.get("preemptible_price"))
     else:
-        estimated_cost = instance_price.body["on_demand_price"]
+        estimated_cost = decimal.Decimal(instance_price.get("on_demand_price"))
 
     return float(estimated_cost)

@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -26,10 +25,13 @@ from inductiva.client.models.user_costs_details import UserCostsDetails
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class OrganizationCosts(BaseModel):
     """
     OrganizationCosts
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     id: StrictStr
     name: StrictStr
     tier_id: StrictStr
@@ -37,14 +39,16 @@ class OrganizationCosts(BaseModel):
     consolidation_last_update_ts: Optional[datetime]
     costs: OrganizationCostComponents
     estimated_costs: List[UserCostsDetails]
-    __properties: ClassVar[List[str]] = ["id", "name", "tier_id", "currency", "consolidation_last_update_ts", "costs", "estimated_costs"]
+    __properties: ClassVar[List[str]] = [
+        "id", "name", "tier_id", "currency", "consolidation_last_update_ts",
+        "costs", "estimated_costs"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -70,8 +74,7 @@ class OrganizationCosts(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -105,14 +108,22 @@ class OrganizationCosts(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "id": obj.get("id"),
-            "name": obj.get("name"),
-            "tier_id": obj.get("tier_id"),
-            "currency": obj.get("currency"),
-            "consolidation_last_update_ts": obj.get("consolidation_last_update_ts"),
-            "costs": OrganizationCostComponents.from_dict(obj["costs"]) if obj.get("costs") is not None else None,
-            "estimated_costs": [UserCostsDetails.from_dict(_item) for _item in obj["estimated_costs"]] if obj.get("estimated_costs") is not None else None
+            "id":
+                obj.get("id"),
+            "name":
+                obj.get("name"),
+            "tier_id":
+                obj.get("tier_id"),
+            "currency":
+                obj.get("currency"),
+            "consolidation_last_update_ts":
+                obj.get("consolidation_last_update_ts"),
+            "costs":
+                OrganizationCostComponents.from_dict(obj["costs"])
+                if obj.get("costs") is not None else None,
+            "estimated_costs": [
+                UserCostsDetails.from_dict(_item)
+                for _item in obj["estimated_costs"]
+            ] if obj.get("estimated_costs") is not None else None
         })
         return _obj
-
-

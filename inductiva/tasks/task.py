@@ -135,8 +135,8 @@ class TaskInfo:
         self.is_submitted = self.status == models.TaskStatusCode.SUBMITTED
         self.is_running = self.status in (
             models.TaskStatusCode.STARTED,
-            models.TaskStatusCode.COMPUTATIONSTARTED,
-            models.TaskStatusCode.COMPUTATIONENDED)
+            models.TaskStatusCode.COMPUTATION_MINUS_STARTED,
+            models.TaskStatusCode.COMPUTATION_MINUS_ENDED)
         self.is_terminal = kwargs.get("is_terminated", False)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -358,9 +358,10 @@ class Task:
 
         This method issues a request to the API.
         """
-        return self.get_status() in (models.TaskStatusCode.STARTED,
-                                     models.TaskStatusCode.COMPUTATIONSTARTED,
-                                     models.TaskStatusCode.COMPUTATIONENDED)
+        return self.get_status() in (
+            models.TaskStatusCode.STARTED,
+            models.TaskStatusCode.COMPUTATION_MINUS_STARTED,
+            models.TaskStatusCode.COMPUTATION_MINUS_ENDED)
 
     def is_failed(self) -> bool:
         """Validate if the task has failed.
@@ -424,23 +425,21 @@ class Task:
         """
         # If the task is in a terminal status and we already have the status,
         # return it without refreshing it from the API.
-        if (self._status is not None and self._info.is_terminal):
+        if (self._status is not None and self._info and self._info.is_terminal):
             return self._status
 
-        resp = self._api.get_task_status(self._get_path_params())
+        resp = self._api.get_task_status(task_id=self.id)
 
-        status = models.TaskStatusCode(resp.body["status"])
+        status = models.TaskStatusCode(resp.status)
         self._status = status
 
         #updates the info.is_terminal when getting the status
-        self._info.is_terminal = resp.body.get(
-            "is_terminated",
-            self.info.is_terminal,
-        )
+        if self._info:
+            self._info.is_terminal = resp.is_terminated
 
-        queue_position = resp.body.get("position_in_queue", None)
+        queue_position = resp.position_in_queue
         if queue_position is not None:
-            self._tasks_ahead = queue_position.get("tasks_ahead", None)
+            self._tasks_ahead = queue_position.tasks_ahead
 
         return status
 
@@ -488,8 +487,7 @@ class Task:
 
         This method issues a request to the API.
         """
-        params = self._get_path_params()
-        resp = self._api.get_task(params, skip_deserialization=True).response
+        resp = self._api.get_task_without_preload_content(task_id=self.id)
 
         info = json.loads(resp.data.decode("utf-8"))
         status = models.TaskStatusCode(info["status"])
@@ -725,8 +723,8 @@ class Task:
                 if not silent_mode:
                     self._handle_status_change(status, description)
 
-                if (status == models.TaskStatusCode.COMPUTATIONSTARTED) and (
-                        not silent_mode):
+                if (status == models.TaskStatusCode.COMPUTATION_MINUS_STARTED
+                   ) and (not silent_mode):
                     try:
                         self.tail_files(["stdout.txt", "stderr.txt"], 50, True,
                                         sys.stdout)
@@ -819,8 +817,7 @@ class Task:
                 if self.is_terminal():
                     break
 
-                path_params = self._get_path_params()
-                self._api.kill_task(path_params=path_params)
+                self._api.kill_task(task_id=self.id)
                 break
             except exceptions.ApiException as exc:
                 if max_api_requests == 0:
@@ -833,12 +830,12 @@ class Task:
             self,
             wait_timeout: Union[float,
                                 int]) -> Tuple[bool, models.TaskStatusCode]:
-        """Check if the task is in the PENDINGKILL state.
+        """Check if the task is in the PENDING_MINUS_KILL state.
         This method keeps checking the status of the task until it is no longer
-        in the PENDINGKILL state or until the timeout is reached.
+        in the PENDING_MINUS_KILL state or until the timeout is reached.
         Args:
             wait_timeout (int, float): number of seconds to wait for the
-            state to leave PENDINGKILL.
+            state to leave PENDING_MINUS_KILL.
         Returns:
             A tuple with a boolean indicating whether the timeout was reached
             and the status of the task.
@@ -847,7 +844,7 @@ class Task:
         start = time.time()
 
         while (status :=
-               self.get_status()) == models.TaskStatusCode.PENDINGKILL:
+               self.get_status()) == models.TaskStatusCode.PENDING_MINUS_KILL:
             if (time.time() - start) > wait_timeout:
                 success = False
                 break
@@ -903,7 +900,7 @@ class Task:
 
         if status != models.TaskStatusCode.KILLED:
             success = False
-            if status == models.TaskStatusCode.PENDINGKILL:
+            if status == models.TaskStatusCode.PENDING_MINUS_KILL:
                 logging.error(
                     "Unable to ensure that task %s transitioned to the KILLED "
                     "state after %f seconds. The status of the task is %s.",
@@ -1390,10 +1387,6 @@ class Task:
         """Util class for type checking path params."""
         task_id: str
 
-    def _get_path_params(self) -> _PathParams:
-        """Get dictionary with the URL path parameters for API calls."""
-        return {"task_id": self.id}
-
     def _get_duration(
         self,
         start_attribute: str,
@@ -1496,7 +1489,7 @@ class Task:
                 logging.info("Remote task files removed successfully.")
         except exceptions.ApiException as e:
             logging.error("An error occurred while removing the files:")
-            logging.error(" > %s", json.loads(e.body)["detail"])
+            logging.error(" > %s", json.loads(e.data)["detail"])
             return False
         return True
 
@@ -1586,7 +1579,7 @@ class Task:
                 raise ValueError(
                     "Metadata keys and values cannot be empty strings.")
 
-        self._api.set_metadata(path_params={"task_id": self.id}, body=metadata)
+        self._api.set_metadata(task_id=self.id, request_body=metadata)
 
     def get_metadata(self) -> Dict[str, str]:
         """Get the metadata associated with the task.
@@ -1594,6 +1587,4 @@ class Task:
         Returns:
             A dictionary with the custom metadata previously set on this task.
         """
-        response = self._api.get_metadata(path_params={"task_id": self.id})
-
-        return dict(response.body)
+        return self._api.get_metadata(task_id=self.id)
