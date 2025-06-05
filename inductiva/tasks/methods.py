@@ -4,11 +4,11 @@ import json
 from typing import Any, Dict, Iterable, List, Mapping, Optional
 
 import inductiva
+import inductiva.client
 from inductiva.client import models
 from inductiva.tasks.task import Task
 from inductiva.utils import format_utils
 from inductiva.client import ApiException
-from inductiva.client.apis.tags.tasks_api import TasksApi
 
 
 def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
@@ -19,7 +19,7 @@ def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
             list_of_tasks: An Iterable of tasks.
         Returns:
             A dictionary with all the relevant information for
-            all the tasks. Example: { "ID": [1, 2, 3], 
+            all the tasks. Example: { "ID": [1, 2, 3],
             "Simulator": ["reef3d", "reef3d", "reef3d"], ... }
     """
     column_names = [
@@ -72,7 +72,7 @@ def _fetch_tasks_from_api(status: Optional[str] = None,
     """
 
     with inductiva.api.methods.get_client() as client:
-        api_instance = TasksApi(client)
+        api_instance = inductiva.client.TasksApi(client)
 
         query_params = {
             "page": page,

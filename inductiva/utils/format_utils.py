@@ -1,4 +1,5 @@
 """Util functions for formatting data for printing to console."""
+import decimal
 from typing import (Any, Callable, Dict, Iterable, Mapping, Optional, Tuple,
                     Union, List)
 from distutils.util import strtobool
@@ -92,7 +93,7 @@ def get_ansi_formatter():
 
     Either `no_formatter` when ansi formatting is disable or the
     `inductiva.utils.format_utils.emphasis_formatter`
-    
+
     """
     if not inductiva.ansi_enabled:
         return no_formatter
@@ -144,7 +145,7 @@ def timedelta_formatter(td: datetime.timedelta) -> str:
 
 def short_timedelta_formatter(td: datetime.timedelta) -> str:
     """Convert timedelta to short human readable string.
-    
+
     This is needed because we need beacause when we want to print text and
     replace (in the notebooks) there is no way to clear the full line. So, we
     need to fill the line with white spaces and for that the line needs to have
@@ -239,7 +240,7 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     """Converts a table of data (Mapping or any Iterable) to a string table.
 
     Args:
-        tabular_data: can be a list-of-lists (or another iterable of 
+        tabular_data: can be a list-of-lists (or another iterable of
             iterables), a list of named tuples, a dictionary of
             iterables, an iterable of dictionaries, an iterable of
             dataclasses (Python 3.7+)
@@ -271,7 +272,7 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     return f"\n{table}\n"
 
 
-def currency_formatter(amount: float) -> str:
+def currency_formatter(amount: Union[float, decimal.Decimal]) -> str:
     """Format a currency amount into a human-readable string.
 
     Convert the amount to a string with a maximum of 10 decimal places.

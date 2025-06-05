@@ -14,7 +14,7 @@ Key Features:
     - Create and manage projects on the backend.
     - Add tasks to projects and retrieve the most recent tasks or filter by
       status.
-    - Monitor the status of all tasks in a project and wait for their 
+    - Monitor the status of all tasks in a project and wait for their
     completion.
     - Download outputs for all tasks in a project.
     - Estimate the total computation cost of a project based on its tasks.
@@ -49,11 +49,11 @@ from typing import List, Optional
 
 from inductiva import tasks
 from inductiva import api as inductiva_api
+import inductiva.client
 from inductiva.client.models import TaskStatusCode
 from inductiva.client import ApiException
 
 # from inductiva.client import models
-from inductiva.client.apis.tags import projects_api
 from inductiva.utils import format_utils
 
 _logger = logging.getLogger(__name__)
@@ -63,7 +63,7 @@ def get_projects() -> List["Project"]:
     """Gets all the user's projects."""
     try:
         _logger.debug("Trying to get remote projects")
-        api = projects_api.ProjectsApi(inductiva_api.get_client())
+        api = inductiva.client.ProjectsApi(inductiva_api.get_client())
         response = api.get_user_projects()
     except ApiException as ex:
         _logger.error("Failed to get remote projects", exc_info=ex)
@@ -104,7 +104,7 @@ class Project:
         Args:
           name (str): The name of the project.
         """
-        self._api = projects_api.ProjectsApi(inductiva_api.get_client())
+        self._api = inductiva.client.ProjectsApi(inductiva_api.get_client())
         # If the project already exists, we will load it from the backend.
         self._proj_data = self._get_project(name)
         # Else, we will create a new project.

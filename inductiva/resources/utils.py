@@ -5,7 +5,6 @@ from typing import List, Optional, Tuple, Union
 
 import inductiva
 import inductiva.client
-from inductiva.client.apis.tags import compute_api
 from inductiva.client import ApiException
 from inductiva.utils import format_utils
 
@@ -49,28 +48,28 @@ def get_available_machine_types(
 ) -> List[MachineTypeInfo]:
     """Get all available machine types from a specified provider,
     allowing for multiple filtering parameters.
-    
+
     Args:
-        provider (Union[str, ProviderType]): 
-            The cloud provider for which to list available machine types. 
+        provider (Union[str, ProviderType]):
+            The cloud provider for which to list available machine types.
             Defaults to `ProviderType.GCP`.
-        machine_families (Optional[List[str]]): 
+        machine_families (Optional[List[str]]):
             A list of machine families to filter the available machine types
             (e.g., "c2", "c2d", "n4", etc).
-        machine_configs (Optional[List[str]]): 
+        machine_configs (Optional[List[str]]):
             A list of specific machine configurations to filter the results
             (e.g., "highcpu", "highmem", "standard").
-        vcpus_range (Optional[Tuple[int, int]]): 
-            A tuple defining the range of virtual CPUs (vCPUs) to filter the 
+        vcpus_range (Optional[Tuple[int, int]]):
+            A tuple defining the range of virtual CPUs (vCPUs) to filter the
             machine types.
-        memory_range (Optional[Tuple[int, int]]): 
-            A tuple defining the range of memory (in MB) to filter the machine 
+        memory_range (Optional[Tuple[int, int]]):
+            A tuple defining the range of memory (in MB) to filter the machine
             types.
-        price_range (Optional[Tuple[float, float]]): 
-            A tuple defining the price range (in the respective currency) to 
+        price_range (Optional[Tuple[float, float]]):
+            A tuple defining the price range (in the respective currency) to
             filter the machine types.
-        spot (Optional[bool]): 
-            If set to True, filters for spot instances; if False, filters for 
+        spot (Optional[bool]):
+            If set to True, filters for spot instances; if False, filters for
             on-demand instances.
 
     Returns:
@@ -80,7 +79,7 @@ def get_available_machine_types(
 
     provider = ProviderType(provider)
 
-    api_client = compute_api.ComputeApi(inductiva.api.get_client())
+    api_client = inductiva.client.ComputeApi(inductiva.api.get_client())
 
     query_params = {"provider_id": provider.value}
 
@@ -126,7 +125,7 @@ def estimate_machine_cost(machine_type: str,
         spot: Whether to use spot machines.
     """
 
-    api = compute_api.ComputeApi(inductiva.api.get_client())
+    api = inductiva.client.ComputeApi(inductiva.api.get_client())
 
     instance_price = api.get_instance_price({
         "machine_type": machine_type,

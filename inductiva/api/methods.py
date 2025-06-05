@@ -17,8 +17,8 @@ from typing import List, Optional
 import logging
 
 import inductiva
+import inductiva.client
 from inductiva.client import ApiClient, ApiException, Configuration
-from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.models import (TaskRequest, TaskStatus, TaskSubmittedInfo,
                                      CompressionMethod)
 from inductiva import constants, storage
@@ -48,7 +48,7 @@ def get_client(api_config: Optional[Configuration] = None) -> ApiClient:
     return client
 
 
-def submit_request(task_api_instance: TasksApi,
+def submit_request(task_api_instance: inductiva.client.TasksApi,
                    request: TaskRequest) -> TaskSubmittedInfo:
     """Submits a task request to the API.
 
@@ -111,7 +111,7 @@ def upload_file(api_instance: ApiClient, input_path: str, method: str, url: str,
             raise ApiException(status=resp.status, reason=resp.reason)
 
 
-def upload_input(api_instance: TasksApi, input_dir, task_id,
+def upload_input(api_instance: inductiva.client.TasksApi, input_dir, task_id,
                  storage_path_prefix, verbose):
     """Uploads the inputs of a given task to the API.
 
@@ -147,7 +147,8 @@ def upload_input(api_instance: TasksApi, input_dir, task_id,
             os.remove(input_zip_path)
 
 
-def block_until_finish(api_instance: TasksApi, task_id: str) -> str:
+def block_until_finish(api_instance: inductiva.client.TasksApi,
+                       task_id: str) -> str:
     """Block until a task executing remotely finishes execution.
 
     Args:
@@ -162,7 +163,7 @@ def block_until_finish(api_instance: TasksApi, task_id: str) -> str:
     return block_until_status_is(api_instance, task_id, {"success", "failed"})
 
 
-def kill_task(api_instance: TasksApi, task_id: str):
+def kill_task(api_instance: inductiva.client.TasksApi, task_id: str):
     """Kill a task that is executing remotely.
 
     The function sends a kill request to the API.
@@ -176,7 +177,8 @@ def kill_task(api_instance: TasksApi, task_id: str):
     logging.info("Task with ID %s was terminated.", task_id)
 
 
-def get_task_status(api_instance: TasksApi, task_id: str) -> TaskStatus:
+def get_task_status(api_instance: inductiva.client.TasksApi,
+                    task_id: str) -> TaskStatus:
     """Check the status of a task."""
 
     api_response = api_instance.get_task_status(
@@ -187,7 +189,7 @@ def get_task_status(api_instance: TasksApi, task_id: str) -> TaskStatus:
     return status
 
 
-def block_until_status_is(api_instance: TasksApi,
+def block_until_status_is(api_instance: inductiva.client.TasksApi,
                           task_id,
                           desired_status,
                           sleep_secs=0.5):
@@ -239,7 +241,7 @@ def _configure_sigint_handler(handler):
 
 
 @contextmanager
-def blocking_task_context(api_instance: TasksApi,
+def blocking_task_context(api_instance: inductiva.client.TasksApi,
                           task_id: str,
                           action_str: str = "action"):
     """Context to handle execution of a blocking task.
@@ -363,7 +365,7 @@ def submit_task(simulator,
                                compress_with=compress_with)
 
     # Create an instance of the TasksApi class
-    task_api_instance = TasksApi(get_client())
+    task_api_instance = inductiva.client.TasksApi(get_client())
 
     # Submit task via the "POST task/submit" endpoint.
     # HTTP status code 400 informs the requested method is invalid.

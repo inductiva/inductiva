@@ -1,26 +1,24 @@
 """Methods to interact with the user info on the API."""
 import json
-from typing import Any, Dict
+from typing import Any, Dict, Optional, List
 
 from inductiva import api
 
-from inductiva.client.apis.tags.users_api import UsersApi
+import inductiva.client
+import inductiva.client.models
 
 
-def _fetch_quotas_from_api() -> Dict[str, Dict[str, Any]]:
+def _fetch_quotas_from_api() -> Dict[str, inductiva.client.models.Quota]:
     """Get information about a user's quotas.
     """
 
     with api.get_client() as client:
-        api_instance = UsersApi(client)
+        api_instance = inductiva.client.UsersApi(client)
 
-        resp = api_instance.get_user_quotas(skip_deserialization=True).response
-        quotas = json.loads(resp.data.decode("utf-8"))
-
-        return quotas
+        return api_instance.get_user_quotas()
 
 
-def get_quotas() -> Dict[str, Dict[str, Any]]:
+def get_quotas() -> Dict[str, inductiva.client.models.Quota]:
     """Get the user quotas.
 
     This function gets a dict with the user quotas.
@@ -28,12 +26,10 @@ def get_quotas() -> Dict[str, Dict[str, Any]]:
     Returns:
         Dict with the user quotas.
     """
-    quotas = _fetch_quotas_from_api()
-
-    return quotas
+    return _fetch_quotas_from_api()
 
 
-def get_info() -> Dict[str, Any]:
+def get_info() -> inductiva.client.models.User:
     """Get the user information.
 
     This funtion gets the user information, including the user's name, email,
@@ -44,15 +40,17 @@ def get_info() -> Dict[str, Any]:
     """
 
     with api.get_client() as client:
-        api_instance = UsersApi(client)
-        request = api_instance.get_user_info()
-    return request.body
+        api_instance = inductiva.client.UsersApi(client)
+        user = api_instance.get_user_info()
+    return user
 
 
-def get_costs(start_year: int,
-              start_month: int,
-              end_year: int = None,
-              end_month: int = None) -> Dict[str, Any]:
+def get_costs(
+    start_year: int,
+    start_month: int,
+    end_year: Optional[int] = None,
+    end_month: Optional[int] = None,
+) -> List[inductiva.client.models.CostDetail]:
     """Get the user costs.
 
     This function gets a dict with the user costs.
@@ -68,14 +66,13 @@ def get_costs(start_year: int,
                          "end_year must also be provided.")
 
     with api.get_client() as client:
-        api_instance = UsersApi(client)
+        api_instance = inductiva.client.UsersApi(client)
 
-        query_params = {"start_year": start_year, "start_month": start_month}
+        response = api_instance.get_user_costs(
+            start_year=start_year,
+            start_month=start_month,
+            end_year=end_year,
+            end_month=end_month,
+        )
 
-        #add end year and month if provided
-        if end_year and end_month:
-            query_params["end_year"] = end_year
-            query_params["end_month"] = end_month
-
-        request = api_instance.get_user_costs(query_params=query_params)
-    return request.body["costs"]
+    return response.costs

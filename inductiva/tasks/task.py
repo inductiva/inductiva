@@ -21,9 +21,9 @@ from ..localization import translator as __
 import inductiva
 from inductiva import storage
 from inductiva import constants
+import inductiva.client
 from inductiva.client import exceptions, models
 from inductiva import api
-from inductiva.client.apis.tags import tasks_api
 from inductiva.utils import files, format_utils, data
 from inductiva.tasks import output_info
 from inductiva.tasks.file_tracker import Operations, FileTracker
@@ -34,7 +34,7 @@ import warnings
 @dataclass
 class Metric:
     """Represents a single metric with a value and a label.
-    
+
     :meta private:
     """
     label: str
@@ -303,7 +303,7 @@ class Task:
     """Represents a running/completed task on the Inductiva API.
 
     Example usage:
-    
+
     .. code-block:: python
 
         task = simulator.run(...)
@@ -317,19 +317,21 @@ class Task:
     _FAILED_STATUSES = {
         models.TaskStatusCode.FAILED,
         models.TaskStatusCode.KILLED,
-        models.TaskStatusCode.EXECUTERFAILED,
-        models.TaskStatusCode.EXECUTERTERMINATED,
-        models.TaskStatusCode.EXECUTERTERMINATEDBYUSER,
-        models.TaskStatusCode.SPOTINSTANCEPREEMPTED,
+        models.TaskStatusCode.EXECUTER_MINUS_FAILED,
+        models.TaskStatusCode.EXECUTER_MINUS_TERMINATED,
+        models.TaskStatusCode.EXECUTER_MINUS_TERMINATED_MINUS_BY_MINUS_USER,
+        models.TaskStatusCode.SPOT_MINUS_INSTANCE_MINUS_PREEMPTED,
         models.TaskStatusCode.ZOMBIE,
-        models.TaskStatusCode.EXECUTERTERMINATEDTTLEXCEEDED,
-        models.TaskStatusCode.TTLEXCEEDED,
+        models.TaskStatusCode.
+        EXECUTER_MINUS_TERMINATED_MINUS_TTL_MINUS_EXCEEDED,
+        models.TaskStatusCode.TTL_MINUS_EXCEEDED,
     }
 
     _RUNNING_STATUSES = {
-        models.TaskStatusCode.PENDINGINPUT, models.TaskStatusCode.STARTED,
-        models.TaskStatusCode.COMPUTATIONSTARTED,
-        models.TaskStatusCode.COMPUTATIONENDED
+        models.TaskStatusCode.PENDING_MINUS_INPUT,
+        models.TaskStatusCode.STARTED,
+        models.TaskStatusCode.COMPUTATION_MINUS_STARTED,
+        models.TaskStatusCode.COMPUTATION_MINUS_ENDED
     }
 
     _KILLABLE_STATUSES = {models.TaskStatusCode.SUBMITTED
@@ -342,7 +344,7 @@ class Task:
     def __init__(self, task_id: str):
         """Initialize the instance from a task ID."""
         self.id = task_id
-        self._api = tasks_api.TasksApi(api.get_client())
+        self._api = inductiva.client.TasksApi(api.get_client())
         self.file_tracker = FileTracker()
         self._info = None
         self._status = None
@@ -1216,7 +1218,7 @@ class Task:
 
     def list_files(self) -> Tuple[Optional[str], int]:
         """List the files in the task's working directory.
-        
+
         This method will list the files, in real time, in the task's working
         directory. It will also print the files in a tree-like structure.
 
@@ -1253,7 +1255,7 @@ class Task:
         Consume and write the formatted output from an asynchronous generator to
         a file-like object.
 
-        This function iterates over the provided asynchronous generator, writing 
+        This function iterates over the provided asynchronous generator, writing
         each line of output to the specified file-like object.
 
         Example:
@@ -1318,9 +1320,9 @@ class Task:
         """
         Display the last modified file for a given task.
 
-        This function retrieves and prints information about the most recently 
-        modified file associated with a specified task. It validates that the 
-        task computation has started before proceeding. If the task is invalid 
+        This function retrieves and prints information about the most recently
+        modified file associated with a specified task. It validates that the
+        task computation has started before proceeding. If the task is invalid
         or not started, an error message is printed to `stderr`.
         """
 
@@ -1336,7 +1338,7 @@ class Task:
                                    filename: str,
                                    n_lines: int = 10,
                                    follow=False):
-        """Get the last n_lines lines of a 
+        """Get the last n_lines lines of a
         file in the task's working directory."""
 
         def formatter(message):
@@ -1357,7 +1359,7 @@ class Task:
         Consume and write the output from an asynchronous generator to a
         file-like object.
 
-        This function iterates over the provided asynchronous generator, writing 
+        This function iterates over the provided asynchronous generator, writing
         each line of output to the specified file-like object.
         """
         try:
@@ -1368,14 +1370,14 @@ class Task:
 
     def _top(self) -> Tuple[Optional[str], int]:
         """Prints the result of the `top -b -H -n 1` command.
-    
+
         This command will list the processes and threads (-H) in batch mode
         (-b).
         This command will run only once (-n 1) instead of running continuously.
         The result is an instant snapshot of the machine CPU and RAM metrics.
 
         Returns:
-            A string with the formatted directory listing. 
+            A string with the formatted directory listing.
             The return code for the command. 0 if successful, 1 if failed.
         """
         result, return_code = self._run_streaming_command(
@@ -1554,7 +1556,7 @@ class Task:
 
     def set_metadata(self, metadata: Dict[str, str]):
         """Set metadata for the task.
-        
+
         Metadata is stored as key-value pairs, where both
         keys and values must be strings.
         Metadata can be useful for categorizing, searching,
@@ -1588,7 +1590,7 @@ class Task:
 
     def get_metadata(self) -> Dict[str, str]:
         """Get the metadata associated with the task.
-            
+
         Returns:
             A dictionary with the custom metadata previously set on this task.
         """

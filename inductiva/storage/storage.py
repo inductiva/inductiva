@@ -20,8 +20,8 @@ import inductiva
 from inductiva import constants
 from inductiva import utils
 from inductiva.api import methods
+import inductiva.client
 from inductiva.client import exceptions, models
-from inductiva.client.apis.tags import storage_api
 from inductiva.utils import format_utils
 from inductiva.utils import data
 
@@ -40,7 +40,7 @@ def _print_storage_size_and_cost() -> int:
 
     return the storage size in bytes.
     """
-    api = storage_api.StorageApi(inductiva.api.get_client())
+    api = inductiva.client.StorageApi(inductiva.api.get_client())
     storage_total_size_bytes = api.get_storage_size().body
     estimated_storage_cost = api.get_storage_monthly_cost(
     ).body["estimated_monthly_cost"]
@@ -97,7 +97,7 @@ def listdir(
     class.
     """
 
-    api = storage_api.StorageApi(inductiva.api.get_client())
+    api = inductiva.client.StorageApi(inductiva.api.get_client())
 
     # This is valid for single files and directories
     if len(path.split("/")) < 2:
@@ -165,7 +165,7 @@ def get_signed_urls(
     paths: List[str],
     operation: Literal["upload", "download"],
 ) -> List[str]:
-    api_instance = storage_api.StorageApi(inductiva.api.get_client())
+    api_instance = inductiva.client.StorageApi(inductiva.api.get_client())
     signed_urls = api_instance.get_signed_urls(query_params={
         "paths": paths,
         "operation": operation,
@@ -201,20 +201,20 @@ def get_zip_contents(
 
     Args:
         path (str): The full path to the ZIP archive.
-        zip_relative_path (str, optional): A relative path inside the ZIP 
-            archive to filter the contents. Defaults to an empty string, 
+        zip_relative_path (str, optional): A relative path inside the ZIP
+            archive to filter the contents. Defaults to an empty string,
             which lists all files within the archive.
         recursive (bool, optional): If True, list contents recursively within
-            the specified `zip_relative_path`. If False, list only top-level 
+            the specified `zip_relative_path`. If False, list only top-level
             files and directories within the specified `zip_relative_path`.
             Defaults to False.
 
     Returns:
         ZipArchiveInfo: An object containing the total size of the ZIP archive
-            and a list of `ZipFileInfo` objects representing the files 
+            and a list of `ZipFileInfo` objects representing the files
             within the specified ZIP archive.
     """
-    api_instance = storage_api.StorageApi(inductiva.api.get_client())
+    api_instance = inductiva.client.StorageApi(inductiva.api.get_client())
     query_params = {
         "path": path,
         "zip_relative_path": zip_relative_path,
@@ -254,7 +254,7 @@ def upload_from_url(
         file_name (str, optional): The name to save the uploaded file as.
             If not specified, the name will be extracted from the URL.
     """
-    api_instance = storage_api.StorageApi(inductiva.api.get_client())
+    api_instance = inductiva.client.StorageApi(inductiva.api.get_client())
 
     # append filename extracted from url to remote_path
     if not file_name:
@@ -319,7 +319,7 @@ def upload(
             uploaded.
         remote_dir (str): The remote directory where the file will
             be uploaded.
-    
+
     Example:
         Upload a file to a remote directory:
 
@@ -345,7 +345,7 @@ def upload(
 
     logging.info("Uploading content...")
 
-    api_instance = storage_api.StorageApi(inductiva.api.get_client())
+    api_instance = inductiva.client.StorageApi(inductiva.api.get_client())
 
     urls = get_signed_urls(paths=remote_file_paths, operation="upload")
 
@@ -532,7 +532,7 @@ def _decompress_file_inside_zip(path):
 
 def download(remote_path: str, local_dir: str = "", decompress: bool = True):
     """
-    Downloads a file or folder from storage to a local directory, optionally 
+    Downloads a file or folder from storage to a local directory, optionally
     decompressing the contents.
 
     Args:
@@ -540,7 +540,7 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
             to download.
         local_dir (str, optional): The local directory where the file or folder
             will be saved. Defaults to the current working directory.
-        decompress (bool, optional): Whether to decompress the downloaded file 
+        decompress (bool, optional): Whether to decompress the downloaded file
             or folder if it is compressed. Defaults to True.
 
     Examples:
@@ -569,7 +569,7 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
         It is not possible to download folders that are inside zip archives.
     """
 
-    api_instance = storage_api.StorageApi(inductiva.api.get_client())
+    api_instance = inductiva.client.StorageApi(inductiva.api.get_client())
     pool_manager = api_instance.api_client.rest_client.pool_manager
 
     if _is_file_inside_zip(remote_path):
@@ -624,7 +624,7 @@ def remove(remote_path: str):
     if "/" not in remote_path:
         remote_path += "/"
 
-    api = storage_api.StorageApi(inductiva.api.get_client())
+    api = inductiva.client.StorageApi(inductiva.api.get_client())
     api.delete_file(query_params={"path": remote_path})
 
     logging.info("Successfully removed '%s' from remote storage.", remote_path)
@@ -636,10 +636,10 @@ def copy(source: str, target: str):
 
     Args:
         source (str): The source path of the file or directory to copy.
-        target (str): The destination path where the file or directory 
+        target (str): The destination path where the file or directory
                       should be copied to.
     """
-    api = storage_api.StorageApi(inductiva.api.get_client())
+    api = inductiva.client.StorageApi(inductiva.api.get_client())
     api.copy(query_params={"source": source, "target": target})
     logging.info("Copied %s to %s successfully.", source, target)
 
@@ -773,7 +773,7 @@ def _generate_complete_multipart_upload_signed_url(
 
 
 def _get_file_size(file_path):
-    api = storage_api.StorageApi(inductiva.api.get_client())
+    api = inductiva.client.StorageApi(inductiva.api.get_client())
 
     contents = api.list_storage_contents({
         "path": file_path,
@@ -834,7 +834,7 @@ def multipart_upload(
     """
     Perform the multipart upload using the server.
     """
-    api = storage_api.StorageApi(inductiva.api.get_client())
+    api = inductiva.client.StorageApi(inductiva.api.get_client())
 
     api.export_multipart_files(
         body={

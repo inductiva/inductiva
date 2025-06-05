@@ -12,11 +12,11 @@ import math
 import logging
 
 import inductiva
+import inductiva.client
 import inductiva.client.models
 from inductiva import api, users, logs
 from inductiva.resources.utils import ProviderType
 from inductiva.utils import format_utils
-from inductiva.client.apis.tags import compute_api
 
 VCPUCount = namedtuple("VCPUCount", ["total", "per_machine"])
 
@@ -94,7 +94,7 @@ class BaseMachineGroup(ABC):
 
         # Set the API configuration that carries the information from the client
         # to the backend.
-        self._api = compute_api.ComputeApi(api.get_client())
+        self._api = inductiva.client.ComputeApi(api.get_client())
 
         self._validate_inputs()
 
@@ -325,7 +325,7 @@ class BaseMachineGroup(ABC):
 
         # Do not call __init__ to prevent registration of the machine group
         machine_group = cls.__new__(cls)
-        machine_group._api = compute_api.ComputeApi(api.get_client())
+        machine_group._api = inductiva.client.ComputeApi(api.get_client())
         machine_group.machine_type = resp["machine_type"]
         machine_group.data_disk_gb = resp["disk_size_gb"]
         machine_group.provider = resp["provider_id"]
@@ -868,7 +868,7 @@ class MPICluster(BaseMachineGroup):
 def _fetch_machine_groups_from_api():
     """Get all active machine groups of a user from the API."""
     try:
-        api_compute = compute_api.ComputeApi(inductiva.api.get_client())
+        api_compute = inductiva.client.ComputeApi(inductiva.api.get_client())
         response = api_compute.list_active_user_instance_groups()
 
         return json.loads(response.response.data)
@@ -893,7 +893,7 @@ def _get_machine_group_class(machine_type: str, is_elastic: bool):
 def get_by_name(machine_name: str):
     """Returns the machine group corresponding to `machine_name`."""
     try:
-        api_compute = compute_api.ComputeApi(inductiva.api.get_client())
+        api_compute = inductiva.client.ComputeApi(inductiva.api.get_client())
         response = api_compute.get_vm_group_by_name({"name": machine_name})
         response = json.loads(response.response.data)
         mg_class = _get_machine_group_class(response["type"],
