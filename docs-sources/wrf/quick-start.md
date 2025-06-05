@@ -33,26 +33,7 @@ wrf = inductiva.simulators.WRF( \
 task = wrf.run( \
 	input_dir=input_dir,
 	case_name="em_real",
-	# generate GIF with the RAINNC values
-	gen_gif=True,
-	gen_gif_variable="RAINNC",
-	gen_gif_files=[
-		"wrfout_d01_2019-11-26_12:00:00",
-		"wrfout_d01_2019-11-26_13:00:00",
-		"wrfout_d01_2019-11-26_14:00:00",
-		"wrfout_d01_2019-11-26_15:00:00",
-		"wrfout_d01_2019-11-26_16:00:00",
-		"wrfout_d01_2019-11-26_17:00:00",
-		"wrfout_d01_2019-11-26_18:00:00",
-		"wrfout_d01_2019-11-26_19:00:00",
-		"wrfout_d01_2019-11-26_20:00:00",
-		"wrfout_d01_2019-11-26_21:00:00",
-		"wrfout_d01_2019-11-26_22:00:00",
-		"wrfout_d01_2019-11-26_23:00:00",
-		"wrfout_d01_2019-11-27_00:00:00",
-	],
 	on=cloud_machine)
-
 
 # Wait for the simulation to finish and download the results
 task.wait()
@@ -63,9 +44,6 @@ task.print_summary()
 ```
 
 **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
-
-For visualization purposes, this script also optionally generates a GIF directly from the simulation outputs.
-Check out this [tutorial](https://inductiva.ai/guides/wrf/gif-generation) for more details.
 
 To adapt this script for other WRF simulations, replace input_dir with the path
 to your WRF input files and set the `case_name` accordingly.
@@ -125,4 +103,4 @@ We’ve walked through the essential steps for setting up and running a WRF simu
 By following this guide, you should now have a clear understanding of how to configure and efficiently 
 run WRF simulations on Inductiva.
 
-Happy simulationg! 🌪️
+Happy simulating! ⚡️
