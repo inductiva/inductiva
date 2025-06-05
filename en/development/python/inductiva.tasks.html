@@ -472,7 +472,7 @@ document.write(`
 files are downloaded.</p></li>
 <li><p><strong>input_dir</strong> – Directory where to download the files. If None, the
 files are downloaded to the default directory. The default is
-{inductiva.get_output_dir()}/[{input_dir}|{task_id}]/inputs/.</p></li>
+{inductiva.get_output_dir()}/{task_id}/inputs/.</p></li>
 <li><p><strong>uncompress</strong> – Whether to uncompress the archive after downloading it.</p></li>
 <li><p><strong>rm_downloaded_zip_archive</strong> – Whether to remove the archive after
 uncompressing it. If uncompress is False, this argument is
@@ -496,7 +496,7 @@ is None or empty (i.e., all input files are downloaded).</p></li>
 files are downloaded.</p></li>
 <li><p><strong>output_dir</strong> – Directory where to download the files. If None, the
 files are downloaded to the default directory. The default is
-{inductiva.get_output_dir()}/[{output_dir}|{task_id}]/outputs/.</p></li>
+{inductiva.get_output_dir()}/{task_id}/outputs/.</p></li>
 <li><p><strong>uncompress</strong> – Whether to uncompress the archive after downloading it.</p></li>
 <li><p><strong>rm_downloaded_zip_archive</strong> – Whether to remove the archive after
 uncompressing it. If uncompress is False, this argument is

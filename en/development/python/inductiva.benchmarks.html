@@ -490,10 +490,18 @@ will overwrite any previously set parameters.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.download_outputs">
-<span class="sig-name descname"><span class="pre">download_outputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.download_outputs" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">download_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.download_outputs" title="Link to this definition">#</a></dt>
 <dd><p>Downloads all the outputs for all the tasks in the project.</p>
-<p>All the files will be stored inside
-<cite>inductiva_output/&lt;project_name&gt;/&lt;task_id’s&gt;</cite>.</p>
+<p>All task outputs will be organized within the specified <cite>output_dir</cite>.
+If <cite>output_dir</cite> is not provided, outputs will be saved to a default
+location under <cite>inductiva_output/&lt;project_name&gt;/&lt;task_id&gt;/</cite>.
+Otherwise, they will be stored in <cite>&lt;output_dir&gt;/&lt;task_id&gt;/</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>output_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – The base directory where project outputs
+will be downloaded.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
