@@ -7,7 +7,6 @@ from abc import ABC, abstractmethod
 import datetime
 import time
 import enum
-import json
 import math
 
 import logging
@@ -274,7 +273,9 @@ class BaseMachineGroup(ABC):
         self._gpu_info = resp.gpu_info
         self.zone = resp.zone
         dynamic_disk_resize_config = resp.dynamic_disk_resize_config
-        self.auto_resize_disk_max_gb = dynamic_disk_resize_config.max_disk_size_gb if dynamic_disk_resize_config else None
+        self.auto_resize_disk_max_gb = (
+            dynamic_disk_resize_config.max_disk_size_gb
+            if dynamic_disk_resize_config else None)
 
     def _register_machine_group(self, **kwargs):
         """Register machine group configuration in API.

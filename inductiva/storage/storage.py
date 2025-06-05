@@ -22,7 +22,6 @@ import inductiva
 from inductiva import constants
 from inductiva import utils
 from inductiva.api import methods
-import inductiva.client.models
 import inductiva.client
 from inductiva.client import exceptions, models
 from inductiva.utils import format_utils
@@ -165,10 +164,10 @@ def get_signed_urls(
     api_instance = inductiva.client.StorageApi(inductiva.api.get_client())
     resp = api_instance.get_signed_urls_without_preload_content(
         paths=paths,
-        operation=inductiva.client.models.OperationType(operation),
+        operation=models.OperationType(operation),
     )
 
-    return [signed_url for signed_url in json.loads(resp.data)]
+    return json.loads(resp.data)
 
 
 @dataclass
@@ -822,12 +821,12 @@ def multipart_upload(
     api = inductiva.client.StorageApi(inductiva.api.get_client())
 
     api.export_multipart_files(
-        body={
-            "path": path,
-            "parts_size": parts_size,
-            "upload_parts": upload_parts,
-            "complete_multipart_url": complete_multipart_url,
-        })
+        multi_part_export_operation=models.MultiPartExportOperation(
+            path=path,
+            parts_size=parts_size,
+            upload_parts=upload_parts,
+            complete_multipart_url=complete_multipart_url,
+        ))
 
 
 def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):

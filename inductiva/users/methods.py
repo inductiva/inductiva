@@ -1,6 +1,5 @@
 """Methods to interact with the user info on the API."""
-import json
-from typing import Any, Dict, Optional, List
+from typing import Dict, Optional, List
 
 from inductiva import api
 
