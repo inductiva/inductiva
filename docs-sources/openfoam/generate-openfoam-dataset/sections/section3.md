@@ -27,7 +27,7 @@ We will use Inductiva’s templating system to generalize the base simulation by
 ## Parametrize the system/forceCoeffs file
 Inductiva allows you to convert fixed parameters in your simulation configuration files into variables that can be programmatically controlled via Python scripting.
 
-This means that instead of hardcoding the wind speed in `input_files/0/include/initialConditions` as:
+This means that instead of hardcoding the wind speed in `openfoam-input-example/0/include/initialConditions` as:
 ```
 ...
     flowVelocity         (20 0 0);
@@ -68,7 +68,7 @@ target_dir = f"variations/wind_speed_{wind_speed}"
 # This is where we make the substitution and set
 # the value of the parameters in the modified config file
 inductiva.TemplateManager.render_dir(
-   source_dir="input_files",
+   source_dir="openfoam-input-example/",
    target_dir=target_dir,
    overwrite=True,
    wind_speed=wind_speed)

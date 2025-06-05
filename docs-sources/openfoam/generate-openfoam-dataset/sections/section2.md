@@ -20,7 +20,7 @@ cloud_machine = inductiva.resources.MachineGroup( \
 openfoam = inductiva.simulators.OpenFOAM()
 
 task = openfoam.run( \
-    input_dir="input_files/",
+    input_dir="openfoam-input-example/",
     shell_script="./Allrun",
     on=cloud_machine)
 
