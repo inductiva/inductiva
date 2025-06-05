@@ -53,7 +53,8 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
+> **Note**: `spot` machines are available at substantial discounts, but your simulation job may be preempted if
+> the Cloud provider reclaims the spot machine.
 
 To adapt this script for other Quantum ESPRESSO simulations, replace `input_dir` with the
 path to your Quantum ESPRESSO input files.

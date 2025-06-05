@@ -43,7 +43,8 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
+> **Note**: `spot` machines are available at substantial discounts, but your simulation job may be preempted if
+> the Cloud provider reclaims the spot machine.
 
 The number of virtual CPUs (`n_vcpus`) is the parameter used to configure the simulation parallelism. This value must be consistently set to the same parameter `M 10` in both the `control.txt` and `ctrl.txt` configuration files.
 

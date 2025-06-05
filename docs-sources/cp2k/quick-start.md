@@ -47,7 +47,8 @@ task.print_summary()
 In this example, we will run the simulation on a virtual machine with 16
 vCPUs, supported by a 4th generation AMD EPYC™ (Genoa) processor.
 
-> **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
+> **Note**: `spot` machines are available at substantial discounts, but your simulation job may be preempted if
+> the Cloud provider reclaims the spot machine.
 
 To adapt this script for other CP2K simulations, replace `input_dir` with the
 path to your CP2K input files and set the `sim_config_filename` accordingly.
