@@ -12,7 +12,7 @@ The goal of this tutorial is to demonstrate how to run the `09_Turbine` use case
 Download the required files from `DualSPHysics_v5.4.2.zip` [here](https://dual.sphysics.org/downloads/). You will be working within this directory and 
 writing the Inductiva Python script there.
 
-### Update the simulation script of the example `09_Turbine`
+### Update the simulation script of the `09_Turbine` example
 Before running the simulation, you will need to adjust the simulation script located
 at `examples/chrono/09_Turbine/xCaseTurbine_linux64_GPU.sh`.
 

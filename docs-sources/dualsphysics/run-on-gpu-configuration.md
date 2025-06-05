@@ -1,23 +1,19 @@
-# 3-D dam break impacting an elastic plate
+# Run DualSPHysics Across Different GPUs
+In this tutorial, we’ll demonstrate how to use the Inductiva API to run DualSPHysics simulations on various GPU configurations.
 
-To evaluate the performance of DualSPHysics across different GPUs, we will run a benchmark simulation based on one presented in the paper
+To illustrate this, we’ll run a benchmark simulation based on the study presented in the paper
 [A fluid–structure interaction model for free-surface flows and flexible structures using smoothed particle hydrodynamics on a GPU](https://www.sciencedirect.com/science/article/pii/S0889974621000955?via%3Dihub).
-Among the various simulations discussed, we focus on the `3-D dam break impacting an elastic plate` scenario.
 
-## Simulation Overview
-
-This simulation showcases the well known dam break problem, where a column of
-water is released from a height. The catch here is the fact that there is an elastic
-plate that is placed on the other side of the simulation domain.
-
-More about this simulation can be found in section `4.5. 3-D dam break impacting an elastic plate`
-of the referenced paper.
+Among the simulations discussed, we focus on the **3-D dam break impacting an elastic plate** scenario.
 
 <p align="center"><img src="./_static/dam_break_elastic.gif" alt="Visualization created with Blender." width="700"></p>
 
-## Prerequisites
+## Simulation Overview
+This simulation illustrates the classic dam break problem, where a column of water is suddenly released. What makes it unique is the presence of an elastic plate positioned at the opposite side of the domain, interacting dynamically with the fluid flow.
 
-### Download the simulation files
+> For more details, see section 4.5, *3-D dam break impacting an elastic plate*, in the referenced paper.
+
+## Prerequisites
 
 ### Download the DualSPHysics package
 Download the required files from `DualSPHysics_v5.4.2.zip` [here](https://dual.sphysics.org/downloads/).
@@ -25,8 +21,7 @@ You will be working within this directory and writing the Inductiva Python scrip
 
 ### Update the simulation script of the `examples/flexstruc/01_DamBreak` case
 
-Before running the simulation, you will need to adjust the simulation script located
-at `examples/flexstruc/01_DamBreak/xCaseDambreak3D_FSI_linux64_GPU.sh`.
+Before running the simulation, update the script located at: `examples/flexstruc/01_DamBreak/xCaseDambreak3D_FSI_linux64_GPU.sh`.
 
 Make the following adjustments:
 1. **Update the `dirbin` variable:**
@@ -41,7 +36,6 @@ Make the following adjustments:
    ```
 
 These modifications will prepare the script for seamless automated execution.
-
 
 ## Running Your Simulation
 Here is the code required to run a DualSPHysics simulation using the Inductiva API:
@@ -83,10 +77,13 @@ cloud_machine.terminate()
 task.print_summary()
 ```
 
-This simulation runs on a `g2-standard-16` machine on spot mode, which has 16 virtual CPUs,
-1 nvidia-l4 GPU and a 200 GB data disk.
+This simulation runs in spot mode on a `g2-standard-16` machine, featuring 16 virtual CPUs, 1 NVIDIA L4 GPU, and a 200 GB data disk.
 
 > **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
+
+For visualization purposes, this script also optionally converts the simulation’s raw particle data 
+(stored as .vtk files) into mesh format (.obj), making it compatible with common visualization tools. 
+Check out this [tutorial](https://inductiva.ai/guides/dualsphysics/convert-to-obj) for more details.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
@@ -109,26 +106,18 @@ Data:
 	Number of output files:   1230
 
 Estimated computation cost (US$): 0.82 US$
-
-Go to https://console.inductiva.ai/tasks/cb7eswodnkzjboi22k50t44s3 for more details.
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that 
 represents the actual execution of the simulation, the core computation time 
 of this simulation was approximately 1 hour and 37 minutes (5862 seconds).
 
-## Testing different GPUS
+## Testing Across Different GPUs
+As mentioned earlier, the simulation ran on an NVIDIA L4 GPU. To test it on other GPUs, simply change the `machine_type` parameter in the code to `a2-highgpu-1g` or `a3-highgpu-1g`. These machines come equipped with 1 NVIDIA A100 and 1 NVIDIA H100 GPU, respectively.
 
-As it was stated before, the simulation ran on an Nvidia L4 GPU. What if we want
-to speed up the simulation by using a more powerful GPU? We can do that by
-changing the `machine_type` parameter in the code above to `a2-highgpu-1g` or
-`a3-highgpu-1g`. This machines have 1 Nvidia A100 and 1 Nvidia H100 GPU respectively.
+You also need to specify `zone="europe-west4-b"` when creating the machine, as the A100 and H100 GPUs are not yet available in our default zone.
 
-**NOTE:** you also have to add `zone="europe-west4-b"` to the machine creation due to
-the fact that the A100 and H100 GPUs are not yet available on our default zone.
-
-
-Here are the results of running the same simulation on those machines:
+Here are the results of running the same simulation on these machines:
 
 |  Machine Type  | GPU         |Execution Time          | Estimated Cost |
 |:--------------:|:-----------:|:----------------------:|:--------------:|
@@ -136,9 +125,6 @@ Here are the results of running the same simulation on those machines:
 |  a2-highgpu-1g | Nvidia A100 | 1 hour 2 minutes       | 0.61 US$    |
 |  a3-highgpu-1g | Nvidia H100 | 34 minutes 33 seconds  | 1.55 US$    |
 
-> **Note**: the times and costs above are only related with running the simulation, not the
-> time it takes to convert the VTK files to OBJ files. That step is optional.
+> **Note**: The times and costs listed above refer only to running the simulation and do not include the time required to convert VTK files to OBJ format. This conversion step is optional.
 
-
-Keep reading to learn how to [visualize the results of your simulation using
-Paraview or Blender](./visualization/index).
+Check out our [ParaView](https://inductiva.ai/guides/dualsphysics/paraview-for-visualization) and [Blender](https://inductiva.ai/guides/dualsphysics/blender-for-visualization) tutorials to learn how to visualize your simulation results.

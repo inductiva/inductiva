@@ -54,7 +54,7 @@ from inductiva.client import ApiException
 
 # from inductiva.client import models
 from inductiva.client.apis.tags import projects_api
-from inductiva.utils import format_utils
+from inductiva.utils import files, format_utils
 
 _logger = logging.getLogger(__name__)
 
@@ -71,6 +71,11 @@ def get_projects() -> List["Project"]:
 
     # pylint: disable=protected-access
     return [Project._from_api_response(resp) for resp in response.body]
+
+
+class ProjectType:
+    PROJECT = "project"
+    BENCHMARK = "benchmark"
 
 
 class Project:
@@ -106,6 +111,9 @@ class Project:
         if not self._proj_data:
             self._proj_data = self._create_project(name)
 
+    def _get_project_type(self):
+        return ProjectType.PROJECT
+
     def _get_project(self, name: str):
         """Fetches the project info from the backend."""
         try:
@@ -120,7 +128,8 @@ class Project:
     def _create_project(self, name):
         """Creates a project with the given name on the backend."""
         try:
-            response = self._api.create_project({"name": name})
+            args = {"name": name, "project_type": self._get_project_type()}
+            response = self._api.create_project(args)
             return response.body
         except ApiException as ex:
             _logger.error("Failed to create project %s", name, exc_info=ex)
@@ -236,17 +245,22 @@ class Project:
             time.sleep(5)
         print("All tasks in the project terminated.")
 
-    def download_outputs(self):
-        """
-        Downloads all the outputs for all the tasks in the project.
+    def download_outputs(self, output_dir: Optional[str] = None):
+        """Downloads all the outputs for all the tasks in the project.
 
-        All the files will be stored inside
-        `inductiva_output/<project_name>/<task_id's>`.
-        """
-        all_tasks = self.get_tasks()
+        All task outputs will be organized within the specified `output_dir`.
+        If `output_dir` is not provided, outputs will be saved to a default
+        location under `inductiva_output/<project_name>/<task_id>/`.
+        Otherwise, they will be stored in `<output_dir>/<task_id>/`.
 
-        for task in all_tasks:
-            task.download_outputs(output_dir=f"{self.name}/{task.id}")
+        Args:
+            output_dir (str, optional): The base directory where project outputs
+                                        will be downloaded.
+        """
+
+        for task in self.get_tasks():
+            base_path = output_dir or files.resolve_output_path(self.name)
+            task.download_outputs(output_dir=f"{base_path}/{task.id}")
 
     def __eq__(self, other) -> bool:
         return (isinstance(other, Project) and self.name == other.name and

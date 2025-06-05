@@ -1,17 +1,15 @@
-# The Inductiva Guide to SFINCS 🏝️
+# The Inductiva Guide to SFINCS
 Your resource hub for all things SFINCS at Inductiva. Whether you're just starting out or an experienced user, you'll find the resources you need to seamlessly run your SFINCS simulations on Cloud machines equipped with hundreds of cores and terabytes of disk space.
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check! 
 
 ## About SFINCS
-[SFINCS](https://www.deltares.nl/en/software-and-data/products/sfincs) is a
-hydrodynamic model designed for rapid and efficient simulation of coastal and
-fluvial flooding. Unlike traditional full-physics models, SFINCS uses a
-simplified physics approach based on the shallow water equations with various
-approximations, enabling it to compute flood extents and water levels at high
-speeds while maintaining sufficient accuracy for decision-making and emergency
-response. Its grid-based structure supports complex topographies, and it is
-particularly well-suited for large-scale, high-resolution inundation modeling
+The [SFINCS](https://www.deltares.nl/en/software-and-data/products/sfincs) (Super-Fast INundation of CoastS) model is a reduced-complexity simulation 
+engine developed by [Deltares](https://www.deltares.nl/en). It is designed 
+to simulate compound coastal flooding with high computational efficiency 
+while maintaining reliable accuracy.
+
+Featuring a grid-based structure that handles complex topographies, SFINCS is particularly well-suited for large-scale, high-resolution inundation modeling
 where computational speed is crucial.
 
 ## What You'll Find Here
@@ -35,4 +33,5 @@ maxdepth: 3
 hidden: true
 ---
 setup-test
+quick-start
 ```

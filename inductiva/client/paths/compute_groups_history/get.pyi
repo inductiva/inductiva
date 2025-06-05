@@ -41,6 +41,8 @@ class PerPageSchema(schemas.IntSchema):
 
 CreatedBeforeSchema = schemas.DateTimeSchema
 CreatedAfterSchema = schemas.DateTimeSchema
+ProjectSchema = schemas.StrSchema
+NonActiveOnlySchema = schemas.BoolSchema
 ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
@@ -65,6 +67,14 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
             CreatedAfterSchema,
             str,
             datetime,
+        ],
+        'project': typing.Union[
+            ProjectSchema,
+            str,
+        ],
+        'non_active_only': typing.Union[
+            NonActiveOnlySchema,
+            bool,
         ],
         'provider_id': typing.Union[
             ProviderIdSchema,
@@ -100,6 +110,18 @@ request_query_created_after = api_client.QueryParameter(
     name="created_after",
     style=api_client.ParameterStyle.FORM,
     schema=CreatedAfterSchema,
+    explode=True,
+)
+request_query_project = api_client.QueryParameter(
+    name="project",
+    style=api_client.ParameterStyle.FORM,
+    schema=ProjectSchema,
+    explode=True,
+)
+request_query_non_active_only = api_client.QueryParameter(
+    name="non_active_only",
+    style=api_client.ParameterStyle.FORM,
+    schema=NonActiveOnlySchema,
     explode=True,
 )
 request_query_provider_id = api_client.QueryParameter(
@@ -237,6 +259,8 @@ class BaseApi(api_client.Api):
                 request_query_per_page,
                 request_query_created_before,
                 request_query_created_after,
+                request_query_project,
+                request_query_non_active_only,
                 request_query_provider_id,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
