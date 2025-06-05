@@ -36,7 +36,7 @@ for i in range(DATASET_SIZE):
           f"wind_speed = {wind_speed}")
     target_dir = f"variations/wind_speed_{wind_speed}"
     inductiva.TemplateManager.render_dir(
-        source_dir="input_files",
+        source_dir="openfoam-input-example/",
         target_dir=target_dir,
         overwrite=True,
         wind_speed=wind_speed)
@@ -106,7 +106,7 @@ for i in range(DATASET_SIZE):
           f"wind_speed = {wind_speed}")
     target_dir = f"variations/wind_speed_{wind_speed}"
     inductiva.TemplateManager.render_dir(
-        source_dir="input_files",
+        source_dir="openfoam-input-example/",
         target_dir=target_dir,
         overwrite=True,
         rotation=rotation,
@@ -158,7 +158,6 @@ your command line interface `inductiva tasks list -p openfoam_dataset`
 Alternatively, you can also check the tasks projects in the [Inductiva Web Console](https://console.inductiva.ai/) on the "Projects" tab:
 
 ![console project](../../_static/console_projects.png)
-
 
 
 ## Summary

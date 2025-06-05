@@ -3,7 +3,7 @@
 
 In this tutorial, we will demonstrate how to use the Inductiva API to efficiently generate an OpenFOAM dataset in parallel, varying the inlet wind speed. This approach enables rapid creation of multiple simulation cases with different wind conditions, making it easier to analyze flow behavior and performance sensitivity across a controlled range of wind speeds. By leveraging cloud resources, users can run these simulations in parallel and accelerate the generation of CFD data for further study or integration into downstream workflows.
 
-<p align="center"><img src="../_static/turbsim_animation_30_fps.gif" alt="TurbSim simulation visualization" width="700"></p>
+<p align="center"><img src="../_static/bike_pressure_field.png" alt="OpenFOAM simulation visualization" width="700"></p>
 
 To demonstrate this, we will use the incompressible, steady-state simpleFoam solver with the [motorBike example](https://develop.openfoam.com/Development/openfoam/-/tree/master/tutorials/incompressible/simpleFoam/motorBike), available on the [OpenFOAM  repository](https://develop.openfoam.com/Development/openfoam).
 

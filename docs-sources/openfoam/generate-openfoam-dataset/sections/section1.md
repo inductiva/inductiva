@@ -3,8 +3,11 @@ Before running a OpenFOAM simulation, ensure all the necessary files are correct
 
 Let’s get started!
 
+<p align="center"><img src="../../_static/bike_flow_slice_U.png" alt="OpenFOAM simulation visualization" width="700"></p>
+
+
 ### Download the Simulation File
-Download the required [motorBike example](https://develop.openfoam.com/Development/openfoam/-/tree/master/tutorials/incompressible/simpleFoam/motorBike) and place it in your working directory under a folder named `input_files`. We also prepared a zip you can [download here](https://storage.googleapis.com/inductiva-api-demo-files/openfoam-input-example.zip). 
+Download the required [motorBike example](https://develop.openfoam.com/Development/openfoam/-/tree/master/tutorials/incompressible/simpleFoam/motorBike) and place it in your working directory under a folder named `openfoam-input-example/`. We also prepared a zip you can [download here](https://storage.googleapis.com/inductiva-api-demo-files/openfoam-input-example.zip). 
 
 Alternatively, you can also download the example files using inductiva:
 
@@ -17,12 +20,10 @@ input_dir = inductiva.utils.download_from_url(
     unzip=True)
 ```
 
-You might need to rename the directory `openfoam-input-example` to `input_files`.
-
 Your directory structure should look like this:
 
 ```
-- input_files/  
+- openfoam-input-example/  
   ├── 0
   ├── Allrun
   ├── constant
