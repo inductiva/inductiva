@@ -10,12 +10,14 @@ from inductiva.utils import format_utils
 def list_buckets(_):
     """List the user's buckets accessible via the Inductiva API."""
     api = storage_api.StorageApi(inductiva.api.get_client())
-    response = api.list_buckets()
+    response_list_buckets = api.list_buckets()
+    response_default_bucket = api.get_default_bucket()
 
-    buckets = [dict(schema) for schema in response.body]
+    buckets = [dict(schema) for schema in response_list_buckets.body]
+    default_bucket = dict(response_default_bucket.body)
     for bucket in buckets:
+        bucket["is_default"] = "yes" if bucket == default_bucket else "no"
         bucket["is_internal"] = "yes" if bucket["is_internal"] else "no"
-        bucket["is_default"] = "yes"
 
     cols = list(buckets[0].keys())
     rows = [list(bucket.values()) for bucket in buckets]
