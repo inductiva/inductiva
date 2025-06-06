@@ -1,6 +1,7 @@
 """Delft3D module of the API."""
 from typing import Optional, Union
-from inductiva import types, simulators
+
+from inductiva import simulators, types
 
 
 class Delft3D(simulators.Simulator):

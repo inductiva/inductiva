@@ -1,8 +1,8 @@
 """AmrWind module of the API for numerical simulations of fluid flows."""
 from typing import List, Literal, Optional, Union
 
-from inductiva import types, tasks, simulators
-from inductiva.commands import MPIConfig, Command
+from inductiva import simulators, tasks, types
+from inductiva.commands import Command, MPIConfig
 
 
 @simulators.simulator.mpi_enabled

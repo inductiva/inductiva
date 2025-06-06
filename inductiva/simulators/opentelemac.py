@@ -1,6 +1,7 @@
 """OpenTelemac module of the API."""
 from typing import Optional, Union
-from inductiva import types, simulators
+
+from inductiva import simulators, types
 
 
 class OpenTelemac(simulators.Simulator):

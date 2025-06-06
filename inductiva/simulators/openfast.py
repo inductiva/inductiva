@@ -1,7 +1,7 @@
 """OpenFAST module of the API for wind turbine simulations."""
 from typing import List, Optional, Union
 
-from inductiva import types, tasks, simulators
+from inductiva import simulators, tasks, types
 
 
 class OpenFAST(simulators.Simulator):

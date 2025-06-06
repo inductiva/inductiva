@@ -1,8 +1,8 @@
 """Class to run commands on Quantum Espresso."""
-from typing import List, Optional, Union
 import logging
+from typing import List, Optional, Union
 
-from inductiva import types, tasks, simulators
+from inductiva import simulators, tasks, types
 
 
 @simulators.simulator.mpi_enabled

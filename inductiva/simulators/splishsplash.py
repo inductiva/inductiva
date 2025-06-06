@@ -1,7 +1,7 @@
 """SplisHSPlasH simulator module of the API."""
 from typing import List, Optional, Union
 
-from inductiva import types, tasks, simulators
+from inductiva import simulators, tasks, types
 
 
 class SplishSplash(simulators.Simulator):

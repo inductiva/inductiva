@@ -1,7 +1,7 @@
 """MOHID simulator module of the API."""
 from typing import List, Optional, Union
 
-from inductiva import types, tasks, simulators
+from inductiva import simulators, tasks, types
 
 ALLOWD_MOHID_COMMANDS = ["MohidWater.exe", "MohidLand.exe"]
 

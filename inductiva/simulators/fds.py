@@ -2,7 +2,7 @@
 
 from typing import List, Optional, Union
 
-from inductiva import types, tasks, simulators
+from inductiva import simulators, tasks, types
 from inductiva.commands.commands import Command
 from inductiva.commands.mpiconfig import MPIConfig
 

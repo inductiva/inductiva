@@ -1,7 +1,7 @@
 """GX module of the API for numerical simulations."""
 from typing import List, Optional, Union
 
-from inductiva import types, tasks, simulators
+from inductiva import simulators, tasks, types
 
 
 class GX(simulators.Simulator):

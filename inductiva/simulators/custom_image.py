@@ -1,7 +1,7 @@
 """Class to run commands on an custom image."""
 from typing import List, Optional, Union
 
-from inductiva import types, tasks, simulators
+from inductiva import simulators, tasks, types
 
 
 @simulators.simulator.mpi_enabled
