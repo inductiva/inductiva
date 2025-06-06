@@ -1,35 +1,37 @@
 """List the user information via CLI."""
+import decimal
 from collections import defaultdict
 from datetime import datetime
-from typing import TextIO
+from typing import TextIO, Dict
 import argparse
 import sys
 
 from inductiva import users, _cli
+import inductiva.client.models
 from inductiva.client.exceptions import ApiException
 from inductiva.users.methods import get_costs
 from inductiva.utils import format_utils
 
 
-def _quotas_to_dict(quotas):
+def _quotas_to_dict(quotas: Dict[str, inductiva.client.models.Quota]):
     """Converts a list of quotas to two dictionaries.
     One for global quotas and one for instance quotas.
     """
     table_global = defaultdict(list)
     table_instance = defaultdict(list)
     for _, quota in quotas.items():
-        current = quota["in_use"]
-        max_allowed = quota["max_allowed"]
-        unit = quota["unit"]
+        current = quota.in_use
+        max_allowed = quota.max_allowed
+        unit = quota.unit
         current_str = (f"{current} {unit}" if current is not None else "N/A")
         max_allowed_str = (f"{max_allowed} {unit}"
                            if max_allowed is not None else "N/A")
 
-        if quota["scope"] == "instance":
-            table_instance[""].append(quota["label"])
+        if quota.scope == "instance":
+            table_instance[""].append(quota.label)
             table_instance["max allowed"].append(max_allowed_str)
         else:
-            table_global[""].append(quota["label"])
+            table_global[""].append(quota.label)
             table_global["current usage"].append(current_str)
             table_global["max allowed"].append(max_allowed_str)
     return table_global, table_instance
@@ -59,10 +61,11 @@ def _print_quotas(_, fout: TextIO = sys.stdout):
     return 0
 
 
-def _print_credits_summary(user_info, fout: TextIO = sys.stdout):
+def _print_credits_summary(user: inductiva.client.models.User,
+                           fout: TextIO = sys.stdout):
     """Prints the user's credits information."""
     total_available_credits = format_utils.currency_formatter(
-        user_info["total_available_credits"])
+        decimal.Decimal(user.total_available_credits))
     print(f"■ Credits: {total_available_credits}", file=fout)
 
 
@@ -75,11 +78,13 @@ def _print_estimated_costs(fout: TextIO = sys.stdout):
     try:
         costs = get_costs(start_year=current_year, start_month=current_month)
         total_estimated_costs = format_utils.currency_formatter(
-            costs[0]["total"])
+            decimal.Decimal(costs[0].total))
         computation_estimated_costs = format_utils.currency_formatter(
-            costs[0]["components"]["compute"])
+            decimal.Decimal(costs[0].components.compute))
         storage_estimated_costs = format_utils.currency_formatter(
-            costs[0]["components"]["storage"])
+            decimal.Decimal(costs[0].components.storage))
+        data_transfer_estimated_costs = format_utils.currency_formatter(
+            decimal.Decimal(costs[0].components.data_transfer))
 
         label_width = 12
         cost_width = 10
@@ -94,6 +99,10 @@ def _print_estimated_costs(fout: TextIO = sys.stdout):
             f"{storage_estimated_costs:<{cost_width}}",
             file=fout)
         print(
+            f"\t{'Data transfer:':<{label_width}} "
+            f"{data_transfer_estimated_costs:<{cost_width}}",
+            file=fout)
+        print(
             f"\t{'Total:':<{label_width}} "
             f"{total_estimated_costs:<{cost_width}}",
             file=fout)
@@ -106,13 +115,13 @@ def get_info(_, fout: TextIO = sys.stdout):
 
     Lists all the user's credits and the credits left for the user to use.
     """
-    user_info = users.get_info()
+    user = users.get_info()
 
-    organization = user_info.get("organization")
-    tier = user_info["tier"]
-    username = user_info["username"]
-    email = user_info["email"]
-    name = user_info["name"] or ""
+    organization = user.organization
+    tier = user.tier
+    username = user.username
+    email = user.email
+    name = user.name
 
     if organization:
         print(f"\nOrganization: {organization}\n", file=fout)
@@ -125,7 +134,7 @@ def get_info(_, fout: TextIO = sys.stdout):
     print(f"■ Plan: {tier}", file=fout)
     print("", file=fout)
 
-    _print_credits_summary(user_info, fout=fout)
+    _print_credits_summary(user, fout=fout)
 
     _print_estimated_costs(fout=fout)
 

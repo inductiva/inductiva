@@ -48,10 +48,10 @@ def login(args):
     """Prompts the user to enter their API Key and stores it securely."""
 
     # pylint: disable=trailing-whitespace,line-too-long
-    inductiva_art = r"""     ___  _   _  ____   _   _   ____  _____  ___ __     __ _    
-    |_ _|| \ | ||  _ \ | | | | / ___||_   _||_ _|\ \   / // \   
-     | | |  \| || | | || | | || |      | |   | |  \ \ / // _ \  
-     | | | |\  || |_| || |_| || |___   | |   | |   \ V // ___ \ 
+    inductiva_art = r"""     ___  _   _  ____   _   _   ____  _____  ___ __     __ _
+    |_ _|| \ | ||  _ \ | | | | / ___||_   _||_ _|\ \   / // \
+     | | |  \| || | | || | | || |      | |   | |  \ \ / // _ \
+     | | | |\  || |_| || |_| || |___   | |   | |   \ V // ___ \
     |___||_| \_||____/  \___/  \____|  |_|  |___|   \_//_/   \_\
     """
     print(inductiva_art)
@@ -79,7 +79,7 @@ def login(args):
 
     first_log_in = utils.set_stored_api_key(api_key)
 
-    user_name = user_info["name"] or ""
+    user_name = user_info.name or ""
 
     if first_log_in:
         print(f"Welcome back {user_name}!")

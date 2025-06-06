@@ -10,7 +10,7 @@ from inductiva.client import exceptions
 @pytest.fixture(name="mock_api_client")
 def api_client_fixture():
     """Mock the API client."""
-    with mock.patch("inductiva.VersionApi") as mock_api:
+    with mock.patch("inductiva.client.VersionApi") as mock_api:
         mock_instance = mock.MagicMock()
         mock_api.return_value = mock_instance
         mock_instance.compare_client_and_backend_versions.return_value = mock.MagicMock(  # pylint: disable=line-too-long
@@ -43,7 +43,7 @@ def test_version_mismatch(mock_api_client):
     # Create the ApiException with the mock API response
     mock_api_exception = exceptions.ApiException(status=406,
                                                  reason="Not Acceptable",
-                                                 api_response=mock_api_response)
+                                                 http_resp=mock_api_response)
 
     # Set the side effect of the mock API client
     mock_api_client.compare_client_and_backend_versions.side_effect = mock_api_exception  # pylint: disable=line-too-long

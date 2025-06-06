@@ -1,14 +1,13 @@
 """Methods to interact with the tasks submitted to the API."""
 from collections import defaultdict
-import json
-from typing import Any, Dict, Iterable, List, Mapping, Optional
+from typing import Any, Iterable, List, Mapping, Optional
 
 import inductiva
+import inductiva.client
 from inductiva.client import models
 from inductiva.tasks.task import Task
 from inductiva.utils import format_utils
 from inductiva.client import ApiException
-from inductiva.client.apis.tags.tasks_api import TasksApi
 
 
 def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
@@ -19,7 +18,7 @@ def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
             list_of_tasks: An Iterable of tasks.
         Returns:
             A dictionary with all the relevant information for
-            all the tasks. Example: { "ID": [1, 2, 3], 
+            all the tasks. Example: { "ID": [1, 2, 3],
             "Simulator": ["reef3d", "reef3d", "reef3d"], ... }
     """
     column_names = [
@@ -65,38 +64,27 @@ def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
 def _fetch_tasks_from_api(status: Optional[str] = None,
                           page=1,
                           per_page=10,
-                          project: Optional[str] = None) -> List[Dict]:
+                          project: Optional[str] = None) -> List[models.Task]:
     """Get information about a user's tasks on the API.
 
     Tags can be filtered by a status. Results are paginated indexed from 1.
     """
 
+    if status is not None:
+        status = models.TaskStatusCode(status)
+
     with inductiva.api.methods.get_client() as client:
-        api_instance = TasksApi(client)
-
-        query_params = {
-            "page": page,
-            "per_page": per_page,
-        }
-
-        if project is not None:
-            query_params["project"] = project
-
-        if status is not None:
-            query_params["status"] = models.TaskStatusCode(status)
-
+        api_instance = inductiva.client.TasksApi(client)
         try:
             # Get User Tasks
-            resp = api_instance.get_user_tasks(
-                query_params=query_params,
-                skip_deserialization=True,  # avoid deserializing to model,
-                # leave as dict which we'll later serialize to our own
-                # dataclasses
-            ).response
+            tasks = api_instance.get_user_tasks(
+                page=page,
+                per_page=per_page,
+                project=project,
+                status=status,
+            )
 
-            response_body = json.loads(resp.data.decode("utf-8"))
-
-            return [{**task} for task in response_body]
+            return tasks
 
         except ApiException as e:
             raise e

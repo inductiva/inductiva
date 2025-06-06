@@ -11,6 +11,7 @@ import pytest
 
 from inductiva import simulators, resources
 import inductiva
+from inductiva.client import models
 
 
 @pytest.fixture(name="list_available_fixture")
@@ -240,14 +241,14 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
 
         def get_task_status(self, *_args, **_kwargs):
             self._tasks_ahead = 0
-            return Namespace(
-                body={
-                    "status": "pending-input",
-                    "position_in_queue": {
-                        "tasks_ahead": 0
-                    },
-                    "is_terminated": True
-                })
+            return models.TaskStatus.from_dict({
+                "id": "123",
+                "status": "pending-input",
+                "position_in_queue": {
+                    "tasks_ahead": 0
+                },
+                "is_terminated": True
+            })
 
         def get_task(self, *_args, **_kwargs):
             return Namespace(response=Namespace(
@@ -261,7 +262,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
     resubmit_key = "resubmit_on_preemption"
 
     mock_mg = mock.Mock()
-    mock_mg.id = uuid.uuid4()
+    mock_mg.id = str(uuid.uuid4())
     mock_mg.has_gpu.return_value = True
     mock_mg.gpu_count.return_value = 1
     mock_mg.available_vcpus = 16
@@ -275,7 +276,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
         method_signature = inspect.signature(simcls.run)
         assert resubmit_key in method_signature.parameters
 
-        with mock.patch("inductiva.tasks.task.tasks_api") as taskapi_mock, \
+        with mock.patch("inductiva.client") as client_mock, \
             mock.patch("inductiva.simulators.simulator.list_available_images") \
                as list_mock, \
             mock.patch("inductiva.api.methods.submit_request") \
@@ -286,10 +287,11 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
 
             validate_resources_mock.return_value = None
 
-            taskapi_mock.TasksApi = TaskApiMock
+            client_mock.TasksApi = TaskApiMock
             list_mock.return_value = {"production": DefaultDictMock()}
 
-            submit_mock.return_value = {"id": "123", "status": None}
+            submit_mock.return_value = models.TaskSubmittedInfo(
+                id="123", status="submitted", is_terminated=False)
             if sim_name == "OpenTelemac":
                 sim_obj = simcls(version="1.0.0")
             elif sim_name == "CustomImage":
@@ -327,9 +329,11 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             sim_obj.run(test_input_dir, *args, **run_kwargs)
 
             req_arg = submit_mock.call_args[1]["request"]
+            print(req_arg)
             if resubmit_on_preemption is None:
-                assert not req_arg[resubmit_key]
+                assert not req_arg.resubmit_on_preemption
             else:
-                assert bool(req_arg[resubmit_key]) == resubmit_on_preemption
+                assert bool(
+                    req_arg.resubmit_on_preemption) == resubmit_on_preemption
 
             submit_mock.assert_called_once()
