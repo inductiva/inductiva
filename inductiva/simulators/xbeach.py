@@ -1,5 +1,5 @@
 """XBeach module of the API."""
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 from inductiva import simulators, tasks, types
 from inductiva.commands.commands import Command

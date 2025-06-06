@@ -4,7 +4,7 @@ import os
 import pathlib
 import re
 from abc import ABC
-from typing import List, Literal, Optional, Union
+from typing import Literal, Optional, Union
 
 from inductiva import commands, logs, projects, resources, tasks, types
 

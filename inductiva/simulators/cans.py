@@ -1,5 +1,5 @@
 """CaNS module of the API for numerical simulations of fluid flows."""
-from typing import List, Literal, Optional, Union
+from typing import Literal, Optional, Union
 
 from inductiva import simulators, tasks, types
 from inductiva.commands.commands import Command

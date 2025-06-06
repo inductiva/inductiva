@@ -1,6 +1,6 @@
 """DualSPHysics simulator module of the API."""
 
-from typing import List, Literal, Optional, Union
+from typing import Literal, Optional, Union
 
 from inductiva import simulators, tasks, types
 
