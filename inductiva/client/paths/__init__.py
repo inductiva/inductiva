@@ -79,6 +79,7 @@ class PathValues(str, enum.Enum):
     STORAGE_INPUT_REMOTE = "/storage/input_remote"
     STORAGE_ = "/storage/"
     STORAGE_COPY = "/storage/copy"
+    STORAGE_LIST_BUCKETS = "/storage/list_buckets"
     STORAGE_OPERATIONS_OPERATION_ID = "/storage/operations/{operation_id}"
     STORAGE_OPERATIONS = "/storage/operations"
     STORAGE_EXPORT_MULTIPART = "/storage/export_multipart"
