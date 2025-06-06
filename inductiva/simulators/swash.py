@@ -1,8 +1,8 @@
 """SWASH module of the API."""
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional, Union
 
-from inductiva import types, tasks, simulators
+from inductiva import simulators, tasks, types
 from inductiva.commands.commands import Command
 from inductiva.commands.mpiconfig import MPIConfig
 
@@ -35,7 +35,7 @@ class SWASH(simulators.Simulator):
             storage_dir: Optional[str] = "",
             on: types.ComputationalResources,
             resubmit_on_preemption: bool = False,
-            remote_assets: Optional[List[str]] = None,
+            remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.

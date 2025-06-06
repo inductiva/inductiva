@@ -1,8 +1,8 @@
 """Class to run commands on Quantum Espresso."""
-from typing import List, Optional
 import logging
+from typing import List, Optional, Union
 
-from inductiva import types, tasks, simulators
+from inductiva import simulators, tasks, types
 
 
 @simulators.simulator.mpi_enabled
@@ -67,7 +67,7 @@ class QuantumEspresso(simulators.Simulator):
             on: types.ComputationalResources,
             extra_metadata: Optional[dict] = None,
             resubmit_on_preemption: bool = False,
-            remote_assets: Optional[List[str]] = None,
+            remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.

@@ -1,7 +1,8 @@
 """Methods to interact with the available simulators."""
-from typing import Dict, List
-import inductiva
 import json
+from typing import Dict, List
+
+import inductiva
 from inductiva.client.apis.tags.simulators_api import SimulatorsApi
 
 
