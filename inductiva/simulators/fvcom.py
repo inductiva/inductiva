@@ -1,5 +1,5 @@
 """FVCOM simulator module of the API."""
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from inductiva import types, tasks, simulators
 from inductiva.commands.commands import Command
@@ -39,7 +39,7 @@ class FVCOM(simulators.Simulator):
             working_dir: Optional[str] = "",
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            remote_assets: Optional[List[str]] = None,
+            remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.

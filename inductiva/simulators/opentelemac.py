@@ -1,5 +1,5 @@
 """OpenTelemac module of the API."""
-from typing import Optional
+from typing import Optional, Union
 from inductiva import types, simulators
 
 
@@ -25,7 +25,7 @@ class OpenTelemac(simulators.Simulator):
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            remote_assets: Optional[list[str]] = None,
+            remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
             **kwargs):
 

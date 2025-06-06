@@ -1,5 +1,5 @@
 """OpenSees module of the API."""
-from typing import List, Literal, Optional
+from typing import List, Literal, Optional, Union
 import logging
 
 from inductiva import types, tasks, simulators
@@ -83,7 +83,7 @@ class OpenSees(simulators.Simulator):
             use_hwthread: bool = True,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            remote_assets: Optional[List[str]] = None,
+            remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.

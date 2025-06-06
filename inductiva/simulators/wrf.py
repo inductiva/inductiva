@@ -1,6 +1,6 @@
 """WRF simulator module of the API."""
 
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from inductiva import types, tasks, simulators
 from inductiva.commands.commands import Command
@@ -61,7 +61,7 @@ class WRF(simulators.Simulator):
             n_vcpus: Optional[int] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            remote_assets: Optional[List[str]] = None,
+            remote_assets: Optional[Union[str, list[str]]] = None,
             init_commands: Optional[List[str]] = None,
             gen_gif: bool = False,
             gen_gif_files: Optional[List[str]] = None,

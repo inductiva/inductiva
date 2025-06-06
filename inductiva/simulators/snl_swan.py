@@ -1,5 +1,5 @@
 """ SNL SWAN module of the API."""
-from typing import List, Optional
+from typing import List, Optional, Union
 from pathlib import Path
 
 from inductiva import types, tasks, simulators
@@ -35,7 +35,7 @@ class SNLSWAN(simulators.Simulator):
         input_dir: Optional[str],
         *,
         sim_config_filename: Optional[str],
-        remote_assets: Optional[List[str]] = None,
+        remote_assets: Optional[Union[str, list[str]]] = None,
         project: Optional[str] = None,
         resubmit_on_preemption: bool = False,
         on: types.ComputationalResources,

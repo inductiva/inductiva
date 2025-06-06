@@ -1,5 +1,5 @@
 """AmrWind module of the API for numerical simulations of fluid flows."""
-from typing import List, Literal, Optional
+from typing import List, Literal, Optional, Union
 
 from inductiva import types, tasks, simulators
 from inductiva.commands import MPIConfig, Command
@@ -46,7 +46,7 @@ class AmrWind(simulators.Simulator):
             n_vcpus: Optional[int] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            remote_assets: Optional[List[str]] = None,
+            remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
