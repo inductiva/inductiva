@@ -5,12 +5,7 @@ from unittest.mock import Mock, patch
 from inductiva import constants
 from inductiva.client import exceptions
 import inductiva.client
-from inductiva.client.model.task_status_code import TaskStatusCode
-
-import inductiva.client.paths
-
-import inductiva.client.paths.tasks_task_id_kill
-import inductiva.client.paths.tasks_task_id_kill.post
+from inductiva.client.models.task_status_code import TaskStatusCode
 
 
 def test_task_kill__string_timeout__typeerror_exception():
@@ -67,7 +62,7 @@ def test_task_kill__none_timeout__none():
         (False, TaskStatusCode.PENDING_MINUS_KILL, False),
         (True, TaskStatusCode.ZOMBIE, False),
         (True, TaskStatusCode.FAILED, False),
-        (True, TaskStatusCode.PENDINGINPUT, False),
+        (True, TaskStatusCode.PENDING_MINUS_INPUT, False),
     ])
 def test_task_kill__positive_timeout__success(pending_kill_success,
                                               pending_kill_status,
@@ -91,7 +86,7 @@ def test_task_kill__positive_timeout__success(pending_kill_success,
     (TaskStatusCode.PENDING_MINUS_KILL),
     (TaskStatusCode.KILLED),
     (TaskStatusCode.ZOMBIE),
-    (TaskStatusCode.PENDINGINPUT),
+    (TaskStatusCode.PENDING_MINUS_INPUT),
     (TaskStatusCode.FAILED),
 ])
 def test__send_kill_request__positive_max_api_requests__none(
@@ -111,7 +106,7 @@ def test__send_kill_request__positive_max_api_requests__none(
         def kill_task(self, *_args, **_kwargs):
             return
 
-    with patch("inductiva.tasks.task.tasks_api") as mock_api, patch(
+    with patch("inductiva.client") as mock_api, patch(
             "inductiva.tasks.Task.get_status",
             return_value=get_status_response), patch(
                 "inductiva.tasks.Task.is_terminal", return_value=False):
@@ -141,7 +136,7 @@ def test__send_kill_request__api_exception__runtimeerror():
         def kill_task(self, *_args, **_kwargs):
             raise exceptions.ApiException(400, "Bad Request")
 
-    with patch("inductiva.tasks.task.tasks_api") as mock_api, patch(
+    with patch("inductiva.client.api.tasks_api") as mock_api, patch(
             "inductiva.tasks.Task.get_status",
             return_value=TaskStatusCode.PENDING_MINUS_KILL), patch(
                 "inductiva.tasks.Task.is_terminal", return_value=False), patch(

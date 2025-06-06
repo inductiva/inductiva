@@ -379,13 +379,11 @@ class Task:
         return self.info.is_terminal
 
     @classmethod
-    def from_api_info(cls, info: Dict[str, Any]) -> "Task":
+    def from_api_info(cls, info: models.TaskWithUserInfo) -> "Task":
 
-        task = cls(info["task_id"])
-        task._info = TaskInfo(**info)
-        task._status = models.TaskStatusCode(info["status"])
-
-        # TODO(luispcunha): construct correct output class from API info.
+        task = cls(info.task_id)
+        task._info = TaskInfo(**info.to_dict())
+        task._status = models.TaskStatusCode(info.status)
 
         return task
 

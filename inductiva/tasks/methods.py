@@ -61,15 +61,17 @@ def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
     return table
 
 
-def _fetch_tasks_from_api(
-        status: Optional[str] = None,
-        page=1,
-        per_page=10,
-        project: Optional[str] = None) -> List[inductiva.client.models.Task]:
+def _fetch_tasks_from_api(status: Optional[str] = None,
+                          page=1,
+                          per_page=10,
+                          project: Optional[str] = None) -> List[models.Task]:
     """Get information about a user's tasks on the API.
 
     Tags can be filtered by a status. Results are paginated indexed from 1.
     """
+
+    if status is not None:
+        status = models.TaskStatusCode(status)
 
     with inductiva.api.methods.get_client() as client:
         api_instance = inductiva.client.TasksApi(client)
@@ -79,7 +81,7 @@ def _fetch_tasks_from_api(
                 page=page,
                 per_page=per_page,
                 project=project,
-                status=models.TaskStatusCode(status),
+                status=status,
             )
 
             return tasks

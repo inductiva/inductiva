@@ -81,6 +81,9 @@ def get_available_machine_types(
     provider = ProviderType(provider)
     api_client = inductiva.client.ComputeApi(inductiva.api.get_client())
 
+    if spot is not None:
+        spot = str(spot).lower()
+
     try:
         resp = api_client.list_available_machine_types_without_preload_content(
             provider_id=provider.value,
@@ -89,7 +92,7 @@ def get_available_machine_types(
             vcpus_range=vcpus_range,
             memory_range=memory_range,
             price_range=price_range,
-            spot=str(spot).lower())
+            spot=spot)
 
         response_body = json.loads(resp.data.decode("utf-8"))
         return [

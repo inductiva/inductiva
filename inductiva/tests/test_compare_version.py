@@ -10,7 +10,7 @@ from inductiva.client import exceptions
 @pytest.fixture(name="mock_api_client")
 def api_client_fixture():
     """Mock the API client."""
-    with mock.patch("inductiva.VersionApi") as mock_api:
+    with mock.patch("inductiva.client.VersionApi") as mock_api:
         mock_instance = mock.MagicMock()
         mock_api.return_value = mock_instance
         mock_instance.compare_client_and_backend_versions.return_value = mock.MagicMock(  # pylint: disable=line-too-long
