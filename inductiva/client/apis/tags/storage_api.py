@@ -17,6 +17,7 @@ from inductiva.client.paths.storage_signed_urls.get import GetSignedUrls
 from inductiva.client.paths.storage_cost.get import GetStorageMonthlyCost
 from inductiva.client.paths.storage_size.get import GetStorageSize
 from inductiva.client.paths.storage_zip_contents.get import GetZipContents
+from inductiva.client.paths.storage_list_buckets.get import ListBuckets
 from inductiva.client.paths.storage_contents.get import ListStorageContents
 from inductiva.client.paths.storage_update_operation_status.post import UpdateExportOperationStatus
 from inductiva.client.paths.storage_input_remote.post import UploadFromUrl
@@ -32,6 +33,7 @@ class StorageApi(
         GetStorageMonthlyCost,
         GetStorageSize,
         GetZipContents,
+        ListBuckets,
         ListStorageContents,
         UpdateExportOperationStatus,
         UploadFromUrl,

@@ -1,8 +1,8 @@
 """SWAN module of the API."""
-from typing import List, Optional
 from pathlib import Path
+from typing import Optional, Union
 
-from inductiva import types, tasks, simulators
+from inductiva import simulators, tasks, types
 from inductiva.commands.commands import Command
 from inductiva.commands.mpiconfig import MPIConfig
 
@@ -30,7 +30,7 @@ class SWAN(simulators.Simulator):
         input_dir: Optional[str],
         *,
         sim_config_filename: Optional[str],
-        remote_assets: Optional[List[str]] = None,
+        remote_assets: Optional[Union[str, list[str]]] = None,
         project: Optional[str] = None,
         resubmit_on_preemption: bool = False,
         on: types.ComputationalResources,

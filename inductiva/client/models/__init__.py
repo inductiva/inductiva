@@ -18,6 +18,7 @@ from inductiva.client.model.action_webhook_info import ActionWebhookInfo
 from inductiva.client.model.autoscale_policy import AutoscalePolicy
 from inductiva.client.model.available_simulator_versions import AvailableSimulatorVersions
 from inductiva.client.model.backend_version import BackendVersion
+from inductiva.client.model.bucket import Bucket
 from inductiva.client.model.cpu_info import CPUInfo
 from inductiva.client.model.capability import Capability
 from inductiva.client.model.compression_method import CompressionMethod
