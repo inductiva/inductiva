@@ -26,11 +26,17 @@ class CM1(simulators.Simulator):
 
     def run(self,
             input_dir: Optional[str],
+            sim_config_filename: str,
             *,
+            base: str = None,
+            init3d: str = None,
+            init_terrain: str = None,
+            init_surface: str = None,
+            input_sounding: str = None,
+            landuse: str = None,
             on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
-            sim_config_filename: Optional[str] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[Union[str, list[str]]] = None,
@@ -40,6 +46,26 @@ class CM1(simulators.Simulator):
 
         Args:
             input_dir: Path to the directory of the simulation input files.
+            base: Path to the  base-state conditions file (base.F), if
+                necessary. Will use the default base state file if not provided.
+            init3d: Path to the 3D initial conditions file (init3d.F), if you
+                need to add perturbations to the base state. Will use the
+                default initial conditions file if not provided.
+            init_terrain: Path to the terrain file. If you are
+                using terrain, you will have to specify the terrain via the `zs`
+                array in the file "init_terrain.F". Will use the default terrain
+                file if not provided.
+            init_surface: Path to the surface conditions file. If you are using
+                surface fluxes of heat/moisture/momentum, then you might have
+                to specify the horizontal distribution of several variables in
+                the file `init_surface.F`. Will use the default surface
+                conditions file if not provided.
+            input_sounding: Path to the sounding file. Used if you are supplying
+                an external sounding file.
+            landuse: Path to the landuse file. If you are using surface fluxes 
+                of heat/momentum/moisture, or if you are using the atmospheric
+                radiation scheme, then you need to specify the surface
+                conditions. Will use the default landuse file if not provided.
             on: The computational resource to launch the simulation on.
             sim_config_filename: Name of the simulation configuration file.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
@@ -60,27 +86,73 @@ class CM1(simulators.Simulator):
                 created.
             other arguments: See the documentation of the base class.
         """
-        if sim_config_filename is None:
-            sim_config_filename = "namelist.input"
-
-        self._input_files_exist(input_dir=input_dir,
-                                remote_assets=remote_assets,
-                                sim_config_filename=sim_config_filename)
-
+        working_dir = "/workdir/output/artifacts"
+        cm1_path = f"{working_dir}/__cm1"
         mpi_config = None
 
+        self._check_vcpus(n_vcpus, on)
+
+        files_to_check = {}
+        # Check only files that are not None from:
+        # base, init3d, init_terrain, init_surface, input_sounding, and
+        # landuse
+        for file in [
+                base, init3d, init_terrain, init_surface, input_sounding,
+                landuse, sim_config_filename
+        ]:
+            if file:
+                files_to_check[file] = file
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets,
+                                **files_to_check)
+
+        # create Mpi config
         mpi_kwargs = {"use_hwthread_cpus": use_hwthread}
         if n_vcpus is not None:
             mpi_kwargs["np"] = n_vcpus
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
 
-        commands = [Command("cm1.exe", mpi_config=mpi_config)]
+        copy_files_commands = []
+        cleanup_commands = [f"rm -r {cm1_path}"]
 
-        # if sim_config_filename is not equal to "namelist.input" we need to
-        # move the file to "namelist.input" before running the simulation
-        if (sim_config_filename is not None) and (sim_config_filename
-                                                  != "namelist.input"):
-            commands.insert(0, f"mv {sim_config_filename} namelist.input")
+        # Copy the Fortan files updated by the user to the CM1 directory
+        if base:
+            copy_files_commands.append(f"cp -f {base} {cm1_path}/src")
+        if init3d:
+            copy_files_commands.append(f"cp -f {init3d} {cm1_path}/src")
+        if init_terrain:
+            copy_files_commands.append(f"cp -f {init_terrain} {cm1_path}/src")
+        if init_surface:
+            copy_files_commands.append(f"cp -f {init_surface} {cm1_path}/src")
+
+        # Copy (and rename) the input_sounding and landuse files to the work dir
+        # If they are already in the work dir with the correct name, we don't
+        # need to copy
+        if input_sounding and input_sounding != "input_sounding":
+            copy_files_commands.append(
+                f"cp -f {input_sounding} {working_dir}/input_sounding")
+            cleanup_commands.append(f"rm {working_dir}/input_sounding")
+        if landuse and landuse != "LANDUSE.TBL":
+            copy_files_commands.append(
+                f"cp -f {landuse} {working_dir}/LANDUSE.TBL")
+            cleanup_commands.append(f"rm {working_dir}/LANDUSE.TBL")
+        # If no landuse file is provided, we use the default landuse file
+        elif landuse is None:
+            copy_files_commands.append(
+                f"cp -f {cm1_path}/run/LANDUSE.TBL {working_dir}")
+            cleanup_commands.append(f"rm {working_dir}/LANDUSE.TBL")
+
+        commands = [
+            f"cp -r /cm1 {cm1_path}", f"make -C {cm1_path}/src",
+            Command(f"{cm1_path}/run/cm1.exe {sim_config_filename}",
+                    mpi_config=mpi_config)
+        ]
+
+        # Add copy_files_commands to the second position in the list
+        commands[1:1] = copy_files_commands
+
+        # Add cleanup_commands to the end of the list
+        commands.extend(cleanup_commands)
 
         return super().run(input_dir,
                            on=on,
