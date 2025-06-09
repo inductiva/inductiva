@@ -1,7 +1,6 @@
 """Tests for the Benchmark class."""
 from unittest import mock
 import pytest
-from pathlib import Path
 from inductiva import simulators, resources
 from inductiva.benchmarks import Benchmark
 
