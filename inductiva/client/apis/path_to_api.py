@@ -92,6 +92,7 @@ from inductiva.client.apis.paths.projects_name import ProjectsName
 from inductiva.client.apis.paths.projects_name_task_task_id_add import ProjectsNameTaskTaskIdAdd
 from inductiva.client.apis.paths.projects_name_task_task_id_remove import ProjectsNameTaskTaskIdRemove
 from inductiva.client.apis.paths.projects_name_metadata import ProjectsNameMetadata
+from inductiva.client.apis.paths.projects_name_tasks_info import ProjectsNameTasksInfo
 from inductiva.client.apis.paths.pubsub_notify_file_change import PubsubNotifyFileChange
 from inductiva.client.apis.paths.metrics_users_username_activity import MetricsUsersUsernameActivity
 from inductiva.client.apis.paths.metrics_users_username_cost_over_time import MetricsUsersUsernameCostOverTime
@@ -289,6 +290,8 @@ PathToApi = typing_extensions.TypedDict(
             ProjectsNameTaskTaskIdRemove,
         PathValues.PROJECTS_NAME_METADATA:
             ProjectsNameMetadata,
+        PathValues.PROJECTS_NAME_TASKS_INFO:
+            ProjectsNameTasksInfo,
         PathValues.PUBSUB_NOTIFY_FILE_CHANGE:
             PubsubNotifyFileChange,
         PathValues.METRICS_USERS_USERNAME_ACTIVITY:
@@ -498,6 +501,8 @@ path_to_api = PathToApi({
         ProjectsNameTaskTaskIdRemove,
     PathValues.PROJECTS_NAME_METADATA:
         ProjectsNameMetadata,
+    PathValues.PROJECTS_NAME_TASKS_INFO:
+        ProjectsNameTasksInfo,
     PathValues.PUBSUB_NOTIFY_FILE_CHANGE:
         PubsubNotifyFileChange,
     PathValues.METRICS_USERS_USERNAME_ACTIVITY:

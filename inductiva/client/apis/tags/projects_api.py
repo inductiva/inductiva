@@ -13,6 +13,7 @@ from inductiva.client.paths.projects.post import CreateProject
 from inductiva.client.paths.projects.delete import DeleteProject
 from inductiva.client.paths.projects_name.get import GetProject
 from inductiva.client.paths.projects_name_metadata.get import GetProjectMetadata
+from inductiva.client.paths.projects_name_tasks_info.get import GetTasksInfo
 from inductiva.client.paths.projects.get import GetUserProjects
 from inductiva.client.paths.projects_name_task_task_id_remove.post import RemoveTaskFromProject
 from inductiva.client.paths.projects_name_metadata.put import SetProjectMetadata
@@ -26,6 +27,7 @@ class ProjectsApi(
         DeleteProject,
         GetProject,
         GetProjectMetadata,
+        GetTasksInfo,
         GetUserProjects,
         RemoveTaskFromProject,
         SetProjectMetadata,
