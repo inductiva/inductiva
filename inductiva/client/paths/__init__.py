@@ -97,6 +97,7 @@ class PathValues(str, enum.Enum):
     PROJECTS_NAME_TASK_TASK_ID_ADD = "/projects/{name}/task/{task_id}/add"
     PROJECTS_NAME_TASK_TASK_ID_REMOVE = "/projects/{name}/task/{task_id}/remove"
     PROJECTS_NAME_METADATA = "/projects/{name}/metadata"
+    PROJECTS_NAME_TASKS_INFO = "/projects/{name}/tasks_info"
     PUBSUB_NOTIFY_FILE_CHANGE = "/pubsub/notify_file_change"
     METRICS_USERS_USERNAME_ACTIVITY = "/metrics/users/{username}/activity"
     METRICS_USERS_USERNAME_COST_OVER_TIME = "/metrics/users/{username}/cost_over_time"
