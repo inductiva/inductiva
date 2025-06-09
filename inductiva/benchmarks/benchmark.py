@@ -253,7 +253,7 @@ class Benchmark(projects.Project):
         if status:
             args["status"] = status
         response = self._api.get_tasks_info(path_params={"name": self.name},
-                                        query_params=args)
+                                            query_params=args)
         info = json.loads(response.response.data)
 
         if not filename:
