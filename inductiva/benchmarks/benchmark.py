@@ -249,11 +249,11 @@ class Benchmark(projects.Project):
         if isinstance(fmt, str):
             fmt = ExportFormat[fmt.upper()]
 
-        args = {"select": select.value}
+        query_params = {"select": select.value}
         if status:
-            args["status"] = status
+            query_params["status"] = status
         response = self._api.get_tasks_info(path_params={"name": self.name},
-                                            query_params=args)
+                                            query_params=query_params)
         info = json.loads(response.response.data)
 
         if not filename:
