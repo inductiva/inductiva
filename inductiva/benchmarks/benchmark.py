@@ -7,7 +7,6 @@ from typing import Optional, Union
 import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 from typing_extensions import Self
-from collections import defaultdict
 from inductiva import types, resources, projects, simulators, client
 from inductiva.client.models import TaskStatusCode
 from inductiva.projects.project import ProjectType
@@ -253,11 +252,15 @@ class Benchmark(projects.Project):
         args = {"select": select.value}
         if status:
             args["status"] = status
-        info = self._api.get_tasks_info(path_params={"name": self.name},
+        response = self._api.get_tasks_info(path_params={"name": self.name},
                                         query_params=args)
-        info = json.loads(info.response.data)
+        info = json.loads(response.response.data)
 
-        filename = filename or f"{self.name}.{fmt.value}"
+        if not filename:
+            filename = f"{self.name}.{fmt.value}"
+        elif not filename.endswith(f".{fmt.value}"):
+            filename = f"{filename}.{fmt.value}"
+
         if fmt == ExportFormat.JSON:
             with open(filename, mode="w", encoding="utf-8") as file:
                 json_content = json.dumps(obj=info, indent=4)
