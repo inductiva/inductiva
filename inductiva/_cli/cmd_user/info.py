@@ -1,5 +1,4 @@
 """List the user information via CLI."""
-import decimal
 from collections import defaultdict
 from datetime import datetime
 from typing import TextIO, Dict

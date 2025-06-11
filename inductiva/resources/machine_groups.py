@@ -1,5 +1,4 @@
 """Base class for machine groups."""
-import decimal
 from collections import defaultdict, namedtuple
 from dataclasses import dataclass
 from typing import Optional, Union, List

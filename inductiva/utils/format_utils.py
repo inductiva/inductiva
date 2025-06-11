@@ -1,5 +1,4 @@
 """Util functions for formatting data for printing to console."""
-import decimal
 from typing import (Any, Callable, Dict, Iterable, Mapping, Optional, Tuple,
                     Union, List)
 from distutils.util import strtobool
@@ -277,7 +276,7 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     return f"\n{table}\n"
 
 
-def currency_formatter(amount: Union[float, decimal.Decimal]) -> str:
+def currency_formatter(amount: float) -> str:
     """Format a currency amount into a human-readable string.
 
     Convert the amount to a string with a maximum of 10 decimal places.

@@ -44,7 +44,6 @@ Example Usage:
 """
 
 import logging
-import decimal
 import time
 from typing import List, Optional
 
@@ -169,7 +168,7 @@ class Project:
         }
 
     @property
-    def estimated_computation_cost(self) -> decimal.Decimal:
+    def estimated_computation_cost(self) -> float:
         """
         Returns the estimated project cost.
 

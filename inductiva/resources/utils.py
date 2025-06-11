@@ -1,7 +1,6 @@
 """Functions to manage or retrieve user resources."""
 from dataclasses import dataclass
 import json
-import decimal
 from typing import List, Optional, Tuple, Union
 
 import inductiva

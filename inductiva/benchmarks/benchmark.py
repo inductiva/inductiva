@@ -9,6 +9,7 @@ from tqdm.contrib.logging import logging_redirect_tqdm
 from typing_extensions import Self
 from inductiva import types, resources, projects, simulators, client
 from inductiva.client.models import TaskStatusCode
+from inductiva.client import models
 from inductiva.projects.project import ProjectType
 from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
 
@@ -23,7 +24,7 @@ class ExportFormat(enum.Enum):
 
 class SelectMode(enum.Enum):
     """
-    Enumeration of supported data selection modes, specifying which data 
+    Enumeration of supported data selection modes, specifying which data
     should be included in the benchmarking results.
     """
     ALL = "all"
@@ -84,7 +85,7 @@ class Benchmark(projects.Project):
             on (Optional[types.ComputationalResources]): The computational
                 resources to use for running the simulations. If not specified,
                 the current resources will remain unchanged.
-            **kwargs: Additional keyword arguments to set as default parameters 
+            **kwargs: Additional keyword arguments to set as default parameters
                 for the simulations. These will update any existing parameters
                 with the same names.
 
@@ -143,10 +144,10 @@ class Benchmark(projects.Project):
         Args:
             num_repeats (int): The number of times to repeat each simulation
                 run (default is 2).
-            wait_for_quotas (bool): Indicates whether to wait for quotas to 
-                become available before starting each resource. If `True`, the 
-                program will actively wait in a loop, periodically sleeping and 
-                checking for quotas. If `False`, the program crashes if quotas 
+            wait_for_quotas (bool): Indicates whether to wait for quotas to
+                become available before starting each resource. If `True`, the
+                program will actively wait in a loop, periodically sleeping and
+                checking for quotas. If `False`, the program crashes if quotas
                 are not available (default is `True`).
 
         Returns:
@@ -249,12 +250,16 @@ class Benchmark(projects.Project):
         if isinstance(fmt, str):
             fmt = ExportFormat[fmt.upper()]
 
-        query_params = {"select": select.value}
-        if status:
-            query_params["status"] = status
-        response = self._api.get_tasks_info(path_params={"name": self.name},
-                                            query_params=query_params)
-        info = json.loads(response.response.data)
+        select = SelectMode(select)
+        if status is not None:
+            status = TaskStatusCode(status)
+
+        response = self._api.get_tasks_info_without_preload_content(
+            name=self.name,
+            select=models.SelectMode(select),
+            status=status,
+        )
+        info = json.loads(response.data)
 
         if not filename:
             filename = f"{self.name}.{fmt.value}"

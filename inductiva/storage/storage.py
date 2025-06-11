@@ -1,5 +1,4 @@
 """Methods to interact with the user storage resources."""
-import decimal
 import json
 import datetime
 import itertools
