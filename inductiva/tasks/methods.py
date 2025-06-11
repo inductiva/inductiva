@@ -95,8 +95,9 @@ def _fetch_tasks_from_api(status: Optional[str] = None,
             ).response
 
             response_body = json.loads(resp.data.decode("utf-8"))
+            tasks = response_body.get("tasks", [])
 
-            return [{**task} for task in response_body]
+            return [{**task} for task in tasks]
 
         except ApiException as e:
             raise e
