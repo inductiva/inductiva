@@ -11,6 +11,7 @@
 from inductiva.client.paths.storage_copy.post import Copy
 from inductiva.client.paths.storage_.delete import DeleteFile
 from inductiva.client.paths.storage_export_multipart.post import ExportMultipartFiles
+from inductiva.client.paths.storage_default_bucket.get import GetDefaultBucket
 from inductiva.client.paths.storage_operations_operation_id.get import GetOperation
 from inductiva.client.paths.storage_operations.get import GetOperationsByUser
 from inductiva.client.paths.storage_signed_urls.get import GetSignedUrls
@@ -27,6 +28,7 @@ class StorageApi(
         Copy,
         DeleteFile,
         ExportMultipartFiles,
+        GetDefaultBucket,
         GetOperation,
         GetOperationsByUser,
         GetSignedUrls,

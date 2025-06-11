@@ -28,7 +28,12 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
 ClientSchema = schemas.StrSchema
-BlockSSchema = schemas.IntSchema
+
+
+class BlockSSchema(schemas.IntSchema):
+    pass
+
+
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {
         'client': typing.Union[
