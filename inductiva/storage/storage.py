@@ -48,7 +48,7 @@ def _print_storage_size_and_cost() -> int:
     ).estimated_monthly_cost
 
     estimated_storage_cost = format_utils.currency_formatter(
-        decimal.Decimal(estimated_storage_cost))
+        estimated_storage_cost)
     storage_total_size = format_utils.bytes_formatter(storage_total_size_bytes)
 
     print("Total storage size used:")

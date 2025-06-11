@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -21,13 +22,10 @@ from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class GPUInfo(BaseModel):
     """
     GPUInfo
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     gpu_count: StrictInt
     gpu_name: StrictStr
     __properties: ClassVar[List[str]] = ["gpu_count", "gpu_name"]
@@ -37,6 +35,7 @@ class GPUInfo(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -62,7 +61,8 @@ class GPUInfo(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -85,3 +85,5 @@ class GPUInfo(BaseModel):
             "gpu_name": obj.get("gpu_name")
         })
         return _obj
+
+

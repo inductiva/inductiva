@@ -135,8 +135,8 @@ class TaskInfo:
         self.is_submitted = self.status == models.TaskStatusCode.SUBMITTED
         self.is_running = self.status in (
             models.TaskStatusCode.STARTED,
-            models.TaskStatusCode.COMPUTATION_MINUS_STARTED,
-            models.TaskStatusCode.COMPUTATION_MINUS_ENDED)
+            models.TaskStatusCode.COMPUTATIONSTARTED,
+            models.TaskStatusCode.COMPUTATIONENDED)
         self.is_terminal = kwargs.get("is_terminated", False)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -317,21 +317,19 @@ class Task:
     _FAILED_STATUSES = {
         models.TaskStatusCode.FAILED,
         models.TaskStatusCode.KILLED,
-        models.TaskStatusCode.EXECUTER_MINUS_FAILED,
-        models.TaskStatusCode.EXECUTER_MINUS_TERMINATED,
-        models.TaskStatusCode.EXECUTER_MINUS_TERMINATED_MINUS_BY_MINUS_USER,
-        models.TaskStatusCode.SPOT_MINUS_INSTANCE_MINUS_PREEMPTED,
+        models.TaskStatusCode.EXECUTERFAILED,
+        models.TaskStatusCode.EXECUTERTERMINATED,
+        models.TaskStatusCode.EXECUTERTERMINATEDBYUSER,
+        models.TaskStatusCode.SPOTINSTANCEPREEMPTED,
         models.TaskStatusCode.ZOMBIE,
-        models.TaskStatusCode.
-        EXECUTER_MINUS_TERMINATED_MINUS_TTL_MINUS_EXCEEDED,
-        models.TaskStatusCode.TTL_MINUS_EXCEEDED,
+        models.TaskStatusCode.EXECUTERTERMINATEDTTLEXCEEDED,
+        models.TaskStatusCode.TTLEXCEEDED,
     }
 
     _RUNNING_STATUSES = {
-        models.TaskStatusCode.PENDING_MINUS_INPUT,
-        models.TaskStatusCode.STARTED,
-        models.TaskStatusCode.COMPUTATION_MINUS_STARTED,
-        models.TaskStatusCode.COMPUTATION_MINUS_ENDED
+        models.TaskStatusCode.PENDINGINPUT, models.TaskStatusCode.STARTED,
+        models.TaskStatusCode.COMPUTATIONSTARTED,
+        models.TaskStatusCode.COMPUTATIONENDED
     }
 
     _KILLABLE_STATUSES = {models.TaskStatusCode.SUBMITTED
@@ -358,10 +356,9 @@ class Task:
 
         This method issues a request to the API.
         """
-        return self.get_status() in (
-            models.TaskStatusCode.STARTED,
-            models.TaskStatusCode.COMPUTATION_MINUS_STARTED,
-            models.TaskStatusCode.COMPUTATION_MINUS_ENDED)
+        return self.get_status() in (models.TaskStatusCode.STARTED,
+                                     models.TaskStatusCode.COMPUTATIONSTARTED,
+                                     models.TaskStatusCode.COMPUTATIONENDED)
 
     def is_failed(self) -> bool:
         """Validate if the task has failed.
@@ -721,8 +718,8 @@ class Task:
                 if not silent_mode:
                     self._handle_status_change(status, description)
 
-                if (status == models.TaskStatusCode.COMPUTATION_MINUS_STARTED
-                   ) and (not silent_mode):
+                if (status == models.TaskStatusCode.COMPUTATIONSTARTED) and (
+                        not silent_mode):
                     try:
                         self.tail_files(["stdout.txt", "stderr.txt"], 50, True,
                                         sys.stdout)
@@ -828,12 +825,12 @@ class Task:
             self,
             wait_timeout: Union[float,
                                 int]) -> Tuple[bool, models.TaskStatusCode]:
-        """Check if the task is in the PENDING_MINUS_KILL state.
+        """Check if the task is in the PENDINGKILL state.
         This method keeps checking the status of the task until it is no longer
-        in the PENDING_MINUS_KILL state or until the timeout is reached.
+        in the PENDINGKILL state or until the timeout is reached.
         Args:
             wait_timeout (int, float): number of seconds to wait for the
-            state to leave PENDING_MINUS_KILL.
+            state to leave PENDINGKILL.
         Returns:
             A tuple with a boolean indicating whether the timeout was reached
             and the status of the task.
@@ -842,7 +839,7 @@ class Task:
         start = time.time()
 
         while (status :=
-               self.get_status()) == models.TaskStatusCode.PENDING_MINUS_KILL:
+               self.get_status()) == models.TaskStatusCode.PENDINGKILL:
             if (time.time() - start) > wait_timeout:
                 success = False
                 break
@@ -898,7 +895,7 @@ class Task:
 
         if status != models.TaskStatusCode.KILLED:
             success = False
-            if status == models.TaskStatusCode.PENDING_MINUS_KILL:
+            if status == models.TaskStatusCode.PENDINGKILL:
                 logging.error(
                     "Unable to ensure that task %s transitioned to the KILLED "
                     "state after %f seconds. The status of the task is %s.",

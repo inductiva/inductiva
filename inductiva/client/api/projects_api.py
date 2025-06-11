@@ -23,6 +23,8 @@ from inductiva.client.models.project import Project
 from inductiva.client.models.project_create import ProjectCreate
 from inductiva.client.models.project_type import ProjectType
 from inductiva.client.models.project_update import ProjectUpdate
+from inductiva.client.models.select_mode import SelectMode
+from inductiva.client.models.task_status_code import TaskStatusCode
 
 from inductiva.client.api_client import ApiClient, RequestSerialized
 from inductiva.client.api_response import ApiResponse
@@ -41,17 +43,20 @@ class ProjectsApi:
             api_client = ApiClient.get_default()
         self.api_client = api_client
 
+
     @validate_call
     def add_task_to_project(
         self,
         name: StrictStr,
         task_id: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -93,31 +98,37 @@ class ProjectsApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def add_task_to_project_with_http_info(
         self,
         name: StrictStr,
         task_id: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -159,31 +170,37 @@ class ProjectsApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def add_task_to_project_without_preload_content(
         self,
         name: StrictStr,
         task_id: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -225,15 +242,19 @@ class ProjectsApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _add_task_to_project_serialize(
         self,
@@ -247,14 +268,16 @@ class ProjectsApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -267,13 +290,20 @@ class ProjectsApi:
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
+
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='POST',
@@ -287,18 +317,24 @@ class ProjectsApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def create_project(
         self,
         project_create: ProjectCreate,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -332,34 +368,41 @@ class ProjectsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._create_project_serialize(project_create=project_create,
-                                                _request_auth=_request_auth,
-                                                _content_type=_content_type,
-                                                _headers=_headers,
-                                                _host_index=_host_index)
+        _param = self._create_project_serialize(
+            project_create=project_create,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Project",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def create_project_with_http_info(
         self,
         project_create: ProjectCreate,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -393,34 +436,41 @@ class ProjectsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._create_project_serialize(project_create=project_create,
-                                                _request_auth=_request_auth,
-                                                _content_type=_content_type,
-                                                _headers=_headers,
-                                                _host_index=_host_index)
+        _param = self._create_project_serialize(
+            project_create=project_create,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Project",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def create_project_without_preload_content(
         self,
         project_create: ProjectCreate,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -454,19 +504,24 @@ class ProjectsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._create_project_serialize(project_create=project_create,
-                                                _request_auth=_request_auth,
-                                                _content_type=_content_type,
-                                                _headers=_headers,
-                                                _host_index=_host_index)
+        _param = self._create_project_serialize(
+            project_create=project_create,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Project",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _create_project_serialize(
         self,
@@ -479,14 +534,16 @@ class ProjectsApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -497,22 +554,33 @@ class ProjectsApi:
         if project_create is not None:
             _body_params = project_create
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
 
         # set the HTTP header `Content-Type`
         if _content_type:
             _header_params['Content-Type'] = _content_type
         else:
-            _default_content_type = (self.api_client.select_header_content_type(
-                ['application/json']))
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
             if _default_content_type is not None:
                 _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='POST',
@@ -526,18 +594,24 @@ class ProjectsApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def delete_project(
         self,
         project_name: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -571,34 +645,41 @@ class ProjectsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._delete_project_serialize(project_name=project_name,
-                                                _request_auth=_request_auth,
-                                                _content_type=_content_type,
-                                                _headers=_headers,
-                                                _host_index=_host_index)
+        _param = self._delete_project_serialize(
+            project_name=project_name,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '202': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def delete_project_with_http_info(
         self,
         project_name: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -632,34 +713,41 @@ class ProjectsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._delete_project_serialize(project_name=project_name,
-                                                _request_auth=_request_auth,
-                                                _content_type=_content_type,
-                                                _headers=_headers,
-                                                _host_index=_host_index)
+        _param = self._delete_project_serialize(
+            project_name=project_name,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '202': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def delete_project_without_preload_content(
         self,
         project_name: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -693,19 +781,24 @@ class ProjectsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._delete_project_serialize(project_name=project_name,
-                                                _request_auth=_request_auth,
-                                                _content_type=_content_type,
-                                                _headers=_headers,
-                                                _host_index=_host_index)
+        _param = self._delete_project_serialize(
+            project_name=project_name,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '202': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _delete_project_serialize(
         self,
@@ -718,33 +811,42 @@ class ProjectsApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
         # process the query parameters
         if project_name is not None:
-
+            
             _query_params.append(('project_name', project_name))
-
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
+
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='DELETE',
@@ -758,18 +860,24 @@ class ProjectsApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def get_project(
         self,
         name: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -803,34 +911,41 @@ class ProjectsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_project_serialize(name=name,
-                                             _request_auth=_request_auth,
-                                             _content_type=_content_type,
-                                             _headers=_headers,
-                                             _host_index=_host_index)
+        _param = self._get_project_serialize(
+            name=name,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Project",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def get_project_with_http_info(
         self,
         name: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -864,34 +979,41 @@ class ProjectsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_project_serialize(name=name,
-                                             _request_auth=_request_auth,
-                                             _content_type=_content_type,
-                                             _headers=_headers,
-                                             _host_index=_host_index)
+        _param = self._get_project_serialize(
+            name=name,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Project",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def get_project_without_preload_content(
         self,
         name: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -925,19 +1047,24 @@ class ProjectsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_project_serialize(name=name,
-                                             _request_auth=_request_auth,
-                                             _content_type=_content_type,
-                                             _headers=_headers,
-                                             _host_index=_host_index)
+        _param = self._get_project_serialize(
+            name=name,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "Project",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _get_project_serialize(
         self,
@@ -950,14 +1077,16 @@ class ProjectsApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -968,13 +1097,20 @@ class ProjectsApi:
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
+
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='GET',
@@ -988,18 +1124,24 @@ class ProjectsApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def get_project_metadata(
         self,
         name: Optional[StrictStr],
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1037,30 +1179,36 @@ class ProjectsApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def get_project_metadata_with_http_info(
         self,
         name: Optional[StrictStr],
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1098,30 +1246,36 @@ class ProjectsApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def get_project_metadata_without_preload_content(
         self,
         name: Optional[StrictStr],
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1159,15 +1313,19 @@ class ProjectsApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _get_project_metadata_serialize(
         self,
@@ -1180,14 +1338,16 @@ class ProjectsApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -1198,13 +1358,20 @@ class ProjectsApi:
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
+
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='GET',
@@ -1218,21 +1385,324 @@ class ProjectsApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
+    def get_tasks_info(
+        self,
+        name: Optional[StrictStr],
+        select: Optional[SelectMode] = None,
+        status: Optional[TaskStatusCode] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> object:
+        """Get Tasks Info
+
+        Retrieves information about the project's runs.
+
+        :param name: (required)
+        :type name: str
+        :param select:
+        :type select: SelectMode
+        :param status:
+        :type status: TaskStatusCode
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_tasks_info_serialize(
+            name=name,
+            select=select,
+            status=status,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "object",
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    def get_tasks_info_with_http_info(
+        self,
+        name: Optional[StrictStr],
+        select: Optional[SelectMode] = None,
+        status: Optional[TaskStatusCode] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[object]:
+        """Get Tasks Info
+
+        Retrieves information about the project's runs.
+
+        :param name: (required)
+        :type name: str
+        :param select:
+        :type select: SelectMode
+        :param status:
+        :type status: TaskStatusCode
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_tasks_info_serialize(
+            name=name,
+            select=select,
+            status=status,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "object",
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    def get_tasks_info_without_preload_content(
+        self,
+        name: Optional[StrictStr],
+        select: Optional[SelectMode] = None,
+        status: Optional[TaskStatusCode] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get Tasks Info
+
+        Retrieves information about the project's runs.
+
+        :param name: (required)
+        :type name: str
+        :param select:
+        :type select: SelectMode
+        :param status:
+        :type status: TaskStatusCode
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_tasks_info_serialize(
+            name=name,
+            select=select,
+            status=status,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "object",
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _get_tasks_info_serialize(
+        self,
+        name,
+        select,
+        status,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if name is not None:
+            _path_params['name'] = name
+        # process the query parameters
+        if select is not None:
+            
+            _query_params.append(('select', select.value))
+            
+        if status is not None:
+            
+            _query_params.append(('status', status.value))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/projects/{name}/tasks_info',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def get_user_projects(
         self,
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
-        per_page: Optional[Annotated[int,
-                                     Field(le=100, strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int, Field(le=100, strict=True, ge=1)]] = None,
         project_type: Optional[ProjectType] = None,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1270,39 +1740,45 @@ class ProjectsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_user_projects_serialize(page=page,
-                                                   per_page=per_page,
-                                                   project_type=project_type,
-                                                   _request_auth=_request_auth,
-                                                   _content_type=_content_type,
-                                                   _headers=_headers,
-                                                   _host_index=_host_index)
+        _param = self._get_user_projects_serialize(
+            page=page,
+            per_page=per_page,
+            project_type=project_type,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[Project]",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def get_user_projects_with_http_info(
         self,
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
-        per_page: Optional[Annotated[int,
-                                     Field(le=100, strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int, Field(le=100, strict=True, ge=1)]] = None,
         project_type: Optional[ProjectType] = None,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1340,39 +1816,45 @@ class ProjectsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_user_projects_serialize(page=page,
-                                                   per_page=per_page,
-                                                   project_type=project_type,
-                                                   _request_auth=_request_auth,
-                                                   _content_type=_content_type,
-                                                   _headers=_headers,
-                                                   _host_index=_host_index)
+        _param = self._get_user_projects_serialize(
+            page=page,
+            per_page=per_page,
+            project_type=project_type,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[Project]",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def get_user_projects_without_preload_content(
         self,
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
-        per_page: Optional[Annotated[int,
-                                     Field(le=100, strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int, Field(le=100, strict=True, ge=1)]] = None,
         project_type: Optional[ProjectType] = None,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1410,21 +1892,26 @@ class ProjectsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_user_projects_serialize(page=page,
-                                                   per_page=per_page,
-                                                   project_type=project_type,
-                                                   _request_auth=_request_auth,
-                                                   _content_type=_content_type,
-                                                   _headers=_headers,
-                                                   _host_index=_host_index)
+        _param = self._get_user_projects_serialize(
+            page=page,
+            per_page=per_page,
+            project_type=project_type,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[Project]",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _get_user_projects_serialize(
         self,
@@ -1439,41 +1926,50 @@ class ProjectsApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
         # process the query parameters
         if page is not None:
-
+            
             _query_params.append(('page', page))
-
+            
         if per_page is not None:
-
+            
             _query_params.append(('per_page', per_page))
-
+            
         if project_type is not None:
-
+            
             _query_params.append(('project_type', project_type.value))
-
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
+
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='GET',
@@ -1487,19 +1983,25 @@ class ProjectsApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def remove_task_from_project(
         self,
         name: StrictStr,
         task_id: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1541,31 +2043,37 @@ class ProjectsApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def remove_task_from_project_with_http_info(
         self,
         name: StrictStr,
         task_id: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1607,31 +2115,37 @@ class ProjectsApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def remove_task_from_project_without_preload_content(
         self,
         name: StrictStr,
         task_id: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1673,15 +2187,19 @@ class ProjectsApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _remove_task_from_project_serialize(
         self,
@@ -1695,14 +2213,16 @@ class ProjectsApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -1715,13 +2235,20 @@ class ProjectsApi:
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
+
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='POST',
@@ -1735,19 +2262,25 @@ class ProjectsApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def set_project_metadata(
         self,
         name: Optional[StrictStr],
         request_body: Dict[str, StrictStr],
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1788,31 +2321,37 @@ class ProjectsApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def set_project_metadata_with_http_info(
         self,
         name: Optional[StrictStr],
         request_body: Dict[str, StrictStr],
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1853,31 +2392,37 @@ class ProjectsApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def set_project_metadata_without_preload_content(
         self,
         name: Optional[StrictStr],
         request_body: Dict[str, StrictStr],
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1918,15 +2463,19 @@ class ProjectsApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _set_project_metadata_serialize(
         self,
@@ -1940,14 +2489,16 @@ class ProjectsApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -1960,22 +2511,33 @@ class ProjectsApi:
         if request_body is not None:
             _body_params = request_body
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
 
         # set the HTTP header `Content-Type`
         if _content_type:
             _header_params['Content-Type'] = _content_type
         else:
-            _default_content_type = (self.api_client.select_header_content_type(
-                ['application/json']))
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
             if _default_content_type is not None:
                 _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='PUT',
@@ -1989,19 +2551,25 @@ class ProjectsApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def update_project(
         self,
         name: StrictStr,
         project_update: ProjectUpdate,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2036,36 +2604,43 @@ class ProjectsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._update_project_serialize(name=name,
-                                                project_update=project_update,
-                                                _request_auth=_request_auth,
-                                                _content_type=_content_type,
-                                                _headers=_headers,
-                                                _host_index=_host_index)
+        _param = self._update_project_serialize(
+            name=name,
+            project_update=project_update,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def update_project_with_http_info(
         self,
         name: StrictStr,
         project_update: ProjectUpdate,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2100,36 +2675,43 @@ class ProjectsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._update_project_serialize(name=name,
-                                                project_update=project_update,
-                                                _request_auth=_request_auth,
-                                                _content_type=_content_type,
-                                                _headers=_headers,
-                                                _host_index=_host_index)
+        _param = self._update_project_serialize(
+            name=name,
+            project_update=project_update,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def update_project_without_preload_content(
         self,
         name: StrictStr,
         project_update: ProjectUpdate,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2164,20 +2746,25 @@ class ProjectsApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._update_project_serialize(name=name,
-                                                project_update=project_update,
-                                                _request_auth=_request_auth,
-                                                _content_type=_content_type,
-                                                _headers=_headers,
-                                                _host_index=_host_index)
+        _param = self._update_project_serialize(
+            name=name,
+            project_update=project_update,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _update_project_serialize(
         self,
@@ -2191,14 +2778,16 @@ class ProjectsApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -2211,22 +2800,33 @@ class ProjectsApi:
         if project_update is not None:
             _body_params = project_update
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
 
         # set the HTTP header `Content-Type`
         if _content_type:
             _header_params['Content-Type'] = _content_type
         else:
-            _default_content_type = (self.api_client.select_header_content_type(
-                ['application/json']))
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
             if _default_content_type is not None:
                 _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='PATCH',
@@ -2240,19 +2840,25 @@ class ProjectsApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def update_project_metadata(
         self,
         name: Optional[StrictStr],
         request_body: Dict[str, StrictStr],
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2293,31 +2899,37 @@ class ProjectsApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def update_project_metadata_with_http_info(
         self,
         name: Optional[StrictStr],
         request_body: Dict[str, StrictStr],
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2358,31 +2970,37 @@ class ProjectsApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def update_project_metadata_without_preload_content(
         self,
         name: Optional[StrictStr],
         request_body: Dict[str, StrictStr],
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2423,15 +3041,19 @@ class ProjectsApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _update_project_metadata_serialize(
         self,
@@ -2445,14 +3067,16 @@ class ProjectsApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -2465,22 +3089,33 @@ class ProjectsApi:
         if request_body is not None:
             _body_params = request_body
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
 
         # set the HTTP header `Content-Type`
         if _content_type:
             _header_params['Content-Type'] = _content_type
         else:
-            _default_content_type = (self.api_client.select_header_content_type(
-                ['application/json']))
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
             if _default_content_type is not None:
                 _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='PATCH',
@@ -2494,4 +3129,7 @@ class ProjectsApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+

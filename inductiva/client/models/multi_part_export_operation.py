@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -23,7 +24,6 @@ from inductiva.client.models.upload_part import UploadPart
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class MultiPartExportOperation(BaseModel):
     """
     Body of the request to the multipart export files endpoint.
@@ -32,15 +32,14 @@ class MultiPartExportOperation(BaseModel):
     parts_size: StrictInt
     upload_parts: List[UploadPart]
     complete_multipart_url: Annotated[str, Field(min_length=1, strict=True)]
-    __properties: ClassVar[List[str]] = [
-        "path", "parts_size", "upload_parts", "complete_multipart_url"
-    ]
+    __properties: ClassVar[List[str]] = ["path", "parts_size", "upload_parts", "complete_multipart_url"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -66,7 +65,8 @@ class MultiPartExportOperation(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -92,14 +92,11 @@ class MultiPartExportOperation(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "path":
-                obj.get("path"),
-            "parts_size":
-                obj.get("parts_size"),
-            "upload_parts": [
-                UploadPart.from_dict(_item) for _item in obj["upload_parts"]
-            ] if obj.get("upload_parts") is not None else None,
-            "complete_multipart_url":
-                obj.get("complete_multipart_url")
+            "path": obj.get("path"),
+            "parts_size": obj.get("parts_size"),
+            "upload_parts": [UploadPart.from_dict(_item) for _item in obj["upload_parts"]] if obj.get("upload_parts") is not None else None,
+            "complete_multipart_url": obj.get("complete_multipart_url")
         })
         return _obj
+
+

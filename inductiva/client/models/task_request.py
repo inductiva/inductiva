@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -22,13 +23,10 @@ from inductiva.client.models.compression_method import CompressionMethod
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class TaskRequest(BaseModel):
     """
     TaskRequest
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     simulator: StrictStr
     simulator_name_alias: Optional[StrictStr] = None
     resource_pool: StrictStr
@@ -41,18 +39,14 @@ class TaskRequest(BaseModel):
     stream_zip: Optional[StrictBool] = True
     compress_with: Optional[CompressionMethod] = None
     extra_params: Optional[Dict[str, Any]] = None
-    __properties: ClassVar[List[str]] = [
-        "simulator", "simulator_name_alias", "resource_pool",
-        "storage_path_prefix", "project", "container_image",
-        "time_to_live_seconds", "resubmit_on_preemption", "input_resources",
-        "stream_zip", "compress_with", "extra_params"
-    ]
+    __properties: ClassVar[List[str]] = ["simulator", "simulator_name_alias", "resource_pool", "storage_path_prefix", "project", "container_image", "time_to_live_seconds", "resubmit_on_preemption", "input_resources", "stream_zip", "compress_with", "extra_params"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -78,7 +72,8 @@ class TaskRequest(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -117,32 +112,19 @@ class TaskRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "simulator":
-                obj.get("simulator"),
-            "simulator_name_alias":
-                obj.get("simulator_name_alias"),
-            "resource_pool":
-                obj.get("resource_pool"),
-            "storage_path_prefix":
-                obj.get("storage_path_prefix")
-                if obj.get("storage_path_prefix") is not None else '',
-            "project":
-                obj.get("project"),
-            "container_image":
-                obj.get("container_image"),
-            "time_to_live_seconds":
-                obj.get("time_to_live_seconds"),
-            "resubmit_on_preemption":
-                obj.get("resubmit_on_preemption")
-                if obj.get("resubmit_on_preemption") is not None else False,
-            "input_resources":
-                obj.get("input_resources"),
-            "stream_zip":
-                obj.get("stream_zip")
-                if obj.get("stream_zip") is not None else True,
-            "compress_with":
-                obj.get("compress_with"),
-            "extra_params":
-                obj.get("extra_params")
+            "simulator": obj.get("simulator"),
+            "simulator_name_alias": obj.get("simulator_name_alias"),
+            "resource_pool": obj.get("resource_pool"),
+            "storage_path_prefix": obj.get("storage_path_prefix") if obj.get("storage_path_prefix") is not None else '',
+            "project": obj.get("project"),
+            "container_image": obj.get("container_image"),
+            "time_to_live_seconds": obj.get("time_to_live_seconds"),
+            "resubmit_on_preemption": obj.get("resubmit_on_preemption") if obj.get("resubmit_on_preemption") is not None else False,
+            "input_resources": obj.get("input_resources"),
+            "stream_zip": obj.get("stream_zip") if obj.get("stream_zip") is not None else True,
+            "compress_with": obj.get("compress_with"),
+            "extra_params": obj.get("extra_params")
         })
         return _obj
+
+

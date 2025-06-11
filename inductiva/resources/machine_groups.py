@@ -544,8 +544,8 @@ class BaseMachineGroup(ABC):
         maximum number of machines up in the cloud. The final cost will vary
         depending on the total usage of the machines."""
 
-        min_cost_per_hour = decimal.Decimal(self._cost_per_hour.min)
-        max_cost_per_hour = decimal.Decimal(self._cost_per_hour.max)
+        min_cost_per_hour = self._cost_per_hour.min
+        max_cost_per_hour = self._cost_per_hour.max
 
         if not verbose:
             return max_cost_per_hour

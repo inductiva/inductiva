@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -22,13 +23,10 @@ from typing import Any, ClassVar, Dict, List, Union
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class UserTasksOverview(BaseModel):
     """
     UserTasksOverview
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     start_date: date
     end_date: date
     username: StrictStr
@@ -39,17 +37,14 @@ class UserTasksOverview(BaseModel):
     avg_task_duration: Union[StrictFloat, StrictInt]
     task_success_rate: Union[StrictFloat, StrictInt]
     preempted_tasks: StrictInt
-    __properties: ClassVar[List[str]] = [
-        "start_date", "end_date", "username", "total_tasks", "total_cost",
-        "total_wait_time", "total_compute_time", "avg_task_duration",
-        "task_success_rate", "preempted_tasks"
-    ]
+    __properties: ClassVar[List[str]] = ["start_date", "end_date", "username", "total_tasks", "total_cost", "total_wait_time", "total_compute_time", "avg_task_duration", "task_success_rate", "preempted_tasks"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -75,7 +70,8 @@ class UserTasksOverview(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -106,3 +102,5 @@ class UserTasksOverview(BaseModel):
             "preempted_tasks": obj.get("preempted_tasks")
         })
         return _obj
+
+

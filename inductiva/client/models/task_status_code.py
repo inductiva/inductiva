@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import json
 from enum import Enum
@@ -21,28 +22,31 @@ class TaskStatusCode(str, Enum):
     """
     Possible task status codes.
     """
+
     """
     allowed enum values
     """
-    PENDING_MINUS_INPUT = 'pending-input'
+    PENDINGINPUT = 'pending-input'
     SUBMITTED = 'submitted'
     STARTED = 'started'
     SUCCESS = 'success'
     FAILED = 'failed'
-    PENDING_MINUS_KILL = 'pending-kill'
+    PENDINGKILL = 'pending-kill'
     KILLED = 'killed'
-    SPOT_MINUS_INSTANCE_MINUS_PREEMPTED = 'spot-instance-preempted'
-    EXECUTER_MINUS_TERMINATED = 'executer-terminated'
-    EXECUTER_MINUS_TERMINATED_MINUS_BY_MINUS_USER = 'executer-terminated-by-user'
-    EXECUTER_MINUS_TERMINATED_MINUS_TTL_MINUS_EXCEEDED = 'executer-terminated-ttl-exceeded'
-    EXECUTER_MINUS_TERMINATED_MINUS_CREDITS_MINUS_EXHAUSTED = 'executer-terminated-credits-exhausted'
-    EXECUTER_MINUS_FAILED = 'executer-failed'
+    SPOTINSTANCEPREEMPTED = 'spot-instance-preempted'
+    EXECUTERTERMINATED = 'executer-terminated'
+    EXECUTERTERMINATEDBYUSER = 'executer-terminated-by-user'
+    EXECUTERTERMINATEDTTLEXCEEDED = 'executer-terminated-ttl-exceeded'
+    EXECUTERTERMINATEDCREDITSEXHAUSTED = 'executer-terminated-credits-exhausted'
+    EXECUTERFAILED = 'executer-failed'
     ZOMBIE = 'zombie'
-    COMPUTATION_MINUS_STARTED = 'computation-started'
-    COMPUTATION_MINUS_ENDED = 'computation-ended'
-    TTL_MINUS_EXCEEDED = 'ttl-exceeded'
+    COMPUTATIONSTARTED = 'computation-started'
+    COMPUTATIONENDED = 'computation-ended'
+    TTLEXCEEDED = 'ttl-exceeded'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of TaskStatusCode from a JSON string"""
         return cls(json.loads(json_str))
+
+

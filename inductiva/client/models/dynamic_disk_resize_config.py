@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -21,24 +22,20 @@ from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class DynamicDiskResizeConfig(BaseModel):
     """
     DynamicDiskResizeConfig
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     free_space_threshold_gb: StrictInt
     max_disk_size_gb: StrictInt
-    __properties: ClassVar[List[str]] = [
-        "free_space_threshold_gb", "max_disk_size_gb"
-    ]
+    __properties: ClassVar[List[str]] = ["free_space_threshold_gb", "max_disk_size_gb"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -64,7 +61,8 @@ class DynamicDiskResizeConfig(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -87,3 +85,5 @@ class DynamicDiskResizeConfig(BaseModel):
             "max_disk_size_gb": obj.get("max_disk_size_gb")
         })
         return _obj
+
+

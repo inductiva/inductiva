@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -23,13 +24,10 @@ from inductiva.client.models.trigger import Trigger
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class EventCreate(BaseModel):
     """
     EventCreate
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     trigger: Trigger
     action: Action
     __properties: ClassVar[List[str]] = ["trigger", "action"]
@@ -39,6 +37,7 @@ class EventCreate(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -64,7 +63,8 @@ class EventCreate(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -89,11 +89,9 @@ class EventCreate(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "trigger":
-                Trigger.from_dict(obj["trigger"])
-                if obj.get("trigger") is not None else None,
-            "action":
-                Action.from_dict(obj["action"])
-                if obj.get("action") is not None else None
+            "trigger": Trigger.from_dict(obj["trigger"]) if obj.get("trigger") is not None else None,
+            "action": Action.from_dict(obj["action"]) if obj.get("action") is not None else None
         })
         return _obj
+
+

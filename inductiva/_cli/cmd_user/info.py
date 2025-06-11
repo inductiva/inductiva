@@ -65,7 +65,7 @@ def _print_credits_summary(user: inductiva.client.models.User,
                            fout: TextIO = sys.stdout):
     """Prints the user's credits information."""
     total_available_credits = format_utils.currency_formatter(
-        decimal.Decimal(user.total_available_credits))
+        user.total_available_credits)
     print(f"■ Credits: {total_available_credits}", file=fout)
 
 
@@ -77,14 +77,13 @@ def _print_estimated_costs(fout: TextIO = sys.stdout):
     # This try will be removed in the future.
     try:
         costs = get_costs(start_year=current_year, start_month=current_month)
-        total_estimated_costs = format_utils.currency_formatter(
-            decimal.Decimal(costs[0].total))
+        total_estimated_costs = format_utils.currency_formatter(costs[0].total)
         computation_estimated_costs = format_utils.currency_formatter(
-            decimal.Decimal(costs[0].components.compute))
+            costs[0].components.compute)
         storage_estimated_costs = format_utils.currency_formatter(
-            decimal.Decimal(costs[0].components.storage))
+            costs[0].components.storage)
         data_transfer_estimated_costs = format_utils.currency_formatter(
-            decimal.Decimal(costs[0].components.data_transfer))
+            costs[0].components.data_transfer)
 
         label_width = 12
         cost_width = 10

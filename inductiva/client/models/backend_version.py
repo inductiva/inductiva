@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -21,24 +22,20 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class BackendVersion(BaseModel):
     """
     BackendVersion
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     version: StrictStr
     min_supported_client_version: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = [
-        "version", "min_supported_client_version"
-    ]
+    __properties: ClassVar[List[str]] = ["version", "min_supported_client_version"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -64,7 +61,8 @@ class BackendVersion(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -88,9 +86,9 @@ class BackendVersion(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "version":
-                obj.get("version"),
-            "min_supported_client_version":
-                obj.get("min_supported_client_version")
+            "version": obj.get("version"),
+            "min_supported_client_version": obj.get("min_supported_client_version")
         })
         return _obj
+
+

@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -26,13 +27,10 @@ from inductiva.client.models.task_status_code import TaskStatusCode
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class Task(BaseModel):
     """
     Task
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     task_id: StrictStr
     status: TaskStatusCode
     status_alias: StrictStr
@@ -62,22 +60,14 @@ class Task(BaseModel):
     task_metadata: Optional[Dict[str, StrictStr]] = None
     extra_params: Optional[Dict[str, Any]] = None
     resubmit_on_preemption: Optional[StrictBool] = False
-    __properties: ClassVar[List[str]] = [
-        "task_id", "status", "status_alias", "simulator", "storage_path",
-        "storage_input_path", "storage_output_path", "container_image",
-        "project", "is_terminated", "create_time", "input_submit_time",
-        "start_time", "computation_start_time", "computation_end_time",
-        "end_time", "estimated_computation_cost", "metrics", "executer",
-        "machine_group_name", "machine_group_id", "error_detail",
-        "input_resources", "stream_zip", "num_retries", "compress_with",
-        "task_metadata", "extra_params", "resubmit_on_preemption"
-    ]
+    __properties: ClassVar[List[str]] = ["task_id", "status", "status_alias", "simulator", "storage_path", "storage_input_path", "storage_output_path", "container_image", "project", "is_terminated", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "estimated_computation_cost", "metrics", "executer", "machine_group_name", "machine_group_id", "error_detail", "input_resources", "stream_zip", "num_retries", "compress_with", "task_metadata", "extra_params", "resubmit_on_preemption"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -103,7 +93,8 @@ class Task(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -218,67 +209,36 @@ class Task(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "task_id":
-                obj.get("task_id"),
-            "status":
-                obj.get("status"),
-            "status_alias":
-                obj.get("status_alias"),
-            "simulator":
-                obj.get("simulator"),
-            "storage_path":
-                obj.get("storage_path"),
-            "storage_input_path":
-                obj.get("storage_input_path"),
-            "storage_output_path":
-                obj.get("storage_output_path"),
-            "container_image":
-                obj.get("container_image"),
-            "project":
-                obj.get("project"),
-            "is_terminated":
-                obj.get("is_terminated"),
-            "create_time":
-                obj.get("create_time"),
-            "input_submit_time":
-                obj.get("input_submit_time"),
-            "start_time":
-                obj.get("start_time"),
-            "computation_start_time":
-                obj.get("computation_start_time"),
-            "computation_end_time":
-                obj.get("computation_end_time"),
-            "end_time":
-                obj.get("end_time"),
-            "estimated_computation_cost":
-                obj.get("estimated_computation_cost"),
-            "metrics":
-                TaskMetrics.from_dict(obj["metrics"])
-                if obj.get("metrics") is not None else None,
-            "executer":
-                Executer.from_dict(obj["executer"])
-                if obj.get("executer") is not None else None,
-            "machine_group_name":
-                obj.get("machine_group_name"),
-            "machine_group_id":
-                obj.get("machine_group_id"),
-            "error_detail":
-                obj.get("error_detail"),
-            "input_resources":
-                obj.get("input_resources"),
-            "stream_zip":
-                obj.get("stream_zip")
-                if obj.get("stream_zip") is not None else True,
-            "num_retries":
-                obj.get("num_retries"),
-            "compress_with":
-                obj.get("compress_with"),
-            "task_metadata":
-                obj.get("task_metadata"),
-            "extra_params":
-                obj.get("extra_params"),
-            "resubmit_on_preemption":
-                obj.get("resubmit_on_preemption")
-                if obj.get("resubmit_on_preemption") is not None else False
+            "task_id": obj.get("task_id"),
+            "status": obj.get("status"),
+            "status_alias": obj.get("status_alias"),
+            "simulator": obj.get("simulator"),
+            "storage_path": obj.get("storage_path"),
+            "storage_input_path": obj.get("storage_input_path"),
+            "storage_output_path": obj.get("storage_output_path"),
+            "container_image": obj.get("container_image"),
+            "project": obj.get("project"),
+            "is_terminated": obj.get("is_terminated"),
+            "create_time": obj.get("create_time"),
+            "input_submit_time": obj.get("input_submit_time"),
+            "start_time": obj.get("start_time"),
+            "computation_start_time": obj.get("computation_start_time"),
+            "computation_end_time": obj.get("computation_end_time"),
+            "end_time": obj.get("end_time"),
+            "estimated_computation_cost": obj.get("estimated_computation_cost"),
+            "metrics": TaskMetrics.from_dict(obj["metrics"]) if obj.get("metrics") is not None else None,
+            "executer": Executer.from_dict(obj["executer"]) if obj.get("executer") is not None else None,
+            "machine_group_name": obj.get("machine_group_name"),
+            "machine_group_id": obj.get("machine_group_id"),
+            "error_detail": obj.get("error_detail"),
+            "input_resources": obj.get("input_resources"),
+            "stream_zip": obj.get("stream_zip") if obj.get("stream_zip") is not None else True,
+            "num_retries": obj.get("num_retries"),
+            "compress_with": obj.get("compress_with"),
+            "task_metadata": obj.get("task_metadata"),
+            "extra_params": obj.get("extra_params"),
+            "resubmit_on_preemption": obj.get("resubmit_on_preemption") if obj.get("resubmit_on_preemption") is not None else False
         })
         return _obj
+
+

@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -21,13 +22,10 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class Executer(BaseModel):
     """
     Executer
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     uuid: StrictStr
     cpu_count_logical: StrictInt
     cpu_count_physical: StrictInt
@@ -37,16 +35,14 @@ class Executer(BaseModel):
     vm_name: Optional[StrictStr] = None
     host_type: StrictStr
     error_detail: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = [
-        "uuid", "cpu_count_logical", "cpu_count_physical", "memory",
-        "n_mpi_hosts", "vm_type", "vm_name", "host_type", "error_detail"
-    ]
+    __properties: ClassVar[List[str]] = ["uuid", "cpu_count_logical", "cpu_count_physical", "memory", "n_mpi_hosts", "vm_type", "vm_name", "host_type", "error_detail"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -72,7 +68,8 @@ class Executer(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -112,3 +109,5 @@ class Executer(BaseModel):
             "error_detail": obj.get("error_detail")
         })
         return _obj
+
+

@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -24,13 +25,10 @@ from inductiva.client.models.storage_operation_name import StorageOperationName
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class StorageOperation(BaseModel):
     """
     StorageOperation
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     id: StrictStr
     name: StorageOperationName
     status: OperationStatus
@@ -38,16 +36,14 @@ class StorageOperation(BaseModel):
     attributes: Dict[str, Any]
     start_time: datetime
     end_time: Optional[datetime]
-    __properties: ClassVar[List[str]] = [
-        "id", "name", "status", "error_message", "attributes", "start_time",
-        "end_time"
-    ]
+    __properties: ClassVar[List[str]] = ["id", "name", "status", "error_message", "attributes", "start_time", "end_time"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -73,7 +69,8 @@ class StorageOperation(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -111,3 +108,5 @@ class StorageOperation(BaseModel):
             "end_time": obj.get("end_time")
         })
         return _obj
+
+

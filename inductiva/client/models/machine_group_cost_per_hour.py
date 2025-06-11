@@ -11,39 +11,36 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional, Union
 from inductiva.client.models.currency_code import CurrencyCode
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class MachineGroupCostPerHour(BaseModel):
     """
     MachineGroupCostPerHour
-    """
-
-  # noqa: E501
-    min: StrictStr
-    max: StrictStr
-    current: Optional[StrictStr] = None
+    """ # noqa: E501
+    min: Union[StrictFloat, StrictInt]
+    max: Union[StrictFloat, StrictInt]
+    current: Optional[Union[StrictFloat, StrictInt]] = None
     min_reason: StrictStr
     max_reason: StrictStr
     currency: Optional[CurrencyCode] = None
-    __properties: ClassVar[List[str]] = [
-        "min", "max", "current", "min_reason", "max_reason", "currency"
-    ]
+    __properties: ClassVar[List[str]] = ["min", "max", "current", "min_reason", "max_reason", "currency"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -69,7 +66,8 @@ class MachineGroupCostPerHour(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -101,3 +99,5 @@ class MachineGroupCostPerHour(BaseModel):
             "currency": obj.get("currency")
         })
         return _obj
+
+

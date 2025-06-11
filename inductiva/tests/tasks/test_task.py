@@ -59,10 +59,10 @@ def test_task_kill__none_timeout__none():
 @pytest.mark.parametrize(
     "pending_kill_success, pending_kill_status, expected_output", [
         (True, TaskStatusCode.KILLED, True),
-        (False, TaskStatusCode.PENDING_MINUS_KILL, False),
+        (False, TaskStatusCode.PENDINGKILL, False),
         (True, TaskStatusCode.ZOMBIE, False),
         (True, TaskStatusCode.FAILED, False),
-        (True, TaskStatusCode.PENDING_MINUS_INPUT, False),
+        (True, TaskStatusCode.PENDINGINPUT, False),
     ])
 def test_task_kill__positive_timeout__success(pending_kill_success,
                                               pending_kill_status,
@@ -83,10 +83,10 @@ def test_task_kill__positive_timeout__success(pending_kill_success,
 
 
 @pytest.mark.parametrize("get_status_response", [
-    (TaskStatusCode.PENDING_MINUS_KILL),
+    (TaskStatusCode.PENDINGKILL),
     (TaskStatusCode.KILLED),
     (TaskStatusCode.ZOMBIE),
-    (TaskStatusCode.PENDING_MINUS_INPUT),
+    (TaskStatusCode.PENDINGINPUT),
     (TaskStatusCode.FAILED),
 ])
 def test__send_kill_request__positive_max_api_requests__none(
@@ -138,7 +138,7 @@ def test__send_kill_request__api_exception__runtimeerror():
 
     with patch("inductiva.client.api.tasks_api") as mock_api, patch(
             "inductiva.tasks.Task.get_status",
-            return_value=TaskStatusCode.PENDING_MINUS_KILL), patch(
+            return_value=TaskStatusCode.PENDINGKILL), patch(
                 "inductiva.tasks.Task.is_terminal", return_value=False), patch(
                     "inductiva.constants.TASK_KILL_RETRY_SLEEP_SEC", 0.1):
         mock_api.TasksApi = TaskApiMock
@@ -152,7 +152,7 @@ def test__send_kill_request__api_exception__runtimeerror():
 
 
 @pytest.mark.parametrize("status_code, expected_success", [
-    (TaskStatusCode.PENDING_MINUS_KILL, False),
+    (TaskStatusCode.PENDINGKILL, False),
     (TaskStatusCode.KILLED, True),
     (TaskStatusCode.ZOMBIE, True),
     (TaskStatusCode.FAILED, True),

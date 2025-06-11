@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -22,13 +23,10 @@ from inductiva.client.models.credits_threshold import CreditsThreshold
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class TerminateResourcesCreditsThresholdUpdate(BaseModel):
     """
     TerminateResourcesCreditsThresholdUpdate
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     credits_threshold: Optional[CreditsThreshold]
     __properties: ClassVar[List[str]] = ["credits_threshold"]
 
@@ -37,6 +35,7 @@ class TerminateResourcesCreditsThresholdUpdate(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -62,7 +61,8 @@ class TerminateResourcesCreditsThresholdUpdate(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -89,8 +89,8 @@ class TerminateResourcesCreditsThresholdUpdate(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "credits_threshold":
-                CreditsThreshold.from_dict(obj["credits_threshold"])
-                if obj.get("credits_threshold") is not None else None
+            "credits_threshold": CreditsThreshold.from_dict(obj["credits_threshold"]) if obj.get("credits_threshold") is not None else None
         })
         return _obj
+
+

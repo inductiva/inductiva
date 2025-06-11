@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -34,13 +35,10 @@ from inductiva.client.models.sharing_level import SharingLevel
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class VMGroupConfig(BaseModel):
     """
     Schema for creating an instance group.
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     max_idle_time: Optional[Union[StrictFloat, StrictInt]] = None
     auto_terminate_ts: Optional[datetime] = None
     id: Optional[StrictStr] = None
@@ -56,7 +54,7 @@ class VMGroupConfig(BaseModel):
     type: Optional[MachineGroupType] = None
     provider_id: Optional[Providers] = None
     started: Optional[StrictBool] = False
-    quota_usage: Optional[Dict[str, StrictStr]] = None
+    quota_usage: Optional[Dict[str, Union[StrictFloat, StrictInt]]] = None
     status: Optional[MachineGroupStatus] = None
     spot: Optional[StrictBool] = False
     is_elastic: Optional[StrictBool] = False
@@ -74,22 +72,14 @@ class VMGroupConfig(BaseModel):
     zone: StrictStr
     gpu_info: Optional[GPUInfo] = None
     cpu_info: Optional[CPUInfo] = None
-    __properties: ClassVar[List[str]] = [
-        "max_idle_time", "auto_terminate_ts", "id", "name", "machine_type",
-        "disk_size_gb", "total_ram_gb", "threads_per_core", "num_vms",
-        "idle_seconds", "creation_timestamp", "deletion_timestamp", "type",
-        "provider_id", "started", "quota_usage", "status", "spot", "is_elastic",
-        "min_vms", "max_vms", "autoscale_policy", "dynamic_disk_resize_config",
-        "custom_vm_image", "machines", "provider_description", "costs",
-        "cost_per_hour", "statistics", "sharing_level", "zone", "gpu_info",
-        "cpu_info"
-    ]
+    __properties: ClassVar[List[str]] = ["max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "total_ram_gb", "threads_per_core", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "started", "quota_usage", "status", "spot", "is_elastic", "min_vms", "max_vms", "autoscale_policy", "dynamic_disk_resize_config", "custom_vm_image", "machines", "provider_description", "costs", "cost_per_hour", "statistics", "sharing_level", "zone", "gpu_info", "cpu_info"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -115,7 +105,8 @@ class VMGroupConfig(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -124,9 +115,7 @@ class VMGroupConfig(BaseModel):
         )
         # override the default output from pydantic by calling `to_dict()` of dynamic_disk_resize_config
         if self.dynamic_disk_resize_config:
-            _dict[
-                'dynamic_disk_resize_config'] = self.dynamic_disk_resize_config.to_dict(
-                )
+            _dict['dynamic_disk_resize_config'] = self.dynamic_disk_resize_config.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in machines (list)
         _items = []
         if self.machines:
@@ -286,80 +275,40 @@ class VMGroupConfig(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "max_idle_time":
-                obj.get("max_idle_time"),
-            "auto_terminate_ts":
-                obj.get("auto_terminate_ts"),
-            "id":
-                obj.get("id"),
-            "name":
-                obj.get("name"),
-            "machine_type":
-                obj.get("machine_type"),
-            "disk_size_gb":
-                obj.get("disk_size_gb"),
-            "total_ram_gb":
-                obj.get("total_ram_gb"),
-            "threads_per_core":
-                obj.get("threads_per_core"),
-            "num_vms":
-                obj.get("num_vms"),
-            "idle_seconds":
-                obj.get("idle_seconds"),
-            "creation_timestamp":
-                obj.get("creation_timestamp"),
-            "deletion_timestamp":
-                obj.get("deletion_timestamp"),
-            "type":
-                obj.get("type"),
-            "provider_id":
-                obj.get("provider_id"),
-            "started":
-                obj.get("started") if obj.get("started") is not None else False,
-            "quota_usage":
-                obj.get("quota_usage"),
-            "status":
-                obj.get("status"),
-            "spot":
-                obj.get("spot") if obj.get("spot") is not None else False,
-            "is_elastic":
-                obj.get("is_elastic")
-                if obj.get("is_elastic") is not None else False,
-            "min_vms":
-                obj.get("min_vms"),
-            "max_vms":
-                obj.get("max_vms"),
-            "autoscale_policy":
-                obj.get("autoscale_policy"),
-            "dynamic_disk_resize_config":
-                DynamicDiskResizeConfig.from_dict(
-                    obj["dynamic_disk_resize_config"])
-                if obj.get("dynamic_disk_resize_config") is not None else None,
-            "custom_vm_image":
-                obj.get("custom_vm_image"),
-            "machines": [
-                MachineInfo.from_dict(_item) for _item in obj["machines"]
-            ] if obj.get("machines") is not None else None,
-            "provider_description":
-                obj.get("provider_description"),
-            "costs":
-                MachineGroupCosts.from_dict(obj["costs"])
-                if obj.get("costs") is not None else None,
-            "cost_per_hour":
-                MachineGroupCostPerHour.from_dict(obj["cost_per_hour"])
-                if obj.get("cost_per_hour") is not None else None,
-            "statistics":
-                MachineGroupUsageStatistics.from_dict(obj["statistics"])
-                if obj.get("statistics") is not None else None,
-            "sharing_level":
-                obj.get("sharing_level"),
-            "zone":
-                obj.get("zone"),
-            "gpu_info":
-                GPUInfo.from_dict(obj["gpu_info"])
-                if obj.get("gpu_info") is not None else None,
-            "cpu_info":
-                CPUInfo.from_dict(obj["cpu_info"])
-                if obj.get("cpu_info") is not None else None
+            "max_idle_time": obj.get("max_idle_time"),
+            "auto_terminate_ts": obj.get("auto_terminate_ts"),
+            "id": obj.get("id"),
+            "name": obj.get("name"),
+            "machine_type": obj.get("machine_type"),
+            "disk_size_gb": obj.get("disk_size_gb"),
+            "total_ram_gb": obj.get("total_ram_gb"),
+            "threads_per_core": obj.get("threads_per_core"),
+            "num_vms": obj.get("num_vms"),
+            "idle_seconds": obj.get("idle_seconds"),
+            "creation_timestamp": obj.get("creation_timestamp"),
+            "deletion_timestamp": obj.get("deletion_timestamp"),
+            "type": obj.get("type"),
+            "provider_id": obj.get("provider_id"),
+            "started": obj.get("started") if obj.get("started") is not None else False,
+            "quota_usage": obj.get("quota_usage"),
+            "status": obj.get("status"),
+            "spot": obj.get("spot") if obj.get("spot") is not None else False,
+            "is_elastic": obj.get("is_elastic") if obj.get("is_elastic") is not None else False,
+            "min_vms": obj.get("min_vms"),
+            "max_vms": obj.get("max_vms"),
+            "autoscale_policy": obj.get("autoscale_policy"),
+            "dynamic_disk_resize_config": DynamicDiskResizeConfig.from_dict(obj["dynamic_disk_resize_config"]) if obj.get("dynamic_disk_resize_config") is not None else None,
+            "custom_vm_image": obj.get("custom_vm_image"),
+            "machines": [MachineInfo.from_dict(_item) for _item in obj["machines"]] if obj.get("machines") is not None else None,
+            "provider_description": obj.get("provider_description"),
+            "costs": MachineGroupCosts.from_dict(obj["costs"]) if obj.get("costs") is not None else None,
+            "cost_per_hour": MachineGroupCostPerHour.from_dict(obj["cost_per_hour"]) if obj.get("cost_per_hour") is not None else None,
+            "statistics": MachineGroupUsageStatistics.from_dict(obj["statistics"]) if obj.get("statistics") is not None else None,
+            "sharing_level": obj.get("sharing_level"),
+            "zone": obj.get("zone"),
+            "gpu_info": GPUInfo.from_dict(obj["gpu_info"]) if obj.get("gpu_info") is not None else None,
+            "cpu_info": CPUInfo.from_dict(obj["cpu_info"]) if obj.get("cpu_info") is not None else None
         })
         return _obj
+
+

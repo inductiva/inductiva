@@ -11,37 +11,33 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr
-from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List, Union
 from typing import Optional, Set
 from typing_extensions import Self
-
 
 class UserMostUsedSimulatorsOverview(BaseModel):
     """
     UserMostUsedSimulatorsOverview
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     simulator: StrictStr
     num_tasks: StrictInt
-    tasks_simulator_cost: StrictStr
-    success_rate_percentage: StrictStr
-    __properties: ClassVar[List[str]] = [
-        "simulator", "num_tasks", "tasks_simulator_cost",
-        "success_rate_percentage"
-    ]
+    tasks_simulator_cost: Union[StrictFloat, StrictInt]
+    success_rate_percentage: Union[StrictFloat, StrictInt]
+    __properties: ClassVar[List[str]] = ["simulator", "num_tasks", "tasks_simulator_cost", "success_rate_percentage"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -67,7 +63,8 @@ class UserMostUsedSimulatorsOverview(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -92,3 +89,5 @@ class UserMostUsedSimulatorsOverview(BaseModel):
             "success_rate_percentage": obj.get("success_rate_percentage")
         })
         return _obj
+
+

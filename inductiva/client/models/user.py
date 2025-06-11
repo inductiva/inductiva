@@ -11,51 +11,44 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional, Union
 from inductiva.client.models.currency_code import CurrencyCode
 from inductiva.client.models.terms_and_conditions import TermsAndConditions
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class User(BaseModel):
     """
     User
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     email: StrictStr
     username: StrictStr
     name: Optional[StrictStr] = None
     organization: Optional[StrictStr] = None
     tier: StrictStr
-    total_available_credits: StrictStr
+    total_available_credits: Union[StrictFloat, StrictInt]
     credits_currency: Optional[CurrencyCode] = None
     terms_and_conditions_decision: TermsAndConditions
     terms_and_conditions_decision_ts: Optional[datetime] = None
     registration_ts: datetime
-    costs_fee_percentage: StrictStr
-    terminate_resources_credits_threshold: StrictStr
-    __properties: ClassVar[List[str]] = [
-        "email", "username", "name", "organization", "tier",
-        "total_available_credits", "credits_currency",
-        "terms_and_conditions_decision", "terms_and_conditions_decision_ts",
-        "registration_ts", "costs_fee_percentage",
-        "terminate_resources_credits_threshold"
-    ]
+    costs_fee_percentage: Union[StrictFloat, StrictInt]
+    terminate_resources_credits_threshold: Union[StrictFloat, StrictInt]
+    __properties: ClassVar[List[str]] = ["email", "username", "name", "organization", "tier", "total_available_credits", "credits_currency", "terms_and_conditions_decision", "terms_and_conditions_decision_ts", "registration_ts", "costs_fee_percentage", "terminate_resources_credits_threshold"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -81,7 +74,8 @@ class User(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -115,29 +109,19 @@ class User(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "email":
-                obj.get("email"),
-            "username":
-                obj.get("username"),
-            "name":
-                obj.get("name"),
-            "organization":
-                obj.get("organization"),
-            "tier":
-                obj.get("tier"),
-            "total_available_credits":
-                obj.get("total_available_credits"),
-            "credits_currency":
-                obj.get("credits_currency"),
-            "terms_and_conditions_decision":
-                obj.get("terms_and_conditions_decision"),
-            "terms_and_conditions_decision_ts":
-                obj.get("terms_and_conditions_decision_ts"),
-            "registration_ts":
-                obj.get("registration_ts"),
-            "costs_fee_percentage":
-                obj.get("costs_fee_percentage"),
-            "terminate_resources_credits_threshold":
-                obj.get("terminate_resources_credits_threshold")
+            "email": obj.get("email"),
+            "username": obj.get("username"),
+            "name": obj.get("name"),
+            "organization": obj.get("organization"),
+            "tier": obj.get("tier"),
+            "total_available_credits": obj.get("total_available_credits"),
+            "credits_currency": obj.get("credits_currency"),
+            "terms_and_conditions_decision": obj.get("terms_and_conditions_decision"),
+            "terms_and_conditions_decision_ts": obj.get("terms_and_conditions_decision_ts"),
+            "registration_ts": obj.get("registration_ts"),
+            "costs_fee_percentage": obj.get("costs_fee_percentage"),
+            "terminate_resources_credits_threshold": obj.get("terminate_resources_credits_threshold")
         })
         return _obj
+
+

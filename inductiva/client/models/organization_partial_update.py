@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -24,29 +25,24 @@ from inductiva.client.models.org_status import OrgStatus
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class OrganizationPartialUpdate(BaseModel):
     """
     OrganizationPartialUpdate
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     identity_provider_id: Optional[StrictStr] = None
     name: Optional[StrictStr] = None
     tier: Optional[StrictStr] = None
     status: Optional[OrgStatus] = None
     creation_ts: Optional[datetime] = None
     credits_boost_percentage: Optional[CreditsBoostPercentage] = None
-    __properties: ClassVar[List[str]] = [
-        "identity_provider_id", "name", "tier", "status", "creation_ts",
-        "credits_boost_percentage"
-    ]
+    __properties: ClassVar[List[str]] = ["identity_provider_id", "name", "tier", "status", "creation_ts", "credits_boost_percentage"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -72,7 +68,8 @@ class OrganizationPartialUpdate(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -81,9 +78,7 @@ class OrganizationPartialUpdate(BaseModel):
         )
         # override the default output from pydantic by calling `to_dict()` of credits_boost_percentage
         if self.credits_boost_percentage:
-            _dict[
-                'credits_boost_percentage'] = self.credits_boost_percentage.to_dict(
-                )
+            _dict['credits_boost_percentage'] = self.credits_boost_percentage.to_dict()
         # set to None if identity_provider_id (nullable) is None
         # and model_fields_set contains the field
         if self.identity_provider_id is None and "identity_provider_id" in self.model_fields_set:
@@ -126,19 +121,13 @@ class OrganizationPartialUpdate(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "identity_provider_id":
-                obj.get("identity_provider_id"),
-            "name":
-                obj.get("name"),
-            "tier":
-                obj.get("tier"),
-            "status":
-                obj.get("status"),
-            "creation_ts":
-                obj.get("creation_ts"),
-            "credits_boost_percentage":
-                CreditsBoostPercentage.from_dict(
-                    obj["credits_boost_percentage"])
-                if obj.get("credits_boost_percentage") is not None else None
+            "identity_provider_id": obj.get("identity_provider_id"),
+            "name": obj.get("name"),
+            "tier": obj.get("tier"),
+            "status": obj.get("status"),
+            "creation_ts": obj.get("creation_ts"),
+            "credits_boost_percentage": CreditsBoostPercentage.from_dict(obj["credits_boost_percentage"]) if obj.get("credits_boost_percentage") is not None else None
         })
         return _obj
+
+

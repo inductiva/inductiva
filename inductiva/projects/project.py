@@ -175,7 +175,7 @@ class Project:
 
         Computed as the sum of the estimated computation cost of each task.
         """
-        return decimal.Decimal(self._proj_data.estimated_computation_cost)
+        return self._proj_data.estimated_computation_cost
 
     def __str__(self) -> str:
         formatted_cost = format_utils.currency_formatter(

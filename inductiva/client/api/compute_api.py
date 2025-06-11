@@ -44,16 +44,19 @@ class ComputeApi:
             api_client = ApiClient.get_default()
         self.api_client = api_client
 
+
     @validate_call
     def delete_vm_group(
         self,
         machine_group_id: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -92,30 +95,36 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '202': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def delete_vm_group_with_http_info(
         self,
         machine_group_id: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -154,30 +163,36 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '202': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def delete_vm_group_without_preload_content(
         self,
         machine_group_id: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -216,15 +231,19 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '202': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _delete_vm_group_serialize(
         self,
@@ -237,33 +256,42 @@ class ComputeApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
         # process the query parameters
         if machine_group_id is not None:
-
+            
             _query_params.append(('machine_group_id', machine_group_id))
-
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
+
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='DELETE',
@@ -277,7 +305,11 @@ class ComputeApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def get_instance_price(
@@ -285,12 +317,14 @@ class ComputeApi:
         machine_type: StrictStr,
         provider_id: Optional[Providers] = None,
         zone: Optional[StrictStr] = None,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -328,25 +362,30 @@ class ComputeApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_instance_price_serialize(machine_type=machine_type,
-                                                    provider_id=provider_id,
-                                                    zone=zone,
-                                                    _request_auth=_request_auth,
-                                                    _content_type=_content_type,
-                                                    _headers=_headers,
-                                                    _host_index=_host_index)
+        _param = self._get_instance_price_serialize(
+            machine_type=machine_type,
+            provider_id=provider_id,
+            zone=zone,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
+
 
     @validate_call
     def get_instance_price_with_http_info(
@@ -354,12 +393,14 @@ class ComputeApi:
         machine_type: StrictStr,
         provider_id: Optional[Providers] = None,
         zone: Optional[StrictStr] = None,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -397,25 +438,30 @@ class ComputeApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_instance_price_serialize(machine_type=machine_type,
-                                                    provider_id=provider_id,
-                                                    zone=zone,
-                                                    _request_auth=_request_auth,
-                                                    _content_type=_content_type,
-                                                    _headers=_headers,
-                                                    _host_index=_host_index)
+        _param = self._get_instance_price_serialize(
+            machine_type=machine_type,
+            provider_id=provider_id,
+            zone=zone,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
+
 
     @validate_call
     def get_instance_price_without_preload_content(
@@ -423,12 +469,14 @@ class ComputeApi:
         machine_type: StrictStr,
         provider_id: Optional[Providers] = None,
         zone: Optional[StrictStr] = None,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -466,21 +514,26 @@ class ComputeApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_instance_price_serialize(machine_type=machine_type,
-                                                    provider_id=provider_id,
-                                                    zone=zone,
-                                                    _request_auth=_request_auth,
-                                                    _content_type=_content_type,
-                                                    _headers=_headers,
-                                                    _host_index=_host_index)
+        _param = self._get_instance_price_serialize(
+            machine_type=machine_type,
+            provider_id=provider_id,
+            zone=zone,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _get_instance_price_serialize(
         self,
@@ -495,41 +548,50 @@ class ComputeApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
         # process the query parameters
         if machine_type is not None:
-
+            
             _query_params.append(('machine_type', machine_type))
-
+            
         if provider_id is not None:
-
+            
             _query_params.append(('provider_id', provider_id.value))
-
+            
         if zone is not None:
-
+            
             _query_params.append(('zone', zone))
-
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
+
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='GET',
@@ -543,18 +605,24 @@ class ComputeApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def get_vm_group_by_name(
         self,
         name: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -592,30 +660,36 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "VMGroupConfig",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def get_vm_group_by_name_with_http_info(
         self,
         name: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -653,30 +727,36 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "VMGroupConfig",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def get_vm_group_by_name_without_preload_content(
         self,
         name: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -714,15 +794,19 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "VMGroupConfig",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _get_vm_group_by_name_serialize(
         self,
@@ -735,14 +819,16 @@ class ComputeApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -753,13 +839,20 @@ class ComputeApi:
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
+
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='GET',
@@ -773,17 +866,23 @@ class ComputeApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def list_active_user_instance_groups(
         self,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -819,28 +918,34 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[VMGroupConfig]",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def list_active_user_instance_groups_with_http_info(
         self,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -876,28 +981,34 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[VMGroupConfig]",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def list_active_user_instance_groups_without_preload_content(
         self,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -933,14 +1044,18 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[VMGroupConfig]",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _list_active_user_instance_groups_serialize(
         self,
@@ -952,14 +1067,16 @@ class ComputeApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -968,13 +1085,20 @@ class ComputeApi:
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
+
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='GET',
@@ -988,33 +1112,33 @@ class ComputeApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def list_available_machine_types(
         self,
         machine_families: Optional[List[StrictStr]] = None,
         machine_configs: Optional[List[StrictStr]] = None,
-        vcpus_range: Optional[Annotated[
-            List[Optional[StrictInt]],
-            Field(min_length=2, max_length=2)]] = None,
-        memory_range: Optional[Annotated[
-            List[StrictInt], Field(min_length=2, max_length=2)]] = None,
-        price_range: Optional[Annotated[
-            List[Union[StrictFloat, StrictInt]],
-            Field(min_length=2, max_length=2)]] = None,
+        vcpus_range: Optional[Annotated[List[Optional[StrictInt]], Field(min_length=2, max_length=2)]] = None,
+        memory_range: Optional[Annotated[List[StrictInt], Field(min_length=2, max_length=2)]] = None,
+        price_range: Optional[Annotated[List[Union[StrictFloat, StrictInt]], Field(min_length=2, max_length=2)]] = None,
         spot: Optional[Any] = None,
-        gpus_range: Optional[Annotated[
-            List[StrictInt], Field(min_length=2, max_length=2)]] = None,
+        gpus_range: Optional[Annotated[List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
         zones: Optional[List[StrictStr]] = None,
         provider_id: Optional[Providers] = None,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1080,45 +1204,45 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[MachineType]",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def list_available_machine_types_with_http_info(
         self,
         machine_families: Optional[List[StrictStr]] = None,
         machine_configs: Optional[List[StrictStr]] = None,
-        vcpus_range: Optional[Annotated[
-            List[Optional[StrictInt]],
-            Field(min_length=2, max_length=2)]] = None,
-        memory_range: Optional[Annotated[
-            List[StrictInt], Field(min_length=2, max_length=2)]] = None,
-        price_range: Optional[Annotated[
-            List[Union[StrictFloat, StrictInt]],
-            Field(min_length=2, max_length=2)]] = None,
+        vcpus_range: Optional[Annotated[List[Optional[StrictInt]], Field(min_length=2, max_length=2)]] = None,
+        memory_range: Optional[Annotated[List[StrictInt], Field(min_length=2, max_length=2)]] = None,
+        price_range: Optional[Annotated[List[Union[StrictFloat, StrictInt]], Field(min_length=2, max_length=2)]] = None,
         spot: Optional[Any] = None,
-        gpus_range: Optional[Annotated[
-            List[StrictInt], Field(min_length=2, max_length=2)]] = None,
+        gpus_range: Optional[Annotated[List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
         zones: Optional[List[StrictStr]] = None,
         provider_id: Optional[Providers] = None,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1184,45 +1308,45 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[MachineType]",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def list_available_machine_types_without_preload_content(
         self,
         machine_families: Optional[List[StrictStr]] = None,
         machine_configs: Optional[List[StrictStr]] = None,
-        vcpus_range: Optional[Annotated[
-            List[Optional[StrictInt]],
-            Field(min_length=2, max_length=2)]] = None,
-        memory_range: Optional[Annotated[
-            List[StrictInt], Field(min_length=2, max_length=2)]] = None,
-        price_range: Optional[Annotated[
-            List[Union[StrictFloat, StrictInt]],
-            Field(min_length=2, max_length=2)]] = None,
+        vcpus_range: Optional[Annotated[List[Optional[StrictInt]], Field(min_length=2, max_length=2)]] = None,
+        memory_range: Optional[Annotated[List[StrictInt], Field(min_length=2, max_length=2)]] = None,
+        price_range: Optional[Annotated[List[Union[StrictFloat, StrictInt]], Field(min_length=2, max_length=2)]] = None,
         spot: Optional[Any] = None,
-        gpus_range: Optional[Annotated[
-            List[StrictInt], Field(min_length=2, max_length=2)]] = None,
+        gpus_range: Optional[Annotated[List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
         zones: Optional[List[StrictStr]] = None,
         provider_id: Optional[Providers] = None,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1288,15 +1412,19 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[MachineType]",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _list_available_machine_types_serialize(
         self,
@@ -1333,63 +1461,71 @@ class ComputeApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
         # process the query parameters
         if machine_families is not None:
-
+            
             _query_params.append(('machine_families', machine_families))
-
+            
         if machine_configs is not None:
-
+            
             _query_params.append(('machine_configs', machine_configs))
-
+            
         if vcpus_range is not None:
-
+            
             _query_params.append(('vcpus_range', vcpus_range))
-
+            
         if memory_range is not None:
-
+            
             _query_params.append(('memory_range', memory_range))
-
+            
         if price_range is not None:
-
+            
             _query_params.append(('price_range', price_range))
-
+            
         if spot is not None:
-
+            
             _query_params.append(('spot', spot))
-
+            
         if gpus_range is not None:
-
+            
             _query_params.append(('gpus_range', gpus_range))
-
+            
         if gpu_names is not None:
-
+            
             _query_params.append(('gpu_names', gpu_names))
-
+            
         if zones is not None:
-
+            
             _query_params.append(('zones', zones))
-
+            
         if provider_id is not None:
-
+            
             _query_params.append(('provider_id', provider_id.value))
-
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
+
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='GET',
@@ -1403,25 +1539,30 @@ class ComputeApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def list_user_instance_groups(
         self,
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
-        per_page: Optional[Annotated[int,
-                                     Field(le=500, strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int, Field(le=500, strict=True, ge=1)]] = None,
         created_before: Optional[datetime] = None,
         created_after: Optional[datetime] = None,
         project: Optional[StrictStr] = None,
         non_active_only: Optional[StrictBool] = None,
         provider_id: Optional[Providers] = None,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1478,37 +1619,42 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[MachineGroupWithCosts]",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def list_user_instance_groups_with_http_info(
         self,
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
-        per_page: Optional[Annotated[int,
-                                     Field(le=500, strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int, Field(le=500, strict=True, ge=1)]] = None,
         created_before: Optional[datetime] = None,
         created_after: Optional[datetime] = None,
         project: Optional[StrictStr] = None,
         non_active_only: Optional[StrictBool] = None,
         provider_id: Optional[Providers] = None,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1565,37 +1711,42 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[MachineGroupWithCosts]",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def list_user_instance_groups_without_preload_content(
         self,
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
-        per_page: Optional[Annotated[int,
-                                     Field(le=500, strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int, Field(le=500, strict=True, ge=1)]] = None,
         created_before: Optional[datetime] = None,
         created_after: Optional[datetime] = None,
         project: Optional[StrictStr] = None,
         non_active_only: Optional[StrictBool] = None,
         provider_id: Optional[Providers] = None,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1652,15 +1803,19 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[MachineGroupWithCosts]",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _list_user_instance_groups_serialize(
         self,
@@ -1679,67 +1834,84 @@ class ComputeApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
         # process the query parameters
         if page is not None:
-
+            
             _query_params.append(('page', page))
-
+            
         if per_page is not None:
-
+            
             _query_params.append(('per_page', per_page))
-
+            
         if created_before is not None:
             if isinstance(created_before, datetime):
                 _query_params.append(
-                    ('created_before',
-                     created_before.strftime(
-                         self.api_client.configuration.datetime_format)))
+                    (
+                        'created_before',
+                        created_before.strftime(
+                            self.api_client.configuration.datetime_format
+                        )
+                    )
+                )
             else:
                 _query_params.append(('created_before', created_before))
-
+            
         if created_after is not None:
             if isinstance(created_after, datetime):
                 _query_params.append(
-                    ('created_after',
-                     created_after.strftime(
-                         self.api_client.configuration.datetime_format)))
+                    (
+                        'created_after',
+                        created_after.strftime(
+                            self.api_client.configuration.datetime_format
+                        )
+                    )
+                )
             else:
                 _query_params.append(('created_after', created_after))
-
+            
         if project is not None:
-
+            
             _query_params.append(('project', project))
-
+            
         if non_active_only is not None:
-
+            
             _query_params.append(('non_active_only', non_active_only))
-
+            
         if provider_id is not None:
-
+            
             _query_params.append(('provider_id', provider_id.value))
-
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
+
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='GET',
@@ -1753,18 +1925,24 @@ class ComputeApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def register_vm_group(
         self,
         register_vm_group_request: RegisterVMGroupRequest,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1803,30 +1981,36 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '201': "VMGroupConfig",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def register_vm_group_with_http_info(
         self,
         register_vm_group_request: RegisterVMGroupRequest,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1865,30 +2049,36 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '201': "VMGroupConfig",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def register_vm_group_without_preload_content(
         self,
         register_vm_group_request: RegisterVMGroupRequest,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1927,15 +2117,19 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '201': "VMGroupConfig",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _register_vm_group_serialize(
         self,
@@ -1948,14 +2142,16 @@ class ComputeApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -1966,22 +2162,33 @@ class ComputeApi:
         if register_vm_group_request is not None:
             _body_params = register_vm_group_request
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
 
         # set the HTTP header `Content-Type`
         if _content_type:
             _header_params['Content-Type'] = _content_type
         else:
-            _default_content_type = (self.api_client.select_header_content_type(
-                ['application/json']))
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
             if _default_content_type is not None:
                 _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='POST',
@@ -1995,18 +2202,24 @@ class ComputeApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def start_vm_group(
         self,
         machine_group_id: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2045,30 +2258,36 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def start_vm_group_with_http_info(
         self,
         machine_group_id: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2107,30 +2326,36 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def start_vm_group_without_preload_content(
         self,
         machine_group_id: StrictStr,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2169,15 +2394,19 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _start_vm_group_serialize(
         self,
@@ -2190,33 +2419,42 @@ class ComputeApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
         # process the query parameters
         if machine_group_id is not None:
-
+            
             _query_params.append(('machine_group_id', machine_group_id))
-
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
+
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='POST',
@@ -2230,19 +2468,25 @@ class ComputeApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+
+
 
     @validate_call
     def update_sharing_level_of_vm_group(
         self,
         machine_group_id: StrictStr,
         sharing_level: SharingLevel,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2284,31 +2528,37 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '204': None,
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
+
     @validate_call
     def update_sharing_level_of_vm_group_with_http_info(
         self,
         machine_group_id: StrictStr,
         sharing_level: SharingLevel,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2350,31 +2600,37 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '204': None,
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
+
     @validate_call
     def update_sharing_level_of_vm_group_without_preload_content(
         self,
         machine_group_id: StrictStr,
         sharing_level: SharingLevel,
-        _request_timeout: Union[None, Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                Tuple[Annotated[StrictFloat,
-                                                Field(gt=0)],
-                                      Annotated[StrictFloat,
-                                                Field(gt=0)]]] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2416,15 +2672,19 @@ class ComputeApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index)
+            _host_index=_host_index
+        )
 
         _response_types_map: Dict[str, Optional[str]] = {
             '204': None,
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param, _request_timeout=_request_timeout)
+            *_param,
+            _request_timeout=_request_timeout
+        )
         return response_data.response
+
 
     def _update_sharing_level_of_vm_group_serialize(
         self,
@@ -2438,14 +2698,16 @@ class ComputeApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
-                                List[Tuple[str, bytes]]]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -2453,20 +2715,27 @@ class ComputeApi:
             _path_params['machine_group_id'] = machine_group_id
         # process the query parameters
         if sharing_level is not None:
-
+            
             _query_params.append(('sharing_level', sharing_level.value))
-
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
 
+
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                ['application/json'])
+                [
+                    'application/json'
+                ]
+            )
+
 
         # authentication setting
-        _auth_settings: List[str] = ['APIKeyHeader']
+        _auth_settings: List[str] = [
+            'APIKeyHeader'
+        ]
 
         return self.api_client.param_serialize(
             method='PUT',
@@ -2480,4 +2749,7 @@ class ComputeApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth)
+            _request_auth=_request_auth
+        )
+
+

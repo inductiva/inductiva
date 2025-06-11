@@ -18,24 +18,20 @@ from enum import Enum
 from typing_extensions import Self
 
 
-class MachineGroupStatus(str, Enum):
+class SelectMode(str, Enum):
     """
-    MachineGroupStatus
+    Enumeration of supported data selection modes, specifying which data  should be included in the project's tasks info.
     """
 
     """
     allowed enum values
     """
-    REGISTERED = 'registered'
-    STARTING = 'starting'
-    STARTED = 'started'
-    SHUTTING_DOWN = 'shutting_down'
-    SHUTDOWN_FAILED = 'shutdown_failed'
-    TERMINATED = 'terminated'
+    ALL = 'all'
+    DISTINCT = 'distinct'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of MachineGroupStatus from a JSON string"""
+        """Create an instance of SelectMode from a JSON string"""
         return cls(json.loads(json_str))
 
 

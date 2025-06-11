@@ -14,17 +14,12 @@
 from typing import Any, Optional
 from typing_extensions import Self
 
-
 class OpenApiException(Exception):
     """The base exception class for all OpenAPIExceptions"""
 
 
 class ApiTypeError(OpenApiException, TypeError):
-
-    def __init__(self,
-                 msg,
-                 path_to_item=None,
-                 valid_classes=None,
+    def __init__(self, msg, path_to_item=None, valid_classes=None,
                  key_type=None) -> None:
         """ Raises an exception for TypeErrors
 
@@ -53,7 +48,6 @@ class ApiTypeError(OpenApiException, TypeError):
 
 
 class ApiValueError(OpenApiException, ValueError):
-
     def __init__(self, msg, path_to_item=None) -> None:
         """
         Args:
@@ -72,7 +66,6 @@ class ApiValueError(OpenApiException, ValueError):
 
 
 class ApiAttributeError(OpenApiException, AttributeError):
-
     def __init__(self, msg, path_to_item=None) -> None:
         """
         Raised when an attribute reference or assignment fails.
@@ -92,7 +85,6 @@ class ApiAttributeError(OpenApiException, AttributeError):
 
 
 class ApiKeyError(OpenApiException, KeyError):
-
     def __init__(self, msg, path_to_item=None) -> None:
         """
         Args:
@@ -112,9 +104,9 @@ class ApiKeyError(OpenApiException, KeyError):
 class ApiException(OpenApiException):
 
     def __init__(
-        self,
-        status=None,
-        reason=None,
+        self, 
+        status=None, 
+        reason=None, 
         http_resp=None,
         *,
         body: Optional[str] = None,
@@ -140,19 +132,17 @@ class ApiException(OpenApiException):
 
     @classmethod
     def from_response(
-        cls,
-        *,
-        http_resp,
-        body: Optional[str],
+        cls, 
+        *, 
+        http_resp, 
+        body: Optional[str], 
         data: Optional[Any],
     ) -> Self:
         if http_resp.status == 400:
             raise BadRequestException(http_resp=http_resp, body=body, data=data)
 
         if http_resp.status == 401:
-            raise UnauthorizedException(http_resp=http_resp,
-                                        body=body,
-                                        data=data)
+            raise UnauthorizedException(http_resp=http_resp, body=body, data=data)
 
         if http_resp.status == 403:
             raise ForbiddenException(http_resp=http_resp, body=body, data=data)
@@ -165,9 +155,7 @@ class ApiException(OpenApiException):
             raise ConflictException(http_resp=http_resp, body=body, data=data)
 
         if http_resp.status == 422:
-            raise UnprocessableEntityException(http_resp=http_resp,
-                                               body=body,
-                                               data=data)
+            raise UnprocessableEntityException(http_resp=http_resp, body=body, data=data)
 
         if 500 <= http_resp.status <= 599:
             raise ServiceException(http_resp=http_resp, body=body, data=data)
@@ -178,11 +166,11 @@ class ApiException(OpenApiException):
         error_message = "({0})\n"\
                         "Reason: {1}\n".format(self.status, self.reason)
         if self.headers:
-            error_message += "HTTP response headers: {0}\n".format(self.headers)
+            error_message += "HTTP response headers: {0}\n".format(
+                self.headers)
 
         if self.data or self.body:
-            error_message += "HTTP response body: {0}\n".format(self.data or
-                                                                self.body)
+            error_message += "HTTP response body: {0}\n".format(self.data or self.body)
 
         return error_message
 

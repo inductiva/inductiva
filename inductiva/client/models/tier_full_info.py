@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -23,28 +24,24 @@ from inductiva.client.models.tier_quota_detail import TierQuotaDetail
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class TierFullInfo(BaseModel):
     """
     TierFullInfo
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     id: StrictStr
     label: StrictStr
     begin_date: datetime
     end_date: datetime
     capabilities: List[Dict[str, StrictStr]]
     quotas: List[TierQuotaDetail]
-    __properties: ClassVar[List[str]] = [
-        "id", "label", "begin_date", "end_date", "capabilities", "quotas"
-    ]
+    __properties: ClassVar[List[str]] = ["id", "label", "begin_date", "end_date", "capabilities", "quotas"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -70,7 +67,8 @@ class TierFullInfo(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -96,18 +94,13 @@ class TierFullInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "id":
-                obj.get("id"),
-            "label":
-                obj.get("label"),
-            "begin_date":
-                obj.get("begin_date"),
-            "end_date":
-                obj.get("end_date"),
-            "capabilities":
-                obj.get("capabilities"),
-            "quotas": [
-                TierQuotaDetail.from_dict(_item) for _item in obj["quotas"]
-            ] if obj.get("quotas") is not None else None
+            "id": obj.get("id"),
+            "label": obj.get("label"),
+            "begin_date": obj.get("begin_date"),
+            "end_date": obj.get("end_date"),
+            "capabilities": obj.get("capabilities"),
+            "quotas": [TierQuotaDetail.from_dict(_item) for _item in obj["quotas"]] if obj.get("quotas") is not None else None
         })
         return _obj
+
+

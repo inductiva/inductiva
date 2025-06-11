@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -22,13 +23,10 @@ from inductiva.client.models.providers import Providers
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class MachineType(BaseModel):
     """
     MachineType
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     machine_type: StrictStr
     num_vcpus: StrictInt
     ram_gb: Union[StrictFloat, StrictInt]
@@ -40,16 +38,14 @@ class MachineType(BaseModel):
     zone: Optional[StrictStr] = None
     num_gpus: Optional[StrictInt] = None
     gpu_name: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = [
-        "machine_type", "num_vcpus", "ram_gb", "price", "provider_id",
-        "threads_per_core", "spot", "region", "zone", "num_gpus", "gpu_name"
-    ]
+    __properties: ClassVar[List[str]] = ["machine_type", "num_vcpus", "ram_gb", "price", "provider_id", "threads_per_core", "spot", "region", "zone", "num_gpus", "gpu_name"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -75,7 +71,8 @@ class MachineType(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -137,3 +134,5 @@ class MachineType(BaseModel):
             "gpu_name": obj.get("gpu_name")
         })
         return _obj
+
+

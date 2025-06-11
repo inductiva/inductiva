@@ -11,37 +11,34 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr
-from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List, Union
 from typing import Optional, Set
 from typing_extensions import Self
-
 
 class TierQuotaDetail(BaseModel):
     """
     TierQuotaDetail
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     id: StrictStr
-    value: StrictStr
+    value: Union[StrictFloat, StrictInt]
     label: StrictStr
     unit: StrictStr
     scope: StrictStr
-    __properties: ClassVar[List[str]] = [
-        "id", "value", "label", "unit", "scope"
-    ]
+    __properties: ClassVar[List[str]] = ["id", "value", "label", "unit", "scope"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -67,7 +64,8 @@ class TierQuotaDetail(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -93,3 +91,5 @@ class TierQuotaDetail(BaseModel):
             "scope": obj.get("scope")
         })
         return _obj
+
+

@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -21,26 +22,22 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class TaskConnection(BaseModel):
     """
     TaskConnection
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     sender_id: StrictStr
     receiver_id: Optional[StrictStr] = None
     type: Optional[StrictStr] = None
     sdp: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = [
-        "sender_id", "receiver_id", "type", "sdp"
-    ]
+    __properties: ClassVar[List[str]] = ["sender_id", "receiver_id", "type", "sdp"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -66,7 +63,8 @@ class TaskConnection(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -106,3 +104,5 @@ class TaskConnection(BaseModel):
             "sdp": obj.get("sdp")
         })
         return _obj
+
+

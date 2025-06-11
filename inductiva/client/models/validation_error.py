@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -22,13 +23,10 @@ from inductiva.client.models.validation_error_loc_inner import ValidationErrorLo
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class ValidationError(BaseModel):
     """
     ValidationError
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     loc: List[ValidationErrorLocInner]
     msg: StrictStr
     type: StrictStr
@@ -39,6 +37,7 @@ class ValidationError(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -64,7 +63,8 @@ class ValidationError(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -90,12 +90,10 @@ class ValidationError(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "loc": [
-                ValidationErrorLocInner.from_dict(_item) for _item in obj["loc"]
-            ] if obj.get("loc") is not None else None,
-            "msg":
-                obj.get("msg"),
-            "type":
-                obj.get("type")
+            "loc": [ValidationErrorLocInner.from_dict(_item) for _item in obj["loc"]] if obj.get("loc") is not None else None,
+            "msg": obj.get("msg"),
+            "type": obj.get("type")
         })
         return _obj
+
+

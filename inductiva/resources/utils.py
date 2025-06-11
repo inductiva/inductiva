@@ -121,9 +121,8 @@ def estimate_machine_cost(machine_type: str,
                                             zone=zone)
 
     if spot:
-        estimated_cost = decimal.Decimal(
-            instance_price.get("preemptible_price"))
+        estimated_cost = instance_price.get("preemptible_price")
     else:
-        estimated_cost = decimal.Decimal(instance_price.get("on_demand_price"))
+        estimated_cost = instance_price.get("on_demand_price")
 
     return float(estimated_cost)

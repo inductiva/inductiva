@@ -13,6 +13,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 __version__ = "1.0.0"
 
 # import apis into sdk package
@@ -47,6 +48,7 @@ from inductiva.client.models.amount import Amount
 from inductiva.client.models.autoscale_policy import AutoscalePolicy
 from inductiva.client.models.available_simulator_versions import AvailableSimulatorVersions
 from inductiva.client.models.backend_version import BackendVersion
+from inductiva.client.models.bucket import Bucket
 from inductiva.client.models.cpu_info import CPUInfo
 from inductiva.client.models.capability import Capability
 from inductiva.client.models.compression_method import CompressionMethod
@@ -104,6 +106,7 @@ from inductiva.client.models.providers import Providers
 from inductiva.client.models.quota import Quota
 from inductiva.client.models.quota_scope import QuotaScope
 from inductiva.client.models.register_vm_group_request import RegisterVMGroupRequest
+from inductiva.client.models.select_mode import SelectMode
 from inductiva.client.models.sharing_level import SharingLevel
 from inductiva.client.models.spot import Spot
 from inductiva.client.models.storage_cost import StorageCost

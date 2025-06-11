@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -22,13 +23,10 @@ from inductiva.client.models.machine_group_time_stat import MachineGroupTimeStat
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class MachineGroupUsageStatistics(BaseModel):
     """
     MachineGroupUsageStatistics
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     total_time: MachineGroupTimeStat
     task_time: MachineGroupTimeStat
     idle_time: MachineGroupTimeStat
@@ -39,6 +37,7 @@ class MachineGroupUsageStatistics(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -64,7 +63,8 @@ class MachineGroupUsageStatistics(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -92,14 +92,10 @@ class MachineGroupUsageStatistics(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "total_time":
-                MachineGroupTimeStat.from_dict(obj["total_time"])
-                if obj.get("total_time") is not None else None,
-            "task_time":
-                MachineGroupTimeStat.from_dict(obj["task_time"])
-                if obj.get("task_time") is not None else None,
-            "idle_time":
-                MachineGroupTimeStat.from_dict(obj["idle_time"])
-                if obj.get("idle_time") is not None else None
+            "total_time": MachineGroupTimeStat.from_dict(obj["total_time"]) if obj.get("total_time") is not None else None,
+            "task_time": MachineGroupTimeStat.from_dict(obj["task_time"]) if obj.get("task_time") is not None else None,
+            "idle_time": MachineGroupTimeStat.from_dict(obj["idle_time"]) if obj.get("idle_time") is not None else None
         })
         return _obj
+
+

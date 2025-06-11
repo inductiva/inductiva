@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -21,37 +22,29 @@ from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class UsageStatistics(BaseModel):
     """
     UsageStatistics
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     period: Optional[StrictStr] = None
     total_core_hours_failed: Optional[Union[StrictFloat, StrictInt]] = None
     total_core_hours: Optional[Union[StrictFloat, StrictInt]] = None
     total_tasks: Optional[StrictInt] = None
     total_failed_tasks: Optional[StrictInt] = None
     avg_total_tasks_duration: Optional[Union[StrictFloat, StrictInt]] = None
-    avg_computation_seconds_task_duration: Optional[Union[StrictFloat,
-                                                          StrictInt]] = None
+    avg_computation_seconds_task_duration: Optional[Union[StrictFloat, StrictInt]] = None
     success_rate: Optional[Union[StrictFloat, StrictInt]] = None
     avg_estimated_cost: Optional[Union[StrictFloat, StrictInt]] = None
     total_estimated_cost: Optional[Union[StrictFloat, StrictInt]] = None
     total_failed_cost: Optional[Union[StrictFloat, StrictInt]] = None
-    __properties: ClassVar[List[str]] = [
-        "period", "total_core_hours_failed", "total_core_hours", "total_tasks",
-        "total_failed_tasks", "avg_total_tasks_duration",
-        "avg_computation_seconds_task_duration", "success_rate",
-        "avg_estimated_cost", "total_estimated_cost", "total_failed_cost"
-    ]
+    __properties: ClassVar[List[str]] = ["period", "total_core_hours_failed", "total_core_hours", "total_tasks", "total_failed_tasks", "avg_total_tasks_duration", "avg_computation_seconds_task_duration", "success_rate", "avg_estimated_cost", "total_estimated_cost", "total_failed_cost"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -77,7 +70,8 @@ class UsageStatistics(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -151,27 +145,18 @@ class UsageStatistics(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "period":
-                obj.get("period"),
-            "total_core_hours_failed":
-                obj.get("total_core_hours_failed"),
-            "total_core_hours":
-                obj.get("total_core_hours"),
-            "total_tasks":
-                obj.get("total_tasks"),
-            "total_failed_tasks":
-                obj.get("total_failed_tasks"),
-            "avg_total_tasks_duration":
-                obj.get("avg_total_tasks_duration"),
-            "avg_computation_seconds_task_duration":
-                obj.get("avg_computation_seconds_task_duration"),
-            "success_rate":
-                obj.get("success_rate"),
-            "avg_estimated_cost":
-                obj.get("avg_estimated_cost"),
-            "total_estimated_cost":
-                obj.get("total_estimated_cost"),
-            "total_failed_cost":
-                obj.get("total_failed_cost")
+            "period": obj.get("period"),
+            "total_core_hours_failed": obj.get("total_core_hours_failed"),
+            "total_core_hours": obj.get("total_core_hours"),
+            "total_tasks": obj.get("total_tasks"),
+            "total_failed_tasks": obj.get("total_failed_tasks"),
+            "avg_total_tasks_duration": obj.get("avg_total_tasks_duration"),
+            "avg_computation_seconds_task_duration": obj.get("avg_computation_seconds_task_duration"),
+            "success_rate": obj.get("success_rate"),
+            "avg_estimated_cost": obj.get("avg_estimated_cost"),
+            "total_estimated_cost": obj.get("total_estimated_cost"),
+            "total_failed_cost": obj.get("total_failed_cost")
         })
         return _obj
+
+

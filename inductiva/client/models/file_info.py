@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -22,29 +23,24 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class FileInfo(BaseModel):
     """
     FileInfo
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     name: StrictStr
     size: Optional[StrictInt] = None
     compressed_size: Optional[StrictInt] = None
     range_start: Optional[StrictInt] = None
     creation_time: Optional[datetime] = None
     compress_type: Optional[StrictInt] = None
-    __properties: ClassVar[List[str]] = [
-        "name", "size", "compressed_size", "range_start", "creation_time",
-        "compress_type"
-    ]
+    __properties: ClassVar[List[str]] = ["name", "size", "compressed_size", "range_start", "creation_time", "compress_type"]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -70,7 +66,8 @@ class FileInfo(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -122,3 +119,5 @@ class FileInfo(BaseModel):
             "compress_type": obj.get("compress_type")
         })
         return _obj
+
+

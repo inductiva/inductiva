@@ -11,6 +11,7 @@
     Do not edit the class manually.
 """  # noqa: E501
 
+
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -22,13 +23,10 @@ from inductiva.client.models.trigger_task_type import TriggerTaskType
 from typing import Optional, Set
 from typing_extensions import Self
 
-
 class TriggerTaskCreate(BaseModel):
     """
     TriggerTaskCreate
-    """
-
-  # noqa: E501
+    """ # noqa: E501
     trigger_type: StrictStr
     task_id: StrictStr
     trigger: TriggerTaskType
@@ -46,6 +44,7 @@ class TriggerTaskCreate(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -71,7 +70,8 @@ class TriggerTaskCreate(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([])
+        excluded_fields: Set[str] = set([
+        ])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -95,3 +95,5 @@ class TriggerTaskCreate(BaseModel):
             "trigger": obj.get("trigger")
         })
         return _obj
+
+
