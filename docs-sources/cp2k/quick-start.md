@@ -31,7 +31,7 @@ cp2k = inductiva.simulators.CP2K(
 
 # Run simulation
 task = cp2k.run( 
-    input_dir="/Path/to/H2O-64",
+    input_dir="/Path/to/H2O-64", 
     sim_config_filename="H2O-64.inp",
     on=cloud_machine)
 
@@ -44,11 +44,13 @@ task.download_outputs()
 task.print_summary()
 ```
 
-In this example, we will run the simulation on a virtual machine with 16
-vCPUs, supported by a 4th generation AMD EPYC™ (Genoa) processor.
+In this basic example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs. 
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
+a machine with more virtual CPUs or one equipped with GPUs. You can explore the full range of available 
+machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: `spot` machines are available at substantial discounts, but your simulation job may be preempted if
-> the Cloud provider reclaims the spot machine.
+> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other CP2K simulations, replace `input_dir` with the
 path to your CP2K input files and set the `sim_config_filename` accordingly.

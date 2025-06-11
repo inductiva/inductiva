@@ -38,8 +38,13 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: `spot` machines are available at substantial discounts, but your simulation job may be preempted if
-> the Cloud provider reclaims the spot machine.
+In this basic example, we're using a cloud machine (`g2-standard-4`) equipped with 4 virtual CPUs and an NVIDIA L4 GPU. 
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
+a more powerful GPU machine. You can explore the full range of available 
+machines [here](https://console.inductiva.ai/machine-groups/instance-types).
+
+> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other GX simulations, replace `input_dir` with the
 path to your GX input files and set the `sim_config_filename` accordingly.

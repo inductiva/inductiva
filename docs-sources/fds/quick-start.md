@@ -39,8 +39,8 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: `spot` machines are available at substantial discounts, but your simulation job may be preempted if
-> the Cloud provider reclaims the spot machine.
+> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 Since FDS requires separate mesh setups for each processor, you will need to specify the number of cores (`n_vcpus`) for your simulation. FDS does not automatically assign cores, so it's crucial to configure this manually.
 

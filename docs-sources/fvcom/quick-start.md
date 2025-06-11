@@ -39,8 +39,8 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: `spot` machines are available at substantial discounts, but your simulation job may be preempted if
-> the Cloud provider reclaims the spot machine.
+> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other FVCOM simulations, replace `input_dir` with the
 path to your FVCOM input files and set the `case_name` accordingly.

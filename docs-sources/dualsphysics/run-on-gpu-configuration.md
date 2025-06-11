@@ -77,10 +77,11 @@ cloud_machine.terminate()
 task.print_summary()
 ```
 
-This simulation runs in spot mode on a `g2-standard-16` machine, featuring 16 virtual CPUs, 1 NVIDIA L4 GPU, and a 200 GB data disk.
+This simulation runs in spot mode on a `g2-standard-16` machine, featuring 16 virtual CPUs, 1 NVIDIA L4 GPU, 
+and a 200 GB data disk.
 
-> **Note**: `spot` machines are available at substantial discounts, but your simulation job may be preempted if
-> the Cloud provider reclaims the spot machine.
+> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 For visualization purposes, this script also optionally converts the simulation’s raw particle data 
 (stored as .vtk files) into mesh format (.obj), making it compatible with common visualization tools. 

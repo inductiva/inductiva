@@ -184,8 +184,8 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: `spot` machines are available at substantial discounts, but your simulation job may be preempted if
-> the Cloud provider reclaims the spot machine.
+> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 In this example, we're using a relatively small cloud machine (`c2-standard-4`), which is equipped with 4 virtual CPUs. 
 COAWST requires a precise core allocation for its simulations, meaning the number of CPUs must exactly match the simulation's configuration. 

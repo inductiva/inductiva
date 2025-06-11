@@ -3,6 +3,9 @@ This tutorial will simulate a flow over a cylinder case using AMR-Wind. This cla
 
 We will cover the `ib_cylinder_Re_300` use case from the test files folder of the [AMR-Wind GitHub repository](https://github.com/Exawind/amr-wind/tree/v3.4.0).
 
+We will also demonstrate Inductiva’s ability to efficiently scale this use case, starting with a cloud 
+machine equivalent to a typical laptop and then scaling up to a more powerful instance.
+
 <img src="_static/Re100.gif" alt="Demo Animation" width="400"/>  <img src="_static/Re10000.gif" alt="Demo Animation" width="400"/>
 
 ## Case Description
@@ -57,7 +60,7 @@ To improve the visibility of vortex shedding and optimize computational efficien
 + transport.viscosity = 1.0e-4   #Adjusted for Re = 1000
 ```
 
-* Adjusting the flow domain so that vortices are more visible, and  proportional modification is made on the mesh. Also, to reduce computation time, the mesh refinement is reduced from 2 levels to 1. 
+* Adjusting the flow domain so that vortices are more visible, and proportional modification is made on the mesh. Additionally, to reduce computation time, the mesh refinement is reduced from 2 levels to 1. 
 
 ```diff 
 - amr.n_cell     = 64 64 16   # Grid cells at coarsest AMRlevel
@@ -71,7 +74,7 @@ To improve the visibility of vortex shedding and optimize computational efficien
 + geometry.prob_hi        =    1.7  0.5  0.0625  
 ```
 
-* Associated modifications have to be performed on the `static_box.refine` file as well.  Here, we remove the 2nd level of mesh refinement to reduce computation time:
+* Associated modifications have to be performed on the `static_box.refine` file as well. Here, we remove the 2nd level of mesh refinement to reduce computation time:
 
 ```diff
 
@@ -115,10 +118,11 @@ task.print_summary()
 
 ```
 
-> **Note**: `spot` machines are available at substantial discounts, but your simulation job may be preempted if
-> the Cloud provider reclaims the spot machine.
+> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-In this example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs.
+In this example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs, comparable 
+in performance to a typical laptop.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
