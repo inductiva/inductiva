@@ -7,7 +7,6 @@ from typing import Optional, Union
 import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 from typing_extensions import Self
-from collections import defaultdict
 from inductiva import types, resources, projects, simulators, client
 from inductiva.client.models import TaskStatusCode
 from inductiva.projects.project import ProjectType
@@ -249,93 +248,31 @@ class Benchmark(projects.Project):
         """
         if isinstance(fmt, str):
             fmt = ExportFormat[fmt.upper()]
-        info = self.runs_info(status=status, select=select)
-        filename = filename or f"{self.name}.{fmt.value}"
+
+        query_params = {"select": select.value}
+        if status:
+            query_params["status"] = status
+        response = self._api.get_tasks_info(path_params={"name": self.name},
+                                            query_params=query_params)
+        info = json.loads(response.response.data)
+
+        if not filename:
+            filename = f"{self.name}.{fmt.value}"
+        elif not filename.endswith(f".{fmt.value}"):
+            filename = f"{filename}.{fmt.value}"
+
         if fmt == ExportFormat.JSON:
             with open(filename, mode="w", encoding="utf-8") as file:
                 json_content = json.dumps(obj=info, indent=4)
                 file.write(json_content)
         elif fmt == ExportFormat.CSV:
             with open(filename, mode="w", encoding="utf-8") as file:
-                fieldnames = info[0].keys() if info else []
+                fieldnames = sorted(info[0].keys()) if info else []
                 writer = csv.DictWriter(file, fieldnames=fieldnames)
                 writer.writeheader()
                 writer.writerows(info)
         else:
             raise ValueError(f"Unsupported export format: {fmt}")
-
-    def runs_info(
-        self,
-        status: Optional[Union[TaskStatusCode, str]] = None,
-        select: Union[SelectMode, str] = SelectMode.DISTINCT,
-    ) -> list:
-        """
-        Gathers the configuration and performance metrics for each run
-        associated with the benchmark in a list, including computation cost and
-        execution time.
-        
-        Args:
-            status (Optional[Union[TaskStatusCode, str]]): The status of the
-                tasks to include in the benchmarking results. Defaults to None,
-                which includes all tasks.
-            select (Union[SelectMode, str]): The data to include in
-                the benchmarking results. Defaults to SelectMode.DISTINCT that
-                includes only the parameters that vary between different runs.
-
-        Returns:
-            list: A list containing the configuration and performance 
-                metrics for each run.
-        """
-
-        def get_task_input_params(task):
-            info_as_dict = task.info.to_dict()
-            extra_params = info_as_dict.get("extra_params")
-            if extra_params is not None:
-                return extra_params
-            input_filename = "input.json"
-            input_dir_path = task.download_inputs(filenames=[input_filename])
-            input_file_path = input_dir_path.joinpath(input_filename)
-            with open(input_file_path, mode="r", encoding="utf-8") as file:
-                return json.load(file)
-
-        def select_distinct(info):
-            if len(info) <= 1:
-                return info
-
-            attrs_lsts = defaultdict(list)
-            for attrs in info:
-                for attr, value in attrs.items():
-                    attrs_lsts[attr].append(value)
-            filtered = {attr for attr, values in attrs_lsts.items() \
-                        if values and len(values) != values.count(values[0])}
-            return [{attr: attrs[attr] for attr in filtered} for attrs in info]
-
-        if isinstance(select, str):
-            select = SelectMode[select.upper()]
-
-        info = []
-        tasks = self.get_tasks(status=status)
-        for task in tasks:
-            task_input_params = get_task_input_params(task)
-            task_info = task.info
-            if not task_info.executer:
-                continue
-            task_machine_type = task_info.executer.vm_type \
-                if task_info.executer.vm_type != "n/a" else \
-                    task_info.executer.vm_name
-            task_time = task_info.time_metrics.computation_seconds.value
-            task_cost = task_info.estimated_computation_cost
-            info.append({
-                Benchmark.InfoKey.TASK_ID: task_info.task_id,
-                Benchmark.InfoKey.SIMULATOR: task_info.simulator,
-                Benchmark.InfoKey.MACHINE_TYPE: task_machine_type,
-                Benchmark.InfoKey.TIME: task_time,
-                Benchmark.InfoKey.COST: task_cost,
-                **task_input_params,
-            })
-        return select_distinct(info) \
-            if select == SelectMode.DISTINCT \
-            else info
 
     def terminate(self) -> Self:
         """
