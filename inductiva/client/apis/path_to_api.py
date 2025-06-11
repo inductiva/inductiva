@@ -75,6 +75,7 @@ from inductiva.client.apis.paths.storage_input_remote import StorageInputRemote
 from inductiva.client.apis.paths.storage_ import Storage
 from inductiva.client.apis.paths.storage_copy import StorageCopy
 from inductiva.client.apis.paths.storage_list_buckets import StorageListBuckets
+from inductiva.client.apis.paths.storage_default_bucket import StorageDefaultBucket
 from inductiva.client.apis.paths.storage_operations_operation_id import StorageOperationsOperationId
 from inductiva.client.apis.paths.storage_operations import StorageOperations
 from inductiva.client.apis.paths.storage_export_multipart import StorageExportMultipart
@@ -256,6 +257,8 @@ PathToApi = typing_extensions.TypedDict(
             StorageCopy,
         PathValues.STORAGE_LIST_BUCKETS:
             StorageListBuckets,
+        PathValues.STORAGE_DEFAULT_BUCKET:
+            StorageDefaultBucket,
         PathValues.STORAGE_OPERATIONS_OPERATION_ID:
             StorageOperationsOperationId,
         PathValues.STORAGE_OPERATIONS:
@@ -467,6 +470,8 @@ path_to_api = PathToApi({
         StorageCopy,
     PathValues.STORAGE_LIST_BUCKETS:
         StorageListBuckets,
+    PathValues.STORAGE_DEFAULT_BUCKET:
+        StorageDefaultBucket,
     PathValues.STORAGE_OPERATIONS_OPERATION_ID:
         StorageOperationsOperationId,
     PathValues.STORAGE_OPERATIONS:
