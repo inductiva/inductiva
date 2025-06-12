@@ -20,10 +20,8 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://docs.inductiva.ai/python/inductiva.templating.html" />
 <meta property="og:site_name" content="Inductiva.ai Docs" />
-<meta property="og:description" content="Inductiva template manager class to manipulate files and render templates." />
 <meta property="og:image" content="https://docs.inductiva.ai/_static/inductiva-social-banner.jpg" />
 <meta property="og:image:alt" content="Inductiva.ai Docs" />
-<meta name="description" content="Inductiva template manager class to manipulate files and render templates." />
 
     <title>templating sub-package &#8212; Python API for Cloud-based Simulation</title>
   
@@ -360,9 +358,7 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</button>
+
 </div></div>
       
     </div>
@@ -378,17 +374,6 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.templating.manager.TemplateManager"><code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.templating.manager.TemplateManager.render_dir"><code class="docutils literal notranslate"><span class="pre">TemplateManager.render_dir()</span></code></a></li>
-</ul>
-</li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -398,50 +383,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-inductiva.templating.manager">
-<span id="templating-sub-package"></span><h1>templating sub-package<a class="headerlink" href="#module-inductiva.templating.manager" title="Link to this heading">#</a></h1>
-<p>Inductiva template manager class to manipulate files and render templates.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="inductiva.templating.manager.TemplateManager">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TemplateManager</span></span><a class="headerlink" href="#inductiva.templating.manager.TemplateManager" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Template manager for rendering files and directories.</p>
-<p>Template files contains variables that are replaced by
-values provided as keyword arguments to the render methods.
-The underlying template engine is the Jinja2 library.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="inductiva.templating.manager.TemplateManager.render_dir">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">render_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">render_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.templating.manager.TemplateManager.render_dir" title="Link to this definition">#</a></dt>
-<dd><p>Renders the entire template directory to the given <cite>target_dir</cite>,
-using the provided rendering args, preserving the directory structure of
-the <cite>source_dir</cite>. Files that are not templates are copied as is.</p>
-<p>When <cite>target_dir</cite> does not exist, it will be created. If any destination
-file inside <cite>target_dir</cite> already exists, a FileExistsError will be
-raised when <cite>overwrite</cite> is False (default). Otherwise, files are
-overwritten.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>source_dir</strong> (<em>str</em>) – Path to the source directory,
-containing template files (and potentially static files to be
-copied without modification).</p></li>
-<li><p><strong>target_dir</strong> (<em>str</em>) – Path to the target directory.</p></li>
-<li><p><strong>overwrite</strong> (<em>bool</em>) – If True, the destination folder will first
-be deleted if it already exists.
-If False (default), a FileExistsError will be raised if
-any file already exists in the target directory.</p></li>
-<li><p><strong>render_args</strong> – Keyword arguments to render the template files.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>FileExistsError</strong> – If the destination file already exists and
-    <cite>overwrite</cite> is False.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+  <section id="templating-sub-package">
+<h1>templating sub-package<a class="headerlink" href="#templating-sub-package" title="Link to this heading">#</a></h1>
 </section>
 
 
@@ -479,24 +422,6 @@ any file already exists in the target directory.</p></li>
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.templating.manager.TemplateManager"><code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.templating.manager.TemplateManager.render_dir"><code class="docutils literal notranslate"><span class="pre">TemplateManager.render_dir()</span></code></a></li>
-</ul>
-</li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>

@@ -20,10 +20,8 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://docs.inductiva.ai/python/inductiva.users.html" />
 <meta property="og:site_name" content="Inductiva.ai Docs" />
-<meta property="og:description" content="Methods to interact with the user info on the API." />
 <meta property="og:image" content="https://docs.inductiva.ai/_static/inductiva-social-banner.jpg" />
 <meta property="og:image:alt" content="Inductiva.ai Docs" />
-<meta name="description" content="Methods to interact with the user info on the API." />
 
     <title>users sub-package &#8212; Python API for Cloud-based Simulation</title>
   
@@ -359,9 +357,7 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</button>
+
 </div></div>
       
     </div>
@@ -377,16 +373,6 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.users.methods.get_costs"><code class="docutils literal notranslate"><span class="pre">get_costs()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.users.methods.get_info"><code class="docutils literal notranslate"><span class="pre">get_info()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.users.methods.get_quotas"><code class="docutils literal notranslate"><span class="pre">get_quotas()</span></code></a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -396,46 +382,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-inductiva.users.methods">
-<span id="users-sub-package"></span><h1>users sub-package<a class="headerlink" href="#module-inductiva.users.methods" title="Link to this heading">#</a></h1>
-<p>Methods to interact with the user info on the API.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="inductiva.users.methods.get_costs">
-<span class="sig-name descname"><span class="pre">get_costs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_month</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_year</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_month</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#inductiva.users.methods.get_costs" title="Link to this definition">#</a></dt>
-<dd><p>Get the user costs.</p>
-<p>This function gets a dict with the user costs.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict with the user costs.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="inductiva.users.methods.get_info">
-<span class="sig-name descname"><span class="pre">get_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#inductiva.users.methods.get_info" title="Link to this definition">#</a></dt>
-<dd><p>Get the user information.</p>
-<p>This funtion gets the user information, including the user’s name, email,
-username, plan, programs, and total available credits.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict with the user information.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="inductiva.users.methods.get_quotas">
-<span class="sig-name descname"><span class="pre">get_quotas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#inductiva.users.methods.get_quotas" title="Link to this definition">#</a></dt>
-<dd><p>Get the user quotas.</p>
-<p>This function gets a dict with the user quotas.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict with the user quotas.</p>
-</dd>
-</dl>
-</dd></dl>
-
+  <section id="users-sub-package">
+<h1>users sub-package<a class="headerlink" href="#users-sub-package" title="Link to this heading">#</a></h1>
 </section>
 
 
@@ -464,23 +412,6 @@ username, plan, programs, and total available credits.</p>
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.users.methods.get_costs"><code class="docutils literal notranslate"><span class="pre">get_costs()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.users.methods.get_info"><code class="docutils literal notranslate"><span class="pre">get_info()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.users.methods.get_quotas"><code class="docutils literal notranslate"><span class="pre">get_quotas()</span></code></a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>
