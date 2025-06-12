@@ -96,15 +96,11 @@ class OpenFOAM(simulators.Simulator):
                                     shell_script=shell_script)
             commands = [f"bash {shell_script}"]
 
-        # If running on MPICluster convert parallel commands
-        # into mpi commands
-        if isinstance(on, MPICluster):
-            for i, command in enumerate(commands):
-                if isinstance(command, str) and "-parallel" in command:
-                    new_command = Command(command,
-                                          mpi_config=on.get_mpi_config())
-                    commands[i] = new_command
-
+        for i, command in enumerate(commands):
+            if isinstance(command, str) and "-parallel" in command:
+                new_command = Command(command, mpi_config=on.get_mpi_config())
+                commands[i] = new_command
+        asd
         return super().run(input_dir,
                            on=on,
                            commands=commands,
