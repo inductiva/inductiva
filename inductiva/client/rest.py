@@ -131,13 +131,7 @@ class RESTClientObject:
         """
         method = method.upper()
         assert method in [
-            'GET',
-            'HEAD',
-            'DELETE',
-            'POST',
-            'PUT',
-            'PATCH',
-            'OPTIONS'
+            'GET', 'HEAD', 'DELETE', 'POST', 'PUT', 'PATCH', 'OPTIONS'
         ]
 
         if post_params and body:
