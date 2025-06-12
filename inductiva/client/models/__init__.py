@@ -98,6 +98,7 @@ from inductiva.client.model.task_status_code import TaskStatusCode
 from inductiva.client.model.task_status_info import TaskStatusInfo
 from inductiva.client.model.task_step import TaskStep
 from inductiva.client.model.task_submitted_info import TaskSubmittedInfo
+from inductiva.client.model.task_with_pagination import TaskWithPagination
 from inductiva.client.model.task_with_status_history import TaskWithStatusHistory
 from inductiva.client.model.task_with_user_info import TaskWithUserInfo
 from inductiva.client.model.terminate_resources_credits_threshold_update import TerminateResourcesCreditsThresholdUpdate
