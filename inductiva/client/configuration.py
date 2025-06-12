@@ -473,7 +473,9 @@ conf = inductiva.client.Configuration(
         """
         if self.refresh_api_key_hook is not None:
             self.refresh_api_key_hook(self)
-        key = self.api_key.get(identifier, self.api_key.get(alias) if alias is not None else None)
+        key = self.api_key.get(
+            identifier,
+            self.api_key.get(alias) if alias is not None else None)
         if key:
             prefix = self.api_key_prefix.get(identifier)
             if prefix:
@@ -494,9 +496,8 @@ conf = inductiva.client.Configuration(
         password = ""
         if self.password is not None:
             password = self.password
-        return urllib3.util.make_headers(
-            basic_auth=username + ':' + password
-        ).get('authorization')
+        return urllib3.util.make_headers(basic_auth=username + ':' +
+                                         password).get('authorization')
 
     def auth_settings(self) -> AuthSettings:
         """Gets Auth Settings dict for api client.
@@ -509,9 +510,7 @@ conf = inductiva.client.Configuration(
                 'type': 'api_key',
                 'in': 'header',
                 'key': 'X-API-Key',
-                'value': self.get_api_key_with_prefix(
-                    'APIKeyHeader',
-                ),
+                'value': self.get_api_key_with_prefix('APIKeyHeader',),
             }
         return auth
 
@@ -532,12 +531,10 @@ conf = inductiva.client.Configuration(
 
         :return: An array of host settings
         """
-        return [
-            {
-                'url': "",
-                'description': "No description provided",
-            }
-        ]
+        return [{
+            'url': "",
+            'description': "No description provided",
+        }]
 
     def get_host_from_settings(
         self,
@@ -568,16 +565,15 @@ conf = inductiva.client.Configuration(
 
         # go through variables and replace placeholders
         for variable_name, variable in server.get('variables', {}).items():
-            used_value = variables.get(
-                variable_name, variable['default_value'])
+            used_value = variables.get(variable_name, variable['default_value'])
 
             if 'enum_values' in variable \
                     and used_value not in variable['enum_values']:
                 raise ValueError(
                     "The variable `{0}` in the host URL has invalid value "
-                    "{1}. Must be {2}.".format(
-                        variable_name, variables[variable_name],
-                        variable['enum_values']))
+                    "{1}. Must be {2}.".format(variable_name,
+                                               variables[variable_name],
+                                               variable['enum_values']))
 
             url = url.replace("{" + variable_name + "}", used_value)
 
@@ -586,7 +582,8 @@ conf = inductiva.client.Configuration(
     @property
     def host(self) -> str:
         """Return generated host."""
-        return self.get_host_from_settings(self.server_index, variables=self.server_variables)
+        return self.get_host_from_settings(self.server_index,
+                                           variables=self.server_variables)
 
     @host.setter
     def host(self, value: str) -> None:
