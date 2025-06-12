@@ -77,17 +77,14 @@ def _fetch_tasks_from_api(status: Optional[str] = None,
         api_instance = inductiva.client.TasksApi(client)
         try:
             # Get User Tasks
-            tasks = api_instance.get_user_tasks(
+            response = api_instance.get_user_tasks(
                 page=page,
                 per_page=per_page,
                 project=project,
                 status=status,
             )
 
-            response_body = json.loads(resp.data.decode("utf-8"))
-            tasks = response_body.get("tasks", [])
-
-            return [{**task} for task in tasks]
+            return response.tasks
 
         except ApiException as e:
             raise e
