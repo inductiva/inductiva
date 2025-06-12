@@ -9,6 +9,7 @@ import logging
 import datetime
 import contextlib
 import nest_asyncio
+import plotext as plt
 from typing_extensions import TypedDict
 from typing import AsyncGenerator, Callable, Dict, Any, List, Optional, TextIO, Tuple, Union
 
@@ -374,6 +375,69 @@ class Task:
         """
         self.get_info()
         return self.info.is_terminal
+    
+    def _capture_tail_output(self):
+        buffer = io.StringIO()  # Create an in-memory text buffer
+        print("Starting tail")
+        self.tail_files(["system_metrics.csv"],1,follow=False,fout=buffer)
+        print("Starting getcalue")
+        contents = buffer.getvalue()  # Read contents of the buffer
+        buffer.close()
+        return contents
+
+    def observe (self):
+        times_arr = []
+        cpu_usages_arr = []
+        mem_usages_arr = []
+
+        while self.get_status() != models.TaskStatusCode.COMPUTATIONSTARTED:
+            print(f"Task has not started yet, waiting for it to start...\n{self.get_status()}")
+            time.sleep(1)
+        while self.get_status() == models.TaskStatusCode.COMPUTATIONSTARTED:
+            tail_str = self._capture_tail_output()
+            tail_str = tail_str.split("\n")[1]
+
+            remove_string = "\033[34m│\033[0m"
+
+            tail_str = tail_str.replace(remove_string, "").strip()
+            # Parse the line
+            parts = tail_str.strip().split(',')
+            parsed = {
+                "time": datetime.datetime.fromisoformat(parts[0]),
+                "command": parts[1] if parts[1] else None,
+                "cpu_usage": float(parts[2]),
+                "memory": float(parts[3]),
+                "disk_input": int(parts[4]),
+                "disk_output": int(parts[5])
+            }
+            # Prepare data for plotting (as list to enable extension later)
+            times_arr.append(parsed["time"].strftime("%H:%M:%S"))
+            cpu_usages_arr.append(parsed["cpu_usage"])
+            mem_usages_arr.append(parsed["memory"])
+
+            x_values = list(range(len(times_arr)))
+            
+
+            plt.clear_figure()
+
+            plt.title("Usage (%)")
+
+            # Add labels
+            plt.plot(x_values, cpu_usages_arr, marker='dot', label="CPU Usage")
+            plt.plot(x_values, mem_usages_arr, marker='dot', label="Memory Usage")
+
+            plt.xlabel("Time")
+            plt.xticks(x_values, times_arr)
+            plt.ylabel("%")
+            plt.ylim(0, 100)
+
+            plt.show()
+
+            print(cpu_usages_arr)
+            print(mem_usages_arr)
+            print(times_arr)
+            
+            time.sleep(30)
 
     @classmethod
     def from_api_info(cls, info: Dict[str, Any]) -> "Task":
