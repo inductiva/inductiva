@@ -24,9 +24,9 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.task_with_pagination import TaskWithPagination
 from inductiva.client.model.task_status_code import TaskStatusCode
 from inductiva.client.model.http_validation_error import HTTPValidationError
-from inductiva.client.model.task_with_user_info import TaskWithUserInfo
 
 from . import path
 
@@ -49,6 +49,34 @@ class PerPageSchema(schemas.IntSchema):
 StatusSchema = TaskStatusCode
 ProjectSchema = schemas.StrSchema
 ActiveSchema = schemas.BoolSchema
+
+
+class SortSchema(schemas.ListSchema):
+
+    class MetaOapg:
+        items = schemas.StrSchema
+
+    def __new__(
+        cls,
+        _arg: typing.Union[typing.Tuple[typing.Union[
+            MetaOapg.items,
+            str,
+        ]], typing.List[typing.Union[
+            MetaOapg.items,
+            str,
+        ]]],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+    ) -> 'SortSchema':
+        return super().__new__(
+            cls,
+            _arg,
+            _configuration=_configuration,
+        )
+
+    def __getitem__(self, i: int) -> MetaOapg.items:
+        return super().__getitem__(i)
+
+
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
@@ -73,6 +101,11 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
         'active': typing.Union[
             ActiveSchema,
             bool,
+        ],
+        'sort': typing.Union[
+            SortSchema,
+            list,
+            tuple,
         ],
     },
     total=False)
@@ -113,33 +146,16 @@ request_query_active = api_client.QueryParameter(
     schema=ActiveSchema,
     explode=True,
 )
+request_query_sort = api_client.QueryParameter(
+    name="sort",
+    style=api_client.ParameterStyle.FORM,
+    schema=SortSchema,
+    explode=True,
+)
 _auth = [
     'APIKeyHeader',
 ]
-
-
-class SchemaFor200ResponseBodyApplicationJson(schemas.ListSchema):
-
-    class MetaOapg:
-
-        @staticmethod
-        def items() -> typing.Type['TaskWithUserInfo']:
-            return TaskWithUserInfo
-
-    def __new__(
-        cls,
-        _arg: typing.Union[typing.Tuple['TaskWithUserInfo'],
-                           typing.List['TaskWithUserInfo']],
-        _configuration: typing.Optional[schemas.Configuration] = None,
-    ) -> 'SchemaFor200ResponseBodyApplicationJson':
-        return super().__new__(
-            cls,
-            _arg,
-            _configuration=_configuration,
-        )
-
-    def __getitem__(self, i: int) -> 'TaskWithUserInfo':
-        return super().__getitem__(i)
+SchemaFor200ResponseBodyApplicationJson = TaskWithPagination
 
 
 @dataclass
@@ -250,6 +266,7 @@ class BaseApi(api_client.Api):
                 request_query_status,
                 request_query_project,
                 request_query_active,
+                request_query_sort,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
