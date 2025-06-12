@@ -3,7 +3,6 @@ from typing import List, Optional, Union
 
 from inductiva import simulators, tasks, types
 from inductiva.commands.commands import Command
-from inductiva.resources.machine_groups import MPICluster
 
 AVAILABLE_OPENFOAM_DISTRIBUTIONS = ["foundation", "esi"]
 
