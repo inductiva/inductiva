@@ -21,9 +21,9 @@ from ..localization import translator as __
 import inductiva
 from inductiva import storage
 from inductiva import constants
+import inductiva.client
 from inductiva.client import exceptions, models
 from inductiva import api
-from inductiva.client.apis.tags import tasks_api
 from inductiva.utils import files, format_utils, data
 from inductiva.tasks import output_info
 from inductiva.tasks.file_tracker import Operations, FileTracker
@@ -34,7 +34,7 @@ import warnings
 @dataclass
 class Metric:
     """Represents a single metric with a value and a label.
-    
+
     :meta private:
     """
     label: str
@@ -303,7 +303,7 @@ class Task:
     """Represents a running/completed task on the Inductiva API.
 
     Example usage:
-    
+
     .. code-block:: python
 
         task = simulator.run(...)
@@ -342,7 +342,7 @@ class Task:
     def __init__(self, task_id: str):
         """Initialize the instance from a task ID."""
         self.id = task_id
-        self._api = tasks_api.TasksApi(api.get_client())
+        self._api = inductiva.client.TasksApi(api.get_client())
         self.file_tracker = FileTracker()
         self._info = None
         self._status = None
@@ -376,13 +376,11 @@ class Task:
         return self.info.is_terminal
 
     @classmethod
-    def from_api_info(cls, info: Dict[str, Any]) -> "Task":
+    def from_api_info(cls, info: models.TaskWithUserInfo) -> "Task":
 
-        task = cls(info["task_id"])
-        task._info = TaskInfo(**info)
-        task._status = models.TaskStatusCode(info["status"])
-
-        # TODO(luispcunha): construct correct output class from API info.
+        task = cls(info.task_id)
+        task._info = TaskInfo(**info.to_dict())
+        task._status = models.TaskStatusCode(info.status)
 
         return task
 
@@ -422,23 +420,21 @@ class Task:
         """
         # If the task is in a terminal status and we already have the status,
         # return it without refreshing it from the API.
-        if (self._status is not None and self._info.is_terminal):
+        if (self._status is not None and self._info and self._info.is_terminal):
             return self._status
 
-        resp = self._api.get_task_status(self._get_path_params())
+        resp = self._api.get_task_status(task_id=self.id)
 
-        status = models.TaskStatusCode(resp.body["status"])
+        status = models.TaskStatusCode(resp.status)
         self._status = status
 
         #updates the info.is_terminal when getting the status
-        self._info.is_terminal = resp.body.get(
-            "is_terminated",
-            self.info.is_terminal,
-        )
+        if self._info:
+            self._info.is_terminal = resp.is_terminated
 
-        queue_position = resp.body.get("position_in_queue", None)
+        queue_position = resp.position_in_queue
         if queue_position is not None:
-            self._tasks_ahead = queue_position.get("tasks_ahead", None)
+            self._tasks_ahead = queue_position.tasks_ahead
 
         return status
 
@@ -486,8 +482,7 @@ class Task:
 
         This method issues a request to the API.
         """
-        params = self._get_path_params()
-        resp = self._api.get_task(params, skip_deserialization=True).response
+        resp = self._api.get_task_without_preload_content(task_id=self.id)
 
         info = json.loads(resp.data.decode("utf-8"))
         status = models.TaskStatusCode(info["status"])
@@ -817,8 +812,7 @@ class Task:
                 if self.is_terminal():
                     break
 
-                path_params = self._get_path_params()
-                self._api.kill_task(path_params=path_params)
+                self._api.kill_task(task_id=self.id)
                 break
             except exceptions.ApiException as exc:
                 if max_api_requests == 0:
@@ -1214,7 +1208,7 @@ class Task:
 
     def list_files(self) -> Tuple[Optional[str], int]:
         """List the files in the task's working directory.
-        
+
         This method will list the files, in real time, in the task's working
         directory. It will also print the files in a tree-like structure.
 
@@ -1251,7 +1245,7 @@ class Task:
         Consume and write the formatted output from an asynchronous generator to
         a file-like object.
 
-        This function iterates over the provided asynchronous generator, writing 
+        This function iterates over the provided asynchronous generator, writing
         each line of output to the specified file-like object.
 
         Example:
@@ -1316,9 +1310,9 @@ class Task:
         """
         Display the last modified file for a given task.
 
-        This function retrieves and prints information about the most recently 
-        modified file associated with a specified task. It validates that the 
-        task computation has started before proceeding. If the task is invalid 
+        This function retrieves and prints information about the most recently
+        modified file associated with a specified task. It validates that the
+        task computation has started before proceeding. If the task is invalid
         or not started, an error message is printed to `stderr`.
         """
 
@@ -1334,7 +1328,7 @@ class Task:
                                    filename: str,
                                    n_lines: int = 10,
                                    follow=False):
-        """Get the last n_lines lines of a 
+        """Get the last n_lines lines of a
         file in the task's working directory."""
 
         def formatter(message):
@@ -1355,7 +1349,7 @@ class Task:
         Consume and write the output from an asynchronous generator to a
         file-like object.
 
-        This function iterates over the provided asynchronous generator, writing 
+        This function iterates over the provided asynchronous generator, writing
         each line of output to the specified file-like object.
         """
         try:
@@ -1366,14 +1360,14 @@ class Task:
 
     def _top(self) -> Tuple[Optional[str], int]:
         """Prints the result of the `top -b -H -n 1` command.
-    
+
         This command will list the processes and threads (-H) in batch mode
         (-b).
         This command will run only once (-n 1) instead of running continuously.
         The result is an instant snapshot of the machine CPU and RAM metrics.
 
         Returns:
-            A string with the formatted directory listing. 
+            A string with the formatted directory listing.
             The return code for the command. 0 if successful, 1 if failed.
         """
         result, return_code = self._run_streaming_command(
@@ -1385,10 +1379,6 @@ class Task:
     class _PathParams(TypedDict):
         """Util class for type checking path params."""
         task_id: str
-
-    def _get_path_params(self) -> _PathParams:
-        """Get dictionary with the URL path parameters for API calls."""
-        return {"task_id": self.id}
 
     def _get_duration(
         self,
@@ -1492,7 +1482,7 @@ class Task:
                 logging.info("Remote task files removed successfully.")
         except exceptions.ApiException as e:
             logging.error("An error occurred while removing the files:")
-            logging.error(" > %s", json.loads(e.body)["detail"])
+            logging.error(" > %s", json.loads(e.data)["detail"])
             return False
         return True
 
@@ -1552,7 +1542,7 @@ class Task:
 
     def set_metadata(self, metadata: Dict[str, str]):
         """Set metadata for the task.
-        
+
         Metadata is stored as key-value pairs, where both
         keys and values must be strings.
         Metadata can be useful for categorizing, searching,
@@ -1582,14 +1572,12 @@ class Task:
                 raise ValueError(
                     "Metadata keys and values cannot be empty strings.")
 
-        self._api.set_metadata(path_params={"task_id": self.id}, body=metadata)
+        self._api.set_metadata(task_id=self.id, request_body=metadata)
 
     def get_metadata(self) -> Dict[str, str]:
         """Get the metadata associated with the task.
-            
+
         Returns:
             A dictionary with the custom metadata previously set on this task.
         """
-        response = self._api.get_metadata(path_params={"task_id": self.id})
-
-        return dict(response.body)
+        return self._api.get_metadata(task_id=self.id)

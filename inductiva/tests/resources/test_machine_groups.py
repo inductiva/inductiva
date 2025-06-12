@@ -1,7 +1,7 @@
 """Tests for machine_groups functions"""
-import json
 import pytest
 from unittest import mock
+import inductiva.client.models
 import inductiva
 
 BASE_RESPONSE = {
@@ -9,12 +9,13 @@ BASE_RESPONSE = {
     "machine_type": "c2-standard-4",
     "disk_size_gb": 10,
     "id": "dummy_id",
-    "creation_timestamp": 1234,
+    "creation_timestamp": "2025-06-05T20:16:54.270Z",
     "spot": False,
     "max_vms": 2,
     "num_vms": 2,
     "min_vms": 1,
     "provider_id": "GCP",
+    "zone": "europe-west1-b",
     "started": False,
     "machines": [],
 }
@@ -35,13 +36,12 @@ EXPECTED_RESULTS = [
                          zip(RESPONSES, EXPECTED_RESULTS))
 def test_get_by_name(response, expected_result):
     mock_compute_api_path =\
-        "inductiva.resources.machine_groups.compute_api.ComputeApi"
+        "inductiva.client.ComputeApi"
 
     with mock.patch(mock_compute_api_path) as mock_compute_api:
         mock_response = mock.MagicMock()
 
-        mock_response.response.data = json.dumps(response,
-                                                 indent=2).encode("utf-8")
+        mock_response = inductiva.client.models.VMGroupConfig(**response)
 
         mock_get_vm_group_by_name = mock.MagicMock(return_value=mock_response)
         (mock_compute_api.return_value.get_vm_group_by_name

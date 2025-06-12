@@ -14,7 +14,7 @@ Key Features:
     - Create and manage projects on the backend.
     - Add tasks to projects and retrieve the most recent tasks or filter by
       status.
-    - Monitor the status of all tasks in a project and wait for their 
+    - Monitor the status of all tasks in a project and wait for their
     completion.
     - Download outputs for all tasks in a project.
     - Estimate the total computation cost of a project based on its tasks.
@@ -49,11 +49,11 @@ from typing import List, Optional
 
 from inductiva import tasks
 from inductiva import api as inductiva_api
-from inductiva.client.models import TaskStatusCode
+import inductiva.client
+from inductiva.client.models import TaskStatusCode, ProjectCreate, ProjectType
 from inductiva.client import ApiException
 
 # from inductiva.client import models
-from inductiva.client.apis.tags import projects_api
 from inductiva.utils import files, format_utils
 
 _logger = logging.getLogger(__name__)
@@ -63,19 +63,14 @@ def get_projects() -> List["Project"]:
     """Gets all the user's projects."""
     try:
         _logger.debug("Trying to get remote projects")
-        api = projects_api.ProjectsApi(inductiva_api.get_client())
+        api = inductiva.client.ProjectsApi(inductiva_api.get_client())
         response = api.get_user_projects()
     except ApiException as ex:
         _logger.error("Failed to get remote projects", exc_info=ex)
         raise ex
 
     # pylint: disable=protected-access
-    return [Project._from_api_response(resp) for resp in response.body]
-
-
-class ProjectType:
-    PROJECT = "project"
-    BENCHMARK = "benchmark"
+    return [Project._from_api_response(resp) for resp in response]
 
 
 class Project:
@@ -104,7 +99,7 @@ class Project:
         Args:
           name (str): The name of the project.
         """
-        self._api = projects_api.ProjectsApi(inductiva_api.get_client())
+        self._api = inductiva.client.ProjectsApi(inductiva_api.get_client())
         # If the project already exists, we will load it from the backend.
         self._proj_data = self._get_project(name)
         # Else, we will create a new project.
@@ -117,8 +112,7 @@ class Project:
     def _get_project(self, name: str):
         """Fetches the project info from the backend."""
         try:
-            response = self._api.get_project({"name": name})
-            return response.body
+            return self._api.get_project(name=name)
         except ApiException as ex:
             if ex.status != 404:
                 _logger.error("Failed to get project %s", name, exc_info=ex)
@@ -128,9 +122,8 @@ class Project:
     def _create_project(self, name):
         """Creates a project with the given name on the backend."""
         try:
-            args = {"name": name, "project_type": self._get_project_type()}
-            response = self._api.create_project(args)
-            return response.body
+            return self._api.create_project(project_create=ProjectCreate(
+                name=name, project_type=self._get_project_type()))
         except ApiException as ex:
             _logger.error("Failed to create project %s", name, exc_info=ex)
             raise RuntimeError(f"Unable to create project {name}") from ex
@@ -145,22 +138,22 @@ class Project:
     @property
     def name(self) -> str:
         """Returns the name of the project."""
-        return self._proj_data.get("name")
+        return self._proj_data.name
 
     @property
     def created_at(self) -> str:
         """Returns the creation date and time of the project."""
-        return self._proj_data.get("created_at")
+        return self._proj_data.created_at.isoformat()
 
     @property
     def num_tasks(self) -> int:
         """Returns the number of tasks in the project."""
-        return self._proj_data.get("num_tasks")
+        return self._proj_data.num_tasks
 
     @property
     def id(self) -> str:
         """Returns the unique ID of the project."""
-        return self._proj_data.get("id")
+        return self._proj_data.id
 
     @property
     def task_by_status(self) -> dict:
@@ -170,8 +163,8 @@ class Project:
         with that status.
         """
         return {
-            TaskStatusCode(attr): int(value) for attr, value in
-            self._proj_data.get("task_status_overview").items()
+            TaskStatusCode(attr): int(value)
+            for attr, value in self._proj_data.task_status_overview.items()
         }
 
     @property
@@ -181,7 +174,7 @@ class Project:
 
         Computed as the sum of the estimated computation cost of each task.
         """
-        return self._proj_data.get("estimated_computation_cost", 0.0)
+        return self._proj_data.estimated_computation_cost
 
     def __str__(self) -> str:
         formatted_cost = format_utils.currency_formatter(
@@ -205,10 +198,7 @@ class Project:
             task: The task to add to the project.
         """
         try:
-            self._api.add_task_to_project({
-                "task_id": task.id,
-                "name": self.name
-            })
+            self._api.add_task_to_project(name=self.name, task_id=task.id)
         except ApiException as ex:
             _logger.error(
                 "Failed to add task %s to project %s",

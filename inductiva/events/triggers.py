@@ -1,7 +1,7 @@
 """ Triggers for events."""
 
-from inductiva.client.model.trigger_task_create import TriggerTaskCreate
-from inductiva.client.model.trigger_task_type import TriggerTaskType
+from inductiva.client.models.trigger_task_create import TriggerTaskCreate
+from inductiva.client.models.trigger_task_type import TriggerTaskType
 
 
 class Trigger:
@@ -17,7 +17,7 @@ class Trigger:
 class TaskOutputUploaded(Trigger):
     """
     Trigger that is activated when a task output is uploaded.
-    
+
     Attributes:
         task_id (int): ID of the task to monitor.
     """
@@ -34,6 +34,5 @@ class TaskOutputUploaded(Trigger):
             TriggerTaskCreate: Configured trigger instance.
         """
         return TriggerTaskCreate(task_id=self.task_id,
-                                 trigger=TriggerTaskType.OUTPUT_UPLOADED,
-                                 trigger_type=TriggerTaskCreate.MetaOapg.
-                                 properties.trigger_type.TASK)
+                                 trigger=TriggerTaskType.TASK_OUTPUT_UPLOADED,
+                                 trigger_type="task")
