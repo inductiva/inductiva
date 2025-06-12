@@ -2,9 +2,8 @@
 Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick AMR-Wind simulation — it only takes a few seconds!
 
 ## Step 1: Copy and Run the Code
-To get started, copy the code below and paste it into a Python script.
 
-When you run the script, all the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. The AMR-Wind simulation will then be sent to a cloud machine for execution.
+1. Copy the code below and save it as `example.py` on your Desktop (or in your preferred directory).
 
 ```python
 """AMR-Wind example."""
@@ -39,6 +38,20 @@ task.download_outputs()
 
 task.print_summary()
 ```
+
+2. Open your command line, then navigate to the Desktop by running:
+
+```
+cd ~/Desktop
+```
+
+3. Execute the Python script by running:
+
+```
+python3 example.py
+```
+
+All the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. The AMR-Wind simulation will then be sent to a cloud machine for execution.
 
 ## Step 2: Verify the Task Status
 After the simulation completes, a task summary will be displayed in your terminal. If the task status shows **Success**, congratulations! You've successfully run an AMR-Wind simulation.
