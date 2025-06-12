@@ -352,8 +352,8 @@ class BaseMachineGroup(ABC):
         is_cost_ok = estimated_cost <= cost_max
 
         vcpu_in_use = quotas["max_vcpus"].in_use
-        vcpu_max = math.inf if quotas[
-            "max_vcpus"].max_allowed is None else quotas["max_vcpus"].max_allowed
+        vcpu_max = (math.inf if quotas["max_vcpus"].max_allowed is None else
+                    quotas["max_vcpus"].max_allowed)
         current_vcpu = self.n_vcpus.total
         estimated_vcpu_usage = vcpu_in_use + current_vcpu
         is_vcpu_ok = estimated_vcpu_usage <= vcpu_max
