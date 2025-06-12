@@ -376,25 +376,44 @@ class Task:
         self.get_info()
         return self.info.is_terminal
     
-    def _capture_tail_output(self):
+    def _capture_tail_output(self,file,lines):
         buffer = io.StringIO()  # Create an in-memory text buffer
-        print("Starting tail")
-        self.tail_files(["system_metrics.csv"],1,follow=False,fout=buffer)
-        print("Starting getcalue")
+        self.tail_files([file],lines,follow=False,fout=buffer)
         contents = buffer.getvalue()  # Read contents of the buffer
         buffer.close()
         return contents
 
-    def observe (self):
+    def observe (self, combine: bool = True):
         times_arr = []
         cpu_usages_arr = []
         mem_usages_arr = []
 
+        line_count=0
+        
+        first = True
+        import shutil
+
+        
+
         while self.get_status() != models.TaskStatusCode.COMPUTATIONSTARTED:
-            print(f"Task has not started yet, waiting for it to start...\n{self.get_status()}")
+            print("Task has not started yet, waiting for it to start...",end="\r")
             time.sleep(1)
+        
         while self.get_status() == models.TaskStatusCode.COMPUTATIONSTARTED:
-            tail_str = self._capture_tail_output()
+            
+            terminal_size = shutil.get_terminal_size(fallback=(100, 40))
+            #columns is half the total columns
+            #same for lines
+            columns = terminal_size.columns -1
+            lines = terminal_size.lines
+
+            #logs
+
+            # -4 -> 3 from stdout formatting and 1 to give an extra line
+            stdout_str = self._capture_tail_output("stdout.txt",(lines//2)-4)
+
+            
+            tail_str = self._capture_tail_output("system_metrics.csv",1)
             tail_str = tail_str.split("\n")[1]
 
             remove_string = "\033[34m│\033[0m"
@@ -416,28 +435,76 @@ class Task:
             mem_usages_arr.append(parsed["memory"])
 
             x_values = list(range(len(times_arr)))
+
+            #moves the cursor up lines*2
+            if not first:
+                print(f"\033[{line_count}A", end="")
             
+            # used to prevent the cursor from going up in the first iteration
+            first = False
 
-            plt.clear_figure()
+            #limit stdout columns to columns size
+            stdout_str= '\n'.join(line[:columns] for line in stdout_str.splitlines())
 
-            plt.title("Usage (%)")
-
-            # Add labels
-            plt.plot(x_values, cpu_usages_arr, marker='dot', label="CPU Usage")
-            plt.plot(x_values, mem_usages_arr, marker='dot', label="Memory Usage")
-
-            plt.xlabel("Time")
-            plt.xticks(x_values, times_arr)
-            plt.ylabel("%")
-            plt.ylim(0, 100)
-
-            plt.show()
-
-            print(cpu_usages_arr)
-            print(mem_usages_arr)
-            print(times_arr)
+            if combine:
             
-            time.sleep(30)
+                plt.clear_figure()
+                plt.plot_size(columns,lines//2)
+
+                plt.title("Usage (%)")
+
+                # Add labels
+                plt.plot(x_values, cpu_usages_arr, marker='hd', label="CPU Usage %")
+                plt.plot(x_values, mem_usages_arr, marker='hd', label="Memory Usage %")
+
+                plt.xlabel("Time")
+                plt.xticks(x_values, times_arr)
+                plt.ylim(0, 100)
+
+                str_plot = plt.build().splitlines()
+
+                str_plot = "\n".join(str_plot)
+
+                str_plot += "\n"+stdout_str
+                line_count = len(str_plot.splitlines())
+
+                print(str_plot)
+            else:
+                plt.clear_figure()
+                plt.plot_size(columns//2, lines//2)
+
+                plt.title("Usage (%)")
+                plt.xlabel("Time")
+                plt.xticks(x_values, times_arr)
+                plt.ylim(0, 100)
+                # Add labels
+                plt.plot(x_values, cpu_usages_arr, marker='hd', label="CPU Usage %")
+                str_plot1 = plt.build()
+                
+                plt.clear_figure()
+                plt.plot_size(columns//2, lines//2)
+                plt.title("Usage (%)")
+                plt.xlabel("Time")
+                plt.xticks(x_values, times_arr)
+                plt.ylim(0, 100)
+                plt.plot(x_values, mem_usages_arr, marker='hd', label="Memory Usage %")
+
+                str_plot2 = plt.build()
+
+                lines1 = str_plot1.splitlines()
+                lines2 = str_plot2.splitlines()
+
+                #plots
+                combined = "\n".join(f"{a} {b}" for a, b in zip(lines1, lines2))
+                
+                
+                # add logs at the end
+                combined += "\n"+stdout_str
+                line_count = len(combined.splitlines())
+
+                print(combined)
+            
+            time.sleep(5)
 
     @classmethod
     def from_api_info(cls, info: Dict[str, Any]) -> "Task":
