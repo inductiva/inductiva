@@ -1,17 +1,15 @@
 # Results and Key Takeaways
-We successfully generated a OpenFOAM dataset in parallel by sampling the wind speed.
+We successfully generated an OpenFOAM dataset in parallel by sampling the wind speed.
 This demonstrates the power of using cloud resources to efficiently scale up computational experiments. 
 Now it's time to retrieve all the results and analyze the data to extract meaningful insights from our simulations.
 
 <p align="center"><img src="../../_static/bike_streamlines_U.png" alt="OpenFOAM simulation visualization" width="700"></p>
-
 
 ## Project Summary and Output Download
 Using the Inductiva package, it is easy to get a project summary and download all the output files. The following code snippet demonstrates how to do this:
 
 ```python
 import inductiva
-
 
 openfoam_project = inductiva.projects.Project(
    name="openfoam_dataset")

@@ -27,7 +27,7 @@ hidden: true
 ---
 setup-test
 quick-start
-Generate OpenFOAM dataset <generate-openfoam-dataset/index>
+Generate OpenFOAM Dataset <generate-openfoam-dataset/index>
 ```
 
 ```{toctree}

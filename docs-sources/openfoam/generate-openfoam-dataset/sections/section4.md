@@ -67,7 +67,6 @@ cloud_machine.terminate()
 Let's break this script into parts.
 
 ## Code section 1: Creating the Project
-
 We will use a project to group all the tasks. This allows us to wait for all tasks to complete and provides additional information, such as the project’s total cost.
 
 ```python
@@ -115,9 +114,12 @@ for i in range(DATASET_SIZE):
 ```
 
 ## Code Section 4: Starting Simulation
-Next, we initialize the OpenFAST simulator and run the simulation using the newly created input directory. Each simulation task is added to the project, allowing us to track and wait for all tasks to be completed. We also save some task metadata to keep track of the input parameters.
+Next, we initialize the OpenFOAM simulator and run the simulation using the newly created input directory. Each simulation task is added to the project, allowing us to track and wait for all tasks to be completed. We also save some task metadata to keep track of the input parameters.
 
-Note: we use `resubmit_on_preemption=True` when submitting a task to ensure that, if a machine is preempted, the task is automatically resubmited on another machine. ªreemptions can occur when using `spot` machines, which are significantly cheaper (up to 5x less expensive than regural instances), but come with the risk of possibly being interrupted at any time.
+> **Note**: We use `resubmit_on_preemption=True` when submitting a task to ensure that if a machine is 
+preempted, the task is automatically resubmitted on another machine. Preemptions can occur when using 
+`spot` machines, which are significantly cheaper (up to 5× less expensive than regular instances) but 
+carry the risk of being interrupted at any time.
 
 ```python
     ...
@@ -155,15 +157,16 @@ cloud_machine.terminate()
 You can list the tasks from this project by running this command on
 your command line interface `inductiva tasks list -p openfoam_dataset`
 
-Alternatively, you can also check the tasks projects in the [Inductiva Web Console](https://console.inductiva.ai/) on the "Projects" tab:
+Alternatively, you can also check the tasks projects in the [Inductiva Web Console](https://console.inductiva.ai/) on the *Projects* tab:
 
 ![console project](../../_static/console_projects.png)
-
 
 ## Summary
 We demonstrated how Inductiva can be used to efficiently run multiple OpenFOAM simulations in parallel and generate a dataset. 
 
-While a single OpenFOAM simulation may run faster on a local machine with high processing power, scaling up to dozens or hundreds of simulations is where Inductiva excels. By automating input file modifications
-and distributing simulations across inexpensive cloud machines, you can drastically reduce overall computation time and streamline large-scale studies.
+While a single OpenFOAM simulation may run faster on a local machine with high processing power, scaling up 
+to dozens or hundreds of simulations is where Inductiva excels. By automating input file modifications
+and distributing simulations across inexpensive cloud machines, you can drastically reduce overall 
+computation time and streamline large-scale studies.
 
 With just a few lines of Python, you can effortlessly scale your OpenFOAM projects - saving time, optimising resources and accelerating your research. 🚀

@@ -4,8 +4,7 @@ case. This should be straightforward as all the necessary input files are
 already prepared, as described in the previous section.
 
 ## Code Overview
-The Python code required to run a OpenFOAM simulation using the Inductiva API follows a consistent structure. We adapt it for this specific use case, as shown below.
-
+The Python code required to run a OpenFOAM simulation using the Inductiva API follows a consistent structure. We adapted it for this specific use case, as shown below.
 
 ```python
 import inductiva
@@ -55,11 +54,11 @@ Data:
 Estimated computation cost (US$): 0.0080 US$
 ```
 
-You can also check the [Inductiva Web Console](https://console.inductiva.ai/) for more task information. You can check task details, navigate the task filesystem and even read the logs in real time!
+You can also visit the [Inductiva Web Console](https://console.inductiva.ai/) to view task details, navigate 
+the task the filesystem, and monitor logs in real time.
 
 ![console timeline](../../_static/console_timeline.png)
 
 ![console logs](../../_static/console_logs.png)
-
 
 In the next part of this tutorial, we'll take things to the next level by running dozens of OpenFOAM simulations in parallel on Inductiva, demonstrating the true power of cloud-based scalability. Stay tuned!
