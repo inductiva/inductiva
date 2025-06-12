@@ -92,18 +92,23 @@ def get_ansi_formatter():
 
     Either `no_formatter` when ansi formatting is disable or the
     `inductiva.utils.format_utils.emphasis_formatter`
-    
+
     """
     if not inductiva.ansi_enabled:
         return no_formatter
     return emphasis_formatter
 
 
-def datetime_formatter(dt: str) -> str:
+def datetime_formatter(dt: Union[datetime.datetime, str]) -> str:
     # get time in local timezone
     if dt is None:
         return None
-    local_dt = datetime.datetime.fromisoformat(dt).astimezone()
+
+    if isinstance(dt, str):
+        local_dt = datetime.datetime.fromisoformat(dt).astimezone()
+    else:
+        local_dt = dt
+
     return local_dt.strftime("%d/%m, %H:%M:%S")
 
 
@@ -144,7 +149,7 @@ def timedelta_formatter(td: datetime.timedelta) -> str:
 
 def short_timedelta_formatter(td: datetime.timedelta) -> str:
     """Convert timedelta to short human readable string.
-    
+
     This is needed because we need beacause when we want to print text and
     replace (in the notebooks) there is no way to clear the full line. So, we
     need to fill the line with white spaces and for that the line needs to have
@@ -239,7 +244,7 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     """Converts a table of data (Mapping or any Iterable) to a string table.
 
     Args:
-        tabular_data: can be a list-of-lists (or another iterable of 
+        tabular_data: can be a list-of-lists (or another iterable of
             iterables), a list of named tuples, a dictionary of
             iterables, an iterable of dictionaries, an iterable of
             dataclasses (Python 3.7+)

@@ -1,7 +1,7 @@
 """ Actions for events"""
 
-from inductiva.client.model.action_email_create import ActionEmailCreate
-from inductiva.client.model.action_webhook_create import ActionWebhookCreate
+from inductiva.client.models.action_email_create import ActionEmailCreate
+from inductiva.client.models.action_webhook_create import ActionWebhookCreate
 
 
 class Action:
