@@ -29,6 +29,7 @@ CLI_COMMANDS = [
     (["inductiva", "simulators", "list"], None),
     (["inductiva", "storage"], None),
     (["inductiva", "storage", "ls"], None),
+    (["inductiva", "storage", "bucket", "ls"], None),
     #cant test inductiva storage rm
     (["inductiva", "storage", "size"], None),
     (["inductiva", "task-runner"], None),
