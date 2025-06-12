@@ -160,7 +160,7 @@ class BaseMachineGroup(ABC):
 
     def set_mpi_config(self,
                        mpi_version: str = "4.1.6",
-                       np: int = None,
+                       np: Optional[int] = None,
                        use_hwthread_cpus: bool = True):
         """Set the MPI configuration for the cluster.
         Args:
@@ -170,10 +170,7 @@ class BaseMachineGroup(ABC):
         """
         self.mpi_version = mpi_version
         self.use_hwthread_cpus = use_hwthread_cpus
-        if np is not None:
-            self.np = self.available_vcpus
-        else:
-            self.np = np
+        self.np = np or self.available_vcpus
 
     def get_mpi_config(self):
         """Get the MPI configuration for the cluster."""
@@ -656,8 +653,7 @@ class MachineGroup(BaseMachineGroup):
         self._register_machine_group(num_vms=self.num_machines,
                                      spot=self.spot,
                                      is_elastic=self._is_elastic)
-        if self.np is None:
-            self.np = self.available_vcpus
+        self.np = self.np or self.available_vcpus
 
     def _validate_inputs(self):
         super()._validate_inputs()
@@ -757,8 +753,7 @@ class ElasticMachineGroup(BaseMachineGroup):
                                      is_elastic=self._is_elastic,
                                      num_vms=self._active_machines,
                                      spot=self.spot)
-        if self.np is None:
-            self.np = self.available_vcpus
+        self.np = self.np or self.available_vcpus
 
     def _validate_inputs(self):
         super()._validate_inputs()
@@ -851,8 +846,7 @@ class MPICluster(BaseMachineGroup):
                                      is_elastic=self._is_elastic,
                                      spot=self.spot,
                                      type=self._type)
-        if self.np is None:
-            self.np = self.available_vcpus
+        self.np = self.np or self.available_vcpus
 
     def _validate_inputs(self):
         super()._validate_inputs()
