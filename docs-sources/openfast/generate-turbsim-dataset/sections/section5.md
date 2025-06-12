@@ -11,7 +11,6 @@ Using the Inductiva package, it is easy to get a project summary and download al
 ```python
 import inductiva
 
-
 turbsim_project = inductiva.projects.Project(
    name="turbsim_dataset")
 
