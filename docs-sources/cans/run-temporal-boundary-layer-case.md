@@ -145,7 +145,8 @@ task.print_summary()
 
 ```
 
-> **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
+> **Note**: `spot` machines are available at substantial discounts, but your simulation job may be preempted if
+> the Cloud provider reclaims the spot machine.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 

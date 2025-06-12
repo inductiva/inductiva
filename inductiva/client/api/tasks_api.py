@@ -16,7 +16,7 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field, StrictBool, StrictInt, StrictStr
+from pydantic import Field, StrictBool, StrictStr
 from typing import Any, Dict, List, Optional
 from typing_extensions import Annotated
 from inductiva.client.models.task_connection import TaskConnection
@@ -24,8 +24,8 @@ from inductiva.client.models.task_request import TaskRequest
 from inductiva.client.models.task_status import TaskStatus
 from inductiva.client.models.task_status_code import TaskStatusCode
 from inductiva.client.models.task_submitted_info import TaskSubmittedInfo
+from inductiva.client.models.task_with_pagination import TaskWithPagination
 from inductiva.client.models.task_with_status_history import TaskWithStatusHistory
-from inductiva.client.models.task_with_user_info import TaskWithUserInfo
 
 from inductiva.client.api_client import ApiClient, RequestSerialized
 from inductiva.client.api_response import ApiResponse
@@ -44,21 +44,19 @@ class TasksApi:
             api_client = ApiClient.get_default()
         self.api_client = api_client
 
-
     @validate_call
     def get_message(
         self,
         task_id: Optional[StrictStr],
         client: StrictStr,
-        block_s: Optional[StrictInt] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        block_s: Optional[Annotated[int,
+                                    Field(le=60, strict=True, ge=0)]] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -95,45 +93,39 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_message_serialize(
-            task_id=task_id,
-            client=client,
-            block_s=block_s,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._get_message_serialize(task_id=task_id,
+                                             client=client,
+                                             block_s=block_s,
+                                             _request_auth=_request_auth,
+                                             _content_type=_content_type,
+                                             _headers=_headers,
+                                             _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
-
     @validate_call
     def get_message_with_http_info(
         self,
         task_id: Optional[StrictStr],
         client: StrictStr,
-        block_s: Optional[StrictInt] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        block_s: Optional[Annotated[int,
+                                    Field(le=60, strict=True, ge=0)]] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -170,45 +162,39 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_message_serialize(
-            task_id=task_id,
-            client=client,
-            block_s=block_s,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._get_message_serialize(task_id=task_id,
+                                             client=client,
+                                             block_s=block_s,
+                                             _request_auth=_request_auth,
+                                             _content_type=_content_type,
+                                             _headers=_headers,
+                                             _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
-
     @validate_call
     def get_message_without_preload_content(
         self,
         task_id: Optional[StrictStr],
         client: StrictStr,
-        block_s: Optional[StrictInt] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        block_s: Optional[Annotated[int,
+                                    Field(le=60, strict=True, ge=0)]] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -245,26 +231,21 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_message_serialize(
-            task_id=task_id,
-            client=client,
-            block_s=block_s,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._get_message_serialize(task_id=task_id,
+                                             client=client,
+                                             block_s=block_s,
+                                             _request_auth=_request_auth,
+                                             _content_type=_content_type,
+                                             _headers=_headers,
+                                             _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         return response_data.response
-
 
     def _get_message_serialize(
         self,
@@ -279,16 +260,14 @@ class TasksApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {
-        }
+        _collection_formats: Dict[str, str] = {}
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
+        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
+                                List[Tuple[str, bytes]]]] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -296,31 +275,24 @@ class TasksApi:
             _path_params['task_id'] = task_id
         # process the query parameters
         if client is not None:
-            
+
             _query_params.append(('client', client))
-            
+
         if block_s is not None:
-            
+
             _query_params.append(('block_s', block_s))
-            
+
         # process the header parameters
         # process the form parameters
         # process the body parameter
 
-
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
+                ['application/json'])
 
         # authentication setting
-        _auth_settings: List[str] = [
-            'APIKeyHeader'
-        ]
+        _auth_settings: List[str] = ['APIKeyHeader']
 
         return self.api_client.param_serialize(
             method='GET',
@@ -334,24 +306,18 @@ class TasksApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
+            _request_auth=_request_auth)
 
     @validate_call
     def get_metadata(
         self,
         task_id: Optional[StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -384,41 +350,34 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_metadata_serialize(
-            task_id=task_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._get_metadata_serialize(task_id=task_id,
+                                              _request_auth=_request_auth,
+                                              _content_type=_content_type,
+                                              _headers=_headers,
+                                              _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
-
     @validate_call
     def get_metadata_with_http_info(
         self,
         task_id: Optional[StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -451,41 +410,34 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_metadata_serialize(
-            task_id=task_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._get_metadata_serialize(task_id=task_id,
+                                              _request_auth=_request_auth,
+                                              _content_type=_content_type,
+                                              _headers=_headers,
+                                              _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
-
     @validate_call
     def get_metadata_without_preload_content(
         self,
         task_id: Optional[StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -518,24 +470,19 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_metadata_serialize(
-            task_id=task_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._get_metadata_serialize(task_id=task_id,
+                                              _request_auth=_request_auth,
+                                              _content_type=_content_type,
+                                              _headers=_headers,
+                                              _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         return response_data.response
-
 
     def _get_metadata_serialize(
         self,
@@ -548,16 +495,14 @@ class TasksApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {
-        }
+        _collection_formats: Dict[str, str] = {}
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
+        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
+                                List[Tuple[str, bytes]]]] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -568,20 +513,13 @@ class TasksApi:
         # process the form parameters
         # process the body parameter
 
-
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
+                ['application/json'])
 
         # authentication setting
-        _auth_settings: List[str] = [
-            'APIKeyHeader'
-        ]
+        _auth_settings: List[str] = ['APIKeyHeader']
 
         return self.api_client.param_serialize(
             method='GET',
@@ -595,24 +533,18 @@ class TasksApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
+            _request_auth=_request_auth)
 
     @validate_call
     def get_task(
         self,
         task_id: Optional[StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -646,41 +578,34 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_task_serialize(
-            task_id=task_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._get_task_serialize(task_id=task_id,
+                                          _request_auth=_request_auth,
+                                          _content_type=_content_type,
+                                          _headers=_headers,
+                                          _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "TaskWithStatusHistory",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
-
     @validate_call
     def get_task_with_http_info(
         self,
         task_id: Optional[StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -714,41 +639,34 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_task_serialize(
-            task_id=task_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._get_task_serialize(task_id=task_id,
+                                          _request_auth=_request_auth,
+                                          _content_type=_content_type,
+                                          _headers=_headers,
+                                          _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "TaskWithStatusHistory",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
-
     @validate_call
     def get_task_without_preload_content(
         self,
         task_id: Optional[StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -782,24 +700,19 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_task_serialize(
-            task_id=task_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._get_task_serialize(task_id=task_id,
+                                          _request_auth=_request_auth,
+                                          _content_type=_content_type,
+                                          _headers=_headers,
+                                          _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "TaskWithStatusHistory",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         return response_data.response
-
 
     def _get_task_serialize(
         self,
@@ -812,16 +725,14 @@ class TasksApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {
-        }
+        _collection_formats: Dict[str, str] = {}
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
+        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
+                                List[Tuple[str, bytes]]]] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -832,20 +743,13 @@ class TasksApi:
         # process the form parameters
         # process the body parameter
 
-
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
+                ['application/json'])
 
         # authentication setting
-        _auth_settings: List[str] = [
-            'APIKeyHeader'
-        ]
+        _auth_settings: List[str] = ['APIKeyHeader']
 
         return self.api_client.param_serialize(
             method='GET',
@@ -859,24 +763,18 @@ class TasksApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
+            _request_auth=_request_auth)
 
     @validate_call
     def get_task_status(
         self,
         task_id: Optional[StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -910,41 +808,34 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_task_status_serialize(
-            task_id=task_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._get_task_status_serialize(task_id=task_id,
+                                                 _request_auth=_request_auth,
+                                                 _content_type=_content_type,
+                                                 _headers=_headers,
+                                                 _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "TaskStatus",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
-
     @validate_call
     def get_task_status_with_http_info(
         self,
         task_id: Optional[StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -978,41 +869,34 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_task_status_serialize(
-            task_id=task_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._get_task_status_serialize(task_id=task_id,
+                                                 _request_auth=_request_auth,
+                                                 _content_type=_content_type,
+                                                 _headers=_headers,
+                                                 _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "TaskStatus",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
-
     @validate_call
     def get_task_status_without_preload_content(
         self,
         task_id: Optional[StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1046,24 +930,19 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_task_status_serialize(
-            task_id=task_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._get_task_status_serialize(task_id=task_id,
+                                                 _request_auth=_request_auth,
+                                                 _content_type=_content_type,
+                                                 _headers=_headers,
+                                                 _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "TaskStatus",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         return response_data.response
-
 
     def _get_task_status_serialize(
         self,
@@ -1076,16 +955,14 @@ class TasksApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {
-        }
+        _collection_formats: Dict[str, str] = {}
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
+        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
+                                List[Tuple[str, bytes]]]] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -1096,20 +973,13 @@ class TasksApi:
         # process the form parameters
         # process the body parameter
 
-
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
+                ['application/json'])
 
         # authentication setting
-        _auth_settings: List[str] = [
-            'APIKeyHeader'
-        ]
+        _auth_settings: List[str] = ['APIKeyHeader']
 
         return self.api_client.param_serialize(
             method='GET',
@@ -1123,36 +993,37 @@ class TasksApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
+            _request_auth=_request_auth)
 
     @validate_call
     def get_user_tasks(
         self,
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
-        per_page: Optional[Annotated[int, Field(le=500, strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int,
+                                     Field(le=500, strict=True, ge=1)]] = None,
         status: Optional[TaskStatusCode] = None,
         project: Optional[StrictStr] = None,
         active: Optional[StrictBool] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        sort: Annotated[
+            Optional[List[Optional[StrictStr]]],
+            Field(
+                description=
+                "Sort fields in format 'field:order'. Example: create_time:desc, status:asc"
+            )] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> List[TaskWithUserInfo]:
+    ) -> TaskWithPagination:
         """Get User Tasks
 
-        Get tasks of authenticated user sorted by most recent first.  This endpoint is used to retrieve the tasks of the authenticated user. The \"per_page\" and \"page\" query parameters are used to paginate the results. Pagination is indexed from 1. The \"status\" query parameter can be used to filter the tasks by status.
+        Get tasks of authenticated user with flexible sorting and filtering.  This endpoint is used to retrieve the tasks of the authenticated user. The \"per_page\" and \"page\" query parameters are used to paginate the results. Pagination is indexed from 1. The \"status\" query parameter can be used to filter the tasks by status. You can also use the 'sort' query parameter for advanced sorting. Example: ?sort=create_time:desc&sort=status:asc
 
         :param page:
         :type page: int
@@ -1164,6 +1035,8 @@ class TasksApi:
         :type project: str
         :param active:
         :type active: bool
+        :param sort: Sort fields in format 'field:order'. Example: create_time:desc, status:asc
+        :type sort: List[Optional[str]]
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1186,57 +1059,58 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_user_tasks_serialize(
-            page=page,
-            per_page=per_page,
-            status=status,
-            project=project,
-            active=active,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._get_user_tasks_serialize(page=page,
+                                                per_page=per_page,
+                                                status=status,
+                                                project=project,
+                                                active=active,
+                                                sort=sort,
+                                                _request_auth=_request_auth,
+                                                _content_type=_content_type,
+                                                _headers=_headers,
+                                                _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[TaskWithUserInfo]",
+            '200': "TaskWithPagination",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
-
     @validate_call
     def get_user_tasks_with_http_info(
         self,
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
-        per_page: Optional[Annotated[int, Field(le=500, strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int,
+                                     Field(le=500, strict=True, ge=1)]] = None,
         status: Optional[TaskStatusCode] = None,
         project: Optional[StrictStr] = None,
         active: Optional[StrictBool] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        sort: Annotated[
+            Optional[List[Optional[StrictStr]]],
+            Field(
+                description=
+                "Sort fields in format 'field:order'. Example: create_time:desc, status:asc"
+            )] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[List[TaskWithUserInfo]]:
+    ) -> ApiResponse[TaskWithPagination]:
         """Get User Tasks
 
-        Get tasks of authenticated user sorted by most recent first.  This endpoint is used to retrieve the tasks of the authenticated user. The \"per_page\" and \"page\" query parameters are used to paginate the results. Pagination is indexed from 1. The \"status\" query parameter can be used to filter the tasks by status.
+        Get tasks of authenticated user with flexible sorting and filtering.  This endpoint is used to retrieve the tasks of the authenticated user. The \"per_page\" and \"page\" query parameters are used to paginate the results. Pagination is indexed from 1. The \"status\" query parameter can be used to filter the tasks by status. You can also use the 'sort' query parameter for advanced sorting. Example: ?sort=create_time:desc&sort=status:asc
 
         :param page:
         :type page: int
@@ -1248,6 +1122,8 @@ class TasksApi:
         :type project: str
         :param active:
         :type active: bool
+        :param sort: Sort fields in format 'field:order'. Example: create_time:desc, status:asc
+        :type sort: List[Optional[str]]
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1270,49 +1146,50 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_user_tasks_serialize(
-            page=page,
-            per_page=per_page,
-            status=status,
-            project=project,
-            active=active,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._get_user_tasks_serialize(page=page,
+                                                per_page=per_page,
+                                                status=status,
+                                                project=project,
+                                                active=active,
+                                                sort=sort,
+                                                _request_auth=_request_auth,
+                                                _content_type=_content_type,
+                                                _headers=_headers,
+                                                _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[TaskWithUserInfo]",
+            '200': "TaskWithPagination",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
-
     @validate_call
     def get_user_tasks_without_preload_content(
         self,
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
-        per_page: Optional[Annotated[int, Field(le=500, strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int,
+                                     Field(le=500, strict=True, ge=1)]] = None,
         status: Optional[TaskStatusCode] = None,
         project: Optional[StrictStr] = None,
         active: Optional[StrictBool] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        sort: Annotated[
+            Optional[List[Optional[StrictStr]]],
+            Field(
+                description=
+                "Sort fields in format 'field:order'. Example: create_time:desc, status:asc"
+            )] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1320,7 +1197,7 @@ class TasksApi:
     ) -> RESTResponseType:
         """Get User Tasks
 
-        Get tasks of authenticated user sorted by most recent first.  This endpoint is used to retrieve the tasks of the authenticated user. The \"per_page\" and \"page\" query parameters are used to paginate the results. Pagination is indexed from 1. The \"status\" query parameter can be used to filter the tasks by status.
+        Get tasks of authenticated user with flexible sorting and filtering.  This endpoint is used to retrieve the tasks of the authenticated user. The \"per_page\" and \"page\" query parameters are used to paginate the results. Pagination is indexed from 1. The \"status\" query parameter can be used to filter the tasks by status. You can also use the 'sort' query parameter for advanced sorting. Example: ?sort=create_time:desc&sort=status:asc
 
         :param page:
         :type page: int
@@ -1332,6 +1209,8 @@ class TasksApi:
         :type project: str
         :param active:
         :type active: bool
+        :param sort: Sort fields in format 'field:order'. Example: create_time:desc, status:asc
+        :type sort: List[Optional[str]]
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1354,28 +1233,24 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._get_user_tasks_serialize(
-            page=page,
-            per_page=per_page,
-            status=status,
-            project=project,
-            active=active,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._get_user_tasks_serialize(page=page,
+                                                per_page=per_page,
+                                                status=status,
+                                                project=project,
+                                                active=active,
+                                                sort=sort,
+                                                _request_auth=_request_auth,
+                                                _content_type=_content_type,
+                                                _headers=_headers,
+                                                _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[TaskWithUserInfo]",
+            '200': "TaskWithPagination",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         return response_data.response
-
 
     def _get_user_tasks_serialize(
         self,
@@ -1384,6 +1259,7 @@ class TasksApi:
         status,
         project,
         active,
+        sort,
         _request_auth,
         _content_type,
         _headers,
@@ -1393,57 +1269,54 @@ class TasksApi:
         _host = None
 
         _collection_formats: Dict[str, str] = {
+            'sort': 'multi',
         }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
+        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
+                                List[Tuple[str, bytes]]]] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
         # process the query parameters
         if page is not None:
-            
+
             _query_params.append(('page', page))
-            
+
         if per_page is not None:
-            
+
             _query_params.append(('per_page', per_page))
-            
+
         if status is not None:
-            
+
             _query_params.append(('status', status.value))
-            
+
         if project is not None:
-            
+
             _query_params.append(('project', project))
-            
+
         if active is not None:
-            
+
             _query_params.append(('active', active))
-            
+
+        if sort is not None:
+
+            _query_params.append(('sort', sort))
+
         # process the header parameters
         # process the form parameters
         # process the body parameter
 
-
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
+                ['application/json'])
 
         # authentication setting
-        _auth_settings: List[str] = [
-            'APIKeyHeader'
-        ]
+        _auth_settings: List[str] = ['APIKeyHeader']
 
         return self.api_client.param_serialize(
             method='GET',
@@ -1457,24 +1330,18 @@ class TasksApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
+            _request_auth=_request_auth)
 
     @validate_call
     def kill_task(
         self,
         task_id: Optional[StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1508,41 +1375,34 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._kill_task_serialize(
-            task_id=task_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._kill_task_serialize(task_id=task_id,
+                                           _request_auth=_request_auth,
+                                           _content_type=_content_type,
+                                           _headers=_headers,
+                                           _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "TaskStatus",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
-
     @validate_call
     def kill_task_with_http_info(
         self,
         task_id: Optional[StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1576,41 +1436,34 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._kill_task_serialize(
-            task_id=task_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._kill_task_serialize(task_id=task_id,
+                                           _request_auth=_request_auth,
+                                           _content_type=_content_type,
+                                           _headers=_headers,
+                                           _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "TaskStatus",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
-
     @validate_call
     def kill_task_without_preload_content(
         self,
         task_id: Optional[StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1644,24 +1497,19 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._kill_task_serialize(
-            task_id=task_id,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._kill_task_serialize(task_id=task_id,
+                                           _request_auth=_request_auth,
+                                           _content_type=_content_type,
+                                           _headers=_headers,
+                                           _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "TaskStatus",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         return response_data.response
-
 
     def _kill_task_serialize(
         self,
@@ -1674,16 +1522,14 @@ class TasksApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {
-        }
+        _collection_formats: Dict[str, str] = {}
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
+        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
+                                List[Tuple[str, bytes]]]] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -1694,20 +1540,13 @@ class TasksApi:
         # process the form parameters
         # process the body parameter
 
-
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
+                ['application/json'])
 
         # authentication setting
-        _auth_settings: List[str] = [
-            'APIKeyHeader'
-        ]
+        _auth_settings: List[str] = ['APIKeyHeader']
 
         return self.api_client.param_serialize(
             method='POST',
@@ -1721,24 +1560,18 @@ class TasksApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
+            _request_auth=_request_auth)
 
     @validate_call
     def notify_input_uploaded(
         self,
         task_id: Optional[StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1777,36 +1610,30 @@ class TasksApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index
-        )
+            _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
-
     @validate_call
     def notify_input_uploaded_with_http_info(
         self,
         task_id: Optional[StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1845,36 +1672,30 @@ class TasksApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index
-        )
+            _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
-
     @validate_call
     def notify_input_uploaded_without_preload_content(
         self,
         task_id: Optional[StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -1913,19 +1734,15 @@ class TasksApi:
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index
-        )
+            _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         return response_data.response
-
 
     def _notify_input_uploaded_serialize(
         self,
@@ -1938,16 +1755,14 @@ class TasksApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {
-        }
+        _collection_formats: Dict[str, str] = {}
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
+        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
+                                List[Tuple[str, bytes]]]] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -1958,20 +1773,13 @@ class TasksApi:
         # process the form parameters
         # process the body parameter
 
-
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
+                ['application/json'])
 
         # authentication setting
-        _auth_settings: List[str] = [
-            'APIKeyHeader'
-        ]
+        _auth_settings: List[str] = ['APIKeyHeader']
 
         return self.api_client.param_serialize(
             method='POST',
@@ -1985,25 +1793,19 @@ class TasksApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
+            _request_auth=_request_auth)
 
     @validate_call
     def offer_task(
         self,
         task_id: Optional[StrictStr],
         task_connection: TaskConnection,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2038,43 +1840,36 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._offer_task_serialize(
-            task_id=task_id,
-            task_connection=task_connection,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._offer_task_serialize(task_id=task_id,
+                                            task_connection=task_connection,
+                                            _request_auth=_request_auth,
+                                            _content_type=_content_type,
+                                            _headers=_headers,
+                                            _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
-
     @validate_call
     def offer_task_with_http_info(
         self,
         task_id: Optional[StrictStr],
         task_connection: TaskConnection,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2109,43 +1904,36 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._offer_task_serialize(
-            task_id=task_id,
-            task_connection=task_connection,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._offer_task_serialize(task_id=task_id,
+                                            task_connection=task_connection,
+                                            _request_auth=_request_auth,
+                                            _content_type=_content_type,
+                                            _headers=_headers,
+                                            _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
-
     @validate_call
     def offer_task_without_preload_content(
         self,
         task_id: Optional[StrictStr],
         task_connection: TaskConnection,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2180,25 +1968,20 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._offer_task_serialize(
-            task_id=task_id,
-            task_connection=task_connection,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._offer_task_serialize(task_id=task_id,
+                                            task_connection=task_connection,
+                                            _request_auth=_request_auth,
+                                            _content_type=_content_type,
+                                            _headers=_headers,
+                                            _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         return response_data.response
-
 
     def _offer_task_serialize(
         self,
@@ -2212,16 +1995,14 @@ class TasksApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {
-        }
+        _collection_formats: Dict[str, str] = {}
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
+        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
+                                List[Tuple[str, bytes]]]] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -2234,33 +2015,22 @@ class TasksApi:
         if task_connection is not None:
             _body_params = task_connection
 
-
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
+                ['application/json'])
 
         # set the HTTP header `Content-Type`
         if _content_type:
             _header_params['Content-Type'] = _content_type
         else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
+            _default_content_type = (self.api_client.select_header_content_type(
+                ['application/json']))
             if _default_content_type is not None:
                 _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = [
-            'APIKeyHeader'
-        ]
+        _auth_settings: List[str] = ['APIKeyHeader']
 
         return self.api_client.param_serialize(
             method='POST',
@@ -2274,25 +2044,19 @@ class TasksApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
+            _request_auth=_request_auth)
 
     @validate_call
     def register_task(
         self,
         task_id: Optional[StrictStr],
         task_connection: TaskConnection,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2327,43 +2091,36 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._register_task_serialize(
-            task_id=task_id,
-            task_connection=task_connection,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._register_task_serialize(task_id=task_id,
+                                               task_connection=task_connection,
+                                               _request_auth=_request_auth,
+                                               _content_type=_content_type,
+                                               _headers=_headers,
+                                               _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
-
     @validate_call
     def register_task_with_http_info(
         self,
         task_id: Optional[StrictStr],
         task_connection: TaskConnection,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2398,43 +2155,36 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._register_task_serialize(
-            task_id=task_id,
-            task_connection=task_connection,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._register_task_serialize(task_id=task_id,
+                                               task_connection=task_connection,
+                                               _request_auth=_request_auth,
+                                               _content_type=_content_type,
+                                               _headers=_headers,
+                                               _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
-
     @validate_call
     def register_task_without_preload_content(
         self,
         task_id: Optional[StrictStr],
         task_connection: TaskConnection,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2469,25 +2219,20 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._register_task_serialize(
-            task_id=task_id,
-            task_connection=task_connection,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._register_task_serialize(task_id=task_id,
+                                               task_connection=task_connection,
+                                               _request_auth=_request_auth,
+                                               _content_type=_content_type,
+                                               _headers=_headers,
+                                               _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         return response_data.response
-
 
     def _register_task_serialize(
         self,
@@ -2501,16 +2246,14 @@ class TasksApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {
-        }
+        _collection_formats: Dict[str, str] = {}
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
+        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
+                                List[Tuple[str, bytes]]]] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -2523,33 +2266,22 @@ class TasksApi:
         if task_connection is not None:
             _body_params = task_connection
 
-
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
+                ['application/json'])
 
         # set the HTTP header `Content-Type`
         if _content_type:
             _header_params['Content-Type'] = _content_type
         else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
+            _default_content_type = (self.api_client.select_header_content_type(
+                ['application/json']))
             if _default_content_type is not None:
                 _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = [
-            'APIKeyHeader'
-        ]
+        _auth_settings: List[str] = ['APIKeyHeader']
 
         return self.api_client.param_serialize(
             method='POST',
@@ -2563,25 +2295,19 @@ class TasksApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
+            _request_auth=_request_auth)
 
     @validate_call
     def set_metadata(
         self,
         task_id: Optional[StrictStr],
         request_body: Dict[str, Optional[StrictStr]],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2616,43 +2342,36 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._set_metadata_serialize(
-            task_id=task_id,
-            request_body=request_body,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._set_metadata_serialize(task_id=task_id,
+                                              request_body=request_body,
+                                              _request_auth=_request_auth,
+                                              _content_type=_content_type,
+                                              _headers=_headers,
+                                              _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
-
     @validate_call
     def set_metadata_with_http_info(
         self,
         task_id: Optional[StrictStr],
         request_body: Dict[str, Optional[StrictStr]],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2687,43 +2406,36 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._set_metadata_serialize(
-            task_id=task_id,
-            request_body=request_body,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._set_metadata_serialize(task_id=task_id,
+                                              request_body=request_body,
+                                              _request_auth=_request_auth,
+                                              _content_type=_content_type,
+                                              _headers=_headers,
+                                              _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
-
     @validate_call
     def set_metadata_without_preload_content(
         self,
         task_id: Optional[StrictStr],
         request_body: Dict[str, Optional[StrictStr]],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2758,25 +2470,20 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._set_metadata_serialize(
-            task_id=task_id,
-            request_body=request_body,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._set_metadata_serialize(task_id=task_id,
+                                              request_body=request_body,
+                                              _request_auth=_request_auth,
+                                              _content_type=_content_type,
+                                              _headers=_headers,
+                                              _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         return response_data.response
-
 
     def _set_metadata_serialize(
         self,
@@ -2790,16 +2497,14 @@ class TasksApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {
-        }
+        _collection_formats: Dict[str, str] = {}
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
+        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
+                                List[Tuple[str, bytes]]]] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -2812,33 +2517,22 @@ class TasksApi:
         if request_body is not None:
             _body_params = request_body
 
-
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
+                ['application/json'])
 
         # set the HTTP header `Content-Type`
         if _content_type:
             _header_params['Content-Type'] = _content_type
         else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
+            _default_content_type = (self.api_client.select_header_content_type(
+                ['application/json']))
             if _default_content_type is not None:
                 _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = [
-            'APIKeyHeader'
-        ]
+        _auth_settings: List[str] = ['APIKeyHeader']
 
         return self.api_client.param_serialize(
             method='PUT',
@@ -2852,24 +2546,18 @@ class TasksApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
+            _request_auth=_request_auth)
 
     @validate_call
     def submit_task(
         self,
         task_request: TaskRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2903,41 +2591,34 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._submit_task_serialize(
-            task_request=task_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._submit_task_serialize(task_request=task_request,
+                                             _request_auth=_request_auth,
+                                             _content_type=_content_type,
+                                             _headers=_headers,
+                                             _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '202': "TaskSubmittedInfo",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
-
     @validate_call
     def submit_task_with_http_info(
         self,
         task_request: TaskRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -2971,41 +2652,34 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._submit_task_serialize(
-            task_request=task_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._submit_task_serialize(task_request=task_request,
+                                             _request_auth=_request_auth,
+                                             _content_type=_content_type,
+                                             _headers=_headers,
+                                             _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '202': "TaskSubmittedInfo",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
-
     @validate_call
     def submit_task_without_preload_content(
         self,
         task_request: TaskRequest,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -3039,24 +2713,19 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._submit_task_serialize(
-            task_request=task_request,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._submit_task_serialize(task_request=task_request,
+                                             _request_auth=_request_auth,
+                                             _content_type=_content_type,
+                                             _headers=_headers,
+                                             _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '202': "TaskSubmittedInfo",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         return response_data.response
-
 
     def _submit_task_serialize(
         self,
@@ -3069,16 +2738,14 @@ class TasksApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {
-        }
+        _collection_formats: Dict[str, str] = {}
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
+        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
+                                List[Tuple[str, bytes]]]] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -3089,33 +2756,22 @@ class TasksApi:
         if task_request is not None:
             _body_params = task_request
 
-
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
+                ['application/json'])
 
         # set the HTTP header `Content-Type`
         if _content_type:
             _header_params['Content-Type'] = _content_type
         else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
+            _default_content_type = (self.api_client.select_header_content_type(
+                ['application/json']))
             if _default_content_type is not None:
                 _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = [
-            'APIKeyHeader'
-        ]
+        _auth_settings: List[str] = ['APIKeyHeader']
 
         return self.api_client.param_serialize(
             method='POST',
@@ -3129,25 +2785,19 @@ class TasksApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
+            _request_auth=_request_auth)
 
     @validate_call
     def update_metadata(
         self,
         task_id: Optional[StrictStr],
         request_body: Dict[str, StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -3182,43 +2832,36 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._update_metadata_serialize(
-            task_id=task_id,
-            request_body=request_body,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._update_metadata_serialize(task_id=task_id,
+                                                 request_body=request_body,
+                                                 _request_auth=_request_auth,
+                                                 _content_type=_content_type,
+                                                 _headers=_headers,
+                                                 _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         ).data
 
-
     @validate_call
     def update_metadata_with_http_info(
         self,
         task_id: Optional[StrictStr],
         request_body: Dict[str, StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -3253,43 +2896,36 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._update_metadata_serialize(
-            task_id=task_id,
-            request_body=request_body,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._update_metadata_serialize(task_id=task_id,
+                                                 request_body=request_body,
+                                                 _request_auth=_request_auth,
+                                                 _content_type=_content_type,
+                                                 _headers=_headers,
+                                                 _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         response_data.read()
         return self.api_client.response_deserialize(
             response_data=response_data,
             response_types_map=_response_types_map,
         )
 
-
     @validate_call
     def update_metadata_without_preload_content(
         self,
         task_id: Optional[StrictStr],
         request_body: Dict[str, StrictStr],
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
@@ -3324,25 +2960,20 @@ class TasksApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._update_metadata_serialize(
-            task_id=task_id,
-            request_body=request_body,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
+        _param = self._update_metadata_serialize(task_id=task_id,
+                                                 request_body=request_body,
+                                                 _request_auth=_request_auth,
+                                                 _content_type=_content_type,
+                                                 _headers=_headers,
+                                                 _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "object",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
+            *_param, _request_timeout=_request_timeout)
         return response_data.response
-
 
     def _update_metadata_serialize(
         self,
@@ -3356,16 +2987,14 @@ class TasksApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {
-        }
+        _collection_formats: Dict[str, str] = {}
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
+        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
+                                List[Tuple[str, bytes]]]] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -3378,33 +3007,22 @@ class TasksApi:
         if request_body is not None:
             _body_params = request_body
 
-
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
+                ['application/json'])
 
         # set the HTTP header `Content-Type`
         if _content_type:
             _header_params['Content-Type'] = _content_type
         else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
+            _default_content_type = (self.api_client.select_header_content_type(
+                ['application/json']))
             if _default_content_type is not None:
                 _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
-        _auth_settings: List[str] = [
-            'APIKeyHeader'
-        ]
+        _auth_settings: List[str] = ['APIKeyHeader']
 
         return self.api_client.param_serialize(
             method='PATCH',
@@ -3418,7 +3036,4 @@ class TasksApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth
-        )
-
-
+            _request_auth=_request_auth)

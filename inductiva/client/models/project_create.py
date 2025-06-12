@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -24,10 +23,13 @@ from inductiva.client.models.project_type import ProjectType
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class ProjectCreate(BaseModel):
     """
     ProjectCreate
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     name: Annotated[str, Field(min_length=1, strict=True, max_length=128)]
     project_type: Optional[ProjectType] = None
     __properties: ClassVar[List[str]] = ["name", "project_type"]
@@ -37,7 +39,6 @@ class ProjectCreate(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -63,8 +64,7 @@ class ProjectCreate(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -87,5 +87,3 @@ class ProjectCreate(BaseModel):
             "project_type": obj.get("project_type")
         })
         return _obj
-
-

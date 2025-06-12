@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 from inspect import getfullargspec
 import json
@@ -27,6 +26,7 @@ from pydantic import Field
 
 TRIGGER1_ANY_OF_SCHEMAS = ["TriggerMachineGroupInfo", "TriggerTaskInfo"]
 
+
 class Trigger1(BaseModel):
     """
     Trigger1
@@ -37,10 +37,11 @@ class Trigger1(BaseModel):
     # data type: TriggerMachineGroupInfo
     anyof_schema_2_validator: Optional[TriggerMachineGroupInfo] = None
     if TYPE_CHECKING:
-        actual_instance: Optional[Union[TriggerMachineGroupInfo, TriggerTaskInfo]] = None
+        actual_instance: Optional[Union[TriggerMachineGroupInfo,
+                                        TriggerTaskInfo]] = None
     else:
         actual_instance: Any = None
-    any_of_schemas: Set[str] = { "TriggerMachineGroupInfo", "TriggerTaskInfo" }
+    any_of_schemas: Set[str] = {"TriggerMachineGroupInfo", "TriggerTaskInfo"}
 
     model_config = {
         "validate_assignment": True,
@@ -50,9 +51,13 @@ class Trigger1(BaseModel):
     def __init__(self, *args, **kwargs) -> None:
         if args:
             if len(args) > 1:
-                raise ValueError("If a position argument is used, only 1 is allowed to set `actual_instance`")
+                raise ValueError(
+                    "If a position argument is used, only 1 is allowed to set `actual_instance`"
+                )
             if kwargs:
-                raise ValueError("If a position argument is used, keyword arguments cannot be used.")
+                raise ValueError(
+                    "If a position argument is used, keyword arguments cannot be used."
+                )
             super().__init__(actual_instance=args[0])
         else:
             super().__init__(**kwargs)
@@ -63,19 +68,24 @@ class Trigger1(BaseModel):
         error_messages = []
         # validate data type: TriggerTaskInfo
         if not isinstance(v, TriggerTaskInfo):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `TriggerTaskInfo`")
+            error_messages.append(
+                f"Error! Input type `{type(v)}` is not `TriggerTaskInfo`")
         else:
             return v
 
         # validate data type: TriggerMachineGroupInfo
         if not isinstance(v, TriggerMachineGroupInfo):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `TriggerMachineGroupInfo`")
+            error_messages.append(
+                f"Error! Input type `{type(v)}` is not `TriggerMachineGroupInfo`"
+            )
         else:
             return v
 
         if error_messages:
             # no match
-            raise ValueError("No match found when setting the actual_instance in Trigger1 with anyOf schemas: TriggerMachineGroupInfo, TriggerTaskInfo. Details: " + ", ".join(error_messages))
+            raise ValueError(
+                "No match found when setting the actual_instance in Trigger1 with anyOf schemas: TriggerMachineGroupInfo, TriggerTaskInfo. Details: "
+                + ", ".join(error_messages))
         else:
             return v
 
@@ -93,17 +103,20 @@ class Trigger1(BaseModel):
             instance.actual_instance = TriggerTaskInfo.from_json(json_str)
             return instance
         except (ValidationError, ValueError) as e:
-             error_messages.append(str(e))
+            error_messages.append(str(e))
         # anyof_schema_2_validator: Optional[TriggerMachineGroupInfo] = None
         try:
-            instance.actual_instance = TriggerMachineGroupInfo.from_json(json_str)
+            instance.actual_instance = TriggerMachineGroupInfo.from_json(
+                json_str)
             return instance
         except (ValidationError, ValueError) as e:
-             error_messages.append(str(e))
+            error_messages.append(str(e))
 
         if error_messages:
             # no match
-            raise ValueError("No match found when deserializing the JSON string into Trigger1 with anyOf schemas: TriggerMachineGroupInfo, TriggerTaskInfo. Details: " + ", ".join(error_messages))
+            raise ValueError(
+                "No match found when deserializing the JSON string into Trigger1 with anyOf schemas: TriggerMachineGroupInfo, TriggerTaskInfo. Details: "
+                + ", ".join(error_messages))
         else:
             return instance
 
@@ -112,17 +125,22 @@ class Trigger1(BaseModel):
         if self.actual_instance is None:
             return "null"
 
-        if hasattr(self.actual_instance, "to_json") and callable(self.actual_instance.to_json):
+        if hasattr(self.actual_instance, "to_json") and callable(
+                self.actual_instance.to_json):
             return self.actual_instance.to_json()
         else:
             return json.dumps(self.actual_instance)
 
-    def to_dict(self) -> Optional[Union[Dict[str, Any], TriggerMachineGroupInfo, TriggerTaskInfo]]:
+    def to_dict(
+        self
+    ) -> Optional[Union[Dict[str, Any], TriggerMachineGroupInfo,
+                        TriggerTaskInfo]]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None
 
-        if hasattr(self.actual_instance, "to_dict") and callable(self.actual_instance.to_dict):
+        if hasattr(self.actual_instance, "to_dict") and callable(
+                self.actual_instance.to_dict):
             return self.actual_instance.to_dict()
         else:
             return self.actual_instance
@@ -130,5 +148,3 @@ class Trigger1(BaseModel):
     def to_str(self) -> str:
         """Returns the string representation of the actual instance"""
         return pprint.pformat(self.model_dump())
-
-

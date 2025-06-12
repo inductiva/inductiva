@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -25,24 +24,29 @@ from inductiva.client.models.task_operation_name import TaskOperationName
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class TaskOperation(BaseModel):
     """
     TaskOperation
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     name: TaskOperationName
     alias: StrictStr
     start_timestamp: datetime
     end_timestamp: Optional[datetime] = None
     status: OperationStatus
     attributes: Dict[str, Any]
-    __properties: ClassVar[List[str]] = ["name", "alias", "start_timestamp", "end_timestamp", "status", "attributes"]
+    __properties: ClassVar[List[str]] = [
+        "name", "alias", "start_timestamp", "end_timestamp", "status",
+        "attributes"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -68,8 +72,7 @@ class TaskOperation(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -101,5 +104,3 @@ class TaskOperation(BaseModel):
             "attributes": obj.get("attributes")
         })
         return _obj
-
-

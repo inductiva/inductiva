@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -23,10 +22,13 @@ from inductiva.client.models.machine_group_terminate_reason import MachineGroupT
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class MachineGroupTerminateRequest(BaseModel):
     """
     MachineGroupTerminateRequest
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     reason: Optional[MachineGroupTerminateReason]
     __properties: ClassVar[List[str]] = ["reason"]
 
@@ -35,7 +37,6 @@ class MachineGroupTerminateRequest(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -61,8 +62,7 @@ class MachineGroupTerminateRequest(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -85,9 +85,5 @@ class MachineGroupTerminateRequest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "reason": obj.get("reason")
-        })
+        _obj = cls.model_validate({"reason": obj.get("reason")})
         return _obj
-
-

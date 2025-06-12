@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 import copy
 import http.client as httplib
 import logging
@@ -23,11 +22,9 @@ from typing_extensions import NotRequired, Self
 
 import urllib3
 
-
 JSON_SCHEMA_VALIDATION_KEYWORDS = {
-    'multipleOf', 'maximum', 'exclusiveMaximum',
-    'minimum', 'exclusiveMinimum', 'maxLength',
-    'minLength', 'pattern', 'maxItems', 'minItems'
+    'multipleOf', 'maximum', 'exclusiveMaximum', 'minimum', 'exclusiveMinimum',
+    'maxLength', 'minLength', 'pattern', 'maxItems', 'minItems'
 }
 
 ServerVariablesT = Dict[str, str]
@@ -42,7 +39,6 @@ GenericAuthSetting = TypedDict(
     },
 )
 
-
 OAuth2AuthSetting = TypedDict(
     "OAuth2AuthSetting",
     {
@@ -52,7 +48,6 @@ OAuth2AuthSetting = TypedDict(
         "value": str,
     },
 )
-
 
 APIKeyAuthSetting = TypedDict(
     "APIKeyAuthSetting",
@@ -64,7 +59,6 @@ APIKeyAuthSetting = TypedDict(
     },
 )
 
-
 BasicAuthSetting = TypedDict(
     "BasicAuthSetting",
     {
@@ -74,7 +68,6 @@ BasicAuthSetting = TypedDict(
         "value": Optional[str],
     },
 )
-
 
 BearerFormatAuthSetting = TypedDict(
     "BearerFormatAuthSetting",
@@ -87,7 +80,6 @@ BearerFormatAuthSetting = TypedDict(
     },
 )
 
-
 BearerAuthSetting = TypedDict(
     "BearerAuthSetting",
     {
@@ -98,7 +90,6 @@ BearerAuthSetting = TypedDict(
     },
 )
 
-
 HTTPSignatureAuthSetting = TypedDict(
     "HTTPSignatureAuthSetting",
     {
@@ -108,7 +99,6 @@ HTTPSignatureAuthSetting = TypedDict(
         "value": None,
     },
 )
-
 
 AuthSettings = TypedDict(
     "AuthSettings",
@@ -190,18 +180,19 @@ conf = inductiva.client.Configuration(
 
     def __init__(
         self,
-        host: Optional[str]=None,
-        api_key: Optional[Dict[str, str]]=None,
-        api_key_prefix: Optional[Dict[str, str]]=None,
-        username: Optional[str]=None,
-        password: Optional[str]=None,
-        access_token: Optional[str]=None,
-        server_index: Optional[int]=None,
-        server_variables: Optional[ServerVariablesT]=None,
-        server_operation_index: Optional[Dict[int, int]]=None,
-        server_operation_variables: Optional[Dict[int, ServerVariablesT]]=None,
-        ignore_operation_servers: bool=False,
-        ssl_ca_cert: Optional[str]=None,
+        host: Optional[str] = None,
+        api_key: Optional[Dict[str, str]] = None,
+        api_key_prefix: Optional[Dict[str, str]] = None,
+        username: Optional[str] = None,
+        password: Optional[str] = None,
+        access_token: Optional[str] = None,
+        server_index: Optional[int] = None,
+        server_variables: Optional[ServerVariablesT] = None,
+        server_operation_index: Optional[Dict[int, int]] = None,
+        server_operation_variables: Optional[Dict[int,
+                                                  ServerVariablesT]] = None,
+        ignore_operation_servers: bool = False,
+        ssl_ca_cert: Optional[str] = None,
         retries: Optional[int] = None,
         ca_cert_data: Optional[Union[str, bytes]] = None,
         *,
@@ -334,7 +325,7 @@ conf = inductiva.client.Configuration(
         """date format
         """
 
-    def __deepcopy__(self, memo:  Dict[int, Any]) -> Self:
+    def __deepcopy__(self, memo: Dict[int, Any]) -> Self:
         cls = self.__class__
         result = cls.__new__(cls)
         memo[id(self)] = result
@@ -471,7 +462,9 @@ conf = inductiva.client.Configuration(
         self.__logger_format = value
         self.logger_formatter = logging.Formatter(self.__logger_format)
 
-    def get_api_key_with_prefix(self, identifier: str, alias: Optional[str]=None) -> Optional[str]:
+    def get_api_key_with_prefix(self,
+                                identifier: str,
+                                alias: Optional[str] = None) -> Optional[str]:
         """Gets API key (with prefix if set).
 
         :param identifier: The identifier of apiKey.
@@ -505,7 +498,7 @@ conf = inductiva.client.Configuration(
             basic_auth=username + ':' + password
         ).get('authorization')
 
-    def auth_settings(self)-> AuthSettings:
+    def auth_settings(self) -> AuthSettings:
         """Gets Auth Settings dict for api client.
 
         :return: The Auth Settings information dict.
@@ -549,8 +542,8 @@ conf = inductiva.client.Configuration(
     def get_host_from_settings(
         self,
         index: Optional[int],
-        variables: Optional[ServerVariablesT]=None,
-        servers: Optional[List[HostSetting]]=None,
+        variables: Optional[ServerVariablesT] = None,
+        servers: Optional[List[HostSetting]] = None,
     ) -> str:
         """Gets host URL based on the index and variables
         :param index: array index of the host settings

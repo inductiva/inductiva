@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -25,10 +24,13 @@ from inductiva.client.models.task_status_code import TaskStatusCode
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class TaskStatusInfo(BaseModel):
     """
     TaskStatusInfo
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     machine_id: Optional[StrictStr] = None
     status: TaskStatusCode
     timestamp: datetime
@@ -36,14 +38,16 @@ class TaskStatusInfo(BaseModel):
     description: StrictStr
     alias: StrictStr
     operations: List[TaskOperation]
-    __properties: ClassVar[List[str]] = ["machine_id", "status", "timestamp", "end_timestamp", "description", "alias", "operations"]
+    __properties: ClassVar[List[str]] = [
+        "machine_id", "status", "timestamp", "end_timestamp", "description",
+        "alias", "operations"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -69,8 +73,7 @@ class TaskStatusInfo(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -106,14 +109,20 @@ class TaskStatusInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "machine_id": obj.get("machine_id"),
-            "status": obj.get("status"),
-            "timestamp": obj.get("timestamp"),
-            "end_timestamp": obj.get("end_timestamp"),
-            "description": obj.get("description"),
-            "alias": obj.get("alias"),
-            "operations": [TaskOperation.from_dict(_item) for _item in obj["operations"]] if obj.get("operations") is not None else None
+            "machine_id":
+                obj.get("machine_id"),
+            "status":
+                obj.get("status"),
+            "timestamp":
+                obj.get("timestamp"),
+            "end_timestamp":
+                obj.get("end_timestamp"),
+            "description":
+                obj.get("description"),
+            "alias":
+                obj.get("alias"),
+            "operations": [
+                TaskOperation.from_dict(_item) for _item in obj["operations"]
+            ] if obj.get("operations") is not None else None
         })
         return _obj
-
-

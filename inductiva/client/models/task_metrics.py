@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -22,12 +21,16 @@ from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class TaskMetrics(BaseModel):
     """
     TaskMetrics
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     total_seconds: Optional[Union[StrictFloat, StrictInt]] = None
-    container_image_download_seconds: Optional[Union[StrictFloat, StrictInt]] = None
+    container_image_download_seconds: Optional[Union[StrictFloat,
+                                                     StrictInt]] = None
     container_image_size_bytes: Optional[StrictInt] = None
     queue_time_seconds: Optional[Union[StrictFloat, StrictInt]] = None
     computation_seconds: Optional[Union[StrictFloat, StrictInt]] = None
@@ -41,14 +44,21 @@ class TaskMetrics(BaseModel):
     output_size_bytes: Optional[StrictInt] = None
     output_zipped_size_bytes: Optional[StrictInt] = None
     output_compression_seconds: Optional[Union[StrictFloat, StrictInt]] = None
-    __properties: ClassVar[List[str]] = ["total_seconds", "container_image_download_seconds", "container_image_size_bytes", "queue_time_seconds", "computation_seconds", "input_upload_seconds", "input_download_seconds", "input_decompression_seconds", "output_upload_seconds", "input_zipped_size_bytes", "input_size_bytes", "output_total_files", "output_size_bytes", "output_zipped_size_bytes", "output_compression_seconds"]
+    __properties: ClassVar[List[str]] = [
+        "total_seconds", "container_image_download_seconds",
+        "container_image_size_bytes", "queue_time_seconds",
+        "computation_seconds", "input_upload_seconds", "input_download_seconds",
+        "input_decompression_seconds", "output_upload_seconds",
+        "input_zipped_size_bytes", "input_size_bytes", "output_total_files",
+        "output_size_bytes", "output_zipped_size_bytes",
+        "output_compression_seconds"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -74,8 +84,7 @@ class TaskMetrics(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -169,22 +178,35 @@ class TaskMetrics(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "total_seconds": obj.get("total_seconds"),
-            "container_image_download_seconds": obj.get("container_image_download_seconds"),
-            "container_image_size_bytes": obj.get("container_image_size_bytes"),
-            "queue_time_seconds": obj.get("queue_time_seconds"),
-            "computation_seconds": obj.get("computation_seconds"),
-            "input_upload_seconds": obj.get("input_upload_seconds"),
-            "input_download_seconds": obj.get("input_download_seconds"),
-            "input_decompression_seconds": obj.get("input_decompression_seconds"),
-            "output_upload_seconds": obj.get("output_upload_seconds"),
-            "input_zipped_size_bytes": obj.get("input_zipped_size_bytes"),
-            "input_size_bytes": obj.get("input_size_bytes"),
-            "output_total_files": obj.get("output_total_files"),
-            "output_size_bytes": obj.get("output_size_bytes"),
-            "output_zipped_size_bytes": obj.get("output_zipped_size_bytes"),
-            "output_compression_seconds": obj.get("output_compression_seconds")
+            "total_seconds":
+                obj.get("total_seconds"),
+            "container_image_download_seconds":
+                obj.get("container_image_download_seconds"),
+            "container_image_size_bytes":
+                obj.get("container_image_size_bytes"),
+            "queue_time_seconds":
+                obj.get("queue_time_seconds"),
+            "computation_seconds":
+                obj.get("computation_seconds"),
+            "input_upload_seconds":
+                obj.get("input_upload_seconds"),
+            "input_download_seconds":
+                obj.get("input_download_seconds"),
+            "input_decompression_seconds":
+                obj.get("input_decompression_seconds"),
+            "output_upload_seconds":
+                obj.get("output_upload_seconds"),
+            "input_zipped_size_bytes":
+                obj.get("input_zipped_size_bytes"),
+            "input_size_bytes":
+                obj.get("input_size_bytes"),
+            "output_total_files":
+                obj.get("output_total_files"),
+            "output_size_bytes":
+                obj.get("output_size_bytes"),
+            "output_zipped_size_bytes":
+                obj.get("output_zipped_size_bytes"),
+            "output_compression_seconds":
+                obj.get("output_compression_seconds")
         })
         return _obj
-
-

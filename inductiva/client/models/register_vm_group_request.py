@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -25,10 +24,13 @@ from inductiva.client.models.machine_group_type import MachineGroupType
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class RegisterVMGroupRequest(BaseModel):
     """
     RegisterVMGroupRequest
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     machine_type: Optional[StrictStr] = None
     name: Optional[StrictStr] = None
     provider_id: Optional[StrictStr] = 'GCP'
@@ -49,14 +51,19 @@ class RegisterVMGroupRequest(BaseModel):
     zone: Optional[StrictStr] = None
     gpu_count: Optional[StrictInt] = None
     gpu_name: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["machine_type", "name", "provider_id", "threads_per_core", "disk_size_gb", "max_idle_time", "auto_terminate_ts", "dynamic_disk_resize_config", "custom_vm_image", "num_vms", "min_vms", "max_vms", "type", "is_elastic", "spot", "cpu_cores_logical", "cpu_cores_physical", "zone", "gpu_count", "gpu_name"]
+    __properties: ClassVar[List[str]] = [
+        "machine_type", "name", "provider_id", "threads_per_core",
+        "disk_size_gb", "max_idle_time", "auto_terminate_ts",
+        "dynamic_disk_resize_config", "custom_vm_image", "num_vms", "min_vms",
+        "max_vms", "type", "is_elastic", "spot", "cpu_cores_logical",
+        "cpu_cores_physical", "zone", "gpu_count", "gpu_name"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -82,8 +89,7 @@ class RegisterVMGroupRequest(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -92,7 +98,9 @@ class RegisterVMGroupRequest(BaseModel):
         )
         # override the default output from pydantic by calling `to_dict()` of dynamic_disk_resize_config
         if self.dynamic_disk_resize_config:
-            _dict['dynamic_disk_resize_config'] = self.dynamic_disk_resize_config.to_dict()
+            _dict[
+                'dynamic_disk_resize_config'] = self.dynamic_disk_resize_config.to_dict(
+                )
         # set to None if machine_type (nullable) is None
         # and model_fields_set contains the field
         if self.machine_type is None and "machine_type" in self.model_fields_set:
@@ -175,27 +183,51 @@ class RegisterVMGroupRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "machine_type": obj.get("machine_type"),
-            "name": obj.get("name"),
-            "provider_id": obj.get("provider_id") if obj.get("provider_id") is not None else 'GCP',
-            "threads_per_core": obj.get("threads_per_core") if obj.get("threads_per_core") is not None else 2,
-            "disk_size_gb": obj.get("disk_size_gb") if obj.get("disk_size_gb") is not None else 10,
-            "max_idle_time": obj.get("max_idle_time"),
-            "auto_terminate_ts": obj.get("auto_terminate_ts"),
-            "dynamic_disk_resize_config": DynamicDiskResizeConfig.from_dict(obj["dynamic_disk_resize_config"]) if obj.get("dynamic_disk_resize_config") is not None else None,
-            "custom_vm_image": obj.get("custom_vm_image"),
-            "num_vms": obj.get("num_vms"),
-            "min_vms": obj.get("min_vms"),
-            "max_vms": obj.get("max_vms"),
-            "type": obj.get("type"),
-            "is_elastic": obj.get("is_elastic") if obj.get("is_elastic") is not None else False,
-            "spot": obj.get("spot") if obj.get("spot") is not None else False,
-            "cpu_cores_logical": obj.get("cpu_cores_logical"),
-            "cpu_cores_physical": obj.get("cpu_cores_physical"),
-            "zone": obj.get("zone"),
-            "gpu_count": obj.get("gpu_count"),
-            "gpu_name": obj.get("gpu_name")
+            "machine_type":
+                obj.get("machine_type"),
+            "name":
+                obj.get("name"),
+            "provider_id":
+                obj.get("provider_id")
+                if obj.get("provider_id") is not None else 'GCP',
+            "threads_per_core":
+                obj.get("threads_per_core")
+                if obj.get("threads_per_core") is not None else 2,
+            "disk_size_gb":
+                obj.get("disk_size_gb")
+                if obj.get("disk_size_gb") is not None else 10,
+            "max_idle_time":
+                obj.get("max_idle_time"),
+            "auto_terminate_ts":
+                obj.get("auto_terminate_ts"),
+            "dynamic_disk_resize_config":
+                DynamicDiskResizeConfig.from_dict(
+                    obj["dynamic_disk_resize_config"])
+                if obj.get("dynamic_disk_resize_config") is not None else None,
+            "custom_vm_image":
+                obj.get("custom_vm_image"),
+            "num_vms":
+                obj.get("num_vms"),
+            "min_vms":
+                obj.get("min_vms"),
+            "max_vms":
+                obj.get("max_vms"),
+            "type":
+                obj.get("type"),
+            "is_elastic":
+                obj.get("is_elastic")
+                if obj.get("is_elastic") is not None else False,
+            "spot":
+                obj.get("spot") if obj.get("spot") is not None else False,
+            "cpu_cores_logical":
+                obj.get("cpu_cores_logical"),
+            "cpu_cores_physical":
+                obj.get("cpu_cores_physical"),
+            "zone":
+                obj.get("zone"),
+            "gpu_count":
+                obj.get("gpu_count"),
+            "gpu_name":
+                obj.get("gpu_name")
         })
         return _obj
-
-

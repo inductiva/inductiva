@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -22,6 +21,7 @@ from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class TaskRunnerAPIConnectionInfo(BaseModel):
     """
     Information sent to the task-runner after registration.
@@ -31,14 +31,16 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
     redis_consumer_name: StrictStr
     redis_consumer_group: StrictStr
     machine_group_id: StrictStr
-    __properties: ClassVar[List[str]] = ["task_runner_id", "redis_stream", "redis_consumer_name", "redis_consumer_group", "machine_group_id"]
+    __properties: ClassVar[List[str]] = [
+        "task_runner_id", "redis_stream", "redis_consumer_name",
+        "redis_consumer_group", "machine_group_id"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -64,8 +66,7 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -91,5 +92,3 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
             "machine_group_id": obj.get("machine_group_id")
         })
         return _obj
-
-

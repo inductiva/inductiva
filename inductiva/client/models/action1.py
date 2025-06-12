@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 from inspect import getfullargspec
 import json
@@ -27,6 +26,7 @@ from pydantic import Field
 
 ACTION1_ANY_OF_SCHEMAS = ["ActionEmailInfo", "ActionWebhookInfo"]
 
+
 class Action1(BaseModel):
     """
     Action1
@@ -37,10 +37,11 @@ class Action1(BaseModel):
     # data type: ActionWebhookInfo
     anyof_schema_2_validator: Optional[ActionWebhookInfo] = None
     if TYPE_CHECKING:
-        actual_instance: Optional[Union[ActionEmailInfo, ActionWebhookInfo]] = None
+        actual_instance: Optional[Union[ActionEmailInfo,
+                                        ActionWebhookInfo]] = None
     else:
         actual_instance: Any = None
-    any_of_schemas: Set[str] = { "ActionEmailInfo", "ActionWebhookInfo" }
+    any_of_schemas: Set[str] = {"ActionEmailInfo", "ActionWebhookInfo"}
 
     model_config = {
         "validate_assignment": True,
@@ -50,9 +51,13 @@ class Action1(BaseModel):
     def __init__(self, *args, **kwargs) -> None:
         if args:
             if len(args) > 1:
-                raise ValueError("If a position argument is used, only 1 is allowed to set `actual_instance`")
+                raise ValueError(
+                    "If a position argument is used, only 1 is allowed to set `actual_instance`"
+                )
             if kwargs:
-                raise ValueError("If a position argument is used, keyword arguments cannot be used.")
+                raise ValueError(
+                    "If a position argument is used, keyword arguments cannot be used."
+                )
             super().__init__(actual_instance=args[0])
         else:
             super().__init__(**kwargs)
@@ -63,19 +68,23 @@ class Action1(BaseModel):
         error_messages = []
         # validate data type: ActionEmailInfo
         if not isinstance(v, ActionEmailInfo):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `ActionEmailInfo`")
+            error_messages.append(
+                f"Error! Input type `{type(v)}` is not `ActionEmailInfo`")
         else:
             return v
 
         # validate data type: ActionWebhookInfo
         if not isinstance(v, ActionWebhookInfo):
-            error_messages.append(f"Error! Input type `{type(v)}` is not `ActionWebhookInfo`")
+            error_messages.append(
+                f"Error! Input type `{type(v)}` is not `ActionWebhookInfo`")
         else:
             return v
 
         if error_messages:
             # no match
-            raise ValueError("No match found when setting the actual_instance in Action1 with anyOf schemas: ActionEmailInfo, ActionWebhookInfo. Details: " + ", ".join(error_messages))
+            raise ValueError(
+                "No match found when setting the actual_instance in Action1 with anyOf schemas: ActionEmailInfo, ActionWebhookInfo. Details: "
+                + ", ".join(error_messages))
         else:
             return v
 
@@ -93,17 +102,19 @@ class Action1(BaseModel):
             instance.actual_instance = ActionEmailInfo.from_json(json_str)
             return instance
         except (ValidationError, ValueError) as e:
-             error_messages.append(str(e))
+            error_messages.append(str(e))
         # anyof_schema_2_validator: Optional[ActionWebhookInfo] = None
         try:
             instance.actual_instance = ActionWebhookInfo.from_json(json_str)
             return instance
         except (ValidationError, ValueError) as e:
-             error_messages.append(str(e))
+            error_messages.append(str(e))
 
         if error_messages:
             # no match
-            raise ValueError("No match found when deserializing the JSON string into Action1 with anyOf schemas: ActionEmailInfo, ActionWebhookInfo. Details: " + ", ".join(error_messages))
+            raise ValueError(
+                "No match found when deserializing the JSON string into Action1 with anyOf schemas: ActionEmailInfo, ActionWebhookInfo. Details: "
+                + ", ".join(error_messages))
         else:
             return instance
 
@@ -112,17 +123,21 @@ class Action1(BaseModel):
         if self.actual_instance is None:
             return "null"
 
-        if hasattr(self.actual_instance, "to_json") and callable(self.actual_instance.to_json):
+        if hasattr(self.actual_instance, "to_json") and callable(
+                self.actual_instance.to_json):
             return self.actual_instance.to_json()
         else:
             return json.dumps(self.actual_instance)
 
-    def to_dict(self) -> Optional[Union[Dict[str, Any], ActionEmailInfo, ActionWebhookInfo]]:
+    def to_dict(
+        self
+    ) -> Optional[Union[Dict[str, Any], ActionEmailInfo, ActionWebhookInfo]]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None
 
-        if hasattr(self.actual_instance, "to_dict") and callable(self.actual_instance.to_dict):
+        if hasattr(self.actual_instance, "to_dict") and callable(
+                self.actual_instance.to_dict):
             return self.actual_instance.to_dict()
         else:
             return self.actual_instance
@@ -130,5 +145,3 @@ class Action1(BaseModel):
     def to_str(self) -> str:
         """Returns the string representation of the actual instance"""
         return pprint.pformat(self.model_dump())
-
-

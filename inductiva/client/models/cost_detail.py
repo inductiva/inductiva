@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -24,23 +23,27 @@ from inductiva.client.models.cost_type import CostType
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class CostDetail(BaseModel):
     """
     CostDetail
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     month: StrictStr
     total: Union[StrictFloat, StrictInt]
     components: CostComponents
     type: CostType
     warning: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["month", "total", "components", "type", "warning"]
+    __properties: ClassVar[List[str]] = [
+        "month", "total", "components", "type", "warning"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -66,8 +69,7 @@ class CostDetail(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -94,12 +96,16 @@ class CostDetail(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "month": obj.get("month"),
-            "total": obj.get("total"),
-            "components": CostComponents.from_dict(obj["components"]) if obj.get("components") is not None else None,
-            "type": obj.get("type"),
-            "warning": obj.get("warning")
+            "month":
+                obj.get("month"),
+            "total":
+                obj.get("total"),
+            "components":
+                CostComponents.from_dict(obj["components"])
+                if obj.get("components") is not None else None,
+            "type":
+                obj.get("type"),
+            "warning":
+                obj.get("warning")
         })
         return _obj
-
-

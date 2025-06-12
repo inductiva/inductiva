@@ -12,7 +12,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 # import models into model package
 from inductiva.client.models.action import Action
 from inductiva.client.models.action1 import Action1
@@ -108,6 +107,7 @@ from inductiva.client.models.task_status_code import TaskStatusCode
 from inductiva.client.models.task_status_info import TaskStatusInfo
 from inductiva.client.models.task_step import TaskStep
 from inductiva.client.models.task_submitted_info import TaskSubmittedInfo
+from inductiva.client.models.task_with_pagination import TaskWithPagination
 from inductiva.client.models.task_with_status_history import TaskWithStatusHistory
 from inductiva.client.models.task_with_user_info import TaskWithUserInfo
 from inductiva.client.models.terminate_resources_credits_threshold_update import TerminateResourcesCreditsThresholdUpdate

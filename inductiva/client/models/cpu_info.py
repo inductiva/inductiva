@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -22,20 +21,24 @@ from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class CPUInfo(BaseModel):
     """
     CPUInfo
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     cpu_cores_logical: StrictInt
     cpu_cores_physical: StrictInt
-    __properties: ClassVar[List[str]] = ["cpu_cores_logical", "cpu_cores_physical"]
+    __properties: ClassVar[List[str]] = [
+        "cpu_cores_logical", "cpu_cores_physical"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -61,8 +64,7 @@ class CPUInfo(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -85,5 +87,3 @@ class CPUInfo(BaseModel):
             "cpu_cores_physical": obj.get("cpu_cores_physical")
         })
         return _obj
-
-

@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -28,10 +27,13 @@ from inductiva.client.models.providers import Providers
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class MachineGroupWithCosts(BaseModel):
     """
     MachineGroupWithCosts
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     id: StrictStr
     name: StrictStr
     machine_type: StrictStr
@@ -54,14 +56,19 @@ class MachineGroupWithCosts(BaseModel):
     statistics: MachineGroupUsageStatistics
     idle_time_seconds: Optional[StrictInt] = None
     costs: MachineGroupCosts
-    __properties: ClassVar[List[str]] = ["id", "name", "machine_type", "disk_size_gb", "auto_resize_disk_max_gb", "num_vms", "min_vms", "max_vms", "spot", "type", "creation_timestamp", "start_timestamp", "deletion_timestamp", "provider_id", "provider_description", "status", "threads_per_core", "max_idle_time", "termination_reason", "statistics", "idle_time_seconds", "costs"]
+    __properties: ClassVar[List[str]] = [
+        "id", "name", "machine_type", "disk_size_gb", "auto_resize_disk_max_gb",
+        "num_vms", "min_vms", "max_vms", "spot", "type", "creation_timestamp",
+        "start_timestamp", "deletion_timestamp", "provider_id",
+        "provider_description", "status", "threads_per_core", "max_idle_time",
+        "termination_reason", "statistics", "idle_time_seconds", "costs"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -87,8 +94,7 @@ class MachineGroupWithCosts(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -158,29 +164,51 @@ class MachineGroupWithCosts(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "id": obj.get("id"),
-            "name": obj.get("name"),
-            "machine_type": obj.get("machine_type"),
-            "disk_size_gb": obj.get("disk_size_gb"),
-            "auto_resize_disk_max_gb": obj.get("auto_resize_disk_max_gb"),
-            "num_vms": obj.get("num_vms"),
-            "min_vms": obj.get("min_vms"),
-            "max_vms": obj.get("max_vms"),
-            "spot": obj.get("spot"),
-            "type": obj.get("type"),
-            "creation_timestamp": obj.get("creation_timestamp"),
-            "start_timestamp": obj.get("start_timestamp"),
-            "deletion_timestamp": obj.get("deletion_timestamp"),
-            "provider_id": obj.get("provider_id"),
-            "provider_description": obj.get("provider_description"),
-            "status": obj.get("status"),
-            "threads_per_core": obj.get("threads_per_core"),
-            "max_idle_time": obj.get("max_idle_time"),
-            "termination_reason": obj.get("termination_reason"),
-            "statistics": MachineGroupUsageStatistics.from_dict(obj["statistics"]) if obj.get("statistics") is not None else None,
-            "idle_time_seconds": obj.get("idle_time_seconds"),
-            "costs": MachineGroupCosts.from_dict(obj["costs"]) if obj.get("costs") is not None else None
+            "id":
+                obj.get("id"),
+            "name":
+                obj.get("name"),
+            "machine_type":
+                obj.get("machine_type"),
+            "disk_size_gb":
+                obj.get("disk_size_gb"),
+            "auto_resize_disk_max_gb":
+                obj.get("auto_resize_disk_max_gb"),
+            "num_vms":
+                obj.get("num_vms"),
+            "min_vms":
+                obj.get("min_vms"),
+            "max_vms":
+                obj.get("max_vms"),
+            "spot":
+                obj.get("spot"),
+            "type":
+                obj.get("type"),
+            "creation_timestamp":
+                obj.get("creation_timestamp"),
+            "start_timestamp":
+                obj.get("start_timestamp"),
+            "deletion_timestamp":
+                obj.get("deletion_timestamp"),
+            "provider_id":
+                obj.get("provider_id"),
+            "provider_description":
+                obj.get("provider_description"),
+            "status":
+                obj.get("status"),
+            "threads_per_core":
+                obj.get("threads_per_core"),
+            "max_idle_time":
+                obj.get("max_idle_time"),
+            "termination_reason":
+                obj.get("termination_reason"),
+            "statistics":
+                MachineGroupUsageStatistics.from_dict(obj["statistics"])
+                if obj.get("statistics") is not None else None,
+            "idle_time_seconds":
+                obj.get("idle_time_seconds"),
+            "costs":
+                MachineGroupCosts.from_dict(obj["costs"])
+                if obj.get("costs") is not None else None
         })
         return _obj
-
-

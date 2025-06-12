@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -23,10 +22,13 @@ from inductiva.client.models.fee_percentage import FeePercentage
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class CostsFeeUpdate(BaseModel):
     """
     CostsFeeUpdate
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     fee_percentage: FeePercentage
     __properties: ClassVar[List[str]] = ["fee_percentage"]
 
@@ -35,7 +37,6 @@ class CostsFeeUpdate(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -61,8 +62,7 @@ class CostsFeeUpdate(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -84,8 +84,8 @@ class CostsFeeUpdate(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "fee_percentage": FeePercentage.from_dict(obj["fee_percentage"]) if obj.get("fee_percentage") is not None else None
+            "fee_percentage":
+                FeePercentage.from_dict(obj["fee_percentage"])
+                if obj.get("fee_percentage") is not None else None
         })
         return _obj
-
-

@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -22,10 +21,13 @@ from typing import Any, ClassVar, Dict, List, Union
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class TaskMetricCreate(BaseModel):
     """
     TaskMetricCreate
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     metric: StrictStr
     value: Union[StrictFloat, StrictInt]
     __properties: ClassVar[List[str]] = ["metric", "value"]
@@ -35,7 +37,6 @@ class TaskMetricCreate(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -61,8 +62,7 @@ class TaskMetricCreate(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -85,5 +85,3 @@ class TaskMetricCreate(BaseModel):
             "value": obj.get("value")
         })
         return _obj
-
-

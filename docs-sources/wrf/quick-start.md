@@ -43,7 +43,12 @@ task.download_outputs()
 task.print_summary()
 ```
 
-**Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
+In this basic example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs. 
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
+a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
+
+> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other WRF simulations, replace input_dir with the path
 to your WRF input files and set the `case_name` accordingly.

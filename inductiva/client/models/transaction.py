@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -25,10 +24,13 @@ from inductiva.client.models.top_up_type import TopUpType
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class Transaction(BaseModel):
     """
     Transaction
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     amount: Union[StrictFloat, StrictInt]
     time: datetime
     currency: Optional[CurrencyCode] = None
@@ -36,14 +38,16 @@ class Transaction(BaseModel):
     fee_percentage: Optional[Union[StrictFloat, StrictInt]]
     total: Optional[Union[StrictFloat, StrictInt]]
     top_up_type: TopUpType
-    __properties: ClassVar[List[str]] = ["amount", "time", "currency", "fee", "fee_percentage", "total", "top_up_type"]
+    __properties: ClassVar[List[str]] = [
+        "amount", "time", "currency", "fee", "fee_percentage", "total",
+        "top_up_type"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -69,8 +73,7 @@ class Transaction(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -113,5 +116,3 @@ class Transaction(BaseModel):
             "top_up_type": obj.get("top_up_type")
         })
         return _obj
-
-

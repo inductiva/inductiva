@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -23,10 +22,13 @@ from inductiva.client.models.update_capabilities_actions import UpdateCapabiliti
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class UpdateCapabilitiesRequest(BaseModel):
     """
     UpdateCapabilitiesRequest
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     capabilities: List[StrictStr]
     action: Optional[UpdateCapabilitiesActions] = None
     __properties: ClassVar[List[str]] = ["capabilities", "action"]
@@ -36,7 +38,6 @@ class UpdateCapabilitiesRequest(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -62,8 +63,7 @@ class UpdateCapabilitiesRequest(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -86,5 +86,3 @@ class UpdateCapabilitiesRequest(BaseModel):
             "action": obj.get("action")
         })
         return _obj
-
-

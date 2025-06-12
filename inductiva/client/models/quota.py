@@ -11,7 +11,6 @@
     Do not edit the class manually.
 """  # noqa: E501
 
-
 from __future__ import annotations
 import pprint
 import re  # noqa: F401
@@ -23,24 +22,28 @@ from inductiva.client.models.quota_scope import QuotaScope
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class Quota(BaseModel):
     """
     Quota
-    """ # noqa: E501
+    """
+
+  # noqa: E501
     id: StrictStr
     label: StrictStr
     max_allowed: Optional[Union[StrictFloat, StrictInt]] = None
     in_use: Optional[Union[StrictFloat, StrictInt]] = None
     unit: StrictStr
     scope: QuotaScope
-    __properties: ClassVar[List[str]] = ["id", "label", "max_allowed", "in_use", "unit", "scope"]
+    __properties: ClassVar[List[str]] = [
+        "id", "label", "max_allowed", "in_use", "unit", "scope"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -66,8 +69,7 @@ class Quota(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -104,5 +106,3 @@ class Quota(BaseModel):
             "scope": obj.get("scope")
         })
         return _obj
-
-
