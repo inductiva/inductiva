@@ -98,10 +98,12 @@ task.download_outputs()
 
 task.print_summary()
 ```
+
 This simulation runs on a `c2d-highcpu-56` machine with a 20 GB disk. Automatic disk resizing is enabled, so the disk size will increase as needed,
 up to the specified maximum of `auto_resize_disk_max_gb`.
 
-> **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
+> **Note**: `spot` machines are available at substantial discounts, but your simulation job may be preempted if
+> the Cloud provider reclaims the spot machine.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 

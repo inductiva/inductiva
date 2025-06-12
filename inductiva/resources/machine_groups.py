@@ -14,6 +14,7 @@ import logging
 import inductiva
 import inductiva.client.models
 from inductiva import api, users, logs
+from inductiva.commands.mpiconfig import MPIConfig
 from inductiva.resources.utils import ProviderType
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
@@ -49,6 +50,9 @@ class BaseMachineGroup(ABC):
                 kept alive. After auto_terminate_minutes minutes the machine
                 will be terminated. This time will start counting after calling
                 this method.
+        mpi_version: The version of MPI to be used on the machines.
+        np: The number of processes to use for MPI commands.
+        use_hwthread_cpus: Whether to use hyperthreading or not.
 
     :meta private:
     """
@@ -62,6 +66,10 @@ class BaseMachineGroup(ABC):
     auto_terminate_ts: Optional[datetime.datetime] = None
     auto_terminate_minutes: Optional[int] = None
     spot: bool = True
+
+    mpi_version: str = "4.1.6"
+    np: int = None
+    use_hwthread_cpus: bool = True
 
     create_time = None
     num_machines = 0
@@ -149,6 +157,26 @@ class BaseMachineGroup(ABC):
         if self._gpu_info is None:
             return 0
         return self._gpu_info.get("gpu_count", 0)
+
+    def set_mpi_config(self,
+                       mpi_version: str = "4.1.6",
+                       np: Optional[int] = None,
+                       use_hwthread_cpus: bool = True):
+        """Set the MPI configuration for the cluster.
+        Args:
+            mpi_version: The version of MPI to be used on the machines.
+            np: The number of processes to use for MPI commands.
+            use_hwthread_cpus: Whether to use hyperthreading or not.
+        """
+        self.mpi_version = mpi_version
+        self.use_hwthread_cpus = use_hwthread_cpus
+        self.np = np or self.available_vcpus
+
+    def get_mpi_config(self):
+        """Get the MPI configuration for the cluster."""
+        return MPIConfig(self.mpi_version,
+                         np=self.np,
+                         use_hwthread_cpus=self.use_hwthread_cpus)
 
     @property
     def id(self):
@@ -625,6 +653,7 @@ class MachineGroup(BaseMachineGroup):
         self._register_machine_group(num_vms=self.num_machines,
                                      spot=self.spot,
                                      is_elastic=self._is_elastic)
+        self.np = self.np or self.available_vcpus
 
     def _validate_inputs(self):
         super()._validate_inputs()
@@ -724,6 +753,7 @@ class ElasticMachineGroup(BaseMachineGroup):
                                      is_elastic=self._is_elastic,
                                      num_vms=self._active_machines,
                                      spot=self.spot)
+        self.np = self.np or self.available_vcpus
 
     def _validate_inputs(self):
         super()._validate_inputs()
@@ -798,6 +828,9 @@ class MPICluster(BaseMachineGroup):
     """
     # Constructor arguments
     num_machines: int = 2
+    mpi_version: str = "4.1.6"
+    np: int = None
+    use_hwthread_cpus: bool = True
 
     # Internal attributes
     auto_resize_disk_max_gb = None
@@ -813,6 +846,7 @@ class MPICluster(BaseMachineGroup):
                                      is_elastic=self._is_elastic,
                                      spot=self.spot,
                                      type=self._type)
+        self.np = self.np or self.available_vcpus
 
     def _validate_inputs(self):
         super()._validate_inputs()
