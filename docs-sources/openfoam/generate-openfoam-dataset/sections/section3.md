@@ -1,8 +1,8 @@
 # Generalizing the Use Case
-Inductiva enables the parallel execution of numerous simulations, making it ideal for conducting parameter studies at scale. For example, suppose you are interested in analyzing how varying a specific input parameter influences the simulation results.
+Inductiva enables the parallel execution of numerous simulations, making it ideal for conducting parameter studies at scale. For example, suppose you are interested in analyzing how varying a specific input parameter influences the simulation results. you might want to analyze how varying a specific input parameter affects the simulation results.
 
-
-As a demonstration, consider studying the impact of changes in the reference free-stream velocity, denoted as `flowVelocity`, which appears in the `initialConditions` file of the OpenFOAM case. This parameter represents the magnitude of the incoming flow velocity used for nondimensionalizing force coefficients. In the current configuration, flowVelocity is set to 20 m/s on the x axis:
+As a demonstration, consider studying the impact of changes in the reference free-stream velocity, 
+`flowVelocity`, defined in the `initialConditions` file of the OpenFOAM case. This parameter represents the magnitude of the incoming flow velocity used for nondimensionalizing force coefficients. In the current configuration, `flowVelocity` is set to 20 m/s on the x axis:
 
 ```
 /*--------------------------------*- C++ -*----------------------------------*\
@@ -22,20 +22,22 @@ turbulentOmega       1.78;
 
 ```
 
-We will use Inductiva’s templating system to generalize the base simulation by randomly sampling values for `flowVelocity`, representing the wind speed in the OpenFOAM case. This allows generating a broad set of simulation conditions efficiently.
+We will use Inductiva’s templating system to generalize the base simulation by randomly sampling values 
+for `flowVelocity` (the wind speed). This allows efficient generation of a broad set of simulation conditions.
 
 ## Parametrize the system/forceCoeffs file
-Inductiva allows you to convert fixed parameters in your simulation configuration files into variables that can be programmatically controlled via Python scripting.
+Inductiva allows you to convert fixed parameters in simulation configuration files into variables that can be programmatically controlled via Python scripting.
 
-This means that instead of hardcoding the wind speed in `openfoam-input-example/0/include/initialConditions` as:
+Instead of hardcoding the wind speed in `openfoam-input-example/0/include/initialConditions` 
+like this:
+
 ```
 ...
     flowVelocity         (20 0 0);
 ...
 ```
 
-
-you can update the file to include a variable placeholder such as:
+you can update the file to include a variable placeholder:
 
 ```
 ...
@@ -43,11 +45,10 @@ you can update the file to include a variable placeholder such as:
 ...
 ```
 
-After this small edit, you will need to save your input file as `initialConditions.jinja` (note the ".jinja" extension). 
-This will tell Inductiva's templating engine that Python variable called "wind_speed" should be used to set the correct x axis flow velocity.
+After this change, save the file as `initialConditions.jinja` (note the `.jinja` extension). This tells Inductiva’s templating engine to replace the `wind_speed` variable with the appropriate value from Python.
 
 ## Code Overview
-The script below shows how we can now set the value of the `flowVelocity` parameter from Python:
+The script below shows how we can now set the value of the `flowVelocity` parameter from Python and run a variation of the original simulation:
 
 ```python
 import inductiva
@@ -90,8 +91,10 @@ cloud_machine.terminate()
 
 That's it!
 
-First, we set the values for `wind_speed`. Then, we generate the input file using the `render_dir` method, which replaces the placeholder variables in our `forceCoeffs.jinja` template with the corresponding values. 
-The generated input files are then stored in the folder, `target_dir` (`variations/wind_speed_{wind_speed}`).
- For more details on managing template files, check out the `TemplateManager` [documentation](https://docs.inductiva.ai/en/latest/intro_to_api/templating.html).
+First, we set the `wind_speed` values. Then, the `render_dir` method generates the input file by replacing 
+the placeholder variables in the `forceCoeffs.jinja` template with the corresponding values. The generated 
+files are saved in the `target_dir` (`variations/wind_speed_{wind_speed}`).
 
-The good thing about the Inductiva API is that it’s a Python API, so you can simply use a for loop with random sampling for `wind_speed` to run multiple simulations in parallel and generate a dataset. That’s exactly what we’ll do in the next section.
+> For more details on managing template files, check out the `TemplateManager` [documentation](https://docs.inductiva.ai/en/latest/intro_to_api/templating.html).
+
+Since Inductiva’s API is Python-based, you can easily loop over different sampled values of `wind_speed` to run multiple simulations in parallel and generate a dataset. That’s exactly what we’ll do in the next section.

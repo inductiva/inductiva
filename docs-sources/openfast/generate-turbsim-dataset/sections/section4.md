@@ -1,7 +1,7 @@
 # Generate the Dataset
 In the previous part of this tutorial we set up a templating system that allows us to programmatically modify the `URef`, `seed_1` and `seed_2` parameter in the OpenFAST input file. 
 This allows us to easily generate multiple simulation configurations.
-
+ 
 We will now take the next step and use a for loop to automate the process and generate a dataset in parallel. This approach demonstrates the true power 
 of Inductiva: efficiently scaling simulations to save computation time.
 
@@ -130,7 +130,10 @@ for i in range(DATASET_SIZE):
 ### Code Section 4: Starting the Simulation
 Next, we initialize the OpenFAST simulator and run the simulation using the newly created input directory. Each simulation task is added to the project, allowing us to track and wait for all tasks to be completed. We also save some task metadata to keep track of the input parameters.
 
-> **Note**: we use `resubmit_on_preemption=True` when submitting a task to ensure that, if a machine is preempted, the task is automatically resubmited on another machine. Preemptions can occur when using `spot` machines, which are significantly cheaper (up to 5x less expensive than regural instances), but come with the risk of possibly being interrupted at any time.
+> **Note**: We use `resubmit_on_preemption=True` when submitting a task to ensure that if a machine is 
+preempted, the task is automatically resubmitted on another machine. Preemptions can occur when using 
+`spot` machines, which are significantly cheaper (up to 5× less expensive than regular instances) but 
+carry the risk of being interrupted at any time.
 
 ```python
     ...
@@ -170,14 +173,16 @@ cloud_machine.terminate()
 You can list the tasks from this project by running this command on
 your command line interface `inductiva tasks list -p turbsim_dataset`.
 
-Alternatively, you can also check the tasks projects in the [Inductiva Web Console](https://console.inductiva.ai/) on the "Projects" tab:
+Alternatively, you can also check the tasks projects in the [Inductiva Web Console](https://console.inductiva.ai/) on the *Projects* tab:
 
 ![console project](../../_static/console_projects.png)
 
 ## Summary
 We demonstrated how Inductiva can be used to efficiently run multiple TurbSim simulations in parallel and generate a dataset. 
 
-While a single TurbSim simulation may run faster on a local machine with high processing power, scaling up to dozens or hundreds of simulations is where Inductiva excels. By automating input file modifications
-and distributing simulations across inexpensive cloud machines, you can drastically reduce overall computation time and streamline large-scale studies.
+While a single TurbSim simulation may run faster on a local machine with high processing power, scaling up 
+to dozens or hundreds of simulations is where Inductiva excels. By automating input file modifications
+and distributing simulations across inexpensive cloud machines, you can drastically reduce overall 
+computation time and streamline large-scale studies.
 
 With just a few lines of Python, you can effortlessly scale your OpenFAST projects - saving time, optimising resources and accelerating your research. 🚀
