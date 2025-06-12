@@ -27,6 +27,8 @@ hidden: true
 ---
 setup-test
 quick-start
+run-exafoam-high-lift-airfoil-benchmark
+mpi-cluster-exafoam-high-lift-airfoil-benchmark
 Generate OpenFOAM dataset <generate-openfoam-dataset/index>
 ```
 
