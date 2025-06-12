@@ -2,6 +2,9 @@
 from typing import List, Optional, Union
 
 from inductiva import simulators, tasks, types
+from inductiva.commands.commands import Command
+from inductiva.commands.mpiconfig import MPIConfig
+from inductiva.resources.machine_groups import MPICluster
 
 AVAILABLE_OPENFOAM_DISTRIBUTIONS = ["foundation", "esi"]
 
@@ -93,6 +96,15 @@ class OpenFOAM(simulators.Simulator):
                                     remote_assets=remote_assets,
                                     shell_script=shell_script)
             commands = [f"bash {shell_script}"]
+
+        # If running on MPICluster convert parallel commands
+        # into mpi commands
+        if isinstance(on, MPICluster):
+            for i, command in enumerate(commands):
+                if "-parallel" in command:
+                    new_command = Command(command,
+                                          mpi_config=on.get_mpi_config())
+                    commands[i] = new_command
 
         return super().run(input_dir,
                            on=on,

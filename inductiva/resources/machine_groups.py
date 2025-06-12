@@ -14,6 +14,7 @@ import logging
 import inductiva
 import inductiva.client.models
 from inductiva import api, users, logs
+from inductiva.commands.mpiconfig import MPIConfig
 from inductiva.resources.utils import ProviderType
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
@@ -795,14 +796,43 @@ class MPICluster(BaseMachineGroup):
         auto_terminate_ts: Moment in which the resource will be
             automatically terminated.
         num_machines: The number of virtual machines to launch.
+        mpi_version: The version of MPI to be used on the machines.
+        np: The number of processes to use for MPI commands.
+        use_hwthread_cpus: Whether to use hyperthreading or not.
     """
     # Constructor arguments
     num_machines: int = 2
+    mpi_version: str = "4.1.6"
+    np: int = None
+    use_hwthread_cpus: bool = True
 
     # Internal attributes
     auto_resize_disk_max_gb = None
     _type = ResourceType.MPI.value
     _is_elastic = False
+
+    def set_mpi_config(self,
+                       mpi_version: str = "4.1.6",
+                       np: int = None,
+                       use_hwthread_cpus: bool = True):
+        """Set the MPI configuration for the cluster.
+        Args:
+            mpi_version: The version of MPI to be used on the machines.
+            np: The number of processes to use for MPI commands.
+            use_hwthread_cpus: Whether to use hyperthreading or not.
+        """
+        self.mpi_version = mpi_version
+        self.use_hwthread_cpus = use_hwthread_cpus
+        if np is not None:
+            self.np = self.available_vcpus
+        else:
+            self.np = np
+
+    def get_mpi_config(self):
+        """Get the MPI configuration for the cluster."""
+        return MPIConfig(self.mpi_version,
+                         np=self.np,
+                         use_hwthread_cpus=self.use_hwthread_cpus)
 
     def __post_init__(self):
         """Validate inputs and initialize additional attributes after
@@ -813,6 +843,8 @@ class MPICluster(BaseMachineGroup):
                                      is_elastic=self._is_elastic,
                                      spot=self.spot,
                                      type=self._type)
+        if self.np is None:
+            self.np = self.available_vcpus
 
     def _validate_inputs(self):
         super()._validate_inputs()
