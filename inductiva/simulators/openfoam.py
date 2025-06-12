@@ -101,7 +101,7 @@ class OpenFOAM(simulators.Simulator):
         # into mpi commands
         if isinstance(on, MPICluster):
             for i, command in enumerate(commands):
-                if "-parallel" in command:
+                if isinstance(command, str) and "-parallel" in command:
                     new_command = Command(command,
                                           mpi_config=on.get_mpi_config())
                     commands[i] = new_command
