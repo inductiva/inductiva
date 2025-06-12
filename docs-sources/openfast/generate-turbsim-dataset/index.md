@@ -9,7 +9,7 @@ In this tutorial, we will demonstrate how to use the Inductiva API to efficientl
 
 <p align="center"><img src="../_static/turbsim_animation_30_fps.gif" alt="TurbSim simulation visualization" width="700"></p>
 
-To demonstrate this, we will use the [`5MW_Baseline`](https://github.com/OpenFAST/r-test/tree/v4.0.2/glue-codes/openfast/5MW_Baseline) wind example, available on the [OpenFAST GitHub repository](https://github.com/openfast).
+To demonstrate this, we will use the [`5MW_Baseline`](https://github.com/OpenFAST/r-test/tree/v4.0.2/glue-codes/openfast/5MW_Baseline) wind example, which is available in the [OpenFAST GitHub repository](https://github.com/openfast).
 
 This example is based on the reference case described in ["Definition of a 5-MW Reference Wind Turbine for Offshore
 System Development"](https://www.nrel.gov/docs/fy09osti/38060.pdf).

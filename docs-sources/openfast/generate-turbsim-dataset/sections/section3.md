@@ -23,7 +23,7 @@ In the current configuration, `URef` is set to 12 m/s.
 
 We will use the Inductiva templating system to generalize the base simulation by randomly sampling values for `URef`, `RandSeed1`, and `RandSeed2`. In the next section, we will use this approach to generate a diverse dataset of simulations.
 
-## Parametrize the input file 90m_12mps_twr.inp
+## Parametrize the `90m_12mps_twr.inp` file
 Inductiva allows you to convert fixed parameters in your simulation configuration files into variables that you can set programmatically using Python scripting. 
 This means that we will be able to change the `URef`, `RandSeed1`, and `RandSeed2` defined in the `90m_12mps_twr.fst` input file from a Python script before starting the simulation.
 
