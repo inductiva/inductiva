@@ -100,7 +100,7 @@ class OpenFOAM(simulators.Simulator):
             if isinstance(command, str) and "-parallel" in command:
                 new_command = Command(command, mpi_config=on.get_mpi_config())
                 commands[i] = new_command
-        asd
+
         return super().run(input_dir,
                            on=on,
                            commands=commands,
