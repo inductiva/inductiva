@@ -27,4 +27,4 @@ The benchmark results clearly demonstrate the substantial performance gains achi
 GPU configurations for CaNS simulations. The fastest machine tested, equipped with **NVIDIA H100 GPUs**, achieved up to 
 a **15.7× speed-up** compared with the smallest GPU tested, a configuration with 4 vCPUs and a single NVIDIA L4 GPU.
 
-With Inductiva, you're able to select the hardware that delivers the performance your simulations demand.
+With Inductiva, you're able to seamlessly select the hardware that delivers the performance your simulations demand.
