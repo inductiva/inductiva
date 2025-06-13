@@ -1,4 +1,4 @@
-# Generate a OpenFOAM Dataset
+# Generate an OpenFOAM Dataset
 [OpenFOAM](https://www.openfoam.com/) is a powerful open-source CFD toolbox widely used across engineering 
 and scientific disciplines for simulating complex fluid dynamics problems. Its capabilities range 
 from incompressible and compressible flows to heat transfer, turbulence modeling, multiphase flows, 
