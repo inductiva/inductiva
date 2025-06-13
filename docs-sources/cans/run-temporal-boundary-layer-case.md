@@ -96,20 +96,18 @@ is_debug = T, is_timing = T
 /
 ```
 
-To shorten the simulation time, we will run only 1% of the original simulation.
-To do this, update the following line:
+To reduce the simulation time, we will use a slightly coarser mesh with 25% fewer grid points along each spatial direction 
+compared to the original simulation. To apply this change, update the following line from:
 
 ```
-nstep = 40000, time_max = 2000., tw_max = 0.1  
+ng(1:3) = 768, 768, 512 
 ```
 
 to:
 
 ```
-nstep = 400, time_max = 20., tw_max = 0.1  
+ng(1:3) = 576, 576, 384
 ```
-
-This adjustment significantly reduces the simulation duration while maintaining the overall configuration. If desired, the full simulation can be run by keeping the original values.
 
 ### Running the Simulation
 Here is the code required to run the simulation using the Inductiva API:
@@ -121,7 +119,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
         provider="GCP",
-        machine_type="a3-highgpu-1g",
+        machine_type="a2-highgpu-2g",
         zone="europe-west4-b",
         data_disk_gb=100,
         spot=True)
@@ -145,8 +143,8 @@ task.print_summary()
 
 ```
 
-> **Note**: `spot` machines are available at substantial discounts, but your simulation job may be preempted if
-> the Cloud provider reclaims the spot machine.
+> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
@@ -154,29 +152,31 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 22/05, 09:13:45      0.818 s
-	In Queue                  at 22/05, 09:13:46      57.083 s
-	Preparing to Compute      at 22/05, 09:14:43      22.052 s
-	In Progress               at 22/05, 09:15:05      493.001 s
-		├> 2.083 s         mkdir -p data
-		└> 490.643 s       /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus --np 1 cans input.nml
-	Finalizing                at 22/05, 09:23:18      404.624 s
-	Success                   at 22/05, 09:30:02      
+	Waiting for Input         at 08/06, 15:06:42      0.758 s
+	In Queue                  at 08/06, 15:06:43      65.05 s
+	Preparing to Compute      at 08/06, 15:07:48      17.726 s
+	In Progress               at 08/06, 15:08:06      10029.364 s
+		├> 1.07 s          mkdir -p data
+		└> 10028.036 s     /opt/openmpi/4.1.6/bin/mpirun --np 2 --use-hwthread-cpus cans input.nml
+	Finalizing                at 08/06, 17:55:15      640.376 s
+	Success                   at 08/06, 18:05:56      
 
 Data:
-	Size of zipped output:    15.59 GB
-	Size of unzipped output:  19.37 GB
-	Number of output files:   42
+	Size of zipped output:    19.72 GB
+	Size of unzipped output:  22.20 GB
+	Number of output files:   2639
 
-Estimated computation cost (US$): 0.65 US$
+Estimated computation cost (US$): 8.86 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that
 represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 8 minutes and 13 seconds.
+the core computation time of this simulation was approximately 2 hours and 47 minutes.
 
 ### Scaling Up the Simulation
-One of the benefits of using Inductiva is the ability to scale simulations to bigger and faster machines with minimal code changes. In this case, only the `machine_type` argument needs to be updated during MachineGroup creation.
+One of the key advantages of using Inductiva is the ease with which you can scale your simulations to larger, 
+more powerful machines with minimal changes to your code. Scaling up simply involves updating the 
+`machine_type` parameter when allocating the cloud machine.
 
 To explore detailed results, visit our [Benchmarks page](https://inductiva.ai/guides/cans/benchmarks).
 

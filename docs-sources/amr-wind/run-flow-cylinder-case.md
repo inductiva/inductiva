@@ -1,7 +1,7 @@
 # Flow Around a Circular Cylinder 🌀
 This tutorial will simulate a flow over a cylinder case using AMR-Wind. This classic fluid dynamics problem reveals the changes in flow behavior depending on the Reynolds number (Re).
 
-We will cover the `ib_cylinder_Re_300` use case from the test files folder of the [AMR-Wind GitHub repository](https://github.com/Exawind/amr-wind/tree/v3.4.0).
+We will cover the `ib_cylinder_Re_300` use case from the test files folder of the [AMR-Wind GitHub repository](https://github.com/Exawind/amr-wind/tree/main/test/test_files/ib_cylinder_Re_300).
 
 We will also demonstrate Inductiva’s ability to efficiently scale this use case, starting with a cloud 
 machine equivalent to a typical laptop and then scaling up to a more powerful instance.
@@ -18,72 +18,32 @@ At Re = 300, the flow becomes fully three-dimensional and unsteady. This makes i
 ## Run the Circular Cylinder Case
 
 ### Prerequisites
-Download the required files [here](https://github.com/Exawind/amr-wind/tree/main/test/test_files/ib_cylinder_Re_300) and place them in a folder called `SimulationFiles`. 
+Download the required files [here](https://storage.googleapis.com/inductiva-api-demo-files/flow-cylinder-case.zip) and place them in a folder called `SimulationFiles`. 
 
 ### Case Modifications
-To improve the visibility of vortex shedding and optimize computational efficiency, the original case setup was modified with the following changes:
+To capture the formation of vortices, the original case setup was adjusted as follows:
 
-* Changing stopping criteria from `max_steps` to `stop_time`, so that the simulation runs for a physical time of 10s.
+* Changed the stopping criterion from `max_steps` to `stop_time` to run the simulation for a physical time of 20 seconds.
 
 ```diff
 - time.stop_time               =   -10.0     # Max (simulated) time to evolve
-+ time.stop_time               =   10.0 
++ time.stop_time               =   20.0 
 - time.max_step                =   20        # Max number of time steps
 + time.max_step                =   -20 
 ```
 
-* Increasing time step size to reduce computation time.
-
-```diff 
-- time.cfl              =   0.45         # CFL factor
-+ time.cfl              =   1.0
-```
-
-* Decreasing plotting frequency to reduce number of output files.
+* Reduced the plotting frequency to decrease the number of output files.
 
 ```diff 
 - time.plot_interval            =  10       # Steps between plot files
-+ time.plot_interval            =  100      # Reduced output frequency to limit file size
++ time.plot_interval            =  400      # Reduced output frequency to limit file size
 ```
 
-* Adding vorticity magnitude as a new derived output.
+* Added vorticity magnitude as a new derived output.
 
 ```diff 
 - io.derived_outputs = "components(velocity,0,1)" "components(gp,0,1)"
 + io.derived_outputs = "components(velocity,0,1)" "components(gp,0,1)" "mag_vorticity"
-```
-
-*  Changing Re from 100 to 1000 to induce faster formation of vortices.
-
-```diff 
-- transport.viscosity = 1.0e-3   # Set for Re = D*v/mu = 100;
-+ transport.viscosity = 1.0e-4   #Adjusted for Re = 1000
-```
-
-* Adjusting the flow domain so that vortices are more visible, and proportional modification is made on the mesh. Additionally, to reduce computation time, the mesh refinement is reduced from 2 levels to 1. 
-
-```diff 
-- amr.n_cell     = 64 64 16   # Grid cells at coarsest AMRlevel
-+ amr.n_cell     = 128 64 8 # Doubled x-divisions to match domain size                                                                                         
-- amr.max_level = 2
-+ amr.max_level = 1
-
-- geometry.prob_lo        =   -0.5 -0.5 -0.125
-+ geometry.prob_lo        =   -0.3 -0.5 -0.0625 # Cylinder offset to extend wake region
-- geometry.prob_hi        =    0.5  0.5  0.125
-+ geometry.prob_hi        =    1.7  0.5  0.0625  
-```
-
-* Associated modifications have to be performed on the `static_box.refine` file as well. Here, we remove the 2nd level of mesh refinement to reduce computation time:
-
-```diff
-
-- 2 # Number of levels of refinement
-+ 1
-  1 # Number of refinement boxes in the first level
- -0.125 -0.125 -0.125 0.5 0.125 0.125 
-- 1 # Number of refinement boxes in the second level
-- -0.0625 -0.0625 -0.125 0.0625 0.0625 0.125 
 ```
 
 ## Running the Simulation
@@ -115,7 +75,6 @@ cloud_machine.terminate()
 task.download_outputs()
 
 task.print_summary()
-
 ```
 
 > **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
@@ -130,31 +89,38 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-        Waiting for Input         at 29/05, 12:53:41      0.647 s
-        In Queue                  at 29/05, 12:53:42      42.442 s
-        Preparing to Compute      at 29/05, 12:54:24      2.136 s
-        In Progress               at 29/05, 12:54:26      386.527 s
-                └> 386.39 s        /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus amr_wind ib_cylinder_Re_300.inp
-        Finalizing                at 29/05, 13:00:53      1.005 s
-        Success                   at 29/05, 13:00:54      
+	Waiting for Input         at 12/06, 13:57:05      0.835 s
+	In Queue                  at 12/06, 13:57:06      33.458 s
+	Preparing to Compute      at 12/06, 13:57:40      2.688 s
+	In Progress               at 12/06, 13:57:42      5685.857 s
+		└> 5685.675 s      /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus amr_wind ib_cylinder_Re_300.inp
+	Finalizing                at 12/06, 15:32:28      2.17 s
+	Success                   at 12/06, 15:32:30      
 
 Data:
-        Size of zipped output:    100.37 MB
-        Size of unzipped output:  205.39 MB
-        Number of output files:   940
+	Size of zipped output:    288.14 MB
+	Size of unzipped output:  852.06 MB
+	Number of output files:   2240
 
-Estimated computation cost (US$): 0.012 US$
+Estimated computation cost (US$): 0.14 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that
 represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 386.5 seconds (6 minutes and 27 seconds).
-
-To analyze the simulation data programmatically, Python-based tools like **yt** can be used, enabling custom visualizations and data extraction. For step-by-step guidance on creating slice plots and animations, be sure to check out our [post-processing yt tutorial](https://inductiva.ai/guides/amr-wind/using-yt).
+the core computation time of this simulation was approximately 1 hour and 35 minutes (5686 seconds).
 
 ## Scaling Up the Simulation
-One of the key advantages of using Inductiva is the ease with which you can scale your simulations to larger, more powerful machines with minimal changes to your code. Scaling up simply involves updating the `machine_type` parameter when creating your MachineGroup.
+One of the key advantages of using Inductiva is the ease with which you can scale your simulations to larger, 
+more powerful machines with minimal changes to your code. Scaling up simply involves updating the 
+`machine_type` parameter when allocating the cloud machine.
 
-In this case, simply switching the cloud machine from c2d-highcpu-16 (16 vCPUs) to c2d-highcpu-32 (32 vCPUs) reduces computation time from 386.5 seconds to 270.5 seconds. For more computationally demanding tasks, the scaling benefits can be even more pronounced.
+In this case, switching from a cloud machine equivalent to your laptop (**c2d-highcpu-16**) to a more 
+powerful machine (**c2d-highcpu-112**) reduces computation time from **1 hour and 35 minutes** to just 
+**37 minutes**, at a cost of US$0.38. For more computationally intensive tasks, the benefits of scaling 
+can be even more significant. 🚀
 
-May your residuals drop fast and your vortices stay coherent. Happy simulating!
+<br>
+
+> To analyze the simulation data programmatically, Python-based tools like **yt** can be used, enabling 
+custom visualizations and data extraction. For step-by-step guidance on creating slice plots and animations, 
+be sure to check out our [post-processing yt tutorial](https://inductiva.ai/guides/amr-wind/using-yt).

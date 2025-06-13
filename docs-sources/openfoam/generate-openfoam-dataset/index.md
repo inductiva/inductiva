@@ -1,9 +1,4 @@
-# Generate a OpenFOAM Dataset
-[OpenFOAM](https://www.openfoam.com/) is a powerful open-source CFD toolbox widely used across engineering 
-and scientific disciplines for simulating complex fluid dynamics problems. Its capabilities range 
-from incompressible and compressible flows to heat transfer, turbulence modeling, multiphase flows, 
-and more, enabling high-fidelity simulations for both research and industrial applications.
-
+# Generate an OpenFOAM Dataset
 In this tutorial, we will demonstrate how to use the Inductiva API to efficiently generate an OpenFOAM dataset 
 in parallel by varying the inlet wind speed. This approach allows rapid creation of multiple simulation cases 
 with different wind conditions, facilitating the analysis of flow behavior and performance sensitivity over 
