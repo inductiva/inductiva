@@ -38,7 +38,6 @@ caption: Benchmarks
 maxdepth: 2
 hidden: true
 ---
-flow-cylinder-benchmarks
 mpi-cluster-benchmarks
 ```
 
