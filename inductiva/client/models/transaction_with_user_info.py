@@ -34,9 +34,9 @@ class TransactionWithUserInfo(BaseModel):
     amount: Union[StrictFloat, StrictInt]
     time: datetime
     currency: Optional[CurrencyCode] = None
-    fee: Optional[Union[StrictFloat, StrictInt]]
-    fee_percentage: Optional[Union[StrictFloat, StrictInt]]
-    total: Optional[Union[StrictFloat, StrictInt]]
+    fee: Optional[Union[StrictFloat, StrictInt]] = None
+    fee_percentage: Optional[Union[StrictFloat, StrictInt]] = None
+    total: Optional[Union[StrictFloat, StrictInt]] = None
     top_up_type: TopUpType
     email: StrictStr
     organization_id: StrictStr
