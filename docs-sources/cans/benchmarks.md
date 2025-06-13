@@ -1,5 +1,5 @@
 # Benchmarks
-This benchmark report presents a performance and cost comparison across various GPU configurations, serving as your trusted 
+This benchmark report presents a performance comparison across various GPU configurations, serving as your trusted 
 guide in selecting the right simulation hardware for your computational CaNS projects.
 
 We benchmark a temporal boundary layer with stable stratification case, the same scenario detailed in our [tutorial](https://inductiva.ai/guides/cans/run-temporal-boundary-layer-case). For benchmarking purposes, we ran the case using a slightly coarser mesh, 
