@@ -2,7 +2,9 @@
 import io
 import sys
 import time
+import time
 import json
+import shutil
 import asyncio
 import pathlib
 import logging
@@ -383,127 +385,132 @@ class Task:
         buffer.close()
         return contents
 
-    def observe (self, combine: bool = True):
+
+    def observe(self, combine: bool = True):
         times_arr = []
         cpu_usages_arr = []
         mem_usages_arr = []
-
-        line_count=0
-        
+        line_count = 0
         first = True
-        import shutil
 
         
 
+        # Wait until the task starts
         while self.get_status() != models.TaskStatusCode.COMPUTATIONSTARTED:
-            print("Task has not started yet, waiting for it to start...",end="\r")
+            print("Task has not started yet, waiting for it to start...", end="\r")
             time.sleep(1)
-        
+
         while self.get_status() == models.TaskStatusCode.COMPUTATIONSTARTED:
-            
             terminal_size = shutil.get_terminal_size(fallback=(100, 40))
-            #columns is half the total columns
-            #same for lines
-            columns = terminal_size.columns -1
+            columns = terminal_size.columns - 1
             lines = terminal_size.lines
 
-            #logs
+            last_mod, _ = self.last_modified_file()
 
-            # -4 -> 3 from stdout formatting and 1 to give an extra line
-            stdout_str = self._capture_tail_output("stdout.txt",(lines//2)-4)
-
+            last_mod = "\n".join(
+                line for line in last_mod.splitlines()
+                if line.startswith(("Most Recent", "Time Since"))
+            )
             
-            tail_str = self._capture_tail_output("system_metrics.csv",1)
-            tail_str = tail_str.split("\n")[1]
+            #limit the columns
+            last_mod = '\n'.join(line[:columns] for line in last_mod.splitlines())
 
-            remove_string = "\033[34m│\033[0m"
+            # Lines occupied by last_mod
+            last_mod_size = last_mod.count('\n') + 1 if last_mod else 0
 
-            tail_str = tail_str.replace(remove_string, "").strip()
-            # Parse the line
-            parts = tail_str.strip().split(',')
+            # half the terminal lines (minus 4 for style) minus the last modified lines
+            log_lines_to_read = ((lines // 2) - 4)- last_mod_size
+
+            if log_lines_to_read < 2:
+                print(f"Terminal size: columns {columns} lines {lines}.")
+                print(f"Size for plots: {lines//2} lines")
+                print(f"Size for logs: {log_lines_to_read} lines")
+                print(f"Size for last_mod: {last_mod_size} lines")
+                raise RuntimeError("Terminal is too small to observe output.\n"
+                                   "Please resize your terminal window and try again.\n"
+                                   f"Terminal has only {lines} lines.")
+
+
+            # Read recent stdout (depending on last_mod will read more or less)
+            stdout_str = self._capture_tail_output("stdout.txt", log_lines_to_read)
+            
+            #remove first and last line from logs
+            stdout_str = "\n".join(stdout_str.splitlines()[1:-1])
+
+            stdout_str = '\n'.join(line[:columns] for line in stdout_str.splitlines())
+
+            # Read and parse the latest metrics line
+            tail_str = self._capture_tail_output("system_metrics.csv", 1).split("\n")[1]
+            tail_str = tail_str.replace("\033[34m│\033[0m", "").strip()
+            parts = tail_str.split(',')
+
             parsed = {
                 "time": datetime.datetime.fromisoformat(parts[0]),
-                "command": parts[1] if parts[1] else None,
+                "command": parts[1] or None,
                 "cpu_usage": float(parts[2]),
                 "memory": float(parts[3]),
                 "disk_input": int(parts[4]),
                 "disk_output": int(parts[5])
             }
-            # Prepare data for plotting (as list to enable extension later)
+
+            # Store data for plotting
             times_arr.append(parsed["time"].strftime("%H:%M:%S"))
             cpu_usages_arr.append(parsed["cpu_usage"])
             mem_usages_arr.append(parsed["memory"])
-
             x_values = list(range(len(times_arr)))
 
-            #moves the cursor up lines*2
+            # Clear previous terminal output (after first iteration)
             if not first:
-                print(f"\033[{line_count}A", end="")
-            
-            # used to prevent the cursor from going up in the first iteration
+                for _ in range(line_count):
+                    sys.stdout.write('\x1b[1A')  # Move cursor up
+                    sys.stdout.write('\x1b[2K')  # Clear line
+                sys.stdout.flush()
             first = False
 
-            #limit stdout columns to columns size
-            stdout_str= '\n'.join(line[:columns] for line in stdout_str.splitlines())
-
+            # Plotting
             if combine:
-            
                 plt.clear_figure()
-                plt.plot_size(columns,lines//2)
-
+                plt.plot_size(columns, lines // 2)
                 plt.title("Usage (%)")
-
-                # Add labels
                 plt.plot(x_values, cpu_usages_arr, marker='hd', label="CPU Usage %")
                 plt.plot(x_values, mem_usages_arr, marker='hd', label="Memory Usage %")
-
                 plt.xlabel("Time")
                 plt.xticks(x_values, times_arr)
                 plt.ylim(0, 100)
 
-                str_plot = plt.build().splitlines()
+                plot_str = plt.build()
+                output = f"{plot_str}\n{stdout_str}"
 
-                str_plot = "\n".join(str_plot)
-
-                str_plot += "\n"+stdout_str
-                line_count = len(str_plot.splitlines())
-
-                print(str_plot)
             else:
+                # CPU plot
                 plt.clear_figure()
-                plt.plot_size(columns//2, lines//2)
-
-                plt.title("Usage (%)")
+                plt.plot_size(columns // 2, lines // 2)
+                plt.title("CPU Usage (%)")
                 plt.xlabel("Time")
                 plt.xticks(x_values, times_arr)
                 plt.ylim(0, 100)
-                # Add labels
                 plt.plot(x_values, cpu_usages_arr, marker='hd', label="CPU Usage %")
-                str_plot1 = plt.build()
-                
+                plot_cpu = plt.build().splitlines()
+
+                # Memory plot
                 plt.clear_figure()
-                plt.plot_size(columns//2, lines//2)
-                plt.title("Usage (%)")
+                plt.plot_size(columns // 2, lines // 2)
+                plt.title("Memory Usage (%)")
                 plt.xlabel("Time")
                 plt.xticks(x_values, times_arr)
                 plt.ylim(0, 100)
                 plt.plot(x_values, mem_usages_arr, marker='hd', label="Memory Usage %")
+                plot_mem = plt.build().splitlines()
 
-                str_plot2 = plt.build()
+                # Combine side-by-side
+                combined_plot = "\n".join(f"{a} {b}" for a, b in zip(plot_cpu, plot_mem))
+                output = f"{combined_plot}\n{stdout_str}"
 
-                lines1 = str_plot1.splitlines()
-                lines2 = str_plot2.splitlines()
-
-                #plots
-                combined = "\n".join(f"{a} {b}" for a, b in zip(lines1, lines2))
-                
-                
-                # add logs at the end
-                combined += "\n"+stdout_str
-                line_count = len(combined.splitlines())
-
-                print(combined)
-            
+            line_count = output.count('\n') + 1
+            print(output)
+            if last_mod:
+                line_count += last_mod.count('\n')+1
+                print(last_mod)
             time.sleep(5)
 
     @classmethod
