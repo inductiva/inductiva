@@ -49,7 +49,7 @@ To capture the formation of vortices, the original case setup was adjusted as fo
 ## Running the Simulation
 Below is the code required to run the simulation using the Inductiva API.
 
-In this example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs, comparable 
+In this example, we're using a `c2d-highcpu-16` cloud machine equipped with 16 virtual CPUs, comparable 
 in performance to a typical laptop.
 
 ```python
