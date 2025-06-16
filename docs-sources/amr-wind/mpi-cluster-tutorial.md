@@ -127,7 +127,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>3.41x</td>
   </tr>
 </table>
-
+ 
 Runtime decreased as the cluster size increased. With **8 machines** (896 vCPUs), the simulation completed in **42 minutes and 12 seconds**, achieving a **speedup of 3.41x** compared to the single-machine runtime of 144 minutes.
 
 Although adding more machines yields noticeable speedups, for a problem of this size, the benefits quickly taper off due to diminishing returns as the cluster size increases.
