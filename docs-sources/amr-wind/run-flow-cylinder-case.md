@@ -47,7 +47,10 @@ To capture the formation of vortices, the original case setup was adjusted as fo
 ```
 
 ## Running the Simulation
-Here is the code required to run the simulation using the Inductiva API:
+Below is the code required to run the simulation using the Inductiva API.
+
+In this example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs, comparable 
+in performance to a typical laptop.
 
 ```python
 """AMR-Wind example."""
@@ -80,9 +83,6 @@ task.print_summary()
 > **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-In this example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs, comparable 
-in performance to a typical laptop.
-
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
 ```
@@ -109,15 +109,16 @@ As you can see in the "In Progress" line, the part of the timeline that
 represents the actual execution of the simulation, 
 the core computation time of this simulation was approximately 1 hour and 35 minutes (5686 seconds).
 
-## Scaling Up the Simulation
+## Upgrading to Powerful Machines
 One of the key advantages of using Inductiva is the ease with which you can scale your simulations to larger, 
 more powerful machines with minimal changes to your code. Scaling up simply involves updating the 
 `machine_type` parameter when allocating the cloud machine.
 
 In this case, switching from a cloud machine equivalent to your laptop (**c2d-highcpu-16**) to a more 
 powerful machine (**c2d-highcpu-112**) reduces computation time from **1 hour and 35 minutes** to just 
-**37 minutes**, at a cost of US$0.38. For more computationally intensive tasks, the benefits of scaling 
-can be even more significant. 🚀
+**37 minutes**, at a cost of US$0.38. This results in a **2.57x faster** simulation!
+
+For more computationally intensive tasks, the benefits of scaling can be even more significant. 🚀
 
 <br>
 
