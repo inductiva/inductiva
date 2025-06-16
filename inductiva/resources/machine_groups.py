@@ -826,12 +826,6 @@ class MPICluster(BaseMachineGroup):
             automatically terminated.
         num_machines: The number of virtual machines to launch.
     """
-    # Constructor arguments
-    num_machines: int = 2
-    mpi_version: str = "4.1.6"
-    np: int = None
-    use_hwthread_cpus: bool = True
-
     # Internal attributes
     auto_resize_disk_max_gb = None
     _type = ResourceType.MPI.value
