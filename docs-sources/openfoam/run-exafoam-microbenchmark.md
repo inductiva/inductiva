@@ -115,7 +115,7 @@ As you can see in the "In Progress" line, the part of the timeline that represen
 
 This shows how, with a simple Python script, you can offload medium-size simulations to the cloud. 
 
-Be sure to check out [this tutorial](mpi-cluster-exafoam-high-lift-airfoil-benchmark), where we’ll explore how to
+Be sure to check out [this tutorial](mpi-cluster-benchmark), where we’ll explore how to
 **scale the simulation across multiple machines** to speed this simulation even further.
 
 

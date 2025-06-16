@@ -30,6 +30,7 @@ quick-start
 run-exafoam-microbenchmark
 mpi-cluster-exafoam-high-lift-airfoil-benchmark
 Generate OpenFOAM dataset <generate-openfoam-dataset/index>
+convert-allrun-script-into-python-commands
 ```
 
 ```{toctree}
