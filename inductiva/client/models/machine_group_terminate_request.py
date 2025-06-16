@@ -16,7 +16,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, StrictBool
 from typing import Any, ClassVar, Dict, List, Optional
 from inductiva.client.models.machine_group_terminate_reason import MachineGroupTerminateReason
 from typing import Optional, Set
@@ -29,8 +29,9 @@ class MachineGroupTerminateRequest(BaseModel):
     """
 
   # noqa: E501
-    reason: Optional[MachineGroupTerminateReason]
-    __properties: ClassVar[List[str]] = ["reason"]
+    reason: Optional[MachineGroupTerminateReason] = None
+    force: Optional[StrictBool] = False
+    __properties: ClassVar[List[str]] = ["reason", "force"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -85,5 +86,8 @@ class MachineGroupTerminateRequest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"reason": obj.get("reason")})
+        _obj = cls.model_validate({
+            "reason": obj.get("reason"),
+            "force": obj.get("force") if obj.get("force") is not None else False
+        })
         return _obj

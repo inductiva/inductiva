@@ -37,7 +37,7 @@ class StorageOperation(BaseModel):
     error_message: Optional[StrictStr] = None
     attributes: Dict[str, Any]
     start_time: datetime
-    end_time: Optional[datetime]
+    end_time: Optional[datetime] = None
     __properties: ClassVar[List[str]] = [
         "id", "name", "status", "error_message", "attributes", "start_time",
         "end_time"

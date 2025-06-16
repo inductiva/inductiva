@@ -14,8 +14,6 @@
 from typing import Any, Optional
 from typing_extensions import Self
 
-from typing import Any, Optional
-from typing_extensions import Self
 
 class OpenApiException(Exception):
     """The base exception class for all OpenAPIExceptions"""
@@ -180,8 +178,7 @@ class ApiException(OpenApiException):
         error_message = "({0})\n"\
                         "Reason: {1}\n".format(self.status, self.reason)
         if self.headers:
-            error_message += "HTTP response headers: {0}\n".format(
-                self.headers)
+            error_message += "HTTP response headers: {0}\n".format(self.headers)
 
         if self.data or self.body:
             error_message += "HTTP response body: {0}\n".format(self.data or
