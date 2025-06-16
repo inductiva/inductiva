@@ -29,13 +29,6 @@ by using the neutral Atmospheric Boundary Layer case from the [AMR-Wind GitHub r
 Download the required input files from the official
 [ExaWind Benchmarks repository](https://github.com/Exawind/exawind-benchmarks/tree/main/amr-wind/atmospheric_boundary_layer/neutral/input_files) and place them in a folder named `SimulationFiles`.
 
-Make sure to update the simulation configuration file (`abl_neutral.inp`) by
-setting the `time.stop_time` parameter to:
-
-```
-time.stop_time = 120.0
-```
-
 To evaluate scalability under heavier workloads, increase the mesh refinement by modifying the `amr.n_cell` parameter in the same file. Change it from:
 
 ```
@@ -46,6 +39,19 @@ to:
 
 ```
 amr.n_cell              = 1024 1024 368 # Grid cells at coarsest AMRlevel
+```
+
+For benchmarking purposes, we will shorten the simulation run time to 0.1% of its original length. To achieve this, 
+update the simulation configuration file (`abl_neutral.inp`) by changing the `time.stop_time parameter` from:
+
+```
+time.stop_time = 120000.0
+```
+
+to:
+
+```
+time.stop_time = 120.0
 ```
 
 You're now ready to launch your simulation!

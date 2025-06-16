@@ -73,3 +73,7 @@ As you can see in the "In Progress" line, the part of the timeline that represen
 the core computation time of this simulation was approximately 3 seconds.
 
 It's that simple!
+
+<br>
+
+> You’ve only just scratched the surface with a very short simulation. Ready for real results? Check out [this tutorial](https://inductiva.ai/guides/amr-wind/run-flow-cylinder-case) to learn how to run longer simulations on high-performance machines.

@@ -49,7 +49,7 @@ To capture the formation of vortices, the original case setup was adjusted as fo
 ## Running the Simulation
 Below is the code required to run the simulation using the Inductiva API.
 
-In this example, we're using a `c2d-highcpu-16` cloud machine equipped with 16 virtual CPUs, comparable 
+In this example, we're using a `c2d-highcpu-16` cloud machine equipped with 16 virtual CPUs (vCPUs), comparable 
 in performance to a typical laptop.
 
 ```python
@@ -114,9 +114,13 @@ One of the key advantages of using Inductiva is the ease with which you can scal
 more powerful machines with minimal changes to your code. Scaling up simply involves updating the 
 `machine_type` parameter when allocating the cloud machine.
 
-In this case, switching from a cloud machine equivalent to your laptop (**c2d-highcpu-16**) to a more 
-powerful machine (**c2d-highcpu-112**) reduces computation time from **1 hour and 35 minutes** to just 
-**37 minutes**, at a cost of US$0.38. This results in a **2.57x faster** simulation!
+You can upgrade to a last-generation cloud machine, increase the number of vCPUs, or do both!
+
+By repeating the simulation on a **c4-highcpu-16** instance, with the same number of vCPUs but two generations newer, 
+the runtime is reduced to **73 minutes**, achieving a **1.97× speedup** at a cost of US$0.37.
+
+Alternivately, switching from a cloud machine equivalent to your laptop (**c2d-highcpu-16**) to a machine with more vCPUs (**c2d-highcpu-112**) reduces computation time from **1 hour and 35 minutes** to just 
+**37 minutes**, costing US$0.38. This results in a **2.57x faster** simulation!
 
 For more computationally intensive tasks, the benefits of scaling can be even more significant. 🚀
 
