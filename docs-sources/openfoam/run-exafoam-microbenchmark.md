@@ -5,7 +5,7 @@ We will cover the `MB9 Microbenchmark from ExaFOAM` use case from the CFD Tutori
 
 ## Prerequisites
 
-1. Download the required files [here](https://github.com/OpenFOAM/OpenFOAM/tree/25.02/Tutorials/OpenFOAM_CFD/11_2%203D%20Dam%20Break%20with%20Obstacle) and place them in a folder named `highLiftConfiguration`.
+1. Download the required files [here](https://develop.openfoam.com/committees/hpc/-/tree/develop/compressible/rhoPimpleFoam/LES/highLiftConfiguration) and place them in a folder named `highLiftConfiguration`.
 
 The **directory structure** should look like this:
 ```bash
