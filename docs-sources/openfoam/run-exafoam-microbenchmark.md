@@ -1,8 +1,7 @@
 # Run the MB9 Microbenchmark from ExaFOAM
 In this tutorial we will show you how to use the Inductiva API to run an advanced OpenFOAM case that requires significant computing power.
 
-## Objective
-The goal of this tutorial is to demonstrate how to run the `MB9 Microbenchmark from ExaFOAM` use case from the CFD Tutorials, available in the [official ExaFOAM documentation](https://exafoam.eu/benchmarks/).
+We will cover the `MB9 Microbenchmark from ExaFOAM` use case from the CFD Tutorials, available in the [official ExaFOAM documentation](https://exafoam.eu/benchmarks/).
 
 ## Prerequisites
 
@@ -31,15 +30,15 @@ total 128
 
 * Open the `Allrun` script and **replace**:
 
-  ```bash
-  parEx="mpirun -np $nProcs"
-  ```
+```bash
+parEx="mpirun -np $nProcs"
+```
 
-  with:
+with:
 
-  ```bash
-  parEx="mpirun -use-hwthread-cpus -np $nProcs"
-  ```
+```bash
+parEx="mpirun -use-hwthread-cpus -np $nProcs"
+```
 
 > The `-use-hwthread-cpus` flag enables all available virtual CPUs on the machine for optimal performance.
 
@@ -114,7 +113,7 @@ Go to https://console.inductiva.ai/tasks/snkbbg86x8okt252gpryo535j for more deta
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, the core computation time of this simulation was approximately 41 hours and 6 minutes.
 
-This shows how, with a simple Python script, you can offload large-scale simulations to the cloud. 
+This shows how, with a simple Python script, you can offload medium-size simulations to the cloud. 
 
 Be sure to check out [this tutorial](mpi-cluster-exafoam-high-lift-airfoil-benchmark), where we’ll explore how to
 **scale the simulation across multiple machines** to speed this simulation even further.
