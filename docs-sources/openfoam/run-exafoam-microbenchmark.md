@@ -41,13 +41,13 @@ total 128
   parEx="mpirun -use-hwthread-cpus -np $nProcs"
   ```
 
-The `-use-hwthread-cpus` flag enables all available virtual CPUs on the machine for optimal performance.
+> The `-use-hwthread-cpus` flag enables all available virtual CPUs on the machine for optimal performance.
 
-* Edit `highLiftConfiguration/system/include/caseDefinition` and set:
-
-  ```bash
-  nCores 360;
-  ```
+* Edit `highLiftConfiguration/system/include/caseDefinition` and **update** the following parameters:
+- Set Time Step (`dt`) to 0.00002
+- Set Start Time (`initTime`) to 0.10
+- Set End Time (`finalTime`) to 0.30
+- Set Number of Cores (`nCores`) to 360
 
 ## Running Your Simulation
 With everything set up, you can now use the Inductiva API to run the simulation on a high-performance cloud machine.
