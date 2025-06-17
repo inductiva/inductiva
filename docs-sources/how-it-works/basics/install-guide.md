@@ -57,7 +57,7 @@ You should now see the INDUCTIVA text art. Proceed to Step 3.
 ## Step 3: Complete your authentication with your API Key 
 
 Right below the INDUCTIVA text art, you are prompted to "Please paste your API Key here:".
-Retrieve your API Key from [Inductiva's web Console](https://console.inductiva.ai/account/details), and paste it there.
+Retrieve your API Key from [Inductiva's web Console](https://console.inductiva.ai/account/profile), and paste it there.
 
 To confirm your authentication, type:
 
