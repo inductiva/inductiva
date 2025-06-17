@@ -79,7 +79,7 @@ Data:
 Estimated computation cost (US$): 0.000057 US$
 ```
 
-If the task status shows **Success**, congratulations! You've successfully run an AMR-Wind simulation.
+If the task status shows **Success**, congratulations! You've successfully run an CaNS simulation.
 
 This simple example tested your installation on a small machine with just 4 virtual CPUs. Inductiva offers far more powerful options to supercharge your simulations.
 
