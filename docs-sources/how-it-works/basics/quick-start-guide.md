@@ -14,7 +14,7 @@ At the end of this step-by-step guide you will:
 
 Before starting, ensure the following:
 
-- **Python installed**: Make sure Python (>=3.9) is installed on your system. Check our [System Prep guide](https://docs.inductiva.ai/en/latest/preinstallation/system/system-requirements.html#) for more information.
+- **Python installed**: Make sure Python (>=3.9) is installed on your system. Check our [System Prep guide](../../systemrequirements/index.md) for more information.
 - **Inductiva API Setup**: Ensure Inductiva library is installed. If you haven’t already, go through the installation steps.
 For a quick check, see that your API Key is set in [Inductiva's web Console](https://console.inductiva.ai/account/details).
 
