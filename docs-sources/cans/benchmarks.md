@@ -1,37 +1,32 @@
 # Benchmarks
-This benchmark report presents a performance and cost comparison across various CPU and GPU configurations, serving as your trusted guide in selecting the right simulation hardware for your computational CaNS projects.
+This benchmark report presents a performance comparison across various GPU configurations, serving as your trusted 
+guide in selecting the right simulation hardware for your computational CaNS projects.
 
-We benchmark a temporal boundary layer case with stable stratification, the same scenario detailed in our [tutorial](https://inductiva.ai/guides/cans/run-temporal-boundary-layer-case). For benchmarking purposes, we executed 1% of the original CaNS simulation.
+We benchmark a temporal boundary layer with stable stratification case, following the same scenario detailed in our 
+[tutorial](https://inductiva.ai/guides/cans/run-temporal-boundary-layer-case). For benchmarking purposes, the case was run 
+using a slightly coarser mesh, reducing the number of grid points by 25% along each spatial direction compared to the 
+original CaNS simulation.
 
-## Results 📊
-Below is a detailed comparison of execution times and costs across different machine types:
+## Results
+The benchmarks cover a range of cloud machines with different GPUs. The reference setup is the most affordable and 
+smallest configuration, featuring 4 virtual CPUs (vCPUs) paired with a single **NVIDIA L4 GPU**. Other configurations that were 
+tested include more powerful machines with increased CPU counts and higher-performance GPUs, such as the **NVIDIA A100** and **H100**, 
+which allow us to evaluate how scaling hardware resources affects simulation speed.
 
-| Machine Type    | vCPUs | GPU                | GPU Count | Duration          | Cost      | Speed-up |
-| --------------- | ----- | ------------------ | --------- | ----------------- | --------- | -------- |
-| c3d-highcpu-90  | 90    | -                  | 0         | 28 minutes 11 sec | 0.49 US$ | 0.28x    |
-| c3d-highcpu-180 | 180   | -                  | 0         | 17 minutes 16 sec | 0.64 US$ | 0.46x    |
-| c3d-highcpu-360 | 360   | -                  | 0         | 10 minutes 20 sec | 0.89 US$ | 0.78x    |
-| a3-highgpu-1    | 26    | NVIDIA H100 (80GB) | 1         | 8 minutes 1 sec   | 0.63 US$ | 1.00x    |
-| a3-highgpu-2    | 52    | NVIDIA H100 (80GB) | 2         | 9 minutes 1 sec   | 1.25 US$ | 0.89x    |
-| a3-highgpu-4    | 104   | NVIDIA H100 (80GB) | 4         | 6 minutes 5 sec   | 2.05 US$ | 1.32x    |
-| a3-highgpu-8    | 208   | NVIDIA H100 (80GB) | 8         | 6 minutes 8 sec   | 3.99 US$ | 1.30x    |
+Below is a detailed comparison of execution times and speed-ups across different machine types:
 
-Speed-ups and cost-efficiency gains are expected to be even more significant when running the full simulation.
+| Machine Type    | vCPUs | GPU            | GPU Count | Execution Time| Cost (US$) | Speed-up  |
+| --------------- | ----- | ---------------| --------- | ------------- | ---------- | --------- |
+| g2-standard-4   | 4     | NVIDIA L4      | 1         | 25h, 3 min    | 6.86       | Reference |
+| g2-standard-24  | 24    | NVIDIA L4      | 2         | 15h, 55 min   | 10.75      | 1.57x     |
+| a2-highgpu-1    | 12    | NVIDIA A100    | 1         | 4h, 44 min    | 7.38       | 5.29x     |
+| a2-highgpu-2    | 24    | NVIDIA A100    | 2         | 2h, 47 min    | 8.85       | 9.00x     |
+| a3-highgpu-1    | 26    | NVIDIA H100    | 1         | 2h, 26 min    | 6.52       | 10.29x    |
+| a3-highgpu-2    | 52    | NVIDIA H100    | 2         | 1h, 36 min    | 8.64       | 15.65x    |
 
-The data illustrates that scaling up hardware resources does not always translate into linear performance improvements. In some cases, increased overhead, such as inter-GPU communication or suboptimal resource utilization, can lead to even longer runtimes. Careful benchmarking is therefore essential to find the right balance between speed, cost, and efficiency for your specific computational needs.
+## Summary
+The benchmark results clearly demonstrate the substantial performance gains achievable by leveraging more powerful 
+GPU configurations for CaNS simulations. The fastest machine tested, equipped with **NVIDIA H100 GPUs**, achieved up to 
+a **15.7× speed-up** compared with the smallest GPU tested, a configuration with 4 vCPUs and a single NVIDIA L4 GPU.
 
-## How To Choose the Best Machine
-Selecting the right hardware configuration for your CaNS simulations depends on balancing performance, cost, and project requirements. Use these key considerations to guide your choice:
-
-### Define Your Priorities: Speed vs. Cost
-- **If time is critical**: GPUs, especially NVIDIA H100-based instances, offer the fastest runtimes, though at a higher cost.
-- **If budget is limited**: High-CPU machines are more cost-effective but come with longer runtimes.
-
-### Consider the Scale of Your Simulation
-- For **small to medium workloads** (like the 1% case benchmarked here), single or dual GPU setups often provide the best balance.
-- For **large-scale simulations**, multi-GPU machines can deliver improved speedups, though watch for diminishing returns due to overhead.
-
-### If You Are Exploring or Just Getting Started
-- Begin with modest configurations to profile your workload and use our benchmarks as a reference to make informed scaling decisions or decide whether GPU acceleration is worthwhile.
-
-Whatever your priorities, Inductiva takes care of the infrastructure, allowing you to focus on what matters most: your CaNS projects.
+With Inductiva, you're able to seamlessly select the hardware that delivers the performance your simulations demand.
