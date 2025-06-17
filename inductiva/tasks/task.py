@@ -1415,8 +1415,6 @@ class Task:
         if start_time is None:
             return None
 
-        # Format the time to datetime type
-        start_time = datetime.datetime.fromisoformat(start_time)
         end_time = datetime.datetime.now(datetime.timezone.utc)
 
         return (end_time - start_time).total_seconds()
