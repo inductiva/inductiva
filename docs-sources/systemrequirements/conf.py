@@ -94,7 +94,7 @@ pygments_style = "monokai"
 
 html_favicon = 'favicon.ico'
 
-html_title = 'SWASH'
+html_title = 'System Requirements'
 
 # Google Analytics
 googleanalytics_id = "G-NHJ03C6M91"
