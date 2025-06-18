@@ -76,7 +76,25 @@ task.print_summary()
 
 The script will take **~2 hours** to run. In the end, you should see something like:
 
-<task print summary>
+```
+Task status: Success
+
+Timeline:
+	Waiting for Input         at 16/06, 19:16:34      1.552 s
+	In Queue                  at 16/06, 19:16:36      41.505 s
+	Preparing to Compute      at 16/06, 19:17:17      6.834 s
+	In Progress               at 16/06, 19:17:24      7037.311 s
+		└> 7037.17 s       /opt/openmpi/4.1.6/bin/mpirun --np 30 --use-hwthread-cpus pw.x -i grir443.in
+	Finalizing                at 16/06, 21:14:41      0.475 s
+	Success                   at 16/06, 21:14:42      
+
+Data:
+	Size of zipped output:    12.94 KB
+	Size of unzipped output:  73.76 KB
+	Number of output files:   4
+
+Estimated computation cost (US$): 0.91 US$
+```
 
 That’s it! You have just run the GRIR443 on Inductiva! 
 
