@@ -17,11 +17,13 @@ Download the required files [here](https://github.com/QEF/benchmarks/tree/master
 ## Key Considerations
 Running this simulation on Inductiva is as straightforward as running any other Quantum ESPRESSO simulation.
 
-The only aspect to consider is ensuring that there is enough RAM to perform the computation. This means allocating a machine with sufficient memory.
+The only aspect to consider is ensuring that there is enough RAM to perform the computation. This means allocating a machine 
+with sufficient memory.
 
 Out of the many machines Inductiva makes available, we opted to use the **highmem** variant of the machine type, which comes equipped with 8 GB of RAM per vCPU.
 
-For machines with more than 30 virtual CPUs, it is feasible to run the GRIR443 simulation using the **standard** variant (4 GB of RAM per vCPU) or the **highcpu** variant (just 2 GB of RAM per vCPU).
+For machines with more than 30 virtual CPUs, it is feasible to run the GRIR443 simulation using the **standard** variant (4 GB 
+of RAM per vCPU) or the **highcpu** variant (just 2 GB of RAM per vCPU).
 
 ## Run the Simulation
 Below is the code required to run GRIR443 with the Inductiva API.
@@ -78,7 +80,8 @@ The script will take **~2 hours** to run. In the end, you should see something l
 
 That’s it! You have just run the GRIR443 on Inductiva! 
 
-Of course, this run wasn’t as fast as Fugaku’s, nor did it outperform the time reported by the Supercomputing Center of Wales in 2018. But we also didn’t use the most powerful machines available on Inductiva!
+Of course, this run wasn’t as fast as Fugaku’s, nor did it outperform the time reported by the Supercomputing Center of Wales 
+in 2018. But we also didn’t use the most powerful machines available on Inductiva!
 
 The magic of Inductiva lies in its flexibility — you can easily scale your simulations to much larger machines, or even multi-node MPI clusters, with just a few minor changes to your Python script.
 
@@ -88,7 +91,9 @@ Let’s explore what happens when we use more powerful machines to run the same 
 Scaling up simply involves updating the `machine_type` parameter when allocating the cloud machine and setting the `np` 
 parameter in the MPI configuration to match the number of vCPUs on the selected machine.
 
-The table below shows the execution times across increasingly powerful machines. As the number of vCPUs increases, we transition from using the **highmem** variant (8 GB RAM per vCPU) to the **standard** (4 GB RAM per vCPU) and **highcpu** variants (2 GB RAM per vCPU). This enables stable pricing while reducing computation time.
+The table below shows the execution times across increasingly powerful machines. As the number of vCPUs increases, we 
+transition from using the **highmem** variant (8 GB RAM per vCPU) to the **standard** (4 GB RAM per vCPU) and 
+**highcpu** variants (2 GB RAM per vCPU). This enables stable pricing while reducing computation time.
 
 | Machine Type       | Execution Time        | Estimated Cost (USD) |
 |--------------------|-----------------------|---------------------|
