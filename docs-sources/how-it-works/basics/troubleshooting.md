@@ -1,14 +1,12 @@
-# Troubleshooting Guide
+# Troubleshoot installation
+
 In this troubleshooting section, we aim to guide you through resolving issues
 related to incorrect or incomplete installation of the Inductiva package
-or its dependencies. This guide assumes you’ve gone through all steps we've shared
-in the [user console](https://console.inductiva.ai/), and have faced
-some issues.
+or its dependencies.
 
 If you find bugs, need help, or want to talk to the developers, reach out to us on
-support@inductiva.ai
+[support@inductiva.ai](mailto:support@inductiva.ai).
 
-If you find any security issues, please report to security@inductiva.ai
 
 ---
 
@@ -20,6 +18,7 @@ steps you can take:
 ```
 pip install --upgrade pip
 ```
+
 ### Use virtualenv or venv to isolate dependencies
 
 If installing the package fails, you can retry it on a new Python virtual environment.
@@ -111,7 +110,7 @@ installation:
 2. **Edit Environment Variables**:
    - Go to the **Advanced** tab and click **Environment Variables**.
    - Under **System variables**, find the `PATH` variable and click **Edit**.
-   - Click **New** and add the path to the `Scripts` folder in your Python installation directory.  
+   - Click **New** and add the path to the `Scripts` folder in your Python installation directory.
      Example: `C:\path\to\python\Scripts`
 
 #### On macOS:

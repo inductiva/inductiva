@@ -1,7 +1,7 @@
 # auth
 
 The `inductiva auth` command allows you to manage your
-authentication on Inductiva API. 
+authentication on Inductiva API.
 
 This is a fundamental aspect of your experience: you will only be
 able to start machines and launch simulations after you are authenticated.
@@ -27,25 +27,25 @@ Authenticate using your Inductiva API key.
 inductiva auth login
 ```
 
-You will be prompted to enter your API key. 
+You will be prompted to enter your API key.
 
 ```sh
-     ___  _   _  ____   _   _   ____  _____  ___ __     __ _    
-    |_ _|| \ | ||  _ \ | | | | / ___||_   _||_ _|\ \   / // \   
-     | | |  \| || | | || | | || |      | |   | |  \ \ / // _ \  
-     | | | |\  || |_| || |_| || |___   | |   | |   \ V // ___ \ 
+     ___  _   _  ____   _   _   ____  _____  ___ __     __ _
+    |_ _|| \ | ||  _ \ | | | | / ___||_   _||_ _|\ \   / // \
+     | | |  \| || | | || | | || |      | |   | |  \ \ / // _ \
+     | | | |\  || |_| || |_| || |___   | |   | |   \ V // ___ \
     |___||_| \_||____/  \___/  \____|  |_|  |___|   \_//_/   \_\
-    
-    You are already logged in. Run `inductiva auth logout` if you want to log out. 
+
+    You are already logged in. Run `inductiva auth logout` if you want to log out.
     Setting a new API Key will erase the existing one.
     To log in, you need an API Key. You can obtain it from your account at https://console.inductiva.ai/account.
 Please paste your API Key here:
 ```
 
 At this stage, please copy paste your personal API key that is available
-from your [User Account] (https://console.inductiva.ai/account/details)
+from your [User Account] (https://console.inductiva.ai/account/profile)
 page in the Web Console.  Once authenticated, your credentials will be
-stored locally for future sessions using that machine. 
+stored locally for future sessions using that machine.
 
 ### `logout`
 Remove stored authentication credentials and log out.

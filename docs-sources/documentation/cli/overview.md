@@ -40,7 +40,7 @@ inductiva auth login
 ```
 
 When prompted, copy paste your personal API key that is availalbe
-from your [User Account] (<https://console.inductiva.ai/account/details>)
+from your [User Account] (<https://console.inductiva.ai/account/profile>)
 page in the Web Console.
 
 ## Need Help?
