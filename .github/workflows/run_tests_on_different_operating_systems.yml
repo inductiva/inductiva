@@ -5,7 +5,12 @@ on:
     branches: [main]
   push:
     branches: [dev]
-
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to use"
+        required: true
+        default: "main"
 
 jobs:
   run_on_linux_arm64:
