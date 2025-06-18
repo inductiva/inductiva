@@ -359,6 +359,8 @@ class BaseMachineGroup(ABC):
 
         machine_group._update_attributes_from_response(resp)
 
+        machine_group.set_mpi_config()
+
         return machine_group
 
     def can_start_resource(self) -> bool:
