@@ -89,9 +89,7 @@ shared_static_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "_shared_static"))
 html_static_path = ['_static', shared_static_path]
 
-html_css_files = [
-    'css/custom.css',
-]
+html_css_files = ['css/custom.css', 'css/enable_sidebar_focus.css']
 pygments_style = "monokai"
 
 html_title = 'Scale Up'

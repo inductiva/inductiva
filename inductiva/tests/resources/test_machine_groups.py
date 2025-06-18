@@ -44,9 +44,17 @@ def test_get_by_name(response, expected_result):
         mock_response = inductiva.client.models.VMGroupConfig(**response)
 
         mock_get_vm_group_by_name = mock.MagicMock(return_value=mock_response)
+
         (mock_compute_api.return_value.get_vm_group_by_name
         ) = mock_get_vm_group_by_name
 
-        result = inductiva.resources.machine_groups.get_by_name("dummy_name")
+        with mock.patch(
+                "inductiva.resources.machine_groups"
+                ".BaseMachineGroup.set_mpi_config") as mock_set_mpi_config:
+            mock_set_mpi_config.return_value = inductiva.commands.MPIConfig(
+                "4.1.6", np=1, use_hwthread_cpus=True)
+
+            result = inductiva.resources.machine_groups.get_by_name(
+                "dummy_name")
 
     assert isinstance(result, expected_result)

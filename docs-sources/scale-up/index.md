@@ -10,6 +10,7 @@ hidden: true
 
 Run Simulations in Parallel <parallel-simulations/run-parallel_simulations>
 Set up an Elastic Machine Group <parallel-simulations/set-up-elastic-machine-group>
+Templating Manager <parallel-simulations/templating>
 
 ```
 

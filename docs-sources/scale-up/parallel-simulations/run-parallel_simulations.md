@@ -4,11 +4,11 @@ Running multiple simulations in parallel can significantly reduce waiting times,
 especially useful when exploring various parameter values or running a large number 
 of simulations for a sensitivity analysis. This how-to guide will walk you through 
 using Machine Groups to run several simulations in parallel, using the 
-[templating mechanism](https://tutorials.inductiva.ai/intro_to_api/templating.html)
+<a href="templating.html">templating mechanism</a>
 integrated within the Inductiva API. 
 This approach makes it easy to explore variations of a base simulation scenario. 
 As a practical example, we will use a coastal dynamics simulation with 
-the [SWASH simulator](https://tutorials.inductiva.ai/simulators/SWASH.html).
+the [SWASH simulator](https://inductiva.ai/guides/swash).
 
 ## 1. Setting Up Your Machine Group
 
@@ -72,7 +72,7 @@ simulation, each with a different water level. The simulations will be submitted
 to our dedicated machine group and will run in parallel.
 
 You can check the status of these simulations through the
-[Inductiva CLI](https://docs.inductiva.ai/en/latest/cli/streaming-logs.html),
+[Inductiva CLI](https://inductiva.ai/guides/documentation/cli/overview),
 and you'll see that it took only **1 minute** from the moment they were
 submitted until they start running:
 
@@ -94,7 +94,7 @@ resources. In our example, all five simulations start in parallel and complete i
 simulation!
 
 ````{eval-rst}
-.. important::
+.. ⚠️Important::
    After completing the simulations, remember to release your computational resources 
    to avoid unnecessary charges!
 ````
