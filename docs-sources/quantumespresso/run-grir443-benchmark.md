@@ -28,7 +28,7 @@ of RAM per vCPU) or the **highcpu** variant (just 2 GB of RAM per vCPU).
 ## Run the Simulation
 Below is the code required to run GRIR443 with the Inductiva API.
 
-Copy and paste it into a file named `run.py`, save it in the `qe_benchmark` folder, and from that folder, execute it by running:
+Copy and paste it into a file named `run.py`, save it in the `qe_benchmark` folder, and execute it from that folder by running:
 
 ````
 python run.py
