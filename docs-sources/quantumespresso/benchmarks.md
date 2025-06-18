@@ -52,10 +52,10 @@ Below are Inductiva’s results:
 While Inductiva’s core counts don’t exactly match Fugaku’s, two regimes provide a fair comparison:
 
 - **Regime 1: Inductiva 720 cores vs. Fugaku 768 cores**  
-  Inductiva outperformed Fugaku by 13 seconds (about **5.8% faster**) at just **$0.83**. The overall hourly cost for this 4-node setup is roughly **$13.60**.
+  Inductiva outperformed Fugaku by 13 seconds (about **5.8% faster**) at just **US$0.83**. The overall hourly cost for this 4-node setup is roughly **US$13.60**.
 
 - **Regime 2: Inductiva 1,440 cores vs. Fugaku 1,152 cores**  
-  Inductiva edged out Fugaku by 2 seconds (a **1% improvement**) using 25% more cores. This indicates that network communication is becoming a limiting factor, where traditional HPC systems like Fugaku excel. Still, Inductiva’s comparable performance costs only **$1.24**, with an estimated hourly expense of about **$27.20**.
+  Inductiva edged out Fugaku by 2 seconds (a **1% improvement**) using 25% more cores. This indicates that network communication is becoming a limiting factor, where traditional HPC systems like Fugaku excel. Still, Inductiva’s comparable performance costs only **$US1.24**, with an estimated hourly expense of about **US$27.20**.
 
 
 ## Can Inductiva Really Beat Fugaku?
