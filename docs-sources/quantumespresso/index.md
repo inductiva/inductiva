@@ -32,7 +32,7 @@ run-grir443-benchmark
 
 ```{toctree}
 ---
-caption: " "
+caption: Benchmarks
 maxdepth: 1
 hidden: true
 ---
