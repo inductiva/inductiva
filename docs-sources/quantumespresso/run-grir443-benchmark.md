@@ -96,7 +96,7 @@ Data:
 Estimated computation cost (US$): 0.91 US$
 ```
 
-That’s it! You have just run the GRIR443 on Inductiva! 
+That’s it! You have just run GRIR443 on Inductiva! 
 
 Of course, this run wasn’t as fast as Fugaku’s, nor did it outperform the time reported by the Supercomputing Center of Wales 
 in 2018. But we also didn’t use the most powerful machines available on Inductiva!

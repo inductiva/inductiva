@@ -14,8 +14,6 @@ We’re not suggesting that Inductiva or any cloud-based infrastructure can gene
 
 And many real-life problems do fall into this category.
 
----
-
 ## An Unexpected Advantage of Cloud HPC
 While supercomputers are engineered for speed and scale, cloud-based HPC infrastructures offer some surprising performance benefits. Traditional HPC systems like Fugaku are computationally homogeneous: every node in a given partition has identical hardware specifications to ensure predictable cluster behavior.
 
@@ -23,14 +21,10 @@ This homogeneity makes upgrading the system challenging: you either upgrade all 
 
 In contrast, cloud providers constantly refresh their hardware. This means that cloud HPC nodes often use the latest generation CPUs, which tend to be faster on a per-node basis than (not so recent) supercomputer nodes. For workloads that only require a handful of nodes, a cloud-based HPC platform like Inductiva may actually outperform even the most expensive supercomputers.
 
----
-
 ## So, What’s the Catch?
 The limitation lies in scaling. Cloud HPC performs best when using up to a few nodes - typically 4 to 8. Beyond this scale, network communication costs in the cloud become a bottleneck. Unlike supercomputers, which use ultra-fast, dedicated interconnects, cloud node communication happens over shared networks that are slower and less predictable.
 
 If you’re fortunate enough to have all your cloud computing nodes located on the same rack and network traffic during the computation is moderate, you might achieve a fast multi-node configuration that outperforms a traditional supercomputer on small to medium-sized tasks. However, a bit of luck is definitely required.
-
----
 
 ## Comparing the Numbers
 After reviewing a [performance report from Fugaku](https://www.hpci-office.jp/documents/appli_software/Fugaku_QE_performance.pdf) on the GRIR443 benchmark, we ran the same benchmark on Inductiva to compare results.
@@ -58,12 +52,11 @@ Below are Inductiva’s results:
 While Inductiva’s core counts don’t exactly match Fugaku’s, two regimes provide a fair comparison:
 
 - **Regime 1: Inductiva 720 cores vs. Fugaku 768 cores**  
-  Inductiva outperformed Fugaku by 13 seconds (about **5.8% faster**) at just **$0.83**. The overall hourly cost for this 4-node setup is roughly **$13.60**.
+  Inductiva outperformed Fugaku by 13 seconds (about **5.8% faster**) at just **US$0.83**. The overall hourly cost for this 4-node setup is roughly **US$13.60**.
 
 - **Regime 2: Inductiva 1,440 cores vs. Fugaku 1,152 cores**  
-  Inductiva edged out Fugaku by 2 seconds (a **1% improvement**) using 25% more cores. This indicates that network communication is becoming a limiting factor, where traditional HPC systems like Fugaku excel. Still, Inductiva’s comparable performance costs only **$1.24**, with an estimated hourly expense of about **$27.20**.
+  Inductiva edged out Fugaku by 2 seconds (a **1% improvement**) using 25% more cores. This indicates that network communication is becoming a limiting factor, where traditional HPC systems like Fugaku excel. Still, Inductiva’s comparable performance costs only **$US1.24**, with an estimated hourly expense of about **US$27.20**.
 
----
 
 ## Can Inductiva Really Beat Fugaku?
 The answer depends on the workload.
