@@ -51,9 +51,8 @@ def test_get_by_name(response, expected_result):
         with mock.patch(
                 "inductiva.resources.machine_groups"
                 ".BaseMachineGroup.set_mpi_config") as mock_set_mpi_config:
-            mock_set_mpi_config.return_value = inductiva.commands.MPIConfig("4.1.6",
-                                                         np=1,
-                                                         use_hwthread_cpus=True)
+            mock_set_mpi_config.return_value = inductiva.commands.MPIConfig(
+                "4.1.6", np=1, use_hwthread_cpus=True)
 
             result = inductiva.resources.machine_groups.get_by_name(
                 "dummy_name")
