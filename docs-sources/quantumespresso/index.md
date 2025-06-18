@@ -27,6 +27,16 @@ hidden: true
 ---
 setup-test
 quick-start
+run-grir443-benchmark
+```
+
+```{toctree}
+---
+caption: Benchmarks
+maxdepth: 1
+hidden: true
+---
+benchmarks
 ```
 
 ```{toctree}
