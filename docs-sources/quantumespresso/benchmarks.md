@@ -1,4 +1,4 @@
-# Can Inductiva Beat Fugaku on Quantum ESPRESSO’s GRIR443 Benchmark?
+# Can Inductiva Beat Fugaku on GRIR443 Benchmark?
 Fugaku, designed by RIKEN and Fujitsu, is a Japanese supercomputer and one of the fastest and most powerful in the world. 
 It delivers a staggering performance exceeding **442 petaflops** and excels across a wide range of applications, from climate simulations and drug discovery to artificial intelligence. 
 
