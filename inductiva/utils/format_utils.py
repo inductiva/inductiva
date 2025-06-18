@@ -1,7 +1,7 @@
 """Util functions for formatting data for printing to console."""
 from typing import (Any, Callable, Dict, Iterable, Mapping, Optional, Tuple,
                     Union, List)
-from distutils.util import strtobool
+from inductiva.utils import strtobool
 from enum import Enum
 import datetime
 import copy
