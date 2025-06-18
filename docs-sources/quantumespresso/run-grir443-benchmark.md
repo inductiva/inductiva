@@ -107,7 +107,7 @@ Solid results for less than a dollar!
 
 For just over 70 cents, you can outperform what a national supercomputer achieved back in 2018 by using only a single node.
 
-And here’s the exciting part: with only a modest increase in cost, leveraging a multi-node configuration could potentially allow you to even beat Fugaku’s record.
+And here’s the exciting part: with only a modest increase in cost, leveraging a multi-node configuration could potentially allow you to even ***beat*** Fugaku’s record.
 
 
 
