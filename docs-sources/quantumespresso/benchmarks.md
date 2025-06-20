@@ -42,12 +42,16 @@ The benchmark was executed on a single VM (as a baseline), and then on MPI clust
 
 Below are Inductiva’s results:
 
-| VM Type         | Number of VMs | Total Cores (NP) | Time (seconds) | Cost (USD) |
-|-----------------|---------------|------------------|----------------|------------|
-| c3d-highcpu-360 | 1             | 180              | 787            | 0.75       |
-| c3d-highcpu-360 | 2             | 360              | 399            | 0.77       |
-| c3d-highcpu-360 | 4             | 720              | 210            | 0.83       |
-| c3d-highcpu-360 | 8             | 1440             | 154            | 1.24       |
+<div align="center">
+
+| VM Type              | Number of VMs | Total Cores (NP) | Time (seconds) | Cost (USD) |
+|----------------------|---------------|------------------|----------------|------------|
+| c3d-highcpu-360      | 1             | 180              | 787            | 0.75       |
+| c3d-highcpu-360      | 2             | 360              | 399            | 0.77       |
+| c3d-highcpu-360      | 4             | 720              | 210            | 0.83       |
+| c3d-highcpu-360      | 8             | 1440             | 154            | 1.24       |
+
+</div>
 
 While Inductiva’s core counts don’t exactly match Fugaku’s, two regimes provide a fair comparison:
 

@@ -100,7 +100,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
   <tr>
     <td>Machine Type</td>
     <td>Nº of Machines</td>
-    <td>Cores</td>
+    <td>vCPUs</td>
     <td>Duration (min:s)</td>
     <td>Speedup</td>
   </tr>
