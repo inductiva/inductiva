@@ -11,6 +11,7 @@ import tqdm.utils
 import signal
 import urllib3
 import decimal
+import ssl
 from contextlib import contextmanager
 from typing import List, Optional
 
@@ -23,6 +24,11 @@ from inductiva.client.models import (TaskRequest, TaskStatus, TaskSubmittedInfo,
                                      CompressionMethod)
 from inductiva import constants, storage
 from inductiva.utils import format_utils, files
+
+try:
+    import truststore
+except ImportError:
+    truststore = None
 
 
 def get_api_config() -> Configuration:
@@ -44,6 +50,10 @@ def get_client(api_config: Optional[Configuration] = None) -> ApiClient:
     client = ApiClient(api_config)
 
     client.user_agent = inductiva.get_api_agent()
+
+    if truststore:
+        ctx = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+        client.rest_client.pool_manager.connection_pool_kw["ssl_context"] = ctx
 
     return client
 
