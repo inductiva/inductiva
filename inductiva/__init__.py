@@ -5,7 +5,7 @@ import logging
 import contextvars
 from urllib3.exceptions import MaxRetryError, NewConnectionError
 
-from inductiva.client.apis.tags.version_api import VersionApi
+import inductiva.client
 from inductiva.client.configuration import Configuration
 from inductiva.client.exceptions import ApiException
 from inductiva._cli.cmd_user.info import get_info
@@ -44,7 +44,7 @@ _api_key = contextvars.ContextVar("INDUCTIVA_API_KEY",
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.16.6"
+__version__ = "0.16.7"
 
 
 def set_output_dir(new_output_dir):
@@ -134,12 +134,10 @@ def compare_client_and_backend_versions(client_version: str):
     api_config = Configuration(host=api_url)
 
     with get_client(api_config) as client:
-        api_instance = VersionApi(client)
-        query_params = {"client_version": client_version}
+        api_instance = inductiva.client.VersionApi(client)
 
         try:
-            api_instance.compare_client_and_backend_versions(
-                query_params=query_params)
+            api_instance.compare_client_and_backend_versions(client_version)
 
         except (MaxRetryError, NewConnectionError) as exc:
             raise RuntimeError(

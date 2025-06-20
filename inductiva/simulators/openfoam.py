@@ -1,7 +1,8 @@
 """OpenFOAM module of the API for fluid dynamics."""
-from typing import List, Optional
+from typing import List, Optional, Union
 
-from inductiva import types, tasks, simulators
+from inductiva import simulators, tasks, types
+from inductiva.commands.commands import Command
 
 AVAILABLE_OPENFOAM_DISTRIBUTIONS = ["foundation", "esi"]
 
@@ -57,7 +58,7 @@ class OpenFOAM(simulators.Simulator):
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            remote_assets: Optional[List[str]] = None,
+            remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
@@ -93,6 +94,11 @@ class OpenFOAM(simulators.Simulator):
                                     remote_assets=remote_assets,
                                     shell_script=shell_script)
             commands = [f"bash {shell_script}"]
+
+        for i, command in enumerate(commands):
+            if isinstance(command, str) and "-parallel" in command:
+                new_command = Command(command, mpi_config=on.get_mpi_config())
+                commands[i] = new_command
 
         return super().run(input_dir,
                            on=on,

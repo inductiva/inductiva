@@ -8,30 +8,42 @@ Let’s continue from the [quick-start tutorial](quick-start), where the followi
 how to enable GIF generation:
 
 ```python
-task = wrf.run(
-    input_dir=input_dir,
-    case_name="em_real",
+"""WRF Simulation."""
+import inductiva
 
-    # Enable GIF generation using the RAINNC variable
-    gen_gif=True,
-    gen_gif_variable="RAINNC",
-    gen_gif_files=[
-        "wrfout_d01_2019-11-26_12:00:00",
-        "wrfout_d01_2019-11-26_13:00:00",
-        "wrfout_d01_2019-11-26_14:00:00",
-        "wrfout_d01_2019-11-26_15:00:00",
-        "wrfout_d01_2019-11-26_16:00:00",
-        "wrfout_d01_2019-11-26_17:00:00",
-        "wrfout_d01_2019-11-26_18:00:00",
-        "wrfout_d01_2019-11-26_19:00:00",
-        "wrfout_d01_2019-11-26_20:00:00",
-        "wrfout_d01_2019-11-26_21:00:00",
-        "wrfout_d01_2019-11-26_22:00:00",
-        "wrfout_d01_2019-11-26_23:00:00",
-        "wrfout_d01_2019-11-27_00:00:00",
-    ],
-    on=cloud_machine
-)
+# Allocate cloud machine on Google Cloud Platform
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c2d-standard-16",
+    spot=True)
+
+# Initialize the Simulator
+wrf = inductiva.simulators.WRF( \
+    version="4.6.1")
+
+# Run simulation
+task = wrf.run( \
+	input_dir=input_dir,
+	case_name="em_real",
+	# generate GIF with the RAINNC values
+	gen_gif=True,
+	gen_gif_variable="RAINNC",
+	gen_gif_files=[
+		"wrfout_d01_2019-11-26_12:00:00",
+		"wrfout_d01_2019-11-26_13:00:00",
+		"wrfout_d01_2019-11-26_14:00:00",
+		"wrfout_d01_2019-11-26_15:00:00",
+		"wrfout_d01_2019-11-26_16:00:00",
+		"wrfout_d01_2019-11-26_17:00:00",
+		"wrfout_d01_2019-11-26_18:00:00",
+		"wrfout_d01_2019-11-26_19:00:00",
+		"wrfout_d01_2019-11-26_20:00:00",
+		"wrfout_d01_2019-11-26_21:00:00",
+		"wrfout_d01_2019-11-26_22:00:00",
+		"wrfout_d01_2019-11-26_23:00:00",
+		"wrfout_d01_2019-11-27_00:00:00",
+	],
+	on=cloud_machine)
 ```
 
 ### GIF Generation Parameters

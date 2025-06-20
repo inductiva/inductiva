@@ -1,15 +1,14 @@
 """Base class for low-level simulators."""
-from typing import List, Literal, Optional
-from abc import ABC
 import logging
 import os
-import re
-
 import pathlib
+import re
+from abc import ABC
+from typing import Literal, Optional, Union
 
-from inductiva import projects, types, tasks, resources, logs
+from inductiva import commands, logs, projects, resources, tasks, types
+
 from .methods import list_available_images
-from inductiva import commands
 
 
 def mpi_enabled(cls):
@@ -243,7 +242,7 @@ class Simulator(ABC):
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
-        remote_assets: Optional[List[str]] = None,
+        remote_assets: Optional[Union[str, list[str]]] = None,
         project: Optional[str] = None,
         **kwargs,
     ) -> tasks.Task:
@@ -270,6 +269,9 @@ class Simulator(ABC):
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
+        if isinstance(remote_assets, str):
+            remote_assets = [remote_assets]
+
         self._validate_input_files(input_dir, remote_assets)
 
         input_dir_path = self._setup_input_dir(input_dir) if input_dir else None

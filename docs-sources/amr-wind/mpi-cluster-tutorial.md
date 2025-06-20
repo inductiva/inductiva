@@ -10,7 +10,7 @@ available and accelerating your simulation’s runtime.
 With **Inductiva**, running your simulations on a multi-node MPI cluster is as straightforward as 
 using any single-node option.
 
-All you need to do is update the resource allocation from `MachineGroup` to `MPICluster`, like this:
+All you need to do is update the resource allocation from `MachineGroup` to `MPICluster`, as follows:
 
 ```diff
 # Allocate a multi-machine MPI cluster on Google Cloud Platform
@@ -29,8 +29,26 @@ by using the neutral Atmospheric Boundary Layer case from the [AMR-Wind GitHub r
 Download the required input files from the official
 [ExaWind Benchmarks repository](https://github.com/Exawind/exawind-benchmarks/tree/main/amr-wind/atmospheric_boundary_layer/neutral/input_files) and place them in a folder named `SimulationFiles`.
 
-Make sure to update the simulation configuration file by
-changing the `time.stop_time` parameter to:
+To evaluate scalability under heavier workloads, increase the mesh refinement by modifying the `amr.n_cell` parameter in the same file. Change it from:
+
+```
+amr.n_cell              = 512 512 184 # Grid cells at coarsest AMRlevel
+```
+
+to:
+
+```
+amr.n_cell              = 1024 1024 368 # Grid cells at coarsest AMRlevel
+```
+
+For benchmarking purposes, we will shorten the simulation run time to 0.1% of its original length. To achieve this, 
+update the simulation configuration file (`abl_neutral.inp`) by changing the `time.stop_time parameter` from:
+
+```
+time.stop_time = 120000.0
+```
+
+to:
 
 ```
 time.stop_time = 120.0
@@ -75,30 +93,47 @@ task.download_outputs()
 This setup lets you seamlessly scale your simulations across multiple nodes, delivering faster results and 
 enabling you to tackle larger, more detailed CFD problems than ever before.
 
-> For an example of running your simulation on a single machine, check out this [tutorial](quick-start).
-
 ## Results
-Here are the results of running this simulation on a multi-node MPI cluster compared to the 
-baseline single-node configuration.
+Below are the results of running this simulation on a multi-node MPI cluster, compared to the single-node configuration (shown in the first row):
 
-| Machine Type    | Nº of Machines | vCPUs | Duration (s) | Speedup |
-| --------------- | ------------ | ----- | ------------ | ------- |
-| c2d-highcpu-112 | 1            | 112   | 1472         | 1.00x   |
-| c2d-highcpu-112 | 2            | 224   | 1404         | 1.05x   |
-| c2d-highcpu-112 | 4            | 448   | 1461         | 1.01x   |
-| c2d-highcpu-112 | 8            | 896   | 977          | 1.51x   |
-| c2d-highcpu-112 | 12           | 1344  | 1408         | 1.05x   |
-| c2d-highcpu-112 | 16           | 1792  | 1001         | 1.47x   |
+<table>
+  <tr>
+    <td>Machine Type</td>
+    <td>Nº of Machines</td>
+    <td>vCPUs</td>
+    <td>Duration (min:s)</td>
+    <td>Speedup</td>
+  </tr>
+  <tr>
+    <td>c2d-highmem-112</td>
+    <td>1</td>
+    <td>112</td>
+    <td>144:00</td>
+    <td>Baseline</td>
+  </tr>
+  <tr>
+    <td>c2d-highmem-112</td>
+    <td>2</td>
+    <td>224</td>
+    <td>90:00</td>
+    <td>1.60x</td>
+  </tr>
+  <tr>
+    <td>c2d-highmem-112</td>
+    <td>4</td>
+    <td>448</td>
+    <td>59:10</td>
+    <td>2.43x</td>
+  </tr>
+  <tr>
+    <td>c2d-highmem-112</td>
+    <td>8</td>
+    <td>896</td>
+    <td>42:12</td>
+    <td>3.41x</td>
+  </tr>
+</table>
 
-For this simulation setup, the **fastest configuration** was achieved using a
-cluster of **8 machines (896 vCPUs)**, completing the run in **977 seconds**.
+Runtime decreased as the cluster size increased. With **8 machines** (896 vCPUs), the simulation completed in **42 minutes and 12 seconds**, achieving a **speedup of 3.41x** compared to the single-machine runtime of 144 minutes.
 
-Interestingly, increasing the number of machines beyond this point did
-not improve performance. This is likely due to the diminishing
-returns of parallelization for smaller or moderately sized problems, where the 
-communication overhead between nodes begins to offset the gains from additional
-compute resources.
-
-To explore these results in more detail, check out our [benchmarks page](https://inductiva.ai/guides/amr-wind/mpi-cluster-benchmarks).
-
-
+Although adding more machines yields noticeable speedups, for a problem of this size, the benefits quickly taper off due to diminishing returns as the cluster size increases.
