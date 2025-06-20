@@ -1,4 +1,4 @@
-# Run GRIR443 on an MPI
+# Run GRIR443 on an MPI Cluster
 QuantumESPRESSO is designed from the ground up with parallelism in mind, enabling it to efficiently distribute both data and 
 computational workload across multiple processors and nodes. This is particularly beneficial for demanding tasks such as plane-wave 
 DFT (Density Functional Theory) calculations, which involve large Hamiltonian matrices and extensive Fourier transforms. By 
@@ -22,10 +22,8 @@ In this tutorial, we’ll demonstrate how leveraging an MPI cluster — both wit
 the performance of the [GRIR443 benchmark](https://github.com/QEF/benchmarks/tree/master/GRIR443).
 
 ## Running the Simulation
-The script for running the GRIR443 simulation on a multi-node MPI cluster remains largely the same as the single-machine version. The c
-ore structure, including defining commands, initializing the simulator, and launching the job, does not change. The main differences lie 
-in resource allocation and MPI configuration, where we adjust the number of machines and the number of MPI processes (threads) to match 
-the parallel environment.
+The script for running the GRIR443 simulation on a multi-node MPI cluster remains largely the same as the single-machine version. 
+The core structure, including defining commands, initializing the simulator, and launching the job, does not change. The main differences lie in resource allocation and MPI configuration, where we adjust the number of machines and the number of MPI processes (threads) to match the parallel environment.
 
 In this example, we request two `c3d-highcpu-360` machines, each with 360 vCPUs, connected as an MPI cluster. This setup provides a total 
 of 720 threads (2 × 360).
