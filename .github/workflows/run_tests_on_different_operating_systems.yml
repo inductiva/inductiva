@@ -76,14 +76,6 @@ jobs:
             }
             python -m pip install truststore
 
-
-            pip freeze
-
-            python test_cycles.py
-
-            echo "---- Import check for inductiva ----"
-            python -c "import inductiva; print('inductiva imported from:', inductiva.__file__); print('Attributes:', dir(inductiva))"
-
             python -m pytest --suppress-no-test-exit-code
   run_on_windows_x64:
     runs-on: Windows_x64_8cores
