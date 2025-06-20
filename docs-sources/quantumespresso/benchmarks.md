@@ -42,12 +42,16 @@ The benchmark was executed on a single VM (as a baseline), and then on MPI clust
 
 Below are Inductiva’s results:
 
-| VM Type              | Number of VMs             | Total Cores (NP)           | Time (seconds)            | Cost (USD)                |
-|----------------------|---------------------------|-----------------------------|----------------------------|----------------------------|
-| <div align="center">c3d-highcpu-360</div> | <div align="center">1</div>   | <div align="center">180</div>   | <div align="center">787</div>   | <div align="center">0.75</div>   |
-| <div align="center">c3d-highcpu-360</div> | <div align="center">2</div>   | <div align="center">360</div>   | <div align="center">399</div>   | <div align="center">0.77</div>   |
-| <div align="center">c3d-highcpu-360</div> | <div align="center">4</div>   | <div align="center">720</div>   | <div align="center">210</div>   | <div align="center">0.83</div>   |
-| <div align="center">c3d-highcpu-360</div> | <div align="center">8</div>   | <div align="center">1440</div>  | <div align="center">154</div>   | <div align="center">1.24</div>   |
+<div align="center">
+
+| VM Type              | Number of VMs | Total Cores (NP) | Time (seconds) | Cost (USD) |
+|----------------------|---------------|------------------|----------------|------------|
+| c3d-highcpu-360      | 1             | 180              | 787            | 0.75       |
+| c3d-highcpu-360      | 2             | 360              | 399            | 0.77       |
+| c3d-highcpu-360      | 4             | 720              | 210            | 0.83       |
+| c3d-highcpu-360      | 8             | 1440             | 154            | 1.24       |
+
+</div>
 
 While Inductiva’s core counts don’t exactly match Fugaku’s, two regimes provide a fair comparison:
 
