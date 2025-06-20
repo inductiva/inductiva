@@ -76,6 +76,7 @@ jobs:
             }
             python -m pip install truststore
 
+
             pip freeze
 
             python test_cycles.py

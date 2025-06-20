@@ -46,6 +46,12 @@ urllib3_logger.setLevel(logging.CRITICAL)
 
 __version__ = "0.16.7"
 
+try:
+    import truststore
+    truststore.inject_into_ssl()
+except ImportError:
+    pass  # Fallback silently if truststore isn't installed
+
 
 def set_output_dir(new_output_dir):
     """Sets the value of `inductiva._output_dir` to `new_output_dir`"""
