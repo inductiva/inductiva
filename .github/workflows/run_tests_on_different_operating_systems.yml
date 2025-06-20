@@ -76,10 +76,9 @@ jobs:
             }
             python -m pip install truststore
 
+            pip freeze
+
             python test_cycles.py
-
-
-            tree -a -L 2
 
             echo "---- Import check for inductiva ----"
             python -c "import inductiva; print('inductiva imported from:', inductiva.__file__); print('Attributes:', dir(inductiva))"
