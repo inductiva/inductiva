@@ -113,6 +113,8 @@ The table below shows the execution times across increasingly powerful machines.
 transition from using the **highmem** variant (8 GB RAM per vCPU) to the **standard** (4 GB RAM per vCPU) and 
 **highcpu** variants (2 GB RAM per vCPU). This enables stable pricing while reducing computation time.
 
+<div align="center">
+
 | Machine Type       | Execution Time        | Estimated Cost (USD) |
 |--------------------|-----------------------|---------------------|
 | c3d-highmem-30     | 1 hour, 57 minutes    | 0.91                |
@@ -120,6 +122,8 @@ transition from using the **highmem** variant (8 GB RAM per vCPU) to the **stand
 | c3d-standard-90    | 41 minutes, 19 seconds| 0.71                |
 | c3d-highcpu-180    | 25 minutes, 24 seconds| 0.72                |
 | c3d-highcpu-360    | 13 minutes, 20 seconds| 0.76                |
+
+</div>
 
 Solid results for less than a dollar!
 
