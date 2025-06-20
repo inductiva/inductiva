@@ -472,7 +472,7 @@ document.write(`
 files are downloaded.</p></li>
 <li><p><strong>input_dir</strong> – Directory where to download the files. If None, the
 files are downloaded to the default directory. The default is
-{inductiva.get_output_dir()}/[{input_dir}|{task_id}]/inputs/.</p></li>
+{inductiva.get_output_dir()}/{task_id}/inputs/.</p></li>
 <li><p><strong>uncompress</strong> – Whether to uncompress the archive after downloading it.</p></li>
 <li><p><strong>rm_downloaded_zip_archive</strong> – Whether to remove the archive after
 uncompressing it. If uncompress is False, this argument is
@@ -496,7 +496,7 @@ is None or empty (i.e., all input files are downloaded).</p></li>
 files are downloaded.</p></li>
 <li><p><strong>output_dir</strong> – Directory where to download the files. If None, the
 files are downloaded to the default directory. The default is
-{inductiva.get_output_dir()}/[{output_dir}|{task_id}]/outputs/.</p></li>
+{inductiva.get_output_dir()}/{task_id}/outputs/.</p></li>
 <li><p><strong>uncompress</strong> – Whether to uncompress the archive after downloading it.</p></li>
 <li><p><strong>rm_downloaded_zip_archive</strong> – Whether to remove the archive after
 uncompressing it. If uncompress is False, this argument is
@@ -511,7 +511,7 @@ is None or empty (i.e., all output files are downloaded).</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="inductiva.tasks.task.Task.from_api_info">
-<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_api_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#inductiva.tasks.task.Task" title="inductiva.tasks.task.Task"><span class="pre">Task</span></a></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.from_api_info" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_api_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TaskWithUserInfo</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#inductiva.tasks.task.Task" title="inductiva.tasks.task.Task"><span class="pre">Task</span></a></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.from_api_info" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -622,7 +622,13 @@ is_terminated.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="inductiva.tasks.task.Task.get_storage_path">
 <span class="sig-name descname"><span class="pre">get_storage_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.get_storage_path" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Get the path to this task’s directory in the user’s remote storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>String with the path to the task’s directory in remote storage.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="inductiva.tasks.task.Task.get_total_time">
@@ -750,8 +756,9 @@ The return code for the command. 0 if successful, 1 if failed.</p>
 keys and values must be strings.
 Metadata can be useful for categorizing, searching,
 and filtering tasks.</p>
-<dl>
-<dt>Example usage:</dt><dd><p>task = simulator.run(…)
+<p>Example usage:</p>
+<blockquote>
+<div><p>task = simulator.run(…)
 # Add experiment information to the task
 task.set_metadata({</p>
 <blockquote>
@@ -761,8 +768,7 @@ task.set_metadata({</p>
 “parameters”: “param1=1,param2=2”,</p>
 </div></blockquote>
 <p>})</p>
-</dd>
-</dl>
+</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>metadata</strong> – A dictionary with the metadata to set.</p>

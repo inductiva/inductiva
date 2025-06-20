@@ -397,11 +397,6 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.wait"><code class="docutils literal notranslate"><span class="pre">Project.wait()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.ProjectType"><code class="docutils literal notranslate"><span class="pre">ProjectType</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.ProjectType.BENCHMARK"><code class="docutils literal notranslate"><span class="pre">ProjectType.BENCHMARK</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.ProjectType.PROJECT"><code class="docutils literal notranslate"><span class="pre">ProjectType.PROJECT</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.get_projects"><code class="docutils literal notranslate"><span class="pre">get_projects()</span></code></a></li>
 </ul>
             </nav>
@@ -509,10 +504,18 @@ status.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="inductiva.projects.project.Project.download_outputs">
-<span class="sig-name descname"><span class="pre">download_outputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.Project.download_outputs" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">download_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.Project.download_outputs" title="Link to this definition">#</a></dt>
 <dd><p>Downloads all the outputs for all the tasks in the project.</p>
-<p>All the files will be stored inside
-<cite>inductiva_output/&lt;project_name&gt;/&lt;task_id’s&gt;</cite>.</p>
+<p>All task outputs will be organized within the specified <cite>output_dir</cite>.
+If <cite>output_dir</cite> is not provided, outputs will be saved to a default
+location under <cite>inductiva_output/&lt;project_name&gt;/&lt;task_id&gt;/</cite>.
+Otherwise, they will be stored in <cite>&lt;output_dir&gt;/&lt;task_id&gt;/</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>output_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – The base directory where project outputs
+will be downloaded.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
@@ -571,22 +574,6 @@ with that status.</p>
 <span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.Project.wait" title="Link to this definition">#</a></dt>
 <dd><p>Wait for all the tasks in a project to complete.</p>
 </dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="inductiva.projects.project.ProjectType">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ProjectType</span></span><a class="headerlink" href="#inductiva.projects.project.ProjectType" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="inductiva.projects.project.ProjectType.BENCHMARK">
-<span class="sig-name descname"><span class="pre">BENCHMARK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'benchmark'</span></em><a class="headerlink" href="#inductiva.projects.project.ProjectType.BENCHMARK" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="inductiva.projects.project.ProjectType.PROJECT">
-<span class="sig-name descname"><span class="pre">PROJECT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'project'</span></em><a class="headerlink" href="#inductiva.projects.project.ProjectType.PROJECT" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 
@@ -655,11 +642,6 @@ with that status.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.num_tasks"><code class="docutils literal notranslate"><span class="pre">Project.num_tasks</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.task_by_status"><code class="docutils literal notranslate"><span class="pre">Project.task_by_status</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.wait"><code class="docutils literal notranslate"><span class="pre">Project.wait()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.ProjectType"><code class="docutils literal notranslate"><span class="pre">ProjectType</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.ProjectType.BENCHMARK"><code class="docutils literal notranslate"><span class="pre">ProjectType.BENCHMARK</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.ProjectType.PROJECT"><code class="docutils literal notranslate"><span class="pre">ProjectType.PROJECT</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.get_projects"><code class="docutils literal notranslate"><span class="pre">get_projects()</span></code></a></li>
