@@ -22,10 +22,8 @@ In this tutorial, we’ll demonstrate how leveraging an MPI cluster — both wit
 the performance of the [GRIR443 benchmark](https://github.com/QEF/benchmarks/tree/master/GRIR443).
 
 ## Running the Simulation
-The script for running the GRIR443 simulation on a multi-node MPI cluster remains largely the same as the single-machine version. The c
-ore structure, including defining commands, initializing the simulator, and launching the job, does not change. The main differences lie 
-in resource allocation and MPI configuration, where we adjust the number of machines and the number of MPI processes (threads) to match 
-the parallel environment.
+The script for running the GRIR443 simulation on a multi-node MPI cluster remains largely the same as the single-machine version. 
+The core structure, including defining commands, initializing the simulator, and launching the job, does not change. The main differences lie in resource allocation and MPI configuration, where we adjust the number of machines and the number of MPI processes (threads) to match the parallel environment.
 
 In this example, we request two `c3d-highcpu-360` machines, each with 360 vCPUs, connected as an MPI cluster. This setup provides a total 
 of 720 threads (2 × 360).
