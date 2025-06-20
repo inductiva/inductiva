@@ -1,4 +1,4 @@
-# Run GRIR443 on an MPI
+# Run GRIR443 on an MPI Cluster
 QuantumESPRESSO is designed from the ground up with parallelism in mind, enabling it to efficiently distribute both data and 
 computational workload across multiple processors and nodes. This is particularly beneficial for demanding tasks such as plane-wave 
 DFT (Density Functional Theory) calculations, which involve large Hamiltonian matrices and extensive Fourier transforms. By 
