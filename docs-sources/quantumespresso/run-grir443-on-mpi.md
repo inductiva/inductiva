@@ -18,8 +18,7 @@ All you need to do is update the resource allocation from `MachineGroup` to `MPI
     spot=True)
 ```
 
-In this tutorial, we’ll demonstrate how leveraging an MPI cluster can impact the performance of your Quantum ESPRESSO simulation 
-by using the [GRIR443 benchmark](https://github.com/QEF/benchmarks/tree/master/GRIR443).
+In this tutorial, we’ll demonstrate how leveraging an MPI cluster — both with and without hyperthreading enabled — can impact the performance of the [GRIR443 benchmark](https://github.com/QEF/benchmarks/tree/master/GRIR443).
 
 ## Running the Simulation
 The script for running the GRIR443 simulation on a multi-node MPI cluster remains largely the same as the single-machine version. The c
