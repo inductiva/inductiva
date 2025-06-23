@@ -16,7 +16,7 @@ Before starting, ensure the following:
 
 - **Python installed**: Make sure Python (>=3.9) is installed on your system. Check our <a href="/guides/systemrequirements">System Prep guide</a> for more information.
 - **Inductiva API Setup**: Ensure Inductiva library is installed. If you haven’t already, go through the installation steps.
-For a quick check, see that your API Key is set in [Inductiva's web Console](https://console.inductiva.ai/account/details).
+For a quick check, see that your API Key is set in [Inductiva's web Console](https://console.inductiva.ai/account/profile).
 
 ## Create the Python file
 
