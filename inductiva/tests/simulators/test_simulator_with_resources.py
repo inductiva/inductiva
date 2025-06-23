@@ -50,7 +50,7 @@ def test_simulator__wrong_version__raises_error():
     assert "not available" in str(excinfo.value)
 
 
-def test_get_simulator_image_based_on_resource__dev():
+def test_append_simulator_image_suffix_based_on_resource__dev():
     inductiva.set_api_key("dummy")
     #has both cpu and gpu versions
     gmx = inductiva.simulators.GROMACS(use_dev=True)
@@ -62,14 +62,16 @@ def test_get_simulator_image_based_on_resource__dev():
     mg_no_gpu.has_gpu.return_value = False
 
     # pylint: disable=protected-access
-    sim_image_gpu = gmx._get_simulator_image_based_on_resource(mg_gpu)
-    sim_image_no_gpu = gmx._get_simulator_image_based_on_resource(mg_no_gpu)
+    sim_image_gpu = gmx._append_simulator_image_suffix_based_on_resource(
+        gmx._image_uri, mg_gpu)
+    sim_image_no_gpu = gmx._append_simulator_image_suffix_based_on_resource(
+        gmx._image_uri, mg_no_gpu)
 
     assert sim_image_gpu.endswith("_gpu_dev")
     assert sim_image_no_gpu.endswith("_dev")
 
 
-def test_get_simulator_image_based_on_resource__not_dev():
+def test_append_simulator_image_suffix_based_on_resource__not_dev():
     inductiva.set_api_key("dummy")
     #has both cpu and gpu versions
     gmx = inductiva.simulators.GROMACS(use_dev=False)
@@ -78,7 +80,8 @@ def test_get_simulator_image_based_on_resource__not_dev():
     mg_gpu.has_gpu.return_value = True
 
     # pylint: disable=protected-access
-    sim_image_gpu = gmx._get_simulator_image_based_on_resource(mg_gpu)
+    sim_image_gpu = gmx._append_simulator_image_suffix_based_on_resource(
+        gmx._image_uri, mg_gpu)
 
     assert sim_image_gpu.endswith("_gpu")
 
