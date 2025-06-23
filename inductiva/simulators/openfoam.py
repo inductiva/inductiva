@@ -96,7 +96,11 @@ class OpenFOAM(simulators.Simulator):
             commands = [f"bash {shell_script}"]
 
         for i, command in enumerate(commands):
-            if isinstance(command, str) and "-parallel" in command:
+            # adds mpirun only if string, and mpirun no already present
+            # in the string
+            if isinstance(
+                    command,
+                    str) and "-parallel" in command and "mpirun" not in command:
                 new_command = Command(command, mpi_config=on.get_mpi_config())
                 commands[i] = new_command
 
