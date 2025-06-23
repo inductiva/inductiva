@@ -1,5 +1,5 @@
 ---
-og:image: "https://inductiva.ai/guides/openfast/_static/openfast_animation_30_fps.gif"
+og:image: "https://inductiva.ai/builds/openfast/_static/openfast_animation_30_fps.gif"
 ---
 
 # Run 50 simulations in parallel
