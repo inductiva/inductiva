@@ -39,6 +39,7 @@ class DualSPHysics(simulators.Simulator):
         resubmit_on_preemption: bool = False,
         remote_assets: Optional[Union[str, list[str]]] = None,
         project: Optional[str] = None,
+        time_to_live: Optional[str] = None,
         vtk_to_obj: Optional[bool] = False,
         vtk_to_obj_vtk_dir: Optional[str] = None,
         vtk_to_obj_vtk_prefix: Optional[str] = "PartFluid_",
@@ -66,6 +67,11 @@ class DualSPHysics(simulators.Simulator):
                 assigned. If None, the task will be assigned to
                 the default project. If the project does not exist, it will be
                 created.
+            time_to_live: Maximum duration the task is allowed to run, 
+                specified as a string with a time unit suffix. Supported formats
+                include minutes ("10m") or hours ("2h"). The task will be 
+                automatically terminated once this duration has elapsed since
+                its start.
             vtk_to_obj: Whether to convert the output VTK files to OBJ meshes
                 using marching cubes.
             vtk_to_obj_vtk_dir: Directory containing VTK files to be converted.
@@ -131,4 +137,5 @@ class DualSPHysics(simulators.Simulator):
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            project=project,
+                           time_to_live=time_to_live,
                            **kwargs)
