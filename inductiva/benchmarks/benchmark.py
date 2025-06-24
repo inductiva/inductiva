@@ -9,7 +9,6 @@ from tqdm.contrib.logging import logging_redirect_tqdm
 from typing_extensions import Self
 from inductiva import types, resources, projects, simulators, client
 from inductiva.client.models import TaskStatusCode
-from inductiva.client import models
 from inductiva.projects.project import ProjectType
 from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
 
