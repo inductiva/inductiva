@@ -250,13 +250,15 @@ class Benchmark(projects.Project):
         if isinstance(fmt, str):
             fmt = ExportFormat[fmt.upper()]
 
-        select = SelectMode(select)
+        if isinstance(select, str):
+            select = SelectMode[select.upper()]
+
         if status is not None:
             status = TaskStatusCode(status)
 
         response = self._api.get_tasks_info_without_preload_content(
             name=self.name,
-            select=models.SelectMode(select),
+            select=select,
             status=status,
         )
         info = json.loads(response.data)
