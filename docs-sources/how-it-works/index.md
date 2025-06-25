@@ -36,6 +36,7 @@ hidden: true
 ⬇️ Download specific files from a group of tasks <recipes/download-file-from-project>
 📤 Export your files to AWS S3 <recipes/export-files-to-aws/index>
 ⚡️ Run simulations on your local machine <recipes/use-local-task-runner/index>
+recipes/start-simulations-from-csv
 ```
 
 ```{toctree}
@@ -56,3 +57,4 @@ maxdepth: 5
 hidden: true
 ---
 bring-your-own-software/index
+```
