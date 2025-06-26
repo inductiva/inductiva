@@ -63,6 +63,7 @@ class TaskWithUserInfo(BaseModel):
     task_metadata: Optional[Dict[str, StrictStr]] = None
     extra_params: Optional[Dict[str, Any]] = None
     resubmit_on_preemption: Optional[StrictBool] = False
+    duration_seconds: Optional[Union[StrictFloat, StrictInt]]
     user: UserInfoShort
     __properties: ClassVar[List[str]] = [
         "task_id", "status", "status_alias", "simulator", "storage_path",
@@ -72,7 +73,8 @@ class TaskWithUserInfo(BaseModel):
         "end_time", "estimated_computation_cost", "metrics", "executer",
         "machine_group_name", "machine_group_id", "error_detail",
         "input_resources", "stream_zip", "num_retries", "compress_with",
-        "task_metadata", "extra_params", "resubmit_on_preemption", "user"
+        "task_metadata", "extra_params", "resubmit_on_preemption",
+        "duration_seconds", "user"
     ]
 
     model_config = ConfigDict(
@@ -211,6 +213,11 @@ class TaskWithUserInfo(BaseModel):
         if self.extra_params is None and "extra_params" in self.model_fields_set:
             _dict['extra_params'] = None
 
+        # set to None if duration_seconds (nullable) is None
+        # and model_fields_set contains the field
+        if self.duration_seconds is None and "duration_seconds" in self.model_fields_set:
+            _dict['duration_seconds'] = None
+
         return _dict
 
     @classmethod
@@ -285,6 +292,8 @@ class TaskWithUserInfo(BaseModel):
             "resubmit_on_preemption":
                 obj.get("resubmit_on_preemption")
                 if obj.get("resubmit_on_preemption") is not None else False,
+            "duration_seconds":
+                obj.get("duration_seconds"),
             "user":
                 UserInfoShort.from_dict(obj["user"])
                 if obj.get("user") is not None else None

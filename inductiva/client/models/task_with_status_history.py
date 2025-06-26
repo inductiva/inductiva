@@ -65,6 +65,7 @@ class TaskWithStatusHistory(BaseModel):
     task_metadata: Optional[Dict[str, StrictStr]] = None
     extra_params: Optional[Dict[str, Any]] = None
     resubmit_on_preemption: Optional[StrictBool] = False
+    duration_seconds: Optional[Union[StrictFloat, StrictInt]]
     status_history: List[TaskStatusInfo]
     machine_operations: List[TaskMachineOperation]
     steps: Optional[List[TaskStep]] = None
@@ -77,7 +78,7 @@ class TaskWithStatusHistory(BaseModel):
         "machine_group_name", "machine_group_id", "error_detail",
         "input_resources", "stream_zip", "num_retries", "compress_with",
         "task_metadata", "extra_params", "resubmit_on_preemption",
-        "status_history", "machine_operations", "steps"
+        "duration_seconds", "status_history", "machine_operations", "steps"
     ]
 
     model_config = ConfigDict(
@@ -234,6 +235,11 @@ class TaskWithStatusHistory(BaseModel):
         if self.extra_params is None and "extra_params" in self.model_fields_set:
             _dict['extra_params'] = None
 
+        # set to None if duration_seconds (nullable) is None
+        # and model_fields_set contains the field
+        if self.duration_seconds is None and "duration_seconds" in self.model_fields_set:
+            _dict['duration_seconds'] = None
+
         return _dict
 
     @classmethod
@@ -308,6 +314,8 @@ class TaskWithStatusHistory(BaseModel):
             "resubmit_on_preemption":
                 obj.get("resubmit_on_preemption")
                 if obj.get("resubmit_on_preemption") is not None else False,
+            "duration_seconds":
+                obj.get("duration_seconds"),
             "status_history": [
                 TaskStatusInfo.from_dict(_item)
                 for _item in obj["status_history"]
