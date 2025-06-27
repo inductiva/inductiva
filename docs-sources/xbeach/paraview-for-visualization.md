@@ -39,7 +39,7 @@ task = xbeach.run(
     sim_config_filename="params.txt",
     on=cloud_machine,
     project="xbeach",
-    export_vtk=True, # Flag to control whether to generate the visualization
+    export_vtk=True, # Flag to control whether to generate the visualization 
 )
 
 # Wait for the simulation to finish and download the results
