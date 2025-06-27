@@ -123,9 +123,9 @@ Here are the results of running the same simulation on these machines:
 
 |  Machine Type  | GPU         |Execution Time          | Estimated Cost |
 |:--------------:|:-----------:|:----------------------:|:--------------:|
-|  g2-standard-16| Nvidia L4   | 1 hour 36 minutes      | 0.66 US$    |
-|  a2-highgpu-1g | Nvidia A100 | 1 hour 2 minutes       | 0.61 US$    |
-|  a3-highgpu-1g | Nvidia H100 | 34 minutes 33 seconds  | 1.55 US$    |
+|  g2-standard-16| NVIDIA L4   | 1 hour 36 minutes      | 0.66 US$    |
+|  a2-highgpu-1g | NVIDIA A100 | 1 hour 2 minutes       | 0.61 US$    |
+|  a3-highgpu-1g | NVIDIA H100 | 34 minutes 33 seconds  | 1.55 US$    |
 
 > **Note**: The times and costs listed above refer only to running the simulation and do not include the time required to convert VTK files to OBJ format. This conversion step is optional.
 
