@@ -79,7 +79,7 @@ To increase computational power, the simulations were run on the `c2d-highcpu-16
 
 ## Results 
 
-## Particle Count and Data Generation
+### Particle Count and Data Generation
 The table below illustrates how varying the particle radius affects both the total number of particles and the amount of data generated during a 4-second simulation. As the particle radius decreases, more particles are required to occupy the same volume, leading to a corresponding increase in data output. Notably, halving the particle radius results in an eightfold increase in the number of particles, as expected based on volume scaling.
 
 | Particle Radius | Total nº of Particles | Data Produced |
@@ -94,7 +94,7 @@ use a particle radius smaller than 0.008. Moreover, if each simulation generates
 particle radius would significantly increase storage demands — making it difficult to manage data from thousands of simulations, not 
 to mention the challenge of training GNNs on such a large volume of data.
 
-## Runtime and Cost per Hardware Type
+### Runtime and Cost per Hardware Type
 Reducing the particle radius naturally increases the number of particles required for the simulation, which in turn demands greater computational resources.
 
 The table below shows the runtime and corresponding cost of running simulations at the three particle radii under consideration, across two types of hardware.
