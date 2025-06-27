@@ -18,11 +18,6 @@ In the following sections, you’ll learn how to:
 
 Whether you're a machine learning engineer or a simulation expert, this tutorial offers a practical, scalable workflow for generating your own synthetic datasets to power Physics-informed ML models.
 
-<div style="display: flex; justify-content:center">
-<video width=500 loop muted autoplay preload="auto">
-<source src="../_static/generating-synthetic-data/viscous_flow.mp4" type="video/mp4">
-</video>
-</div>
 
 ```{toctree}
 :hidden:

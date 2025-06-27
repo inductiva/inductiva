@@ -3,6 +3,12 @@ In the introduction, we outlined the overall workflow for generating synthetic d
 
 Our base case is simple: a **0.5-meter cube of water** is initially positioned in the top corner of a sealed **1-meter cubic box**. At the start of the simulation, the water block is released, causing it to fall, spill, and splash against the closed walls of the box over a 4-second interval. To model this scenario, we use the **SPlisHSPlasH** simulator.
 
+<div style="display: flex; justify-content:center">
+<video width=500 loop muted autoplay preload="auto">
+<source src="../_static/generating-synthetic-data/viscous_flow.mp4" type="video/mp4">
+</video>
+</div>
+
 ## Preparing the Configuration Files
 To get started, we’ve prepared a directory containing all the configuration files needed to run the SPlisHSPlasH simulation. 
 
