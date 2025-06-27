@@ -112,7 +112,7 @@ And that’s it! Inductiva’s templating mechanism allows us to simulate a wide
 simulating viscous fluids with horizontal velocity, using essentially the same configuration file. It really is as simple as it seems.
 
 Now, we’re ready to take things a step further by generalizing the simulator’s hyperparameters, which have a direct impact on the 
-execution time of each simulation. Our focus will be on **particle size**, a key setting that determines the total number of particles used.
+execution time of each simulation. Our focus will be on **particle radius**, a key setting that determines the total number of particles used.
 
 This hyperparameter plays a crucial role, as it significantly affects both the accuracy of the results and the computational 
 resources required to run the simulation.
