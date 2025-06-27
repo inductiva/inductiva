@@ -1,7 +1,7 @@
 # Generalizing the Use Case
-While a single simulation may run at similar speed, Inductiva allows you to scale many simulations in parallel. So let's say you want to study 
-the effect of changing a certain input parameter of your simulation. For the sake of demonstration, let us assume that we want to study what happens 
-when the offshore turbine in this example is installed in locations with different water depths.
+While a single simulation may run at similar speed, Inductiva allows you to scale many simulations in parallel. So let's say you want 
+to study the effect of changing a certain input parameter of your simulation. For the sake of demonstration, let us assume that we want 
+to study what happens when the offshore turbine in this example is installed in locations with different water depths.
 
 In the 'Environmental Conditions' section of the `5MW_OC4Semi_WSt_WavesWN.fst` parameter file it can be seen that the WtrDpth parameter has been set to 200 m:
 

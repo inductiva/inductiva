@@ -27,4 +27,5 @@ hidden: true
 ---
 setup-test
 quick-start
+Generate Synthetic Data for Physics-Informed ML <synthetic-data-for-piml/index>
 ```

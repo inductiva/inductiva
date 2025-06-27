@@ -114,7 +114,7 @@ One of the key advantages of using Inductiva is the ease with which you can scal
 more powerful machines with minimal changes to your code. Scaling up simply involves updating the 
 `machine_type` parameter when allocating the cloud machine.
 
-You can upgrade to a last-generation cloud machine, increase the number of vCPUs, or do both!
+You can upgrade to a next-generation cloud machine, increase the number of vCPUs, or do both!
 
 By repeating the simulation on a **c4-highcpu-16** instance, with the same number of vCPUs but two generations newer, 
 the runtime is reduced to **73 minutes**, achieving a **1.97× speedup** at a cost of US$0.37.
