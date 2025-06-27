@@ -1,4 +1,4 @@
-# Versiond and Containers 🛠️
+# Versions and Containers 🛠️
 
 ## Supported Versions
 Inductiva stays up to date with the latest versions of SPlisHSPlasH. Below is a list of the supported versions, along with their respective release dates:
