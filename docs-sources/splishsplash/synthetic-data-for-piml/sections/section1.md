@@ -82,9 +82,11 @@ These parameters not only govern the physics of the simulation, but also have a 
 ```
 
 ## Running the Base Case
-Below is the code required to run this SPlisHSPlasH simulation using the Inductiva API.
+To speed up the dataset generation process, we aim to avoid relying on high-performance, expensive machines to reduce runtime. Instead, our primary acceleration strategy is to leverage the ability to run a large number of machines in parallel.
 
-In this example, we're using a `c2d-highcpu-4` cloud machine equipped with 4 virtual CPUs (vCPUs).
+For this reason, we focus on using instances with a strong cost-performance ratio — such as the **c2d cloud machine family**.
+
+To get started, the code below runs a single simulation of this base case using the Inductiva API. In this example, we're using a `c2d-highcpu-4` cloud machine, which is equipped with 4 virtual CPUs (vCPUs).
 
 ```python
 import inductiva
