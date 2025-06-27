@@ -13,7 +13,7 @@ In order to automatically generate the XBeach visualization at the end of your s
 1. `outputformat = netcdf`
 2. Save the global variables Height (`H`), Water Level (`Zs`), and Bed Level (`Zb`).
 
-Because the goal is a 3-D view, use global output instead of point or line output. Control this with the number of global variables (`nglobalvar`) and the interval time of global output (`tintg`).
+ParaView needs a full grid to plot surfaces and volumes, which only the global output provides. Control this with the number of global variables (`nglobalvar`) and the interval time of global output (`tintg`).
 
 ## Running the DELILAH case
 Below is a script to run the DELILAH case using the Inductiva API. It is configured to export simulation results in a .vtk format, via the `export_vtk` flag, which is compatible with ParaView for visualization.
@@ -37,7 +37,7 @@ xbeach = inductiva.simulators.XBeach()
 task = xbeach.run(
     input_dir=input_dir,
     sim_config_filename="params.txt",
-    on=mg,
+    on=cloud_machine,
     project="xbeach",
     export_vtk=True, # Flag to control whether to generate the visualization
 )
@@ -56,15 +56,15 @@ At the end of the run, the simulation will be complete, and the results will be 
 
 ## Visualizing the Results with ParaView
 
-If you setted the `export_vtk` flag to `True` then a `VTK` folder will be created on the outputs of your simulation. Inside of this folder there should be two vtk groups: 
+Set the `export_vtk` flag to `True` then a `VTK` folder will be created in the simulation output directory. Inside of this folder there should be two vtk groups: 
 
-1. seabed.vtk -> unique .vtk file for the simulation's world.
-2. wave_..vtk -> a group of .vtk files which represents the water height for each `tintg`.
+1. seabed.vtk -> single, static mesh of the seabed.
+2. wave_..vtk -> a group of .vtk files which contains water-surface data at every `tintg` interval.
 
 Visualizing your simulation with ParaView is simple and straightforward.
 
 First, open ParaView and go to the menu `File` > `Open...`. Navigate to your
-simulation results folder, then to `VTK/`, and select the three Groups named `seabed.vtk`, and `wave_..vtk`.
+simulation results folder, then to `VTK/`, and select both Groups named `seabed.vtk`, and `wave_..vtk`.
 
 ![File -> Open](./_static/file-open.png)
 <p align="center"><em>Figure 1: File -> Open</em></p>
