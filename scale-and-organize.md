@@ -112,13 +112,14 @@ Once your simulations finish, download all outputs with the following script:
 
 ```python
 import inductiva
+import os
 
 project = inductiva.projects.Project("my-swash-project")
 
 for task in project.get_tasks():
     metadata = task.get_metadata()
     input_dir = metadata["input_dir"]
-    task.download_outputs(output_dir=f"swash-outputs/{input_dir}")
+    task.download_outputs(output_dir=os.path.join("swash-outputs", input_dir))
 ```
 
 You'll get logs like this:
