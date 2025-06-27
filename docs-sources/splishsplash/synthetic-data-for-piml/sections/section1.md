@@ -5,10 +5,8 @@ Our base case is simple: a **0.5-meter cube of water** is initially positioned i
 
 ## Preparing the Configuration Files
 To get started, we’ve prepared a directory containing all the configuration files needed to run the SPlisHSPlasH simulation. 
-Key hyperparameters, most notably the particle radius, have been set to values that enable relatively short simulation times, even 
-when using the default computational resources provided by the API.
 
-Let’s begin by [downloading the pre-configured input folder]() and saving it to a local directory. Inside this folder, you’ll find:
+Let’s begin by [downloading the pre-configured input folder](https://storage.googleapis.com/inductiva-api-demo-files/splishsplash-base-dir.zip) and saving it to a local directory. Inside this folder, you’ll find:
 
 - An `.obj` file containing the 3D geometry of the fluid container — in this case, a simple cubic box.  
 - A `.json` file specifying the simulation parameters. This configuration file is organized into four key sections that define the simulation:
@@ -20,16 +18,15 @@ Let’s begin by [downloading the pre-configured input folder]() and saving it t
 Understanding the structure and contents of the configuration file is essential, as we’ll later modify it programmatically to generate multiple variations of our base case. This will allow us to create a diverse dataset suitable for training a Machine Learning model.
 
 ## Configuration File Overview
-It's important to understand that these parameters not only govern the physics of the simulation, but also have a significant impact on computational performance. 
+These parameters not only govern the physics of the simulation, but also have a significant impact on computational performance. 
 
 ```json
 {   
-    // 1. "Configuration" defines the simulation parameters. For now, we've 
-    // modified the particle radius to reduce the simulation runtime.
+    // 1. "Configuration" defines the simulation parameters. 
     "Configuration": {
         "stopAt": 4,
         "timeStepSize": 0.01,
-        "particleRadius": 0.01,
+        "particleRadius": 0.008,
         "simulationMethod": 4,
         "boundaryHandlingMethod": 0,
         "kernel": 1,
@@ -79,7 +76,9 @@ It's important to understand that these parameters not only govern the physics o
 ```
 
 ## Running the Base Case
-Here is the code required to run this SPlisHSPlasH simulation using the Inductiva API:
+Below is the code required to run this SPlisHSPlasH simulation using the Inductiva API.
+
+In this example, we're using a `c2d-highcpu-4` cloud machine equipped with 4 virtual CPUs (vCPUs).
 
 ```python
 import inductiva
@@ -87,10 +86,11 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup(
     provider="GCP",
-    machine_type="c2-standard-4")
+    machine_type="c2d-highcpu-4",
+    spot=True)
 
 # Set path to the input directory with the SPlisHSPlasH files
-input_dir = "splishsplash-base-dir"
+input_dir = "/Path/to/splishsplash-base-dir"
 
 # Initialize the Simulator
 splishsplash = inductiva.simulators.SplishSplash()
@@ -107,4 +107,35 @@ cloud_machine.terminate()
 
 task.download_outputs()
 ```
+
+This script uploads the input data from your local directory to the API server and schedules a simulation `task` for execution. You’ll 
+be able to view details about the `task`, such as its ID and the machine group assigned to it, by checking the terminal’s standard 
+output (`stdout`):
+
+```
+■ Task Information:
+	· ID:                    uaxaztw3o1y4mz45kv5diazf7
+	· Simulator:             SplishSplash
+	· Version:               2.13.0
+	· Image:                 docker://inductiva/kutu:splishsplash_v2.13.0
+	· Local input directory: splishsplash-base-dir
+	· Submitting to the following computational resources:
+ 		· Machine Group api-mmirpn1frhnmm9ja2a2owftqu with c2d-highcpu-4 machines
+	· Restart On Preemption: False
+
+
+■ Task uaxaztw3o1y4mz45kv5diazf7 submitted to the queue of the Machine Group api-mmirpn1frhnmm9ja2a2owftqu with c2d-highcpu-4 machines.
+```
+
+The simulation should take approximately **33 minutes** to complete. Once finished, the resulting data will be stored in a directory 
+located at `inductiva-output/{task-id}`. This output includes several log files - most notably `stderr.txt`, `stdout.txt`, and 
+`log/SPH_log.txt` - which provide details about the simulation process and report any errors that may have occurred.
+
+More importantly, the output directory contains a `vtk` subdirectory, where a series of .vtk files store data about the fluid 
+particles at each simulation timestep. These .vtk files are the seeds of our dataset.
+
+
+
+
+
 
