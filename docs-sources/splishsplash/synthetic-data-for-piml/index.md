@@ -1,4 +1,4 @@
-# Synthetic Data for Physics-Informed Machine Learning
+# Generate Synthetic Data for Physics-Informed ML
 Training Physics-Informed Machine Learning (PIML) models often requires large, diverse datasets that reflect real-world physical behavior. However, collecting such data through experiments or high-resolution simulations can be time-consuming and expensive. That’s where **synthetic data generation** becomes essential.
 
 In this tutorial, you'll learn how to generate high-quality synthetic datasets at scale using the **Inductiva API** - a fast and cost-effective solution for supporting the training of PIML models.
