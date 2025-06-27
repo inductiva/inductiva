@@ -6,8 +6,7 @@ The goal of this tutorial is to demonstrate how to run the `Galveston Island` us
 
 ## Prerequisites
 1. We will be using the dataset titled "XBeach model setup and results for beach and dune enhancement scenarios on Galveston Island, Texas," which is available [here](https://data.griidc.org/data/HI.x833.000:0001). Visit the [dataset page](https://data.griidc.org/data/HI.x833.000:0001#individual-files).
-2. Navigate to **Files >> XBeach_Model_Runs >> Beach_Nourish_Only >> Input** and download all the files in this directory:
-   ![File Selection](xbeach_source_files.png)
+2. Navigate to **Files >> XBeach_Model_Runs >> Beach_Nourish_Only >> Input** and download all the files in this directory.
 3. Save these files in a folder named `Beach_Nourish_Only`, ensuring the directory structure is as follows:
 
 ```

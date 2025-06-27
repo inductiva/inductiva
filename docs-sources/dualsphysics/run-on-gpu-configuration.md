@@ -20,7 +20,6 @@ Download the required files from `DualSPHysics_v5.4.2.zip` [here](https://dual.s
 You will be working within this directory and writing the Inductiva Python script there.
 
 ### Update the simulation script of the `examples/flexstruc/01_DamBreak` case
-
 Before running the simulation, update the script located at: `examples/flexstruc/01_DamBreak/xCaseDambreak3D_FSI_linux64_GPU.sh`.
 
 Make the following adjustments:
