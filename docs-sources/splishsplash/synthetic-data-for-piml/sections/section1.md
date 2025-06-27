@@ -1,5 +1,5 @@
 # Setting Up the Base Case
-In the introduction, we outlined the overall workflow for generating synthetic datasets to train Physics-informed ML models using the Inductiva API. Now, let’s dive into the very first step: defining the **base case** simulation model of the physical system we want to study.
+In the introduction, we outlined the overall workflow for generating synthetic datasets to train Physics-Informed ML models using the Inductiva API. Now, let’s dive into the very first step: defining the **base case** simulation model of the physical system we want to study.
 
 Our base case is simple: a **0.5-meter cube of water** is initially positioned in the top corner of a sealed **1-meter cubic box**. At the start of the simulation, the water block is released, causing it to fall, spill, and splash against the closed walls of the box over a 4-second interval. To model this scenario, we use the **SPlisHSPlasH** simulator.
 

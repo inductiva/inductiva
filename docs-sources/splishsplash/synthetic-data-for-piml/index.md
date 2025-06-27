@@ -24,8 +24,6 @@ Whether you're a machine learning engineer or a simulation expert, this tutorial
 </video>
 </div>
 
-<p align="center"><em>Video 2: Dynamics of a viscous fluid simulated with 26,600 particles performed using SPlisHSPlasH via the Inductiva API</em></p>
-
 ```{toctree}
 :hidden:
 sections/section1.md
