@@ -72,7 +72,7 @@ cloud_machine = inductiva.resources.MachineGroup(
     spot=True)
 
 # Set the path to the local directory where the template folder was downloaded
-template_dir = "./splishsplash-template-dir"
+template_dir = "splishsplash-template-dir"
 
 # Specify the initial conditions for the fluid simulation and the fluid's properties
 initial_velocity = [4, 0, 0]  # Example: A high horizontal initial speed m/s in the x direction 
@@ -114,5 +114,4 @@ simulating viscous fluids with horizontal velocity, using essentially the same c
 Now, we’re ready to take things a step further by generalizing the simulator’s hyperparameters, which have a direct impact on the 
 execution time of each simulation. Our focus will be on **particle radius**, a key setting that determines the total number of particles used.
 
-This hyperparameter plays a crucial role, as it significantly affects both the accuracy of the results and the computational 
-resources required to run the simulation.
+This hyperparameter plays a crucial role, as it significantly affects both the accuracy of the results and the overall runtime.
