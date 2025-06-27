@@ -6,10 +6,17 @@ As an example, we will use the `DELILAH` field experiment, which is also feature
 ## Prerequisites
 Download the necessary input files from this [link](https://svn.oss.deltares.nl/repos/xbeach/skillbed/input/Delilah_199010131000/). 
 
-Alguma versão do Paraview que devamos recomendar?
+### Visualization requirements
+
+In order to automatically generate the XBeach visualization at the end of your simulation ensure that the following variables are in the `params.txt` input file:
+
+1. `outputformat = netcdf`
+2. Save the global variables Height (`H`), Water Level (`Zs`), and Bed Level (`Zb`).
+
+Because the goal is a 3-D view, use global output instead of point or line output. Control this with the number of global variables (`nglobalvar`) and the interval time of global output (`tintg`).
 
 ## Running the DELILAH case
-Below is a script to run the DELILAH case using the Inductiva API. It is configured to export simulation results in a .vtk format, which is compatible with ParaView for visualization.
+Below is a script to run the DELILAH case using the Inductiva API. It is configured to export simulation results in a .vtk format, via the `export_vtk` flag, which is compatible with ParaView for visualization.
 
 ```python
 import inductiva
@@ -20,13 +27,20 @@ cloud_machine = inductiva.resources.MachineGroup(
     machine_type="c2d-highcpu-16",
     spot=True)
 
-# Initialize the Simulator
-dualsphysics = inductiva.simulators.DualSPHysics( \
-    version="1.24")
+# Set simulation input directory
+input_dir = "Path/to/Delilah_199010131000"
 
+# Initialize the Simulator
+xbeach = inductiva.simulators.XBeach()
 
 # Run simulation
-COLOCAR TASK + FLAG export_vtk = True
+task = xbeach.run(
+    input_dir=input_dir,
+    sim_config_filename="params.txt",
+    on=mg,
+    project="xbeach",
+    export_vtk=True, # Flag to control whether to generate the visualization
+)
 
 # Wait for the simulation to finish and download the results
 task.wait()
@@ -39,46 +53,40 @@ task.print_summary()
 
 At the end of the run, the simulation will be complete, and the results will be downloaded to the `inductiva_output` folder on your local machine.
 
-You’re now ready to start creating your visualization!
 
 ## Visualizing the Results with ParaView
+
+If you setted the `export_vtk` flag to `True` then a `VTK` folder will be created on the outputs of your simulation. Inside of this folder there should be two vtk groups: 
+
+1. seabed.vtk -> unique .vtk file for the simulation's world.
+2. wave_..vtk -> a group of .vtk files which represents the water height for each `tintg`.
+
 Visualizing your simulation with ParaView is simple and straightforward.
 
 First, open ParaView and go to the menu `File` > `Open...`. Navigate to your
-simulation results folder, then to `CaseDambreak3D_FSI_out/particles`, and select the three Groups named `PartFluid_..vtk`, `PartGate_..vtk` and `PartStructure_..vtk`. -> DAR UPDATE
+simulation results folder, then to `VTK/`, and select the three Groups named `seabed.vtk`, and `wave_..vtk`.
 
 ![File -> Open](./_static/file-open.png)
 <p align="center"><em>Figure 1: File -> Open</em></p>
 
-![Selecting the files](./_static/select-files.png) -> DAR UPDATE, isto está para o DSPH
+![Selecting the files](./_static/select-files.png)
 <p align="center"><em>Figure 2: Selecting the files</em></p>
 
 Once all files are loaded, make them visible by clicking the **eye** icon in the **Pipeline Browser** 
 on the left side of the screen.
 
-![Make files visible](./_static/eye.png) -> DAR UPDATE
+![Make files visible](./_static/eye.png)
 <p align="center"><em>Figure 3: Make files visible</em></p>
 
-Next, position your camera by clicking the `set view direction +Y` button in the toolbar.
+Next, position your camera by clicking the `set view direction +X` button in the toolbar.
 
 ![Move the camera to the correct position](./_static/camera.png)
 <p align="center"><em>Figure 4: Move the camera to the correct position</em></p>
 
 Now you can press the **Play** button in the toolbar to watch your simulation run in real time.
 
-![Simulation running](./_static/sim.png) -> DAR UPDATE
+![Simulation running](./_static/sim.gif)
 <p align="center"><em>Figure 5: Simulation running</em></p>
-
-## Choosing What Data to Visualize -> DAR UPDATE 
-In the previous section, we visualized the particles using ParaView’s default settings. A key part of analyzing your simulation is choosing which data to visualize. For example, DualSPHysics allows you to visualize particle velocity, depending on what data was saved during the simulation.
-
-To do this, select `PartFluid_0000.vtk*` in the **Pipeline Browser** and change the dropdown menu above from `idp` to `Vel`.
-
-![Changing idp to Vel](./_static/pick_vel.png)
-<p align="center"><em>Figure 6: Changing idp to Vel</em></p>
-
-![Simulation running with velocity visible](./_static/sim_vel.png)
-<p align="center"><em>Figure 7: Simulation running with velocity visible</em></p>
 
 You can save your animation by going to **File > Save Animation...** and choosing your preferred format.
 
