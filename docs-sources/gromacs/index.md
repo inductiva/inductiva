@@ -27,4 +27,5 @@ hidden: true
 ---
 setup-test
 quick-start
+run-benchPEP-h-benchmark
 ```
