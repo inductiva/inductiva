@@ -110,9 +110,7 @@ represents the actual execution of the simulation,
 the core computation time of this simulation was approximately 1 hour and 35 minutes (5686 seconds).
 
 ## Upgrading to Powerful Machines
-One of the key advantages of using Inductiva is the ease with which you can scale your simulations to larger, 
-more powerful machines with minimal changes to your code. Scaling up simply involves updating the 
-`machine_type` parameter when allocating the cloud machine.
+One of Inductiva’s key advantages is how easily you can scale your simulations to larger, more powerful machines with minimal code changes. Scaling up simply requires updating the `machine_type` parameter when allocating your cloud machine.
 
 You can upgrade to a next-generation cloud machine, increase the number of vCPUs, or do both!
 
