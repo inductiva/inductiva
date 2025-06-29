@@ -6,17 +6,18 @@ As an example, we will use the `DELILAH` field experiment, which is also feature
 ## Prerequisites
 Download the necessary input files from this [link](https://svn.oss.deltares.nl/repos/xbeach/skillbed/input/Delilah_199010131000/). 
 
-### Visualization requirements
+### Visualization requirements — DELILAH case
 
-In order to automatically generate the XBeach visualization at the end of your simulation ensure that the following variables are in the `params.txt` input file:
+In order to automatically generate the XBeach visualization at the end of your DELILAH simulation ensure that the following variables exists in the `params_original.txt` input file, or modify them accordingly:
 
-1. `outputformat = netcdf`
-2. Save the global variables Height (`H`), Water Level (`Zs`), and Bed Level (`Zb`).
+- `outputformat = netcdf`: Ensure that the xbeach is exporting the results in the `netcdf` format
+- `nglobalvar = 3` followed by `H`, `Zs`, and `Zb`. These three global variables gives the visualization script everything it needs to rebuild the water surface (H, Zs) and the seabed (Zb) in 3D.
+- `single_dir = 0`: – required for this particular example.
+- `tintg = 5`: tells XBeach to write those global variables every few time steps; the low value generates enough frames for a smooth animation without creating huge files.
 
-ParaView needs a full grid to plot surfaces and volumes, which only the global output provides. Control this with the number of global variables (`nglobalvar`) and the interval time of global output (`tintg`).
 
 ## Running the DELILAH case
-Below is a script to run the DELILAH case using the Inductiva API. It is configured to export simulation results in a .vtk format, via the `export_vtk` flag, which is compatible with ParaView for visualization.
+Below is a script to run the DELILAH case using the Inductiva API. It is configured to export simulation results in a .vtk format, via the `export_vtk` flag, which is compatible with ParaView for visualization. This specific example should take around 4 minutes on this machine.
 
 ```python
 import inductiva
@@ -36,7 +37,7 @@ xbeach = inductiva.simulators.XBeach()
 # Run simulation
 task = xbeach.run(
     input_dir=input_dir,
-    sim_config_filename="params.txt",
+    sim_config_filename="params_original.txt",
     on=cloud_machine,
     project="xbeach",
     export_vtk=True, # Flag to control whether to generate the visualization 
