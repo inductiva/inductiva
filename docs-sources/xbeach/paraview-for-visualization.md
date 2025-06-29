@@ -11,7 +11,16 @@ Download the necessary input files from this [link](https://svn.oss.deltares.nl/
 In order to automatically generate the XBeach visualization at the end of your DELILAH simulation ensure that the following variables exists in the `params_original.txt` input file, or modify them accordingly:
 
 - `outputformat = netcdf`: Ensure that the xbeach is exporting the results in the `netcdf` format
-- `nglobalvar = 3` followed by `H`, `Zs`, and `Zb`. These three global variables gives the visualization script everything it needs to rebuild the water surface (H, Zs) and the seabed (Zb) in 3D.
+- `Global output block`: copy the four lines in the snippet just as shown
+
+```
+nglobalvar = 3
+H
+zs
+zb
+```
+These give the visualization script the wave height (`H`), free-surface level (`zs`) and bed level (`zb`) it needs.
+
 - `single_dir = 0`: – required for this particular example.
 - `tintg = 5`: tells XBeach to write those global variables every few time steps; the low value generates enough frames for a smooth animation without creating huge files.
 
