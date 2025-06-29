@@ -16,9 +16,8 @@ In order to automatically generate the XBeach visualization at the end of your D
 - `tintg = 5`: tells XBeach to write those global variables every few time steps; the low value generates enough frames for a smooth animation without creating huge files.
 
 
-
 ## Running the DELILAH case
-Below is a script to run the DELILAH case using the Inductiva API. It is configured to export simulation results in a .vtk format, via the `export_vtk` flag, which is compatible with ParaView for visualization.
+Below is a script to run the DELILAH case using the Inductiva API. It is configured to export simulation results in a .vtk format, via the `export_vtk` flag, which is compatible with ParaView for visualization. This specific example should take around 4 minutes on this machine.
 
 ```python
 import inductiva
