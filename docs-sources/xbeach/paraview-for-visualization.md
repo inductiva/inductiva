@@ -1,17 +1,17 @@
 # XBeach Visualizations with ParaView
 This tutorial guides you through creating a visualization in ParaView using simulation results from XBeach.
 
-As an example, we will use the `DELILAH` field experiment, which is also featured in the [official XBeach documentation](https://xbeach.readthedocs.io/en/stable/examples.html#field-experiment-delilah).
+As an example, we use the `DELILAH` field experiment, which is also featured in the [official XBeach documentation](https://xbeach.readthedocs.io/en/stable/examples.html#field-experiment-delilah).
 
 ## Prerequisites
 Download the necessary input files from this [link](https://svn.oss.deltares.nl/repos/xbeach/skillbed/input/Delilah_199010131000/). 
 
-### Visualization requirements — DELILAH case
+## Adjust Simulation Parameters
+To automatically generate the XBeach visualization at the end of your DELILAH simulation, ensure that the following variables exist in the `params_original.txt` input file, or modify them accordingly:
 
-In order to automatically generate the XBeach visualization at the end of your DELILAH simulation ensure that the following variables exists in the `params_original.txt` input file, or modify them accordingly:
-
-- `outputformat = netcdf`: Ensure that the xbeach is exporting the results in the `netcdf` format
-- `Global output block`: copy the four lines in the snippet just as shown
+* `outputformat = netcdf` - ensures XBeach exports the results in NetCDF format.
+* `single_dir = 0` - required for XBeach v10+; add this just after the header.
+* **Global output block** - provides the wave height (`H`), free-surface level (`zs`), and bed level (`zb`) required by the visualization script. Copy the following lines exactly as shown:
 
 ```
 nglobalvar = 3
@@ -19,14 +19,12 @@ H
 zs
 zb
 ```
-These give the visualization script the wave height (`H`), free-surface level (`zs`) and bed level (`zb`) it needs.
 
-- `single_dir = 0`: – required for this particular example.
-- `tintg = 5`: tells XBeach to write those global variables every few time steps; the low value generates enough frames for a smooth animation without creating huge files.
-
+* `tintg = 5` - sets how often XBeach writes the global variables. A low value like `5` generates enough frames for smooth animation 
+without producing excessively large files.
 
 ## Running the DELILAH case
-Below is a script to run the DELILAH case using the Inductiva API. It is configured to export simulation results in a .vtk format, via the `export_vtk` flag, which is compatible with ParaView for visualization. This specific example should take around 4 minutes on this machine.
+Below is the script to run the DELILAH case using the Inductiva API. The simulation is configured to export results in .vtk format using the `export_vtk` flag, making them compatible with ParaView for visualization. This example typically takes around 4 minutes on the specified cloud machine.
 
 ```python
 import inductiva
@@ -49,7 +47,7 @@ task = xbeach.run(
     sim_config_filename="params_original.txt",
     on=cloud_machine,
     project="xbeach",
-    export_vtk=True, # Flag to control whether to generate the visualization 
+    export_vtk=True, # Flag to enable VTK output for visualization
 )
 
 # Wait for the simulation to finish and download the results
@@ -63,15 +61,13 @@ task.print_summary()
 
 At the end of the run, the simulation will be complete, and the results will be downloaded to the `inductiva_output` folder on your local machine.
 
-
 ## Visualizing the Results with ParaView
+When the `export_vtk` flag is set to `True`, a VTK folder will be created inside the `inductiva_output` directory. This folder contains two groups of VTK files: 
 
-Set the `export_vtk` flag to `True` then a `VTK` folder will be created in the simulation output directory. Inside of this folder there should be two vtk groups: 
+1. `seabed.vtk` - a single, static mesh representing the seabed.
+2. `wave_..vtk` - a time series of .vtk files containing water-surface data at each `tintg` interval. 
 
-1. seabed.vtk -> single, static mesh of the seabed.
-2. wave_..vtk -> a group of .vtk files which contains water-surface data at every `tintg` interval.
-
-Visualizing your simulation with ParaView is simple and straightforward.
+Visualizing your simulation with ParaView is simple:
 
 First, open ParaView and go to the menu `File` > `Open...`. Navigate to your
 simulation results folder, then to `VTK/`, and select both Groups named `seabed.vtk`, and `wave_..vtk`.
