@@ -9,12 +9,12 @@ clean and automated way.
 
 ## What You Will Learn
 
-- Submit **multiple** simulations in parallel
-- Use **vertical scaling** (more powerful machine) and **horizontal scaling** (more machines)
-- Group your simulations in a **project**
-- Add **metadata** to track and distinguish each simulation
-- Monitor the tasks using the [Console](https://console.inductiva.ai/dashboard)
-- Download outputs programmatically
+- Submit multiple simulations to **run in parallel on the cloud**
+- Use **multiple powerful machines** simultaneously to speed up your simulations
+- Organize all simulations under a single **project**
+- Attach **metadata** to track and distinguish each simulation
+- **Monitor progress in real time** using the [Console](https://console.inductiva.ai/dashboard)
+- Download all simulation outputs in a structured and automated way
 
 ## Input Folder Structure
 
