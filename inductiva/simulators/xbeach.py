@@ -78,6 +78,10 @@ class XBeach(simulators.Simulator):
             Command(f"xbeach {sim_config_filename}", mpi_config=mpi_config)
         ]
 
+        if sim_config_filename != "params.txt":
+            # add mv to the start of the command list
+            commands.insert(0, Command(f"mv {sim_config_filename} params.txt"))
+
         # Conditionally append the VTK-export step
         if export_vtk:
             commands.append(
