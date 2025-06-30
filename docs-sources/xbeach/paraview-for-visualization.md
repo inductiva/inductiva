@@ -4,14 +4,14 @@ This tutorial guides you through creating a visualization in ParaView using simu
 As an example, we use the `DELILAH` field experiment, which is also featured in the [official XBeach documentation](https://xbeach.readthedocs.io/en/stable/examples.html#field-experiment-delilah).
 
 ## Prerequisites
-Download the necessary input files from this [link](https://svn.oss.deltares.nl/repos/xbeach/skillbed/input/Delilah_199010131000/). 
+Download the necessary input files [here](https://storage.googleapis.com/inductiva-api-demo-files/delilah-xbeach-example.zip). 
 
-## Adjust Simulation Parameters
-To automatically generate the XBeach visualization at the end of your DELILAH simulation, ensure that the following variables exist in the `params_original.txt` input file, or modify them accordingly:
+## Case Modifications
+To automatically generate the XBeach visualization at the end of your DELILAH simulation, the following modifications were made to the `params.txt` input file:
 
 * `outputformat = netcdf` - ensures XBeach exports the results in NetCDF format.
 * `single_dir = 0` - required for XBeach v10+; add this just after the header.
-* **Global output block** - provides the wave height (`H`), free-surface level (`zs`), and bed level (`zb`) required by the visualization script. Copy the following lines exactly as shown:
+* **Global output block** - provides the wave height (`H`), free-surface level (`zs`), and bed level (`zb`) required by the visualization script. 
 
 ```
 nglobalvar = 3
@@ -44,7 +44,7 @@ xbeach = inductiva.simulators.XBeach()
 # Run simulation
 task = xbeach.run(
     input_dir=input_dir,
-    sim_config_filename="params_original.txt",
+    sim_config_filename="params.txt",
     on=cloud_machine,
     project="xbeach",
     export_vtk=True, # Flag to enable VTK output for visualization
