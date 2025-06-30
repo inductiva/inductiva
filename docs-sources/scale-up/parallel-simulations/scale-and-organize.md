@@ -89,10 +89,10 @@ of Inductiva API.
 - Automatic Shutdown: The machine group will terminate automatically after 5 minutes of inactivity.
 You can customize this using `max_idle_time` parameter in the [`MachineGroup` constructor](https://inductiva.ai/guides/documentation/api/inductiva.resources#inductiva.resources.machine_groups.MachineGroup).
 
-## Monitor Your Simulations
+## Monitor Your Simulations in Real Time
 
-As soon as the script runs, your simulations begin running in parallel across cloud machines.
-You can monitor their progress directly through the [Inductiva Console](https://console.inductiva.ai/dashboard).
+As soon as the script runs, your simulations start running in parallel on the cloud.
+You can monitor their progress in real time using the [Inductiva Console](https://console.inductiva.ai/dashboard).
 
 ### View Tasks in the Console
 
