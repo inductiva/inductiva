@@ -18,7 +18,7 @@ clean and automated way.
 
 ## Input Folder Structure
 
-We assume the following layout:
+We assume the following folder structure:
 
 ```
 swash-inputs/
@@ -34,34 +34,34 @@ swash-inputs/
 Each subfolder contains all the input files for a **SWASH** simulation.
 All simulations use the same config file, named `S1.sws`.
 
-## Submitting Simulations in Parallel
+## Submit Multiple Simulations to Run in Parallel on the Cloud
 
-Here's the full Python script to submit all your simulations at once:
+Here's the full Python script to submit multiple simulations to run in parallel on the cloud:
 
 ```python
 import inductiva
 import pathlib
 
-# Define Cloud Resources
+# Define cloud resources
 cloud_machine = inductiva.resources.MachineGroup(
-    machine_type="c3d-highcpu-180",  # Vertical scaling: CPU-heavy machine
-    num_machines=5,                  # Horizontal scaling: up to 5 simulations in parallel
+    machine_type="c3d-highcpu-180",  # Machine optimized for compute-intensive tasks
+    num_machines=5,                  # Run up to 5 simulations in parallel on the cloud
     spot=True,                       # Use cheaper spot instances (can be interrupted)
 )
 
-# Initialize Simulator and Project Settings
-swash = inductiva.simulators.SWASH(version="11.01") # Initialize SWASH simulator
-sim_config_filename = "S1.sws"                      # Common simulation configuration file name
-project_name = "my-swash-project"                   # Group tasks under this project
+# Initialize simulator and project settings
+swash = inductiva.simulators.SWASH(version="11.01") # Create a SWASH simulator instance
+sim_config_filename = "S1.sws"                      # Name of the simulation config file
+project_name = "my-swash-project"                   # Project name to group all submitted tasks
 
-# Collect Input Folders
+# Gather all input directories containing simulation files
 root_path = pathlib.Path("swash-inputs")
 input_dirs = [
     input_dir for input_dir in root_path.iterdir()
     if input_dir.is_dir()
 ]
 
-# Submit Tasks in Parallel (No Waiting)
+# Submit all simulations to run in parallel on the cloud (no waiting)
 for input_dir in input_dirs:
     task = swash.run(
         input_dir=input_dir,
@@ -70,7 +70,7 @@ for input_dir in input_dirs:
         project=project_name,
     )
 
-    # Attach metadata - e.g., to later identify the source input
+    # Attach metadata to each task - e.g., to identify its input directory later
     task.set_metadata({
         "input_dir": input_dir.name,
     })
