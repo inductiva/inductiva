@@ -3,6 +3,7 @@
 ## Supported Versions
 Inductiva stays up to date with the latest versions of WRF. Below is a list of the supported versions, along with their respective release dates:
 
+- **4.7.1** (Jun., 2025)
 - **4.6.1** (Oct., 2024)
 
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
