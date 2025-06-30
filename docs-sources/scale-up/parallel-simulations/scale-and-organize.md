@@ -108,7 +108,7 @@ You can monitor their progress in real time using the [Inductiva Console](https:
 
 ## Downloading Outputs
 
-Once your simulations finish, download all outputs with the following script:
+Once your simulations complete (e.g., with status `Success`), you can download all outputs using the following script:
 
 ```python
 import inductiva
@@ -119,7 +119,8 @@ project = inductiva.projects.Project("my-swash-project")
 for task in project.get_tasks():
     metadata = task.get_metadata()
     input_dir = metadata["input_dir"]
-    task.download_outputs(output_dir=os.path.join("swash-outputs", input_dir))
+    output_dir = os.path.join("swash-outputs", input_dir)
+    task.download_outputs(output_dir=output_dir)
 ```
 
 You'll get logs like this:
@@ -142,26 +143,22 @@ swash-outputs/
 
 ---
 
-# Wrapping Up: A Scalable Simulation Workflow
-
+# Wrapping Up: Building a Scalable Simulation Workflow
 
 In this tutorial, you learned how to efficiently run multiple SWASH simulations in parallel using the Inductiva API.
 
-By leveraging cloud resources, projects, and task metadata, you've created a scalable and maintainable workflow for large
-batches of simulations.
+By leveraging cloud resources, projects, and task metadata, you've created a scalable and maintainable workflow to manage large batches of simulations with ease.
 
 ### Key Takeaways
 
 - **Parallel execution** drastically reduces total runtime.
-- **Projects** help group and manage related simulations.
-- **Metadata** enables tracking and post-processing of individual runs.
-- **The Console** provides a clear UI for progress monitoring, task management and troubleshooting.
+- **Projects** provide an effective way to group and organize related simulation tasks.
+- **Metadata** allows you to track, filter, and manage individual runs for better traceability.
+- **The Console** offers a user-friendly interface for real-time monitoring, management, and troubleshooting.
 - **Programmatic downloads** keep your results organized and reproducible.
 
-Whether you're scaling vertically with more powerful machines or horizontally by running many tasks at once, Inductiva makes
-it easy to run cloud simulations at scale.
+Whether you increase compute power or run many simulations at once, the Inductiva API makes running simulations on the cloud simple and efficient at any scale.
 
-You're now ready to integrate this workflow into larger pipelines, automate experiment batches, or build research tools powered
-by Inductiva's infrastructure.
+You're now equipped to integrate this workflow into larger pipelines, automate batch experiments, or develop research tools powered by Inductiva API.
 
 **Happy simulating!**
