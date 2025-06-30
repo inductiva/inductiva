@@ -1,11 +1,11 @@
 # Scale Up and Organize Simulation Batches with Projects and Metadata
 
 In this tutorial, you'll learn how to run multiple simulations in parallel — each with
-its own input directory — and manage them efficiently using Inductiva's cloud platform.
-You'll learn how to submit multiple simulations efficiently to the cloud, organize them
-using projects and metadata, monitor the simulations progress using the
-[Console](https://console.inductiva.ai/dashboard) and later download the results in a
-clean and automated way using the Inductiva API.
+its own input directory — and manage them efficiently using the Inductiva API.
+You'll see how to submit multiple simulations to the cloud, organize them
+with projects and metadata, monitor their progress using the
+[Console](https://console.inductiva.ai/dashboard), and finally, download the results in a
+clean and automated way.
 
 ## What You Will Learn
 
