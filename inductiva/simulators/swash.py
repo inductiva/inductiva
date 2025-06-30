@@ -37,6 +37,7 @@ class SWASH(simulators.Simulator):
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
+            time_to_live: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -62,6 +63,11 @@ class SWASH(simulators.Simulator):
                 assigned. If None, the task will be assigned to
                 the default project. If the project does not exist, it will be
                 created.
+            time_to_live: Maximum duration the task is allowed to run, 
+                specified as a string with a time unit suffix. Supported formats
+                include minutes ("10m") or hours ("2h"). The task will be 
+                automatically terminated once this duration has elapsed since
+                its start.
         """
 
         if command not in ("swashrun", "swash.exe"):
@@ -128,4 +134,5 @@ class SWASH(simulators.Simulator):
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            project=project,
+                           time_to_live=time_to_live,
                            **kwargs)

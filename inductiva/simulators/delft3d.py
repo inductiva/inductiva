@@ -29,6 +29,7 @@ class Delft3D(simulators.Simulator):
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
+            time_to_live: Optional[str] = None,
             **kwargs):
 
         if commands is None and shell_script is None:
@@ -53,4 +54,5 @@ class Delft3D(simulators.Simulator):
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            project=project,
+                           time_to_live=time_to_live,
                            **kwargs)
