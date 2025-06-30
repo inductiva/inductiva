@@ -1,5 +1,5 @@
 # Run Your First Simulation
-This tutorial will show you how to run OpenTelemac simulations using the Inductiva API. 
+This tutorial will show you how to run TELEMAC-2D simulations using the Inductiva API. 
 
 We will cover the `Malpasset Dam Break` use case from the [OpenTelemac GitLab repository](https://gitlab.pam-retd.fr/otm/telemac-mascaret/-/tree/main/examples/telemac2d/malpasset?ref_type=heads) to help you get started with simulations. This setup models the flood wave resulting from the dam failure, propagating through a valley with realistic topography and open-channel hydraulics using TELEMAC-2D.
 

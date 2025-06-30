@@ -9,7 +9,6 @@ from tqdm.contrib.logging import logging_redirect_tqdm
 from typing_extensions import Self
 from inductiva import types, resources, projects, simulators, client
 from inductiva.client.models import TaskStatusCode
-from inductiva.client import models
 from inductiva.projects.project import ProjectType
 from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
 
@@ -250,13 +249,15 @@ class Benchmark(projects.Project):
         if isinstance(fmt, str):
             fmt = ExportFormat[fmt.upper()]
 
-        select = SelectMode(select)
+        if isinstance(select, str):
+            select = SelectMode[select.upper()]
+
         if status is not None:
             status = TaskStatusCode(status)
 
         response = self._api.get_tasks_info_without_preload_content(
             name=self.name,
-            select=models.SelectMode(select),
+            select=select,
             status=status,
         )
         info = json.loads(response.data)
