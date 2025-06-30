@@ -18,7 +18,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictInt
 from typing import Any, ClassVar, Dict, List
-from inductiva.client.models.task_with_user_info import TaskWithUserInfo
+from inductiva.client.models.task import Task
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -30,7 +30,7 @@ class TaskWithPagination(BaseModel):
 
   # noqa: E501
     total_size: StrictInt
-    tasks: List[TaskWithUserInfo]
+    tasks: List[Task]
     __properties: ClassVar[List[str]] = ["total_size", "tasks"]
 
     model_config = ConfigDict(
@@ -91,8 +91,7 @@ class TaskWithPagination(BaseModel):
         _obj = cls.model_validate({
             "total_size":
                 obj.get("total_size"),
-            "tasks": [
-                TaskWithUserInfo.from_dict(_item) for _item in obj["tasks"]
-            ] if obj.get("tasks") is not None else None
+            "tasks": [Task.from_dict(_item) for _item in obj["tasks"]]
+                     if obj.get("tasks") is not None else None
         })
         return _obj
