@@ -993,7 +993,7 @@ class ComputeApi:
     @validate_call
     def list_available_machine_types(
         self,
-        machine_families: Optional[List[StrictStr]] = None,
+        machine_families: Optional[List[Optional[StrictStr]]] = None,
         machine_configs: Optional[List[StrictStr]] = None,
         vcpus_range: Optional[Annotated[
             List[Optional[StrictInt]],
@@ -1025,7 +1025,7 @@ class ComputeApi:
         List available machine types for the given provider and zone.
 
         :param machine_families:
-        :type machine_families: List[str]
+        :type machine_families: List[Optional[str]]
         :param machine_configs:
         :type machine_configs: List[str]
         :param vcpus_range:
@@ -1097,7 +1097,7 @@ class ComputeApi:
     @validate_call
     def list_available_machine_types_with_http_info(
         self,
-        machine_families: Optional[List[StrictStr]] = None,
+        machine_families: Optional[List[Optional[StrictStr]]] = None,
         machine_configs: Optional[List[StrictStr]] = None,
         vcpus_range: Optional[Annotated[
             List[Optional[StrictInt]],
@@ -1129,7 +1129,7 @@ class ComputeApi:
         List available machine types for the given provider and zone.
 
         :param machine_families:
-        :type machine_families: List[str]
+        :type machine_families: List[Optional[str]]
         :param machine_configs:
         :type machine_configs: List[str]
         :param vcpus_range:
@@ -1201,7 +1201,7 @@ class ComputeApi:
     @validate_call
     def list_available_machine_types_without_preload_content(
         self,
-        machine_families: Optional[List[StrictStr]] = None,
+        machine_families: Optional[List[Optional[StrictStr]]] = None,
         machine_configs: Optional[List[StrictStr]] = None,
         vcpus_range: Optional[Annotated[
             List[Optional[StrictInt]],
@@ -1233,7 +1233,7 @@ class ComputeApi:
         List available machine types for the given provider and zone.
 
         :param machine_families:
-        :type machine_families: List[str]
+        :type machine_families: List[Optional[str]]
         :param machine_configs:
         :type machine_configs: List[str]
         :param vcpus_range:
