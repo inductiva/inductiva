@@ -88,7 +88,7 @@ class XBeach(simulators.Simulator):
             mpi_kwargs["np"] = n_vcpus
 
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
-        commands = [Command(f"xbeach", mpi_config=mpi_config)]
+        commands = [Command("xbeach", mpi_config=mpi_config)]
 
         # Conditionally append the VTK-export step
         if export_vtk:
