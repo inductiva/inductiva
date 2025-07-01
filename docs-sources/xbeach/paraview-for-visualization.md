@@ -44,7 +44,6 @@ xbeach = inductiva.simulators.XBeach()
 # Run simulation
 task = xbeach.run(
     input_dir=input_dir,
-    sim_config_filename="params.txt",
     on=cloud_machine,
     project="xbeach",
     export_vtk=True, # Flag to enable VTK output for visualization
