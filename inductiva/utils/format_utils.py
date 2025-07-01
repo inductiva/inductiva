@@ -310,17 +310,3 @@ def currency_formatter(amount: float) -> str:
         return f"{amount:.{decimal_places}f} {CURRENCY_SYMBOL}"
 
     return f"{amount:.2f} {CURRENCY_SYMBOL}"
-
-
-def str_to_seconds(duration: str) -> int:
-    """
-    Convert a duration string to seconds.
-    Supports only minutes (m) or hours (h).
-    """
-    unit = duration[-1].lower()
-    units = {"h": 3600, "m": 60}
-    if unit not in units:
-        err_msg = "Invalid unit: only minutes (m) or hours (h) are supported."
-        raise ValueError(err_msg)
-    value = int(duration[:-1])
-    return value * units[unit]

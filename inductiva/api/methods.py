@@ -14,6 +14,7 @@ import decimal
 import ssl
 from contextlib import contextmanager
 from typing import List, Optional
+from pytimeparse.timeparse import timeparse
 
 import logging
 
@@ -363,14 +364,19 @@ def submit_task(simulator,
     stream_zip = params.pop("stream_zip", True)
     compress_with = params.pop("compress_with", CompressionMethod.SEVEN_Z)
 
-    ttls = format_utils.str_to_seconds(time_to_live) if time_to_live else None
+    if time_to_live:
+        time_to_live_seconds = timeparse(time_to_live)
+        if time_to_live_seconds is None:
+            raise ValueError("Time could not be parsed from the given string.")
+    else:
+        time_to_live_seconds = None
 
     task_request = TaskRequest(simulator=simulator,
                                extra_params=params,
                                project=project_name,
                                resource_pool=machine_group.id,
                                container_image=container_image,
-                               time_to_live_seconds=ttls,
+                               time_to_live_seconds=time_to_live_seconds,
                                storage_path_prefix=storage_path_prefix,
                                simulator_name_alias=simulator_name_alias,
                                resubmit_on_preemption=resubmit_on_preemption,
