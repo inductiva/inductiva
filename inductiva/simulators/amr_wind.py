@@ -75,7 +75,7 @@ class AmrWind(simulators.Simulator):
                 created.
             time_to_live: Maximum allowed runtime for the task, specified as a
                 string duration. Supports all formats accepted by the
-                `pytimeparse` library, such as "10m", "2 hours", "1h30m", or
+                `pytimeparse2` library, such as "10m", "2 hours", "1h30m", or
                 "90s". The task will be automatically terminated if it exceeds
                 this duration after starting.
             **kwargs: Keyword arguments to be passed to the base class.

@@ -14,7 +14,7 @@ import decimal
 import ssl
 from contextlib import contextmanager
 from typing import List, Optional
-from pytimeparse.timeparse import timeparse
+from pytimeparse2 import parse
 
 import logging
 
@@ -351,7 +351,7 @@ def submit_task(simulator,
                 the default project.
         time_to_live: Maximum allowed runtime for the task, specified as a
             string duration. Supports all formats accepted by the
-            `pytimeparse` library, such as "10m", "2 hours", "1h30m", or
+            `pytimeparse2` library, such as "10m", "2 hours", "1h30m", or
             "90s". The task will be automatically terminated if it exceeds
             this duration after starting.
     Return:
@@ -364,19 +364,14 @@ def submit_task(simulator,
     stream_zip = params.pop("stream_zip", True)
     compress_with = params.pop("compress_with", CompressionMethod.SEVEN_Z)
 
-    if time_to_live:
-        time_to_live_seconds = timeparse(time_to_live)
-        if time_to_live_seconds is None:
-            raise ValueError("Time could not be parsed from the given string.")
-    else:
-        time_to_live_seconds = None
+    ttls = parse(time_to_live, raise_exception=True) if time_to_live else None
 
     task_request = TaskRequest(simulator=simulator,
                                extra_params=params,
                                project=project_name,
                                resource_pool=machine_group.id,
                                container_image=container_image,
-                               time_to_live_seconds=time_to_live_seconds,
+                               time_to_live_seconds=ttls,
                                storage_path_prefix=storage_path_prefix,
                                simulator_name_alias=simulator_name_alias,
                                resubmit_on_preemption=resubmit_on_preemption,
