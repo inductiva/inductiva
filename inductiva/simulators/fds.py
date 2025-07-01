@@ -30,6 +30,7 @@ class FDS(simulators.Simulator):
             *,
             on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,
+            omp_num_threads: Optional[int] = None,
             use_hwthread: bool = True,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
@@ -59,9 +60,9 @@ class FDS(simulators.Simulator):
                 assigned. If None, the task will be assigned to
                 the default project. If the project does not exist, it will be
                 created.
-            time_to_live: Maximum duration the task is allowed to run, 
+            time_to_live: Maximum duration the task is allowed to run,
                 specified as a string with a time unit suffix. Supported formats
-                include minutes ("10m") or hours ("2h"). The task will be 
+                include minutes ("10m") or hours ("2h"). The task will be
                 automatically terminated once this duration has elapsed since
                 its start.
         """
@@ -70,17 +71,36 @@ class FDS(simulators.Simulator):
                                 remote_assets=remote_assets,
                                 sim_config_filename=sim_config_filename)
 
+        available_vcpus = on.available_vcpus
+
+        if n_vcpus is None and omp_num_threads is None:
+            n_vcpus = 1
+            omp_num_threads = available_vcpus
+        elif n_vcpus is None:
+            n_vcpus = available_vcpus // n_vcpus
+        elif omp_num_threads is None:
+            omp_num_threads = available_vcpus // n_vcpus
+        else:
+            requested_vcpus = omp_num_threads * n_vcpus
+            if requested_vcpus > available_vcpus:
+                raise ValueError(
+                    f"omp_num_threads * n_vcpus ({omp_num_threads} * {n_vcpus} "
+                    f"= {requested_vcpus}) can't be larger than "
+                    f"{available_vcpus} (the number of available VCPUs in the specified machine)"
+                )
+
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
-        if n_vcpus is not None:
-            mpi_kwargs["np"] = n_vcpus
+        mpi_kwargs["np"] = n_vcpus
 
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
         commands = [
             Command(
                 "/opt/fds/Build/ompi_gnu_linux/fds_ompi_gnu_linux "
                 f"{sim_config_filename}",
-                mpi_config=mpi_config)
+                mpi_config=mpi_config,
+                env={"OMP_NUM_THREADS": str(omp_num_threads)},
+            )
         ]
 
         return super().run(input_dir,
