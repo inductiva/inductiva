@@ -31,7 +31,7 @@ reef3d = inductiva.simulators.REEF3D( \
 
 # Run simulation
 task = reef3d.run(input_dir="/Path/to/RegularWavePropagation",
-    n_vcpu=16,
+    n_vcpu=8,
     on=cloud_machine)
 
 # Wait for the simulation to finish and download the results

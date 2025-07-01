@@ -35,7 +35,7 @@ to see how you can do it.
 
 <br>
 
-## 4. How to Load the `libdiscon.so` library?
+## 4. How to load the `libdiscon.so` library?
 
 Some simulations require the `libdiscon.so` library. To simplify the process,
 we've included this library in our simulation image. You can use it by
