@@ -364,11 +364,8 @@ def submit_task(simulator,
     stream_zip = params.pop("stream_zip", True)
     compress_with = params.pop("compress_with", CompressionMethod.SEVEN_Z)
 
-    time_to_live_seconds = (
-        pytimeparse2.parse(time_to_live, raise_exception=True)
-        if time_to_live
-        else None
-    )
+    time_to_live_seconds = pytimeparse2.parse(
+        time_to_live, raise_exception=True) if time_to_live else None
 
     task_request = TaskRequest(simulator=simulator,
                                extra_params=params,
