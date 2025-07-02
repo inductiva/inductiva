@@ -98,7 +98,9 @@ You can monitor their progress in real time using the [Inductiva Console](https:
 
 1. Navigate to the [Projects](https://console.inductiva.ai/projects/projects) tab.
 2. Click on your project name — in this case: `my-swash-project`.
-3. You'll see a list of all tasks submitted under that project, along with their current statuses (e.g., `In progress`).
+3. You'll see a list of all tasks submitted under that project, along with their current statuses (e.g., `In progress`). 
+The 5 tasks are marked as `In progress` at the same time because they are running simultaneously on 5 separate cloud machines
+(as specified by the `num_machines=5` setting in the cloud resource configuration).
 
 !["Project page in the Inductiva Console"](console-project.png)
 
