@@ -67,7 +67,6 @@ the name of the project as an argument to the ```simulator.run``` method.
 
 ```python
 task = simulator.run(input_dir=input_dir,
-                     sim_config_filename="params.txt",
                      on=machine_group,
                      project="demo")
 
@@ -105,7 +104,6 @@ project = inductiva.projects.Project("my_xbeach_project")
 simulator = inductiva.simulators.XBeach()
 
 task1 = simulator.run(input_dir=input_dir,
-                      sim_config_filename="params.txt",
                       on=machine_group)
 
 # add a task to the "my_xbeach_project" project
@@ -113,7 +111,6 @@ project.add_task(task_1)
 
 # task2 will be added to the default project
 task2 = simulator.run(input_dir=input_dir,
-                      sim_config_filename="params.txt",
                       on=machine_group)
 
 print(task1.get_info().project) # "my_xbeach_project"
@@ -138,7 +135,6 @@ with inductiva.projects.Project("my_xbeach_project", append=True) as project:
 
     # add a task to the "my_xbeach_project" project
     task1 = simulator.run(input_dir=input_dir,
-                          sim_config_filename="params.txt",
                           on=machine_group)
 ```
 

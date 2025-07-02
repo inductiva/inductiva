@@ -1,4 +1,5 @@
 """Wrapper class for simulator commands."""
+from typing import Optional, Dict
 import re
 from inductiva import types
 from .mpiconfig import MPIConfig
@@ -9,7 +10,13 @@ class Command:
     SPECIAL_CHARACTERS = r"[|><&;*?~$]"
     SPECIAL_CHARACTERS_PRETTY_PRINT = r"| > < & ; * ? ~ $"
 
-    def __init__(self, cmd: str, *prompts: str, mpi_config: MPIConfig = None):
+    def __init__(
+        self,
+        cmd: str,
+        *prompts: str,
+        mpi_config: Optional[MPIConfig] = None,
+        env: Optional[Dict[str, str]] = None,
+    ):
         """
         Args:
           cmd: A string with the command, e.g, 'gmx pdb2gmx -f protein.pdb'
@@ -34,6 +41,7 @@ class Command:
         self.cmd = cmd
         self.prompts = list(prompts)
         self.mpi_config = mpi_config
+        self.env = env or {}
 
     def _has_special_chars(self, command):
         """Checks if the command contains special characters.
@@ -48,7 +56,7 @@ class Command:
     def to_dict(self):
         """
         Convert this command to a dictionary representation.
-        
+
         Returns:
         A dictionary with {"cmd": self.cmd, "prompts": self.prompts}
 

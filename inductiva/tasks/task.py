@@ -376,7 +376,7 @@ class Task:
         return self.info.is_terminal
 
     @classmethod
-    def from_api_info(cls, info: models.TaskWithUserInfo) -> "Task":
+    def from_api_info(cls, info: models.Task) -> "Task":
 
         task = cls(info.task_id)
         task._info = TaskInfo(**info.to_dict())

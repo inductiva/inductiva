@@ -28,7 +28,6 @@ xbeach = inductiva.simulators.XBeach( \
 
 # Run simulation
 task = xbeach.run(input_dir="/Path/to/SimulationFiles",
-    sim_config_filename="params.txt",
     on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
