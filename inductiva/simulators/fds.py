@@ -116,11 +116,13 @@ class FDS(simulators.Simulator):
                 f"{available_vcpus} (the number of available VCPUs in "
                 "the specified machine)")
 
-        mpi_kwargs = {}
-        mpi_kwargs["use_hwthread_cpus"] = use_hwthread
-        mpi_kwargs["np"] = n_vcpus
+        mpi_config = None
+        if n_mpi_processes > 1:
+            mpi_kwargs = {}
+            mpi_kwargs["use_hwthread_cpus"] = use_hwthread
+            mpi_kwargs["np"] = n_vcpus
+            mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
 
-        mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
         commands = [
             Command(
                 "/opt/fds/Build/ompi_gnu_linux/fds_ompi_gnu_linux "
