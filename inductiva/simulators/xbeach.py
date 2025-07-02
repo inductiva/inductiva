@@ -1,4 +1,5 @@
 """XBeach module of the API."""
+import logging
 from typing import Optional, Union
 
 from inductiva import simulators, tasks, types
@@ -74,9 +75,10 @@ class XBeach(simulators.Simulator):
         """
 
         if sim_config_filename is not None:
-            print("Deprecated: This parameter is no longer used and will be "
-                  "removed in a future version. Please use `params.txt` in the "
-                  "input directory instead.")
+            logging.warning(
+                "Deprecated: This parameter is no longer used and will be "
+                "removed in a future version. Please use `params.txt` in the "
+                "input directory instead.")
 
         self._input_files_exist(input_dir=input_dir,
                                 remote_assets=remote_assets,
