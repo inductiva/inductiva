@@ -83,6 +83,7 @@ from inductiva.client.models.organization_cost_components import OrganizationCos
 from inductiva.client.models.organization_costs import OrganizationCosts
 from inductiva.client.models.project import Project
 from inductiva.client.models.project_create import ProjectCreate
+from inductiva.client.models.project_statistics import ProjectStatistics
 from inductiva.client.models.project_type import ProjectType
 from inductiva.client.models.project_update import ProjectUpdate
 from inductiva.client.models.providers import Providers
@@ -92,6 +93,7 @@ from inductiva.client.models.register_vm_group_request import RegisterVMGroupReq
 from inductiva.client.models.select_mode import SelectMode
 from inductiva.client.models.sharing_level import SharingLevel
 from inductiva.client.models.spot import Spot
+from inductiva.client.models.storage_contents_with_pagination import StorageContentsWithPagination
 from inductiva.client.models.storage_cost import StorageCost
 from inductiva.client.models.storage_file_info import StorageFileInfo
 from inductiva.client.models.storage_operation import StorageOperation
