@@ -1,12 +1,11 @@
 """FDS simulator module of the API."""
 
 from typing import Optional, Union
+import logging
 
 from inductiva import simulators, tasks, types
 from inductiva.commands.commands import Command
 from inductiva.commands.mpiconfig import MPIConfig
-
-from absl import logging
 
 
 class FDS(simulators.Simulator):
@@ -79,13 +78,13 @@ class FDS(simulators.Simulator):
         if all(arg is not None
                for arg in [n_vcpus, n_omp_threads, n_mpi_processes]):
             raise ValueError(
-                "Parameters n_vcpus, omp_n_threads and n_mpi_processes can't be set simultaneously."
-            )
+                "Parameters n_vcpus, omp_n_threads and n_mpi_processes "
+                "can't be set simultaneously.")
 
         if n_vcpus is None:
             logging.info(
-                "Param n_vcpus not set. Defaulting to the number of available vcpus (%s).\n",
-                available_vcpus)
+                "Param n_vcpus not set. Defaulting to the number of "
+                "available vcpus (%s).\n", available_vcpus)
             n_vcpus = available_vcpus
 
         if n_mpi_processes is None:
@@ -112,10 +111,10 @@ class FDS(simulators.Simulator):
         requested_vcpus = n_omp_threads * n_mpi_processes
         if requested_vcpus > available_vcpus:
             raise ValueError(
-                f"n_mpi_processes * n_omp_threads ({n_mpi_processes} * {n_omp_threads} "
-                f"= {requested_vcpus}) can't be larger than "
-                f"{available_vcpus} (the number of available VCPUs in the specified machine)"
-            )
+                f"n_mpi_processes * n_omp_threads ({n_mpi_processes} * "
+                f"{n_omp_threads} = {requested_vcpus}) can't be larger than "
+                f"{available_vcpus} (the number of available VCPUs in "
+                "the specified machine)")
 
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
