@@ -1,5 +1,13 @@
 # Setting a TTL (Time-to-Live) on Your Simulations
 
+## The Challenge
+
+When running simulations, it's important to control how long a task can run to avoid
+unnecessary resource usage and costs. Without limits, tasks may run indefinitely or
+longer than intended.
+
+## The Solution
+
 To set a TTL (Time-to-Live) for your simulation, use the `time_to_live` parameter when 
 submitting the task. This parameter defines the maximum duration the task is allowed to 
 run, specified as a string duration. It supports common time formats such as "10m", 
