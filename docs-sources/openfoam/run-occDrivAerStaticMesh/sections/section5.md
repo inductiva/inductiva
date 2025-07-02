@@ -1,77 +1,107 @@
-# Results and Key Takeaways
-We successfully generated an OpenFOAM dataset in parallel by sampling the wind speed.
-This demonstrates the power of using cloud resources to efficiently scale up computational experiments. 
-Now it's time to retrieve all the results and analyze the data to extract meaningful insights from our simulations.
 
-<p align="center"><img src="../../_static/bike_streamlines_U.png" alt="OpenFOAM simulation visualization" width="700"></p>
+# Scaling it even more
 
-## Project Summary and Output Download
-Using the Inductiva package, it is easy to get a project summary and download all the output files. The following code snippet demonstrates how to do this:
+In the previous parts of this tutorial, we progressively scaled our simulation
+setup from a single machine to a basic MPI cluster with two nodes. In this part,
+we will take the next step by scaling the simulation across **four machines**,
+allowing us to further explore how performance scales with available resources.
+
+We'll walk through two different scenarios:
+
+* **With Hyperthreading Enabled:** Where we run the simulation using all available
+   virtual CPUs (vCPUs).
+* **Without Hyperthreading:** Where we disable hyperthreading to use only the physical cores.
+
+## Scaling to Four Machines
+
+Scaling this simulation to four machines is straightforward. You simply need to
+update the `num_machines` parameter in your `MPICluster` configuration to 4 and
+you need to edit the `caseDefinition` file to use 448 vCPUs, as shown below:
+
+```diff
+-nCores              224;              // Number of cores used for simulation
++nCores              448;              // Number of cores used for simulation
+decompositionMethod hierarchical;      // Decomposition method
+-nHierarchical       (14 4 4);           // Coefficients for hierarchical decomposition
++nHierarchical       (14 8 4);          // Coefficients for hierarchical decomposition
+```
+
+By using 448 vCPUs, this means that we are using hyperthreading, which allows us to
+leverage all available virtual CPUs on the four machines.
+
+## Running the Simulation
+
+Here is the code required to run the simulation using the Inductiva API:
 
 ```python
 import inductiva
 
-openfoam_project = inductiva.projects.Project(
-   name="openfoam_dataset")
+# Allocate cloud machine on Google Cloud Platform
+cloud_machine = inductiva.resources.MPICluster( \
+    provider="GCP",
+    machine_type="c2d-highcpu-112",
+    data_disk_gb=100,
+    num_machines=4,
+    spot=True)
 
+# Initialize OpenFOAM stack
+openfoam = inductiva.simulators.OpenFOAM(
+    version="2412",
+    distribution="esi"
+    )
 
-print(openfoam_project)
+simulation_commands = [
+    "cp system/controlDict.noWrite system/controlDict",
+    "cp system/fvSolution.fixedIter system/fvSolution",
+    "decomposePar -constant",
+    "restore0Dir -processor",
+    "renumberMesh -constant -overwrite -parallel",
+    "potentialFoam -initialiseUBCs -parallel",
+    "applyBoundaryLayer -ybl '0.0450244' -parallel",
+    "simpleFoam -parallel",
+]
 
-openfoam_project.download_outputs()
+task = openfoam.run( \
+    input_dir="/Path/to/openfoam-occDrivAerStaticMesh",
+    commands=simulation_commands,
+    on=cloud_machine)
+
+# Wait for the simulation to finish and download the results
+task.wait()
+cloud_machine.terminate()
+
+task.download_outputs()
+
+task.print_summary()
 ```
 
-Executing `print(openfoam_project)` gives a summary of the main project details:
+## Disabling Hyperthreading
 
-```
-Project 'openfoam_dataset' created at 2025-06-03 11:02.
-
-Total number of tasks: 25
-
-Tasks by status:
-  success: 25
-
-Estimated total computation cost: 0.20 US$
-```
-
-Running `openfoam_project.download_outputs()` creates a folder called `inductiva_output/openfoam_project` with one folder for each simulation.
-
-## Retrieve Task Metadata
-Retrieving the previously set metadata is easy with the Inductiva API.
-Below we show how you can retrieve the metadata of all the tasks in the project:
+Turning off hyperthreading is as simple as changing a couple of parameters when
+allocatiing your `MPICluster`. You can set the `use_hwthread_cpus` parameter to
+`False` and the `np` parameter to `224`, which is the number of physical
+cores available across the four machines.
 
 ```python
-import inductiva
-
-openfoam_project = inductiva.projects.Project(
-   name="openfoam_dataset")
-
-for task in openfoam_project.get_tasks():
-    print(f"Task ID: {task.id}")
-    print(f"Task metadata: {task.get_metadata()}")
-    print()
+cloud_machine = inductiva.resources.MPICluster( \
+    provider="GCP",
+    machine_type="c2d-highcpu-112",
+    data_disk_gb=100,
+    num_machines=4,
+    np=224, # Number of processes mpi will use
+    use_hwthread_cpus=False, # Disable hyperthreading
+    spot=True)
 ```
 
-```
-Task ID: 3b9n21xqqt97nbec07yzr6wzr
-Task metadata: {'wind_speed': '46', 'local_template_dir': 'variations/wind_speed_46'}
+Don't forget to revert the `caseDefinition` file to use 224 vCPUs, as shown below:
 
-Task ID: d5r521g6igus8wh9c3yy8fbry
-Task metadata: {'wind_speed': '15', 'local_template_dir': 'variations/wind_speed_15'}
-
-Task ID: iqf11voamuizebwt1edukkfw9
-Task metadata: {'wind_speed': '7', 'local_template_dir': 'variations/wind_speed_7'}
-
-..
+```diff
+nCores              224;              // Number of cores used for simulation
+decompositionMethod hierarchical;      // Decomposition method
+nHierarchical       (14 4 4);           // Coefficients for hierarchical decomposition
 ```
 
-## Key Takeaways
-In summary, using cloud computing for generating datasets of large-scale simulations not only increases efficiency, but also significantly reduces computational time and cost. 
+If now you run the simulation you will be using only the physical cores available
+across the four machines, which is 224 vCPUs.
 
-Inductiva makes it possible and convenient to run hundreds or thousands of simulations. For example, you could now change the code for:
-
-1. Cover a design space with many more parameters;
-2. Add a black-box optimizer, such as [Vizier](https://github.com/google/vizier),
-on top of the loop and add an evaluation function to analyse the result of each completed simulation and perform an intelligent exploration of the design space;
-3. Build a really large dataset of example simulations to later train a surrogate model.
-
-Inductiva can simplify research by making high-performance computing more accessible and cost-effective.
+## Going over the results
