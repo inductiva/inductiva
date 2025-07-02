@@ -68,10 +68,10 @@ class DualSPHysics(simulators.Simulator):
                 the default project. If the project does not exist, it will be
                 created.
             time_to_live: Maximum allowed runtime for the task, specified as a
-                string duration. Supports all formats accepted by the
-                `pytimeparse2` library, such as "10m", "2 hours", "1h30m", or
-                "90s". The task will be automatically terminated if it exceeds
-                this duration after starting.
+                string duration. Supports common time duration formats such as
+                "10m", "2 hours", "1h30m", or "90s". The task will be
+                automatically terminated if it exceeds this duration after
+                starting.
             vtk_to_obj: Whether to convert the output VTK files to OBJ meshes
                 using marching cubes.
             vtk_to_obj_vtk_dir: Directory containing VTK files to be converted.
