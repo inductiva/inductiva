@@ -518,7 +518,6 @@ task to a project using explicit management:</p>
 <span class="c1"># add a task to the &quot;my_xbeach_project&quot; project</span>
 <span class="n">task1</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
     <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
-    <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;params.txt&quot;</span><span class="p">,</span>
     <span class="n">on</span><span class="o">=</span><span class="n">cloud_machine</span><span class="p">)</span>
 
 <span class="n">project</span><span class="o">.</span><span class="n">close</span><span class="p">()</span> <span class="c1"># &lt;-- close the project</span>
@@ -526,7 +525,6 @@ task to a project using explicit management:</p>
 <span class="c1"># task2 will be added to the default project</span>
 <span class="n">task2</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
     <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
-    <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;params.txt&quot;</span><span class="p">,</span>
     <span class="n">on</span><span class="o">=</span><span class="n">cloud_machine</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">task1</span><span class="o">.</span><span class="n">get_info</span><span class="p">()</span><span class="o">.</span><span class="n">project</span><span class="p">)</span> <span class="c1"># &quot;my_xbeach_project&quot;</span>
@@ -564,13 +562,11 @@ will be added to the default one:</p>
     <span class="c1"># add a task to the &quot;my_xbeach_project&quot; project</span>
     <span class="n">task1</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
         <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
-        <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;params.txt&quot;</span><span class="p">,</span>
         <span class="n">on</span><span class="o">=</span><span class="n">cloud_machine</span><span class="p">)</span>
 
 <span class="c1"># task2 will be added to the default project</span>
 <span class="n">task2</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
     <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
-    <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;params.txt&quot;</span><span class="p">,</span>
     <span class="n">on</span><span class="o">=</span><span class="n">cloud_machine</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">task1</span><span class="o">.</span><span class="n">get_info</span><span class="p">()</span><span class="o">.</span><span class="n">project</span><span class="p">)</span> <span class="c1"># &quot;my_xbeach_project&quot;</span>
