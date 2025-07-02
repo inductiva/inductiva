@@ -20,10 +20,8 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://docs.inductiva.ai/python/inductiva.projects.html" />
 <meta property="og:site_name" content="Inductiva.ai Docs" />
-<meta property="og:description" content="This module provides functionality for managing projects and their associated tasks within the Inductiva platform. A project serves as a container for grouping related tasks, enabling better organi..." />
 <meta property="og:image" content="https://docs.inductiva.ai/_static/inductiva-social-banner.jpg" />
 <meta property="og:image:alt" content="Inductiva.ai Docs" />
-<meta name="description" content="This module provides functionality for managing projects and their associated tasks within the Inductiva platform. A project serves as a container for grouping related tasks, enabling better organi..." />
 
     <title>projects sub-package &#8212; Python API for Cloud-based Simulation</title>
   
@@ -359,9 +357,7 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</button>
+
 </div></div>
       
     </div>
@@ -377,28 +373,6 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.__init__"><code class="docutils literal notranslate"><span class="pre">Project.__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.add_task"><code class="docutils literal notranslate"><span class="pre">Project.add_task()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.created_at"><code class="docutils literal notranslate"><span class="pre">Project.created_at</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.download_outputs"><code class="docutils literal notranslate"><span class="pre">Project.download_outputs()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.estimated_computation_cost"><code class="docutils literal notranslate"><span class="pre">Project.estimated_computation_cost</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.get_tasks"><code class="docutils literal notranslate"><span class="pre">Project.get_tasks()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.id"><code class="docutils literal notranslate"><span class="pre">Project.id</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.name"><code class="docutils literal notranslate"><span class="pre">Project.name</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.num_tasks"><code class="docutils literal notranslate"><span class="pre">Project.num_tasks</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.task_by_status"><code class="docutils literal notranslate"><span class="pre">Project.task_by_status</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.wait"><code class="docutils literal notranslate"><span class="pre">Project.wait()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.get_projects"><code class="docutils literal notranslate"><span class="pre">get_projects()</span></code></a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -408,180 +382,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="module-inductiva.projects.project">
-<span id="projects-sub-package"></span><h1>projects sub-package<a class="headerlink" href="#module-inductiva.projects.project" title="Link to this heading">#</a></h1>
-<p>This module provides functionality for managing projects and their associated
-tasks within the Inductiva platform. A project serves as a container for
-grouping related tasks, enabling better organization and management of
-computational workflows.</p>
-<dl>
-<dt>Classes:</dt><dd><ul class="simple">
-<li><p>Project: Represents a project that groups related tasks together.</p></li>
-</ul>
-</dd>
-<dt>Functions:</dt><dd><ul class="simple">
-<li><p>get_projects(): Retrieves all projects associated with the current user.</p></li>
-</ul>
-</dd>
-<dt>Key Features:</dt><dd><ul class="simple">
-<li><p>Create and manage projects on the backend.</p></li>
-<li><p>Add tasks to projects and retrieve the most recent tasks or filter by
-status.</p></li>
-<li><p>Monitor the status of all tasks in a project and wait for their</p></li>
-</ul>
-<p>completion.
-- Download outputs for all tasks in a project.
-- Estimate the total computation cost of a project based on its tasks.</p>
-</dd>
-</dl>
-<p>Example Usage:</p>
-<blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
-
-<span class="c1"># Create a new project or load an existing one</span>
-<span class="n">project</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Project</span><span class="p">(</span><span class="s2">&quot;my_project&quot;</span><span class="p">)</span>
-
-<span class="c1"># Select a simulator</span>
-<span class="n">fvcom</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">FVCOM</span><span class="p">()</span>
-<span class="c1"># Run and add tasks to the project</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
-    <span class="n">task</span> <span class="o">=</span> <span class="n">fvcom</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-    <span class="n">project</span><span class="o">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
-
-<span class="c1"># Monitor task completion</span>
-<span class="n">project</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-<span class="c1"># Download outputs for all tasks</span>
-<span class="n">project</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
-<span class="c1"># Print project details</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">project</span><span class="p">)</span>
-</pre></div>
-</div>
-</div></blockquote>
-<dl class="py class">
-<dt class="sig sig-object py" id="inductiva.projects.project.Project">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.Project" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Projects management class.</p>
-<p>Groups related tasks together under a single project.</p>
-<p class="rubric">Example</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">project</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">projects</span><span class="o">.</span><span class="n">Project</span><span class="p">(</span><span class="s2">&quot;my project&quot;</span><span class="p">)</span>
-
-<span class="n">task_1</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="n">project</span><span class="o">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">task_1</span><span class="p">)</span>
-
-<span class="n">task_2</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="n">project</span><span class="o">.</span><span class="n">add_task</span><span class="p">(</span><span class="n">task_2</span><span class="p">)</span>
-</pre></div>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="inductiva.projects.project.Project.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.Project.__init__" title="Link to this definition">#</a></dt>
-<dd><p>Initialize the Project instance.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – The name of the project.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="inductiva.projects.project.Project.add_task">
-<span class="sig-name descname"><span class="pre">add_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">task</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="inductiva.tasks.html#inductiva.tasks.task.Task" title="inductiva.tasks.task.Task"><span class="pre">Task</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.Project.add_task" title="Link to this definition">#</a></dt>
-<dd><p>Adds a task to the project.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>task</strong> – The task to add to the project.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="inductiva.projects.project.Project.created_at">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">created_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#inductiva.projects.project.Project.created_at" title="Link to this definition">#</a></dt>
-<dd><p>Returns the creation date and time of the project.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="inductiva.projects.project.Project.download_outputs">
-<span class="sig-name descname"><span class="pre">download_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.Project.download_outputs" title="Link to this definition">#</a></dt>
-<dd><p>Downloads all the outputs for all the tasks in the project.</p>
-<p>All task outputs will be organized within the specified <cite>output_dir</cite>.
-If <cite>output_dir</cite> is not provided, outputs will be saved to a default
-location under <cite>inductiva_output/&lt;project_name&gt;/&lt;task_id&gt;/</cite>.
-Otherwise, they will be stored in <cite>&lt;output_dir&gt;/&lt;task_id&gt;/</cite>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>output_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – The base directory where project outputs
-will be downloaded.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="inductiva.projects.project.Project.estimated_computation_cost">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">estimated_computation_cost</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#inductiva.projects.project.Project.estimated_computation_cost" title="Link to this definition">#</a></dt>
-<dd><p>Returns the estimated project cost.</p>
-<p>Computed as the sum of the estimated computation cost of each task.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="inductiva.projects.project.Project.get_tasks">
-<span class="sig-name descname"><span class="pre">get_tasks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">last_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="inductiva.tasks.html#inductiva.tasks.task.Task" title="inductiva.tasks.task.Task"><span class="pre">Task</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#inductiva.projects.project.Project.get_tasks" title="Link to this definition">#</a></dt>
-<dd><p>Get the the tasks of this project.</p>
-<p>Optionally, those can be filtered by task status.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>last_n</strong> (<em>int</em>) – The number of tasks with repect to the submission
-time to fetch. If <cite>last_n&lt;=0</cite> we fetch all tasks submitted
-to the project.</p></li>
-<li><p><strong>status</strong> – Status of the tasks to get. If <cite>None</cite>, tasks with any
-status will be returned.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="inductiva.projects.project.Project.id">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#inductiva.projects.project.Project.id" title="Link to this definition">#</a></dt>
-<dd><p>Returns the unique ID of the project.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="inductiva.projects.project.Project.name">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#inductiva.projects.project.Project.name" title="Link to this definition">#</a></dt>
-<dd><p>Returns the name of the project.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="inductiva.projects.project.Project.num_tasks">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_tasks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#inductiva.projects.project.Project.num_tasks" title="Link to this definition">#</a></dt>
-<dd><p>Returns the number of tasks in the project.</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="inductiva.projects.project.Project.task_by_status">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">task_by_status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><a class="headerlink" href="#inductiva.projects.project.Project.task_by_status" title="Link to this definition">#</a></dt>
-<dd><p>Returns a dictionary with the number of tasks by status.
-The keys are the status codes and the values are the number of tasks
-with that status.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="inductiva.projects.project.Project.wait">
-<span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.Project.wait" title="Link to this definition">#</a></dt>
-<dd><p>Wait for all the tasks in a project to complete.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="inductiva.projects.project.get_projects">
-<span class="sig-name descname"><span class="pre">get_projects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#inductiva.projects.project.Project" title="inductiva.projects.project.Project"><span class="pre">Project</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#inductiva.projects.project.get_projects" title="Link to this definition">#</a></dt>
-<dd><p>Gets all the user’s projects.</p>
-</dd></dl>
-
+  <section id="projects-sub-package">
+<h1>projects sub-package<a class="headerlink" href="#projects-sub-package" title="Link to this heading">#</a></h1>
 </section>
 
 
@@ -619,35 +421,6 @@ with that status.</p>
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project"><code class="docutils literal notranslate"><span class="pre">Project</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.__init__"><code class="docutils literal notranslate"><span class="pre">Project.__init__()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.add_task"><code class="docutils literal notranslate"><span class="pre">Project.add_task()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.created_at"><code class="docutils literal notranslate"><span class="pre">Project.created_at</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.download_outputs"><code class="docutils literal notranslate"><span class="pre">Project.download_outputs()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.estimated_computation_cost"><code class="docutils literal notranslate"><span class="pre">Project.estimated_computation_cost</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.get_tasks"><code class="docutils literal notranslate"><span class="pre">Project.get_tasks()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.id"><code class="docutils literal notranslate"><span class="pre">Project.id</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.name"><code class="docutils literal notranslate"><span class="pre">Project.name</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.num_tasks"><code class="docutils literal notranslate"><span class="pre">Project.num_tasks</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.task_by_status"><code class="docutils literal notranslate"><span class="pre">Project.task_by_status</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.wait"><code class="docutils literal notranslate"><span class="pre">Project.wait()</span></code></a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.get_projects"><code class="docutils literal notranslate"><span class="pre">get_projects()</span></code></a></li>
-</ul>
-  </nav></div>
-
-</div></div>
               
             
           </div>
