@@ -24,7 +24,6 @@ import inductiva
 
 task = simulator.run(
     input_dir=input_dir,
-    sim_config_filename=sim_config_filename,
     on=cloud_machine,
     time_to_live="1m",  # Sets TTL to 1 minute
 )
