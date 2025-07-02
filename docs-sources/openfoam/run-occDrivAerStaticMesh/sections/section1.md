@@ -27,12 +27,27 @@ The folder structure above represents a typical OpenFOAM case setup:
 
 This structure is fundamental for OpenFOAM simulations, enabling users to define the problem, specify physical properties, and control numerical execution.
 
-### Download the Mesh Files
+## Download the Mesh Files
 
 Download the mesh file from [this link](https://zenodo.org/records/15012221/files/polyMesh_65M.tar.gz?download=1)
 to obtain the 65 million-cell mesh.
 Once downloaded, extract the contents into the `constant/` directory. This will
 create a `polyMesh` folder containing all the required mesh files for the simulation.
+
+## Update the `Allrun` script
+
+The provided `Allrun` script was create to run on a system with SLURM, witch is
+not the case with Inductiva. To fix this just replace the following line from the
+`Allrun` script:
+
+```diff
+# extra mpi flags
+-OMPI_FLAGS="" #  "--mca pml ucx"
++OMPI_FLAGS="--use-hwthread-cpus" #  "--mca pml ucx"
+
+-parEx="mpirun -np ${SLURM_NTASKS} ${OMPI_FLAGS}"
++parEx="mpirun -np ${nProcs} ${OMPI_FLAGS}"
+```
 
 ## Adjust the simulation parameters
 
@@ -40,11 +55,11 @@ By default, this simulation is set to run with 512 processes, which might be a
 bit too much for now. To lower this number, open the file
 `system/include/caseDefinition` and update the following lines:
 ```diff
-- nCores              512;              // Number of cores used for simulation
-+ nCores              112;              // Number of cores used for simulation
+-nCores              512;              // Number of cores used for simulation
++nCores              112;              // Number of cores used for simulation
 decompositionMethod hierarchical;    // Decomposition method
-- nHierarchical       (16 8 4);         // Coefficient n for the hierarchical decomposition method
-+ nHierarchical       (7 4 4);         // Coefficient n for the hierarchical decomposition method
+-nHierarchical       (16 8 4);         // Coefficient n for the hierarchical decomposition method
++nHierarchical       (7 4 4);         // Coefficient n for the hierarchical decomposition method
 ```
 
 This should allow us to run this simulation on a 112 vcpu machine without changing

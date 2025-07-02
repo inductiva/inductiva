@@ -1,100 +1,105 @@
-# Generalizing the Use Case
-Inductiva enables the parallel execution of numerous simulations, making it ideal for conducting parameter studies at scale. For example, suppose you are interested in analyzing how varying a specific input parameter influences the simulation results. you might want to analyze how varying a specific input parameter affects the simulation results.
+# Preparing for MPI Cluster Execution
 
-As a demonstration, consider studying the impact of changes in the reference free-stream velocity, 
-`flowVelocity`, defined in the `initialConditions` file of the OpenFOAM case. This parameter represents the magnitude of the incoming flow velocity used for nondimensionalizing force coefficients. In the current configuration, `flowVelocity` is set to 20 m/s on the x axis:
+In the previous part of this tutorial, we ran the simulation using the `Allrun`
+shell script, which is the standard way to execute OpenFOAM simulations. This
+script conveniently automates the entire workflow into a single command.
 
-```
-/*--------------------------------*- C++ -*----------------------------------*\
-  =========                 |
-  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Version:  8
-     \\/     M anipulation  |
-\*---------------------------------------------------------------------------*/
+However, when scaling the simulation across multiple machines using an **MPI cluster**,
+we need to adjust our approach. Instead of relying on the `Allrun` script, we
+will explicitly define each step as separate commands. This allows us to
+configure said command for parallel execution, harnessing the full power of your
+MPI cluster. Don’t worry, this process is automated behind the scenes, so you
+won’t need to manage it manually.
 
-flowVelocity         (20 0 0);
-pressure             0;
-turbulentKE          0.24;
-turbulentOmega       1.78;
+Keep reading to learn how to adapt your simulation for multi-node execution.
 
-// ************************************************************************* //
+## Switching to an MPI Cluster
 
-```
+The first step is to switch your compute resource from a `MachineGroup` to an
+**MPICluster**. This is straightforward, simply update your code like this:
 
-We will use Inductiva’s templating system to generalize the base simulation by randomly sampling values 
-for `flowVelocity` (the wind speed). This allows efficient generation of a broad set of simulation conditions.
-
-## Parametrize the system/forceCoeffs file
-Inductiva allows you to convert fixed parameters in simulation configuration files into variables that can be programmatically controlled via Python scripting.
-
-Instead of hardcoding the wind speed in `openfoam-input-example/0/include/initialConditions` 
-like this:
-
-```
-...
-    flowVelocity         (20 0 0);
-...
+```diff
+-cloud_machine = inductiva.resources.MachineGroup(
++cloud_machine = inductiva.resources.MPICluster(
+    provider="GCP",
+    machine_type="c2d-highcpu-112",
++    num_machines=2,
+    spot=True)
 ```
 
-you can update the file to include a variable placeholder:
+## Defining Your Command List
 
+Next, convert the commands inside your `Allrun` script into a list of
+independent commands. A few important notes:
+
+* Each command must be self-contained. For example, you cannot split directory changes (`cd`) and file operations (`cp`) into separate commands. Instead, combine them into a single command like:
+
+  ```bash
+  cp system/controlDict.noWrite system/controlDict
+  ```
+
+* Special shell characters like `<`, `>`, `|`, and `&` are not allowed, so you cannot pipe output between commands or redirect to files. Don’t worry, all outputs will be automatically saved into `stdout.txt` and `stderr.txt`.
+
+Here is the result of converting the `Allrun` script into a list of commands:
+
+```python
+simulation_commands = [
+    "cp system/controlDict.noWrite system/controlDict",
+    "cp system/fvSolution.fixedIter system/fvSolution",
+    "decomposePar -constant",
+    "restore0Dir -processor",
+    "renumberMesh -constant -overwrite -parallel",
+    "potentialFoam -initialiseUBCs -parallel",
+    "applyBoundaryLayer -ybl '0.0450244' -parallel",
+    "simpleFoam -parallel",
+]
 ```
-...
-    flowVelocity         ({{ wind_speed }} 0 0);
-...
-```
 
-After this change, save the file as `initialConditions.jinja` (note the `.jinja` extension). This tells Inductiva’s templating engine to replace the `wind_speed` variable with the appropriate value from Python.
+---
 
-## Code Overview
-The script below shows how we can now set the value of the `flowVelocity` parameter from Python and run a variation of the original simulation:
+Your simulation script should now look like this:
 
 ```python
 import inductiva
 
-# Allocate cloud machine
-cloud_machine = inductiva.resources.MachineGroup(
-   provider="GCP",
-   machine_type="c2d-highcpu-32",
-   spot=True
-)
+# Allocate cloud machine on Google Cloud Platform
+cloud_machine = inductiva.resources.MPICluster( \
+    provider="GCP",
+    machine_type="c2d-highcpu-112",
+    num_machines=2,
+    data_disk_gb=100,
+    spot=True)
 
-wind_speed = 15
+# Initialize OpenFOAM stack
+openfoam = inductiva.simulators.OpenFOAM(
+    version="2412",
+    distribution="esi"
+    )
 
-print(f"Preparing files for OpenFOAM with "\
-      f"wind_speed = {wind_speed}")
-target_dir = f"variations/wind_speed_{wind_speed}"
+simulation_commands = [
+    "cp system/controlDict.noWrite system/controlDict",
+    "cp system/fvSolution.fixedIter system/fvSolution",
+    "decomposePar -constant",
+    "restore0Dir -processor",
+    "renumberMesh -constant -overwrite -parallel",
+    "potentialFoam -initialiseUBCs -parallel",
+    "applyBoundaryLayer -ybl '0.0450244' -parallel",
+    "simpleFoam -parallel",
+]
 
-# This is where we make the substitution and set
-# the value of the parameters in the modified config file
-inductiva.TemplateManager.render_dir(
-   source_dir="openfoam-input-example/",
-   target_dir=target_dir,
-   overwrite=True,
-   wind_speed=wind_speed)
+task = openfoam.run( \
+    input_dir="/Path/to/openfoam-occDrivAerStaticMesh",
+    commands=simulation_commands,
+    on=cloud_machine)
 
-# Initialize OpenFOAM simulator
-openfoam = inductiva.simulators.OpenFOAM()
-
-# Run simulation
-task = openfoam.run(
-   input_dir=target_dir,
-   shell_script="./Allrun",
-   on=cloud_machine,
-   resubmit_on_preemption=True,
-)
-
+# Wait for the simulation to finish and download the results
 task.wait()
 cloud_machine.terminate()
+
+task.download_outputs()
+
+task.print_summary()
 ```
 
-That's it!
-
-First, we set the `wind_speed` values. Then, the `render_dir` method generates the input file by replacing 
-the placeholder variables in the `forceCoeffs.jinja` template with the corresponding values. The generated 
-files are saved in the `target_dir` (`variations/wind_speed_{wind_speed}`).
-
-> For more details on managing template files, check out the `TemplateManager` [documentation](https://docs.inductiva.ai/en/latest/intro_to_api/templating.html).
-
-Since Inductiva’s API is Python-based, you can easily loop over different sampled values of `wind_speed` to run multiple simulations in parallel and generate a dataset. That’s exactly what we’ll do in the next section.
+Keep reading to see the speed ups we can get when moving from a single machine into
+2 or even 4 machines.

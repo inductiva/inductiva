@@ -13,6 +13,7 @@ import inductiva
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
     machine_type="c2d-highcpu-112",
+    data_disk_gb=100,
     spot=True)
 
 # Initialize OpenFOAM stack
@@ -35,7 +36,15 @@ task.download_outputs()
 task.print_summary()
 ```
 
-When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown as follows.
+When the simulation is complete, we terminate the machine, download the results
+and print a summary of the simulation as shown as follows.
 
 ```
 ```
+
+As you can see in the “In Progress” line, the part of the timeline that
+represents the actual execution of the simulation, the core computation time of
+this simulation was approximately 3.5 seconds.
+
+Stay with us to see how you can scale this same simulation into multiple machines
+and reducing the simulation time by X times! 
