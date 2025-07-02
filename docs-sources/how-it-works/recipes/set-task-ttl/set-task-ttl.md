@@ -1,12 +1,13 @@
 # Setting a TTL (Time-to-Live) on Your Simulations
 
-To set a TTL (Time-to-Live) for your simulation, you need to use the `time_to_live` 
-parameter when submitting the task. This parameter defines the maximum duration the 
-task is allowed to run, expressed as a string with a time unit suffix. Supported formats 
-include minutes (e.g., `"10m"`) or hours (e.g., `"2h"`). Once the specified time has 
-elapsed from the task's start, the simulation will be automatically terminated. This 
-feature helps you control resource usage and avoid running tasks longer than necessary 
-(e.g., perfect for quick test runs).
+To set a TTL (Time-to-Live) for your simulation, use the `time_to_live` parameter when 
+submitting the task. This parameter defines the maximum duration the task is allowed to 
+run, specified as a string duration. It supports common time formats such as "10m", 
+"2 hours", "2h", "1h30m", or "90s" (see 
+[here](https://github.com/onegreyonewhite/pytimeparse2#pytimeparse2-time-expression-parser)
+for more details on supported formats). The task will be automatically terminated if it
+exceeds this duration after starting. This feature helps you control resource usage and
+avoid running tasks longer than necessary (e.g., perfect for quick test runs).
 
 ```python
 import inductiva
