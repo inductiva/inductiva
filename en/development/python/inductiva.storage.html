@@ -20,8 +20,10 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://docs.inductiva.ai/python/inductiva.storage.html" />
 <meta property="og:site_name" content="Inductiva.ai Docs" />
+<meta property="og:description" content="Methods to interact with the user storage resources." />
 <meta property="og:image" content="https://docs.inductiva.ai/_static/inductiva-social-banner.jpg" />
 <meta property="og:image:alt" content="Inductiva.ai Docs" />
+<meta name="description" content="Methods to interact with the user storage resources." />
 
     <title>storage sub-package &#8212; Python API for Cloud-based Simulation</title>
   
@@ -357,7 +359,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -373,6 +377,51 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ExportDestination"><code class="docutils literal notranslate"><span class="pre">ExportDestination</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ExportDestination.AWS_S3"><code class="docutils literal notranslate"><span class="pre">ExportDestination.AWS_S3</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.StorageOperation"><code class="docutils literal notranslate"><span class="pre">StorageOperation</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.StorageOperation.__init__"><code class="docutils literal notranslate"><span class="pre">StorageOperation.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.StorageOperation.from_api_response"><code class="docutils literal notranslate"><span class="pre">StorageOperation.from_api_response()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.StorageOperation.wait"><code class="docutils literal notranslate"><span class="pre">StorageOperation.wait()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipArchiveInfo"><code class="docutils literal notranslate"><span class="pre">ZipArchiveInfo</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipArchiveInfo.__init__"><code class="docutils literal notranslate"><span class="pre">ZipArchiveInfo.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipArchiveInfo.files"><code class="docutils literal notranslate"><span class="pre">ZipArchiveInfo.files</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipArchiveInfo.size"><code class="docutils literal notranslate"><span class="pre">ZipArchiveInfo.size</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.__init__"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.compress_type"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.compress_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.compressed_size"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.compressed_size</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.creation_time"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.creation_time</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.name"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.range_start"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.range_start</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.size"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.size</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.copy"><code class="docutils literal notranslate"><span class="pre">copy()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.download"><code class="docutils literal notranslate"><span class="pre">download()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.export"><code class="docutils literal notranslate"><span class="pre">export()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.export_to_aws_s3"><code class="docutils literal notranslate"><span class="pre">export_to_aws_s3()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_signed_urls"><code class="docutils literal notranslate"><span class="pre">get_signed_urls()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_space_used"><code class="docutils literal notranslate"><span class="pre">get_space_used()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_zip_contents"><code class="docutils literal notranslate"><span class="pre">get_zip_contents()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.listdir"><code class="docutils literal notranslate"><span class="pre">listdir()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.multipart_upload"><code class="docutils literal notranslate"><span class="pre">multipart_upload()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.remove"><code class="docutils literal notranslate"><span class="pre">remove()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.upload"><code class="docutils literal notranslate"><span class="pre">upload()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.upload_from_url"><code class="docutils literal notranslate"><span class="pre">upload_from_url()</span></code></a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -382,8 +431,318 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="storage-sub-package">
-<h1>storage sub-package<a class="headerlink" href="#storage-sub-package" title="Link to this heading">#</a></h1>
+  <section id="module-inductiva.storage.storage">
+<span id="storage-sub-package"></span><h1>storage sub-package<a class="headerlink" href="#module-inductiva.storage.storage" title="Link to this heading">#</a></h1>
+<p>Methods to interact with the user storage resources.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ExportDestination">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExportDestination</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.ExportDestination" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ExportDestination.AWS_S3">
+<span class="sig-name descname"><span class="pre">AWS_S3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'aws-s3'</span></em><a class="headerlink" href="#inductiva.storage.storage.ExportDestination.AWS_S3" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="inductiva.storage.storage.StorageOperation">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StorageOperation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">StorageApi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.StorageOperation" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a storage operation running remotely via Inductiva API.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.storage.storage.StorageOperation.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">StorageApi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.StorageOperation.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.storage.storage.StorageOperation.from_api_response">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_api_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.StorageOperation.from_api_response" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.storage.storage.StorageOperation.wait">
+<span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">poll_s</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.StorageOperation.wait" title="Link to this definition">#</a></dt>
+<dd><p>Wait for the operation to complete.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>poll_s</strong> – Time in seconds between calls to the API to update
+the status of the operation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipArchiveInfo">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ZipArchiveInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#inductiva.storage.storage.ZipFileInfo" title="inductiva.storage.storage.ZipFileInfo"><span class="pre">ZipFileInfo</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.ZipArchiveInfo" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents the total ZIP size and file contents of a ZIP archive.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipArchiveInfo.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#inductiva.storage.storage.ZipFileInfo" title="inductiva.storage.storage.ZipFileInfo"><span class="pre">ZipFileInfo</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#inductiva.storage.storage.ZipArchiveInfo.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipArchiveInfo.files">
+<span class="sig-name descname"><span class="pre">files</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#inductiva.storage.storage.ZipFileInfo" title="inductiva.storage.storage.ZipFileInfo"><span class="pre">ZipFileInfo</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#inductiva.storage.storage.ZipArchiveInfo.files" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipArchiveInfo.size">
+<span class="sig-name descname"><span class="pre">size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#inductiva.storage.storage.ZipArchiveInfo.size" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileInfo">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ZipFileInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compressed_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">creation_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compress_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents information about a file within a ZIP archive.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileInfo.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compressed_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">creation_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compress_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileInfo.compress_type">
+<span class="sig-name descname"><span class="pre">compress_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo.compress_type" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileInfo.compressed_size">
+<span class="sig-name descname"><span class="pre">compressed_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo.compressed_size" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileInfo.creation_time">
+<span class="sig-name descname"><span class="pre">creation_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo.creation_time" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileInfo.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileInfo.range_start">
+<span class="sig-name descname"><span class="pre">range_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo.range_start" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileInfo.size">
+<span class="sig-name descname"><span class="pre">size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#inductiva.storage.storage.ZipFileInfo.size" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.storage.storage.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.copy" title="Link to this definition">#</a></dt>
+<dd><p>Copies a file or folder from a source path in storage to a target path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<em>str</em>) – The source path of the file or directory to copy.</p></li>
+<li><p><strong>target</strong> (<em>str</em>) – The destination path where the file or directory
+should be copied to.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.storage.storage.download">
+<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remote_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decompress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.download" title="Link to this definition">#</a></dt>
+<dd><p>Downloads a file or folder from storage to a local directory, optionally
+decompressing the contents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>remote_path</strong> (<em>str</em>) – The path of the file or folder on the remote server
+to download.</p></li>
+<li><p><strong>local_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – The local directory where the file or folder
+will be saved. Defaults to the current working directory.</p></li>
+<li><p><strong>decompress</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to decompress the downloaded file
+or folder if it is compressed. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Download a folder from a remote server to the current directory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inductiva</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">remote_path</span><span class="o">=</span><span class="s2">&quot;/path/to/remote/folder/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Download a file and save it to a local directory without decompressing:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inductiva</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">remote_path</span><span class="o">=</span><span class="s2">&quot;/path/to/remote/file.zip&quot;</span><span class="p">,</span>
+                           <span class="n">local_dir</span><span class="o">=</span><span class="s2">&quot;/local/directory&quot;</span><span class="p">,</span>
+                           <span class="n">decompress</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Download a file inside a zip archive:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inductiva</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">download</span><span class="p">(</span>
+    <span class="n">remote_path</span><span class="o">=</span><span class="s2">&quot;/some_task_id/output.zip/stdout.txt&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is not possible to download folders that are inside zip archives.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.storage.storage.export">
+<span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_export</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_to</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#inductiva.storage.storage.ExportDestination" title="inductiva.storage.storage.ExportDestination"><span class="pre">ExportDestination</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">part_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.export" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.storage.storage.export_to_aws_s3">
+<span class="sig-name descname"><span class="pre">export_to_aws_s3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_export</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">part_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.export_to_aws_s3" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.storage.storage.get_signed_urls">
+<span class="sig-name descname"><span class="pre">get_signed_urls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">operation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'upload'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'download'</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#inductiva.storage.storage.get_signed_urls" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.storage.storage.get_space_used">
+<span class="sig-name descname"><span class="pre">get_space_used</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.get_space_used" title="Link to this definition">#</a></dt>
+<dd><p>Returns the occupied storage size in GB.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.storage.storage.get_zip_contents">
+<span class="sig-name descname"><span class="pre">get_zip_contents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zip_relative_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#inductiva.storage.storage.ZipArchiveInfo" title="inductiva.storage.storage.ZipArchiveInfo"><span class="pre">ZipArchiveInfo</span></a></span></span><a class="headerlink" href="#inductiva.storage.storage.get_zip_contents" title="Link to this definition">#</a></dt>
+<dd><p>Retrieve the contents of a ZIP archive from a given path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – The full path to the ZIP archive.</p></li>
+<li><p><strong>zip_relative_path</strong> (<em>str</em><em>, </em><em>optional</em>) – A relative path inside the ZIP
+archive to filter the contents. Defaults to an empty string,
+which lists all files within the archive.</p></li>
+<li><p><strong>recursive</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, list contents recursively within
+the specified <cite>zip_relative_path</cite>. If False, list only top-level
+files and directories within the specified <cite>zip_relative_path</cite>.
+Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>An object containing the total size of the ZIP archive</dt><dd><p>and a list of <cite>ZipFileInfo</cite> objects representing the files
+within the specified ZIP archive.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#inductiva.storage.storage.ZipArchiveInfo" title="inductiva.storage.storage.ZipArchiveInfo">ZipArchiveInfo</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.storage.storage.listdir">
+<span class="sig-name descname"><span class="pre">listdir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'size'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'creation_time'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'creation_time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_order</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'asc'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'desc'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'desc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">print_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.listdir" title="Link to this definition">#</a></dt>
+<dd><p>List and display the contents of the user’s storage.
+:param path: Storage directory to list. Default is root.
+:type path: str
+:param max_results: The maximum number of results to return. If not set,</p>
+<blockquote>
+<div><p>all entries are returned.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>order_by</strong> (<em>str</em>) – The field to sort the contents by.</p></li>
+<li><p><strong>sort_order</strong> (<em>str</em>) – Whether to sort the contents in ascending or</p></li>
+<li><p><strong>order.</strong> (<em>descending</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of dictionaries containing information about
+the size, the name and the creation time of each content that can
+easily be converted to a dataframe.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list of dict</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>This function prints a table with the storage content information:</dt><dd><p>Name            Size            Creation Time
+1234            5.68 MiB        29 Sep, 14:12:00
+12345           374.85 KiB      29 Sep, 14:13:10
+1234567         97.59 KiB       29 Sep, 14:13:24
+123             0 B             29 Sep, 14:13:29
+123456          0 B             29 Sep, 14:13:18</p>
+</dd>
+</dl>
+<p>You can use this information to delete the contents you don’t need
+anymore and further inspect task outputs and logs using the Task
+class.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.storage.storage.multipart_upload">
+<span class="sig-name descname"><span class="pre">multipart_upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parts_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upload_parts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">complete_multipart_url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.multipart_upload" title="Link to this definition">#</a></dt>
+<dd><p>Perform the multipart upload using the server.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.storage.storage.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remote_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.remove" title="Link to this definition">#</a></dt>
+<dd><p>Removes a file or directory from the remote location.</p>
+<p>Parameters:
+- remote_path (str): The path to the remote file or directory.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.storage.storage.upload">
+<span class="sig-name descname"><span class="pre">upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">local_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remote_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.upload" title="Link to this definition">#</a></dt>
+<dd><p>Upload a local file or directory to a specified remote directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>local_path</strong> (<em>str</em>) – The path to the local file or directory to be
+uploaded.</p></li>
+<li><p><strong>remote_dir</strong> (<em>str</em>) – The remote directory where the file will
+be uploaded.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Upload a file to a remote directory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inductiva</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="s1">&#39;local/path/file.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;my_data&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Upload a directory to a remote location:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inductiva</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">upload</span><span class="p">(</span><span class="s1">&#39;local/path/folder&#39;</span><span class="p">,</span> <span class="s1">&#39;my_data&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.storage.storage.upload_from_url">
+<span class="sig-name descname"><span class="pre">upload_from_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remote_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.upload_from_url" title="Link to this definition">#</a></dt>
+<dd><p>Upload a file from a given URL to a specified remote directory.</p>
+<p>If no file name is provided, the function extracts the name from the URL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – The URL of the file to be uploaded.</p></li>
+<li><p><strong>remote_dir</strong> (<em>str</em>) – The path to the remote directory where the file will
+be stored.</p></li>
+<li><p><strong>file_name</strong> (<em>str</em><em>, </em><em>optional</em>) – The name to save the uploaded file as.
+If not specified, the name will be extracted from the URL.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
 
@@ -421,6 +780,58 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ExportDestination"><code class="docutils literal notranslate"><span class="pre">ExportDestination</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ExportDestination.AWS_S3"><code class="docutils literal notranslate"><span class="pre">ExportDestination.AWS_S3</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.StorageOperation"><code class="docutils literal notranslate"><span class="pre">StorageOperation</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.StorageOperation.__init__"><code class="docutils literal notranslate"><span class="pre">StorageOperation.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.StorageOperation.from_api_response"><code class="docutils literal notranslate"><span class="pre">StorageOperation.from_api_response()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.StorageOperation.wait"><code class="docutils literal notranslate"><span class="pre">StorageOperation.wait()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipArchiveInfo"><code class="docutils literal notranslate"><span class="pre">ZipArchiveInfo</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipArchiveInfo.__init__"><code class="docutils literal notranslate"><span class="pre">ZipArchiveInfo.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipArchiveInfo.files"><code class="docutils literal notranslate"><span class="pre">ZipArchiveInfo.files</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipArchiveInfo.size"><code class="docutils literal notranslate"><span class="pre">ZipArchiveInfo.size</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.__init__"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.compress_type"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.compress_type</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.compressed_size"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.compressed_size</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.creation_time"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.creation_time</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.name"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.name</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.range_start"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.range_start</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.size"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.size</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.copy"><code class="docutils literal notranslate"><span class="pre">copy()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.download"><code class="docutils literal notranslate"><span class="pre">download()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.export"><code class="docutils literal notranslate"><span class="pre">export()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.export_to_aws_s3"><code class="docutils literal notranslate"><span class="pre">export_to_aws_s3()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_signed_urls"><code class="docutils literal notranslate"><span class="pre">get_signed_urls()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_space_used"><code class="docutils literal notranslate"><span class="pre">get_space_used()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_zip_contents"><code class="docutils literal notranslate"><span class="pre">get_zip_contents()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.listdir"><code class="docutils literal notranslate"><span class="pre">listdir()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.multipart_upload"><code class="docutils literal notranslate"><span class="pre">multipart_upload()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.remove"><code class="docutils literal notranslate"><span class="pre">remove()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.upload"><code class="docutils literal notranslate"><span class="pre">upload()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.upload_from_url"><code class="docutils literal notranslate"><span class="pre">upload_from_url()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
