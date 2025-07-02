@@ -3,8 +3,7 @@
 ## The Challenge
 
 When running simulations, it's important to control how long a task can run to avoid
-unnecessary resource usage and costs. Without limits, tasks may run indefinitely or
-longer than intended.
+unnecessary resource usage and costs. Without limits, tasks may run longer than intended.
 
 ## The Solution
 
