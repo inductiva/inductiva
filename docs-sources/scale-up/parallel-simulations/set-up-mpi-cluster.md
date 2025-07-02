@@ -10,21 +10,23 @@ In the example below, a SWASH simulation is run on an MPICluster.
 ```python
 import inductiva
 
-# Download the input files for the SWASH simulation
+# Download the input files
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "swash-resources-example.zip", unzip=True)
 
-# Instantiate a MPICluster object with 4 machine of type c2-standard-30 and 
-# start it immediately. This accounts for 120 vCPUs.
+# Instantiate an MPICluster with 4 machines of type c2d-highcpu-32 and 
+# start it immediately. This provides a total of 128 vCPUs.
+
 mpi_cluster = inductiva.resources.MPICluster(
     provider="GCP",
-    machine_type="c2-standard-30",
+    machine_type="c2d-highcpu-32",
     num_machines=4)
 
 # Initialize the SWASH simulator and run the simulation
-# in your just launched dedicated MPICluster
-swash = inductiva.simulators.SWASH()
+# in your just launched MPICluster
+swash = inductiva.simulators.SWASH(\
+    version="11.01")
 
 task = swash.run(
     input_dir=input_dir,
@@ -34,16 +36,16 @@ task = swash.run(
 # Wait for the task to finish and download the outputs
 task.wait()
 
-# Terminate your dedicated MPICluster at then end of the simulation.
+# Terminate your dedicated MPICluster at the end of the simulation.
 mpi_cluster.terminate()
 ```
 
 For comparison, the same simulation took 9 minutes and 37 seconds to complete on 
-a single `c2-standard-30` machine.
+a single `c2d-highcpu-32` machine.
 
-Using the MPI cluster with 120 vCPUs (4x30), the simulation completed in 3 
+Using the MPI cluster with 128 vCPUs (4x32), the simulation completed in 3 
 minutes and 25 seconds, achieving a **2.75× speedup** compared to the single 
-machine with 30 vCPUs.
+machine with 32 vCPUs.
 
 While the time reduction isn’t perfectly linear with the number of vCPUs, 
 the improvement remains substantial. For longer simulations, leveraging an 
