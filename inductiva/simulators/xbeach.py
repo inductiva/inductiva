@@ -1,4 +1,5 @@
 """XBeach module of the API."""
+import logging
 from typing import Optional, Union
 
 from inductiva import simulators, tasks, types
@@ -30,7 +31,7 @@ class XBeach(simulators.Simulator):
             on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
-            sim_config_filename: Optional[str] = "params.txt",
+            sim_config_filename: Optional[str] = None,
             export_vtk: bool = False,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
@@ -44,6 +45,9 @@ class XBeach(simulators.Simulator):
             input_dir: Path to the directory of the simulation input files.
             on: The computational resource to launch the simulation on.
             sim_config_filename: Name of the simulation configuration file.
+                Deprecated: This parameter is no longer used and will be removed
+                in a future version. Please use `params.txt` in the input
+                directory instead.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
                 (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
@@ -70,9 +74,15 @@ class XBeach(simulators.Simulator):
             other arguments: See the documentation of the base class.
         """
 
+        if sim_config_filename is not None:
+            logging.warning(
+                "Deprecated: This parameter is no longer used and will be "
+                "removed in a future version. Please use `params.txt` in the "
+                "input directory instead.")
+
         self._input_files_exist(input_dir=input_dir,
                                 remote_assets=remote_assets,
-                                sim_config_filename=sim_config_filename)
+                                sim_config_filename="params.txt")
 
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
@@ -80,13 +90,7 @@ class XBeach(simulators.Simulator):
             mpi_kwargs["np"] = n_vcpus
 
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
-        commands = [
-            Command(f"xbeach {sim_config_filename}", mpi_config=mpi_config)
-        ]
-
-        if sim_config_filename != "params.txt":
-            # add mv to the start of the command list
-            commands.insert(0, Command(f"mv {sim_config_filename} params.txt"))
+        commands = [Command("xbeach", mpi_config=mpi_config)]
 
         # Conditionally append the VTK-export step
         if export_vtk:
