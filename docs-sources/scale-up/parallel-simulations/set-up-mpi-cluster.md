@@ -5,7 +5,7 @@ Setting up an MPI cluster is straightforward using the `MPICluster` class. You s
 
 With this configuration, the Inductiva API initializes the cluster, ensuring all machines can communicate effectively and access the shared storage for reading and writing data.
 
-In the example below, an AMR-Wind simulation is run on an MPICluster. For a step-by-step guide, refer to the related tutorial [tutorial](https://inductiva.ai/guides/amr-wind/mpi-cluster-tutorial).
+In the example below, an AMR-Wind simulation is run on an MPICluster. For a step-by-step guide, refer to the related [tutorial](https://inductiva.ai/guides/amr-wind/mpi-cluster-tutorial).
 
 ```python
 """AMR-Wind example."""
