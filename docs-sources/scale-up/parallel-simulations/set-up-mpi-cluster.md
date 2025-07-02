@@ -5,47 +5,42 @@ Setting up an MPI cluster is straightforward using the `MPICluster` class. You s
 
 With this configuration, the Inductiva API initializes the cluster, ensuring all machines can communicate effectively and access the shared storage for reading and writing data.
 
-In the example below, a SWASH simulation is run on an MPICluster. 
+In the example below, an AMR-Wind simulation is run on an MPICluster. For a step-by-step guide, refer to the related tutorial [tutorial](https://inductiva.ai/guides/amr-wind/mpi-cluster-tutorial).
 
 ```python
+"""AMR-Wind example."""
 import inductiva
 
-# Download the input files
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "swash-resources-example.zip", unzip=True)
+# Allocate a multi-machine MPI cluster on Google Cloud Platform
+cloud_machine = inductiva.resources.MPICluster(
+    machine_type="c2d-highcpu-112",
+    num_machines=4,
+    data_disk_gb=200,
+    spot=True
+)
 
-# Instantiate an MPICluster with 4 machines of type c2d-highcpu-32 and 
-# start it immediately. This provides a total of 128 vCPUs.
+# Initialize the Simulator
+amr_wind = inductiva.simulators.AmrWind(
+    version="3.4.1"
+)
 
-mpi_cluster = inductiva.resources.MPICluster(
-    provider="GCP",
-    machine_type="c2d-highcpu-32",
-    num_machines=4)
+# Run the simulation
+task = amr_wind.run(
+    input_dir="/Path/to/SimulationFiles",
+    sim_config_filename="abl_neutral.inp",
+    on=cloud_machine
+)
 
-# Initialize the SWASH simulator and run the simulation
-# in your just launched MPICluster
-swash = inductiva.simulators.SWASH(\
-    version="11.01")
-
-task = swash.run(
-    input_dir=input_dir,
-    sim_config_filename="input.sws",
-    on=mpi_cluster)
-
-# Wait for the task to finish and download the outputs
+# Wait for the simulation to finish and download results
 task.wait()
-
-# Terminate your dedicated MPICluster at the end of the simulation.
-mpi_cluster.terminate()
+cloud_machine.terminate()
+task.download_outputs()
 ```
 
-For comparison, the same simulation took 9 minutes and 37 seconds to complete on 
-a single `c2d-highcpu-32` machine.
+The same simulation took **2 hours and 24 minutes** to complete on 
+a single `c2d-highcpu-112` machine.
 
-Using the MPI cluster with 128 vCPUs (4x32), the simulation completed in 3 
-minutes and 25 seconds, achieving a **2.75× speedup** compared to the single 
-machine with 32 vCPUs.
+Running it on an MPI cluster with 448 vCPUs (4×112) reduced the runtime to **59 minutes**, resulting in a **2.44× speedup** compared to the single machine with 112 vCPUs.
 
 While the time reduction isn’t perfectly linear with the number of vCPUs, 
 the improvement remains substantial. For longer simulations, leveraging an 
