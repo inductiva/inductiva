@@ -1,5 +1,4 @@
 # Run Multiple Simulations in Parallel
-
 Running multiple simulations in parallel can significantly reduce waiting times, 
 especially useful when exploring various parameter values or running a large number 
 of simulations for a sensitivity analysis. This how-to guide will walk you through 
@@ -11,7 +10,6 @@ As a practical example, we will use a coastal dynamics simulation with
 the [SWASH simulator](https://inductiva.ai/guides/swash).
 
 ## 1. Setting Up Your Machine Group
-
 First, create a MachineGroup to run your simulations in parallel:
 
 ```python
@@ -28,7 +26,6 @@ could_machine.start()
 ```
 
 ## 2. Preparing Simulation Inputs
-
 Download and prepare the input files for your simulations:
 
 ```python
@@ -66,7 +63,6 @@ for i, water_level in enumerate(water_levels_list):
 ```
 
 ## 4. Monitoring Simulations
-
 The template mechanism will allow you to explore 5 different variations of the
 simulation, each with a different water level. The simulations will be submitted
 to our dedicated machine group and will run in parallel.
