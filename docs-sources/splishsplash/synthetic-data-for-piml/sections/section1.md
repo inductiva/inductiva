@@ -5,7 +5,7 @@ Our base case is simple: a **0.5-meter cube of water** is initially positioned i
 
 <div style="display: flex; justify-content:center">
 <video width=500 loop muted autoplay preload="auto">
-<source src="../_static/generating-synthetic-data/viscous_flow.mp4" type="video/mp4">
+<source src="./_static/generating-synthetic-data/viscous_flow.mp4" type="video/mp4">
 </video>
 </div>
 
@@ -135,13 +135,13 @@ output (`stdout`):
 ■ Task uaxaztw3o1y4mz45kv5diazf7 submitted to the queue of the Machine Group api-mmirpn1frhnmm9ja2a2owftqu with c2d-highcpu-4 machines.
 ```
 
-The simulation should take approximately **33 minutes** to complete. Once finished, the resulting data will be stored in a directory 
-located at `inductiva-output/{task-id}`. This output includes several log files - most notably `stderr.txt`, `stdout.txt`, and 
-`log/SPH_log.txt` - which provide details about the simulation process and report any errors that may have occurred.
+The simulation should take approximately **33 minutes** to complete. Once finished, the resulting data will be 
+stored in a directory located at `inductiva-output/{task-id}`. This output includes several log files - most 
+notably `stderr.txt`, `stdout.txt`, and `log/SPH_log.txt` - which provide details about the simulation process 
+and report any errors that may have occurred.
 
-More importantly, the output directory contains a `vtk` subdirectory, where a series of .vtk files store data about the fluid 
-particles at each simulation timestep. These .vtk files are the seeds of our dataset.
-
+More importantly, the output directory contains a `vtk` subdirectory, where a series of .vtk files store data 
+about the fluid particles at each simulation timestep. These .vtk files are the seeds of our dataset.
 
 
 
