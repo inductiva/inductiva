@@ -97,7 +97,7 @@ html_favicon = 'favicon.ico'
 html_title = 'SWASH'
 
 # Google Analytics
-googleanalytics_id = "G-NHJ03C6M91"
+googleanalytics_id = "G-J1X662323P" // trocar para G-J1X662323P website
 googleanalytics_enabled = True
 
 # OpenGraph protocol
