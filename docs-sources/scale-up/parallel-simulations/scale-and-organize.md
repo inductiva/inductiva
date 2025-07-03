@@ -97,7 +97,7 @@ You can monitor their progress in real time using the [Inductiva Console](https:
 ### View Tasks in the Console
 
 1. Navigate to the [Projects](https://console.inductiva.ai/projects/projects) tab.
-2. Click on your project name — in this case: `my-swash-project`.
+2. Click on your project name. In this case: `my-swash-project`.
 3. You'll see a list of all tasks submitted under that project, along with their current statuses (e.g., `In progress`). 
 The 5 tasks are marked as `In progress` at the same time because they are running simultaneously on 5 separate cloud machines
 (as specified by the `num_machines=5` setting in the cloud resource configuration).
@@ -145,12 +145,12 @@ swash-outputs/
 
 ---
 
-# Why This Matters
+# Why This Matters?
 
 If you need to run multiple simulations simultaneously, submitting several tasks across multiple cloud machines lets you speed up
-your execution time by the number of machines — in this case, 5 times faster. Setting this up requires just one line of code 
+your execution time by the number of machines. Here, that means running 5 times faster. Setting this up requires just one line of code 
 (e.g., `num_machines=<number of simulations>`). Additionally, organizing simulations with projects, storing metadata, and monitoring
-via the console help you effortlessly keep track of everything, so you never lose sight of what's happening in your batch — making for
+via the console help you effortlessly keep track of everything, so you never lose sight of what's happening in your batch, creating 
 a powerful and efficient simulation workflow.
 
 ---
