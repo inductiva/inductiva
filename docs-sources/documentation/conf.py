@@ -149,7 +149,7 @@ html_context = {
 }
 
 # Google Analytics
-googleanalytics_id = "G-J1X662323P"
+googleanalytics_id = "G-NHJ03C6M91"
 googleanalytics_enabled = True
 
 # sitemap.xml
