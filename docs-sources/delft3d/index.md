@@ -40,5 +40,6 @@ hidden: true
 ---
 setup-test
 quick-start
+flow-wave
 ```
 
