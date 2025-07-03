@@ -2,7 +2,6 @@
 import inductiva
 from inductiva.client.models.event_create import EventCreate
 from inductiva.events import triggers, actions
-import pytest
 
 
 def test_create_event():
