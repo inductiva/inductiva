@@ -81,10 +81,10 @@ for input_dir in input_dirs:
 - Spot Instances: Setting `spot=True` uses cheaper machines that may be interrupted at any time.
 More info [here](https://cloud.google.com/compute/docs/instances/spot).
 
-- No `task.wait()` Calls: The script doesn't call `task.wait()` inside the for loop — that's intentional.
-This allows all simulations to be submitted immediately without waiting for each other to complete.
+- No `task.wait()` Calls: The script doesn't call `task.wait()` inside the for loop. This is intentional.
+It allows all simulations to be submitted immediately without waiting for each other to complete.
 This approach submits all tasks as quickly as possible, maximizing parallelism and taking full advantage
-of Inductiva API.
+of the Inductiva API.
 
 - Automatic Shutdown: The machine group will terminate automatically after 5 minutes of inactivity.
 You can customize this using `max_idle_time` parameter in the [`MachineGroup` constructor](https://inductiva.ai/guides/documentation/api/inductiva.resources#inductiva.resources.machine_groups.MachineGroup).
