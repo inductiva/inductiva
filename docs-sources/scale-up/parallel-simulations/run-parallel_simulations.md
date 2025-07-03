@@ -19,12 +19,15 @@ import inductiva
 # Instantiate a MachineGroup object with 5 preemptible machines of type
 # c2-standard-30 and start it immediately
 cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
     machine_type="c2-standard-30",
     num_machines=5,
     spot=True)
 ```
 
 Let's break down these parameters:
+
+- `provider` specifies the cloud provider where your machines will be created.
 
 - `machine_type` specifies the type of machine on which your simulations will run.
 
