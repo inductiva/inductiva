@@ -102,11 +102,11 @@ You can monitor their progress in real time using the [Inductiva Console](https:
 The 5 tasks are marked as `In progress` at the same time because they are running simultaneously on 5 separate cloud machines
 (as specified by the `num_machines=5` setting in the cloud resource configuration).
 
-!["Project page in the Inductiva Console"](console-project.png)
+!["Project page in the Inductiva Console"](./_static/console-project.png)
 
 4. Click on any task to open a detailed view.
 
-!["Task details view in the Inductiva Console"](console-task.png)
+!["Task details view in the Inductiva Console"](./_static/console-task.png)
 
 ## Downloading Outputs
 
