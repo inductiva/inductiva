@@ -6,15 +6,16 @@ We will cover the `03_flow-wave` use case from the examples available in the [De
 ## Prerequisites
 Download the required files [here](https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/examples/03_flow-wave/) and save them to a folder named `03_flow-wave`.
 
-**Notes:** To download the files run `svn checkout https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/examples/03_flow-wave/`
+**Notes:** To download the files run `svn checkout https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/examples/03_flow-wave/` on your terminal.
 
-## Creating your simulation script
+## Creating Your Simulation Script
 
-This kind of simulations is a bit more complex than the previous ones. In this case,
-we need to execute two commands at at the same time, d_hydro and wave.exe. In order
-to do that, we will use a shell script to run both commands.
+This type of simulation is a bit more complex than the previous ones, as it
+requires running two components simultaneously: `d_hydro` for the flow module
+and `wave.exe` for the wave module. To manage this, we’ll create a shell script
+that launches both commands together.
 
-Create a file named `run_sim.sh` in the `03_flow-wave` folder with the following content:
+Create a file named `run_sim.sh` in the `03_flow-wave` directory with the following content:
 
 ```bash
 #!/bin/bash
@@ -36,16 +37,16 @@ mpirun -np $procs $flowexedir/d_hydro.exe $argfile &
 $waveexedir/wave.exe $mdwfile 1
 ```
 
-As you can see, we need to point to the necessary executables in the Delft3D installation
-directory. The `D3D_HOME` and `ARCH` variables are defined in the Delft3D environment,
-so you don't need to worry about it.
+Notice that we’re referencing the required executables using the `D3D_HOME` and
+`ARCH` environment variables. These are set automatically by the Delft3D
+environment, so there’s no need to define them manually.
 
 Once you have your executables defined you just need to run the `d_hydro.exe` and `wave.exe` commands
 with the appropriate arguments. In this case, we are using `mpirun` to run
 `d_hydro.exe` with the specified number of processes (`procs`), and then running
 `wave.exe` with the specified input file (`mdwfile`).
 
-**Notes:** See that we ran d_hydro.exe with `&` at the end of the command. This is to run it in the background, so that we can run `wave.exe` in the foreground. This is necessary because `d_hydro.exe` and `wave.exe` will run both coupled with each other.
+**Notes:** See that we ran `d_hydro.exe` with `&` at the end of the command. This is to run it in the background, so that we can run `wave.exe` in the foreground. This is necessary because `d_hydro.exe` and `wave.exe` will run both coupled with each other.
 
 ## Running the coupled simulation
 Here is the code required to run the Delft3D simulation using the Inductiva API:
