@@ -10,6 +10,27 @@ Whether you're a beginner or an advanced user, this page is designed to support 
 
 ```{toctree}
 ---
+caption: Introduction to Inductiva API
+maxdepth: 3
+hidden: true
+---
+
+intro/how_it_works
+intro/tasks
+intro/shared_dedicated_resources
+intro/data_flow
+intro/computational-infrastructure
+intro/benchmarking
+intro/templating
+intro/configuring-simulators
+intro/projects
+setup/system/system-requirements
+setup/troubleshooting
+setup/uninstall_inductiva
+```
+
+```{toctree}
+---
 caption: The Basics
 maxdepth: 2
 hidden: true
@@ -35,7 +56,6 @@ hidden: true
 
 ⬇️ Download specific files from a group of tasks <recipes/download-file-from-project>
 📤 Export your files to AWS S3 <recipes/export-files-to-aws/index>
-⚡️ Run simulations on your local machine <recipes/use-local-task-runner/index>
 ```
 
 ```{toctree}
@@ -48,11 +68,3 @@ hidden: true
 💢 Minimize simulation data <best-practices/save_storage>
 
 ```
-
-```{toctree}
----
-caption: "Bring Your Own Software"
-maxdepth: 5
-hidden: true
----
-bring-your-own-software/index

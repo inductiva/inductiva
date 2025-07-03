@@ -134,18 +134,18 @@ templates_path = [
                      "_shared_templates/_templates"))
 ]
 
-html_title = "Documentation"
+html_title = "Expand Inductiva"
 html_context = {
     "project_name":
         "Inductiva.AI",
     "project_description":
-        "Inductiva.AI Documentation",
+        "Inductiva.AI Expand",
     "project_url":
-        "https://inductiva.ai/guides/documentation",
+        "https://inductiva.ai/guides/expand",
     "ogp_image":
-        "https://inductiva.ai/builds/documentation/_static/inductiva-social-banner.jpg",
+        "https://inductiva.ai/builds/expand/_static/inductiva-social-banner.jpg",
     "keywords":
-        "documentation, Inductiva.AI"
+        "Inductiva.AI"
 }
 
 # Google Analytics
@@ -156,4 +156,4 @@ googleanalytics_enabled = True
 # See https://sphinx-sitemap.readthedocs.io/
 language = 'en'
 version = 'local'
-html_baseurl = 'https://inductiva.ai/guides/documentation'
+html_baseurl = 'https://inductiva.ai/guides/expand'
