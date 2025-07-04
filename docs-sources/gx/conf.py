@@ -99,7 +99,7 @@ html_favicon = 'favicon.ico'
 html_title = 'GX'
 
 # Google Analytics
-googleanalytics_id = "G-NHJ03C6M91"
+googleanalytics_id = "G-J1X662323P"
 googleanalytics_enabled = True
 
 # OpenGraph protocol

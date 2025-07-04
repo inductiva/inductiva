@@ -12,11 +12,11 @@ As summarized in the research abstract:
 So, where does this training data come from?
 
 In the following sections, you’ll learn how to:
-* Build a base SPH simulation using **SPlisHSPlasH**, the same open-source solver used in the original study (already integrated with our API).
+* Build a base SPH simulation using **SPlisHSPlasH**, the same open-source solver used in the original study.
 * Configure simulation parameters to reflect real-world variability.
 * Scale up to generate thousands of meaningful dataset variations for model training.
 
-Whether you're a machine learning engineer or a simulation expert, this tutorial offers a practical, scalable workflow for generating your own synthetic datasets to power Physics-informed ML models.
+Whether you're a Machine Learning engineer or a simulation expert, this tutorial offers a practical, scalable workflow for generating your own synthetic datasets to power Physics-informed ML models.
 
 
 ```{toctree}
