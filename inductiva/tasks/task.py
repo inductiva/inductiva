@@ -804,7 +804,8 @@ class Task:
                    tail_files: List[str],
                    lines: int,
                    follow: bool,
-                   fout: TextIO = sys.stdout):
+                   fout: TextIO = sys.stdout,
+                   wait: bool = False):
         """
         Prints the result of tailing a list of files.
 
@@ -816,6 +817,8 @@ class Task:
                 are changed in real time. If False, it will print the tail and
                 end.
             fout: The file object to print the result to. Default is stdout.
+            wait: If True, the method will wait for the files to be created
+                before tailing them.
         """
         return self._run_multiple_streaming_commands([
             lambda filename=filename: self._run_tail_on_machine(
@@ -1356,7 +1359,8 @@ class Task:
     async def _run_tail_on_machine(self,
                                    filename: str,
                                    n_lines: int = 10,
-                                   follow=False):
+                                   follow=False,
+                                   wait=False):
         """Get the last n_lines lines of a
         file in the task's working directory."""
 
@@ -1370,7 +1374,8 @@ class Task:
                                                 formatter=formatter,
                                                 filename=filename,
                                                 lines=n_lines,
-                                                follow=follow):
+                                                follow=follow,
+                                                wait=wait):
             yield lines
 
     async def _consume(self, generator: AsyncGenerator, fout: TextIO):
