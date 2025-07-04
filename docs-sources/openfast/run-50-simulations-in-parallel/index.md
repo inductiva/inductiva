@@ -1,3 +1,7 @@
+---
+og:image: "https://inductiva.ai/builds/openfast/_static/openfast_animation_30_fps.gif"
+---
+
 # Run 50 simulations in parallel
 If you only need to run a single OpenFAST simulation, then you should run it on your desktop machine: it will be faster there due to the much higher 
 clock speeds. However, if you need to run hundreds or thousands of OpenFAST simulations, you can use the Inductiva API to spin up hundreds of very cheap cloud machines 

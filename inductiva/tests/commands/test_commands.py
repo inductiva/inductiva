@@ -11,7 +11,8 @@ def test_to_dict__with_prompts():
     assert cmd.to_dict() == {
         "cmd": "command with prompts",
         "prompts": ["y", "y"],
-        "mpi_config": None
+        "mpi_config": None,
+        "env": {},
     }
 
 
@@ -20,7 +21,8 @@ def test_to_dict__without_prompts():
     assert cmd.to_dict() == {
         "cmd": "command without prompts",
         "prompts": [],
-        "mpi_config": None
+        "mpi_config": None,
+        "env": {},
     }
 
 
@@ -72,7 +74,8 @@ def test_to_dict__with_mpi_config():
             "options": {
                 "np": 4
             }
-        }
+        },
+        "env": {}
     }
 
 
@@ -89,5 +92,6 @@ def test_to_dict__mpi_config_is_none():
     assert cmd.to_dict() == {
         "cmd": "command with prompts",
         "prompts": ["y", "y"],
-        "mpi_config": None
+        "mpi_config": None,
+        "env": {}
     }

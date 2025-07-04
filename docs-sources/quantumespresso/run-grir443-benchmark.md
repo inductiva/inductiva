@@ -7,7 +7,7 @@ FFT grid dimension (180, 180, 192).
 
 According to the [Guide to Running Quantum ESPRESSO (2018)](https://portal.supercomputing.wales/wp-content/uploads/2018/06/Lab_Worksheet_QuantumESPRESSO_SCW_SLURM.pdf?utm_source=chatgpt.com) from the Supercomputing Center of Wales, the GRIR443 benchmark is expected to complete in approximately 22 minutes on 160 CPU cores.
 
-More recently, a performance [report from Fugaku](https://www.hpci-office.jp/documents/appli_software/Fugaku_QE_performance.pdf), the Japanese petascale supercomputer ranked fastest in the world as of June 2020, claimed that the same benchmark completed in just 223.6 seconds when run on 768 AMR-based cores.
+More recently, a performance [report from Fugaku](https://www.hpci-office.jp/documents/appli_software/Fugaku_QE_performance.pdf), the Japanese petascale supercomputer ranked fastest in the world as of June 2020, claimed that the same benchmark completed in just 223.6 seconds when run on 768 ARM-based cores.
 
 In this guide, we will run the GRIR443 benchmark using the Inductiva platform.
 
@@ -28,7 +28,7 @@ of RAM per vCPU) or the **highcpu** variant (just 2 GB of RAM per vCPU).
 ## Run the Simulation
 Below is the code required to run GRIR443 with the Inductiva API.
 
-Copy and paste it into a file named `run.py`, save it in the `qe_benchmark` folder, and from that folder, execute it by running:
+Copy and paste it into a file named `run.py`, save it in the `qe_benchmark` folder, and execute it from that folder by running:
 
 ````
 python run.py

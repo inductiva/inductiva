@@ -36,6 +36,7 @@ class NWChem(simulators.Simulator):
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
+            time_to_live: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -58,6 +59,11 @@ class NWChem(simulators.Simulator):
                 assigned. If None, the task will be assigned to
                 the default project. If the project does not exist, it will be
                 created.
+            time_to_live: Maximum allowed runtime for the task, specified as a
+                string duration. Supports common time duration formats such as
+                "10m", "2 hours", "1h30m", or "90s". The task will be
+                automatically terminated if it exceeds this duration after
+                starting.
         """
 
         self._input_files_exist(input_dir=input_dir,
@@ -81,4 +87,5 @@ class NWChem(simulators.Simulator):
                            remote_assets=remote_assets,
                            resubmit_on_preemption=resubmit_on_preemption,
                            project=project,
+                           time_to_live=time_to_live,
                            **kwargs)

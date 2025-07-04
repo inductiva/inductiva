@@ -28,6 +28,7 @@ hidden: true
 setup-test
 quick-start
 run-grir443-benchmark
+run-grir443-on-mpi
 ```
 
 ```{toctree}

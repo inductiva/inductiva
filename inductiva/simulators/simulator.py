@@ -107,7 +107,7 @@ class Simulator(ABC):
     def _regex_exists_in_file(self, file_path: str, pattern: str) -> bool:
         """
         Check if a given regular expression exists in a file.
-        
+
         :param file_path: Path to the file.
         :param pattern: Regular expression pattern to search for.
         :return: True if the pattern exists, False otherwise.
@@ -215,8 +215,8 @@ class Simulator(ABC):
         suffix = f"{suffix}{dev_suffix}"
         return suffix
 
-    def _get_simulator_image_based_on_resource(
-            self, resource: types.ComputationalResources):
+    def _append_simulator_image_suffix_based_on_resource(
+            self, image_uri: str, resource: types.ComputationalResources):
         """
         Get the simulator image for the simulation, based on the resourced used.
 
@@ -232,7 +232,7 @@ class Simulator(ABC):
         if self._device:
             suffixes = self._get_version_suffixes(resource)
 
-        return f"{self._image_uri}{suffixes}"
+        return f"{image_uri}{suffixes}"
 
     @logs.mute_logging()
     def run(
@@ -244,6 +244,7 @@ class Simulator(ABC):
         resubmit_on_preemption: bool = False,
         remote_assets: Optional[Union[str, list[str]]] = None,
         project: Optional[str] = None,
+        time_to_live: Optional[str] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -266,6 +267,11 @@ class Simulator(ABC):
                 assigned. If None, the task will be assigned to
                 the default project. If the project does not exist, it will be
                 created.
+            time_to_live: Maximum allowed runtime for the task, specified as a
+                string duration. Supports common time duration formats such as
+                "10m", "2 hours", "1h30m", or "90s". The task will be
+                automatically terminated if it exceeds this duration after
+                starting.
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
@@ -292,13 +298,14 @@ class Simulator(ABC):
 
         # Get the user-specified image name. If not specified,
         # use the default image name for the current simulator
-        self._image_uri = kwargs.pop("container_image", self._image_uri)
+        image_uri = kwargs.pop("container_image", self._image_uri)
 
         # CustomImage does not use suffixes. We can the image as is
         if self.__class__.__name__ != "CustomImage":
-            self._image_uri = self._get_simulator_image_based_on_resource(on)
+            image_uri = self._append_simulator_image_suffix_based_on_resource(
+                image_uri, on)
 
-        if on.has_gpu() and "_gpu" not in self._image_uri:
+        if on.has_gpu() and "_gpu" not in image_uri:
             logging.warning("Attention: The machine you selected has a GPU, but"
                             " the simulator you picked will run on the CPU "
                             "only.\n")
@@ -313,11 +320,12 @@ class Simulator(ABC):
             simulator_obj=self,
             storage_dir=storage_dir,
             machine_group=on,
-            container_image=self._image_uri,
+            container_image=image_uri,
             resubmit_on_preemption=resubmit_on_preemption,
             remote_assets=remote_assets,
             simulator_name_alias=self.simulator_name_alias,
             project_name=project,
+            time_to_live=time_to_live,
             **kwargs,
         )
 

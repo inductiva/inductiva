@@ -376,7 +376,7 @@ class Task:
         return self.info.is_terminal
 
     @classmethod
-    def from_api_info(cls, info: models.TaskWithUserInfo) -> "Task":
+    def from_api_info(cls, info: models.Task) -> "Task":
 
         task = cls(info.task_id)
         task._info = TaskInfo(**info.to_dict())
@@ -917,6 +917,11 @@ class Task:
         return self.info.simulator
 
     def get_storage_path(self) -> str:
+        """Get the path to this task's directory in the user's remote storage.
+
+        Returns:
+            String with the path to the task's directory in remote storage.
+        """
         return self.info.storage_path
 
     def get_output_info(self) -> output_info.TaskOutputInfo:
@@ -1547,6 +1552,7 @@ class Task:
         and filtering tasks.
 
         Example usage:
+
             task = simulator.run(...)
             # Add experiment information to the task
             task.set_metadata({

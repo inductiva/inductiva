@@ -18,6 +18,8 @@ Open your Terminal (Linux/MacOS) or Command Prompt/PowerShell (Windows) and ente
 pip install inductiva
 ```
 
+If you encounter any issues during installation, please refer to our <a href="/guides/how-it-works/basics/troubleshooting">troubleshooting guide</a> for assistance.
+
 ## Step 2: Authenticate Using Inductiva's CLI (Command Line Interface)
 
 Now that the Inductiva package is installed, run the authentication command:
@@ -32,13 +34,13 @@ You should see the INDUCTIVA text art:
 </div>
 <br>
 
-> ⚠️ **Warning**  
-> Windows users might experience an error when trying to authenticate this way, meaning that Inductiva's CLI (Command Line Interface) was not successfuly installed.  
+> ⚠️ **Warning**
+> Windows users might experience an error when trying to authenticate this way, meaning that Inductiva's CLI (Command Line Interface) was not successfuly installed.
 > If this is the case, follow the instructions to Authenticate Using the Python API. Otherwise, move to Step 3.
 
 #### If you got an error and did not get the INDUCTIVA text art
 
-If you weren't able to authenticate using Inductiva's CLI (Command Line Interface), you can do it directly within a Python script.  
+If you weren't able to authenticate using Inductiva's CLI (Command Line Interface), you can do it directly within a Python script.
 
 On your Command Prompt/PowerShell start your Python interpreter:
 
@@ -46,7 +48,7 @@ On your Command Prompt/PowerShell start your Python interpreter:
 python
 ```
 
-You should get a message with the Python version.  
+You should get a message with the Python version.
 Then type:
 
 ```python
@@ -67,4 +69,4 @@ To confirm your authentication, type:
 inductiva user info
 ```
 
-This will display your account information, confirming that the API key has been stored successfully.  
+This will display your account information, confirming that the API key has been stored successfully.

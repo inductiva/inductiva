@@ -33,6 +33,15 @@ run-galveston-island-example
 
 ```{toctree}
 ---
+caption: Visualization
+maxdepth: 1
+hidden: true
+---
+paraview-for-visualization
+```
+
+```{toctree}
+---
 caption: " "
 maxdepth: 1
 hidden: true

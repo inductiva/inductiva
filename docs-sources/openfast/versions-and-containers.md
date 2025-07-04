@@ -3,6 +3,7 @@
 ## Supported Versions
 Inductiva stays up to date with the latest versions of OpenFAST. Below is a list of the supported versions, along with their respective release dates:
 
+- **4.7.1** (Jun., 2025)
 - **4.0.3** (Apr., 2025)
 - **4.0.2** (Feb., 2025)
 - **3.5.2** (Jan., 2024)

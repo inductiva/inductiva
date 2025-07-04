@@ -5,7 +5,12 @@ on:
     branches: [main]
   push:
     branches: [dev]
-
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch to use"
+        required: true
+        default: "main"
 
 jobs:
   run_on_linux_arm64:
@@ -34,6 +39,7 @@ jobs:
             export INDUCTIVA_API_URL=https://api-dev.inductiva.ai
             fi
             pytest --suppress-no-test-exit-code
+
   run_on_windows_arm64:
     runs-on: Windows_ARM64_4cores
 
@@ -45,10 +51,10 @@ jobs:
           run: |
             Set-ExecutionPolicy Bypass -Scope Process
             Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-            
+
             choco install visualstudio2022buildtools --yes --package-parameters "--add Microsoft.VisualStudio.Workload.VCTools"
             choco install python --version=3.12.0 --yes
-            
+
             Set-Alias python "C:\ProgramData\chocolatey\bin\python3.12.exe"
 
             echo "Verifying Python installation..."
@@ -57,7 +63,7 @@ jobs:
             $env:Path += ";c:\python312\Scripts"
 
             $env:PYTHONUTF8 = 1
-          
+
             python -m pip install --upgrade pip setuptools wheel
             python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
             if (Test-Path "requirements.txt") { python -m pip install -r requirements.txt }
@@ -69,7 +75,7 @@ jobs:
               $env:INDUCTIVA_API_URL = "https://api-dev.inductiva.ai"
             }
             python -m pip install truststore
-            
+
             python -m pytest --suppress-no-test-exit-code
   run_on_windows_x64:
     runs-on: Windows_x64_8cores
@@ -82,14 +88,14 @@ jobs:
           run: |
             Set-ExecutionPolicy Bypass -Scope Process
             Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-            
+
             echo "Verifying Python installation..."
             python --version
 
             $env:Path += ";c:\python312\Scripts"
 
             $env:PYTHONUTF8 = 1
-          
+
             python -m pip install --upgrade pip setuptools wheel
             python -m pip install pytest pytest-custom_exit_code toml pytest-markdown-docs
             if (Test-Path "requirements.txt") { python -m pip install -r requirements.txt }
