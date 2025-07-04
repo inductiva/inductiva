@@ -1,7 +1,8 @@
 ## Quotas
+Quotas help ensure fair access to powerful computing and storage for all users, so that users always get reliable performance when they launch their simulations.
 
 You're free to use the Inductiva API as an individual user (starter plan) or join an
-organization (business or academia) - visit the Pricing webpage for more information .
+organization (business or academia) - visit the [Pricing webpage](https://https://inductiva.ai/pricing) for more information.
 
 | Quota | unit | scope* | Description | Starter | Business | Academia |
 |-------|------|-------|-------------|----------|------------|------------|
@@ -15,11 +16,9 @@ machines and tasks submitted by the user.
 _Instance_ quotas are applied to each machine and task and, therefore,
 are only applicable to each item individually.
 
-## How to monitor your account details
-
-Inductiva's CLI provides an easy way to monitor your account details and get
-information about your tier, credits and current quotas. Simply use
-the command `inductiva user info`
+## How to check quotas
+The web Console's Dashboard shows the user'squotas, and their usage in real-time.
+Also, there's a [CLI user command](https://inductiva.ai/guides/documentation/cli/user)
 
 
 If any of these quotas establish a limit for what you can achieve with Inductiva
