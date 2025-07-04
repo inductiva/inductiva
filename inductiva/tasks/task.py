@@ -705,7 +705,7 @@ class Task:
             try:
                 wait_for_status = models.TaskStatusCode(wait_for_status)
             except ValueError:
-                logging.error(f"Invalid wait_for_status: {wait_for_status}.")
+                logging.error("Invalid wait_for_status: %s.", wait_for_status)
                 return
 
         # Check if task is already in a desired status
