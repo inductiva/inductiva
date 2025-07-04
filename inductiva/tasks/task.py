@@ -697,7 +697,8 @@ class Task:
             msg = ("Waiting for task %s to complete...\n"
                    if wait_for_status is None else
                    "Waiting for task %s to reach desired status...\n")
-            msg += "Go to https://console.inductiva.ai/tasks/%s for more details."
+            msg += ("Go to https://console.inductiva.ai/tasks/%s "
+                    "for more details.")
             logging.info(msg, self.id, self.id)
 
         requires_newline = False
@@ -767,7 +768,6 @@ class Task:
                 return status
 
             time.sleep(polling_period)
-
 
     def _validate_task_computation_started(self) -> Tuple[bool, Optional[str]]:
         info = self.get_info()
