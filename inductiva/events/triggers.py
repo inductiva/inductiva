@@ -26,3 +26,44 @@ class TaskOutputUploaded(Trigger):
             "trigger": TriggerTaskType.TASK_OUTPUT_UPLOADED,
             "trigger_type": "task"
         }
+
+
+class ObserverFileExists(Trigger):
+    """
+    Trigger that is activated when a file exists.
+    
+    Attributes:
+        task_id (str): ID of the task to monitor.
+        file_path (str): Path of the file to monitor."""
+    task_id: str
+    file_path: str
+
+    def get_trigger(self):
+        return {
+            "trigger_type": "observer",
+            "task_id": self.task_id,
+            "trigger": "file_exists_observer",
+            "file_path": self.file_path,
+        }
+
+
+class ObserverFileRegex(Trigger):
+    """
+    Trigger that is activated when a file matches a regex pattern.
+    
+    Attributes:
+        task_id (str): ID of the task to monitor.
+        file_path (str): Path of the file to monitor.
+        regex (str): Regex pattern to match."""
+    task_id: str
+    file_path: str
+    regex: str
+
+    def get_trigger(self):
+        return {
+            "trigger_type": "observer",
+            "task_id": self.task_id,
+            "trigger": "file_regex_observer",
+            "file_path": self.file_path,
+            "regex": self.regex,
+        }
