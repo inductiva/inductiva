@@ -59,8 +59,23 @@ class TriggerMachineGroupInfo:
     __repr__ = __str__
 
 
+class TriggerCreditsInfo:
+    """Model for the machine group trigger."""
+
+    def __init__(self, trigger_type: str, trigger: str):
+        self.trigger_type = trigger_type
+        self.trigger = trigger
+
+    def __str__(self):
+        return (f"TriggerCreditsInfo(type={self.trigger_type}, "
+                f"trigger={self.trigger})")
+
+    __repr__ = __str__
+
+
 ActionInfoUnion = Union[ActionEmailInfo, ActionWebhookInfo]
-TriggerInfoUnion = Union[TriggerTaskInfo, TriggerMachineGroupInfo]
+TriggerInfoUnion = Union[TriggerTaskInfo, TriggerMachineGroupInfo,
+                         TriggerCreditsInfo]
 
 
 class EventInfo:
@@ -93,6 +108,8 @@ def parse_event_info(data: dict[str, Any]) -> EventInfo:
         trigger = TriggerTaskInfo(**trigger_data)
     elif trigger_type == "machine_group":
         trigger = TriggerMachineGroupInfo(**trigger_data)
+    elif trigger_type == "credits":
+        trigger = TriggerCreditsInfo(**trigger_data)
     else:
         raise ValueError(f"Unknown trigger_type: {trigger_type}")
 
