@@ -1,5 +1,5 @@
 # Testing the Impact of Hyperparameters
-Next, we'll take a closer look at one of the most important hyperparameters in our simulation: **particle radius**. This parameter plays a key role in balancing the fidelity of the SPH simulation with its computational cost. Our goal is to find a value that allows us to generate a dataset with characteristics similar to those used by [Sánchez-González et al.](https://arxiv.org/abs/2002.09405), while keeping computational demands within reasonable limits.
+Next, we'll take a closer look at one of the most important hyperparameters in our simulation: **particle radius**. This parameter plays a key role in balancing the fidelity of the SPH simulation with its computational cost. Our goal is to identify a value that produces a particle count comparable to that used by [Sánchez-González et al.](https://arxiv.org/abs/2002.09405), while keeping the computational requirements manageable.
 
 To approach this systematically, we’ll once again use Inductiva’s templating mechanism. This allows us to replace the fixed numerical value of the particle radius in the .json configuration file with a templated variable, making it easy to experiment with different values programmatically.
 
@@ -35,7 +35,8 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup(
     provider="GCP",
-    machine_type="c2d-highcpu-4")
+    machine_type="c2d-highcpu-4",
+    num_machines=3)
 
 # Initialize the Simulator
 splishsplash = inductiva.simulators.SplishSplash()
@@ -46,8 +47,6 @@ template_dir = "/Path/to/splishsplash-template-dir"
 
 # Define the radii of the particles
 particle_radii = [0.008, 0.006, 0.004]
-
-tasks_list = []
 
 for n, radius in enumerate(particle_radii, start=1):
     # Define the directory where the rendered templates will appear filled 
@@ -62,8 +61,8 @@ for n, radius in enumerate(particle_radii, start=1):
     task = splishsplash.run(
         input_dir=target_dir,
         sim_config_filename="config.json",
+        project=f"SplishSplash-radius-study",
         on=cloud_machine)
-    tasks_list.append(task)
 ```
 
 For each particle size, our API creates a new folder, updates the configuration with the corresponding radius, and launches the 
@@ -84,7 +83,7 @@ For comparison, we ran the simulations on another c2d machine — the `c2d-highc
 
 ## Results 
 
-### Particle Count and Data Generation
+### Particle Radius and Data Generation
 The table below illustrates how varying the particle radius affects both the total number of particles and the amount of data generated during a 4-second simulation. As the particle radius decreases, more particles are required to occupy the same volume, leading to a corresponding increase in data output. Notably, halving the particle radius results in an eightfold increase in the number of particles, as expected based on volume scaling.
 
 | Particle Radius | Total nº of Particles | Data Produced |
@@ -93,27 +92,21 @@ The table below illustrates how varying the particle radius affects both the tot
 | 0.006           | 73720                 | 783 MB        |
 | 0.004           | 244584                | 2.63 GB       |
 
-For reference, the dataset produced by [Sánchez-González et al.](https://arxiv.org/abs/2002.09405) was based on simulations 
-containing approximately 8,000 to 25,000 particles. This suggests that, to create a comparable dataset, it's likely unnecessary to 
-use a particle radius smaller than 0.008. Moreover, if each simulation generates hundreds of megabytes of data, using a smaller 
-particle radius would significantly increase storage demands — making it difficult to manage data from thousands of simulations, not 
-to mention the challenge of training GNNs on such a large volume of data.
+For reference, the dataset produced by [Sánchez-González et al.](https://arxiv.org/abs/2002.09405) was based on simulations containing approximately 8,000 to 25,000 particles. This suggests that, to create a comparable dataset, it's likely unnecessary to use a particle radius smaller than 0.008. Moreover, if each simulation generates hundreds of megabytes of data, using a smaller particle radius would significantly increase storage demands — making it difficult to manage data from thousands of simulations, not to mention the challenge of training GNNs on such a large volume of data.
 
-### Runtime and Cost per Hardware Type
+### Runtime and Cost per Particle Radius
 Reducing the particle radius naturally increases the number of particles required for the simulation and, consequently, the overall runtime.
 
-The table below shows the runtime and corresponding cost of running simulations at the three particle radii under consideration, across two types of hardware.
+The table below shows the runtime and corresponding cost of running simulations at the three particle radii under consideration.
 
-| Particle Radius (m) | Machine Type    | Execution Time | Cost (US$) |
+| Particle Radius (m) | Machine Type    | Execution Time | Estimated Cost (USD) |
 |---------------------|-----------------|----------------|------------|
 | 0.008               | c2d-highcpu-4   | 33 min         | 0.014      | 
-| 0.008               | c2d-highcpu-16  | 24 min         | 0.036      | 
 | 0.006               | c2d-highcpu-4   | 1h, 20 min     | 0.034      | 
-| 0.006               | c2d-highcpu-16  | 53 min         | 0.081      | 
 | 0.004               | c2d-highcpu-4   | 4h, 33 min     | 0.11       | 
-| 0.004               | c2d-highcpu-16  | 2h, 55 min     | 0.26       | 
 
-As expected, reducing the particle radius and consequently increasing the number of particles leads to a significant rise in 
-computation time.
+As expected, reducing the particle radius, and consequently increasing the number of particles, leads to a significant rise in computation time.
 
-Based on performance and cost, it is reasonable to commit to a particle radius of 0.008 for running 10,000+ simulations in parallel — positioning **Inductiva** as a fast and cost-effective platform for PIML model training.
+Based on performance and cost considerations, committing to a particle radius of 0.008 is reasonable for running over **10,000** simulations **in parallel**. At this scale, the total cost would be approximately $140.
+
+This positions **Inductiva** as a fast and cost-effective platform for large-scale Physics-Informed Machine Learning (PIML) model training.
