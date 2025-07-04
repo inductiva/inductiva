@@ -822,7 +822,7 @@ class Task:
         """
         return self._run_multiple_streaming_commands([
             lambda filename=filename: self._run_tail_on_machine(
-                filename, lines, follow) for filename in tail_files
+                filename, lines, follow, wait) for filename in tail_files
         ],
                                                      fout=fout)
 
