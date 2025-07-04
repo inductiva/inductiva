@@ -665,14 +665,11 @@ class Task:
             if status == models.TaskStatusCode.FAILED:
                 self._print_failed_message(out_dir)
 
-    def wait(
-        self,
-        polling_period: int = 1,
-        silent_mode: bool = False,
-        download_std_on_completion: bool = True,
-        wait_for_status: Optional[Union[models.TaskStatusCode,
-                                        List[models.TaskStatusCode]]] = None
-    ) -> models.TaskStatusCode:
+    def wait(self,
+             polling_period: int = 1,
+             silent_mode: bool = False,
+             download_std_on_completion: bool = True,
+             wait_for_status: str = None) -> models.TaskStatusCode:
         """Wait for the task to reach a specific status or complete.
 
         This method issues requests to the API.
@@ -683,9 +680,9 @@ class Task:
                 to the console.
             download_std_on_completion: Request immediate download of the
                 standard files (stdout and stderr) after the task completes.
-            wait_for_status: Optional. If set, return when the task reaches any
-                of the status listed (or any of the terminal status). If not
-                set, waits until the task reaches a terminal state.
+            wait_for_status: Optional. If set, return when the task reaches the
+                status (or any of the terminal status). If not set, waits until
+                the task reaches a terminal state.
 
         Returns:
             The final status of the task.
@@ -704,8 +701,18 @@ class Task:
         requires_newline = False
         previous_duration_l = 0
 
-        if wait_for_status and not isinstance(wait_for_status, list):
-            wait_for_status = [wait_for_status]
+        if wait_for_status:
+            try:
+                wait_for_status = models.TaskStatusCode(wait_for_status)
+            except ValueError:
+                logging.error(f"Invalid wait_for_status: {wait_for_status}.")
+                return
+
+        # Check if task is already in a desired status
+        task_info = self.get_info()
+        status = models.TaskStatusCode(task_info.status_history[-1]["status"])
+        if wait_for_status and status == wait_for_status:
+            return status
 
         while True:
             task_info = self.get_info()
@@ -727,6 +734,9 @@ class Task:
                     sys.stdout.write("\n")
                 if not silent_mode:
                     self._handle_status_change(status, description)
+
+                if wait_for_status and status == wait_for_status:
+                    return status
 
                 if (status == models.TaskStatusCode.COMPUTATIONSTARTED) and (
                         not silent_mode):
