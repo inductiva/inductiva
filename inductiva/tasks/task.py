@@ -748,10 +748,12 @@ class Task:
                         # Ignore errors while tailing files
                         pass
 
+            # Print timer
             elif (status != models.TaskStatusCode.SUBMITTED and
                   not task_info.is_terminal):
 
                 if not silent_mode:
+                    #clear previous line
                     print(" " * previous_duration_l, end="\r")
 
                     duration = f"Duration: {duration}"
@@ -761,6 +763,7 @@ class Task:
 
             prev_status = status
 
+            #Used to print queue information
             if (status == models.TaskStatusCode.SUBMITTED and
                     self._tasks_ahead is not None):
                 requires_newline = True
