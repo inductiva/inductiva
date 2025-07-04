@@ -29,8 +29,9 @@ task = simulator.run(
 )
 ```
 
-
-You'll see logs like these in your terminal:
+If the simulation exceeds the maximum duration (in this case, 1 minute), you'll see logs 
+like these in your terminal indicating that it was automatically terminated because the 
+TTL was reached:
 
 ```bash
 ■ Your task exceeded its configured time-to-live (TTL) and was automatically stopped.
