@@ -138,7 +138,7 @@ total 36080
    0 drwxr-xr-x@  503 paulobarbosa  staff    16096 Apr  9 10:55 surface
 ```
 
-The folders `boundary`, `particles`, and `surface` contain data that can be loaded into **ParaView** for visualization—just like the sample animation shown above.
+The folders `boundary`, `particles`, and `surface` contain data that can be loaded into **ParaView** for visualization — just like the sample animation shown above.
 
 
 
