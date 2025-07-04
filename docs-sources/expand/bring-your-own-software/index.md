@@ -1,4 +1,4 @@
-# The Inductiva Guide to Bringing Your Own Software
+# Guide to Bringing Your Own Software
 Inductiva is a versatile API platform that simplifies the process of running a wide variety of pre-configured simulation software. With its flexible architecture, Inductiva can also be adapted to run **any scientific software**, making it a powerful tool for researchers and developers.
 
 A key feature of Inductiva is its support for **custom Apptainer images** (formerly Singularity). This allows you to package and upload any software your project requires. Once uploaded, these images can be seamlessly deployed on cloud GPUs, enabling high-performance computing at scale with minimal setup. 
