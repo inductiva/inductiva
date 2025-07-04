@@ -24,7 +24,7 @@ import inductiva
 project = inductiva.projects.Project(
     name="my-project")
 
-for task in project.list():
+for task in project.get_tasks():
     # Download a specific output file from each task
     task.download_outputs(["path/to/output/file.txt"])
 ```

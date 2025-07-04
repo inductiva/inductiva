@@ -1,4 +1,4 @@
-# Run 1 Simulation
+# Run a Single Simulation
 First, we will run a single OpenFAST simulation using the `5MW_OC4Semi_WSt_WavesWN` case. This should be straightforward as all 
 the necessary input files are already prepared.
 
@@ -36,7 +36,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown as follows.
+When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as follows.
 
 ```
 inductiva tasks info hk8fmb4dif05c5vf5saurocxp
@@ -83,5 +83,4 @@ The execution time remains almost the same on all machines, regardless of the nu
 
 Additionally, running the simulation on the `n2-highcpu-2` VM proves to be extremely cost-efficient, with a total cost of only 0.00013 US$.
 
-In the next part of this tutorial, we'll take things to the next level by running dozens of OpenFAST simulations in parallel on Inductiva, demonstrating 
-the true power of cloud-based scalability. Stay tuned!
+In the next part of this tutorial, we'll take things to the next level by running dozens of OpenFAST simulations in parallel on Inductiva, demonstrating the true power of cloud-based scalability. Stay tuned!

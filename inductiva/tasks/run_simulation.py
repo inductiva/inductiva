@@ -19,6 +19,7 @@ def run_simulation(
     remote_assets: Optional[List[str]] = None,
     simulator_name_alias: Optional[str] = None,
     project_name: Optional[str] = None,
+    time_to_live: Optional[str] = None,
     verbose: bool = True,
     **kwargs: Any,
 ) -> tasks.Task:
@@ -49,7 +50,9 @@ def run_simulation(
                                   simulator_name_alias=simulator_name_alias,
                                   simulator_obj=simulator_obj,
                                   remote_assets=remote_assets,
-                                  project_name=project_name)
+                                  project_name=project_name,
+                                  time_to_live=time_to_live,
+                                  verbose=verbose)
 
     if not isinstance(task_id, str):
         raise RuntimeError(
@@ -62,18 +65,17 @@ def run_simulation(
     else:
         pos_info = f"Task {task_id} does not have queue information."
 
-    if verbose:
-        logging.info(
-            "%s\n"
-            "· Consider tracking the status of the task via CLI:"
-            "\n\tinductiva tasks list --id %s\n"
-            "· Or, tracking the logs of the task via CLI:"
-            "\n\tinductiva logs %s\n"
-            "· Or, track the task files in real time with:"
-            "\n\tinductiva tasks list-files %s\n"
-            "· You can also get more information "
-            "about the task via the CLI command:"
-            "\n\tinductiva tasks info %s\n\n", pos_info, task_id, task_id,
-            task_id, task_id)
+    logging.info(
+        "%s\n"
+        "· Consider tracking the status of the task via CLI:"
+        "\n\tinductiva tasks list --id %s\n"
+        "· Or, tracking the logs of the task via CLI:"
+        "\n\tinductiva logs %s\n"
+        "· Or, track the task files in real time with:"
+        "\n\tinductiva tasks list-files %s\n"
+        "· You can also get more information "
+        "about the task via the CLI command:"
+        "\n\tinductiva tasks info %s\n\n", pos_info, task_id, task_id, task_id,
+        task_id)
 
     return task

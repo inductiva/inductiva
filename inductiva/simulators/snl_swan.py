@@ -1,8 +1,8 @@
 """ SNL SWAN module of the API."""
-from typing import List, Optional
 from pathlib import Path
+from typing import Optional, Union
 
-from inductiva import types, tasks, simulators
+from inductiva import simulators, tasks, types
 from inductiva.commands.commands import Command
 from inductiva.commands.mpiconfig import MPIConfig
 
@@ -35,7 +35,7 @@ class SNLSWAN(simulators.Simulator):
         input_dir: Optional[str],
         *,
         sim_config_filename: Optional[str],
-        remote_assets: Optional[List[str]] = None,
+        remote_assets: Optional[Union[str, list[str]]] = None,
         project: Optional[str] = None,
         resubmit_on_preemption: bool = False,
         on: types.ComputationalResources,
@@ -43,6 +43,7 @@ class SNLSWAN(simulators.Simulator):
         n_vcpus: Optional[int] = None,
         use_hwthread: bool = True,
         command: str = "swanrun",
+        time_to_live: Optional[str] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -70,6 +71,11 @@ class SNLSWAN(simulators.Simulator):
                 assigned. If None, the task will be assigned to
                 the default project. If the project does not exist, it will be
                 created.
+            time_to_live: Maximum allowed runtime for the task, specified as a
+                string duration. Supports common time duration formats such as
+                "10m", "2 hours", "1h30m", or "90s". The task will be
+                automatically terminated if it exceeds this duration after
+                starting.
         """
 
         if command not in ("swanrun", "swan.exe"):
@@ -135,4 +141,5 @@ class SNLSWAN(simulators.Simulator):
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            project=project,
+                           time_to_live=time_to_live,
                            **kwargs)

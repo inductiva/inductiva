@@ -1,6 +1,7 @@
 """Delft3D module of the API."""
-from typing import Optional
-from inductiva import types, simulators
+from typing import Optional, Union
+
+from inductiva import simulators, types
 
 
 class Delft3D(simulators.Simulator):
@@ -26,8 +27,9 @@ class Delft3D(simulators.Simulator):
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            remote_assets: Optional[list[str]] = None,
+            remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
+            time_to_live: Optional[str] = None,
             **kwargs):
 
         if commands is None and shell_script is None:
@@ -52,4 +54,5 @@ class Delft3D(simulators.Simulator):
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            project=project,
+                           time_to_live=time_to_live,
                            **kwargs)

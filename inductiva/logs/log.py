@@ -1,4 +1,5 @@
 """Custom logging functions"""
+import functools
 import traceback
 import json
 import os
@@ -75,7 +76,7 @@ def _get_traceback_first_and_last_lines(exc_traceback, n_lines: int,
 def _handle_api_exception(exc_type, exc_value, exc_traceback,
                           is_notebook: bool):
     if issubclass(exc_type, exceptions.ApiException) and \
-        400 <= exc_value.status  < 500:
+        400 <= exc_value.status < 500:
         detail = json.loads(exc_value.body)["detail"]
 
         # Gets the last N lines of the traceback
@@ -166,3 +167,35 @@ def setup(level=logging.INFO):
         ip.set_custom_exc((Exception,), ipy_handle_uncaught_exception)
     else:
         sys.excepthook = handle_uncaught_exception
+
+
+def mute_logging():
+    """
+    Decorator to temporarily set logging level to ERROR
+    during function execution and restore it afterward.
+
+    Example:
+        @mute_logging()
+        def my_function():
+            pass
+    """
+
+    def decorator(func):
+
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            original_level = root_logger.level
+
+            verbose = kwargs.get("verbose", True)
+
+            if not verbose:
+                root_logger.setLevel(logging.ERROR)
+
+            try:
+                return func(*args, **kwargs)
+            finally:
+                root_logger.setLevel(original_level)
+
+        return wrapper
+
+    return decorator

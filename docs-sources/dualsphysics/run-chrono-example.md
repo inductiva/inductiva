@@ -12,7 +12,7 @@ The goal of this tutorial is to demonstrate how to run the `09_Turbine` use case
 Download the required files from `DualSPHysics_v5.4.2.zip` [here](https://dual.sphysics.org/downloads/). You will be working within this directory and 
 writing the Inductiva Python script there.
 
-### Update the simulation script of the example `09_Turbine`
+### Update the simulation script of the `09_Turbine` example
 Before running the simulation, you will need to adjust the simulation script located
 at `examples/chrono/09_Turbine/xCaseTurbine_linux64_GPU.sh`.
 
@@ -63,10 +63,10 @@ cloud_machine.terminate()
 task.print_summary()
 ```
 
-This simulation runs on a `g2-standard-32` machine on spot mode, which has 32 virtual CPUs,
-1 nvidia-l4 GPU and a 200 GB data disk.
+This simulation runs in spot mode on a `g2-standard-32` machine, featuring 32 virtual CPUs, 1 NVIDIA L4 GPU, and a 200 GB data disk.
 
-> **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
+> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 

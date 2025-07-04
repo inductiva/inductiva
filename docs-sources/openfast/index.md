@@ -38,7 +38,7 @@ caption: TurbSim Tutorials
 maxdepth: 4
 hidden: true
 ---
-Generate TurbSim dataset <generate-turbsim-dataset/index>
+Generate TurbSim Dataset <generate-turbsim-dataset/index>
 turbsim-visualization
 ```
 

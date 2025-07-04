@@ -5,6 +5,7 @@ Inductiva stays up to date with the latest versions of OpenTelemac. Below is a l
 
 - **9.0.0** (Dec., 2024)
 - **8p4r0** (Dec., 2022)
+- **8p1r2** (Dec., 2021)
 
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!

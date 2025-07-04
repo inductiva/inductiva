@@ -96,7 +96,7 @@ pygments_style = "monokai"
 html_title = 'OpenFOAM'
 
 # Google Analytics
-googleanalytics_id = "G-N6GVDZ3621"
+googleanalytics_id = "G-J1X662323P"
 googleanalytics_enabled = True
 
 # OpenGraph protocol

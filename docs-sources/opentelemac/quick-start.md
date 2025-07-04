@@ -1,5 +1,5 @@
 # Run Your First Simulation
-This tutorial will show you how to run OpenTelemac simulations using the Inductiva API. 
+This tutorial will show you how to run TELEMAC-2D simulations using the Inductiva API. 
 
 We will cover the `Malpasset Dam Break` use case from the [OpenTelemac GitLab repository](https://gitlab.pam-retd.fr/otm/telemac-mascaret/-/tree/main/examples/telemac2d/malpasset?ref_type=heads) to help you get started with simulations. This setup models the flood wave resulting from the dam failure, propagating through a valley with realistic topography and open-channel hydraulics using TELEMAC-2D.
 
@@ -50,7 +50,12 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
+In this basic example, we're using a cloud machine (`c2d-highcpu-32`) equipped with 32 virtual CPUs. 
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
+a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
+
+> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 ### Adapting the Script
 To adapt this script for other OpenTelemac simulations, replace `input_dir` with the

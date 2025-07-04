@@ -11,18 +11,25 @@ import tqdm.utils
 import signal
 import urllib3
 import decimal
+import ssl
 from contextlib import contextmanager
 from typing import List, Optional
+import pytimeparse2
 
 import logging
 
 import inductiva
+import inductiva.client
 from inductiva.client import ApiClient, ApiException, Configuration
-from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.models import (TaskRequest, TaskStatus, TaskSubmittedInfo,
                                      CompressionMethod)
 from inductiva import constants, storage
 from inductiva.utils import format_utils, files
+
+try:
+    import truststore
+except ImportError:
+    truststore = None
 
 
 def get_api_config() -> Configuration:
@@ -45,10 +52,14 @@ def get_client(api_config: Optional[Configuration] = None) -> ApiClient:
 
     client.user_agent = inductiva.get_api_agent()
 
+    if truststore:
+        ctx = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+        client.rest_client.pool_manager.connection_pool_kw["ssl_context"] = ctx
+
     return client
 
 
-def submit_request(task_api_instance: TasksApi,
+def submit_request(task_api_instance: inductiva.client.TasksApi,
                    request: TaskRequest) -> TaskSubmittedInfo:
     """Submits a task request to the API.
 
@@ -59,13 +70,13 @@ def submit_request(task_api_instance: TasksApi,
         Contains two fields, "id" and "status".
     """
     # Submit task using provided or temporary instance
-    api_response = task_api_instance.submit_task(body=request)
-    logging.debug("Request status: %s", api_response.body["status"])
+    resp = task_api_instance.submit_task(task_request=request)
+    logging.debug("Request status: %s", resp.status)
 
-    return api_response.body
+    return resp
 
 
-def prepare_input(task_id, input_dir, params):
+def prepare_input(task_id, input_dir):
     """Prepare the input files for a task submission."""
 
     # If the input directory is empty, do not zip it
@@ -79,11 +90,8 @@ def prepare_input(task_id, input_dir, params):
             raise ValueError(
                 f"Invalid file name: '{constants.TASK_OUTPUT_ZIP}'")
 
-    input_zip_path = inductiva.utils.data.pack_input(
-        input_dir,
-        params,
-        zip_name=task_id,
-    )
+    input_zip_path = inductiva.utils.data.pack_input(input_dir,
+                                                     zip_name=task_id)
 
     zip_file_size = os.path.getsize(input_zip_path)
     logging.info("Input archive size: %s",
@@ -114,22 +122,20 @@ def upload_file(api_instance: ApiClient, input_path: str, method: str, url: str,
             raise ApiException(status=resp.status, reason=resp.reason)
 
 
-def upload_input(api_instance: TasksApi, input_dir, params, task_id,
-                 storage_path_prefix):
+def upload_input(api_instance: inductiva.client.TasksApi, input_dir, task_id,
+                 storage_path_prefix, verbose):
     """Uploads the inputs of a given task to the API.
 
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task.
         input_dir: Directory containing the input files to be uploaded.
-        params: Additional parameters to be sent to the API.
         storage_path_prefix: Path to the storage bucket.
         """
     input_zip_path = None
 
     try:
-        input_zip_path, zip_file_size = prepare_input(task_id, input_dir,
-                                                      params)
+        input_zip_path, zip_file_size = prepare_input(task_id, input_dir)
 
         remote_input_zip_path = f"{storage_path_prefix}/{task_id}/input.zip"
         url = storage.get_signed_urls(
@@ -140,9 +146,10 @@ def upload_input(api_instance: TasksApi, input_dir, params, task_id,
         with tqdm.tqdm(total=zip_file_size,
                        unit="B",
                        unit_scale=True,
-                       unit_divisor=1000) as progress_bar:
+                       unit_divisor=1000,
+                       disable=not verbose) as progress_bar:
             upload_file(api_instance, input_zip_path, "PUT", url, progress_bar)
-            api_instance.notify_input_uploaded(path_params={"task_id": task_id})
+            api_instance.notify_input_uploaded(task_id=task_id)
         logging.info("Local input directory successfully uploaded.")
         logging.info("")
 
@@ -151,7 +158,8 @@ def upload_input(api_instance: TasksApi, input_dir, params, task_id,
             os.remove(input_zip_path)
 
 
-def block_until_finish(api_instance: TasksApi, task_id: str) -> str:
+def block_until_finish(api_instance: inductiva.client.TasksApi,
+                       task_id: str) -> str:
     """Block until a task executing remotely finishes execution.
 
     Args:
@@ -166,7 +174,7 @@ def block_until_finish(api_instance: TasksApi, task_id: str) -> str:
     return block_until_status_is(api_instance, task_id, {"success", "failed"})
 
 
-def kill_task(api_instance: TasksApi, task_id: str):
+def kill_task(api_instance: inductiva.client.TasksApi, task_id: str):
     """Kill a task that is executing remotely.
 
     The function sends a kill request to the API.
@@ -176,22 +184,18 @@ def kill_task(api_instance: TasksApi, task_id: str):
         task_id: ID of the task to kill.
    """
     logging.debug("Sending kill task request ...")
-    api_instance.kill_task(path_params={"task_id": task_id},)
+    api_instance.kill_task(task_id=task_id)
     logging.info("Task with ID %s was terminated.", task_id)
 
 
-def get_task_status(api_instance: TasksApi, task_id: str) -> TaskStatus:
+def get_task_status(api_instance: inductiva.client.TasksApi,
+                    task_id: str) -> TaskStatus:
     """Check the status of a task."""
 
-    api_response = api_instance.get_task_status(
-        path_params={"task_id": task_id})
-
-    status = api_response.body["status"]
-
-    return status
+    return api_instance.get_task_status(task_id=task_id)
 
 
-def block_until_status_is(api_instance: TasksApi,
+def block_until_status_is(api_instance: inductiva.client.TasksApi,
                           task_id,
                           desired_status,
                           sleep_secs=0.5):
@@ -243,7 +247,7 @@ def _configure_sigint_handler(handler):
 
 
 @contextmanager
-def blocking_task_context(api_instance: TasksApi,
+def blocking_task_context(api_instance: inductiva.client.TasksApi,
                           task_id: str,
                           action_str: str = "action"):
     """Context to handle execution of a blocking task.
@@ -282,6 +286,7 @@ def task_info_str(
     local_input_dir,
     resource_pool,
     simulator,
+    task_request: TaskRequest,
     task_submitted_info: TaskSubmittedInfo,
 ) -> str:
     """Generate a string with the main components of a task submission."""
@@ -298,14 +303,13 @@ def task_info_str(
     info_str += f" \t\t· {resource_pool}\n"
 
     if task_submitted_info is not None:
-        ttl_seconds = task_submitted_info.get("time_to_live_seconds")
+        ttl_seconds = task_submitted_info.time_to_live_seconds
         if ttl_seconds is not None and isinstance(ttl_seconds, decimal.Decimal):
             ttl_seconds = format_utils.seconds_formatter(ttl_seconds)
             info_str += (f" \t\t· Task will be killed after the computation "
                          f"time exceeds {ttl_seconds} (h:m:s).\n")
         if resource_pool.spot:
-            preemption = task_submitted_info.get(
-                "resubmit_on_preemption") or False
+            preemption = task_request.resubmit_on_preemption or False
             info_str += (f"\t· Restart On Preemption: {preemption}\n")
     info_str += "\n"
     return info_str
@@ -316,12 +320,14 @@ def submit_task(simulator,
                 machine_group,
                 params,
                 storage_path_prefix,
+                verbose,
                 resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
                 simulator_name_alias: Optional[str] = None,
                 simulator_obj=None,
                 remote_assets: Optional[List[str]] = None,
-                project_name: Optional[str] = None):
+                project_name: Optional[str] = None,
+                time_to_live: Optional[str] = None):
     """Submit a task and send input files to the API.
 
     Args:
@@ -343,6 +349,11 @@ def submit_task(simulator,
         project: Name of the project to which the task will be
                 assigned. If None, the task will be assigned to
                 the default project.
+        time_to_live: Maximum allowed runtime for the task, specified as a
+            string duration. Supports common time duration formats such as
+            "10m", "2 hours", "1h30m", or "90s". The task will be
+            automatically terminated if it exceeds this duration after
+            starting.
     Return:
         Returns the task id.
     """
@@ -353,11 +364,15 @@ def submit_task(simulator,
     stream_zip = params.pop("stream_zip", True)
     compress_with = params.pop("compress_with", CompressionMethod.SEVEN_Z)
 
+    time_to_live_seconds = pytimeparse2.parse(
+        time_to_live, raise_exception=True) if time_to_live else None
+
     task_request = TaskRequest(simulator=simulator,
                                extra_params=params,
                                project=project_name,
                                resource_pool=machine_group.id,
                                container_image=container_image,
+                               time_to_live_seconds=time_to_live_seconds,
                                storage_path_prefix=storage_path_prefix,
                                simulator_name_alias=simulator_name_alias,
                                resubmit_on_preemption=resubmit_on_preemption,
@@ -366,7 +381,7 @@ def submit_task(simulator,
                                compress_with=compress_with)
 
     # Create an instance of the TasksApi class
-    task_api_instance = TasksApi(get_client())
+    task_api_instance = inductiva.client.TasksApi(get_client())
 
     # Submit task via the "POST task/submit" endpoint.
     # HTTP status code 400 informs the requested method is invalid.
@@ -376,13 +391,14 @@ def submit_task(simulator,
         request=task_request,
     )
 
-    task_id = task_submitted_info["id"]
+    task_id = task_submitted_info.id
     logging.info(
         task_info_str(
             task_id,
             input_dir,
             machine_group,
             simulator_obj,
+            task_request,
             task_submitted_info,
         ))
     logging.info("■ Task %s submitted to the queue of the %s.\n", task_id,
@@ -390,15 +406,15 @@ def submit_task(simulator,
 
     # If the status returned by the previous HTTP request is "pending-input",
     #  ZIP inputs and send them via "POST task/{task_id}/input".
-    if task_submitted_info["status"] == "pending-input":
+    if task_submitted_info.status == "pending-input":
         # Use the blocking task context
         with blocking_task_context(task_api_instance, task_id, "input upload"):
             upload_input(
                 api_instance=task_api_instance,
                 input_dir=input_dir,
-                params=params,
                 task_id=task_id,
                 storage_path_prefix=storage_path_prefix,
+                verbose=verbose,
             )
 
     # Return task_id and leaves the simulation on the queue until resources

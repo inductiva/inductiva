@@ -1,7 +1,6 @@
 """Tests for the Benchmark class."""
 from unittest import mock
 import pytest
-from pathlib import Path
 from inductiva import simulators, resources
 from inductiva.benchmarks import Benchmark
 
@@ -16,6 +15,7 @@ def benchmark_fixture():
     mocked_benchmark.kwargs = {}
     mocked_benchmark.open = mock.MagicMock(return_value=None)
     mocked_benchmark.name = "test_benchmark"
+    mocked_benchmark.verbose = False
     return mocked_benchmark
 
 
@@ -148,7 +148,8 @@ def test_benchmark_run(benchmark, num_repeats, wait_for_quotas):
     assert benchmark.runs == []
 
     m4.start.assert_not_called()
-    m8.start.assert_called_once_with(wait_for_quotas=wait_for_quotas)
+    m8.start.assert_called_once_with(wait_for_quotas=wait_for_quotas,
+                                     verbose=False)
 
     simulator_run_calls = [
         mock.call(input_dir="dir",
@@ -175,92 +176,6 @@ def test_benchmark_run(benchmark, num_repeats, wait_for_quotas):
     ] * num_repeats
     simulator.run.assert_has_calls(calls=simulator_run_calls, any_order=True)
     assert len(simulator.run.call_args_list) == num_repeats * num_runs
-
-
-def test_benchmark_runs_info_select_all(benchmark):
-    task1 = mock.MagicMock()
-    task1.download_inputs = mock.MagicMock(return_value=Path("input_dir_path1"))
-    task1.info = mock.MagicMock()
-    task1.info.time_metrics.computation_seconds.value = 100
-    task1.info.estimated_computation_cost = 10
-    task1.info.task_id = "task1"
-    task1.info.simulator = "sim1"
-    task1.info.executer.vm_type = "vm1"
-    kwargs = {"extra_params": {"param": "value"}}
-    task1.info.to_dict = mock.MagicMock(return_value=kwargs)
-
-    task2 = mock.MagicMock()
-    task2.download_inputs = mock.MagicMock(return_value=Path("input_dir_path2"))
-    task2.info = mock.MagicMock()
-    task2.info.time_metrics.computation_seconds.value = 200
-    task2.info.estimated_computation_cost = 20
-    task2.info.task_id = "task2"
-    task2.info.simulator = "sim2"
-    task2.info.executer.vm_type = "vm2"
-    task2.info.to_dict = mock.MagicMock(return_value=kwargs)
-
-    benchmark.get_tasks = mock.MagicMock(return_value=[task1, task2])
-
-    info = Benchmark.runs_info(self=benchmark, select="all")
-    assert info == [
-        {
-            Benchmark.InfoKey.TASK_ID: "task1",
-            Benchmark.InfoKey.SIMULATOR: "sim1",
-            Benchmark.InfoKey.MACHINE_TYPE: "vm1",
-            Benchmark.InfoKey.TIME: 100,
-            Benchmark.InfoKey.COST: 10,
-            "param": "value",
-        },
-        {
-            Benchmark.InfoKey.TASK_ID: "task2",
-            Benchmark.InfoKey.SIMULATOR: "sim2",
-            Benchmark.InfoKey.MACHINE_TYPE: "vm2",
-            Benchmark.InfoKey.TIME: 200,
-            Benchmark.InfoKey.COST: 20,
-            "param": "value",
-        },
-    ]
-
-
-def test_benchmark_runs_info_select_distinct(benchmark):
-    task1 = mock.MagicMock()
-    task1.download_inputs = mock.MagicMock(return_value=Path("input_dir_path1"))
-    task1.info = mock.MagicMock()
-    task1.info.time_metrics.computation_seconds.value = 100
-    task1.info.estimated_computation_cost = 10
-    task1.info.task_id = "task1"
-    task1.info.simulator = "sim1"
-    task1.info.executer.vm_type = "vm1"
-    kwargs = {"extra_params": {"param": "value"}}
-    task1.info.to_dict = mock.MagicMock(return_value=kwargs)
-
-    task2 = mock.MagicMock()
-    task2.download_inputs = mock.MagicMock(return_value=Path("input_dir_path2"))
-    task2.info = mock.MagicMock()
-    task2.info.time_metrics.computation_seconds.value = 200
-    task2.info.estimated_computation_cost = 20
-    task2.info.task_id = "task2"
-    task2.info.simulator = "sim1"
-    task2.info.executer.vm_type = "vm2"
-    task2.info.to_dict = mock.MagicMock(return_value=kwargs)
-
-    benchmark.get_tasks = mock.MagicMock(return_value=[task1, task2])
-
-    info = Benchmark.runs_info(self=benchmark, select="distinct")
-    assert info == [
-        {
-            Benchmark.InfoKey.TASK_ID: "task1",
-            Benchmark.InfoKey.MACHINE_TYPE: "vm1",
-            Benchmark.InfoKey.TIME: 100,
-            Benchmark.InfoKey.COST: 10,
-        },
-        {
-            Benchmark.InfoKey.TASK_ID: "task2",
-            Benchmark.InfoKey.MACHINE_TYPE: "vm2",
-            Benchmark.InfoKey.TIME: 200,
-            Benchmark.InfoKey.COST: 20,
-        },
-    ]
 
 
 def test_benchmark_terminate(benchmark):

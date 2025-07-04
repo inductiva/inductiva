@@ -1,8 +1,9 @@
 # Generalizing the Use Case
-Inductiva enables the parallel execution of numerous simulations, making it ideal for conducting parameter studies at scale. For example, suppose you are interested in analyzing how varying a specific input parameter influences the simulation results.
+Inductiva enables the parallel execution of numerous simulations, making it ideal for conducting parameter studies at scale. 
 
+For example, suppose you want to analyze how varying a specific input parameter affects the simulation results. To demonstrate, consider studying the impact of changes in the mean wind velocity at the reference height, denoted as `URef`. This parameter is defined in the Meteorological Boundary Conditions section of the `90m_12mps_twr.inp` input file. 
 
-As a demonstration, consider studying the impact of changes in the mean wind velocity at the reference height, denoted as `URef`. This parameter is defined in the Meteorological Boundary Conditions section of the `90m_12mps_twr.inp` input file. In the current configuration, `URef` is set to 12 m/s.
+In the current configuration, `URef` is set to 12 m/s.
 
 ```
 --------Meteorological Boundary Conditions-------------------
@@ -20,13 +21,13 @@ As a demonstration, consider studying the impact of changes in the mean wind vel
 
 ```
 
-We will use Inductiva templating system to generalize the base simulation by randomly sampling values for `URef`, `RandSeed1`, and `RandSeed2`. In the next section we will use this approach to generate a diverse dataset of simulations.
+We will use the Inductiva templating system to generalize the base simulation by randomly sampling values for `URef`, `RandSeed1`, and `RandSeed2`. In the next section, we will use this approach to generate a diverse dataset of simulations.
 
-## Parametrize the input file 90m_12mps_twr.inp
+## Parametrize the `90m_12mps_twr.inp` file
 Inductiva allows you to convert fixed parameters in your simulation configuration files into variables that you can set programmatically using Python scripting. 
 This means that we will be able to change the `URef`, `RandSeed1`, and `RandSeed2` defined in the `90m_12mps_twr.fst` input file from a Python script before starting the simulation.
 
-To do this you will need to edit your `90m_12mps_twr.inp` from this:
+To do this, you will need to edit your `90m_12mps_twr.inp` file from this:
 
 ```
 ---------Runtime Options-----------------------------------
@@ -40,9 +41,7 @@ To do this you will need to edit your `90m_12mps_twr.inp` from this:
 ...
 ```
 
-
 To this:
-
 
 ```
 ---------Runtime Options-----------------------------------
@@ -56,14 +55,12 @@ To this:
 ...
 ```
 
+After this small edit, you will need to save your input file as `90m_12mps_twr.inp.jinja` (note the `.jinja` extension). 
 
-
-
-After this small edit, you will need to save your input file as `90m_12mps_twr.inp.jinja` (note the ".jinja" extension). 
-This will tell Inductiva's templating engine that Python variables called "URef", "seed_1" and "seed_2" should be used to set the correct scalar value in `90m_12mps_twr.fst`.
+This will tell Inductiva's templating engine that Python variables called `URef`, `seed_1` and `seed_2` should be used to set the correct scalar value in `90m_12mps_twr.fst`.
 
 ## Code Overview
-The script below shows how we can now set the value of the `URef`, `RandSeed1`, and `RandSeed2` parameters from Python:
+The script below shows how we can now set the value of the `URef`, `RandSeed1`, and `RandSeed2` parameters from Python and run a variation of the original simulation:
 
 ```python
 import inductiva
@@ -107,10 +104,10 @@ task.wait()
 cloud_machine.terminate()
 ```
 
-That's it!
-
 First, we set the values for `seed_1`, `seed_2` and `URef`. Then, we generate the input file using the `render_dir` method, which replaces the placeholder variables in our `90m_12mps_twr.fst.jinja` template with the corresponding values. 
-The generated input files are then stored in the folder, `target_dir` (`variations/s1_{seed_1}/s2_{seed_2}/URef_{URef}`).
- For more details on managing template files, check out the `TemplateManager` [documentation](https://docs.inductiva.ai/en/latest/intro_to_api/templating.html).
+
+The generated input files are then stored in the folder `target_dir` (`variations/s1_{seed_1}/s2_{seed_2}/URef_{URef}`).
+
+> For more details on managing template files, check out the `TemplateManager` [documentation](https://docs.inductiva.ai/en/latest/intro_to_api/templating.html).
 
 The good thing about the Inductiva API is that it’s a Python API, so you can simply use a for loop with random sampling for `URef`, `seed_1` and `seed_2` to run multiple simulations in parallel and generate a dataset. That’s exactly what we’ll do in the next section.

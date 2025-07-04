@@ -1,6 +1,7 @@
 """OpenTelemac module of the API."""
-from typing import Optional
-from inductiva import types, simulators
+from typing import Optional, Union
+
+from inductiva import simulators, types
 
 
 class OpenTelemac(simulators.Simulator):
@@ -11,7 +12,7 @@ class OpenTelemac(simulators.Simulator):
     def __init__(
         self,
         /,
-        version: Optional[str] = "8p4r0",
+        version: Optional[str] = None,
         use_dev: bool = False,
     ):
         super().__init__(version, use_dev, self._default_opentelemac_device)
@@ -25,8 +26,9 @@ class OpenTelemac(simulators.Simulator):
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            remote_assets: Optional[list[str]] = None,
+            remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
+            time_to_live: Optional[str] = None,
             **kwargs):
 
         return super().run(input_dir,
@@ -36,4 +38,5 @@ class OpenTelemac(simulators.Simulator):
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            project=project,
+                           time_to_live=time_to_live,
                            **kwargs)

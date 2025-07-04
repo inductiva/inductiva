@@ -31,7 +31,7 @@ reef3d = inductiva.simulators.REEF3D( \
 
 # Run simulation
 task = reef3d.run(input_dir="/Path/to/RegularWavePropagation",
-    n_vcpu=16,
+    n_vcpu=8,
     on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
@@ -43,7 +43,12 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
+In this basic example, we're using a cloud machine (`c2d-highcpu-8`) equipped with 8 virtual CPUs. 
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
+a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
+
+> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 The number of virtual CPUs (`n_vcpus`) is the parameter used to configure the simulation parallelism. This value must be consistently set to the same parameter `M 10` in both the `control.txt` and `ctrl.txt` configuration files.
 

@@ -1,7 +1,7 @@
 """MOHID simulator module of the API."""
-from typing import List, Optional
+from typing import Optional, Union
 
-from inductiva import types, tasks, simulators
+from inductiva import simulators, tasks, types
 
 ALLOWD_MOHID_COMMANDS = ["MohidWater.exe", "MohidLand.exe"]
 
@@ -34,8 +34,9 @@ class MOHID(simulators.Simulator):
             n_vcpus: Optional[int] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            remote_assets: Optional[List[str]] = None,
+            remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
+            time_to_live: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -63,6 +64,11 @@ class MOHID(simulators.Simulator):
                 assigned. If None, the task will be assigned to
                 the default project. If the project does not exist, it will be
                 created.
+            time_to_live: Maximum allowed runtime for the task, specified as a
+                string duration. Supports common time duration formats such as
+                "10m", "2 hours", "1h30m", or "90s". The task will be
+                automatically terminated if it exceeds this duration after
+                starting.
         """
 
         self._check_vcpus(n_vcpus, on)
@@ -92,4 +98,5 @@ class MOHID(simulators.Simulator):
                            run_subprocess_dir=working_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
                            project=project,
+                           time_to_live=time_to_live,
                            **kwargs)
