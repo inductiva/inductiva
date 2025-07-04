@@ -66,7 +66,7 @@ class CM1(simulators.Simulator):
             landuse: Path to the landuse file. If you are using surface fluxes 
                 of heat/momentum/moisture, or if you are using the atmospheric
                 radiation scheme, then you need to specify the surface
-                conditions. Will use the default landuse file if not provided.
+                conditions. Used if you are supplying an external landuse file.
             on: The computational resource to launch the simulation on.
             sim_config_filename: Name of the simulation configuration file.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
@@ -141,11 +141,6 @@ class CM1(simulators.Simulator):
         if landuse and landuse != "LANDUSE.TBL":
             copy_files_commands.append(
                 f"cp -f {landuse} {working_dir}/LANDUSE.TBL")
-            cleanup_commands.append(f"rm {working_dir}/LANDUSE.TBL")
-        # If no landuse file is provided, we use the default landuse file
-        elif landuse is None:
-            copy_files_commands.append(
-                f"cp -f {cm1_path}/run/LANDUSE.TBL {working_dir}")
             cleanup_commands.append(f"rm {working_dir}/LANDUSE.TBL")
 
         commands = [

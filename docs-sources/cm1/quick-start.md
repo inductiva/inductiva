@@ -1,29 +1,37 @@
 # Run Your First Simulation
 This tutorial will show you how to run CM1 simulations using the Inductiva API. 
 
-We will cover an example simulation available in the [official CM1 release](https://www2.mmm.ucar.edu/people/bryan/cm1/cm1r18.tar.gz), to help you get started with simulations.
+We will cover an example simulation available in the
+[official CM1 v18 release](https://www2.mmm.ucar.edu/people/bryan/cm1/cm1r18.tar.gz),
+to help you get started with simulations.
 
 ## Prerequisites
-1. Download the required files [here](https://www2.mmm.ucar.edu/people/bryan/cm1/cm1r18.tar.gz) and extract them to a folder called `cm1r18`.
+
+1. Download the required files
+[here](https://www2.mmm.ucar.edu/people/bryan/cm1/cm1r18.tar.gz) and extract
+them to a folder called `cm1r18`.
+
 2. Create a folder named `input_files` inside the `cm1r18` directory.
 
 Let's now copy all files we need to the `input_files` folder that you
-created inside the `cm1r18` directory.
+created inside the `cm1r18` directory. Additional details about input files
+can be found in the "Step 2" of this
+[CM1 official tutorial](https://www2.mmm.ucar.edu/people/bryan/cm1/user_guide_brief.html).
 
 Copy the following files to the `input_files` directory:
 
 |            Origin           |             Description            |
 |:---------------------------:|:----------------------------------:|
 | `cm1r18/run/namelist.input` | Our simulation configuration file. |
-| `cm1r18/run/LANDUSE.TBL` | You can provide your own `LANDUSE.TBL` or we will use the default one provided by CM1.|
-| `cm1r18/src/base.F` | Modify the base-state conditions, as appropriate. There are two sections: one for the hydrostatic pressure, temperature, and moisture sounding; and one for the initial winds (u and v components).|
-| `cm1r18/src/init3d.F` | In `init3d.F,` you can add perturbations to the base state. Several default options are available.|
-| `cm1r18/src/init_terrain.F` | If you are using terrain, you will have to specify the terrain via the `zs` array in the file `init_terrain.F`.|
-| `cm1r18/src/init_surface.F` | If you are using surface fluxes of heat/moisture/momentum, then you might have to specify the horizontal distribution of several variables in the file `init_surface.F`.|
+| `cm1r18/run/LANDUSE.TBL` | Specifies the surface conditions, if you are using surface fluxes of heat/momentum/moisture, or if you are using the atmospheric radiation scheme. |
+| `cm1r18/src/base.F` | Modifies the base-state conditions, as appropriate. There are two sections: one for the hydrostatic pressure, temperature, and moisture sounding; and one for the initial winds (u and v components). |
+| `cm1r18/src/init3d.F` | Adds perturbations to the base state. Several default options are available. |
+| `cm1r18/src/init_terrain.F` | Specifies the terrain via the `zs` array. |
+| `cm1r18/src/init_surface.F` | Specifies the horizontal distribution of several variables, if you are using surface fluxes of heat/moisture/momentum. |
 
-From the previous list, the only file that is **mandatory** is `namelist.input`. The
-rest of the files are optional and depend on the specific configuration you want
-to run. If any of the optional files are missing, the default files provided by
+From the previous list, the only file that is **mandatory** is `namelist.input`.
+The rest of the files are optional and depend on the specific configuration you
+want to run. If any of the `.F` files are missing, the default files provided by
 CM1 will be used.
 
 You can also provide your own `input_sounding` file but we wont be using it in
@@ -43,9 +51,9 @@ Once you have all your files, your `input_files` directory should look like this
 Since this is just a introduction tutorial we won't be editing any of the files
 and will use the default configuration.
 
-> Note: In this case, because we are not editing any of the files we could simply
-just send the file `namelist.input` in the `input_files` directory. We added all
-the other files as an example of what you could do.
+> Note: In this case, because we are not editing any of the files we could
+simply just send the file `namelist.input` in the `input_files` directory. We
+added all the other files as an example of what you could do.
 
 ## Running a CM1 Simulation
 Here is the code required to run a CM1 simulation using the Inductiva API:
@@ -85,12 +93,15 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: `spot` machines are a lot cheaper but may be terminated by the provider if necessary.
+> **Note**: `spot` machines are a lot cheaper but may be terminated by the
+provider if necessary.
 
-To adapt the code for this or any other use case, simply replace `input_dir` with the path to your CM1 input files and 
-set the `sim_config_filename` accordingly.
+To adapt the code for this or any other use case, simply replace `input_dir`
+with the path to your CM1 input files and set the `sim_config_filename`
+accordingly.
 
-When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
+When the simulation is complete, we terminate the machine, download the results
+and print a summary of the simulation as shown below.
 
 ```
 inductiva tasks info 4kemtaacrjjoyr92oksh819my
@@ -123,15 +134,16 @@ Estimated computation cost (US$): 0.0043 US$
 Go to https://console.inductiva.ai/tasks/4kemtaacrjjoyr92oksh819my for more details.
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 364.6 seconds (around 6 minutes).
+As you can see in the "In Progress" line, the part of the timeline that
+represents the actual execution of the simulation, the core computation time of
+this simulation was approximately 364.6 seconds (around 6 minutes).
 
 It's that simple!
 
 ## Scaling Up Your Simulation
 
-In order to scale your simulation to a larger machine, you need to change a couple
-of lines in your `namelist.input` file and in your Python script.
+In order to scale your simulation to a larger machine, you need to change a
+couple of lines in your `namelist.input` file and in your Python script.
 
 Here are a list of changes you need to do:
 - Change `nodex` to 4 in the `namelist.input` file.
@@ -143,11 +155,11 @@ This is all you need to do to scale your simulation to a 16 vCPU machine.
 
 Here are the results of running the same simulation on a few machines:
 
-| Machine Type            | Virtual CPUs | Time              | Estimated Cost |
-|-------------------------|--------------|------------------|---------------|
-| **Local Ryzen 7 7700X** | 16           | 1 minute and 20 seconds | N/A           |
-| **Cloud c3d-highcpu-16** | 16           | 1 minute and 53 seconds | 0.0051 US$      |
-| **Cloud c3d-highcpu-60** | 60           | 1 minute and 25 seconds | 0.014 US$      | 
+| Machine Type            | Virtual CPUs | Time             | Estimated Cost |
+|-------------------------|--------------|------------------|----------------|
+| **Local Ryzen 7 7700X** | 16 | 1 minute and 20 seconds | N/A |
+| **Cloud c3d-highcpu-16** | 16 | 1 minute and 53 seconds | 0.0051 US$ |
+| **Cloud c3d-highcpu-60** | 60 | 1 minute and 25 seconds | 0.014 US$ |
 
 By leveraging the Inductiva API, you can efficiently scale your CM1 simulations
 to meet your computational needs. Try different machine configurations and
