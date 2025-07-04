@@ -705,7 +705,7 @@ class Task:
             try:
                 wait_for_status = models.TaskStatusCode(wait_for_status)
             except ValueError:
-                logging.error("Invalid wait_for_status: %s.", wait_for_status)
+                logging.error(f"Invalid wait_for_status: {wait_for_status}.")
                 return
 
         # Check if task is already in a desired status
@@ -769,6 +769,9 @@ class Task:
                 requires_newline = True
                 self._update_queue_info(is_tty=is_tty, duration=duration)
 
+            if wait_for_status is not None and status in wait_for_status:
+                return status
+
             #use is_terminal instead of the method to avoid an api call
             #that can make the task status inconsistent
             if self.info.is_terminal:
@@ -801,8 +804,7 @@ class Task:
                    tail_files: List[str],
                    lines: int,
                    follow: bool,
-                   fout: TextIO = sys.stdout,
-                   wait: bool = False):
+                   fout: TextIO = sys.stdout):
         """
         Prints the result of tailing a list of files.
 
@@ -814,12 +816,10 @@ class Task:
                 are changed in real time. If False, it will print the tail and
                 end.
             fout: The file object to print the result to. Default is stdout.
-            wait: If True, the method will wait for the files to be created
-                before tailing them.
         """
         return self._run_multiple_streaming_commands([
             lambda filename=filename: self._run_tail_on_machine(
-                filename, lines, follow, wait) for filename in tail_files
+                filename, lines, follow) for filename in tail_files
         ],
                                                      fout=fout)
 
@@ -1356,8 +1356,7 @@ class Task:
     async def _run_tail_on_machine(self,
                                    filename: str,
                                    n_lines: int = 10,
-                                   follow=False,
-                                   wait=False):
+                                   follow=False):
         """Get the last n_lines lines of a
         file in the task's working directory."""
 
@@ -1371,8 +1370,7 @@ class Task:
                                                 formatter=formatter,
                                                 filename=filename,
                                                 lines=n_lines,
-                                                follow=follow,
-                                                wait=wait):
+                                                follow=follow):
             yield lines
 
     async def _consume(self, generator: AsyncGenerator, fout: TextIO):
