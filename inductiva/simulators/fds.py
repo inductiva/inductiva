@@ -1,6 +1,7 @@
 """FDS simulator module of the API."""
 
 from typing import Optional, Union
+import logging
 
 from inductiva import simulators, tasks, types
 from inductiva.commands.commands import Command
@@ -30,6 +31,8 @@ class FDS(simulators.Simulator):
             *,
             on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,
+            n_mpi_processes: Optional[int] = None,
+            n_omp_threads: Optional[int] = None,
             use_hwthread: bool = True,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
@@ -70,17 +73,63 @@ class FDS(simulators.Simulator):
                                 remote_assets=remote_assets,
                                 sim_config_filename=sim_config_filename)
 
-        mpi_kwargs = {}
-        mpi_kwargs["use_hwthread_cpus"] = use_hwthread
-        if n_vcpus is not None:
-            mpi_kwargs["np"] = n_vcpus
+        available_vcpus = on.available_vcpus
 
-        mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
+        if all(arg is not None
+               for arg in [n_vcpus, n_omp_threads, n_mpi_processes]):
+            raise ValueError(
+                "Parameters n_vcpus, omp_n_threads and n_mpi_processes "
+                "can't be set simultaneously.")
+
+        if n_vcpus is None:
+            logging.info(
+                "Param n_vcpus not set. Defaulting to the number of "
+                "available vcpus (%s).\n", available_vcpus)
+            n_vcpus = available_vcpus
+
+        if n_mpi_processes is None:
+            if n_omp_threads is None:
+                n_mpi_processes = 1
+            else:
+                n_mpi_processes = n_vcpus // n_omp_threads
+
+            logging.info("Param n_mpi_processes not set. Defaulting to %s.\n",
+                         n_mpi_processes)
+
+        if n_omp_threads is None:
+            n_omp_threads = n_vcpus // n_mpi_processes
+            logging.info("Param n_omp_threads not set. Defaulting to %s.\n",
+                         n_omp_threads)
+
+        if n_vcpus == 0:
+            raise ValueError("n_vcpus must be larger than 0")
+        if n_mpi_processes == 0:
+            raise ValueError("n_mpi_processes must be larger than 0")
+        if n_omp_threads == 0:
+            raise ValueError("n_omp_threads must be larger than 0")
+
+        requested_vcpus = n_omp_threads * n_mpi_processes
+        if requested_vcpus > available_vcpus:
+            raise ValueError(
+                f"n_mpi_processes * n_omp_threads ({n_mpi_processes} * "
+                f"{n_omp_threads} = {requested_vcpus}) can't be larger than "
+                f"{available_vcpus} (the number of available VCPUs in "
+                "the specified machine)")
+
+        mpi_config = None
+        if n_mpi_processes > 1:
+            mpi_kwargs = {}
+            mpi_kwargs["use_hwthread_cpus"] = use_hwthread
+            mpi_kwargs["np"] = n_vcpus
+            mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
+
         commands = [
             Command(
                 "/opt/fds/Build/ompi_gnu_linux/fds_ompi_gnu_linux "
                 f"{sim_config_filename}",
-                mpi_config=mpi_config)
+                mpi_config=mpi_config,
+                env={"OMP_NUM_THREADS": str(n_omp_threads)},
+            )
         ]
 
         return super().run(input_dir,
