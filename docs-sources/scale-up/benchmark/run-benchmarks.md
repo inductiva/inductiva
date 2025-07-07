@@ -329,25 +329,44 @@ benchmarks.Benchmark(name="splishsplash-fluid-cube") \
             filename="benchmark.csv")
 ```
 
-## Step 5: Visualize and Analyze the Benchmark Results
+## Step 5: Visualize the Benchmark Results in the Console
 
-After exporting the benchmark results, the next step is to analyze the data to determine the best machine configuration based on computation time and cost.
+Now that your benchmark has run, it's time to analyze the results and identify the best machine configuration
+based on computation time and cost.
 
-### Visualizing the Results
+The [Inductiva Console](https://console-dev.inductiva.ai/dashboard) provides a powerful UI for inspecting benchmark
+performance. Here's how you can explore your results:
 
-You can use a tool like [CSVPlot](https://www.csvplot.com/) to upload and visualize the exported CSV file. Follow these steps:
+### 1. Go to the Benchmarks section
 
-1. Open the [CSVPlot](https://www.csvplot.com/) website.
-2. Upload the benchmark.csv file containing the results.
-3. Generate a plot to compare computation time and cost for each machine type.
+Click on the [Benchmarks](https://console.inductiva.ai/benchmarks) tab in the sidebar. You'll see a list of all benchmarks
+you've run over time.
 
-### Key Insights from the Plot
+![List of Benchmarks](./_static/list-of-benchmarks.png)
 
-![plot](../_static/how_to/plot-benchmark-results.png)
+### 2. Open your specific benchmark
 
-- The `c3-standard-44` machine is the best in terms of both computation time and cost.
-- It takes approximately 35 seconds and costs $0.01.
-- The `c3-standard-88` machine takes the same amount of time but costs twice as much.
+Find and click on the benchmark you're interested in — in this case, [`splishsplash-fluid-cube`](https://console.inductiva.ai/benchmarks/splishsplash-fluid-cube?tab=realtime).
+This opens a page with real-time monitoring details, including overall progress, the list of tasks, and the machine
+groups involved in the benchmark.
+
+![Benchmark Real Time tab](./_static/benchmark-real-time.png)
+
+### 3. View the statistics
+
+Navigate to the [Statistics](https://console.inductiva.ai/benchmarks/splishsplash-fluid-cube?tab=statistics) tab.
+Here, you'll find summary insights such as the **fastest** and **cheapest** machine types, along with our 
+**recommended machine** that balances both speed and cost. You'll also see comparison plots showing: execution 
+**duration** per machine type, estimated **cost** per machine type and overall **recommendation score**.
+
+![Benchmark Statistics tab 1](./_static/benchmark-stats-1.gif)
+
+### 4. Explore the Cost vs Duration plot
+
+Scroll down to find the **"Cost vs Duration"** plot. This gives you a clear visual comparison of trade-offs between 
+execution time and price — making it easier to choose the ideal machine type for your use case.
+
+![Benchmark Statistics tab 2](./_static/benchmark-stats-2.gif)
 
 ## Bonus: Adding a New Machine for Comparison
 

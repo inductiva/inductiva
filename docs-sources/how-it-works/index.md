@@ -17,7 +17,7 @@ hidden: true
 
 🚀 Install Inductiva API in 2 steps <basics/install-guide>
 ⏩ Quick-Start guide <basics/quick-start-guide>
-💲 How much compute time does 5$US provide <basics/compute-5USD>
+💲 How much compute time does 5$US provide <basics/compute-5usd>
 💰 How much does a simulation cost in Inductiva? <basics/how-much-does-it-cost>
 🔒 Inductiva Quotas <basics/quotas>
 💥 How many cores can be used? <basics/how-many-cores>
@@ -36,7 +36,7 @@ hidden: true
 
 ⬇️ Download specific files from a group of tasks <recipes/download-file-from-project>
 📤 Export your files to AWS S3 <recipes/export-files-to-aws/index>
-⚡️ Run simulations on your local machine <recipes/use-local-task-runner/index>
+🧪 Generate a Dataset <generate-dataset>
 ```
 
 ```{toctree}

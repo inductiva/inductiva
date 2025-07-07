@@ -16,23 +16,22 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, StrictInt
 from typing import Any, ClassVar, Dict, List
-from inductiva.client.models.action import Action
-from inductiva.client.models.trigger import Trigger
+from inductiva.client.models.storage_file_info import StorageFileInfo
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class EventCreate(BaseModel):
+class StorageContentsWithPagination(BaseModel):
     """
-    EventCreate
+    StorageContentsWithPagination
     """
 
-    # noqa: E501
-    trigger: Trigger
-    action: Action
-    __properties: ClassVar[List[str]] = ["trigger", "action"]
+  # noqa: E501
+    total_files: StrictInt
+    contents: Dict[str, StorageFileInfo]
+    __properties: ClassVar[List[str]] = ["total_files", "contents"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -51,7 +50,7 @@ class EventCreate(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of EventCreate from a JSON string"""
+        """Create an instance of StorageContentsWithPagination from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -71,17 +70,19 @@ class EventCreate(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of trigger
-        if self.trigger:
-            _dict['trigger'] = self.trigger.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of action
-        if self.action:
-            _dict['action'] = self.action.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of each value in contents (dict)
+        _field_dict = {}
+        if self.contents:
+            for _key_contents in self.contents:
+                if self.contents[_key_contents]:
+                    _field_dict[_key_contents] = self.contents[
+                        _key_contents].to_dict()
+            _dict['contents'] = _field_dict
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of EventCreate from a dict"""
+        """Create an instance of StorageContentsWithPagination from a dict"""
         if obj is None:
             return None
 
@@ -89,11 +90,11 @@ class EventCreate(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "trigger":
-                Trigger.from_dict(obj["trigger"])
-                if obj.get("trigger") is not None else None,
-            "action":
-                Action.from_dict(obj["action"])
-                if obj.get("action") is not None else None
+            "total_files":
+                obj.get("total_files"),
+            "contents":
+                dict((_k, StorageFileInfo.from_dict(_v))
+                     for _k, _v in obj["contents"].items())
+                if obj.get("contents") is not None else None
         })
         return _obj

@@ -16,23 +16,24 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
-from typing import Any, ClassVar, Dict, List
-from inductiva.client.models.action import Action
-from inductiva.client.models.trigger import Trigger
+from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt
+from typing import Any, ClassVar, Dict, List, Union
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class EventCreate(BaseModel):
+class ProjectStatistics(BaseModel):
     """
-    EventCreate
+    ProjectStatistics
     """
 
-    # noqa: E501
-    trigger: Trigger
-    action: Action
-    __properties: ClassVar[List[str]] = ["trigger", "action"]
+  # noqa: E501
+    success_rate: Union[StrictFloat, StrictInt]
+    avg_task_duration_seconds: Union[StrictFloat, StrictInt]
+    avg_task_compute_cost: Union[StrictFloat, StrictInt]
+    __properties: ClassVar[List[str]] = [
+        "success_rate", "avg_task_duration_seconds", "avg_task_compute_cost"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -51,7 +52,7 @@ class EventCreate(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of EventCreate from a JSON string"""
+        """Create an instance of ProjectStatistics from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -71,17 +72,11 @@ class EventCreate(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of trigger
-        if self.trigger:
-            _dict['trigger'] = self.trigger.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of action
-        if self.action:
-            _dict['action'] = self.action.to_dict()
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of EventCreate from a dict"""
+        """Create an instance of ProjectStatistics from a dict"""
         if obj is None:
             return None
 
@@ -89,11 +84,8 @@ class EventCreate(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "trigger":
-                Trigger.from_dict(obj["trigger"])
-                if obj.get("trigger") is not None else None,
-            "action":
-                Action.from_dict(obj["action"])
-                if obj.get("action") is not None else None
+            "success_rate": obj.get("success_rate"),
+            "avg_task_duration_seconds": obj.get("avg_task_duration_seconds"),
+            "avg_task_compute_cost": obj.get("avg_task_compute_cost")
         })
         return _obj
