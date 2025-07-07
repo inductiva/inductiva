@@ -96,7 +96,7 @@ pygments_style = "monokai"
 html_title = 'GROMACS'
 
 # Google Analytics
-googleanalytics_id = os.getenv("GTAG_WEBSITE")
+googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
 googleanalytics_enabled = True
 
 # OpenGraph protocol
