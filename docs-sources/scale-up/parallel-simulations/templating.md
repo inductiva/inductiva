@@ -32,12 +32,18 @@ of template files to a destination folder. In the end, we will discuss some safe
 features that the `TemplateManager` class provides to prevent accidental overwriting
 of files and ensure the uniqueness of the destination directory.
 
-### Rendering basics
+### Rendering Basics
 
-To start, a template file is a file that contains labels that will be replaced
-with specific values during a rendering process. These labels -- variables --
-are enclosed in double curly brackets, optionally specifying default values they
-might take when not explicitly set during the rendering process.
+Template files are plain text files that contain placeholders—also known as
+variables, that will be replaced with actual values during the rendering process.
+These files must have the `.jinja` extension and use double curly braces (`{{ }}`)
+to denote variables. Optionally, you can provide default values for variables to
+be used when no explicit value is supplied.
+
+> **Important:** To enable the Templating Manager to render a file, you must append `.jinja` to its filename.
+> For example, to render a file originally named `file1.txt`, you should rename it to `file1.txt.jinja`.
+> The Templating Manager will then process this template and generate `file1.txt` with all placeholders correctly replaced by their corresponding values.
+
 
 In the following example, the content of a template file defines a configuration
 parameter named `config_parameter`:
