@@ -25,28 +25,37 @@ jobs:
         run: |
           rm -rf build/linkcheck
 
-      - name: Run linkcheck recursively
-        run: |
-          for d in docs-sources/*/ ; do
-            if [ -f "$d/conf.py" ]; then
-              echo "Running linkcheck for $d"
-              sphinx-build -b linkcheck "$d" "build/linkcheck/$(basename "$d")"
-            fi
-          done
-
-      - name: Convert linkcheck output to CSV
+      - name: Run linkcheck and collect results
         run: |
           echo "Documentation Folder,File,Line,Status,URL,Message" > linkcheck_summary.csv
-          find build/linkcheck -type f -name "*.txt" | while read -r file; do
-            project=$(basename "$(dirname "$file")")
-            while IFS= read -r line; do
-              docfile=$(echo "$line" | awk -F':' '{print $1}')
-              lineno=$(echo "$line" | awk -F':' '{print $2}' | awk '{print $1}')
-              status=$(echo "$line" | grep -o '\[.*\]' | tr -d '[]')
-              url=$(echo "$line" | awk '{for (i=3; i<=NF; i++) if ($i ~ /^http/) {print $i; break}}')
-              message=$(echo "$line" | sed -E 's/.* - //')
-              echo "\"$project\",\"$docfile\",\"$lineno\",\"$status\",\"$url\",\"$message\"" >> linkcheck_summary.csv
-            done < "$file"
+
+          for d in docs-sources/*/ ; do
+            if [ -f "$d/conf.py" ]; then
+              folder=$(basename "$d")
+              output_dir="build/linkcheck/$folder"
+              mkdir -p "$output_dir"
+              echo "Running linkcheck for $folder"
+
+              if sphinx-build -b linkcheck "$d" "$output_dir" > "$output_dir/build.log" 2>&1; then
+                echo "Sphinx build succeeded for $folder"
+              else
+                echo "Sphinx build failed for $folder"
+                message=$(tail -n 10 "$output_dir/build.log" | tr '\n' ' ' | sed 's/"/'\''/g')
+                echo "\"$folder\",\"conf.py\",\"-\",\"ERROR\",\"-\",\"$message\"" >> linkcheck_summary.csv
+                continue
+              fi
+
+              find "$output_dir" -type f -name "*.txt" | while read -r file; do
+                while IFS= read -r line; do
+                  docfile=$(echo "$line" | awk -F':' '{print $1}')
+                  lineno=$(echo "$line" | awk -F':' '{print $2}' | awk '{print $1}')
+                  status=$(echo "$line" | grep -o '\[.*\]' | tr -d '[]')
+                  url=$(echo "$line" | awk '{for (i=3; i<=NF; i++) if ($i ~ /^http/) {print $i; break}}')
+                  message=$(echo "$line" | sed -E 's/.* - //')
+                  echo "\"$folder\",\"$docfile\",\"$lineno\",\"$status\",\"$url\",\"$message\"" >> linkcheck_summary.csv
+                done < "$file"
+              done
+            fi
           done
 
       - name: Upload CSV report
