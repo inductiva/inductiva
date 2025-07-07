@@ -82,21 +82,6 @@ how_to/run-benchmarks
 
 ```{toctree}
 ---
-caption: Synthetic Data for Physics-ML
-maxdepth: 1
-hidden: true
----
-
-generating-synthetic-data/synthetic-data-generation-1.md
-generating-synthetic-data/synthetic-data-generation-2.md
-generating-synthetic-data/synthetic-data-generation-3.md
-generating-synthetic-data/synthetic-data-generation-4.md
-generating-synthetic-data/synthetic-data-generation-5.md
-generating-synthetic-data/synthetic-data-generation-6.md
-```
-
-```{toctree}
----
 caption: Partial Differential Equations
 maxdepth: 1
 hidden: true

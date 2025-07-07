@@ -5,7 +5,7 @@ Our base case is simple: a **0.5-meter cube of water** is initially positioned i
 
 <div style="display: flex; justify-content:center">
 <video width=500 loop muted autoplay preload="auto">
-<source src="../_static/generating-synthetic-data/viscous_flow.mp4" type="video/mp4">
+<source src="./_static/generating-synthetic-data/viscous_flow.mp4" type="video/mp4">
 </video>
 </div>
 
@@ -82,11 +82,7 @@ These parameters not only govern the physics of the simulation, but also have a 
 ```
 
 ## Running the Base Case
-To speed up the dataset generation process, we aim to avoid relying on high-performance, expensive machines to reduce runtime. Instead, our primary acceleration strategy is to leverage the ability to run a large number of machines in parallel.
-
-For this reason, we focus on using instances with a strong cost-performance ratio — such as the **c2d cloud machine family**.
-
-To get started, the code below runs a single simulation of this base case using the Inductiva API. In this example, we're using a `c2d-highcpu-4` cloud machine, which is equipped with 4 virtual CPUs (vCPUs).
+To get started, let's run a single simulation of this base case using the Inductiva API. In this example, we're using a `c2d-highcpu-4` cloud machine, which is equipped with 4 virtual CPUs (vCPUs).
 
 ```python
 import inductiva
@@ -135,15 +131,14 @@ output (`stdout`):
 ■ Task uaxaztw3o1y4mz45kv5diazf7 submitted to the queue of the Machine Group api-mmirpn1frhnmm9ja2a2owftqu with c2d-highcpu-4 machines.
 ```
 
-The simulation should take approximately **33 minutes** to complete. Once finished, the resulting data will be stored in a directory 
-located at `inductiva-output/{task-id}`. This output includes several log files - most notably `stderr.txt`, `stdout.txt`, and 
-`log/SPH_log.txt` - which provide details about the simulation process and report any errors that may have occurred.
+The simulation should take approximately **33 minutes** to complete. Once finished, the resulting data will be 
+stored in a directory located at `inductiva-output/{task-id}`. This output includes several log files - most 
+notably `stderr.txt`, `stdout.txt`, and `log/SPH_log.txt` - which provide details about the simulation process 
+and report any errors that may have occurred.
 
-More importantly, the output directory contains a `vtk` subdirectory, where a series of .vtk files store data about the fluid 
-particles at each simulation timestep. These .vtk files are the seeds of our dataset.
+More importantly, the output directory contains a `vtk` subdirectory, where a series of .vtk files store data 
+about the fluid particles at each simulation timestep. These .vtk files are the seeds of our dataset.
 
+For comparison, running the same base case on a more powerful machine (`c2d-highcpu-16`, with 16 vCPUs) reduced the runtime to **24 minutes**. However, this performance gain is not linear — doubling or quadrupling the number of vCPUs doesn't lead to a proportional decrease in runtime.
 
-
-
-
-
+Therefore, to efficiently scale up dataset generation, we focus not on using the most powerful (and expensive) machines, but on **parallelism**: running many small sized machines simultaneously.

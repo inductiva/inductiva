@@ -97,7 +97,7 @@ pygments_style = "monokai"
 html_title = 'AMR-Wind'
 
 # Google Analytics
-googleanalytics_id = "G-J1X662323P"
+googleanalytics_id = os.getenv("GTAG_WEBSITE")
 googleanalytics_enabled = True
 
 # OpenGraph protocol
