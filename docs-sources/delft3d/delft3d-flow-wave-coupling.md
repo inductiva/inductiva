@@ -1,7 +1,7 @@
 # Run Delft3D with FLOW-WAVE coupling
 This tutorial will show you how to run Deft3D with FLOW-WAVE coupling using the Inductiva API. 
 
-We will cover the `03_flow-wave` use case from the examples available in the [Delft3D Subversion repository](https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/),
+We will cover the `03_flow-wave` use case from the examples available in the [Delft3D Subversion repository](https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/).
 
 ## Prerequisites
 Download the required files [here](https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/examples/03_flow-wave/) and save them to a folder named `03_flow-wave`.

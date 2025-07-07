@@ -40,6 +40,6 @@ hidden: true
 ---
 setup-test
 quick-start
-flow-wave
+delft3d-flow-wave-coupling
 ```
 
