@@ -22,30 +22,31 @@ jobs:
           pip install -r docs-sources/requirements.txt
 
       - name: Clean previous build results
-        run: |
-          rm -rf build/linkcheck
+        run: rm -rf build/linkcheck
 
-      - name: Run linkcheck and collect results
+      - name: Run linkcheck recursively
         run: |
-          echo "Documentation Folder,File,Line,Status,URL,Message" > linkcheck_summary.csv
-
           for d in docs-sources/*/ ; do
             if [ -f "$d/conf.py" ]; then
               folder=$(basename "$d")
-              output_dir="build/linkcheck/$folder"
-              mkdir -p "$output_dir"
-              echo "Running linkcheck for $folder"
+              outdir="build/linkcheck/$folder"
+              mkdir -p "$outdir"
+              echo "Running linkcheck for $folder..."
+              sphinx-build -b linkcheck "$d" "$outdir" > "$outdir/build.log" 2>&1 || echo "Sphinx failed for $folder" >> "$outdir/build.log"
+            fi
+          done
 
-              if sphinx-build -b linkcheck "$d" "$output_dir" > "$output_dir/build.log" 2>&1; then
-                echo "Sphinx build succeeded for $folder"
-              else
-                echo "Sphinx build failed for $folder"
-                message=$(tail -n 10 "$output_dir/build.log" | tr '\n' ' ' | sed 's/"/'\''/g')
-                echo "\"$folder\",\"conf.py\",\"-\",\"ERROR\",\"-\",\"$message\"" >> linkcheck_summary.csv
-                continue
-              fi
-
-              find "$output_dir" -type f -name "*.txt" | while read -r file; do
+      - name: Convert linkcheck output to CSV
+        run: |
+          echo "Documentation Folder,File,Line,Status,URL,Message" > linkcheck_summary.csv
+          for dir in build/linkcheck/*; do
+            folder=$(basename "$dir")
+            txt_files=$(find "$dir" -name "*.txt")
+            if [ -z "$txt_files" ]; then
+              message=$(tail -n 10 "$dir/build.log" | tr '\n' ' ' | sed 's/"/'\''/g')
+              echo "\"$folder\",\"conf.py\",\"-\",\"ERROR\",\"-\",\"$message\"" >> linkcheck_summary.csv
+            else
+              for file in $txt_files; do
                 while IFS= read -r line; do
                   docfile=$(echo "$line" | awk -F':' '{print $1}')
                   lineno=$(echo "$line" | awk -F':' '{print $2}' | awk '{print $1}')
