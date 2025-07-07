@@ -14,12 +14,16 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.12"
+          python-version: "3.x"
 
       - name: Install Python dependencies
         run: |
           pip install --upgrade pip
           pip install -r docs-sources/requirements.txt
+
+      - name: Clean previous build results
+        run: |
+          rm -rf build/linkcheck
 
       - name: Run linkcheck recursively
         run: |
