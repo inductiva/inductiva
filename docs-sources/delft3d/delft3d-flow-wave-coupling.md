@@ -1,21 +1,31 @@
 # Run Delft3D with FLOW-WAVE coupling
-This tutorial will show you how to run Deft3D with FLOW-WAVE coupling using the Inductiva API. 
+This tutorial demonstrates how to run a Delft3D simulation with FLOW-WAVE coupling using the Inductiva API.
 
-We will cover the `03_flow-wave` use case from the examples available in the [Delft3D Subversion repository](https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/).
+We’ll guide you through the `03_flow-wave example` provided in the [Delft3D Subversion repository](https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/).
 
 ## Prerequisites
-Download the required files [here](https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/examples/03_flow-wave/) and save them to a folder named `03_flow-wave`.
+Before running the simulation, you'll need to download the input files for the `03_flow-wave` example.
 
-**Notes:** To download the files run `svn checkout https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/examples/03_flow-wave/` on your terminal.
+### Option 1: Download manually
+You can download the files directly from the [Delft3D repository](https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/examples/03_flow-wave/) and save them in a folder named `03_flow-wave`.
 
-## Creating Your Simulation Script
+### Option 2: Use SVN
+If you have Subversion (SVN) installed, you can quickly download all files by running this command in your terminal:
 
-This type of simulation is a bit more complex than the previous ones, as it
-requires running two components simultaneously: `d_hydro` for the flow module
-and `wave.exe` for the wave module. To manage this, we’ll create a shell script
-that launches both commands together.
+```
+svn checkout https://svn.oss.deltares.nl/repos/delft3d/branches/releases/7545/examples/03_flow-wave/
+```
 
-Create a file named `run_sim.sh` in the `03_flow-wave` directory with the following content:
+This will create a folder called `03_flow-wave` containing all the required files.
+
+## Creating the Simulation Script
+This type of simulation is slightly more complex, as it involves running two components concurrently:
+- `d_hydro.exe` for the flow module
+- `wave.exe` for the wave module
+
+To manage this, you’ll create a shell script that launches both commands simultaneously.
+
+In the `03_flow-wave` directory, create a file named `run_sim.sh` with the following content:
 
 ```bash
 #!/bin/bash
@@ -37,22 +47,17 @@ mpirun -np $procs $flowexedir/d_hydro.exe $argfile &
 $waveexedir/wave.exe $mdwfile 1
 ```
 
-Notice that we’re referencing the required executables using the `D3D_HOME` and
-`ARCH` environment variables. These are set automatically by the Delft3D
-environment, so there’s no need to define them manually.
+The `D3D_HOME` and `ARCH` environment variables are automatically set by the Delft3D environment, so no manual configuration is needed.
 
-Once you have your executables defined you just need to run the `d_hydro.exe` and `wave.exe` commands
-with the appropriate arguments. In this case, we are using `mpirun` to run
-`d_hydro.exe` with the specified number of processes (`procs`), and then running
-`wave.exe` with the specified input file (`mdwfile`).
+Once you have your executables defined, you just need to run the `d_hydro.exe` and `wave.exe` commands with the appropriate arguments. In this case, we use `mpirun` to run `d_hydro.exe` with the specified number of processes (`procs`), followed by `wave.exe` using the specified input file (`mdwfile`).
 
-**Notes:** See that we ran `d_hydro.exe` with `&` at the end of the command. This is to run it in the background, so that we can run `wave.exe` in the foreground. This is necessary because `d_hydro.exe` and `wave.exe` will run both coupled with each other.
+> **Note**: The `d_hydro.exe` command ends with an `&`, which runs it in the background. This allows `wave.exe` to run in the foreground. Running both simultaneously is necessary, as they are coupled and need to operate together throughout the simulation.
 
-## Running the coupled simulation
-Here is the code required to run the Delft3D simulation using the Inductiva API:
+## Running the Coupled Simulation
+Here is the code required to run this Delft3D simulation using the Inductiva API:
 
 ```python
-"""Delft3D Simulation."""
+"""Delft3D FLOW-WAVE coupled simulation."""
 import inductiva
 
 # Allocate a machine on Google Cloud Platform
@@ -63,7 +68,7 @@ cloud_machine = inductiva.resources.MachineGroup( \
 
 # Initialize the Simulator
 delft3d = inductiva.simulators.Delft3D(\
-    version="6.04.00",use_dev=True)
+    version="6.04.00")
 
 # Run simulation
 task = delft3d.run( \
@@ -110,11 +115,9 @@ Data:
 	Number of output files:   76
 
 Estimated computation cost (US$): 0.0023 US$
-
-Go to https://console.inductiva.ai/tasks/975yio4uujcz7hssjszbdupdi for more details.
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 85.2 seconds.
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of 
+the simulation, the core computation time of this simulation was approximately 85.2 seconds.
 
-It's that simple!
+And that’s it — you’re now ready to run coupled FLOW-WAVE simulations using Delft3D on the cloud with Inductiva!
