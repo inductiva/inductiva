@@ -22,31 +22,41 @@ jobs:
           pip install -r docs-sources/requirements.txt
 
       - name: Clean previous build results
-        run: |
-          rm -rf build/linkcheck
+        run: rm -rf build/linkcheck
 
       - name: Run linkcheck recursively
         run: |
           for d in docs-sources/*/ ; do
             if [ -f "$d/conf.py" ]; then
-              echo "Running linkcheck for $d"
-              sphinx-build -b linkcheck "$d" "build/linkcheck/$(basename "$d")"
+              folder=$(basename "$d")
+              outdir="build/linkcheck/$folder"
+              mkdir -p "$outdir"
+              echo "Running linkcheck for $folder..."
+              sphinx-build -b linkcheck "$d" "$outdir" > "$outdir/build.log" 2>&1 || echo "Sphinx failed for $folder" >> "$outdir/build.log"
             fi
           done
 
       - name: Convert linkcheck output to CSV
         run: |
           echo "Documentation Folder,File,Line,Status,URL,Message" > linkcheck_summary.csv
-          find build/linkcheck -type f -name "*.txt" | while read -r file; do
-            project=$(basename "$(dirname "$file")")
-            while IFS= read -r line; do
-              docfile=$(echo "$line" | awk -F':' '{print $1}')
-              lineno=$(echo "$line" | awk -F':' '{print $2}' | awk '{print $1}')
-              status=$(echo "$line" | grep -o '\[.*\]' | tr -d '[]')
-              url=$(echo "$line" | awk '{for (i=3; i<=NF; i++) if ($i ~ /^http/) {print $i; break}}')
-              message=$(echo "$line" | sed -E 's/.* - //')
-              echo "\"$project\",\"$docfile\",\"$lineno\",\"$status\",\"$url\",\"$message\"" >> linkcheck_summary.csv
-            done < "$file"
+          for dir in build/linkcheck/*; do
+            folder=$(basename "$dir")
+            txt_files=$(find "$dir" -name "*.txt")
+            if [ -z "$txt_files" ]; then
+              message=$(tail -n 10 "$dir/build.log" | tr '\n' ' ' | sed 's/"/'\''/g')
+              echo "\"$folder\",\"conf.py\",\"-\",\"ERROR\",\"-\",\"$message\"" >> linkcheck_summary.csv
+            else
+              for file in $txt_files; do
+                while IFS= read -r line; do
+                  docfile=$(echo "$line" | awk -F':' '{print $1}')
+                  lineno=$(echo "$line" | awk -F':' '{print $2}' | awk '{print $1}')
+                  status=$(echo "$line" | grep -o '\[.*\]' | tr -d '[]')
+                  url=$(echo "$line" | awk '{for (i=3; i<=NF; i++) if ($i ~ /^http/) {print $i; break}}')
+                  message=$(echo "$line" | sed -E 's/.* - //')
+                  echo "\"$folder\",\"$docfile\",\"$lineno\",\"$status\",\"$url\",\"$message\"" >> linkcheck_summary.csv
+                done < "$file"
+              done
+            fi
           done
 
       - name: Upload CSV report
