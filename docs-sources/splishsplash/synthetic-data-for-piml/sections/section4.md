@@ -1,25 +1,20 @@
-# Creating a SPlisHSPlasH Dataset
+# Generate the Dataset
+In the previous sections, we built a base SPH simulation using **SPlisHSPlasH**, used the template system to configure simulation parameters to reflect real-world variability, and demonstrated how easy it is to run multiple simulations in parallel to explore a wide range of parameters.
 
-In the previous sections, we introduced our templating system and showed how
-easy it is to run multiple simulations in parallel to explore a wide range of
-parameters.
-
-In this part of the tutorial, we’ll put that into practice.
+In this final section, we’ll put all of that into practice and show you how to scale up to generate synthetic data in bulk.
 
 <p align="center"><img src="../../_static/combined.gif" alt="Visualization of 10 simulations" width="600"></p>
 
-We will run 400 simulations while varying the following parameters:
-
+We will run **400 simulations**, randomly varying the following parameters:
 * **Particle start and end positions**: randomly shifted within ±0.33 of the original position, moving the particles up/down
 * **Initial velocity**: randomly set between -1 and 1 in all axes
 * **Density**: randomly selected between 800 and 1200
 * **Viscosity**: randomly chosen between 0.05 and 1.05
 
-Each parameter will be sampled randomly within the specified bounds, allowing us to generate a diverse and representative dataset.
+Each parameter will be sampled independently within its specified range, allowing us to create a diverse and representative synthetic dataset.
 
-## The code
-
-In order to run this dataset generation, we will use the following code:
+## Code Overview
+Generating the dataset is as simple as executing the Python script shown below:
 
 ```python
 import inductiva
@@ -108,32 +103,24 @@ for s,e,v,ini_vel,d in zip(start,end,viscosity,initialVelocity,density0):
     )
 ```
 
-We start this script by allocating a cloud Elastic Machine Group. This resource
-will have a minimum of 1 and a maximum of 50 machines, this will allow us to run
-up to 50 simulations in parallel. Once the simulations start to finish our Machine
-Group will scale down, keeping the costs to a minimum.
+We begin the script by allocating a cloud [Elastic Machine Group](https://inductiva.ai/guides/scale-up/parallel-simulations/set-up-elastic-machine-group) with a minimum of 1 and a maximum of 50 machines. This setup allows 
+us to run up to 50 simulations in parallel. As simulations complete, the Machine Group automatically scales down, helping to keep costs to 
+a minimum.
 
-Following that we have a loop that will generate the random parameter values for
-the whole 400 simulations.
+Next, a loop generates random parameter values for all 400 simulations.
 
-Lastly we have another loop that will start each simulation, using our templating
-system to replace the parameters in the simulation files with the generated values
-and submitting the simulation to the cloud machine. We also added some metadata
-to each simulation just to keep track of the parameters used in each simulation.
+Lastly, another loop starts each simulation by using our templating system to replace the parameters in the simulation files with the generated values and submits the simulation to the cloud machine. Metadata is also added to each simulation to keep track of the parameters used.
 
-This is all you need to generate a dataset with 400 simulations, each with
-different parameters.
+And that’s it — with this setup, you can generate a dataset of 400 simulations, each with its own unique parameter configuration.
 
 ## Results
-
-Once all the simulation are finished, you can download the results from all the simulations
-by running the following terminal command:
+Once all the simulations have finished, you can download the results from all the simulations by executing the following terminal command:
 
 ```bash
 inductiva project download splishsplash_400
 ```
 
-You can also run this script to get some information about your project:
+You can also run this script to get detailed information about your project:
 
 ```
 import inductiva
@@ -152,7 +139,6 @@ Tasks by status:
 Estimated total computation cost: 2.55 US$
 ```
 
-From this output we can see that our project has 400 tasks, all of them
-successfully completed, and the estimated total computation cost is around 2.55 US$.
+From the output, we can see that the project contains **400 tasks**, all **successfully completed**, with an estimated total computation cost of **2.55 US$**.
 
-Keep following the tutorial to learn how you can visualize the results of these simulations!
+(remeter para os tutoriais de viz)
