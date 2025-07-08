@@ -19,7 +19,11 @@ Whether you're a Machine Learning engineer or a simulation expert, the Inductiva
 
 ---
 
-Ready to dive in? Check out these hands-on tutorials to kickstart your journey:
+**Ready to dive in?** 
 
+Explore these hands-on tutorials to jumpstart your journey:
 - [Generate an OpenFOAM Dataset](https://inductiva.ai/guides/openfoam/generate-openfoam-dataset/index)  
 - [Create Synthetic Data for Physics-Informed ML](https://inductiva.ai/guides/splishsplash/synthetic-data-for-piml/index)
+
+Or, if you prefer to read, check out our blog post:
+- [SimuStruct Dataset (0.1)](https://inductiva.ai/blog/article/simustruct-dataset)
