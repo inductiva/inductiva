@@ -55,12 +55,21 @@ By default, this simulation is set to run with 512 processes, which might be a
 bit too much for now. To lower this number, open the file
 `system/include/caseDefinition` and update the following lines:
 ```diff
+-remover writeInterval_      100;
 -nCores              512;              // Number of cores used for simulation
 +nCores              112;              // Number of cores used for simulation
 decompositionMethod hierarchical;    // Decomposition method
 -nHierarchical       (16 8 4);         // Coefficient n for the hierarchical decomposition method
 +nHierarchical       (7 4 4);         // Coefficient n for the hierarchical decomposition method
 ```
+
+We will also need to update the `system/controlDict.noWrite` file:
+```diff
+-writeInterval     2500;
++writeInterval     100000;
+```
+
+> **Note**: Disk writes can significantly degrade simulation performance on MPI clusters. To mitigate this, we are minimizing the number of write operations during this simulation.
 
 This should allow us to run this simulation on a 112 vcpu machine without changing
 the grid ratio too much.
