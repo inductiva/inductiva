@@ -155,7 +155,10 @@ type: cube
 side: 1
 ```
 
-<img src="./_static/template.png" alt="Template Manager" width="800">
+<div style="text-align: center;">
+  <img src="./_static/template.png" alt="Template Manager" width="800">
+</div>
+
 
 ### Overwrite safety
 
