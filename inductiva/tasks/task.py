@@ -683,7 +683,6 @@ class Task:
         Returns:
             The final status of the task.
         """
-        # TODO: refactor method to make it cleaner
         prev_status = None
         is_tty = sys.stdout.isatty()
 
@@ -697,7 +696,6 @@ class Task:
         previous_duration_l = 0
 
         while True:
-            # status = self.get_status()
             task_info = self.get_info()
             status = models.TaskStatusCode(
                 task_info.status_history[-1]["status"])
@@ -748,6 +746,7 @@ class Task:
                     self._tasks_ahead is not None):
                 requires_newline = True
                 self._update_queue_info(is_tty=is_tty, duration=duration)
+
             #use is_terminal instead of the method to avoid an api call
             #that can make the task status inconsistent
             if self.info.is_terminal:
@@ -755,6 +754,94 @@ class Task:
                     download_std_on_completion=download_std_on_completion,
                     status=status)
                 return status
+
+            time.sleep(polling_period)
+
+    def wait_for_status(self,
+                        status: str,
+                        polling_period: int = 1,
+                        silent_mode: bool = False) -> models.TaskStatusCode:
+        """Wait for the task to reach a specific status or complete.
+
+        This method issues requests to the API.
+
+        Args:
+            polling_period: How often to poll the API for the task status.
+            silent_mode: If True, do not print to stdout.
+            status: Return when the task reaches the set status or if the
+                 task reaches a terminal status.
+
+        Returns:
+            The final status of the task.
+        """
+        prev_status = None
+        is_tty = sys.stdout.isatty()
+
+        if not silent_mode:
+            logging.info(
+                "Waiting for task %s to reach status %s...\n"
+                "Go to https://console.inductiva.ai/tasks/%s for more details.",
+                self.id, status, self.id)
+
+        requires_newline = False
+        previous_duration_l = 0
+
+        try:
+            wait_for_status = models.TaskStatusCode(status)
+        except ValueError:
+            logging.error("Invalid status: %s.", status)
+            return
+
+        # Check if task is already in a desired status
+        task_info = self.get_info()
+        status = models.TaskStatusCode(task_info.status_history[-1]["status"])
+        if status == wait_for_status:
+            return status
+
+        while True:
+            task_info = self.get_info()
+            status = models.TaskStatusCode(
+                task_info.status_history[-1]["status"])
+            status_start_time = datetime.datetime.fromisoformat(
+                task_info.status_history[-1]["timestamp"])
+            description = task_info.status_history[-1].get("description", "")
+
+            now_time = datetime.datetime.now(datetime.timezone.utc)
+            duration_timedelta = now_time - status_start_time
+            duration_timedelta = max(duration_timedelta, datetime.timedelta(0))
+            duration = format_utils.short_timedelta_formatter(
+                duration_timedelta)
+
+            if status != prev_status:
+                if requires_newline:
+                    requires_newline = False
+                    sys.stdout.write("\n")
+                if not silent_mode:
+                    self._handle_status_change(status, description)
+
+                if status == wait_for_status:
+                    return status
+
+            # Print timer
+            elif (status != models.TaskStatusCode.SUBMITTED and
+                  not task_info.is_terminal):
+
+                if not silent_mode:
+                    #clear previous line
+                    print(" " * previous_duration_l, end="\r")
+
+                    duration = f"Duration: {duration}"
+                    print(duration, end="\r")
+
+                    previous_duration_l = len(duration)
+
+            prev_status = status
+
+            #Used to print queue information
+            if (status == models.TaskStatusCode.SUBMITTED and
+                    self._tasks_ahead is not None):
+                requires_newline = True
+                self._update_queue_info(is_tty=is_tty, duration=duration)
 
             time.sleep(polling_period)
 
@@ -780,7 +867,8 @@ class Task:
                    tail_files: List[str],
                    lines: int,
                    follow: bool,
-                   fout: TextIO = sys.stdout):
+                   fout: TextIO = sys.stdout,
+                   wait: bool = False):
         """
         Prints the result of tailing a list of files.
 
@@ -792,10 +880,12 @@ class Task:
                 are changed in real time. If False, it will print the tail and
                 end.
             fout: The file object to print the result to. Default is stdout.
+            wait: If True, the method will wait for the files to be created
+                before tailing them.
         """
         return self._run_multiple_streaming_commands([
             lambda filename=filename: self._run_tail_on_machine(
-                filename, lines, follow) for filename in tail_files
+                filename, lines, follow, wait) for filename in tail_files
         ],
                                                      fout=fout)
 
@@ -1332,7 +1422,8 @@ class Task:
     async def _run_tail_on_machine(self,
                                    filename: str,
                                    n_lines: int = 10,
-                                   follow=False):
+                                   follow=False,
+                                   wait=False):
         """Get the last n_lines lines of a
         file in the task's working directory."""
 
@@ -1346,7 +1437,8 @@ class Task:
                                                 formatter=formatter,
                                                 filename=filename,
                                                 lines=n_lines,
-                                                follow=follow):
+                                                follow=follow,
+                                                wait=wait):
             yield lines
 
     async def _consume(self, generator: AsyncGenerator, fout: TextIO):
