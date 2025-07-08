@@ -668,9 +668,8 @@ class Task:
     def wait(self,
              polling_period: int = 1,
              silent_mode: bool = False,
-             download_std_on_completion: bool = True,
-             wait_for_status: str = None) -> models.TaskStatusCode:
-        """Wait for the task to reach a specific status or complete.
+             download_std_on_completion: bool = True) -> models.TaskStatusCode:
+        """Wait for the task to complete.
 
         This method issues requests to the API.
 
@@ -680,9 +679,6 @@ class Task:
                 to the console.
             download_std_on_completion: Request immediate download of the
                 standard files (stdout and stderr) after the task completes.
-            wait_for_status: Optional. If set, return when the task reaches the
-                status (or any of the terminal status). If not set, waits until
-                the task reaches a terminal state.
 
         Returns:
             The final status of the task.
@@ -691,28 +687,13 @@ class Task:
         is_tty = sys.stdout.isatty()
 
         if not silent_mode:
-            msg = ("Waiting for task %s to complete...\n"
-                   if wait_for_status is None else
-                   "Waiting for task %s to reach desired status...\n")
-            msg += ("Go to https://console.inductiva.ai/tasks/%s "
-                    "for more details.")
-            logging.info(msg, self.id, self.id)
+            logging.info(
+                "Waiting for task %s to complete...\n"
+                "Go to https://console.inductiva.ai/tasks/%s for more details.",
+                self.id, self.id)
 
         requires_newline = False
         previous_duration_l = 0
-
-        if wait_for_status:
-            try:
-                wait_for_status = models.TaskStatusCode(wait_for_status)
-            except ValueError:
-                logging.error("Invalid wait_for_status: %s.", wait_for_status)
-                return
-
-        # Check if task is already in a desired status
-        task_info = self.get_info()
-        status = models.TaskStatusCode(task_info.status_history[-1]["status"])
-        if wait_for_status and status == wait_for_status:
-            return status
 
         while True:
             task_info = self.get_info()
@@ -734,9 +715,6 @@ class Task:
                     sys.stdout.write("\n")
                 if not silent_mode:
                     self._handle_status_change(status, description)
-
-                if wait_for_status and status == wait_for_status:
-                    return status
 
                 if (status == models.TaskStatusCode.COMPUTATIONSTARTED) and (
                         not silent_mode):
@@ -769,9 +747,6 @@ class Task:
                 requires_newline = True
                 self._update_queue_info(is_tty=is_tty, duration=duration)
 
-            if wait_for_status is not None and status in wait_for_status:
-                return status
-
             #use is_terminal instead of the method to avoid an api call
             #that can make the task status inconsistent
             if self.info.is_terminal:
@@ -781,6 +756,95 @@ class Task:
                 return status
 
             time.sleep(polling_period)
+
+    def wait_for_status(self,
+                        status: str,
+                        polling_period: int = 1,
+                        silent_mode: bool = False) -> models.TaskStatusCode:
+        """Wait for the task to reach a specific status or complete.
+
+        This method issues requests to the API.
+
+        Args:
+            polling_period: How often to poll the API for the task status.
+            silent_mode: If True, do not print to stdout.
+            status: Return when the task reaches the set status or if the
+                 task reaches a terminal status.
+
+        Returns:
+            The final status of the task.
+        """
+        prev_status = None
+        is_tty = sys.stdout.isatty()
+
+        if not silent_mode:
+            logging.info(
+                "Waiting for task %s to reach status %s...\n"
+                "Go to https://console.inductiva.ai/tasks/%s for more details.",
+                self.id, status, self.id)
+
+        requires_newline = False
+        previous_duration_l = 0
+
+        try:
+            wait_for_status = models.TaskStatusCode(status)
+        except ValueError:
+            logging.error("Invalid status: %s.", status)
+            return
+
+        # Check if task is already in a desired status
+        task_info = self.get_info()
+        status = models.TaskStatusCode(task_info.status_history[-1]["status"])
+        if status == wait_for_status:
+            return status
+
+        while True:
+            task_info = self.get_info()
+            status = models.TaskStatusCode(
+                task_info.status_history[-1]["status"])
+            status_start_time = datetime.datetime.fromisoformat(
+                task_info.status_history[-1]["timestamp"])
+            description = task_info.status_history[-1].get("description", "")
+
+            now_time = datetime.datetime.now(datetime.timezone.utc)
+            duration_timedelta = now_time - status_start_time
+            duration_timedelta = max(duration_timedelta, datetime.timedelta(0))
+            duration = format_utils.short_timedelta_formatter(
+                duration_timedelta)
+
+            if status != prev_status:
+                if requires_newline:
+                    requires_newline = False
+                    sys.stdout.write("\n")
+                if not silent_mode:
+                    self._handle_status_change(status, description)
+
+                if status == wait_for_status:
+                    return status
+
+            # Print timer
+            elif (status != models.TaskStatusCode.SUBMITTED and
+                  not task_info.is_terminal):
+
+                if not silent_mode:
+                    #clear previous line
+                    print(" " * previous_duration_l, end="\r")
+
+                    duration = f"Duration: {duration}"
+                    print(duration, end="\r")
+
+                    previous_duration_l = len(duration)
+
+            prev_status = status
+
+            #Used to print queue information
+            if (status == models.TaskStatusCode.SUBMITTED and
+                    self._tasks_ahead is not None):
+                requires_newline = True
+                self._update_queue_info(is_tty=is_tty, duration=duration)
+
+            time.sleep(polling_period)
+
 
     def _validate_task_computation_started(self) -> Tuple[bool, Optional[str]]:
         info = self.get_info()
