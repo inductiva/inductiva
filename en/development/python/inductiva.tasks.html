@@ -414,6 +414,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.sync_context"><code class="docutils literal notranslate"><span class="pre">Task.sync_context()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.tail_files"><code class="docutils literal notranslate"><span class="pre">Task.tail_files()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.wait"><code class="docutils literal notranslate"><span class="pre">Task.wait()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.wait_for_status"><code class="docutils literal notranslate"><span class="pre">Task.wait_for_status()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.methods.get"><code class="docutils literal notranslate"><span class="pre">get()</span></code></a></li>
@@ -802,7 +803,7 @@ task.wait()</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="inductiva.tasks.task.Task.tail_files">
-<span class="sig-name descname"><span class="pre">tail_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">tail_files:</span> <span class="pre">~typing.List[str],</span> <span class="pre">lines:</span> <span class="pre">int,</span> <span class="pre">follow:</span> <span class="pre">bool,</span> <span class="pre">fout:</span> <span class="pre">~typing.TextIO</span> <span class="pre">=</span> <span class="pre">&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.tasks.task.Task.tail_files" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">tail_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">tail_files:</span> <span class="pre">~typing.List[str],</span> <span class="pre">lines:</span> <span class="pre">int,</span> <span class="pre">follow:</span> <span class="pre">bool,</span> <span class="pre">fout:</span> <span class="pre">~typing.TextIO</span> <span class="pre">=</span> <span class="pre">&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;,</span> <span class="pre">wait:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.tasks.task.Task.tail_files" title="Link to this definition">#</a></dt>
 <dd><p>Prints the result of tailing a list of files.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -814,6 +815,8 @@ will keep printing the new lines in the selected files as they
 are changed in real time. If False, it will print the tail and
 end.</p></li>
 <li><p><strong>fout</strong> – The file object to print the result to. Default is stdout.</p></li>
+<li><p><strong>wait</strong> – If True, the method will wait for the files to be created
+before tailing them.</p></li>
 </ul>
 </dd>
 </dl>
@@ -832,6 +835,26 @@ end.</p></li>
 to the console.</p></li>
 <li><p><strong>download_std_on_completion</strong> – Request immediate download of the
 standard files (stdout and stderr) after the task completes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The final status of the task.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.tasks.task.Task.wait_for_status">
+<span class="sig-name descname"><span class="pre">wait_for_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">polling_period</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TaskStatusCode</span></span></span><a class="headerlink" href="#inductiva.tasks.task.Task.wait_for_status" title="Link to this definition">#</a></dt>
+<dd><p>Wait for the task to reach a specific status or complete.</p>
+<p>This method issues requests to the API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>polling_period</strong> – How often to poll the API for the task status.</p></li>
+<li><p><strong>silent_mode</strong> – If True, do not print to stdout.</p></li>
+<li><p><strong>status</strong> – Return when the task reaches the set status or if the
+task reaches a terminal status.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1021,6 +1044,7 @@ all the tasks. Example: { “ID”: [1, 2, 3],
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.sync_context"><code class="docutils literal notranslate"><span class="pre">Task.sync_context()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.tail_files"><code class="docutils literal notranslate"><span class="pre">Task.tail_files()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.wait"><code class="docutils literal notranslate"><span class="pre">Task.wait()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.task.Task.wait_for_status"><code class="docutils literal notranslate"><span class="pre">Task.wait_for_status()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.tasks.methods.get"><code class="docutils literal notranslate"><span class="pre">get()</span></code></a></li>
