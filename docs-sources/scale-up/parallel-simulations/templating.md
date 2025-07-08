@@ -155,6 +155,8 @@ type: cube
 side: 1
 ```
 
+<img src="_static/template.png" alt="Template Manager" width="800">
+
 ### Overwrite safety
 
 By default, the `TemplateManager` *will not overwrite* any existing files in the
