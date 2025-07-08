@@ -98,6 +98,8 @@ from inductiva.client.models.top_up_type import TopUpType
 from inductiva.client.models.transaction import Transaction
 from inductiva.client.models.trigger import Trigger
 from inductiva.client.models.trigger1 import Trigger1
+from inductiva.client.models.trigger_credits_info import TriggerCreditsInfo
+from inductiva.client.models.trigger_credits_type import TriggerCreditsType
 from inductiva.client.models.trigger_machine_group_create import TriggerMachineGroupCreate
 from inductiva.client.models.trigger_machine_group_info import TriggerMachineGroupInfo
 from inductiva.client.models.trigger_machine_group_type import TriggerMachineGroupType

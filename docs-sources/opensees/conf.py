@@ -99,7 +99,7 @@ html_favicon = 'favicon.ico'
 html_title = 'OpenSees'
 
 # Google Analytics
-googleanalytics_id = "G-J1X662323P"
+googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
 googleanalytics_enabled = True
 
 # OpenGraph protocol

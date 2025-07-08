@@ -112,7 +112,7 @@ html_context = {
 }
 
 # Google Analytics
-googleanalytics_id = "G-J1X662323P"
+googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
 googleanalytics_enabled = True
 
 # sitemap.xml
