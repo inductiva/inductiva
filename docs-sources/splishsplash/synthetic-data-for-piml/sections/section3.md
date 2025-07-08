@@ -6,26 +6,29 @@ To approach this systematically, we’ll once again use Inductiva’s templating
 To perform a hyperparameter search over the particle radius while keeping all other simulation parameters fixed, modify the templated configuration file as shown below:
 
 ```text
-"Configuration": {
-    "stopAt": 4,
-    "timeStepSize": 0.01,
-    "particleRadius": {{ particle_radius | default(0.008) }},
-    "simulationMethod": 4,
-    "boundaryHandlingMethod": 0,
-    "kernel": 1,
-    "cflMethod": 1,
-    "cflFactor": 0.5,
-    "cflMinTimeStepSize": 0.0001,
-    "cflMaxTimeStepSize": 0.005,
-    "gravitation": [0, 0, -9.81],
-    "gradKernel": 1,
-    "enableVTKExport": true,
-    "dataExportFPS": 60,
-    "particleAttributes": "velocity;density"
+"Configuration": 
+{
+  "stopAt": 6,
+  "cameraPosition": [0,2,5],
+  "cameraLookat": [0,0,0],
+  "particleRadius": {{ particle_radius | default(0.015)}},
+  "numberOfStepsPerRenderUpdate": 1,
+  "simulationMethod": 4,
+  "gravitation": [0,-9.81,0],
+  "timeStepSize": 0.0001,
+  "cflMethod": 1, 
+  "cflFactor": 0.05,
+  "cflMaxTimeStepSize": 0.005,		
+  "stiffness": 50000,
+  "exponent": 7,
+  "enableVTKExport": true,
+  "velocityUpdateMethod": 0,
+  "enableDivergenceSolver": true,
+  "boundaryHandlingMethod": 2
 }
 ```
 
-This setup uses templating to make `particleRadius` the only configurable parameter, with a default value of 0.008.
+This setup uses templating to make `particleRadius` the only configurable parameter, with a default value of 0.015.
 
 Now, save the .json file in the local directory, specifically within the download folder, in preparation for running three **parallel** simulations with particle radii of 0.015, 0.012, and 0.010 meters. The following code demonstrates how to set up and execute these simulations:
 
