@@ -90,7 +90,7 @@ The table below illustrates how varying the particle radius affects both the tot
 | 0.012           | 68921                 | 422 MB        |
 | 0.009           | 166375                | 1.01 GB       |
 
-For reference, the dataset produced by [Sánchez-González et al.](https://arxiv.org/abs/2002.09405) was based on simulations containing approximately 8,000 to 25,000 particles. This suggests that, to create a comparable dataset, it's likely unnecessary to use a particle radius smaller than 0.015. Moreover, if each simulation generates hundreds of megabytes of data, using a smaller particle radius would significantly increase storage demands — making it difficult to manage data from thousands of simulations, not to mention the challenge of training GNNs on such a large volume of data.
+For reference, the dataset produced by [Sánchez-González et al.](https://arxiv.org/abs/2002.09405) was based on simulations containing approximately 8,000 to 25,000 particles. This suggests that, to create a comparable dataset, it is likely unnecessary to use a particle radius smaller than 0.015. Additionally, since each simulation can generate hundreds of megabytes of data, reducing the particle radius would substantially increase storage requirements — making it difficult to manage data from thousands of simulations. This also adds complexity to training GNNs on such a large volume of data.
 
 ### Runtime and Cost per Particle Radius
 Reducing the particle radius naturally increases the number of particles required for the simulation and, consequently, the overall runtime.
