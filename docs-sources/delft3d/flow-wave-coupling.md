@@ -20,8 +20,8 @@ This will create a folder called `03_flow-wave` containing all the required file
 
 ## Creating the Simulation Script
 This type of simulation is slightly more complex, as it involves running two components concurrently:
-- `d_hydro.exe` for the flow module
-- `wave.exe` for the wave module
+- `d_hydro.exe` for the FLOW (hydrodynamics) module
+- `wave.exe` for the WAVE (SWAN) module
 
 To manage this, you’ll create a shell script that launches both commands simultaneously.
 

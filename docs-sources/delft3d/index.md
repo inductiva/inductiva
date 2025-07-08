@@ -40,6 +40,14 @@ hidden: true
 ---
 setup-test
 quick-start
-delft3d-flow-wave-coupling
+flow-wave-coupling
 ```
 
+```{toctree}
+---
+caption: " "
+maxdepth: 1
+hidden: true
+---
+faq
+```
