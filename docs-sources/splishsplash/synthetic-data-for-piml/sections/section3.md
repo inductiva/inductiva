@@ -97,11 +97,34 @@ Reducing the particle radius naturally increases the number of particles require
 
 The table below shows the runtime and corresponding cost of running simulations at the three particle radii under consideration.
 
-| Particle Radius (m) | Machine Type    | Execution Time | Estimated Cost (USD) |
-|---------------------|-----------------|----------------|----------------------|
-| 0.015               | c2d-highcpu-16  | 2 min, 57s     | 0.0045               | 
-| 0.012               | c2d-highcpu-16  | 6 min, 55s     | 0.011                | 
-| 0.009               | c2d-highcpu-16  | 30 min, 40s    | 0.047                | 
+<table>
+  <thead>
+    <tr>
+      <th>Particle Radius (m)</th>
+      <th>Machine Type</th>
+      <th>Execution Time</th>
+      <th>Estimated Cost (USD)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0.015</td>
+      <td rowspan="3">c2d-highcpu-16</td>
+      <td>2 min, 57s</td>
+      <td>0.0045</td>
+    </tr>
+    <tr>
+      <td>0.012</td>
+      <td>6 min, 55s</td>
+      <td>0.011</td>
+    </tr>
+    <tr>
+      <td>0.009</td>
+      <td>30 min, 40s</td>
+      <td>0.047</td>
+    </tr>
+  </tbody>
+</table>
 
 As expected, reducing the particle radius, and consequently increasing the number of particles, leads to a significant rise in 
 computation time.
