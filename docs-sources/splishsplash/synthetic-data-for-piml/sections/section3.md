@@ -103,8 +103,10 @@ The table below shows the runtime and corresponding cost of running simulations 
 | 0.012               | c2d-highcpu-16  | 6 min, 55s     | 0.011                | 
 | 0.009               | c2d-highcpu-16  | 30 min, 40s    | 0.047                | 
 
-As expected, reducing the particle radius, and consequently increasing the number of particles, leads to a significant rise in computation time.
+As expected, reducing the particle radius, and consequently increasing the number of particles, leads to a significant rise in 
+computation time.
 
-Based on performance and cost considerations, committing to a particle radius of 0.015 is reasonable for running over **10,000** simulations **in parallel**. At this scale, the total cost would be approximately **US$45**.
+Based on performance and cost considerations, committing to a particle radius of 0.015 is reasonable for running over **10,000** 
+simulations **in parallel**. At this scale, the total cost would be approximately **US$45**.
 
 This positions **Inductiva** as a fast and cost-effective platform for large-scale Physics-Informed Machine Learning (PIML) model training.
