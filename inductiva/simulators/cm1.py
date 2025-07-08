@@ -34,6 +34,7 @@ class CM1(simulators.Simulator):
             init_surface: str = None,
             input_sounding: str = None,
             landuse: str = None,
+            recompile: bool = True,
             on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
@@ -67,6 +68,14 @@ class CM1(simulators.Simulator):
                 of heat/momentum/moisture, or if you are using the atmospheric
                 radiation scheme, then you need to specify the surface
                 conditions. Used if you are supplying an external landuse file.
+            recompile: Enabled by default to optimize the simulation
+                performance. If set to False, the simulation will use the
+                pre-compiled version of the CM1 code. For machines with a high
+                number of vCPUs the performance optimization may not be
+                significant, so you can set this to False to save time.
+                The value is ignored if any of the files `base`, `init3d`,
+                `init_terrain`, or `init_surface` is provided, as the simulator
+                will always recompile the code in that case.
             on: The computational resource to launch the simulation on.
             sim_config_filename: Name of the simulation configuration file.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
@@ -112,14 +121,22 @@ class CM1(simulators.Simulator):
                                 remote_assets=remote_assets,
                                 **files_to_check)
 
-        # create Mpi config
+        # Create MPI config
         mpi_kwargs = {"use_hwthread_cpus": use_hwthread}
         if n_vcpus is not None:
             mpi_kwargs["np"] = n_vcpus
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
 
+        # Setup commands for copying files and cleaning up
         copy_files_commands = []
-        cleanup_commands = [f"rm -r {cm1_path}"]
+        cleanup_commands = []
+
+        if any((base, init3d, init_terrain, init_surface)):
+            recompile = True
+
+        if recompile:
+            copy_files_commands.append(f"cp -r /cm1 {cm1_path}")
+            cleanup_commands.append(f"rm -r {cm1_path}")
 
         # Copy the Fortan files updated by the user to the CM1 directory
         if base:
@@ -143,16 +160,19 @@ class CM1(simulators.Simulator):
                 f"cp -f {landuse} {working_dir}/LANDUSE.TBL")
             cleanup_commands.append(f"rm {working_dir}/LANDUSE.TBL")
 
-        commands = [
-            f"cp -r /cm1 {cm1_path}", f"make -C {cm1_path}/src",
-            Command(f"{cm1_path}/run/cm1.exe {sim_config_filename}",
-                    mpi_config=mpi_config)
-        ]
+        # Construct the commands to run the simulation
+        commands = []
+        commands.extend(copy_files_commands)
 
-        # Add copy_files_commands to the second position in the list
-        commands[1:1] = copy_files_commands
+        if recompile:
+            commands.extend([
+                f"make -C {cm1_path}/src",
+                Command(f"{cm1_path}/run/cm1.exe {sim_config_filename}",
+                        mpi_config=mpi_config),
+            ])
+        else:
+            commands.append(Command("cm1.exe", mpi_config=mpi_config))
 
-        # Add cleanup_commands to the end of the list
         commands.extend(cleanup_commands)
 
         return super().run(input_dir,
