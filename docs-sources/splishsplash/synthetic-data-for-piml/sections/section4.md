@@ -3,7 +3,13 @@ In the previous sections, we built a base SPH simulation using **SPlisHSPlasH**,
 
 In this final section, we’ll put all of that into practice and show you how to scale up to generate synthetic data in bulk.
 
-<p align="center"><img src="../../_static/combined.gif" alt="Visualization of 10 simulations" width="600"></p>
+<div style="text-align: center;">
+  <video width="500" loop muted autoplay preload="auto">
+    <source src="../../_static/sim.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+
 
 We will run **400 simulations**, randomly varying the following parameters:
 * **Particle start and end positions**: randomly shifted within ±0.33 of the original position, moving the particles up/down
