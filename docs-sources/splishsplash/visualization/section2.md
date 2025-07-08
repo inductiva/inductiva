@@ -4,6 +4,8 @@ Now that we generated multiple animations, it's time to bring the results togeth
 
 We’ll do this by combining individual simulation GIFs into a single animated grid. The result is one comprehensive animation that showcases multiple simulations side-by-side.
 
+<p align="center"><img src="../_static/combined.gif" alt="Visualization of 9 simulations" width="600"></p>
+
 ## Creating a Combined GIF
 
 The following Python script takes several GIF files and arranges them in a grid layout to produce a single, unified GIF:
@@ -112,8 +114,6 @@ python combine_gifs.py combined.gif 3 3 gifs/output_0.gif gifs/output_1.gif gifs
 * `--seconds 7`: (Optional) Limit the total duration of the animation to 7 seconds.
 
 This will generate a 3×3 animation grid from 9 individual simulation outputs, giving you a unified view of how different configurations perform.
-
-<p align="center"><img src="../_static/combined.gif" alt="Visualization of 9 simulations" width="600"></p>
 
 ---
 

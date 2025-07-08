@@ -3,6 +3,8 @@
 After running the 400 simulations from [Generate the Dataset](../synthetic-data-for-piml/sections/section4.md), it’s time to download and visualize the results.
 To make this process easier, we’ve prepared a few helper scripts.
 
+<p align="center"><img src="../_static/single_sim.gif" alt="Visualization of 1 simulation" width="600"></p>
+
 ## Step 1: Download the Simulation Results
 
 Start by downloading the results from the cloud using the following command:
@@ -38,8 +40,6 @@ python splishsplash_gen_viz.py
 > ```
 
 Once the script finishes, you’ll find a collection of GIFs in the `gifs` folder—one for each simulation. Each animation shows how particles move over time, giving you a visual insight into the dynamics of each simulation.
-
-<p align="center"><img src="../_static/single_sim.gif" alt="Visualization of 1 simulation" width="600"></p>
 
 ---
 
