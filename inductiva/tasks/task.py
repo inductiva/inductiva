@@ -845,7 +845,6 @@ class Task:
 
             time.sleep(polling_period)
 
-
     def _validate_task_computation_started(self) -> Tuple[bool, Optional[str]]:
         info = self.get_info()
         if info.is_terminal:
