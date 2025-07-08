@@ -1414,7 +1414,8 @@ class Task:
             return None
 
         # The task is still running
-        start_time = getattr(info, start_attribute)
+        start_time_string = getattr(info, start_attribute)
+        start_time = datetime.datetime.fromisoformat(start_time_string)
 
         # start time may be None if the task was killed before it started
         if start_time is None:
