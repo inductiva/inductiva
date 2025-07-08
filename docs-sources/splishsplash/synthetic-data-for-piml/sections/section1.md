@@ -1,7 +1,7 @@
 # Setting Up the Base Case
-In the introduction, we outlined the overall workflow for generating synthetic datasets to train Physics-Informed ML models using the Inductiva API. Now, let’s dive into the very first step: defining the **base case** simulation model of the physical system we want to study.
+In the introduction, we outlined the overall workflow for generating synthetic datasets to train Physics-Informed ML models using the **Inductiva API**. Now, let’s dive into the very first step: defining the **base case** simulation model of the physical system we want to study.
 
-Our base case is simple: a **1-meter cube of water** is initially positioned in the top corner of a sealed **2-meter cubic box**. At the start of the simulation, the water block is released, causing it to fall, spill, and splash against the closed walls of the box over a 6-second interval. To model this scenario, we use the **SPlisHSPlasH** simulator.
+Our base case is simple: a **1-meter cube of water** is initially positioned in the center of a sealed **2-meter cubic box**. At the start of the simulation, the water block is released, causing it to fall, spill, and splash against the closed walls of the box over a 6-second interval. To model this scenario, we use the **SPlisHSPlasH** simulator.
 
 ## Preparing the Configuration Files
 To get started, we’ve prepared a directory containing all the configuration files needed to run the SPlisHSPlasH simulation. 
@@ -114,7 +114,7 @@ cloud_machine.terminate()
 task.download_outputs()
 ```
 
-This script uploads the input data from your local directory to the API server and schedules a simulation `task` for execution. You'll 
+This script uploads the input data from your local directory to the cloud and schedules a simulation `task` for execution. You'll 
 be able to view details about the `task`, such as its ID and the machine group assigned to it, by checking the terminal's standard 
 output (`stdout`):
 
