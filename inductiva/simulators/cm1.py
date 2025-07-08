@@ -161,17 +161,20 @@ class CM1(simulators.Simulator):
             cleanup_commands.append(f"rm {working_dir}/LANDUSE.TBL")
 
         # Construct the commands to run the simulation
+        bin_base_path = ""
+        executable = "cm1.exe"
         commands = []
         commands.extend(copy_files_commands)
 
         if recompile:
-            commands.extend([
-                f"make -C {cm1_path}/src",
-                Command(f"{cm1_path}/run/cm1.exe {sim_config_filename}",
-                        mpi_config=mpi_config),
-            ])
-        else:
-            commands.append(Command("cm1.exe", mpi_config=mpi_config))
+            commands.append(f"make -C {cm1_path}/src")
+            bin_base_path = f"{cm1_path}/run/"
+
+        commands.append(
+            Command(
+                f"{bin_base_path}{executable} {sim_config_filename}",
+                mpi_config=mpi_config,
+            ))
 
         commands.extend(cleanup_commands)
 
