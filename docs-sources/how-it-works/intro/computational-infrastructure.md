@@ -34,10 +34,10 @@ through our API are executed on one or more virtual machines (VMs) hosted on GCP
 There are several families of Virtual Machines (VMs) made available by Inductiva on 
 Google Cloud Platform (GCP):
 
-- [**Compute-optimized Machines**]()
-- [**Memory-optimized Machines**]()
-- [**General-purpose Machines**]()
-- [**Accelerator-optimized Machines**]()
+- [**Compute-optimized Machines**](https://cloud.google.com/compute/docs/compute-optimized-machines)
+- [**Memory-optimized Machines**](https://cloud.google.com/compute/docs/memory-optimized-machines)
+- [**General-purpose Machines**](https://cloud.google.com/compute/docs/general-purpose-machines)
+- [**Accelerator-optimized Machines**](https://cloud.google.com/compute/docs/accelerator-optimized-machines)
 
 To know with more detail which specific machine types Inductiva offers wihtin each machine family, go here.
 
@@ -89,5 +89,5 @@ we talked about how the growing diversity of computing options
 is transforming the landscape—and how it’s not always easy to find the best machine 
 for your job.
 
-With our [benchmarking tool](benchmarking.md), we’re making it easier
+With our [benchmarking tool](benchmarking.md), we make it easier
 to make smarter, cost-effective decisions for your workloads.
