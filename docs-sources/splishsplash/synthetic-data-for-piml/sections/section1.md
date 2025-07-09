@@ -11,6 +11,8 @@ Our base case is simple: a **0.5-meter cube of water** is initially positioned i
 
 <p align="center"><img src="../../_static/single_sim.gif" alt="Visualization of one simulation" width="500"></p>
 
+<p align="center"><img src="../../_static/single_sim.gif" alt="Visualization of one simulation" width="500"></p>
+
 ## Preparing the Configuration Files
 To get started, we’ve prepared a directory containing all the configuration files needed to run the SPlisHSPlasH simulation. 
 
