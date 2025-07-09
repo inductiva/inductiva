@@ -18,6 +18,7 @@ In the following sections, you’ll learn how to:
 
 Whether you're a Machine Learning engineer or a simulation expert, this tutorial offers a practical, scalable workflow for generating your own synthetic datasets to power Physics-informed ML models.
 
+<p align="center"><img src="../_static/combined_3_3.gif" alt="Visualization of 9 simulations" width="600"></p>
 
 ```{toctree}
 :hidden:

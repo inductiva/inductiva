@@ -1,14 +1,12 @@
 # Visualizing Multiple Simulations in a Single Animation
+Now that we've generated individual animations, it’s time to bring them together into a single visualization. This allows for a clear side-by-side comparison of how different parameters influence particle behavior over time.
 
-Now that we generated multiple animations, it's time to bring the results together into a single visualization. This will help us clearly compare how different parameters affect particle movement over time.
-
-We’ll do this by combining individual simulation GIFs into a single animated grid. The result is one comprehensive animation that showcases multiple simulations side-by-side.
+We’ll do this by combining the individual simulation GIFs into a single animated grid.
 
 <p align="center"><img src="../_static/combined.gif" alt="Visualization of 9 simulations" width="600"></p>
 
 ## Creating a Combined GIF
-
-The following Python script takes several GIF files and arranges them in a grid layout to produce a single, unified GIF:
+The Python script below takes multiple GIF files and arranges them into a grid layout, producing a single unified animation:
 
 ```python
 from PIL import Image, ImageSequence
@@ -91,30 +89,26 @@ if __name__ == "__main__":
     print(f"Combined GIF saved as {args.output}")
 ```
 
-> 💡 **Note**: Make sure to install the required dependencies by running:
+> **Note**: Before running the script, make sure to install the required dependencies:
 >
 > ```bash
 > pip install pillow
 > ```
 
 ## Example Usage
-
-You can run the script with the following command:
+To create a single animation from multiple simulation results, run the script with the following command:
 
 ```bash
 python combine_gifs.py combined.gif 3 3 gifs/output_0.gif gifs/output_1.gif gifs/output_2.gif gifs/output_3.gif gifs/output_4.gif gifs/output_5.gif gifs/output_6.gif gifs/output_7.gif gifs/output_8.gif --seconds 7
 ```
 
 ### What this command does:
-
 * `combined.gif`: Name of the output file.
 * `3`: Number of columns in the GIF grid.
 * `3`: Number of rows in the GIF grid.
-* `gifs/output_*.gif`: Input GIFs from previous simulations.
-* `--seconds 7`: (Optional) Limit the total duration of the animation to 7 seconds.
+* `gifs/output_*.gif`: Input GIFs generated from the simulations.
+* `--seconds 7`: *(Optional)* Sets the total duration of the combined animation to 7 seconds.
 
 This will generate a 3×3 animation grid from 9 individual simulation outputs, giving you a unified view of how different configurations perform.
 
----
-
-Ready to take your simulation visualizations to the next level? Let's go!
+Ready to take your simulation visualizations to the next level? Let's go! 
