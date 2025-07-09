@@ -45,6 +45,7 @@ hidden: true
 📌 Pick a cloud machine for your simulation <basics/pick-cloud-machine>
 ✈️ Start your first cloud machine with Inductiva <basics/start-first-machine>
 🛠️ Troubleshoot installation <basics/troubleshooting>
+🗑️ Uninstallation guide <basics/uninstall_inductiva>
 
 ```
 
