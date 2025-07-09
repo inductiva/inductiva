@@ -73,4 +73,6 @@ we talked about how the growing diversity of computing options
 is transforming the landscape—and how it’s not always easy to find the best machine 
 for your job.
 
-With our [benchmarking tool](benchmarking.md), we make it easier to make smarter, cost-effective decisions for your workloads. Check out the [Run a Benchmark](../../scale-up/benchmark/run-benchmarks.md) tutorial that offers an in-depth step-by-step guide to help you create a benchmarking script and choose the best machine type for your specific case.
+With our [benchmarking tool](benchmarking.md), we make it easier to make smarter, cost-effective decisions for your workloads.
+
+Check out the [Run a Benchmark](../../scale-up/benchmark/run-benchmarks.md) tutorial that offers an in-depth step-by-step guide to help you create a benchmarking script and choose the best machine type for your specific case.
