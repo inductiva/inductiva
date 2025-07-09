@@ -1,6 +1,13 @@
 # Computational Infrastructure
 
-oi
+The Inductiva API serves as a direct intermediary, bridging the gap between users 
+and the complex landscape of computational resources. It streamlines the process 
+of managing and allocating computational workloads and simulation tasks, by 
+facilitating access to an expansive selection of computing options.
+
+This guide will detail how the API simplifies the orchestration of your simulations 
+and introduce you to the various computational options currently available to you, 
+as well as preview exciting additions planned for future releases!
 
 ## Computational Resource Management
 
