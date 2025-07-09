@@ -27,19 +27,17 @@ returns the results back to you.
 
 ## Available Computational Resources
 
-Inductiva supports dispatching computational 
-workloads to the Google Cloud Platform (GCP). This means that the simulations initiated 
-through our API are executed on one or more virtual machines (VMs) hosted on GCP.
+Inductiva executes computational workloads on Google Cloud Platform (GCP). This means that the simulations initiated through our API are executed on one or more virtual machines (VMs) hosted on GCP.
 
 There are several families of Virtual Machines (VMs) made available by Inductiva on 
 Google Cloud Platform (GCP):
 
-- [**Compute-optimized Machines**](https://cloud.google.com/compute/docs/compute-optimized-machines)
-- [**Memory-optimized Machines**](https://cloud.google.com/compute/docs/memory-optimized-machines)
-- [**General-purpose Machines**](https://cloud.google.com/compute/docs/general-purpose-machines)
-- [**Accelerator-optimized Machines**](https://cloud.google.com/compute/docs/accelerator-optimized-machines)
+- [**Compute-optimized Machines**](https://cloud.google.com/compute/docs/compute-optimized-machines): Ideal for CPU-intensive simulations requiring high-performance processors and optimized compute-to-memory ratios.
+- [**Memory-optimized Machines**](https://cloud.google.com/compute/docs/memory-optimized-machines): Perfect for memory-intensive applications that require large amounts of RAM.
+- [**General-purpose Machines**](https://cloud.google.com/compute/docs/general-purpose-machines): Versatile VMs that provide a balanced mix of compute, memory, and networking resources, suitable for a wide range of simulation workloads.
+- [**Accelerator-optimized Machines**](https://cloud.google.com/compute/docs/accelerator-optimized-machines): Specialized VMs equipped with GPUs and other accelerators for high-performance computing tasks that benefit from parallel processing capabilities.
 
-To know with more detail which specific machine types Inductiva offers wihtin each machine family, go here.
+Each VM family offers multiple machine types with different specifications to match your simulation requirements and budget. For detailed information about specific machine types available within each family through Inductiva, including pricing and performance characteristics, explore our complete machine catalog.
 
 The VMs within these families are categorized into three types, based on the RAM-to-vCPU 
 ratio:
@@ -49,13 +47,12 @@ ratio:
 - **highmem** - Equipped with 8 GB of RAM per vCPU, designed for memory-intensive applications.
 
 These configurations allow for the customization of
-[MachineGroups](http://docs.inductiva.ai/en/latest/api_reference/computational_resources/machinegroup_class.html),
-[ElasticMachineGroups](http://docs.inductiva.ai/en/latest/api_reference/computational_resources/elasticgroup_class.html),
-and [MPIClusters](http://docs.inductiva.ai/en/latest/api_reference/computational_resources/mpicluster_class.html)
+[MachineGroups](computational_resources/machinegroup_class.md),
+[ElasticMachineGroups](computational_resources/elasticgroup_class.md),
+and [MPIClusters](computational_resources/mpicluster_class.md)
 to match your computational needs.
 
-Here's an example of how you can start a MachineGroup with robust "**c3d-standard-60**" 
-general machines:
+Here's an example of how you can start a MachineGroup using "**c3d-standard-60**" machines:
 
 ```python
 import inductiva
