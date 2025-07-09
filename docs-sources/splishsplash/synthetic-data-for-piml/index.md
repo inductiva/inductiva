@@ -1,4 +1,8 @@
 # Generate Synthetic Data for Physics-Informed ML
+
+<p align="center"><img src="../_static/combined_all_small.gif" alt="Visualization of all simulations" width="500"></p>
+
+
 Training Physics-Informed Machine Learning (PIML) models often requires large, diverse datasets that reflect real-world physical behavior. However, collecting such data through experiments or high-resolution simulations can be time-consuming and expensive. That’s where **synthetic data generation** becomes essential.
 
 In this tutorial, you'll learn how to generate high-quality synthetic datasets at scale using the **Inductiva API**. By leveraging Inductiva's ability to run hundreds of machines in parallel, we can dramatically accelerate the dataset generation process. Instead of relying on high-performance (and high-cost) machines, our approach emphasizes scalability — using a large number of cost-effective instances to maximize efficiency while keeping costs under control.
@@ -17,8 +21,6 @@ In the following sections, you’ll learn how to:
 * Scale up to generate thousands of meaningful dataset variations for model training.
 
 Whether you're a Machine Learning engineer or a simulation expert, this tutorial offers a practical, scalable workflow for generating your own synthetic datasets to power Physics-informed ML models.
-
-<p align="center"><img src="../_static/combined_3_3.gif" alt="Visualization of 9 simulations" width="600"></p>
 
 ```{toctree}
 :hidden:
