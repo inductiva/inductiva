@@ -105,7 +105,7 @@ class TriggerRegexObserverInfo:
         self.regex = regex
 
     def __str__(self):
-        return (f"TriggerFileExistsObserverInfo("
+        return (f"TriggerRegexObserverInfo("
                 f"task_id={self.task_id}, "
                 f"file_path={self.file_path}), "
                 f"regex={self.regex})")
@@ -156,7 +156,7 @@ def parse_event_info(data: dict[str, Any]) -> EventInfo:
         if observer_type == "file_exists_observer":
             trigger = TriggerFileExistsObserverInfo(**trigger_data)
         elif observer_type == "file_regex_observer":
-            trigger = TriggerFileExistsObserverInfo(**trigger_data)
+            trigger = TriggerRegexObserverInfo(**trigger_data)
     else:
         raise ValueError(f"Unknown trigger_type: {trigger_type}")
 
