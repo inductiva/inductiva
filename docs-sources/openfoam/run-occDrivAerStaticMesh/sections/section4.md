@@ -1,18 +1,12 @@
-# Running Your Simulation on an MPI Cluster
-
-You’re almost ready to scale your simulation across multiple machines, unlocking
-the full power of your **MPI Cluster**. Running simulations in parallel on a
-cluster allows you to significantly reduce computation time by distributing the
-workload across multiple machines.
+# Run the Simulation on an MPI Cluster
+You’re almost ready to scale your simulation across multiple machines, unlocking the full power of an **MPI Cluster**. 
+Running simulations in parallel across a cluster can dramatically reduce computation time by distributing the workload over 
+many machines.
 
 ## Update Simulation Parameters to Use 224 vCPUs
+Currently, the simulation is configured to run on 112 vCPUs. To fully utilize the MPI Cluster — which provides 224 vCPUs across two machines — you’ll need to adjust the simulation parameters accordingly.
 
-Currently, the simulation is configured to run on 112 vCPUs. To fully utilize
-your **MPI Cluster**, which provides 224 vCPUs across multiple machines, you
-need to update your configuration accordingly.
-
-Edit the file `system/include/caseDefinition` to increase the number of cores
-and adjust the decomposition settings:
+Open the file `system/include/caseDefinition` and update the number of cores and decomposition settings:
 
 ```diff
 -nCores              112;              // Number of cores used for simulation
@@ -22,11 +16,10 @@ decompositionMethod hierarchical;      // Decomposition method
 +nHierarchical       (14 4 4);          // Coefficients for hierarchical decomposition
 ```
 
-These changes ensure your simulation workload is properly partitioned across all available processors for optimal parallel performance.
+These changes ensure that the simulation workload is properly partitioned across all available processors for optimal parallel performance.
 
 ## Run your simulation
-
-Here is the code required to run the simulation using the Inductiva API:
+Below is the updated Python script for running the simulation across two machines using an MPI cluster.
 
 ```python
 import inductiva
@@ -70,27 +63,22 @@ task.download_outputs()
 task.print_summary()
 ```
 
-### Explaining the parallel commands
+### How Parallel Commands Are Handled
+As mentioned previously, the Inductiva API automatically detects parallel commands by checking for the `-parallel` flag in your command list. When present, it configures the command to run across the entire MPI cluster without requiring any manual setup.
 
-Like we said before, we automatically detect parallel commands and configure them
-to run on your MPI Cluster. We look for the flag `-parallel` in the command
-list, and if it is present, we automatically do the necessary configuration.
-
-Just like the previous simulation, when the simulation is complete, we terminate
-the machine, download the results and print a summary of the simulation as
-shown.
+Just like in the single-machine simulation, once the run is complete, the machines are automatically shut down, the results are downloaded, and a detailed summary is printed, as shown below.
 
 ```
 ```
 
-As you can see in the “In Progress” line, the part of the timeline that
-represents the actual execution of the simulation, we have all our commands that
-ran during the simulation, including the parallel commands. You can also see
-that those commands ran on 224 vCPUs, which is the total number of vCPUs available
-on our MPI Cluster.
+As shown in the “In Progress” line, all the commands (including those executed in parallel) are listed. You can also notice 
+that these commands ran on 224 vCPUs, representing the full capacity of our MPI cluster.
 
-With this configuration, we managed to reduce the computaion time to X time, meaning
-a reduction of X times compared to the previous single machine simulation.
+With this setup, the computation time was reduced to ---, achieving a --- -fold speedup compared to the previous single-machine simulation.
 
-Keep reading for a more in depth dive into performance and different configurations
-of your simulation and MPI Cluster.
+Keep reading for a deeper dive into performance analysis and various configuration options for your simulation and MPI cluster.
+
+
+
+
+
