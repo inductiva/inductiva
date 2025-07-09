@@ -13,14 +13,23 @@ from PIL import Image, ImageSequence
 import math
 import argparse
 
-def combine_gifs_grid(gif_paths, output_path, columns, rows=None, max_seconds=None, bg_color=(255, 255, 255, 0), frame_duration=100):
+
+def combine_gifs_grid(gif_paths,
+                      output_path,
+                      columns,
+                      rows=None,
+                      max_seconds=None,
+                      bg_color=(255, 255, 255, 0),
+                      frame_duration=100):
     num_gifs = len(gif_paths)
 
     # Determine number of rows automatically if not specified
     if rows is None:
         rows = math.ceil(num_gifs / columns)
     elif rows * columns < num_gifs:
-        print(f"Warning: grid size {rows}x{columns} is too small for {num_gifs} GIFs. Some will be skipped.")
+        print(
+            f"Warning: grid size {rows}x{columns} is too small for {num_gifs} "
+            "GIFs. Some will be skipped.")
 
     # Load GIF frames
     gifs_frames = []
@@ -29,14 +38,18 @@ def combine_gifs_grid(gif_paths, output_path, columns, rows=None, max_seconds=No
 
     for path in gif_paths:
         im = Image.open(path)
-        frames = [frame.copy().convert("RGBA") for frame in ImageSequence.Iterator(im)]
+        frames = [
+            frame.copy().convert("RGBA")
+            for frame in ImageSequence.Iterator(im)
+        ]
         gifs_frames.append(frames)
         gifs_sizes.append(im.size)
         max_frames = max(max_frames, len(frames))
 
     # Adjust frame count based on time limit
     if max_seconds is not None:
-        max_frames = min(max_frames, int((max_seconds * 1000) / frame_duration))
+        max_frames = min(max_frames, int(
+            (max_seconds * 1000) / frame_duration))
 
     max_width = max(w for w, h in gifs_sizes)
     max_height = max(h for w, h in gifs_sizes)
@@ -69,12 +82,23 @@ def combine_gifs_grid(gif_paths, output_path, columns, rows=None, max_seconds=No
         transparency=0,
     )
 
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Combine multiple GIFs into a grid layout.")
+    parser = argparse.ArgumentParser(
+        description="Combine multiple GIFs into a grid layout.")
     parser.add_argument("output", help="Filename of the output GIF")
-    parser.add_argument("columns", type=int, help="Number of columns in the grid")
-    parser.add_argument("rows_or_gifs", nargs='+', help="Optionally specify the number of rows, followed by the input GIF paths")
-    parser.add_argument("--seconds", type=float, help="Limit the output GIF duration (in seconds)")
+    parser.add_argument("columns",
+                        type=int,
+                        help="Number of columns in the grid")
+    parser.add_argument(
+        "rows_or_gifs",
+        nargs='+',
+        help=
+        "Optionally specify the number of rows, followed by the input GIF paths"
+    )
+    parser.add_argument("--seconds",
+                        type=float,
+                        help="Limit the output GIF duration (in seconds)")
 
     args = parser.parse_args()
 
@@ -87,6 +111,7 @@ if __name__ == "__main__":
 
     combine_gifs_grid(gif_paths, args.output, args.columns, rows, args.seconds)
     print(f"Combined GIF saved as {args.output}")
+
 ```
 
 > **Note**: Before running the script, make sure to install the required dependencies:
