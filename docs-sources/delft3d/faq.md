@@ -8,8 +8,8 @@
 To run a Delft3D simulation with FLOW-WAVE coupling using the Inductiva API,
 you’ll need to run both the FLOW and WAVE components together. This involves
 creating a shell script (e.g., `run_sim.sh`) that starts `d_hydro.exe` with
-`mpirun` in the background and launches `wave.exe` in the foreground, allowing
-them to interact during the simulation.
+`mpirun` in the background while launching `wave.exe` in the foreground, allowing
+both components to interact during the simulation.
 
 Here’s a basic example of such a script:
 
@@ -28,8 +28,7 @@ mpirun -np 16 $flowexedir/d_hydro.exe config_d_hydro.xml &
 $waveexedir/wave.exe r17.mdw 1
 ```
 
-For a detailed walkthrough of the setup and execution process, refer to the full
-this [tutorial](https://inductiva.ai/guides/delft3d/flow-wave-coupling).
+For a detailed walkthrough of the setup and execution process, refer to the full [tutorial](https://inductiva.ai/guides/delft3d/flow-wave-coupling).
 
 <br>
 <br>
