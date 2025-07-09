@@ -39,14 +39,7 @@ Google Cloud Platform (GCP):
 
 Each VM family offers multiple machine types with different specifications to match your simulation requirements and budget. For detailed information about specific machine types available within each family through Inductiva, including pricing and performance characteristics, explore our complete machine catalog.
 
-The VMs within these families are categorized into three types, based on the RAM-to-vCPU 
-ratio:
-
-- **highcpu** -  Offers 2 GB of RAM per vCPU, suited for CPU-intensive tasks.
-- **standard** -  Provides a balanced 4 GB of RAM per vCPU, ideal for general-purpose use.
-- **highmem** - Equipped with 8 GB of RAM per vCPU, designed for memory-intensive applications.
-
-These configurations allow for the customization of
+These machine types allow for the customization of
 [MachineGroups](computational_resources/machinegroup_class.md),
 [ElasticMachineGroups](computational_resources/elasticgroup_class.md),
 and [MPIClusters](computational_resources/mpicluster_class.md)
@@ -87,4 +80,6 @@ is transforming the landscape—and how it’s not always easy to find the best 
 for your job.
 
 With our [benchmarking tool](benchmarking.md), we make it easier
-to make smarter, cost-effective decisions for your workloads.
+to make smarter, cost-effective decisions for your workloads. Check out our [Run a Benchmark](../../scale-up/benchmark/run-benchmarks.md) tutorial that
+offers an in-depth step-by-step guide to help you create a benchmarking script and choose
+the best machine type for your specific case.
