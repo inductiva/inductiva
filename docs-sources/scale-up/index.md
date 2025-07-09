@@ -8,9 +8,10 @@ maxdepth: 2
 hidden: true
 ---
 
-Run Simulations in Parallel <parallel-simulations/run-parallel_simulations>
-Set up an Elastic Machine Group <parallel-simulations/set-up-elastic-machine-group>
+Run Simulations in Parallel <parallel-simulations/>
 Templating Manager <parallel-simulations/templating>
+Run Simulations in Parallel with Templating <parallel-simulations/run-parallel-simulations-with-templating>
+Set up an Elastic Machine Group <parallel-simulations/set-up-elastic-machine-group>
 
 ```
 
