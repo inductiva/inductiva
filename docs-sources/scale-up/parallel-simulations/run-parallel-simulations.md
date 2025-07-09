@@ -143,6 +143,8 @@ swash-outputs/
 ├── ...
 ```
 
+> **Note:** Keep in mind that downloading incurs additional costs. You can check the pricing details [here](../../how-it-works/basics/how-much-does-it-cost.md).
+
 ---
 
 # Why This Matters?
