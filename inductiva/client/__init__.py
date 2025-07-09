@@ -124,12 +124,17 @@ from inductiva.client.models.trigger import Trigger
 from inductiva.client.models.trigger1 import Trigger1
 from inductiva.client.models.trigger_credits_info import TriggerCreditsInfo
 from inductiva.client.models.trigger_credits_type import TriggerCreditsType
+from inductiva.client.models.trigger_file_exists_observer_info import TriggerFileExistsObserverInfo
 from inductiva.client.models.trigger_machine_group_create import TriggerMachineGroupCreate
 from inductiva.client.models.trigger_machine_group_info import TriggerMachineGroupInfo
 from inductiva.client.models.trigger_machine_group_type import TriggerMachineGroupType
+from inductiva.client.models.trigger_observer_create import TriggerObserverCreate
+from inductiva.client.models.trigger_observer_type import TriggerObserverType
+from inductiva.client.models.trigger_regex_observer_info import TriggerRegexObserverInfo
 from inductiva.client.models.trigger_task_create import TriggerTaskCreate
 from inductiva.client.models.trigger_task_info import TriggerTaskInfo
 from inductiva.client.models.trigger_task_type import TriggerTaskType
+from inductiva.client.models.trigger_type import TriggerType
 from inductiva.client.models.update_operation_status import UpdateOperationStatus
 from inductiva.client.models.upload_part import UploadPart
 from inductiva.client.models.usage_statistics import UsageStatistics
