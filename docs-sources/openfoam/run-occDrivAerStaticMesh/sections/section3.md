@@ -22,7 +22,7 @@ The first step is to switch your compute resource from a `MachineGroup` to an
 -cloud_machine = inductiva.resources.MachineGroup(
 +cloud_machine = inductiva.resources.MPICluster(
     provider="GCP",
-    machine_type="c2d-highcpu-112",
+    machine_type="c3d-highcpu-180",
 +    num_machines=2,
     spot=True)
 ```
@@ -65,7 +65,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MPICluster( \
     provider="GCP",
-    machine_type="c2d-highcpu-112",
+    machine_type="c3d-highcpu-180",
     num_machines=2,
     data_disk_gb=100,
     spot=True)

@@ -12,7 +12,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2d-highcpu-112",
+    machine_type="c3d-highcpu-180",
     data_disk_gb=100,
     spot=True)
 

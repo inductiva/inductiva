@@ -16,17 +16,17 @@ We'll walk through two different scenarios:
 
 Scaling this simulation to four machines is straightforward. You simply need to
 update the `num_machines` parameter in your `MPICluster` configuration to 4 and
-you need to edit the `caseDefinition` file to use 448 vCPUs, as shown below:
+you need to edit the `caseDefinition` file to use 720 vCPUs, as shown below:
 
 ```diff
--nCores              224;              // Number of cores used for simulation
-+nCores              448;              // Number of cores used for simulation
+-nCores              360;              // Number of cores used for simulation
++nCores              720;              // Number of cores used for simulation
 decompositionMethod hierarchical;      // Decomposition method
--nHierarchical       (14 4 4);           // Coefficients for hierarchical decomposition
-+nHierarchical       (14 8 4);          // Coefficients for hierarchical decomposition
+-nHierarchical       (15 6 4);           // Coefficients for hierarchical decomposition
++nHierarchical       (18 10 4);          // Coefficients for hierarchical decomposition
 ```
 
-By using 448 vCPUs, this means that we are using hyperthreading, which allows us to
+By using 720 vCPUs, this means that we are using hyperthreading, which allows us to
 leverage all available virtual CPUs on the four machines.
 
 ## Running the Simulation
@@ -39,7 +39,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MPICluster( \
     provider="GCP",
-    machine_type="c2d-highcpu-112",
+    machine_type="c2d-highcpu-180",
     data_disk_gb=100,
     num_machines=4,
     spot=True)
@@ -79,29 +79,29 @@ task.print_summary()
 
 Turning off hyperthreading is as simple as changing a couple of parameters when
 allocatiing your `MPICluster`. You can set the `use_hwthread_cpus` parameter to
-`False` and the `np` parameter to `224`, which is the number of physical
+`False` and the `np` parameter to `360`, which is the number of physical
 cores available across the four machines.
 
 ```python
 cloud_machine = inductiva.resources.MPICluster( \
     provider="GCP",
-    machine_type="c2d-highcpu-112",
+    machine_type="c3d-highcpu-180",
     data_disk_gb=100,
     num_machines=4,
-    np=224, # Number of processes mpi will use
+    np=360, # Number of processes mpi will use
     use_hwthread_cpus=False, # Disable hyperthreading
     spot=True)
 ```
 
-Don't forget to revert the `caseDefinition` file to use 224 vCPUs, as shown below:
+Don't forget to revert the `caseDefinition` file to use 360 vCPUs, as shown below:
 
 ```diff
-nCores              224;              // Number of cores used for simulation
+nCores              360;              // Number of cores used for simulation
 decompositionMethod hierarchical;      // Decomposition method
-nHierarchical       (14 4 4);           // Coefficients for hierarchical decomposition
+nHierarchical       (15 6 4);           // Coefficients for hierarchical decomposition
 ```
 
 If now you run the simulation you will be using only the physical cores available
-across the four machines, which is 224 vCPUs.
+across the four machines, which is 360 vCPUs.
 
 ## Going over the results

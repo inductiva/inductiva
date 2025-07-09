@@ -5,7 +5,7 @@ correctly set up. This guide will walk you through the preparation process.
 Let’s get started!
 
 ## Download the Simulation File
-Download the motorBike example [here](https://develop.openfoam.com/committees/hpc/-/tree/9e0480e778e0c5168b97b8177cc3ece3fb3dc496/incompressible/simpleFoam/occDrivAerStaticMesh) and place it in your working directory under a
+Download the motorBike example [here](https://develop.openfoam.com/committees/hpc/-/tree/84c262431117f5c921db8335e368a12d0e9fa3f0/incompressible/simpleFoam/occDrivAerStaticMesh) and place it in your working directory under a
 folder named `openfoam-occDrivAerStaticMesh/`.
 
 Your directory structure should look like this:
@@ -57,21 +57,13 @@ bit too much for now. To lower this number, open the file
 ```diff
 -remover writeInterval_      100;
 -nCores              512;              // Number of cores used for simulation
-+nCores              112;              // Number of cores used for simulation
++nCores              180;              // Number of cores used for simulation
 decompositionMethod hierarchical;    // Decomposition method
 -nHierarchical       (16 8 4);         // Coefficient n for the hierarchical decomposition method
-+nHierarchical       (7 4 4);         // Coefficient n for the hierarchical decomposition method
++nHierarchical       (9 5 4);         // Coefficient n for the hierarchical decomposition method
 ```
 
-We will also need to update the `system/controlDict.noWrite` file:
-```diff
--writeInterval     2500;
-+writeInterval     100000;
-```
-
-> **Note**: Disk writes can significantly degrade simulation performance on MPI clusters. To mitigate this, we are minimizing the number of write operations during this simulation.
-
-This should allow us to run this simulation on a 112 vcpu machine without changing
+This should allow us to run this simulation on a 180 vcpu machine without changing
 the grid ratio too much.
 
 That’s it — you’re ready to send your simulation to the cloud!
