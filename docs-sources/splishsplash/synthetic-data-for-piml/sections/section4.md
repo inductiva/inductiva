@@ -6,7 +6,6 @@ In this final section, we’ll put all of that into practice and show you how to
 <div align="center">
   <video width="400" loop muted autoplay preload="auto">
     <source src="../../_static/sim.mp4" type="video/mp4">
-    Your browser does not support the video tag.
   </video>
 </div>
 
