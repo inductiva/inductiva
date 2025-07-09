@@ -74,9 +74,7 @@ is transforming the landscape—and how it’s not always easy to find the best 
 for your job.
 
 With our [benchmarking tool](benchmarking.md), we make it easier
-to make smarter, cost-effective decisions for your workloads. Check out the
-[Run a Benchmark](../../scale-up/benchmark/run-benchmarks.md) tutorial that
+to make smarter, cost-effective decisions for your workloads.
+Check out the [Run a Benchmark](../../scale-up/benchmark/run-benchmarks.md) tutorial that
 offers an in-depth step-by-step guide to help you create a benchmarking script and choose
 the best machine type for your specific case.
-
-[Run a Benchmark](../../scale-up/benchmark/run-benchmarks.md)
