@@ -1,7 +1,6 @@
 # Run a Single Simulation
-First, we will run a single OpenFOAM simulation using the `occDrivAerStaticMesh` 
-case. This should be straightforward as all the necessary input files are 
-already prepared, as described in the previous section.
+Let’s begin by running a single OpenFOAM simulation using the `occDrivAerStaticMesh` case.
+All the required input files are already prepared, as outlined in the previous section.
 
 ## Code Overview
 The Python code required to run a OpenFOAM simulation using the Inductiva API follows a consistent structure. We adapted it for this specific use case, as shown below.
@@ -44,7 +43,9 @@ and print a summary of the simulation as shown as follows.
 
 As you can see in the “In Progress” line, the part of the timeline that
 represents the actual execution of the simulation, the core computation time of
-this simulation was approximately 3.5 seconds.
+this simulation was approximately --- seconds.
 
-Stay with us to see how you can scale this same simulation into multiple machines
-and reducing the simulation time by X times! 
+Next, we’ll show you how to scale this same simulation across multiple machines and significantly 
+reduce simulation time by a factor of ---!
+
+Stay tuned!
