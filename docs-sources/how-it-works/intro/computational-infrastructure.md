@@ -10,13 +10,7 @@ and introduce you to the various computational options currently available to yo
 
 ## Computational Resource Management
 
-The Inductiva API acts as an abstraction layer that enables you to access a wide 
-array of computational resources provided by a number of different players through 
-a unified Python code. These resources could be from cloud providers, bare-metal 
-hardware rentals, standard high-performance computing (HPC) solutions commonly 
-used in academia, or even on-premise hardware for those with their own computing 
-infrastructure. The API serves as a unifying interface atop all these varied resources, 
-facilitating access to computational solutions of varying scales, prices, and 
+The Inductiva API provides a unified Python interface that simplifies access to diverse computational resources across multiple providers. These resources could be from cloud providers, physical server rentals, standard high-performance computing (HPC) solutions commonly used in academia, or even on-premise hardware for those with their own computing infrastructure. The API serves as a unifying interface atop all these varied resources, facilitating access to computational solutions of varying scales, prices, and 
 performance levels and helping you select the optimal resource for your needs, 
 all through straightforward Python scripting from your laptop.
 
@@ -80,6 +74,7 @@ is transforming the landscape—and how it’s not always easy to find the best 
 for your job.
 
 With our [benchmarking tool](benchmarking.md), we make it easier
-to make smarter, cost-effective decisions for your workloads. Check out our [Run a Benchmark](../../scale-up/benchmark/run-benchmarks.md) tutorial that
+to make smarter, cost-effective decisions for your workloads. Check out the
+[Run a Benchmark](../../scale-up/benchmark/run-benchmarks.md) tutorial that
 offers an in-depth step-by-step guide to help you create a benchmarking script and choose
 the best machine type for your specific case.
