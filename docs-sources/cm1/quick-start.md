@@ -7,9 +7,8 @@ to help you get started with simulations.
 
 ## Prerequisites
 
-1. Download the required files
-[here](https://www2.mmm.ucar.edu/people/bryan/cm1/cm1r18.tar.gz) and extract
-them to a folder called `cm1r18`.
+1. Download the required files [here](https://www2.mmm.ucar.edu/people/bryan/cm1/cm1r18.tar.gz) and extract
+them into a folder named `cm1r18`.
 
 2. Create a folder named `input_files` inside the `cm1r18` directory.
 
