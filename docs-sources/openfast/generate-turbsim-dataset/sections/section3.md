@@ -108,6 +108,6 @@ First, we set the values for `seed_1`, `seed_2` and `URef`. Then, we generate th
 
 The generated input files are then stored in the folder `target_dir` (`variations/s1_{seed_1}/s2_{seed_2}/URef_{URef}`).
 
-> For more details on managing template files, check out the `TemplateManager` [documentation](https://docs.inductiva.ai/en/latest/intro_to_api/templating.html).
+> For more details on managing template files, check out the `TemplateManager` [documentation](https://inductiva.ai/guides/how-it-works/intro/templating).
 
 The good thing about the Inductiva API is that it’s a Python API, so you can simply use a for loop with random sampling for `URef`, `seed_1` and `seed_2` to run multiple simulations in parallel and generate a dataset. That’s exactly what we’ll do in the next section.
