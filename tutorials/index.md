@@ -73,27 +73,11 @@ hidden: true
 how_to/run-parallel_simulations
 how_to/manage_computational_resources
 how_to/set-up-elastic-machine-group
-how_to/set-up-mpi-cluster
 how_to/manage-remote-storage
 how_to/manage_tasks
 how_to/manage_and_retrieve_results
 how_to/reuse-files
 how_to/run-benchmarks
-```
-
-```{toctree}
----
-caption: Synthetic Data for Physics-ML
-maxdepth: 1
-hidden: true
----
-
-generating-synthetic-data/synthetic-data-generation-1.md
-generating-synthetic-data/synthetic-data-generation-2.md
-generating-synthetic-data/synthetic-data-generation-3.md
-generating-synthetic-data/synthetic-data-generation-4.md
-generating-synthetic-data/synthetic-data-generation-5.md
-generating-synthetic-data/synthetic-data-generation-6.md
 ```
 
 ```{toctree}

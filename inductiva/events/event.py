@@ -59,10 +59,10 @@ def register(trigger: Trigger, action: Action):
         _logger.debug("Trying to register trigger %s and action %s", trigger,
                       action)
         api = inductiva.client.EventsApi(inductiva_api.get_client())
-        event = EventCreate(
-            trigger=trigger.get_trigger(),
-            action=action.get_action(),
-        )
+        event = EventCreate.from_dict({
+            "trigger": trigger.get_trigger(),
+            "action": action.get_action()
+        })
         response = api.create_event_without_preload_content(event)
     except ApiException as ex:
         _logger.error("Failed to register trigger %s and action %s",

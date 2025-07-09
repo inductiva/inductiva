@@ -69,6 +69,7 @@ class WRF(simulators.Simulator):
             gen_gif_fps: int = 3,
             gen_gif_variable: Optional[List[str]] = "RAINNC",
             project: Optional[str] = None,
+            time_to_live: Optional[str] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -106,7 +107,11 @@ class WRF(simulators.Simulator):
             gen_gif_fps (int): Frames per second for the GIF. Default is 3.
             gen_gif_variable (str): Variable to be used for generating the GIF.
                 Default is "RAINNC".
-            
+            time_to_live: Maximum allowed runtime for the task, specified as a
+                string duration. Supports common time duration formats such as
+                "10m", "2 hours", "1h30m", or "90s". The task will be
+                automatically terminated if it exceeds this duration after
+                starting.
         """
 
         if case_name not in self.VALID_CASE_NAMES:
@@ -161,4 +166,5 @@ class WRF(simulators.Simulator):
                            remote_assets=remote_assets,
                            resubmit_on_preemption=resubmit_on_preemption,
                            project=project,
+                           time_to_live=time_to_live,
                            **kwargs)

@@ -19,16 +19,28 @@ import inductiva
 
 # Instantiate a MachineGroup object with 5 preemptible machines of type
 # c2-standard-30 and start it immediately
-could_machine = inductiva.resources.MachineGroup(
+cloud_machine = inductiva.resources.MachineGroup(
     provider="GCP",
     machine_type="c2-standard-30",
     num_machines=5,
     spot=True)
-could_machine.start()
 ```
 
-## 2. Preparing Simulation Inputs
+Let's break down these parameters:
 
+- `provider` specifies the cloud provider where your machines will be created.
+
+- `machine_type` specifies the type of machine on which your simulations will run.
+
+- `num_machines` defines how many machines of that type will be created. In this case, it's set to 5, meaning 
+the machine group will consist of 5 identical machines. Why 5? Because there are 5 variations of the
+simulation — specifically, 5 different water levels (as shown below). Each simulation will be assigned to its own
+machine, allowing them to run in parallel and speed up execution by a factor of 5.
+
+- `spot` enables the use of spot instances. These are cheaper versions of the selected machine type, but they
+come with the risk of being interrupted at any time. You can learn more about spot instances [here](https://cloud.google.com/compute/docs/instances/spot).
+
+## 2. Preparing Simulation Inputs
 Download and prepare the input files for your simulations:
 
 ```python
@@ -62,11 +74,20 @@ for i, water_level in enumerate(water_levels_list):
     task = swash.run(
         input_dir=target_dir,
         sim_config_filename="input.sws",
-        on=could_machine)
+        on=cloud_machine)
 ```
 
-## 4. Monitoring Simulations
+Notes on the script:
 
+- When submitting a simulation (i.e., `swash.run`), we pass the same machine group named `cloud_machine`, 
+which contains 5 `"c2-standard-30"` machines. The Inductiva API handles the scheduling, ensuring that each 
+simulation is assigned to an available (idle) machine so they can run in parallel.
+
+- Also note that we do not wait for each task to finish before submitting the next one in the loop 
+(i.e., we don't call `task.wait`). This is intentional and beneficial — it ensures that all tasks are submitted
+quickly and run in parallel, maximizing the use of the machine group and the Inductiva API's parallelism.
+
+## 4. Monitoring Simulations
 The template mechanism will allow you to explore 5 different variations of the
 simulation, each with a different water level. The simulations will be submitted
 to our dedicated machine group and will run in parallel.
