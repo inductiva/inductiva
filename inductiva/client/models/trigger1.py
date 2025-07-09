@@ -19,14 +19,17 @@ import re  # noqa: F401
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, ValidationError, field_validator
 from typing import Optional
 from inductiva.client.models.trigger_credits_info import TriggerCreditsInfo
+from inductiva.client.models.trigger_file_exists_observer_info import TriggerFileExistsObserverInfo
 from inductiva.client.models.trigger_machine_group_info import TriggerMachineGroupInfo
+from inductiva.client.models.trigger_regex_observer_info import TriggerRegexObserverInfo
 from inductiva.client.models.trigger_task_info import TriggerTaskInfo
 from typing import Union, Any, List, Set, TYPE_CHECKING, Optional, Dict
 from typing_extensions import Literal, Self
 from pydantic import Field
 
 TRIGGER1_ANY_OF_SCHEMAS = [
-    "TriggerCreditsInfo", "TriggerMachineGroupInfo", "TriggerTaskInfo"
+    "TriggerCreditsInfo", "TriggerFileExistsObserverInfo",
+    "TriggerMachineGroupInfo", "TriggerRegexObserverInfo", "TriggerTaskInfo"
 ]
 
 
@@ -39,16 +42,23 @@ class Trigger1(BaseModel):
     anyof_schema_1_validator: Optional[TriggerTaskInfo] = None
     # data type: TriggerMachineGroupInfo
     anyof_schema_2_validator: Optional[TriggerMachineGroupInfo] = None
+    # data type: TriggerFileExistsObserverInfo
+    anyof_schema_3_validator: Optional[TriggerFileExistsObserverInfo] = None
+    # data type: TriggerRegexObserverInfo
+    anyof_schema_4_validator: Optional[TriggerRegexObserverInfo] = None
     # data type: TriggerCreditsInfo
-    anyof_schema_3_validator: Optional[TriggerCreditsInfo] = None
+    anyof_schema_5_validator: Optional[TriggerCreditsInfo] = None
     if TYPE_CHECKING:
         actual_instance: Optional[Union[TriggerCreditsInfo,
+                                        TriggerFileExistsObserverInfo,
                                         TriggerMachineGroupInfo,
+                                        TriggerRegexObserverInfo,
                                         TriggerTaskInfo]] = None
     else:
         actual_instance: Any = None
     any_of_schemas: Set[str] = {
-        "TriggerCreditsInfo", "TriggerMachineGroupInfo", "TriggerTaskInfo"
+        "TriggerCreditsInfo", "TriggerFileExistsObserverInfo",
+        "TriggerMachineGroupInfo", "TriggerRegexObserverInfo", "TriggerTaskInfo"
     }
 
     model_config = {
@@ -89,6 +99,22 @@ class Trigger1(BaseModel):
         else:
             return v
 
+        # validate data type: TriggerFileExistsObserverInfo
+        if not isinstance(v, TriggerFileExistsObserverInfo):
+            error_messages.append(
+                f"Error! Input type `{type(v)}` is not `TriggerFileExistsObserverInfo`"
+            )
+        else:
+            return v
+
+        # validate data type: TriggerRegexObserverInfo
+        if not isinstance(v, TriggerRegexObserverInfo):
+            error_messages.append(
+                f"Error! Input type `{type(v)}` is not `TriggerRegexObserverInfo`"
+            )
+        else:
+            return v
+
         # validate data type: TriggerCreditsInfo
         if not isinstance(v, TriggerCreditsInfo):
             error_messages.append(
@@ -99,7 +125,7 @@ class Trigger1(BaseModel):
         if error_messages:
             # no match
             raise ValueError(
-                "No match found when setting the actual_instance in Trigger1 with anyOf schemas: TriggerCreditsInfo, TriggerMachineGroupInfo, TriggerTaskInfo. Details: "
+                "No match found when setting the actual_instance in Trigger1 with anyOf schemas: TriggerCreditsInfo, TriggerFileExistsObserverInfo, TriggerMachineGroupInfo, TriggerRegexObserverInfo, TriggerTaskInfo. Details: "
                 + ", ".join(error_messages))
         else:
             return v
@@ -126,7 +152,21 @@ class Trigger1(BaseModel):
             return instance
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
-        # anyof_schema_3_validator: Optional[TriggerCreditsInfo] = None
+        # anyof_schema_3_validator: Optional[TriggerFileExistsObserverInfo] = None
+        try:
+            instance.actual_instance = TriggerFileExistsObserverInfo.from_json(
+                json_str)
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        # anyof_schema_4_validator: Optional[TriggerRegexObserverInfo] = None
+        try:
+            instance.actual_instance = TriggerRegexObserverInfo.from_json(
+                json_str)
+            return instance
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
+        # anyof_schema_5_validator: Optional[TriggerCreditsInfo] = None
         try:
             instance.actual_instance = TriggerCreditsInfo.from_json(json_str)
             return instance
@@ -136,7 +176,7 @@ class Trigger1(BaseModel):
         if error_messages:
             # no match
             raise ValueError(
-                "No match found when deserializing the JSON string into Trigger1 with anyOf schemas: TriggerCreditsInfo, TriggerMachineGroupInfo, TriggerTaskInfo. Details: "
+                "No match found when deserializing the JSON string into Trigger1 with anyOf schemas: TriggerCreditsInfo, TriggerFileExistsObserverInfo, TriggerMachineGroupInfo, TriggerRegexObserverInfo, TriggerTaskInfo. Details: "
                 + ", ".join(error_messages))
         else:
             return instance
@@ -155,7 +195,8 @@ class Trigger1(BaseModel):
     def to_dict(
         self
     ) -> Optional[Union[Dict[str, Any], TriggerCreditsInfo,
-                        TriggerMachineGroupInfo, TriggerTaskInfo]]:
+                        TriggerFileExistsObserverInfo, TriggerMachineGroupInfo,
+                        TriggerRegexObserverInfo, TriggerTaskInfo]]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None
