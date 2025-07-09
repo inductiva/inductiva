@@ -1,11 +1,11 @@
 # Prerequisites
-Before running the OpenFOAM simulation, ensure all the necessary files are
-correctly set up. This guide will walk you through the preparation process.
+Before running the OpenFOAM simulation, make sure all required files are properly set up. This section will walk you through the 
+preparation steps.
 
 Let’s get started!
 
-## Download the Simulation File
-Download the motorBike example [here](https://develop.openfoam.com/committees/hpc/-/tree/9e0480e778e0c5168b97b8177cc3ece3fb3dc496/incompressible/simpleFoam/occDrivAerStaticMesh) and place it in your working directory under a
+## Download the Simulation Files
+Download the case [here](https://develop.openfoam.com/committees/hpc/-/tree/9e0480e778e0c5168b97b8177cc3ece3fb3dc496/incompressible/simpleFoam/occDrivAerStaticMesh) and place it in your working directory under a
 folder named `openfoam-occDrivAerStaticMesh/`.
 
 Your directory structure should look like this:
@@ -28,17 +28,14 @@ The folder structure above represents a typical OpenFOAM case setup:
 This structure is fundamental for OpenFOAM simulations, enabling users to define the problem, specify physical properties, and control numerical execution.
 
 ## Download the Mesh Files
+Download the 65 million-cell mesh [here](https://zenodo.org/records/15012221/files/polyMesh_65M.tar.gz?download=1).
 
-Download the mesh file from [this link](https://zenodo.org/records/15012221/files/polyMesh_65M.tar.gz?download=1)
-to obtain the 65 million-cell mesh.
-Once downloaded, extract the contents into the `constant/` directory. This will
-create a `polyMesh` folder containing all the required mesh files for the simulation.
+After downloading, extract the contents into the `constant/` directory. This will create a `polyMesh` folder containing 
+all necessary mesh files for the simulation.
 
-## Update the `Allrun` script
-
-The provided `Allrun` script was create to run on a system with SLURM, witch is
-not the case with Inductiva. To fix this just replace the following line from the
-`Allrun` script:
+## Adapt the `Allrun` script
+The provided `Allrun` script is configured for SLURM-based systems, which isn’t applicable when using Inductiva. 
+To adapt it, modify the following lines in the `Allrun` file:
 
 ```diff
 # extra mpi flags
@@ -49,11 +46,11 @@ not the case with Inductiva. To fix this just replace the following line from th
 +parEx="mpirun -np ${nProcs} ${OMPI_FLAGS}"
 ```
 
-## Adjust the simulation parameters
+## Adjust the Simulation Parameters
+By default, this simulation is configured to run with 512 processes, which is quite high for an initial test run. Let’s start with a lower number.
 
-By default, this simulation is set to run with 512 processes, which might be a
-bit too much for now. To lower this number, open the file
-`system/include/caseDefinition` and update the following lines:
+To adjust it, open the file `system/include/caseDefinition` and update the following lines:
+
 ```diff
 -remover writeInterval_      100;
 -nCores              512;              // Number of cores used for simulation
@@ -63,15 +60,15 @@ decompositionMethod hierarchical;    // Decomposition method
 +nHierarchical       (7 4 4);         // Coefficient n for the hierarchical decomposition method
 ```
 
-We will also need to update the `system/controlDict.noWrite` file:
+Update the `system/controlDict.noWrite` file:
+
 ```diff
 -writeInterval     2500;
 +writeInterval     100000;
 ```
 
-> **Note**: Disk writes can significantly degrade simulation performance on MPI clusters. To mitigate this, we are minimizing the number of write operations during this simulation.
+> **Note**: Disk writes can significantly degrade performance on MPI clusters. By increasing the `writeInterval`, we reduce the number of write operations, improving overall runtime efficiency.
 
-This should allow us to run this simulation on a 112 vcpu machine without changing
-the grid ratio too much.
+With these adjustments, your setup is optimized to run on a 112 vCPU machine without needing to modify the mesh resolution.
 
 That’s it — you’re ready to send your simulation to the cloud!
