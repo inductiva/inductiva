@@ -40,6 +40,14 @@ hidden: true
 ---
 setup-test
 quick-start
-flow-wave
+flow-wave-coupling
 ```
 
+```{toctree}
+---
+caption: " "
+maxdepth: 1
+hidden: true
+---
+faq
+```

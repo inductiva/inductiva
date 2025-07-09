@@ -97,7 +97,7 @@ html_favicon = 'favicon.ico'
 html_title = 'System Requirements'
 
 # Google Analytics
-googleanalytics_id = os.getenv("GTAG_WEBSITE")
+googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
 googleanalytics_enabled = True
 
 # OpenGraph protocol
