@@ -1,5 +1,6 @@
 # Test Your Inductiva Setup ⚙️
-Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick OpenFOAM simulation — it only takes a few seconds!
+Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. 
+To confirm everything is working as expected, simply run a quick OpenFOAM simulation — it only takes a minute!
 
 ## Step 1: Copy and Run the Code
 
@@ -82,7 +83,8 @@ Estimated computation cost (US$): 0.00052 US$
 
 If the task status shows **Success**, congratulations! You've successfully run an OpenFOAM simulation.
 
-This simple example tested your installation on a small machine with just 4 virtual CPUs. Inductiva offers far more powerful options to supercharge your simulations.
+This simple example tested your installation on a small machine with just 4 virtual CPUs. Inductiva offers far more powerful 
+options to supercharge your simulations.
 
 Start running simulations seamlessly! 
 
