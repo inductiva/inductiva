@@ -74,10 +74,13 @@ cloud_machine = inductiva.resources.MachineGroup(
 # Set the path to the local directory where the template folder was downloaded
 template_dir = "splishsplash-template-dir"
 
-# Specify the initial conditions for the fluid simulation and the fluid's properties
-initial_velocity = [4, 0, 0]  # Example: A high horizontal initial speed m/s in the x direction 
-kinematic_viscosity = 2       # Represents a fluid with higher viscosity m^2/s
-density = 2500                # A denser fluid compared to water 1000 kg/m^3
+# Specify the initial conditions for the fluid simulation and properties
+# Example: A high horizontal initial speed m/s in the x direction 
+initial_velocity = [4, 0, 0]
+# Represents a fluid with higher viscosity m^2/s
+kinematic_viscosity = 2       
+# A denser fluid compared to water 1000 kg/m^3
+density = 2500                
 
 # Define the directory where the rendered templates will appear filled 
 # with the values of the variables defined above
