@@ -95,6 +95,6 @@ First, we set the `wind_speed` values. Then, the `render_dir` method generates t
 the placeholder variables in the `forceCoeffs.jinja` template with the corresponding values. The generated 
 files are saved in the `target_dir` (`variations/wind_speed_{wind_speed}`).
 
-> For more details on managing template files, check out the `TemplateManager` [documentation](https://docs.inductiva.ai/en/latest/intro_to_api/templating.html).
+> For more details on managing template files, check out the `TemplateManager` [documentation](https://inductiva.ai/guides/how-it-works/intro/templating).
 
 Since Inductiva’s API is Python-based, you can easily loop over different sampled values of `wind_speed` to run multiple simulations in parallel and generate a dataset. That’s exactly what we’ll do in the next section.
