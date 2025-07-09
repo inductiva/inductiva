@@ -39,7 +39,7 @@ These machine types allow for the customization of
 and [MPIClusters](computational_resources/mpicluster_class.md)
 to match your computational needs.
 
-Here's an example of how you can start a MachineGroup using "**c3d-standard-60**" machines:
+Here's an example of how you can start a MachineGroup using "c3d-standard-60" machines:
 
 ```python
 import inductiva
