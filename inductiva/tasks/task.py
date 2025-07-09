@@ -1507,6 +1507,8 @@ class Task:
 
         # The task is still running
         start_time = getattr(info, start_attribute)
+        if isinstance(start_time, str):
+            start_time = datetime.datetime.fromisoformat(start_time)
 
         # start time may be None if the task was killed before it started
         if start_time is None:
