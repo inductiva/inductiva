@@ -35,15 +35,14 @@ task.download_outputs()
 task.print_summary()
 ```
 
-When the simulation is complete, we terminate the machine, download the results
-and print a summary of the simulation as shown as follows.
+When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation 
+as shown as follows.
 
 ```
 ```
 
-As you can see in the “In Progress” line, the part of the timeline that
-represents the actual execution of the simulation, the core computation time of
-this simulation was approximately --- seconds.
+As you can see in the “In Progress” line, the part of the timeline that represents the actual execution of the simulation, 
+the core computation time of this simulation was approximately --- seconds.
 
 Next, we’ll show you how to scale this same simulation across multiple machines and significantly 
 reduce simulation time by a factor of ---!
