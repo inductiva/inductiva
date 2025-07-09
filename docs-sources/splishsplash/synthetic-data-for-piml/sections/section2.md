@@ -1,5 +1,5 @@
 # Generalizing the Base Case
-In this step, we’ll build on our simple base case and generalize the simulation script to allow programmatic control over the physical parameters of the simulation. To do this, we’ll use Inductiva’s built-in [Templating System](https://website-staging.inductiva.ai/guides/documentation/intro/templating).
+In this step, we’ll build on our simple base case and generalize the simulation script to allow programmatic control over the physical parameters of the simulation. To do this, we’ll use Inductiva’s built-in [Templating System](https://inductiva.ai/guides/documentation/intro/templating).
 
 ## What is Templating?
 Templating is a powerful mechanism that lets you start with a specific simulation file, such as our base case, that contains fixed values for the parameters you want to explore. You can then transform those fixed values into variables that can be modified directly from your Python code before submitting the simulation for remote execution.
@@ -7,7 +7,7 @@ Templating is a powerful mechanism that lets you start with a specific simulatio
 Now, let’s revisit our base case script and identify the parameters and values we want to generalize. We'll start by focusing on those directly related to the physical properties of the simulation, such as initial conditions, viscosity, and other aspects of the fluid’s physical behavior.
 
 ## Generalizing Physical Parameters
-The key parameters we want to convert into variables include the fluid **block’s dimensions**, **initial position**, and **initial velocity**. Additionally, we want to make the **fluid's density** and **viscosity** configurable in order to generate more diverse examples for our target machine learning task.
+The key parameters we want to convert into variables include the fluid **initial position**, and **initial velocity**. Additionally, we want to make the **fluid's density** and **viscosity** configurable in order to generate more diverse examples for our target machine learning task.
 
 Start by [downloading our pre-configured template folder](https://storage.googleapis.com/inductiva-api-demo-files/splishsplash-template-dir.zip) and saving it to a local directory. As you may recall, the simulation configuration, including the parameters we are now making variable, is stored in a `.json` file, which is included in the downloaded folder.
 
@@ -15,48 +15,59 @@ Below is an overview of our templated configuration file. Note that we’ve defi
 
 ```text
 {
-    "Configuration": {
-        "stopAt": 4,
-        "timeStepSize": 0.01,
-        "particleRadius": 0.008,
-        "simulationMethod": 4,
-        "boundaryHandlingMethod": 0,
-        "kernel": 1,
-        "cflMethod": 1,
-        "cflFactor": 0.5,
-        "cflMinTimeStepSize": 0.0001,
-        "cflMaxTimeStepSize": 0.005,
-        "gravitation": [0, 0, -9.81],
-        "gradKernel": 1,
+	"Configuration": 
+	{
+        "stopAt": 6,
+		"cameraPosition": [0,2,5],
+		"cameraLookat": [0,0,0],
+		"particleRadius": {{ particle_radius | default(0.015)}},
+		"numberOfStepsPerRenderUpdate": 1,
+		"simulationMethod": 4,
+		"gravitation": [0,-9.81,0],
+        "timeStepSize": 0.0001,
+		"cflMethod": 1, 
+		"cflFactor": 0.05,
+		"cflMaxTimeStepSize": 0.005,		
+		"stiffness": 50000,
+		"exponent": 7,
         "enableVTKExport": true,
-        "dataExportFPS": 60,
-        "particleAttributes": "velocity;density"
-    },
-    "RigidBodies": [
-        {
-            "geometryFile": "unit_box.obj",
-            "translation": [0, 0, 0],
-            "scale": [1, 1, 1],
-            "isDynamic": false
-        }
-    ],
-    "Materials": [
-        {
-            "id": "Fluid",
-            "density0": {{ density | default(1000) }},
-            "viscosity": {{ viscosity | default(1e-6) }},
-            "viscosityMethod": 6
-        }
-    ],
-    "FluidModels": [
-        {
-            "id": "Fluid",
-            "particleFile": "unit_box.obj",
-            "translation": {{ initial_position | default([0, 0, 0]) }},
-            "scale": {{ dimensions | default([0.5, 0.5, 0.5]) }},
-            "initialVelocity": {{ initial_velocity | default([0, 0, 0]) }}
-        }
-    ]
+		"velocityUpdateMethod": 0,
+		"enableDivergenceSolver": true,
+		"boundaryHandlingMethod": 2
+	},
+	"Materials": [
+		{
+			"id": "Fluid",
+			"viscosity": {{ viscosity | default(0.01) }},
+			"density0": {{ density | default(1000) }},
+			"viscosityMethod": 1,
+			"colorMapType": 1
+		}
+	],
+	"RigidBodies": [
+		{
+			"geometryFile": "unitBox.obj",
+			"translation": [0,0,0],
+			"rotationAxis": [1, 0, 0],
+			"rotationAngle": 0,
+			"scale": [2, 2, 2],
+			"color": [0.1, 0.4, 0.6, 1.0], 
+			"isDynamic": false,
+			"isWall": true,
+			"mapInvert": true, 
+			"mapThickness": 0.0,
+			"mapResolution": [25,25,25]
+		}
+	],
+	"FluidBlocks": [
+		{
+			"id": "Fluid",
+			"denseMode": 0,
+            "start": {{ start | default([-0.5, -0.5, -0.5]) }},
+            "end": {{ end | default([0.5, 0.5, 0.5]) }},
+			"initialVelocity": {{ initial_velocity | default([0, 0, 0]) }}
+		}
+	]
 }
 ```
 
