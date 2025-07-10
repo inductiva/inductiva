@@ -1,4 +1,4 @@
-# Generalizing the Use Case
+# Generalize the Use Case
 Inductiva enables the parallel execution of numerous simulations, making it ideal for conducting parameter studies at scale. For example, suppose you are interested in analyzing how varying a specific input parameter influences the simulation results. you might want to analyze how varying a specific input parameter affects the simulation results.
 
 As a demonstration, consider studying the impact of changes in the reference free-stream velocity, 

@@ -1,4 +1,5 @@
-# Run Multiple Simulations in Parallel
+# Parallel Simulations with Templating
+
 Running multiple simulations in parallel can significantly reduce waiting times, 
 especially useful when exploring various parameter values or running a large number 
 of simulations for a sensitivity analysis. This how-to guide will walk you through 
