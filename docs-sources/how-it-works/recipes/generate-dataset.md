@@ -8,7 +8,7 @@ Start by preparing the configuration files for a base case simulation model of t
 
 2. **Generalize the Base Case**
 Generalize the configuration files to allow variations of the base case. 
-Our [Templating System](https://inductiva.ai/guides/documentation/intro/templating) enables dynamic substitution 
+Our [Templating System](https://inductiva.ai/guides/scale-up/parallel-simulations/templating) enables dynamic substitution 
 of variables at runtime, making it easy to modify simulation (hyper)parameters through Python. This supports 
 both exhaustive and randomized exploration of the configuration space.
 

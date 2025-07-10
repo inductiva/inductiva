@@ -4,8 +4,20 @@ Your resource hub for all things OpenFOAM at Inductiva. Whether you're just star
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check! 
 
 ## What You'll Find Here
-- **Tutorials:** Step-by-step guides to help you learn how to run OpenFOAM through the Inductiva API. From getting started to advanced tutorials, we have you covered.
-- **Benchmarks:** A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how OpenFOAM performs on different hardware configurations.
+
+### Tutorials
+Step-by-step guides to help you learn how to run OpenFOAM through the Inductiva API. From getting started to advanced tutorials, we have you covered.
+
+* **Getting Started**
+    - [Test Your Inductiva Setup](https://inductiva.ai/guides/openfoam/setup-test)
+    - [Quick Start Guide](https://inductiva.ai/guides/openfoam/quick-start)
+
+* **Advanced Tutorials**
+    - [Generate a Wind Tunnel Simulation Dataset](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/index)
+    - [Run occDrivAerStaticMesh from the OpenFOAM HPC Benchmark Suite](https://inductiva.ai/guides/openfoam/run-occdrivaerstaticmesh-case/index)
+
+### Benchmarks
+A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how OpenFOAM performs on different hardware configurations.
 
 ```{toctree}
 ---
@@ -25,6 +37,7 @@ hidden: true
 setup-test
 quick-start
 Generate a Wind Tunnel Simulation Dataset <generate-wind-tunnel-dataset/index>
+Run occDrivAerStaticMesh from the OpenFOAM HPC Benchmark Suite <run-occdrivaerstaticmesh-case/index>
 ```
 
 ```{toctree}
