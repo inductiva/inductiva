@@ -27,7 +27,7 @@ hidden: true
 ---
 setup-test
 quick-start
-Generate an OpenFOAM Dataset <generate-openfoam-dataset/index>
+Wind Tunnel Simulation Dataset <wind-tunnel-dataset/index>
 ```
 
 ```{toctree}
