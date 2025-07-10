@@ -48,7 +48,8 @@
 	--purple-hover-color: #7d35dc;
 
 	--cta-container-border: none;
-	--cta-container-bg: #e2e3ef;;
+	--cta-container-bg: #e2e3ef;
+	--cta-container-text-color: #333;
 }
 .dark {
 	--bg-color: #03020e;
@@ -80,6 +81,7 @@
 
 	--cta-container-border: 1px solid #4c3669;
 	--cta-container-bg: #8e3bff1a;
+	--cta-container-text-color: #ffffff;
 }
 
 .border-border {
@@ -1346,7 +1348,6 @@ footer {
 	gap: 16px;
 	padding: 20px 28px;
 	border-radius: 10px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 	max-width: 800px;
 	margin: 20px auto;
 	border: var(--cta-container-border);
@@ -1355,7 +1356,7 @@ footer {
 
 .cta-text {
 	font-size: 14px;
-	color: var(--text-btn-color);
+	color: var(--cta-container-text-color);
 	flex: 1 1 0;
 	min-width: 200px;          
 	word-break: break-word;   
