@@ -93,7 +93,5 @@ options to supercharge your simulations.
   <button  onclick="window.open('https://console.inductiva.ai/', '_blank')" target="_blank" class="cta-button">Sign In</button>
 </div>
 
----
-
 ## Need Help?
 If you encounter any issues or need further assistance, don't hesitate to [**Contact Us**](mailto:support@inductiva.ai). We're here to help!
