@@ -34,7 +34,7 @@ swash-inputs/
 Each subfolder contains all the input files for a **SWASH** simulation.
 All simulations use the same config file, named `S1.sws`.
 
-## Submit Parallel Simulations
+## Submit Simulations to Run in Parallel
 
 Here's the full Python script to submit multiple simulations to run in parallel on the cloud:
 
