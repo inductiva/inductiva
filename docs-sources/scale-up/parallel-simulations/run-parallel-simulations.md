@@ -34,7 +34,7 @@ swash-inputs/
 Each subfolder contains all the input files for a **SWASH** simulation.
 All simulations use the same config file, named `S1.sws`.
 
-## Submit Multiple Simulations to Run in Parallel on the Cloud
+## Submit Parallel Simulations
 
 Here's the full Python script to submit multiple simulations to run in parallel on the cloud:
 
@@ -158,7 +158,7 @@ powerful and efficient simulation workflow.
 
 ---
 
-## Wrapping Up: Building a Scalable Simulation Workflow
+## Wrapping Up
 
 In this tutorial, you learned how to efficiently run multiple SWASH simulations in parallel using the Inductiva API.
 
