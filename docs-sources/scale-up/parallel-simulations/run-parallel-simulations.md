@@ -147,7 +147,7 @@ swash-outputs/
 
 ---
 
-# Why This Matters?
+## Why This Matters?
 
 If you need to run multiple simulations simultaneously, submitting several tasks across multiple cloud machines lets you speed up
 your execution time by the number of machines. Here, that means running 5 times faster. Setting this up requires just one line of code 
@@ -157,7 +157,7 @@ a powerful and efficient simulation workflow.
 
 ---
 
-# Wrapping Up: Building a Scalable Simulation Workflow
+## Wrapping Up: Building a Scalable Simulation Workflow
 
 In this tutorial, you learned how to efficiently run multiple SWASH simulations in parallel using the Inductiva API.
 
