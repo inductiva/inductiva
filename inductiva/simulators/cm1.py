@@ -34,7 +34,7 @@ class CM1(simulators.Simulator):
             init_surface: Optional[str] = None,
             input_sounding: Optional[str] = None,
             landuse: Optional[str] = None,
-            recompile: bool = True,
+            recompile: bool = False,
             on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
@@ -68,14 +68,14 @@ class CM1(simulators.Simulator):
                 of heat/momentum/moisture, or if you are using the atmospheric
                 radiation scheme, then you need to specify the surface
                 conditions. Used if you are supplying an external landuse file.
-            recompile: Enabled by default to optimize the simulation
-                performance. If set to False, the simulation will use the
-                pre-compiled version of the CM1 code. For machines with a high
-                number of vCPUs the performance optimization may not be
-                significant, so you can set this to False to save time.
-                The value is ignored if any of the files `base`, `init3d`,
-                `init_terrain`, or `init_surface` is provided, as the simulator
-                will always recompile the code in that case.
+            recompile: Recompile flag, disabled by default. The simulation will
+                use the pre-compiled version of the CM1 code. The value is
+                ignored if any of the files `base`, `init3d`, `init_terrain`,
+                or `init_surface` is provided, as the simulator will always
+                recompile the code in that case. If enabled, the simulator
+                will recompile for the machine architecture of the
+                computational resource, which may result in a performance
+                improvement (usually not significant).
             on: The computational resource to launch the simulation on.
             sim_config_filename: Name of the simulation configuration file.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
