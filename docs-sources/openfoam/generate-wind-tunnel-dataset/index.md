@@ -19,7 +19,7 @@ In this tutorial, we'll walk through how to:
 
 <div class="cta-bar">
   <div class="cta-text">
-    <strong>Ready to dive in?</strong> Click the button to get started with $5 of free credits. No credit card needed!
+    <strong>Ready to dive in?</strong> Sign in to get started with $5 of free credits. No credit card needed!
   </div>
   <button  onclick="window.open('https://console.inductiva.ai/', '_blank')" target="_blank" class="cta-button">Sign In</button>
 </div>

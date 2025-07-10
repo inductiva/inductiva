@@ -75,4 +75,9 @@ Estimated computation cost (US$): 0.0047 US$
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
 the core computation time of this simulation was approximately 2 minutes and 10 seconds.
 
-It's that simple!
+<div class="cta-bar">
+  <div class="cta-text">
+    <strong>Start running simulations seamlessly!</strong> Sign in to get started with $5 of free credits. No credit card needed!
+  </div>
+  <button  onclick="window.open('https://console.inductiva.ai/', '_blank')" target="_blank" class="cta-button">Sign In</button>
+</div>
