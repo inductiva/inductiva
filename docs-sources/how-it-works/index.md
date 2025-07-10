@@ -32,9 +32,8 @@ setup/uninstall_inductiva
 caption: Computational Resources
 maxdepth: 3
 hidden: true
+captionlink: machines/index
 ---
-
-Computational Resources <machines/index>
 machines/shared-dedicated-resources
 machines/computational-infrastructure
 ```
