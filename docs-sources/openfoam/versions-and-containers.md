@@ -3,7 +3,7 @@
 ## About OpenFOAM
 OpenFOAM is an open-source C++ toolbox designed for the development of custom numerical solvers and pre- and post-processing utilities. It is widely used for solving a variety of continuum mechanics problems, including computational fluid dynamics, solid mechanics, electromagnetism, and multiphase flow.
 
-## Supported Versioms
+## Supported Versions
 Inductiva stays up to date with the latest versions of OpenFOAM and supports both OpenFOAM distributions: [ESI Group](https://www.openfoam.com/about-esi-opencfd) and [OpenFOAM Foundation](https://openfoam.org/), giving you access to the full range of OpenFOAM capabilities.
 
 Below is a list of the supported versions, along with their respective release dates:
