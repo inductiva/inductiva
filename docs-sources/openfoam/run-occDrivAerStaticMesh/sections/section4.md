@@ -6,9 +6,8 @@ Running simulations in parallel across a cluster can dramatically reduce computa
 many machines.
 
 ## Update Simulation Parameters to Use 360 vCPUs
-Currently, the simulation is configured to run on 180 vCPUs. To fully utilize
-the MPI Cluster, which provides 360 vCPUs across two machines, you’ll need to
-adjust the simulation parameters accordingly.
+Previously, the simulation was set up to run on 180 vCPUs. To make full use of the MPI cluster's 360 vCPUs across 
+two machines, you'll need to adjust the simulation parameters.
 
 Open the file `system/include/caseDefinition` and update the number of cores and decomposition settings:
 
@@ -20,7 +19,7 @@ decompositionMethod hierarchical;      // Decomposition method
 +nHierarchical       (15 6 4);          // Coefficients for hierarchical decomposition
 ```
 
-These changes ensure that the simulation workload is properly partitioned across all available processors for optimal parallel performance.
+These changes ensure the simulation workload is properly partitioned across all available processors, enabling optimal parallel performance.
 
 ## Run your simulation
 Below is the updated Python script for running the simulation across two machines using an MPI cluster and the newly
@@ -99,21 +98,16 @@ Data:
 	Number of output files:   6517
 
 Estimated computation cost (US$): 26.97 US$
-
-Go to https://console.inductiva.ai/tasks/4trnwrg7xscpk6ynzsw7dnxsh for more details.
 ```
 
-As shown in the “In Progress” line, all commands, including those running in
-parallel, are listed. These commands were executed across **360 vCPUs**,
+As shown in the “In Progress” line, all commands (including those running in
+parallel) are listed. These commands were executed across **360 vCPUs**,
 utilizing the full capacity of our MPI cluster.
 
 With this setup, the total computation time dropped to **7 hours and 53 minutes**,
-nearly halving the runtime compared to the single-machine execution.
+**nearly cutting the runtime in half** compared to running on a single machine.
 
-For this particular simulation, scaling to additional machines offers no further
-benefit, as the **communication overhead outweighs** the performance gains from
-the extra compute power.
-
-You can learn more about running OpenFOAM on MPI clusters in our [blog post](https://inductiva.ai/blog/article/from-supercomputer-to-cloud-a-new-era-for-openfoam-simulations).
+For this particular simulation, scaling to more machines provides no additional benefit, as the 
+**communication overhead outweighs the performance gains** from the extra compute resources.
 
 

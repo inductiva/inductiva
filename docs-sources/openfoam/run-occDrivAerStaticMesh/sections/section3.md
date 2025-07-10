@@ -48,16 +48,13 @@ simulation_commands = [
 ]
 ```
 
-
-### How Parallel Commands Are Handled
-As mentioned previously, the Inductiva API automatically detects parallel commands
+## How Parallel Commands Are Handled
+The Inductiva API automatically detects parallel commands
 by checking for the `-parallel` flag in your command list. When present, it
 configures the command to run across the entire MPI cluster without requiring
 any manual setup.
 
-Now that you’ve seen how to move from using the `Allrun` script to a sequence of
-individual commands, you're ready to take full advantage of an MPI cluster.
-Let’s explore the **performance gains** you can achieve by scaling your simulation
-from a single machine to multiple machines.
-
+Now that you’ve learned how to transition from using the `Allrun` script to executing individual commands, 
+you're ready to fully leverage an MPI cluster. Let’s explore the **performance improvements** you can achieve 
+by scaling your simulation from a single machine to a multi-node setup.
 

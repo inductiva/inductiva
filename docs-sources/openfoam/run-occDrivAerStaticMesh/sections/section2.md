@@ -57,14 +57,12 @@ Data:
 	Number of output files:   3276
 
 Estimated computation cost (US$): 24.31 US$
-
-Go to https://console.inductiva.ai/tasks/6j356wymfn7t614fncoff2dnf for more details.
 ```
 
 As you can see in the “In Progress” line, the part of the timeline that represents the actual execution of the simulation, 
 the core computation time of this simulation was approximately 14 hours and 13 minutes.
 
 Next, we’ll show you how to scale this same simulation across multiple machines and significantly 
-reduce simulation time by a factor of **1.8 times**!
+reduce simulation time - by up to **1.8x**!
 
 Stay tuned!
