@@ -78,12 +78,6 @@ class FDS(simulators.Simulator):
 
         available_vcpus = on.available_vcpus
 
-        if all(arg is not None
-               for arg in [n_vcpus, n_omp_threads, n_mpi_processes]):
-            raise ValueError(
-                "Parameters n_vcpus, omp_n_threads and n_mpi_processes "
-                "can't be set simultaneously.")
-
         if n_vcpus is None:
             logging.info(
                 "Param n_vcpus not set. Defaulting to the number of "
