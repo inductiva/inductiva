@@ -1,4 +1,4 @@
-# Wind Tunnel Simulation Dataset
+# Generate a Wind Tunnel Simulation Dataset
 In this tutorial, we will demonstrate how to use the Inductiva API to efficiently generate an OpenFOAM dataset 
 in parallel by varying the inlet wind speed. This approach allows rapid creation of multiple simulation cases 
 with different wind conditions, facilitating the analysis of flow behavior and performance sensitivity over 

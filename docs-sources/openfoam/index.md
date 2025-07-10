@@ -27,7 +27,7 @@ hidden: true
 ---
 setup-test
 quick-start
-Wind Tunnel Simulation Dataset <wind-tunnel-dataset/index>
+Generate a Wind Tunnel Simulation Dataset <wind-tunnel-dataset/index>
 ```
 
 ```{toctree}
