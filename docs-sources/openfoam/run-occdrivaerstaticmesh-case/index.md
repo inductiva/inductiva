@@ -18,40 +18,50 @@ In this tutorial, we'll walk through how to:
 This guide is divided into a few straightforward steps. Follow along to explore the performance and scalability of this simulation 
 using the **Inductiva API**.
 
-Prefer to read about it first? Check out our [blog post](https://inductiva.ai/blog/article/from-supercomputer-to-cloud-a-new-era-for-openfoam-simulations) for the full story.
+---
 
-Ready to dive in? Click the button below to get started with $5 of free credits.
+**Prefer to read about it first?** Check out our [blog post](https://inductiva.ai/blog/article/from-supercomputer-to-cloud-a-new-era-for-openfoam-simulations) for the full story.
 
-<div style="text-align: center; margin: 2em 0;">
-  <a href="https://console.inductiva.ai/" role="button" class="signin-button">Sign In</a>
+<div class="cta-bar">
+  <div class="cta-text">
+    <strong>Ready to dive in?</strong> Click the button to get started with $5 of free credits. No credit card needed!
+  </div>
+  <button class="cta-button">Sign In</button>
 </div>
 
-<style>
-  .signin-button {
-    display: inline-block;
-    padding: 12px 24px;
-    background-color: #9747FF;
-    color: #fff;
-    font-weight: 600;
-    text-decoration: none;
-    border-radius: 6px;
-    border: 2px solid #9747FF;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  .signin-button:hover,
-  .signin-button:focus {
-    background-color: #fff;
-    color: #9747FF;
-    outline: none;
-  }
-</style>
+.cta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background-color: #f3f4fe;
+  padding: 20px 28px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  max-width: 800px;
+  margin: 40px auto;
+  flex-wrap: wrap; /* responsive */
+}
 
+.cta-text {
+  font-size: 16px;
+  color: #333;
+  flex: 1;
+  min-width: 250px;
+}
 
-```{toctree}
-:hidden:
-sections/section1.md
-sections/section2.md
-sections/section3.md
-sections/section4.md
-```
+.cta-button {
+  background-color: #8E3BFF; /* your original purple */
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #752fd6; /* darker shade of your purple */
+}
