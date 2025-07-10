@@ -1,4 +1,4 @@
-# Run Multiple Simulations in Parallel
+# Parallel Simulations
 
 In this tutorial, you'll learn how to run multiple simulations in parallel, each with
 its own input directory, and manage them efficiently using the Inductiva API.
