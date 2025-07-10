@@ -60,15 +60,15 @@ limitations on the quantity and types of machines that you can launch. For detai
 on these limitations, please consult the
 [User Quotas](../basics/quotas.md).
 
+### Beyond Google Could Platform
+
+While the examples above focus on GCP resources, Inductiva also supports running simulations on other computational infrastructures. For comprehensive information about using your own hardware, see our [BYOH (Bring Your Own Hardware)](https://inductiva.ai/guides/expand/use-local-task-runner/index) tutorial, which explores in detail the various infrastructure options we support beyond GCP.
+
 ````{eval-rst}
 .. seealso::
    Learn how to manage your computational resources through
    `Inductiva's Command Line Interface <https://inductiva.ai/guides/documentation/cli/resources>`_
 ```` 
-
-### Beyond Google Could Platform
-
-While the examples above focus on GCP resources, Inductiva also supports running simulations on other computational infrastructures. For comprehensive information about using your own hardware, see our [BYOH (Bring Your Own Hardware)](../../expand/use-local-task-runner/index.md) tutorial, which explores in detail the various infrastructure options we support beyond GCP.
 
 ## What Next? 
 
