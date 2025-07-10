@@ -28,7 +28,7 @@ using the **Inductiva API**.
   <div class="cta-text">
     <strong>Ready to dive in?</strong> Click the button to get started with $5 of free credits. No credit card needed!
   </div>
-  <button class="cta-button">Sign In</button>
+  <button href="https://console.inductiva.ai/" target="_blank" class="cta-button">Sign In</button>
 </div>
 
 ```{toctree}

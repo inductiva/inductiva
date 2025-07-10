@@ -6,7 +6,7 @@ python scripts from your laptop, you can streamline your entire simulation workf
 In essence, the API enables you to:
 
 <div align="center">
-   <img src="../_static/infographic-apifunctionality-fullscreen.svg" alt="Inductiva API Usage Flow">
+   <img src="../_static/infographic-apifunctionality-fullscreen-white.svg" alt="Inductiva API Usage Flow">
 </div>
 
 1. Start and manage remote Virtual Machines (VMs), operating either independently
