@@ -25,7 +25,7 @@ hidden: true
 setup-test
 quick-start
 Generate a Wind Tunnel Simulation Dataset <generate-wind-tunnel-dataset/index>
-Run `occDrivAerStaticMesh` from the OpenFOAM HPC Benchmark Suite <run-occdrivaerstaticmesh-case/index>
+Run occDrivAerStaticMesh from the OpenFOAM HPC Benchmark Suite <run-occdrivaerstaticmesh-case/index>
 ```
 
 ```{toctree}
@@ -36,5 +36,3 @@ hidden: true
 ---
 faq
 ```
-
-

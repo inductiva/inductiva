@@ -22,14 +22,9 @@ using the **Inductiva API**.
 
 ---
 
-**Prefer to read about it first?** Check out our [blog post](https://inductiva.ai/blog/article/from-supercomputer-to-cloud-a-new-era-for-openfoam-simulations) for the full story.
+Prefer to read about it first? Check out our [blog post](https://inductiva.ai/blog/article/from-supercomputer-to-cloud-a-new-era-for-openfoam-simulations) for the full story.
 
-<div class="cta-bar">
-  <div class="cta-text">
-    <strong>Ready to dive in?</strong> Click the button to get started with $5 of free credits. No credit card needed!
-  </div>
-  <button  onclick="window.open('https://console.inductiva.ai/', '_blank')" target="_blank" class="cta-button">Sign In</button>
-</div>
+Ready to get started? Click the button to claim your $5 in free credits — no credit card required!
 
 ```{toctree}
 :hidden:
