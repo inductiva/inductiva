@@ -34,7 +34,7 @@ swash-inputs/
 Each subfolder contains all the input files for a **SWASH** simulation.
 All simulations use the same config file, named `S1.sws`.
 
-## Submit Multiple Simulations to Run in Parallel on the Cloud
+## Submit Simulations to Run in Parallel
 
 Here's the full Python script to submit multiple simulations to run in parallel on the cloud:
 
@@ -149,15 +149,16 @@ swash-outputs/
 
 ## Why This Matters?
 
-If you need to run multiple simulations simultaneously, submitting several tasks across multiple cloud machines lets you speed up
-your execution time by the number of machines. Here, that means running 5 times faster. Setting this up requires just one line of code 
-(e.g., `num_machines=<number of simulations>`). Additionally, organizing simulations with projects, storing metadata, and monitoring
-via the console help you effortlessly keep track of everything, so you never lose sight of what's happening in your batch, creating 
-a powerful and efficient simulation workflow.
+If you need to run multiple simulations simultaneously, submitting several tasks across multiple cloud machines can significantly reduce
+total execution time, especially when simulations are independent and of similar duration. For example, running 5 simulations on 5 machines
+can ideally achieve up to a 5× speedup, though actual gains may vary depending on simulation runtimes and resource usage. Setting this up
+requires just one line of code (e.g., `num_machines=<number of simulations>`) and a `for` loop to submit the tasks. Additionally, organizing
+simulations with projects, storing metadata, and monitoring via the console help you effortlessly keep track of everything, creating a
+powerful and efficient simulation workflow.
 
 ---
 
-## Wrapping Up: Building a Scalable Simulation Workflow
+## Wrapping Up
 
 In this tutorial, you learned how to efficiently run multiple SWASH simulations in parallel using the Inductiva API.
 
