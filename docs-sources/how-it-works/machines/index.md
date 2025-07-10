@@ -1,5 +1,3 @@
-# Introduction
-
 The Inductiva API simplifies access to high-performance computing resources through straightforward Python commands. Rather than managing complex infrastructure setup and resource allocation, you can execute single simulations or orchestrate thousands of parallel tasks through our API.
 
 ## What You'll Learn
