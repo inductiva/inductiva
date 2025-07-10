@@ -17,8 +17,3 @@ In this section, you'll discover:
 - **Practical Implementation**: See real-world examples of how to configure and deploy different resource types for optimal performance and cost-effectiveness
 
 Whether you're running lightweight parameter studies or computationally intensive simulations, this guide will help you make informed decisions about resource allocation and maximize the efficiency of your computational workflows.
-
-```{toctree}
-shared-dedicated-resources
-computational-infrastructure
-```
