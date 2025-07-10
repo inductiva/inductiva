@@ -28,6 +28,7 @@ hidden: true
 setup-test
 quick-start
 Generate an OpenFOAM Dataset <generate-openfoam-dataset/index>
+Run `occDrivAerStaticMesh` from the OpenFOAM HPC Benchmark Suite <run-occdrivaerstaticmesh-case/index>
 ```
 
 ```{toctree}
