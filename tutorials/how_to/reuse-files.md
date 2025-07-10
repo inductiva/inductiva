@@ -168,7 +168,7 @@ task = gromacs.run(
 ```
 
 Each task’s output will be accessible in a folder named after that task’s ID:
-```python
+```
 <task_id_1>/...
 <task_id_2>/...
 ```
