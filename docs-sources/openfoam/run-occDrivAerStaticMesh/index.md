@@ -12,11 +12,41 @@ reproducible simulations.
 
 In this tutorial, we'll walk through how to:
 - Run the `occDrivAerStaticMesh` simulation
-- Scale the simulation across multiple machines using an **MPI cluster**
-- Benchmark performance with hyperthreading enabled and disabled
+- Prepare it for execution on an MPI cluster
+- Scale the simulation across multiple machines
 
 This guide is divided into a few straightforward steps. Follow along to explore the performance and scalability of this simulation 
-using the **Inductiva API**!
+using the **Inductiva API**.
+
+Prefer to read about it first? Check out our [blog post](https://inductiva.ai/blog/article/from-supercomputer-to-cloud-a-new-era-for-openfoam-simulations) for the full story.
+
+Ready to dive in? Click the button below to get started with $5 of free credits.
+
+<div style="text-align: center; margin: 2em 0;">
+  <a href="https://console.inductiva.ai/" role="button" class="signin-button">Sign In</a>
+</div>
+
+<style>
+  .signin-button {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #9747FF;
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+    border: 2px solid #9747FF;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .signin-button:hover,
+  .signin-button:focus {
+    background-color: #fff;
+    color: #9747FF;
+    outline: none;
+  }
+</style>
+
 
 ```{toctree}
 :hidden:
