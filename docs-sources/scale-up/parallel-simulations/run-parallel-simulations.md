@@ -1,4 +1,4 @@
-# Scale Up and Organize Simulation Batches with Projects and Metadata
+# Parallel Simulations
 
 In this tutorial, you'll learn how to run multiple simulations in parallel, each with
 its own input directory, and manage them efficiently using the Inductiva API.
@@ -142,6 +142,8 @@ swash-outputs/
 ├── swash-input-2/
 ├── ...
 ```
+
+> **Note:** Keep in mind that downloading incurs additional costs. You can check the pricing details [here](../../how-it-works/basics/how-much-does-it-cost.md).
 
 ---
 
