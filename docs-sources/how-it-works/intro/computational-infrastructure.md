@@ -21,7 +21,7 @@ returns the results back to you.
 
 ## Available Computational Resources
 
-Inductiva executes computational workloads on Google Cloud Platform (GCP). This means that the simulations initiated through our API are executed on one or more virtual machines (VMs) hosted on GCP.
+By default, Inductiva executes computational workloads on Google Cloud Platform (GCP). This means that the simulations initiated through our API are executed on one or more virtual machines (VMs) hosted on GCP.
 
 There are several families of Virtual Machines (VMs) made available by Inductiva on 
 Google Cloud Platform (GCP):
@@ -64,7 +64,11 @@ on these limitations, please consult the
 .. seealso::
    Learn how to manage your computational resources through
    `Inductiva's Command Line Interface <https://inductiva.ai/guides/documentation/cli/resources>`_
-````  
+```` 
+
+### Beyond Google Could Platform
+
+While the examples above focus on GCP resources, Inductiva also supports running simulations on other computational infrastructures. For comprehensive information about using your own hardware, see our [BYOH (Bring Your Own Hardware)](../../expand/bring-your-own-software/index.md) tutorial, which explores in detail the various infrastructure options we support beyond GCP.
 
 ## What Next? 
 
