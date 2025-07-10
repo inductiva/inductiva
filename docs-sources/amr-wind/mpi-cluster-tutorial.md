@@ -103,6 +103,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>vCPUs</td>
     <td>Duration (min:s)</td>
     <td>Speedup</td>
+    <td>Estimated Cost (USD)</td>
   </tr>
   <tr>
     <td>c2d-highmem-112</td>
@@ -110,6 +111,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>112</td>
     <td>144:00</td>
     <td>Baseline</td>
+    <td>3.60</td>
   </tr>
   <tr>
     <td>c2d-highmem-112</td>
@@ -117,6 +119,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>224</td>
     <td>90:00</td>
     <td>1.60x</td>
+    <td>4.82</td>
   </tr>
   <tr>
     <td>c2d-highmem-112</td>
@@ -124,6 +127,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>448</td>
     <td>59:10</td>
     <td>2.43x</td>
+    <td>6.94</td>
   </tr>
   <tr>
     <td>c2d-highmem-112</td>
@@ -131,9 +135,10 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>896</td>
     <td>42:12</td>
     <td>3.41x</td>
+    <td>10.87</td>
   </tr>
 </table>
 
 Runtime decreased as the cluster size increased. With **8 machines** (896 vCPUs), the simulation completed in **42 minutes and 12 seconds**, achieving a **speedup of 3.41x** compared to the single-machine runtime of 144 minutes.
 
-Although adding more machines yields noticeable speedups, for a problem of this size, the benefits quickly taper off due to diminishing returns as the cluster size increases.
+Although adding more machines yields noticeable speedups, the relatively small size of the problem means that the benefits quickly taper off, with diminishing returns becoming evident as the cluster size increases.

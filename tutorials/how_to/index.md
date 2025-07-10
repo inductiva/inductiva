@@ -14,7 +14,6 @@ manage-remote-storage
 manage_tasks
 run-parallel_simulations
 set-up-elastic-machine-group
-set-up-mpi-cluster
 reuse-files
 run-benchmarks
 ```

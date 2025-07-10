@@ -4,13 +4,15 @@
 ```{toctree}
 ---
 caption: Parallel Simulations
-maxdepth: 2
+maxdepth: 4
 hidden: true
 ---
 
-Run Simulations in Parallel <parallel-simulations/run-parallel_simulations>
+Parallel Simulations <parallel-simulations/run-parallel-simulations>
+Templating <parallel-simulations/templating>
+Parallel Simulations with Templating <parallel-simulations/run-parallel-simulations-with-templating>
 Set up an Elastic Machine Group <parallel-simulations/set-up-elastic-machine-group>
-Templating Manager <parallel-simulations/templating>
+Set up an MPI Cluster <parallel-simulations/set-up-mpi-cluster>
 
 ```
 

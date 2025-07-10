@@ -114,11 +114,15 @@ One of Inductiva’s key advantages is how easily you can scale your simulations
 
 You can upgrade to a next-generation cloud machine, increase the number of vCPUs, or do both!
 
-By repeating the simulation on a **c4-highcpu-16** instance, with the same number of vCPUs but two generations newer, 
-the runtime is reduced to **73 minutes**, achieving a **1.97× speedup** at a cost of US$0.37.
+For example, running the simulation on a next-generation machine with the same number of vCPUs (`c4-highcpu-16`) reduces the runtime to **73 minutes**.
 
-Alternivately, switching from a cloud machine equivalent to your laptop (**c2d-highcpu-16**) to a machine with more vCPUs (**c2d-highcpu-112**) reduces computation time from **1 hour and 35 minutes** to just 
-**37 minutes**, costing US$0.38. This results in a **2.57x faster** simulation!
+Alternivately, switching from a cloud machine equivalent to your laptop (`c2d-highcpu-16`) to one with more vCPUs (**c2d-highcpu-112**) reduces runtime to just **37 minutes**.
+
+| Machine Type     | vCPUs | Execution Time | Estimated Cost (USD) | Speedup   |
+|------------------|-------|----------------|------------|-----------|
+| c2d-highcpu-16   | 16    | 1h 35min       | $0.38      | Reference |
+| c2d-highcpu-112  | 112   | 37 min         | $0.38      | 2.57×     |
+| c4-highcpu-16    | 16    | 73 min         | $0.37      | 1.97×     |
 
 For more computationally intensive tasks, the benefits of scaling can be even more significant. 🚀
 
