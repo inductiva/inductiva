@@ -6,38 +6,33 @@ We will cover an example simulation available in the
 to help you get started with simulations.
 
 ## Prerequisites
+Before running the simulation, you need to prepare the required files and directory structure.
 
-1. Download the required files
-[here](https://www2.mmm.ucar.edu/people/bryan/cm1/cm1r18.tar.gz) and extract
-them to a folder called `cm1r18`.
+1. **Download the Files**
+Download the files [here](https://www2.mmm.ucar.edu/people/bryan/cm1/cm1r18.tar.gz).
 
-2. Create a folder named `input_files` inside the `cm1r18` directory.
+2. **Create the Input Directory**
+Inside the `cm1r18` folder, create a new subfolder named `input_files`.
 
-Let's now copy all files we need to the `input_files` folder that you
-created inside the `cm1r18` directory. Additional details about input files
-can be found in the "Step 2" of this
-[CM1 official tutorial](https://www2.mmm.ucar.edu/people/bryan/cm1/user_guide_brief.html).
+3. **Copy the Required Files**
+Now, copy the following files into the `input_files` directory. For more information about these input files, refer to **Step 2** 
+of the [CM1 official guide](https://www2.mmm.ucar.edu/people/bryan/cm1/user_guide_brief.html).
 
-Copy the following files to the `input_files` directory:
+| File Path                    | Description                                                                |
+|:----------------------------:|:--------------------------------------------------------------------------:|
+| `cm1r18/run/namelist.input`  | Simulation configuration file. **Mandatory**.                          |
+| `cm1r18/run/LANDUSE.TBL`     | Defines surface conditions used in radiation and flux schemes.             |
+| `cm1r18/run/LANDUSE.TBL`     | Defines surface conditions used when enabling surface fluxes (heat, momentum, moisture) or the atmospheric radiation scheme.                        |
+| `cm1r18/src/base.F`          | Configures base-state conditions. Includes two parts: (1) hydrostatic pressure, temperature, and moisture sounding, and (2) initial winds (u, v). |
+| `cm1r18/src/init_terrain.F`  | Specifies terrain via the `zs` array.                                      |
+| `cm1r18/src/init_surface.F`  | Sets horizontal surface distributions (e.g., heat, moisture).              |
 
-|            Origin           |             Description            |
-|:---------------------------:|:----------------------------------:|
-| `cm1r18/run/namelist.input` | Our simulation configuration file. |
-| `cm1r18/run/LANDUSE.TBL` | Specifies the surface conditions, if you are using surface fluxes of heat/momentum/moisture, or if you are using the atmospheric radiation scheme. |
-| `cm1r18/src/base.F` | Modifies the base-state conditions, as appropriate. There are two sections: one for the hydrostatic pressure, temperature, and moisture sounding; and one for the initial winds (u and v components). |
-| `cm1r18/src/init3d.F` | Adds perturbations to the base state. Several default options are available. |
-| `cm1r18/src/init_terrain.F` | Specifies the terrain via the `zs` array. |
-| `cm1r18/src/init_surface.F` | Specifies the horizontal distribution of several variables, if you are using surface fluxes of heat/moisture/momentum. |
+Of the files listed above, only `namelist.input` is required.
+The other files are optional and depend on the specific configuration of your simulation. If any of the `.F` files are not provided, the default files provided by CM1 will be used.
 
-From the previous list, the only file that is **mandatory** is `namelist.input`.
-The rest of the files are optional and depend on the specific configuration you
-want to run. If any of the `.F` files are missing, the default files provided by
-CM1 will be used.
+You may also include a custom `input_sounding` file, although we won’t be using one in this tutorial.
 
-You can also provide your own `input_sounding` file but we wont be using it in
-this tutorial.
-
-Once you have all your files, your `input_files` directory should look like this:
+Once all necessary files are in place, your `input_files` directory should look like this:
 
 ```
 -rw-r--r--@ 1 paulobarbosa  staff   5125 Jul 26  2015 LANDUSE.TBL
@@ -130,8 +125,6 @@ Data:
 	Number of output files:   13
 
 Estimated computation cost (US$): 0.0043 US$
-
-Go to https://console.inductiva.ai/tasks/4kemtaacrjjoyr92oksh819my for more details.
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that
@@ -141,26 +134,28 @@ this simulation was approximately 364.6 seconds (around 6 minutes).
 It's that simple!
 
 ## Scaling Up Your Simulation
+To run your simulation on a larger machine, you’ll need to make a few small changes to both your `namelist.input` file 
+and your Python script.
 
-In order to scale your simulation to a larger machine, you need to change a
-couple of lines in your `namelist.input` file and in your Python script.
+### Required Changes
+Update the following parameters:
 
-Here are a list of changes you need to do:
-- Change `nodex` to 4 in the `namelist.input` file.
-- Change `nodey` to 4 in the `namelist.input` file.
-- Change your `machine_type` to `c3d-highcpu-16` in your Python script.
-- Change your `n_vcpus` to `16` in your Python script.
+* In `namelist.input`:
+	- Set `nodex` = 4
+	- Set `nodey` = 4
+* In your Python script:
+	- Set `machine_type` = "c3d-highcpu-16"
+	- Set `n_vcpus` = 16
 
-This is all you need to do to scale your simulation to a 16 vCPU machine.
+That’s all it takes to scale your simulation to a 16 vCPU machine.
 
-Here are the results of running the same simulation on a few machines:
+### Performance Comparison
+Here are the results of running the same simulation on different machines:
 
-| Machine Type            | Virtual CPUs | Time             | Estimated Cost |
-|-------------------------|--------------|------------------|----------------|
-| **Local Ryzen 7 7700X** | 16 | 1 minute and 20 seconds | N/A |
-| **Cloud c3d-highcpu-16** | 16 | 1 minute and 53 seconds | 0.0051 US$ |
-| **Cloud c3d-highcpu-60** | 60 | 1 minute and 25 seconds | 0.014 US$ |
+| Machine Type             | Virtual CPUs     | Time             | Estimated Cost (USD) |
+|--------------------------|------------------|------------------|----------------------|
+| **Local Ryzen 7 7700X**  | 16               | 1 min, 20s       | N/A                  |
+| **Cloud c3d-highcpu-16** | 16               | 1 min, 3s        | 0.0051               |
+| **Cloud c3d-highcpu-60** | 60               | 1 min, 25s       | 0.014                |
 
-By leveraging the Inductiva API, you can efficiently scale your CM1 simulations
-to meet your computational needs. Try different machine configurations and
-optimize your workflow for faster, more cost-effective results!
+With the **Inductiva API**, you can easily scale your CM1 simulations to match your computational demands. Whether you need faster runtimes or lower costs, experimenting with different machine configurations allows you to find the optimal balance for your workflow.
