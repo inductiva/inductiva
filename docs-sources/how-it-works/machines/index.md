@@ -1,4 +1,4 @@
-# Computational Resources
+# Introduction
 
 The Inductiva API transforms complex computational resource management into a seamless experience, providing you with direct access to powerful computing infrastructure through simple Python commands. Whether you need to run a single simulation or orchestrate thousands of parallel tasks, our unified interface abstracts away the complexity of resource provisioning, allocation, and management.
 

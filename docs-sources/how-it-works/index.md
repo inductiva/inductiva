@@ -27,14 +27,16 @@ setup/troubleshooting
 setup/uninstall_inductiva
 ```
 
-.. toctree::
-   :maxdepth: 3
-   :hidden:
-   :caption: Computational Resources
-
-   machines/index
-   machines/shared-dedicated-resources
-   machines/computational-infrastructure
+```{toctree}
+---
+caption: Computational Resources
+maxdepth: 3
+hidden: true
+---
+machines/index
+machines/shared-dedicated-resources
+machines/computational-infrastructure
+```
 
 ```{toctree}
 ---
