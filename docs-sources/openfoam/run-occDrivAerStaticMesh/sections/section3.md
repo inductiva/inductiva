@@ -1,22 +1,14 @@
-# Preparing for MPI Cluster Execution
+# Preparation for MPI Cluster Execution
+In the previous section, we ran the simulation using the `Allrun` shell script — the standard approach for executing 
+OpenFOAM simulations. This script wraps the entire simulation workflow into a single command.
 
-In the previous part of this tutorial, we ran the simulation using the `Allrun`
-shell script, which is the standard way to execute OpenFOAM simulations. This
-script conveniently automates the entire workflow into a single command.
+However, when scaling the simulation across **multiple machines using an MPI cluster**, we need to take a different approach. 
+Rather than relying on `Allrun`, we'll define each simulation step as a separate command. This enables configuring the command 
+for parallel execution, fully leveraging the power of the MPI cluster. Don’t worry — this process is handled automatically behind 
+the scenes, so there’s no need for manual intervention.
 
-However, when scaling the simulation across multiple machines using an **MPI cluster**,
-we need to adjust our approach. Instead of relying on the `Allrun` script, we
-will explicitly define each step as separate commands. This allows us to
-configure said command for parallel execution, harnessing the full power of your
-MPI cluster. Don’t worry, this process is automated behind the scenes, so you
-won’t need to manage it manually.
-
-Keep reading to learn how to adapt your simulation for multi-node execution.
-
-## Switching to an MPI Cluster
-
-The first step is to switch your compute resource from a `MachineGroup` to an
-**MPICluster**. This is straightforward, simply update your code like this:
+## Setting Up an MPI Cluster
+The first step is to update the resource allocation from `MachineGroup` to `MPICluster`, as follows:
 
 ```diff
 -cloud_machine = inductiva.resources.MachineGroup(
@@ -28,17 +20,16 @@ The first step is to switch your compute resource from a `MachineGroup` to an
 ```
 
 ## Defining Your Command List
+Next, convert the commands inside the `Allrun` script into a list of standalone commands.
 
-Next, convert the commands inside your `Allrun` script into a list of
-independent commands. A few important notes:
+⚠️ **Important Notes**: 
+* Each command must be self-contained. For example, directory changes (`cd`) and file operations (`cp`) cannot be split into separate commands. Instead, combine them into a single command, such as:
 
-* Each command must be self-contained. For example, you cannot split directory changes (`cd`) and file operations (`cp`) into separate commands. Instead, combine them into a single command like:
+```bash
+cp system/controlDict.noWrite system/controlDict
+```
 
-  ```bash
-  cp system/controlDict.noWrite system/controlDict
-  ```
-
-* Special shell characters like `<`, `>`, `|`, and `&` are not allowed, so you cannot pipe output between commands or redirect to files. Don’t worry, all outputs will be automatically saved into `stdout.txt` and `stderr.txt`.
+* Special shell characters like `<`, `>`, `|`, and `&` are not allowed, so piping output between commands or redirecting to files is not supported. However, all outputs will be automatically saved to `stdout.txt` and `stderr.txt`.
 
 Here is the result of converting the `Allrun` script into a list of commands:
 
@@ -55,9 +46,8 @@ simulation_commands = [
 ]
 ```
 
----
-
-Your simulation script should now look like this:
+## Full Script Using an MPI Cluster
+Below is the updated Python script for running the simulation across two machines using an MPI cluster.
 
 ```python
 import inductiva
@@ -73,8 +63,7 @@ cloud_machine = inductiva.resources.MPICluster( \
 # Initialize OpenFOAM stack
 openfoam = inductiva.simulators.OpenFOAM(
     version="2412",
-    distribution="esi"
-    )
+    distribution="esi")
 
 simulation_commands = [
     "cp system/controlDict.noWrite system/controlDict",
@@ -101,5 +90,6 @@ task.download_outputs()
 task.print_summary()
 ```
 
-Keep reading to see the speed ups we can get when moving from a single machine into
-2 or even 4 machines.
+Now that we’ve adapted the workflow for an MPI cluster, let’s explore the **performance improvements** we can achieve by scaling 
+from one machine to two or even four machines.
+

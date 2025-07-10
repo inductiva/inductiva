@@ -5,7 +5,7 @@ Let’s get started!
 
 <p align="center"><img src="../../_static/bike_flow_slice_U.png" alt="OpenFOAM simulation visualization" width="700"></p>
 
-## Download the Simulation File
+## Download the Simulation Files
 Download the motorBike example [here](https://storage.googleapis.com/inductiva-api-demo-files/openfoam-input-example.zip) and place it in your working directory under a folder named `openfoam-input-example/`.
 
 Your directory structure should look like this:
