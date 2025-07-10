@@ -8,7 +8,22 @@ and accelerate the generation of CFD data for further study or integration into 
 <p align="center"><img src="../_static/bike_pressure_field.png" alt="OpenFOAM motorBike visualization" width="700"></p>
 
 To demonstrate this process, we will use the incompressible, steady-state simpleFoam solver along with 
-the [motorBike example](https://develop.openfoam.com/Development/openfoam/-/tree/master/tutorials/incompressible/simpleFoam/motorBike), which is available in the [OpenFOAM repository](https://develop.openfoam.com/Development/openfoam).
+the **motorBike example**, which is available in the OpenFOAM repository.
+
+In this tutorial, we'll walk through how to:
+- [Review the prerequisites for running the motorBike case](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section1)
+- [Run the simulation](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section2)
+- [Generalize the use case](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section3)
+- [Generate synthetic wind tunnel data at scale](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section4)
+- [Post-process and analyze simulation results](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section5)
+
+<div class="cta-bar">
+  <div class="cta-text">
+    <strong>Ready to dive in?</strong> Click the button to get started with $5 of free credits. No credit card needed!
+  </div>
+  <button  onclick="window.open('https://console.inductiva.ai/', '_blank')" target="_blank" class="cta-button">Sign In</button>
+</div>
+
 
 ```{toctree}
 :hidden:
