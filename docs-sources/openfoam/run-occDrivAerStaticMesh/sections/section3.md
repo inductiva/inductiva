@@ -1,14 +1,16 @@
 # Preparation for MPI Cluster Execution
-In the previous section, we ran the simulation using the `Allrun` shell script — the standard approach for executing 
+In the previous section, we ran the simulation using the `Allrun` shell script, the standard approach for executing 
 OpenFOAM simulations. This script wraps the entire simulation workflow into a single command.
 
-However, when scaling the simulation across **multiple machines using an MPI cluster**, we need to take a different approach. 
-Rather than relying on `Allrun`, we'll define each simulation step as a separate command. This enables configuring the command 
-for parallel execution, fully leveraging the power of the MPI cluster. Don’t worry — this process is handled automatically behind 
-the scenes, so there’s no need for manual intervention.
+When scaling the simulation across **multiple machines in an MPI cluster**, we
+take a different approach. Instead of using `Allrun`, each simulation step is
+defined as a separate command. This allows us to configure them for parallel
+execution and fully utilize the cluster’s capabilities.
+
+The good news? This entire process is automated, no manual setup required.
 
 ## Setting Up an MPI Cluster
-The first step is to update the resource allocation from `MachineGroup` to `MPICluster`, as follows:
+The first step is to update the resource allocation from `MachineGroup` to an `MPICluster`, as follows:
 
 ```diff
 -cloud_machine = inductiva.resources.MachineGroup(
@@ -46,50 +48,16 @@ simulation_commands = [
 ]
 ```
 
-## Full Script Using an MPI Cluster
-Below is the updated Python script for running the simulation across two machines using an MPI cluster.
 
-```python
-import inductiva
+### How Parallel Commands Are Handled
+As mentioned previously, the Inductiva API automatically detects parallel commands
+by checking for the `-parallel` flag in your command list. When present, it
+configures the command to run across the entire MPI cluster without requiring
+any manual setup.
 
-# Allocate cloud machine on Google Cloud Platform
-cloud_machine = inductiva.resources.MPICluster( \
-    provider="GCP",
-    machine_type="c3d-highcpu-180",
-    num_machines=2,
-    data_disk_gb=100,
-    spot=True)
+Now that you’ve seen how to move from using the `Allrun` script to a sequence of
+individual commands, you're ready to take full advantage of an MPI cluster.
+Let’s explore the **performance gains** you can achieve by scaling your simulation
+from a single machine to multiple machines.
 
-# Initialize OpenFOAM stack
-openfoam = inductiva.simulators.OpenFOAM(
-    version="2412",
-    distribution="esi")
-
-simulation_commands = [
-    "cp system/controlDict.noWrite system/controlDict",
-    "cp system/fvSolution.fixedIter system/fvSolution",
-    "decomposePar -constant",
-    "restore0Dir -processor",
-    "renumberMesh -constant -overwrite -parallel",
-    "potentialFoam -initialiseUBCs -parallel",
-    "applyBoundaryLayer -ybl '0.0450244' -parallel",
-    "simpleFoam -parallel",
-]
-
-task = openfoam.run( \
-    input_dir="/Path/to/openfoam-occDrivAerStaticMesh",
-    commands=simulation_commands,
-    on=cloud_machine)
-
-# Wait for the simulation to finish and download the results
-task.wait()
-cloud_machine.terminate()
-
-task.download_outputs()
-
-task.print_summary()
-```
-
-Now that we’ve adapted the workflow for an MPI cluster, let’s explore the **performance improvements** we can achieve by scaling 
-from one machine to two or even four machines.
 

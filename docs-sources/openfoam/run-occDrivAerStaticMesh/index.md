@@ -24,5 +24,4 @@ sections/section1.md
 sections/section2.md
 sections/section3.md
 sections/section4.md
-sections/section5.md
 ```

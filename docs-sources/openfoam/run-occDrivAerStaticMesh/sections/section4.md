@@ -1,10 +1,14 @@
 # Run the Simulation on an MPI Cluster
-You’re almost ready to scale your simulation across multiple machines, unlocking the full power of an **MPI Cluster**. 
+You’re almost ready to scale your simulation across multiple machines, unlocking
+the full power of an **MPI Cluster**. 
+
 Running simulations in parallel across a cluster can dramatically reduce computation time by distributing the workload over 
 many machines.
 
 ## Update Simulation Parameters to Use 360 vCPUs
-Currently, the simulation is configured to run on 180 vCPUs. To fully utilize the MPI Cluster — which provides 360 vCPUs across two machines — you’ll need to adjust the simulation parameters accordingly.
+Currently, the simulation is configured to run on 180 vCPUs. To fully utilize
+the MPI Cluster, which provides 360 vCPUs across two machines, you’ll need to
+adjust the simulation parameters accordingly.
 
 Open the file `system/include/caseDefinition` and update the number of cores and decomposition settings:
 
@@ -19,7 +23,8 @@ decompositionMethod hierarchical;      // Decomposition method
 These changes ensure that the simulation workload is properly partitioned across all available processors for optimal parallel performance.
 
 ## Run your simulation
-Below is the updated Python script for running the simulation across two machines using an MPI cluster.
+Below is the updated Python script for running the simulation across two machines using an MPI cluster and the newly
+created list of commands.
 
 ```python
 import inductiva
@@ -63,20 +68,52 @@ task.download_outputs()
 task.print_summary()
 ```
 
-### How Parallel Commands Are Handled
-As mentioned previously, the Inductiva API automatically detects parallel commands by checking for the `-parallel` flag in your command list. When present, it configures the command to run across the entire MPI cluster without requiring any manual setup.
-
-Just like in the single-machine simulation, once the run is complete, the machines are automatically shut down, the results are downloaded, and a detailed summary is printed, as shown below.
+Just like in the single-machine simulation, once the run is complete, the
+machines are automatically shut down, the results are downloaded, and a detailed
+summary is printed, as shown below.
 
 ```
+inductiva tasks info 4trnwrg7xscpk6ynzsw7dnxsh
+Task status: Success
+
+Timeline:
+	Waiting for Input         at 09/07, 10:45:29      0.879 s
+	In Queue                  at 09/07, 10:45:30      56.879 s
+	Preparing to Compute      at 09/07, 10:46:27      113.184 s
+	In Progress               at 09/07, 10:48:20      28246.922 s
+		├> 1.08 s          mv caseDefinition system/include/caseDefinition
+		├> 1.096 s         cp system/controlDict.noWrite system/controlDict
+		├> 1.079 s         cp system/fvSolution.fixedIter system/fvSolution
+		├> 129.235 s       decomposePar -constant
+		├> 3.09 s          restore0Dir -processor
+		├> 63.279 s        /opt/openmpi/4.1.6/bin/mpirun --hostfile /home/task-runner/mpi_hosts --mca btl_tcp_if_include 10.132.0.0/20 --mca oob_tcp_if_include 10.132.0.0/20 --np 360 --use-hwthread-cpus renumberMesh -constant -overwrite -parallel
+		├> 45.22 s         /opt/openmpi/4.1.6/bin/mpirun --hostfile /home/task-runner/mpi_hosts --mca btl_tcp_if_include 10.132.0.0/20 --mca oob_tcp_if_include 10.132.0.0/20 --np 360 --use-hwthread-cpus potentialFoam -initialiseUBCs -parallel
+		├> 20.108 s        /opt/openmpi/4.1.6/bin/mpirun --hostfile /home/task-runner/mpi_hosts --mca btl_tcp_if_include 10.132.0.0/20 --mca oob_tcp_if_include 10.132.0.0/20 --np 360 --use-hwthread-cpus applyBoundaryLayer -ybl 0.0450244 -parallel
+		└> 27974.321 s     /opt/openmpi/4.1.6/bin/mpirun --hostfile /home/task-runner/mpi_hosts --mca btl_tcp_if_include 10.132.0.0/20 --mca oob_tcp_if_include 10.132.0.0/20 --np 360 --use-hwthread-cpus simpleFoam -parallel
+	Finalizing                at 09/07, 18:39:07      21.577 s
+	Success                   at 09/07, 18:39:28      
+
+Data:
+	Size of zipped output:    5.56 GB
+	Size of unzipped output:  10.82 GB
+	Number of output files:   6517
+
+Estimated computation cost (US$): 26.97 US$
+
+Go to https://console.inductiva.ai/tasks/4trnwrg7xscpk6ynzsw7dnxsh for more details.
 ```
 
-As shown in the “In Progress” line, all the commands (including those executed in parallel) are listed. You can also notice 
-that these commands ran on 360 vCPUs, representing the full capacity of our MPI cluster.
+As shown in the “In Progress” line, all commands, including those running in
+parallel, are listed. These commands were executed across **360 vCPUs**,
+utilizing the full capacity of our MPI cluster.
 
-With this setup, the computation time was reduced to ---, achieving a --- -fold speedup compared to the previous single-machine simulation.
+With this setup, the total computation time dropped to **7 hours and 53 minutes**,
+nearly halving the runtime compared to the single-machine execution.
 
-Keep reading for a deeper dive into performance analysis and various configuration options for your simulation and MPI cluster.
+For this particular simulation, scaling to additional machines offers no further
+benefit, as the **communication overhead outweighs** the performance gains from
+the extra compute power.
 
+You can learn more about running OpenFOAM on MPI clusters in our [blog post](https://inductiva.ai/blog/article/from-supercomputer-to-cloud-a-new-era-for-openfoam-simulations).
 
 
