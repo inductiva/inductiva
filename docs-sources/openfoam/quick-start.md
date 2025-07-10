@@ -1,7 +1,7 @@
 # Run Your First Simulation
 This tutorial will show you how to run OpenFOAM simulations using the Inductiva API. 
 
-We will cover the `motorbike` use case from the [OpenFOAM Foundation GitHub repository](https://github.com/OpenFOAM/OpenFOAM-8/tree/version-8/tutorials), to help you get started with simulations.
+We will cover the `motorBike` use case from the [OpenFOAM Foundation GitHub repository](https://github.com/OpenFOAM/OpenFOAM-8/tree/version-8/tutorials), to help you get started with simulations.
 
 ## Prerequisites
 Download the required files [here](https://github.com/OpenFOAM/OpenFOAM-8/tree/version-8/tutorials/incompressible/simpleFoam/motorBike) and place them in a folder called `SimulationFiles`. Then, you’ll be ready to send your simulation to the Cloud.

@@ -14,6 +14,7 @@ import decimal
 import ssl
 from contextlib import contextmanager
 from typing import List, Optional
+import pytimeparse2
 
 import logging
 
@@ -348,11 +349,11 @@ def submit_task(simulator,
         project: Name of the project to which the task will be
                 assigned. If None, the task will be assigned to
                 the default project.
-        time_to_live: Maximum duration the task is allowed to run, 
-            specified as a string with a time unit suffix. Supported formats
-            include minutes ("10m") or hours ("2h"). The task will be 
-            automatically terminated once this duration has elapsed since
-            its start.
+        time_to_live: Maximum allowed runtime for the task, specified as a
+            string duration. Supports common time duration formats such as
+            "10m", "2 hours", "1h30m", or "90s". The task will be
+            automatically terminated if it exceeds this duration after
+            starting.
     Return:
         Returns the task id.
     """
@@ -363,14 +364,15 @@ def submit_task(simulator,
     stream_zip = params.pop("stream_zip", True)
     compress_with = params.pop("compress_with", CompressionMethod.SEVEN_Z)
 
-    ttls = format_utils.str_to_seconds(time_to_live) if time_to_live else None
+    time_to_live_seconds = pytimeparse2.parse(
+        time_to_live, raise_exception=True) if time_to_live else None
 
     task_request = TaskRequest(simulator=simulator,
                                extra_params=params,
                                project=project_name,
                                resource_pool=machine_group.id,
                                container_image=container_image,
-                               time_to_live_seconds=ttls,
+                               time_to_live_seconds=time_to_live_seconds,
                                storage_path_prefix=storage_path_prefix,
                                simulator_name_alias=simulator_name_alias,
                                resubmit_on_preemption=resubmit_on_preemption,

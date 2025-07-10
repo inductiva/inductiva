@@ -39,5 +39,5 @@ caption: " "
 maxdepth: 1
 hidden: true
 ---
-FAQ
+faq
 ```

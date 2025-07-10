@@ -10,6 +10,27 @@ Whether you're a beginner or an advanced user, this page is designed to support 
 
 ```{toctree}
 ---
+caption: Introduction to Inductiva API
+maxdepth: 3
+hidden: true
+---
+
+intro/how_it_works
+intro/tasks
+intro/shared_dedicated_resources
+intro/data_flow
+intro/computational-infrastructure
+intro/benchmarking
+intro/templating
+intro/configuring-simulators
+intro/projects
+setup/system/system-requirements
+setup/troubleshooting
+setup/uninstall_inductiva
+```
+
+```{toctree}
+---
 caption: The Basics
 maxdepth: 2
 hidden: true
@@ -17,8 +38,9 @@ hidden: true
 
 🚀 Install Inductiva API in 2 steps <basics/install-guide>
 ⏩ Quick-Start guide <basics/quick-start-guide>
-💲 How much compute time does 5$US provide <basics/compute-5USD>
+💲 How much compute time does 5$US provide <basics/compute-5usd>
 💰 How much does a simulation cost in Inductiva? <basics/how-much-does-it-cost>
+🔒 Inductiva Quotas <basics/quotas>
 💥 How many cores can be used? <basics/how-many-cores>
 📌 Pick a cloud machine for your simulation <basics/pick-cloud-machine>
 ✈️ Start your first cloud machine with Inductiva <basics/start-first-machine>
@@ -35,7 +57,7 @@ hidden: true
 
 ⬇️ Download specific files from a group of tasks <recipes/download-file-from-project>
 📤 Export your files to AWS S3 <recipes/export-files-to-aws/index>
-⚡️ Run simulations on your local machine <recipes/use-local-task-runner/index>
+🧪 Generate a Dataset <recipes/generate-dataset>
 ```
 
 ```{toctree}
@@ -48,11 +70,3 @@ hidden: true
 💢 Minimize simulation data <best-practices/save_storage>
 
 ```
-
-```{toctree}
----
-caption: "Bring Your Own Software"
-maxdepth: 5
-hidden: true
----
-bring-your-own-software/index

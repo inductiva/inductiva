@@ -146,7 +146,6 @@ xbeach = inductiva.simulators.XBeach()
 # Run simulation with config files in the input directory
 task = xbeach.run(
     input_dir=input_dir,
-    sim_config_filename="params.txt",
     n_vcpus=90,
     on=cloud_machine)
 

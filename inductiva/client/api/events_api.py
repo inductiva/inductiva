@@ -21,7 +21,9 @@ from typing import Any, List, Optional
 from inductiva.client.models.event_create import EventCreate
 from inductiva.client.models.event_info import EventInfo
 from inductiva.client.models.trigger_machine_group_type import TriggerMachineGroupType
+from inductiva.client.models.trigger_observer_type import TriggerObserverType
 from inductiva.client.models.trigger_task_type import TriggerTaskType
+from inductiva.client.models.trigger_type import TriggerType
 
 from inductiva.client.api_client import ApiClient, RequestSerialized
 from inductiva.client.api_response import ApiResponse
@@ -742,10 +744,13 @@ class EventsApi:
     @validate_call
     def get_events(
         self,
+        trigger_type: Optional[TriggerType] = None,
         task_id: Optional[StrictStr] = None,
         task_trigger: Optional[TriggerTaskType] = None,
         machine_group_id: Optional[StrictInt] = None,
         machine_group_trigger: Optional[TriggerMachineGroupType] = None,
+        observer_id: Optional[StrictStr] = None,
+        observer_trigger: Optional[TriggerObserverType] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -761,6 +766,8 @@ class EventsApi:
 
         Fetch events based on filters.
 
+        :param trigger_type:
+        :type trigger_type: TriggerType
         :param task_id:
         :type task_id: str
         :param task_trigger:
@@ -769,6 +776,10 @@ class EventsApi:
         :type machine_group_id: int
         :param machine_group_trigger:
         :type machine_group_trigger: TriggerMachineGroupType
+        :param observer_id:
+        :type observer_id: str
+        :param observer_trigger:
+        :type observer_trigger: TriggerObserverType
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -792,10 +803,13 @@ class EventsApi:
         """ # noqa: E501
 
         _param = self._get_events_serialize(
+            trigger_type=trigger_type,
             task_id=task_id,
             task_trigger=task_trigger,
             machine_group_id=machine_group_id,
             machine_group_trigger=machine_group_trigger,
+            observer_id=observer_id,
+            observer_trigger=observer_trigger,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -816,10 +830,13 @@ class EventsApi:
     @validate_call
     def get_events_with_http_info(
         self,
+        trigger_type: Optional[TriggerType] = None,
         task_id: Optional[StrictStr] = None,
         task_trigger: Optional[TriggerTaskType] = None,
         machine_group_id: Optional[StrictInt] = None,
         machine_group_trigger: Optional[TriggerMachineGroupType] = None,
+        observer_id: Optional[StrictStr] = None,
+        observer_trigger: Optional[TriggerObserverType] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -835,6 +852,8 @@ class EventsApi:
 
         Fetch events based on filters.
 
+        :param trigger_type:
+        :type trigger_type: TriggerType
         :param task_id:
         :type task_id: str
         :param task_trigger:
@@ -843,6 +862,10 @@ class EventsApi:
         :type machine_group_id: int
         :param machine_group_trigger:
         :type machine_group_trigger: TriggerMachineGroupType
+        :param observer_id:
+        :type observer_id: str
+        :param observer_trigger:
+        :type observer_trigger: TriggerObserverType
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -866,10 +889,13 @@ class EventsApi:
         """ # noqa: E501
 
         _param = self._get_events_serialize(
+            trigger_type=trigger_type,
             task_id=task_id,
             task_trigger=task_trigger,
             machine_group_id=machine_group_id,
             machine_group_trigger=machine_group_trigger,
+            observer_id=observer_id,
+            observer_trigger=observer_trigger,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -890,10 +916,13 @@ class EventsApi:
     @validate_call
     def get_events_without_preload_content(
         self,
+        trigger_type: Optional[TriggerType] = None,
         task_id: Optional[StrictStr] = None,
         task_trigger: Optional[TriggerTaskType] = None,
         machine_group_id: Optional[StrictInt] = None,
         machine_group_trigger: Optional[TriggerMachineGroupType] = None,
+        observer_id: Optional[StrictStr] = None,
+        observer_trigger: Optional[TriggerObserverType] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -909,6 +938,8 @@ class EventsApi:
 
         Fetch events based on filters.
 
+        :param trigger_type:
+        :type trigger_type: TriggerType
         :param task_id:
         :type task_id: str
         :param task_trigger:
@@ -917,6 +948,10 @@ class EventsApi:
         :type machine_group_id: int
         :param machine_group_trigger:
         :type machine_group_trigger: TriggerMachineGroupType
+        :param observer_id:
+        :type observer_id: str
+        :param observer_trigger:
+        :type observer_trigger: TriggerObserverType
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -940,10 +975,13 @@ class EventsApi:
         """ # noqa: E501
 
         _param = self._get_events_serialize(
+            trigger_type=trigger_type,
             task_id=task_id,
             task_trigger=task_trigger,
             machine_group_id=machine_group_id,
             machine_group_trigger=machine_group_trigger,
+            observer_id=observer_id,
+            observer_trigger=observer_trigger,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -959,10 +997,13 @@ class EventsApi:
 
     def _get_events_serialize(
         self,
+        trigger_type,
         task_id,
         task_trigger,
         machine_group_id,
         machine_group_trigger,
+        observer_id,
+        observer_trigger,
         _request_auth,
         _content_type,
         _headers,
@@ -983,6 +1024,10 @@ class EventsApi:
 
         # process the path parameters
         # process the query parameters
+        if trigger_type is not None:
+
+            _query_params.append(('trigger_type', trigger_type.value))
+
         if task_id is not None:
 
             _query_params.append(('task_id', task_id))
@@ -999,6 +1044,14 @@ class EventsApi:
 
             _query_params.append(
                 ('machine_group_trigger', machine_group_trigger.value))
+
+        if observer_id is not None:
+
+            _query_params.append(('observer_id', observer_id))
+
+        if observer_trigger is not None:
+
+            _query_params.append(('observer_trigger', observer_trigger.value))
 
         # process the header parameters
         # process the form parameters

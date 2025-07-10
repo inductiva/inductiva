@@ -20,6 +20,7 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing_extensions import Annotated
+from inductiva.client.models.project_statistics import ProjectStatistics
 from inductiva.client.models.project_type import ProjectType
 from typing import Optional, Set
 from typing_extensions import Self
@@ -39,9 +40,11 @@ class Project(BaseModel):
     estimated_computation_cost: Optional[Union[StrictFloat, StrictInt]] = 0.0
     task_status_overview: Optional[Dict[str, Optional[StrictInt]]] = None
     project_metadata: Optional[Dict[str, StrictStr]] = None
+    statistics: Optional[ProjectStatistics] = None
     __properties: ClassVar[List[str]] = [
         "name", "project_type", "id", "created_at", "num_tasks",
-        "estimated_computation_cost", "task_status_overview", "project_metadata"
+        "estimated_computation_cost", "task_status_overview",
+        "project_metadata", "statistics"
     ]
 
     model_config = ConfigDict(
@@ -81,10 +84,18 @@ class Project(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of statistics
+        if self.statistics:
+            _dict['statistics'] = self.statistics.to_dict()
         # set to None if project_metadata (nullable) is None
         # and model_fields_set contains the field
         if self.project_metadata is None and "project_metadata" in self.model_fields_set:
             _dict['project_metadata'] = None
+
+        # set to None if statistics (nullable) is None
+        # and model_fields_set contains the field
+        if self.statistics is None and "statistics" in self.model_fields_set:
+            _dict['statistics'] = None
 
         return _dict
 
@@ -114,6 +125,9 @@ class Project(BaseModel):
             "task_status_overview":
                 obj.get("task_status_overview"),
             "project_metadata":
-                obj.get("project_metadata")
+                obj.get("project_metadata"),
+            "statistics":
+                ProjectStatistics.from_dict(obj["statistics"])
+                if obj.get("statistics") is not None else None
         })
         return _obj

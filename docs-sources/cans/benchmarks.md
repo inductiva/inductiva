@@ -15,7 +15,7 @@ which allow us to evaluate how scaling hardware resources affects simulation spe
 
 Below is a detailed comparison of execution times and speed-ups across different machine types:
 
-| Machine Type    | vCPUs | GPU            | GPU Count | Execution Time| Cost (US$) | Speed-up  |
+| Machine Type    | vCPUs | GPU            | GPU Count | Execution Time| Estimated Cost (USD) | Speed-up  |
 | --------------- | ----- | ---------------| --------- | ------------- | ---------- | --------- |
 | g2-standard-4   | 4     | NVIDIA L4      | 1         | 25h, 3 min    | 6.86       | Reference |
 | g2-standard-24  | 24    | NVIDIA L4      | 2         | 15h, 55 min   | 10.75      | 1.57x     |
