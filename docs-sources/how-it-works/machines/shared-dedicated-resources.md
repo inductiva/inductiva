@@ -16,17 +16,17 @@ for your use.
 There are three types of dedicated computational resources you can launch for your
 simulations:
 
-- [**Machine Group**](https://docs.inductiva.ai/en/latest/api_reference/computational_resources/machinegroup_class.html): 
+- [**Machine Group**](computational_resources/machinegroup_class.md): 
   This consists of homogeneous machines designed to operate individually,
   enabling the distribution of multiple simulations across different machines for
   parallel processing.
   
-- [**Elastic Machine Group**](http://docs.inductiva.ai/en/latest/api_reference/computational_resources/elasticgroup_class.html): 
+- [**Elastic Machine Group**](computational_resources/elasticgroup_class.md): 
   Similar to Machine Group, these also consist of individual machines. The key
   difference here is the elastic scaling feature, which dynamically adjusts the
   number of machines based on simulation demands, ensuring efficient resource utilization.
   
-- [**MPI Cluster**](http://docs.inductiva.ai/en/latest/api_reference/computational_resources/mpicluster_class.html): 
+- [**MPI Cluster**](computational_resources/mpicluster_class.md): 
   This setup involves a network of machines configured to work in tandem on a
   single simulation task, distributing the workload across multiple CPUs. This is
   particularly useful for complex simulations that exceed the capabilities of a
