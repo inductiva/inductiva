@@ -33,7 +33,7 @@ caption: Computational Resources
 maxdepth: 3
 hidden: true
 ---
-
+machines/index
 machines/shared-dedicated-resources
 machines/computational-infrastructure
 ```
