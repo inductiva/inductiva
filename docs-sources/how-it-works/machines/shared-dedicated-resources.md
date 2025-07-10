@@ -1,4 +1,4 @@
-# Resource Allocation Options
+# Resource Selection
 
 In this guide, we will explain some of the main features of the Inductiva API
 when it comes to making informed decisions about resource allocation. You will

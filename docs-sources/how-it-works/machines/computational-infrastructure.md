@@ -1,4 +1,4 @@
-# Computational Infrastructure
+# Computational Infrastructure Overview
 
 The Inductiva API serves as a direct intermediary, bridging the gap between users 
 and the complex landscape of computational resources. It streamlines the process 
