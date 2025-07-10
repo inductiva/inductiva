@@ -73,6 +73,9 @@ class FDS(simulators.Simulator):
                                 remote_assets=remote_assets,
                                 sim_config_filename=sim_config_filename)
 
+        available_mpi_slots = on.get_available_mpi_slots(
+            use_hwthread=use_hwthread)
+
         available_vcpus = on.available_vcpus
 
         if all(arg is not None
@@ -88,18 +91,23 @@ class FDS(simulators.Simulator):
             n_vcpus = available_vcpus
 
         if n_mpi_processes is None:
-            if n_omp_threads is None:
-                n_mpi_processes = 1
-            else:
-                n_mpi_processes = n_vcpus // n_omp_threads
+            n_mpi_processes = 1
 
-            logging.info("Param n_mpi_processes not set. Defaulting to %s.\n",
-                         n_mpi_processes)
+            logging.info(
+                "Param n_mpi_processes not set. Defaulting to %s. "
+                "Note that the number of MPI processes for FDS "
+                "simulations is limited by the number of meshes "
+                "in the simulation case.\n", n_mpi_processes)
 
         if n_omp_threads is None:
-            n_omp_threads = n_vcpus // n_mpi_processes
+            n_omp_threads = max(n_vcpus // n_mpi_processes, 1)
             logging.info("Param n_omp_threads not set. Defaulting to %s.\n",
                          n_omp_threads)
+
+        if n_mpi_processes > available_mpi_slots:
+            raise ValueError(
+                f"n_mpi_processes ({n_mpi_processes}) exceeds the number of "
+                f"MPI slots available on the machine ({available_mpi_slots})")
 
         if n_vcpus == 0:
             raise ValueError("n_vcpus must be larger than 0")
@@ -120,7 +128,7 @@ class FDS(simulators.Simulator):
         if n_mpi_processes > 1:
             mpi_kwargs = {}
             mpi_kwargs["use_hwthread_cpus"] = use_hwthread
-            mpi_kwargs["np"] = n_vcpus
+            mpi_kwargs["np"] = n_mpi_processes
             mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
 
         commands = [

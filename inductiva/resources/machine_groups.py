@@ -206,6 +206,21 @@ class BaseMachineGroup(ABC):
         """
         return self.n_vcpus.per_machine
 
+    def get_available_mpi_slots(
+        self,
+        use_hwthread: Optional[bool] = None,
+    ) -> int:
+        if use_hwthread is None:
+            use_hwthread = self.use_hwthread_cpus
+
+        n_cores = self.available_vcpus / self.threads_per_core
+
+        threads_per_core = self.threads_per_core
+        if not use_hwthread:
+            threads_per_core = 1
+
+        return int(n_cores * threads_per_core)
+
     @property
     def name(self):
         return self._name
