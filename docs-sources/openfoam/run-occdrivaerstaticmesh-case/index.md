@@ -19,7 +19,7 @@ In this tutorial, we'll walk through how to:
 This guide is divided into a few straightforward steps. Follow along to explore the performance and scalability of this simulation
 using the **Inductiva API**.
 
-**Prefer to read about it first?** Check out our [blog post](https://inductiva.ai/blog/article/from-supercomputer-to-cloud-a-new-era-for-openfoam-simulations) for the full story.
+👉 Check out our [blog post](https://inductiva.ai/blog/article/from-supercomputer-to-cloud-a-new-era-for-openfoam-simulations) for the full story.
 
 <div class="cta-bar">
   <div class="cta-text">
