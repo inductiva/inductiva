@@ -36,5 +36,3 @@ hidden: true
 ---
 faq
 ```
-
-
