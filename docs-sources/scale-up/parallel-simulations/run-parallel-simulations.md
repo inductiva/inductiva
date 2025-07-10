@@ -151,9 +151,10 @@ swash-outputs/
 
 If you need to run multiple simulations simultaneously, submitting several tasks across multiple cloud machines can significantly reduce
 total execution time, especially when simulations are independent and of similar duration. For example, running 5 simulations on 5 machines
-can ideally achieve up to a 5× speedup, though actual gains may vary depending on simulation runtimes and resource usage. Setting this up 
-requires just one line of code (e.g., `num_machines=<number of simulations>`). Additionally, organizing simulations with projects, storing
-metadata, and monitoring via the console help you effortlessly keep track of everything, creating a powerful and efficient simulation workflow.
+can ideally achieve up to a 5× speedup, though actual gains may vary depending on simulation runtimes and resource usage. Setting this up
+requires just one line of code (e.g., `num_machines=<number of simulations>`) and a `for` loop to submit the tasks. Additionally, organizing
+simulations with projects, storing metadata, and monitoring via the console help you effortlessly keep track of everything, creating a powerful
+and efficient simulation workflow.
 
 ---
 
