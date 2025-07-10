@@ -30,7 +30,6 @@ setup/uninstall_inductiva
 ```{toctree}
 ---
 caption: Computational Resources
-maxdepth: 3
 hidden: true
 captionlink: machines/index
 ---
