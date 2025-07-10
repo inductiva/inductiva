@@ -31,8 +31,8 @@ class FDS(simulators.Simulator):
             *,
             on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,
-            n_mpi_processes: Optional[int] = None,
             n_omp_threads: Optional[int] = None,
+            n_mpi_processes: Optional[int] = None,
             use_hwthread: bool = True,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
@@ -48,6 +48,13 @@ class FDS(simulators.Simulator):
             sim_config_filename: Name of the simulation configuration file.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
                 (default), all vCPUs will be used.
+            n_omp_threads: Number of OpenMP threads to use in the simulation.
+                If not provided, it defaults to the number of available vcpus
+                of the machine group where the task will run.
+            n_mpi_processes: Number of MPI processes that will run the
+                simulation. If not provided, it defaults to 1. Note that the
+                number of MPI processes can't exceed the number of meshes
+                of the simulation case.
             use_hwthread: If specified Open MPI will attempt to discover the
                 number of hardware threads on the node, and use that as the
                 number of slots available.
