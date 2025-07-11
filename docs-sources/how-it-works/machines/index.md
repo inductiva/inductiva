@@ -2,13 +2,13 @@
 The Inductiva API provides on-demand access to computational infrastructure for running your simulations at any scale. Resources are automatically provisioned and managed, so you can focus on your simulations rather than infrastructure management.
 
 ## Get started
-Learn about _Resources_—the core entity in the Inductiva API that executes your simulations. Resources can be cloud machines, your personal computer, or dedicated hardware, all managed through our API that handles its allocation, scaling, and monitoring automatically.
+Learn about _Resources_ — the core entity in the Inductiva API that executes your simulations. Resources can be cloud machines, your personal computer, or dedicated hardware, all managed through our API that handles its allocation, scaling, and monitoring automatically.
 
 | **[Resources →](shared-dedicated-resources.md)** | **[Computational Infrastructure →](computational-infrastructure.md)** |
 |---|---|
 | Learn how to choose beteween the resources made available by our API, and understand when each option provides the best value for your specific use case |  Understand the diverse computational options available, from cloud machines to your own laptop, and how our API simplifies their access and orchestration |
 
-Whether you're running a single simulation or orchestrating thousands of simulations, this guide will help you make informed decisions about resource allocation and maximize the efficiency of your computational workflows.
+Whether you're running a single simulation or orchestrating thousands of simulations, this section will help you make informed decisions about resource allocation and maximize the efficiency of your computational workflows.
 
 ## Features
 ✓ **Launch resources instantly** Automatically allocate and configure compute infrastructure. No need to manually set up instances or manage infrastructure.
@@ -21,4 +21,4 @@ Whether you're running a single simulation or orchestrating thousands of simulat
 
 ✓ **Control costs** Get transparent pricing of resource usage and costs.
 
-✓ **Evaluate with Benchmarks** Intelligently match your simulation requirements with the most suitable computational resources using our benchmarking feature.
+✓ **Evaluate with Benchmarks** Intelligently match your simulation requirements with the most suitable computational resources using our [benchmarking](../intro/benchmarking.md) feature.
