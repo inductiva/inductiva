@@ -1,38 +1,40 @@
 # Resources
 
-In this guide, we will explain some of the main features of the Inductiva API
-when it comes to making informed decisions about resource allocation. You will
-learn how to set up and utilize dedicated resources for running your simulations.
-Additionally, we will demonstrate the performance of these resources using a SWASH
-simulation.
+The Inductiva API provides flexible computational resources for different simulation needs. Whether you're running a single simulation or orchestrating thousands of parallel tasks, our resource management system handles the complexity of infrastructure provisioning, scaling, and monitoring for you.
 
-## Dedicated Resources
+## Available Resource Types
 
-To ensure you can access the necessary computational power for your simulations
-without the constraints of a shared environment, Inductiva provides the option
-to create dedicated pools of Virtual Machine (VM) resources, exclusively reserved
-for your use.
+Inductiva provides three types of computational resources, each optimized for different simulation patterns and workloads.
 
-There are three types of dedicated computational resources you can launch for your
-simulations:
+### Machine Group
+A collection of homogeneous machines designed to operate individually,
+enabling the distribution of multiple simulations across different machines for
+parallel processing.
 
-- [**Machine Group**](computational_resources/machinegroup_class.md): 
-  This consists of homogeneous machines designed to operate individually,
-  enabling the distribution of multiple simulations across different machines for
-  parallel processing.
-  
-- [**Elastic Machine Group**](computational_resources/elasticgroup_class.md): 
-  Similar to Machine Group, these also consist of individual machines. The key
-  difference here is the elastic scaling feature, which dynamically adjusts the
-  number of machines based on simulation demands, ensuring efficient resource utilization.
-  
-- [**MPI Cluster**](computational_resources/mpicluster_class.md): 
-  This setup involves a network of machines configured to work in tandem on a
-  single simulation task, distributing the workload across multiple CPUs. This is
-  particularly useful for complex simulations that exceed the capabilities of a
-  single machine.
+- **Best for**: Multiple independent simulations, parameter sweeps, Monte Carlo studies
+- **Key benefit**: Parallel execution of separate simulation tasks
+- **Learn more**: [Machine Group documentation](computational_resources/machinegroup_class.md)
 
-## Example: SWASH
+````{eval-rst}
+.. seealso::
+   The documentation of the `MachineGroup <https://inductiva.ai/guides/api-functions/api/inductiva.resources#inductiva.resources.machine_groups.MachineGroup>` class of out Pyhton API_
+```` 
+
+### Elastic Machine Group
+Similar to Machine Group but with dynamic scaling capabilities that automatically adjust the number of machines based on your simulation queue, ensuring efficient resource utilization and cost optimization.
+
+- **Best for**: Variable workloads, batch processing with unpredictable demand
+- **Key benefit**: Automatic scaling based on simulation demand
+- **Learn more**: [Elastic Machine Group documentation](computational_resources/elasticgroup_class.md)
+
+### MPI Cluster
+A network of machines configured to work collaboratively on a single simulation task, distributing the computational workload across multiple CPUs for maximum performance on complex simulations.
+
+- **Best for**: Complex simulations that exceed the capabilities of a single machine
+- **Key benefit**: Parallel processing within a single simulation
+- **Learn more**: [MPI Cluster documentation](computational_resources/mpicluster_class.md)
+
+## Quick Start Example
 
 To illustrate the performance of running simulations on dedicated resources using
 the Inductiva API, we will run [SWASH](https://inductiva.ai/guides/swash)

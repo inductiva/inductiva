@@ -13,7 +13,7 @@ Whether you're running a single simulation or orchestrating thousands of simulat
 ## Features
 ✓ **Launch resources instantly** Automatically allocate and configure compute infrastructure. No need to manually set up instances or manage infrastructure.
 
-✓ **Scale dynamically** Scale your computational resources up or down based on your simulation demands. Handle everything from single simulations to thousands of parallel jobs seamlessly.
+✓ **Scale dynamically** Scale your computational resources up or down based on your simulation demands. Handle everything from single simulations to thousands of parallel tasks.
 
 ✓ **Run anywhere** Execute simulations on cloud infrastructure, dedicated servers, or your own hardware. Switch between different environments without changing your code.
 
@@ -21,4 +21,4 @@ Whether you're running a single simulation or orchestrating thousands of simulat
 
 ✓ **Control costs** Get transparent pricing of resource usage and costs.
 
-✓ **Evaluate with Benchmarks** Intelligently match your simulation requirements with the most suitable computational resources using our [benchmarking](../intro/benchmarking.md) feature.
+✓ **Evaluate with Benchmarks** Intelligently match your simulation requirements with the most suitable computational resources using our [benchmarking](../intro/benchmarking.md) tool.
