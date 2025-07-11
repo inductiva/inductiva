@@ -19,6 +19,17 @@ Next, recall that the inductiva package, writes locally to your
 disk. Therefore, you should have a folder under `$HOME/.inductiva` in
 your system. Remove it and you are good to go!
 
+MacOS:
 ```
 rm -rf $HOME/.inductiva
+```
+
+Windows Command prompt:
+```
+rmdir /s /q "%USERPROFILE%\.inductiva"
+```
+
+Windows Powershell:
+```
+Remove-Item -Recurse -Force "$env:USERPROFILE\.inductiva"
 ```
