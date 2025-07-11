@@ -67,6 +67,7 @@ hidden: true
 ⬇️ Download specific files from a group of tasks <recipes/download-file-from-project>
 📤 Export your files to AWS S3 <recipes/export-files-to-aws/index>
 🧪 Generate a Dataset <recipes/generate-dataset>
+📁 Receive an Email When a Simulation File is Created <recipes/receive-email-on-file-creation>
 ```
 
 ```{toctree}
