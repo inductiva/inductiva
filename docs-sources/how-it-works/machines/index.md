@@ -4,40 +4,9 @@ The Inductiva API provides on-demand access to computational infrastructure for 
 ## Get started
 Learn about _Resources_—the core entity in the Inductiva API that executes your simulations. Resources can be cloud machines, your personal computer, or dedicated hardware, all managed through our API that handles its allocation, scaling, and monitoring automatically.
 
-````{eval-rst}
-.. container:: grid-container
-
-   .. container:: grid-item
-      
-      **Resources**
-      
-      Learn about the anatomy of a Resource and how it works.
-      
-      `Learn more → <resources.html>`_
-
-   .. container:: grid-item
-      
-      **Set up Resources**
-      
-      Create, test, and monitor Resources through the API without complex infrastructure management.
-      
-      `Learn more → <setup-resources.html>`_
-
-   .. container:: grid-item
-      
-      **Use cases**
-      
-      See example simulation scenarios you can run with Resources.
-      
-      `Learn more → <use-cases.html>`_
-````
-
-| **[Resources →](resources.html)** | **[Computational Infrastructure →](setup-resources.html)** | **[Use cases →](use-cases.html)** |
-|---|---|---|
-| Learn about the types of Resources and how to choose between them. | Create, test, and monitor Resources through the API without complex infrastructure management. | See example simulation scenarios you can run with Resources. |
-
-- **Resources**: Learn how to choose beteween the dedicated resources made available by our API, and understand when each option provides the best value for your specific use case
-- **Computational Infrastructure**: Understand the diverse computational options available, from cloud machines to your own laptop, and understand how the API simplifies the access to these computing infrastructure
+| **[Resources →](shared-dedicated-resources.md)** | **[Computational Infrastructure →](computational-infrastructure.md)** |
+|---|---|
+| Learn how to choose beteween the resources made available by our API, and understand when each option provides the best value for your specific use case |  Understand the diverse computational options available, from cloud machines to your own laptop, and how our API simplifies their access and orchestration |
 
 Whether you're running a single simulation or orchestrating thousands of simulations, this guide will help you make informed decisions about resource allocation and maximize the efficiency of your computational workflows.
 
