@@ -1,4 +1,4 @@
-# Generalizing the Use Case
+# Generalize the Use Case
 Inductiva enables the parallel execution of numerous simulations, making it ideal for conducting parameter studies at scale. For example, suppose you are interested in analyzing how varying a specific input parameter influences the simulation results. you might want to analyze how varying a specific input parameter affects the simulation results.
 
 As a demonstration, consider studying the impact of changes in the reference free-stream velocity, 
@@ -95,6 +95,6 @@ First, we set the `wind_speed` values. Then, the `render_dir` method generates t
 the placeholder variables in the `forceCoeffs.jinja` template with the corresponding values. The generated 
 files are saved in the `target_dir` (`variations/wind_speed_{wind_speed}`).
 
-> For more details on managing template files, check out the `TemplateManager` [documentation](https://inductiva.ai/guides/how-it-works/intro/templating).
+> For more details on managing template files, check out the `TemplateManager` [documentation](https://inductiva.ai/guides/scale-up/parallel-simulations/templating).
 
 Since Inductiva’s API is Python-based, you can easily loop over different sampled values of `wind_speed` to run multiple simulations in parallel and generate a dataset. That’s exactly what we’ll do in the next section.

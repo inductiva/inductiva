@@ -10,6 +10,21 @@ Whether you're a beginner or an advanced user, this page is designed to support 
 
 ```{toctree}
 ---
+caption: Get Started with Inductiva 
+maxdepth: 3
+hidden: true
+---
+
+🚀 Install Inductiva API in 2 steps <get-started/install-guide>
+⏩ Quick-Start guide <get-started/quick-start-guide>
+📌 Pick a cloud machine for your simulation <get-started/pick-cloud-machine>
+✈️ Start your first cloud machine with Inductiva <get-started/start-first-machine>
+🛠️ Troubleshoot installation <get-started/troubleshooting>
+
+```
+
+```{toctree}
+---
 caption: Introduction to Inductiva API
 maxdepth: 3
 hidden: true
@@ -19,7 +34,6 @@ intro/how_it_works
 intro/tasks
 intro/data_flow
 intro/benchmarking
-intro/templating
 intro/configuring-simulators
 intro/projects
 setup/system/system-requirements
@@ -45,15 +59,10 @@ maxdepth: 2
 hidden: true
 ---
 
-🚀 Install Inductiva API in 2 steps <basics/install-guide>
-⏩ Quick-Start guide <basics/quick-start-guide>
 💲 How much compute time does 5$US provide <basics/compute-5usd>
 💰 How much does a simulation cost in Inductiva? <basics/how-much-does-it-cost>
 🔒 Inductiva Quotas <basics/quotas>
 💥 How many cores can be used? <basics/how-many-cores>
-📌 Pick a cloud machine for your simulation <basics/pick-cloud-machine>
-✈️ Start your first cloud machine with Inductiva <basics/start-first-machine>
-🛠️ Troubleshoot installation <basics/troubleshooting>
 
 ```
 

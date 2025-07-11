@@ -1,4 +1,4 @@
-# Integrate Your Docker Container 
+# Integrate Your Docker Container
 One of Inductiva's standout features is its ability to seamlessly run any Docker container directly in the cloud. In this guide, we’ll walk you through the integration process using [FFMPEG](https://ffmpeg.org) as an example. This approach can also be applied to your **own custom Docker images**.
 
 ## What You'll Learn
@@ -9,15 +9,15 @@ By the end of this guide, you’ll know how to:
 
 Let's dive in!
 
-## Step 1: Pull the Docker Image 
+## Step 1: Pull the Docker Image
 You can use any Docker image from Docker Hub or your own private registry. For this guide, we will use a pre-built FFMPEG image, a widely-used tool for media processing. To get started, run the following command:
 
 ```
 docker pull linuxserver/ffmpeg --platform linux/amd64
 ```
 
-## Step 2: Upload to Inductiva 
-Uploading Docker images to Inductiva is simple — just **one command**. When you upload your image, it will automatically be converted into the [Singularity Image Format](https://en.wikipedia.org/wiki/Singularity_(container_technology)) (.sif), which is commonly used in high-performance computing for its portability and security.
+## Step 2: Upload to Inductiva
+Uploading Docker images to Inductiva is simple — just **one command**. When you upload your image, it will automatically be converted into the [Singularity Image Format](https://en.wikipedia.org/wiki/Singularity_(software)) (.sif), which is commonly used in high-performance computing for its portability and security.
 
 To upload your image, run:
 
