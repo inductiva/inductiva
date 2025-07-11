@@ -49,7 +49,8 @@ extensions = [
     'sphinxcontrib.googleanalytics',
     'sphinxext.opengraph',
     'sphinx_sitemap',
-    'sphinx_reredirects'
+    'sphinx_reredirects',
+    'sphinxcontrib.programoutput',  # Auto-generates docs from CLI
 ]
 
 # Enable automatic docstring discovery
