@@ -47,7 +47,7 @@ caption: Computational Resources
 maxdepth: 3
 hidden: true
 ---
-machines/index
+Overview <machines/index>
 machines/shared-dedicated-resources
 machines/computational-infrastructure
 ```
