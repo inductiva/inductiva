@@ -17,7 +17,7 @@ parallel processing.
 
 ````{eval-rst}
 .. seealso::
-   The documentation of the `MachineGroup <https://inductiva.ai/guides/api-functions/api/inductiva.resources#inductiva.resources.machine_groups.MachineGroup>`_ class of out Pyhton API
+   For complete API documentation including all parameters, methods, and configuration options, see the `MachineGroup <https://inductiva.ai/guides/api-functions/api/inductiva.resources#inductiva.resources.machine_groups.MachineGroup>`_ class documentation
 ```` 
 
 ### Elastic Machine Group
@@ -27,6 +27,11 @@ Similar to Machine Group but with dynamic scaling capabilities that automaticall
 - **Key benefit**: Automatic scaling based on simulation demand
 - **Learn more**: [Elastic Machine Group documentation](computational_resources/elasticgroup_class.md)
 
+````{eval-rst}
+.. seealso::
+   For complete API documentation including all parameters, methods, and configuration options, see the `ElasticMachineGroup <https://inductiva.ai/guides/api-functions/api/inductiva.resources#inductiva.resources.machine_groups.ElasticMachineGroup>`_ class documentation
+````
+
 ### MPI Cluster
 A network of machines configured to work collaboratively on a single simulation task, distributing the computational workload across multiple CPUs for maximum performance on complex simulations.
 
@@ -34,15 +39,28 @@ A network of machines configured to work collaboratively on a single simulation 
 - **Key benefit**: Parallel processing within a single simulation
 - **Learn more**: [MPI Cluster documentation](computational_resources/mpicluster_class.md)
 
+````{eval-rst}
+.. seealso::
+   For complete API documentation including all parameters, methods, and configuration options, see the `MPICluster <https://inductiva.ai/guides/api-functions/api/inductiva.resources#inductiva.resources.machine_groups.MPICluster>`_ class documentation
+````
+
+## Choosing the Right Resource
+
+Choose the resource type that best fits your simulation needs:
+
+| Feature | Machine Group | Elastic Machine Group | MPI Cluster |
+|---------|---------------|----------------------|-------------|
+| **Scaling** | Fixed number of machines | Dynamic auto-scaling | Fixed cluster size |
+| **Simulation Distribution** | One simulation per machine | One simulation per machine | Single simulation across all machines |
+| **Best for** | Parallel independent tasks | Variable workloads | Large-scale distributed computing |
+| **Cost** | Pay for all machines | Pay for active machines only | Pay for entire cluster |
+| **Resource Utilization** | All machines run independently | Number of active machines scale with demand | All machines work together |
+
 ## Quick Start Example
 
-To illustrate the performance of running simulations on dedicated resources using
-the Inductiva API, we will run [SWASH](https://inductiva.ai/guides/swash)
-as an example.
-
-### Running SWASH on Dedicated Resources
-
-Let's run the simulation on dedicated resources specifically set up for this task.
+To illustrate the performance of running simulations on resources using
+the Inductiva API, we will run [SWASH](https://inductiva.ai/guides/swash) Simulator on
+`c2-standard-30` GCP (Google Cloud Platform) machines as an example.
 
 ```python
 import inductiva
@@ -74,3 +92,11 @@ machine_group.terminate()
 
 Running the simulation on a [dedicated machine group](#dedicated-resources) with
 a `c2-standard-30` machine took **9 minutes and 37 seconds** to complete.
+
+## Next Steps
+
+Now that you understand the fundamentals of resources in the Inductiva API, explore these topics to deepen your knowledge:
+
+- **[Computational Infrastructure →](computational-infrastructure.md)** - Learn about the underlying infrastructure and available machine types
+- **[Benchmarking →](../intro/benchmarking.md)** - Discover how to optimize resource selection for your specific simulations
+- **[Cost Management →](../guides/cost-management.md)** - Advanced techniques for optimizing your simulation costs
