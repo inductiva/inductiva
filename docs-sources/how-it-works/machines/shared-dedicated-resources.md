@@ -4,7 +4,7 @@ The Inductiva API provides flexible computational resources for different simula
 
 ## Available Resource Types
 
-Inductiva provides three types of computational resources, each optimized for different simulation patterns and workloads.
+Inductiva provides three types of computational resources you can launch for your simulations.
 
 ### Machine Group
 A collection of homogeneous machines designed to operate individually,
