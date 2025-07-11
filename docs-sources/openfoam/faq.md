@@ -99,6 +99,46 @@ This runs the simulation using 5 processes, disables hyperthreading, and uses MP
 If you use `runParallel`, OpenFOAM manages parallelism internally and ignores these settings.
 
 <br>
+
+
+## 4. Do your simulations work on your laptop but not on Inductiva?
+
+If your simulation runs successfully on your local machine but fails on Inductiva,
+it’s likely due to a version mismatch.
+
+Make sure you're using the same software version and distribution
+(e.g., ESI or Foundation) on both your machine and Inductiva. If the version
+you need isn’t available on Inductiva yet,
+[contact us](mailto:support@inductiva.ai) — we’ll be happy to add it as soon as possible.
+
+<br>
+
+## 5. My simulation fails, but the console shows Success. What’s going on?
+
+This usually means your `Allrun` script is not properly reporting errors.
+
+Inductiva checks whether a simulation succeeded by looking at the script’s
+**exit code**. A non-zero code means failure. However, in your case, a command
+like `runApplication blockMesh` might be failing, but the script continues to
+execute, often ending with a command like `echo "Simulation Complete!"`,
+which returns a success code (`0`).
+
+Because the final command succeeds, the whole script appears successful, even
+though a key step failed.
+
+### How to fix it
+
+Add this line to the top of your `Allrun` script:
+
+```bash
+set -e
+```
+
+This will make the script stop immediately if any command fails, and it will
+correctly return a non-zero exit code. That way, Inductiva can detect the
+failure and show it as such.
+
+<br>
 <br>
 
 Still can't find what you're looking for? [Contact Us](mailto:support@inductiva.ai)

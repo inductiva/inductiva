@@ -219,7 +219,7 @@ inductiva.TemplateManager.render_dir(..., bts_filepath=f"{turbsim_task.id}/TurbS
 ```
 
 > 💡 **Tip:** Want to learn more about using templates for simulation input files?
-> Check out the [Inductiva Templating Guide](https://inductiva.ai/guides/how-it-works/intro/templating).
+> Check out the [Inductiva Templating Guide](https://inductiva.ai/guides/scale-up/parallel-simulations/templating).
 
 ## FAQs
 
