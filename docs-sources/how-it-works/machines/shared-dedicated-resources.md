@@ -90,9 +90,6 @@ task.wait()
 machine_group.terminate()
 ```
 
-Running the simulation on a [dedicated machine group](#dedicated-resources) with
-a `c2-standard-30` machine took **9 minutes and 37 seconds** to complete.
-
 ## Next Steps
 
 Now that you understand the fundamentals of resources in the Inductiva API, explore these topics to deepen your knowledge:
@@ -100,3 +97,15 @@ Now that you understand the fundamentals of resources in the Inductiva API, expl
 - **[Computational Infrastructure →](computational-infrastructure.md)** - Learn about the underlying infrastructure and available machine types
 - **[Benchmarking →](../intro/benchmarking.md)** - Discover how to optimize resource selection for your specific simulations
 - **[Cost Management →](../guides/cost-management.md)** - Advanced techniques for optimizing your simulation costs
+
+
+```{toctree}
+---
+caption: Resources
+maxdepth: 2
+hidden: true
+---
+computational_resources/machinegroup_class
+computational_resources/elasticgroup_class
+computational_resources/mpicluster_class
+```
