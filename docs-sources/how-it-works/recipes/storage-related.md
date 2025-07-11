@@ -50,7 +50,7 @@ for task in all_tasks:
 This script populates the `big_tasks` list with all tasks whose outputs exceed
 2.1 GB. You can adjust the `threshold` value to whatever limit best fits your needs.
 
-You can now do whatever you want to the list of flagged tasks. Here is an example:
+You can now do whatever you want to the list of flagged tasks.
 
 ## Download and delete the storage from a list of tasks.
 
