@@ -17,7 +17,7 @@ parallel processing.
 
 ````{eval-rst}
 .. seealso::
-   The documentation of the `MachineGroup <https://inductiva.ai/guides/api-functions/api/inductiva.resources#inductiva.resources.machine_groups.MachineGroup>` class of out Pyhton API_
+   The documentation of the `MachineGroup <https://inductiva.ai/guides/api-functions/api/inductiva.resources#inductiva.resources.machine_groups.MachineGroup>`_ class of out Pyhton API
 ```` 
 
 ### Elastic Machine Group
