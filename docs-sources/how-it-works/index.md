@@ -49,6 +49,7 @@ hidden: true
 ---
 Overview <machines/index>
 machines/shared-dedicated-resources
+machines/manage_computational_resources.md
 machines/computational-infrastructure
 ```
 
