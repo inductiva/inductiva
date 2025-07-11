@@ -1,7 +1,7 @@
 # Run Your First Simulation
 This tutorial will show you how to run OpenFOAM simulations using the Inductiva API. 
 
-We will cover the `motorbike` use case from the [OpenFOAM Foundation GitHub repository](https://github.com/OpenFOAM/OpenFOAM-8/tree/version-8/tutorials), to help you get started with simulations.
+We will cover the `motorBike` use case from the [OpenFOAM Foundation GitHub repository](https://github.com/OpenFOAM/OpenFOAM-8/tree/version-8/tutorials), to help you get started with simulations.
 
 ## Prerequisites
 Download the required files [here](https://github.com/OpenFOAM/OpenFOAM-8/tree/version-8/tutorials/incompressible/simpleFoam/motorBike) and place them in a folder called `SimulationFiles`. Then, you’ll be ready to send your simulation to the Cloud.
@@ -75,4 +75,10 @@ Estimated computation cost (US$): 0.0047 US$
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
 the core computation time of this simulation was approximately 2 minutes and 10 seconds.
 
-It's that simple!
+<div class="cta-bar">
+  <div class="cta-text">
+    <strong>Start running simulations seamlessly!</strong> You have $5 in <strong>free</strong> credits, no credit card required.
+  </div>
+  <button  onclick="window.open('https://console.inductiva.ai/', '_blank')" target="_blank" class="cta-button">Sign In</button>
+</div>
+
