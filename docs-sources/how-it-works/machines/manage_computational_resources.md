@@ -4,7 +4,6 @@ Once you have created your resources, the Inductiva API provides various methods
 
 ## Quick Start
 The typical workflow for managing computational resources follows three simple steps:
-
 1. **Start** resources when you need to run simulations
 2. **Monitor** them while they're running
 3. **Terminate** them when you're done to avoid unnecessary costs
@@ -65,7 +64,7 @@ inductiva resources launch c2-standard-4 \
 
 ````{eval-rst}
 .. seealso::
-   Run **`inductiva resources start --help`** to see the full command syntax, arguments and options
+   Run `**inductiva resources start --help**` to see the full command syntax, arguments and options
 ```` 
 
 ### List
@@ -98,7 +97,7 @@ Active Resources:
 
 **Web Console**
 
-From Inductiva's Web Console, you can also view your active resources navigating to the dedicated [Active Machine Groups page](https://console.inductiva.ai/machine-groups/active).
+From Inductiva's Web Console, you can also view your active resources navigating to the dedicated [Active Machine Groups](https://console.inductiva.ai/machine-groups/active) page.
 
 ### Monitor Costs
 
@@ -128,7 +127,6 @@ When you register a resource object using the Python API, you can view the estim
 
 You can later also fecth this cost value again:
 ```python
-# Get cost estimate for an active resource
 >>> cost_estimate = machine_group.estimate_cloud_cost()
 >>> print(f"Current resource cost: ${cost_estimate:.2f}/hour")
 ```
@@ -148,12 +146,12 @@ inductiva resources cost c2-standard-4
 
 **Web Console**
 
-1- Navigate to the [Active resources page](https://console.inductiva.ai/machine-groups/active).
-2- Click on the resource and see the value under **Estimated Cost**.
+1. Navigate to the [Active resources page](https://console.inductiva.ai/machine-groups/active).
+2. Click on the resource and see the value under **Estimated Cost**.
 
 Or you can see the cost of a terminated resource:
-1- Navigate to the [Terminated resources page](https://console.inductiva.ai/machine-groups/terminated).
-2- Click on the resource and see the value under **Cost**.
+1. Navigate to the [Terminated resources page](https://console.inductiva.ai/machine-groups/terminated).
+2. Click on the resource and see the value under **Cost**.
 
 
 ## Terminate
@@ -184,13 +182,10 @@ inductiva resources terminate --all
 
 **Web Console**
 
-1- Navigate to the [Active resources page](https://console.inductiva.ai/machine-groups/active).
-2- Click on the resource you want to terminate and click the **Terminate Machine Group** button.
+1. Navigate to the [Active resources page](https://console.inductiva.ai/machine-groups/active).
+2. Click on the resource you want to terminate and click the **Terminate Machine Group** button.
 
-<div align="center">
-   <img src="_static/terminate_machine.png" alt="Terminate Resource">
-   <figcaption align="center"><b>Terminate Resource</b></figcaption>
-</div>
+![Terminate Resource](./_static/terminate_machine.png)
 
 All these are a blocking call that will only finish when the machines have terminated, in this way no computational resources are left up.
 
