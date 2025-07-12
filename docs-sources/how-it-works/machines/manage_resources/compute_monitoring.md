@@ -1,4 +1,4 @@
-# Computational Resources Monitoring
+# Automated Resource Monitoring
 
 Inductiva API has at all times a monitoring service running in the background
 that will clean up any resources that are not being used. The focus of this

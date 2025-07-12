@@ -31,7 +31,7 @@ print(f"Current resource cost: ${cost:.2f}/hour")
 machine_group.terminate()
 ```
 
->💡 **Pro tip**: Resources continue charging until terminated, so always clean up when finished! Don't worry if you forget -- we have a background monitoring service that automatically terminates idle machines.
+>💡 **Pro tip**: Resources continue charging until terminated, so always clean up when finished! Don't worry if you forget -- we have a [background monitoring service](manage_resources/compute_monitoring.md) that automatically terminates idle machines.
 
 ## Core Operations
 ### Start
