@@ -1,4 +1,4 @@
-# Set up an MPI Cluster
+# Set up and Manage an MPI Cluster
 An **MPI Cluster** is a set of homogeneous machines configured to communicate and collaborate in running a single simulation. By leveraging multiple machines working together, users can execute simulations that require a level of parallelization beyond what a single machine can provide.
 
 Setting up an MPI cluster is straightforward using the `MPICluster` class. You simply specify the type and number of machines to compose the cluster, along with the size of the shared disk storage accessible by all machines.

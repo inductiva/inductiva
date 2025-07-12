@@ -1,4 +1,4 @@
-# Set up an Elastic Machine Group
+# Set up and Manage an Elastic Machine Group
 
 The `ElasticMachineGroup`, similarly to the standard `MachineGroup`, is composed of 
 a group of homogeneous machines that work individually to run multiple simulations. 
