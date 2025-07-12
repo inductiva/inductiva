@@ -4,14 +4,14 @@ The Inductiva API provides flexible computational resources for different simula
 
 ## Available Resource Types
 
-Inductiva provides three types of computational resources you can launch for your simulations.
+Inductiva provides three types of resources you can launch for your simulations.
 
 ### Machine Group
 A collection of homogeneous machines designed to operate individually,
 enabling the distribution of multiple simulations across different machines for
 parallel processing.
 
-- **Best for**: Multiple independent simulations, parameter sweeps, Monte Carlo studies
+- **Best for**: Multiple independent simulations, parameter sweeps
 - **Key benefit**: Parallel execution of separate simulation tasks
 - **Learn more**: [Machine Group documentation](computational_resources/machinegroup_class.md)
 
@@ -60,7 +60,7 @@ Choose the resource type that best fits your simulation needs:
 
 To illustrate the performance of running simulations on resources using
 the Inductiva API, we will run [SWASH](https://inductiva.ai/guides/swash) Simulator on
-`c2-standard-30` GCP (Google Cloud Platform) machines as an example.
+`c2-standard-30` Google Cloud Platform (GCP) machines as an example.
 
 ```python
 import inductiva
