@@ -31,7 +31,7 @@ print(f"Current resource cost: ${cost:.2f}/hour")
 machine_group.terminate()
 ```
 
->💡 **Pro tip**: Resources continue charging until terminated, so always clean up when finished!
+>💡 **Pro tip**: Resources continue charging until terminated, so always clean up when finished! Don't worry if you forget -- we have a background monitoring service that automatically terminates idle machines.
 
 ## Core Operations
 ### Start
@@ -64,7 +64,7 @@ inductiva resources launch c2-standard-4 \
 
 ````{eval-rst}
 .. seealso::
-   Run `**inductiva resources start --help**` to see the full command syntax, arguments and options
+   Run `inductiva resources start --help` to see the full command syntax, arguments and options
 ```` 
 
 ### List
@@ -94,6 +94,11 @@ Active Resources:
  api-5014txg0rwx3jbbpf6y0ndzmv   c2d-highmem-16   False       mpi        3/3            10                  False    10 Jul, 16:22:04     0:02:12/0:3:00   3.27774
  api-es9sjockjymvkwfmjioibfw8p   c2-standard-8    False       standard   2/2            60                  False    10 Jul, 16:23:25     0:02:50/0:03:00   1.08312
 ```
+
+````{eval-rst}
+.. seealso::
+   Run `inductiva resources list --help` to see the full command syntax, arguments and options
+```` 
 
 **Web Console**
 
@@ -197,6 +202,10 @@ See a more advanced tutorial on how to setup and manage Elastic Machine Groups t
 ### MPI Cluster
 See a more advanced tutorial on how to setup and manage MPI Clusters to run parallel simulations [here](manage_resources/set-up-mpi-cluster.md).
 
+### Automated Resource Monitoring
+
+Learn how Inductiva's background monitoring service automatically manages your resources to prevent waste and optimize costs [here](manage_resources/compute_monitoring.md).
+
 ```{toctree}
 ---
 caption: Manage Resources
@@ -205,4 +214,5 @@ hidden: true
 ---
 manage_resources/set-up-elastic-machine-group
 manage_resources/set-up-mpi-cluster
+manage_resources/compute_monitoring
 ```
