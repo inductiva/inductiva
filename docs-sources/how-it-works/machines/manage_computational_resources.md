@@ -12,19 +12,23 @@ The typical workflow for managing computational resources follows three simple s
 ```python
 import inductiva
 
-# Start a machine group
+# 1. Start computational resources
 machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-4",
-    num_machines=2
+    machine_type="c2-standard-4",    # Choose appropriate machine type
+    num_machines=2,                  # Scale based on your workload
+    data_disk_gb=100,                # Enough storage for your data
+    spot=True                        # Save up to 80% on costs
 )
 machine_group.start()
 
-# List active resources
+# 2. Monitor your resources
 resources = inductiva.resources.machine_groups.get()
-# Fech estimated cost
+print(f"Active resources: {len(resources)}")
+# For example, fetch the estimated cost
 cost = machine_group.estimate_cloud_cost()
+print(f"Current resource cost: ${cost:.2f}/hour")
 
-# Terminate when done
+# 3. Always terminate when done
 machine_group.terminate()
 ```
 
