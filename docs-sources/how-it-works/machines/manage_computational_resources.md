@@ -3,6 +3,11 @@
 Once you have created your resources, the Inductiva API provides various methods and tools for managing them. This guide covers everything from launching resources to monitoring costs and terminating them when you're done.
 
 ## Quick Start
+The typical workflow for managing computational resources follows three simple steps:
+
+1. **Start** resources when you need to run simulations
+2. **Monitor** them while they're running
+3. **Terminate** them when you're done to avoid unnecessary costs
 
 ```python
 import inductiva
@@ -16,10 +21,14 @@ machine_group.start()
 
 # List active resources
 resources = inductiva.resources.machine_groups.get()
+# Fech estimated cost
+cost = machine_group.estimate_cloud_cost()
 
 # Terminate when done
 machine_group.terminate()
 ```
+
+>💡 **Pro tip**: Resources continue charging until terminated, so always clean up when finished!
 
 ## Core Operations
 ### Start
@@ -40,10 +49,10 @@ machine_group.start()
 
 **CLI**
 ```bash
-# Start a machine group
 inductiva resources start c2-standard-4
-
-# Start with specific options
+```
+Or start with specific options:
+```bash
 inductiva resources launch c2-standard-4 \
   --n 4  \
   -d 50 \
@@ -52,11 +61,11 @@ inductiva resources launch c2-standard-4 \
 
 ````{eval-rst}
 .. seealso::
-   Run `inductiva resources start --help` to see the full command syntax, arguments and options
+   Run **`inductiva resources start --help`** to see the full command syntax, arguments and options
 ```` 
 
-### Listxw
-Check the status and details of your active resources.
+### List
+List and check the details of your active resources.
 
 **Python**
 ```python
@@ -70,7 +79,7 @@ Check the status and details of your active resources.
 
 **CLI**
 ```bash
-$ inductiva resources list
+inductiva resources list
 ```
 
 One obtains for example the following output:
@@ -84,6 +93,7 @@ Active Resources:
 ```
 
 **Web Console**
+
 From Inductiva's Web Console, you can also view your active resources navigating to the dedicated [Active Machine Groups page](https://console.inductiva.ai/machine-groups/active).
 
 ### Monitor Costs
@@ -91,7 +101,8 @@ From Inductiva's Web Console, you can also view your active resources navigating
 Keep track of your resource costs to optimize your spending.
 
 **Python**
-When you register a resource object using the Python API, you can view the estimated cost in the CLI logs when running your script:
+
+When you register a resource object using the Python API, you can view the estimated cost in the CLI logs:
 
 ```bash
 ■ Registering MachineGroup configurations:
@@ -132,6 +143,7 @@ inductiva resources cost c2-standard-4
 ```` 
 
 **Web Console**
+
 1- Navigate to the [Active resources page](https://console.inductiva.ai/machine-groups/active).
 2- Click on the resource and see the value under **Estimated Cost**.
 
@@ -167,12 +179,13 @@ inductiva resources terminate --all
 ```
 
 **Web Console**
+
 1- Navigate to the [Active resources page](https://console.inductiva.ai/machine-groups/active).
 2- Click on the resource you want to terminate and click the **Terminate Machine Group** button.
 
 <div align="center">
-   <img src="_static/terminate_machine.png" alt="Task Metadata">
-   <figcaption align="center"><b>Task Metadata</b></figcaption>
+   <img src="_static/terminate_machine.png" alt="Terminate Resource">
+   <figcaption align="center"><b>Terminate Resource</b></figcaption>
 </div>
 
 All these are a blocking call that will only finish when the machines have terminated, in this way no computational resources are left up.
