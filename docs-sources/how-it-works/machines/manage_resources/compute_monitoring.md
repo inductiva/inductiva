@@ -23,8 +23,7 @@ data of running simulations. So please be mindful of the time your simulations
 may take to run when specifying `auto_terminate_ts` or `auto_terminate_minutes`.
 
 The above mentioned attributes can be defined when initializing the machine
-group (this is valid for all machine group types). `max_idle_time` can be a
-`datetime.timedelta` object or an integer representing the number of minutes.
+group.
 
 ```python
 import inductiva
@@ -33,12 +32,12 @@ import datetime
 machine_group = inductiva.resources.MachineGroup(
     machine_type="c2-standard-16",
     data_disk_gb=20,
-    max_idle_time=1,
+    max_idle_time=1,  # terminate after 1 minute of inactitivy
     # or
-    # max_idle_time=datetime.timedelta(seconds=30),
+    # max_idle_time=datetime.timedelta(seconds=60),
     auto_terminate_ts=datetime.datetime.now(datetime.timezone.utc) +
-    datetime.timedelta(hours=10),
+    datetime.timedelta(hours=1),  # terminate 60 minutes after launch
     # or
-    # auto_terminate_minutes=30,
+    # auto_terminate_minutes=60,
 )
 ```
