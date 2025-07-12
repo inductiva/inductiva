@@ -1,6 +1,6 @@
 # Manage Resources
 
-Once you have launched your resources, the Inductiva API provides various methods and tools for managing them. This guide covers everything from launching resources to monitoring costs and terminating them when you're done.
+Once you have created your resources, the Inductiva API provides various methods and tools for managing them. This guide covers everything from launching resources to monitoring costs and terminating them when you're done.
 
 ## Quick Start
 
@@ -24,7 +24,7 @@ machine_group.terminate()
 ## Core Operations
 ### Start
 
-Launch computational resources to run your simulations. You can start resources using Python or the CLI.
+Start computational resources to run your simulations. You can start resources using Python or the CLI.
 
 **Python**
 ```python
