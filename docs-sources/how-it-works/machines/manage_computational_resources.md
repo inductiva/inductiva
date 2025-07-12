@@ -27,7 +27,6 @@ machine_group.terminate()
 Launch computational resources to run your simulations. You can start resources using Python or the CLI.
 
 **Python**
-# Create and start a standard machine group
 ```python
 # Create and start a machine group
 machine_group = inductiva.resources.MachineGroup(
