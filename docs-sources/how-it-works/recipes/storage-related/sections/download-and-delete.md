@@ -15,4 +15,4 @@ for task in big_tasks:
 
 It's this simple.
 
-> **Note**: Keep in mind that downloading the files has a cost (learn more about costs [here](https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost)). If you can, download only the needed files instead of the whole storage. (learn more how you can do that [here](download-file-from-project).)
+> **Note**: Keep in mind that downloading the files has a cost (learn more about costs [here](https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost)). If you can, download only the needed files instead of the whole storage. (learn more how you can do that [here](../../download-file-from-project))

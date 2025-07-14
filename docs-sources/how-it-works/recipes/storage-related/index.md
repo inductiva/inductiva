@@ -6,7 +6,7 @@ As you run more simulations on Inductiva, storage used by failed, outdated, or l
 * [Deleting old tasks](sections/delete-old-tasks.md)
 * [Cleaning up storage for entire projects](sections/delete-project-tasks.md)
 * [Downloading outputs before deletion](sections/download-and-delete.md)
-* [Identifying tasks that use the most storage](sections/find-lasrge-tasks.md)
+* [Identifying tasks that use the most storage](sections/find-large-tasks.md)
 
 Each section provides a code snippet to help you manage your storage effectively and keep your workspace organized.
 
@@ -16,5 +16,5 @@ sections/delete-failed-tasks
 sections/delete-old-tasks
 sections/delete-project-tasks
 sections/download-and-delete
-sections/find-lasrge-tasks
+sections/find-large-tasks
 ```
