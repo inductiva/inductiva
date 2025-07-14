@@ -146,15 +146,19 @@ benchmark.export(fmt="json", select="distinct", status="success")
 ### Design Principles
 
 **Start Simple, Then Expand**
+
 Begin with a small set of representative configurations before scaling to comprehensive evaluations. This helps validate your approach and avoid costly mistakes.
 
 **Control Variables**
+
 Change only one parameter at a time when possible. This makes it easier to identify the source of performance differences and builds clearer insights.
 
 **Representative Workloads**
+
 Use simulation inputs that represent your actual production workloads. Synthetic benchmarks might not capture real-world performance characteristics.
 
 **Document Everything**
+
 Keep detailed records of benchmark configurations, objectives, and results. This documentation becomes valuable for future optimizations.
 
 ### Resource Management
@@ -166,9 +170,11 @@ benchmark.wait().terminate()
 ```
 
 **Monitor Costs**
+
 Regularly review resource usage to avoid unexpected charges during long-running benchmarks.
 
 **Use Quotas Wisely**
+
 Consider enabling `wait_for_quotas=True` in `run()` to ensure your simulation runs without quota issues.
 ```python
 # Handle resource quotas gracefully
@@ -184,6 +190,7 @@ max_idle_time = datetime.timedelta(seconds=30)
 ### Statistical Considerations
 
 **Account for Variability**
+
 Run multiple repetitions to ensure reliable results. System variability can significantly impact single-run measurements:
 
 ```python
@@ -197,6 +204,7 @@ benchmark.run(num_repeats=5)
 ### Performance Optimization
 
 **Parallel Repetitions**
+
 Optimize benchmark execution time by running repetitions in parallel:
 
 ```python

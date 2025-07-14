@@ -2,7 +2,7 @@
 The Inductiva API provides a benchmarking tool to help you measure, compare, and optimize simulation performance across different computational configurations. Make data-driven decisions about resource allocation, cost optimization, and performance tuning.
 
 ## Get started
-Learn about _Benchmarks_ — the entity in the Inductiva API for aggregating tasks to evaluate simulation performance across different machine types, configurations, and parameters. Our benchmarking tool helps you find the optimal balance between computation time, cost, and accuracy for your specific use cases.
+Learn about _Benchmarks_ — the class in the Inductiva API for systematically evaluating simulation performance across different machine types, configurations, and parameters.
 
 | **[Benchmarks →](benchmarking.md)** | **[Run a Benchmark →](run-benchmarks.md)** |
 |---|---|
