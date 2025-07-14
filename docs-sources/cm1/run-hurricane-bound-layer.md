@@ -1,4 +1,4 @@
-# LES of Hurricane Bound Layer 🌪
+# LES of Hurricane Boundary Layer 🌪
 
 In this tutorial, we demonstrate how to simulate a simplified hurricane boundary
 layer (HBL) using Large Eddy Simulation (LES) on the Inductiva platform. This
@@ -16,20 +16,16 @@ to more powerful machines.
 ## Prerequisites
 
 The required files may be downloaded [here](https://storage.googleapis.com/inductiva-api-demo-files/cm1-les-hurr-bound-layer.zip).
-Note that manual download is not necessary since the run script will donwload
-it.
-
-## Key Considerations
-
-TODO
+Note that manual download is not necessary since the simulation script will
+donwload it.
 
 ## Run the Simulation
 
 Below is the code required to run the hurricane boundary layer use case with
 the Inductiva API.
 
-The simulation will then be sent to a `c2d-higcpu-16` virtual machine from
-Google Cloud, equipped with 16 vCPU and 32 GB of RAM. This machine is
+The simulation will then be sent to a `c2d-highcpu-16` virtual machine from
+Google Cloud, equipped with 16 vCPUs and 32 GB of RAM. This machine is
 equivalent to a standard working laptop.
 
 ```python
@@ -76,8 +72,8 @@ execute it by running:
 python run.py
 ````
 
-The script will take about **1 hour and 36 minutes** to run. In the end, you
-should see something like:
+When the simulation is complete, we terminate the machine, download the results
+and print a summary of the simulation as shown below.
 
 ```
 Task status: Success
@@ -99,14 +95,48 @@ Data:
 Estimated computation cost (US$): 0.15 US$
 ```
 
+As you can see in the "In Progress" line (the part of the timeline that
+represents the actual execution of the simulation), the core computation time
+of this simulation was approximately 1 hour and 36 minutes (5772 seconds).
+
 ## Scaling Up
 
-| Machine Type     | Execution Time | Estimated Cost (USD) | Speedup   |
-|------------------|----------------|----------------------|-----------|
-| c2d-highcpu-16   | 1h 36min       | $0.14                | Reference |
-| c4-highcpu-16    | 1h 6min        | $0.33                | 1.45×     |
-| c2d-highcpu-112  | 17 min         | $0.17                | 5.65×     |
-| c3d-highcpu-360  | 9 min          | $0.51                | 10.67×    |
+One of the strengths of running LES simulations on the Inductiva platform is
+the ability to scale your workload across a wide range of high-performance
+cloud machines. Whether you need faster results or better cost-efficiency,
+scaling up is as simple as adjusting the `machine_type` parameter when
+allocating your cloud machine.
+
+We tested the same simulation across several cloud machines with increasing
+vCPU counts and next-generation architectures. The results show a clear trend:
+more powerful machines can dramatically reduce execution time while maintaining
+reasonable costs.
+
+| Machine Type     | Execution Time | Speedup   | Estimated Cost (USD) |
+|------------------|----------------|-----------|----------------------|
+| c2d-highcpu-16   | 1h 36min       | Reference | $0.14                |
+| c4-highcpu-16    | 1h 6min        | 1.45×     | $0.33                |
+| c2d-highcpu-112  | 17 min         | 5.65×     | $0.17                |
+| c3d-highcpu-360  | 9 min          | 10.67×    | $0.51                |
+
+Upgrading from `c2d-highcpu-16` (a typical entry-level machine) to
+`c4-highcpu-16` (a newer generation with the same number of vCPUs) improved
+runtime by 45%.
+
+Increasing the number of vCPUs to 112 on `c2d-highcpu-112` slashed the
+execution time by over 5×, with only a slight increase in cost—offering. It's a
+great balance between speed and cost-efficiency.
+
+For maximum performance, `c3d-highcpu-360` brought the simulation time down to
+just 9 minutes, achieving a 10× speedup compared to the baseline. While it’s
+the most expensive option tested, it delivers exceptional speed for
+time-critical workloads.
+
+These results demonstrate that Inductiva not only supports rapid scaling but
+also gives users flexibility to optimize for speed, cost, or a balance of both, depending on the demands of the task. 🚀
+
+If you want to benchmark your own workload in a single script please follow
+this [tutorial](https://inductiva.ai/guides/scale-up/benchmark/run-benchmarks).
 
 ## References
 
