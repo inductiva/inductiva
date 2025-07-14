@@ -6,6 +6,8 @@ LEVELS_TO_STR = {
     3: "^",
 }
 
+LEAF_COMMANDS = ["logs"]
+
 
 def extract_cmd(cmd_dir: Path) -> str:
     return cmd_dir.name.removeprefix("cmd_").replace("_", "-")
@@ -55,7 +57,8 @@ def gen_file(cmd_dir: Path):
         underline = '=' * len(header)
         file.write(f"{header}\n{underline}\n")
         gen_cmd_block("Overview", cmd, 1, file)
-        gen_cmd_blocks(cmd_dir, cmd, 1, file)
+        if cmd not in LEAF_COMMANDS:
+            gen_cmd_blocks(cmd_dir, cmd, 1, file)
 
 
 def gen_files(cli_dir: str):

@@ -12,15 +12,21 @@ def register(root_parser):
         help="Stream the logs of a running task.",
         formatter_class=argparse.RawTextHelpFormatter)
 
-    parser.description = (
-        "Stream the STDOUT of a running task.\n\n"
-        "This command will stream the logs being written to STDOUT by a\n"
-        "running task only if the task is still running. If the task has\n"
-        "finished, or transitioned to a status other than 'running', the\n"
-        "logs will not be available for streaming.\n"
-        "To check the status of a task, use:\n"
-        "  inductiva tasks list --id <task_id>")
+    parser.description = \
+"""
+Streams the standard output (STDOUT) of a running task in real-time, useful for
+monitoring live execution progress.
 
+This command will stream the logs being written to STDOUT by a task
+only if the task is still in progress. If the task has finished, or transitioned
+to a status, the logs will not be available for streaming.
+
+Real-time streaming of a running task's standard error (STDERR) is also 
+supported via an argument.
+
+To check the status of a task, use:
+    inductiva tasks list --id <task_id>
+"""
     utils.show_help_msg(parser)
 
     loader.load_commands(parser,
