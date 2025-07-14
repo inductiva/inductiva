@@ -4,10 +4,6 @@ Our **Benchmark** tool is designed to help you run and evaluate simulations syst
 measuring their performance, cost, and execution time. It allows you to configure 
 benchmarking runs, export results, and manage resources. 
 
-The tool supports different export formats, handles the execution of multiple 
-simulations in parallel, and provides mechanisms to gather and present performance 
-metrics.
-
 ## Quick Start
 The typical workflow for running benchmarks follows three simple steps:
 1. **Setup** your benchmark configuration with different runs to compare
@@ -146,15 +142,12 @@ benchmark.export(fmt="json", select="distinct", status="success")
 ### Design Principles
 
 **Start Simple, Then Expand**
-
 Begin with a small set of representative configurations before scaling to comprehensive evaluations. This helps validate your approach and avoid costly mistakes.
 
 **Control Variables**
-
 Change only one parameter at a time when possible. This makes it easier to identify the source of performance differences and builds clearer insights.
 
 **Representative Workloads**
-
 Use simulation inputs that represent your actual production workloads. Synthetic benchmarks might not capture real-world performance characteristics.
 
 ### Resource Management

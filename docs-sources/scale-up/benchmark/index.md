@@ -1,5 +1,5 @@
 # Benchmark
-The Inductiva API provides a benchmarking tool to help you measure, compare, and optimize simulation performance across different computational configurations. Make data-driven decisions about resource allocation, cost optimization, and performance tuning.
+The Inductiva API provides a benchmarking tool to help you measure, compare, and optimize simulation performance across different configurations. Make data-driven decisions about resource allocation, cost optimization, and performance tuning.
 
 ## Get started
 Learn about _Benchmarks_ — the class in the Inductiva API for systematically evaluating simulation performance across different machine types, configurations, and parameters.
@@ -11,14 +11,10 @@ Learn about _Benchmarks_ — the class in the Inductiva API for systematically e
 ## Features
 ✓ **Compare machine types** Systematically evaluate different computational resources to find the best price-performance ratio for your simulations.
 
-✓ **Measure performance metrics** Track execution time, cost, resource utilization, and other key performance indicators across multiple runs.
+✓ **Measure performance metrics** Track execution time, cost, and other key performance indicators across multiple runs.
 
 ✓ **Parallel execution** Run multiple benchmark configurations simultaneously to reduce evaluation time and get faster insights.
 
-✓ **Export results** Export benchmark data in JSON or CSV formats for further analysis, reporting, and decision-making.
+✓ **Export results** Export benchmark data in JSON or CSV formats for further analysis, and decision-making.
 
-✓ **Intelligent recommendations** Get automated recommendations for optimal machine configurations based on your specific performance and cost requirements.
-
-✓ **Reproducible results** Ensure consistent and reliable benchmarking through automated repetition and statistical analysis of simulation runs.
-
-✓ **Resource management** Automatically provision, monitor, and terminate computational resources to minimize costs and maximize efficiency during benchmarking.
+✓ **Automatic recommendations** Get recommendations for optimal machine configurations.
