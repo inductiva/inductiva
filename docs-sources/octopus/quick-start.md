@@ -103,8 +103,6 @@ Data:
 	Number of output files:   51
 
 Estimated computation cost (US$): 0.00039 US$
-
-Go to https://console.inductiva.ai/tasks/ojxq8bqtybpk2kn9ukd0837td for more details.
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
