@@ -33,22 +33,45 @@ def register(parser):
     subparser = parser.add_parser(
         "list",
         aliases=["ls"],
-        help="List all container files in remote storage.",
+        help=("List all container files in remote storage, "
+              "including their size and estimated cost."),
         formatter_class=argparse.RawTextHelpFormatter)
 
-    subparser.description = (
-        "Lists all container files in the folder within remote storage.\n"
-        "If no folder is provided, defaults to the 'my-containers' directory.")
+    subparser.description = \
+"""
+Lists all container files in remote storage under the default containers
+folder (`my-containers/`), including their size and estimated cost. You can
+also specify other container folders to list their contents.
+"""
 
     subparser.add_argument(
         "folder",
         nargs="?",
         type=str,
-        help=(
-            "Opt folder path in remote storage to list container files from.\n"
-            "If omitted, defaults to 'my-containers'."),
+        help="Path to a containers folder in remote storage.\n" \
+             "Defaults to `my-containers/` if omitted."
     )
 
-    subparser.add_argument("-m", "--max-results", default=10, type=int)
+    subparser.add_argument(
+        "--max-results",
+        "-m",
+        default=10,
+        type=int,
+        help="Maximum number of container files to list. Defaults to 10.",
+    )
+
+    subparser.epilog =\
+"""
+examples:
+➜  inductiva containers ls
+NAME             SIZE        CREATION TIME
+container1.sif   200.00 MB   26/03, 16:41:14
+container2.sif   100.00 MB   26/03, 16:41:14
+container3.sif   300.00 MB   26/03, 16:41:14
+
+Total storage size used:
+         Volume: 0.59 GB
+         Cost: 0.02 US$/month
+"""
 
     subparser.set_defaults(func=list_containers)

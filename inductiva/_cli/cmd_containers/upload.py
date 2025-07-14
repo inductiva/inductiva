@@ -126,28 +126,49 @@ def register(parser):
         help="Convert a Docker image to a .sif and upload to remote storage.",
         formatter_class=argparse.RawTextHelpFormatter,
     )
-    subparser.description = (
-        "Converts a Docker image (from Docker Hub or local) into a .sif file "
-        "using Apptainer,\n stores it temporarily in a folder, and uploads that"
-        " folder to the system's remote storage.")
+
+    subparser.description = \
+"""
+Converts a Docker image (from Docker Hub, a local image, or a .tar file) into
+a SIF file using Apptainer, stores it in a temporary folder, and uploads that
+folder to your Inductiva remote storage, making it available for use with the
+Inductiva API.
+"""
+
+    subparser.epilog = \
+"""
+examples:
+# Convert and upload a local Docker image
+inductiva containers upload my-simulation-image
+
+# Convert and upload a Docker Hub CFD image (SU2) with a custom storage path
+inductiva containers upload docker://su2code/su2:latest my-containers/su2cfd.sif
+"""
 
     subparser.add_argument(
         "image",
         type=str,
-        help="Docker image reference (e.g., python:3.11-slim or docker://...).",
+        help=(
+            "Docker image reference. Accepts a:\n"
+            "\t- local image name or ID (e.g., python:3.11-slim)\n"
+            "\t- Docker Hub reference URL (e.g., docker://nginx:latest)\n"
+            "\t- `.tar` archive exported from Docker"
+        ),
     )
     subparser.add_argument(
         "output_path",
         nargs="?",
         type=str,
         help=(
-            "Optional output path for the .sif file, my-containers/nginx.sif.\n"
-            "If omitted, defaults to my-containers/<image-name>.sif."),
+            "Optional output path for the `.sif` file in Inductiva remote\n"
+            "storage (e.g., `my-containers/nginx.sif`). If omitted, defaults\n"
+            "to: `my-containers/<image-name>.sif`."
+        )
     )
     subparser.add_argument(
         "-f",
         "--overwrite",
         action="store_true",
-        help="Overwrite the file in remote storage without asking.")
+        help="Overwrites the file in remote storage without asking.")
 
     subparser.set_defaults(func=upload_container)

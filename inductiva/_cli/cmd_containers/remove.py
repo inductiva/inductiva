@@ -57,26 +57,26 @@ def register(parser):
     subparser = parser.add_parser(
         "remove",
         aliases=["rm"],
-        help="Remove a container file from remote storage.",
+        help="Remove a container file from your Inductiva remote storage.",
         formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = (
         "Removes a specific container file from a remote storage folder.\n"
-        "If no folder is specified, defaults to 'my-containers'.\n"
-        "Use the `--yes` flag to skip confirmation prompts.")
+        "If no folder is specified, defaults to 'my-containers'. Use the\n"
+        "flag `--yes` to skip confirmation prompts.\n\n"
+        "This action is irreversible and should be used with caution.")
 
     subparser.add_argument(
         "folder",
         nargs="?",
         type=str,
-        help=
-        "Optional folder path in remote storage. Defaults to 'my-containers'.")
+        help="Path to folder in remote storage. Defaults to 'my-containers/'.")
 
     subparser.add_argument("-n",
                            "--name",
                            required=True,
                            type=str,
-                           help="Name of the container to remove.")
+                           help="Name of the container file to remove.")
 
     subparser.add_argument(
         "-y",
@@ -85,5 +85,19 @@ def register(parser):
         dest="confirm",
         default=False,
         help="Skip confirmation prompt and delete immediately.")
+
+    subparser.epilog = \
+"""
+examples:
+
+# Remove a container with confirmation
+inductiva containers rm -n nginx.sif
+
+# Remove a container without confirmation prompt
+inductiva containers rm -n nginx.sif -y
+
+# Remove a container from a specific folder
+inductiva containers rm my-custom-folder -n my-container.sif
+"""
 
     subparser.set_defaults(func=rm_container)

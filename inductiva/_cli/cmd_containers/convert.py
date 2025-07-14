@@ -190,19 +190,42 @@ def register(parser):
         help="Convert a Docker image to an Apptainer .sif file.",
         formatter_class=argparse.RawTextHelpFormatter,
     )
-    subparser.description = (
-        "The `inductiva containers convert` command converts a Docker "
-        "image—specified as a Docker Hub URL,\n a local Docker image reference,"
-        " or a .tar archive—into an Apptainer .sif file using\n the Apptainer.")
+    subparser.description = \
+"""
+The `inductiva containers convert` command converts a Docker image into a
+Singularity Image Format (SIF, `.sif`) file using the Apptainer.
+
+The Docker image can be specified as a Docker Hub URL, a local Docker image
+reference, or a `.tar` archive.
+
+This can be useful for users that want to see the conversion result and test
+the SIF file before uploading it to the remote storage. 
+"""
+
+    subparser.epilog = \
+"""
+examples:
+
+# Convert a local image to SIF
+inductiva containers convert my-image:latest ./my-image.sif
+
+# Convert a Docker Hub image to SIF
+inductiva containers convert docker://python:3.11-slim ./python.sif
+"""
+
     subparser.add_argument(
         "image",
         type=str,
-        help=("Docker image reference. A docker:// URL, a local image name/ID, "
-              "or a path to a .tar file."),
+        help=(
+            "Docker image to convert. Accepts a:\n"
+            "\t- local image name or ID (e.g., my-image:latest)\n"
+            "\t- Docker Hub reference URL (e.g., docker://username/image:tag)\n"
+            "\t- `.tar` archive exported from Docker"
+        ),
     )
     subparser.add_argument(
         "output",
         type=str,
-        help="Path to save the resulting .sif file.",
+        help="The local path to save the resulting `.sif` file.",
     )
     subparser.set_defaults(func=convert_image)
