@@ -68,6 +68,7 @@ hidden: true
 ⬇️ Download specific files from a group of tasks <recipes/download-file-from-project>
 📤 Export your files to AWS S3 <recipes/export-files-to-aws/index>
 🧪 Generate a Dataset <recipes/generate-dataset>
+⏰ Setting a Time-to-Live on Your Simulations <recipes/set-task-ttl/set-task-ttl>
 ```
 
 ```{toctree}
