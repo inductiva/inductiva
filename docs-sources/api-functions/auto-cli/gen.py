@@ -1,19 +1,20 @@
 from pathlib import Path
 
 LEVELS_TO_STR = {
-    1: '-',
-    2: '~',
-    3: '^',
+    1: "-",
+    2: "~",
+    3: "^",
 }
 
 
 def extract_cmd(cmd_dir: Path) -> str:
-    return cmd_dir.name.removeprefix("cmd_").replace('_', '-')
+    return cmd_dir.name.removeprefix("cmd_").replace("_", "-")
+
 
 def get_cmd_dirs(root: Path) -> str:
     return sorted([
-        d for d in root.iterdir() 
-        if d.is_dir() and d.name.startswith("cmd_")
+        directory for directory in root.iterdir()
+        if directory.is_dir() and directory.name.startswith("cmd_")
     ])
 
 
@@ -30,10 +31,9 @@ def gen_cmd_block(header: str, command: str, level: int, file):
 
 def gen_cmd_blocks(cmd_dir: Path, cmd: str, level: int, file):
     sub_cmds = sorted([
-        f.stem.replace('_', '-') for f in cmd_dir.iterdir() 
-        if f.is_file() and
-            f.stem != "__init__" and
-            f.name.endswith(".py")
+        f.stem.replace("_", "-")
+        for f in cmd_dir.iterdir()
+        if f.is_file() and f.stem != "__init__" and f.name.endswith(".py")
     ])
 
     for sub_cmd in sub_cmds:
