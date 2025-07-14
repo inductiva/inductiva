@@ -210,10 +210,8 @@ for machine_type in machine_types:
 benchmark.run(num_repeats=num_repeats)
 ```
 
----
+## Next Steps
+Now that you understand the fundamentals of benchmarks in the Inductiva API, explore these topics to deepen your knowledge:
 
-Ready to dive in? Check out these exciting tutorials and our blog for more insights:
-
+- [How to Run a Benchmark](run-benchmarks.md)
 - [Allocating Computational Resources in a Diverse Chip Ecosystem](https://inductiva.ai/blog/article/allocating-computational-resources-in-a-diverse-chip-ecosystem)
-- [How to Run a Benchmark](https://tutorials.inductiva.ai/how_to/run-benchmarks.html)
-- [Benchmarking Computational Resources - A Use Case](https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-6.html)
