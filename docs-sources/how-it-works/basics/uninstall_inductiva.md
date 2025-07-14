@@ -19,7 +19,7 @@ Next, recall that the inductiva package, writes locally to your
 disk. Therefore, you should have a folder under `$HOME/.inductiva` in
 your system. Remove it and you are good to go!
 
-MacOS:
+MacOS/Linux:
 ```
 rm -rf $HOME/.inductiva
 ```
