@@ -11,7 +11,7 @@ A collection of homogeneous machines designed to operate individually,
 enabling the distribution of multiple simulations across different machines for
 parallel processing.
 
-- **Best for**: Multiple independent simulations, parameter sweeps
+- **Best for**: Multiple independent simulations
 - **Key benefit**: Parallel execution of separate simulation tasks
 - **Learn more**: [Machine Group documentation](computational_resources/machinegroup_class.md)
 

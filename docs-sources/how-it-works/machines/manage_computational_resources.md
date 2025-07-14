@@ -16,7 +16,7 @@ machine_group = inductiva.resources.MachineGroup(
     machine_type="c2-standard-4",    # Choose appropriate machine type
     num_machines=2,                  # Scale based on your workload
     data_disk_gb=100,                # Enough storage for your data
-    spot=True                        # Save up to 80% on costs
+    spot=True                        # Save costs by using spot machines
 )
 machine_group.start()
 
@@ -56,7 +56,7 @@ inductiva resources start c2-standard-4
 ```
 Or start with specific options:
 ```bash
-inductiva resources launch c2-standard-4 \
+inductiva resources start c2-standard-4 \
   --n 4  \
   -d 50 \
   --s
@@ -64,7 +64,7 @@ inductiva resources launch c2-standard-4 \
 
 ````{eval-rst}
 .. seealso::
-   Run `inductiva resources start --help` to see the full command syntax, arguments and options
+   Run :literal:`inductiva resources start --help` to see the full command syntax, arguments and options
 ```` 
 
 ### List
@@ -130,15 +130,17 @@ When you register a resource object using the Python API, you can view the estim
         · You are spending 2.4x less by using spot machines.
 ```
 
-You can later also fecth this cost value again:
+You can later also fetch this cost value again:
 ```python
 >>> cost_estimate = machine_group.estimate_cloud_cost()
 >>> print(f"Current resource cost: ${cost_estimate:.2f}/hour")
+Current resource cost: $0.65/hour
 ```
 
 **CLI**
+You can check the cost for a specific configuration
+
 ```bash
-# Check cost for a specific configuration
 inductiva resources cost c2-standard-4
 
 # Output: Estimated total cost (per machine): 0.23 US$/h

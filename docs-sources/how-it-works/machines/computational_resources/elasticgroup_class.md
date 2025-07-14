@@ -62,24 +62,3 @@ registers the configuration on the API which can now be used to manage it furthe
 ## Managing the Elastic Machine Group
 
 Visit our [Manage Resources](../manage_computational_resources.md) guide to learn how to monitor and control your `ElasticMachineGroup` resources.
-
-With your `elastic_machine_group` object ready, you can launch the elastic machine
-group with the minimum number of machines active with `elastic_machine_group.start()`.
-
-Within a few minutes, the machines will be set up and ready to pick up several
-simulations simultaneously. As simulations get into the queue, the number of active
-machines increases.
-
-At any moment, you can check an estimate of the price per hour of the group as follows:
-
-```
-elastic_machine_group.estimate_cloud_cost()
-```
-
-When you have finished you can terminate it with `elastic_machine_group.terminate()`
-or via the CLI with `$ inductiva resources terminate api-agn23rtnv0qnfn03nv93nc`.
-
-Running simulations will be killed and from this point, the `elastic_machine_group`
-object cannot be re-used.
-
-Elastic Machine Group on demand without any hassle.

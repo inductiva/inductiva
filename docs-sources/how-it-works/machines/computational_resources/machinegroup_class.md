@@ -6,7 +6,7 @@ allows the creation of a private queue that only receives the tasks you specific
 send to them. Then, the machines can pick simulations from the queue, which allows
 to run multiple simulations in parallel and speeds up the exploration of a design space.
 
-## Instantiating an `MachineGroup` object
+## Instantiating a `MachineGroup` object
 The following parameters can be configured:
 - the `machine_type` defines the type of CPU used for each machine. This parameter
 follows the naming convention set by
@@ -55,31 +55,3 @@ to manage it further.
 ## Managing the Machine Group
 
 Visit our [Manage Resources](../manage_computational_resources.md) guide to learn how to monitor and control your `MachineGroup` resources.
-
-With your `machine_group` object ready, starting all of the machines at the same
-time is as simple as calling `machine_group.start()`.
-
-Within a few minutes, the machines will be set up and ready to pick several
-simulations simultaneously. At any moment, you can check an estimate of the
-price per hour of the group with `machine_group.estimate_cloud_cost()` and
-when you have finished you can terminate it with `machine_group.terminate()`.
-Running simulations will be killed and from this point, the `machine_group`
-object cannot be re-used.
-
-To simplify the workflow, the last two functions can also be performed via the CLI.
-
-First, you can check the cost of the group by selecting the machine
-type and the number of machines you wish to use:
-
-```bash
-$ inductiva resources cost c2-standard-4 -n 4
-Estimated total cost (per machine): 0.919 (0.230) $/h.
-```
-
-When you don't need the Machine group anymore, you can easily kill it with the name:
-
-```bash
-$ inductiva resources terminate api-agn23rtnv0qnfn03nv93nc
-```
-
-Machine Group on demand without any hassle.

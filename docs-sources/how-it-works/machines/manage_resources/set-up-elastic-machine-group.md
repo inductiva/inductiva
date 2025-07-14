@@ -35,8 +35,8 @@ elastic_machine_group.start()
 Once started, simulations can be submitted to the queue of the elastic machine group.
 
 To explore our elastic machine group, we will follow the example of 
-[running multiple simulations in parallel](./run-parallel_simulations.md), based on the 
-[templating mechanism](./templating.md)
+[running multiple simulations in parallel](../../../scale-up/parallel-simulations/run-parallel-simulations.md), based on the 
+[templating mechanism](../../../scale-up/parallel-simulations/templating.md)
 built in the Inductiva API, but now with a scalable infrastructure.
 
 ```python
@@ -80,11 +80,11 @@ the CLI commands to monitor the tasks and the resources.
 
 To track the active resources we use
 ```bash
-$ watch inductiva resources ls
+watch inductiva resources ls
 ```
 and for our last 5 tasks submitted, we tracked them with
 ```bash
-$ watch inductiva tasks list -n 5
+watch inductiva tasks list -n 5
 ```
 
 Right after launch, the elastic machine group starts with a single active machine
