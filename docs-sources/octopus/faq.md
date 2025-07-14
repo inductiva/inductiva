@@ -6,8 +6,7 @@
 
 ## 1. What Octopus commands do I have available?
 
-We compiled Octopus with all it's utility functions. Feel free to use them in your
-list of commands:
+Besides the main `octopus` command you have available all utility functions, listed below:
 
 |       |       |       |       |
 |-------|-------|-------|-------|
