@@ -157,10 +157,6 @@ Change only one parameter at a time when possible. This makes it easier to ident
 
 Use simulation inputs that represent your actual production workloads. Synthetic benchmarks might not capture real-world performance characteristics.
 
-**Document Everything**
-
-Keep detailed records of benchmark configurations, objectives, and results. This documentation becomes valuable for future optimizations.
-
 ### Resource Management
 
 **Always Clean Up**
