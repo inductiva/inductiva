@@ -28,7 +28,7 @@ class MachineGroupUsageStatistics(BaseModel):
     MachineGroupUsageStatistics
     """
 
-  # noqa: E501
+    # noqa: E501
     total_time: MachineGroupTimeStat
     task_time: MachineGroupTimeStat
     idle_time: MachineGroupTimeStat

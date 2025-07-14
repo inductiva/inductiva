@@ -27,7 +27,7 @@ class CostComponents(BaseModel):
     CostComponents
     """
 
-  # noqa: E501
+    # noqa: E501
     compute: Union[StrictFloat, StrictInt]
     storage: Union[StrictFloat, StrictInt]
     data_transfer: Union[StrictFloat, StrictInt]

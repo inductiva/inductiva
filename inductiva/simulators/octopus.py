@@ -1,4 +1,5 @@
 """Octopus module of the API."""
+import logging
 from typing import Optional, Union
 
 from inductiva import simulators, tasks, types
@@ -74,11 +75,78 @@ class Octopus(simulators.Simulator):
             other arguments: See the documentation of the base class.
         """
 
-        on.
+        available_mpi_slots = on.get_available_mpi_slots(
+            use_hwthread=use_hwthread)
+
+        available_vcpus = on.available_vcpus
+
+        if n_vcpus is None:
+            logging.info(
+                "Param n_vcpus not set. Defaulting to the number of "
+                "available vcpus (%s).\n", available_vcpus)
+            n_vcpus = available_vcpus
+
+        if n_mpi_processes is None:
+            n_mpi_processes = 1
+
+            logging.info("Param n_mpi_processes not set. Defaulting to %s.\n",
+                         n_mpi_processes)
+
+        if n_omp_threads is None:
+            n_omp_threads = max(n_vcpus // n_mpi_processes, 1)
+            logging.info("Param n_omp_threads not set. Defaulting to %s.\n",
+                         n_omp_threads)
+
+        if n_mpi_processes > available_mpi_slots:
+            raise ValueError(
+                f"n_mpi_processes ({n_mpi_processes}) exceeds the number of "
+                f"MPI slots available on the machine ({available_mpi_slots})")
+
+        if n_vcpus <= 0:
+            raise ValueError("n_vcpus must be larger than 0")
+        if n_mpi_processes <= 0:
+            raise ValueError("n_mpi_processes must be larger than 0")
+        if n_omp_threads <= 0:
+            raise ValueError("n_omp_threads must be larger than 0")
+
+        requested_vcpus = n_omp_threads * n_mpi_processes
+        if requested_vcpus > available_vcpus:
+            raise ValueError(
+                f"n_mpi_processes * n_omp_threads ({n_mpi_processes} * "
+                f"{n_omp_threads} = {requested_vcpus}) can't be larger than "
+                f"{available_vcpus} (the number of available VCPUs in "
+                "the specified machine).\n"
+                "Update `n_mpi_processes` or `n_omp_threads`.")
+
+        mpi_config = None
+        if n_mpi_processes > 1:
+            mpi_kwargs = {}
+            mpi_kwargs["use_hwthread_cpus"] = use_hwthread
+            mpi_kwargs["np"] = n_mpi_processes
+            mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
+
+        # Will add the mpiconfig to the octopus command if needed
+        processed_commands = []
+        for command in commands:
+            is_string = isinstance(command, str)
+            # The only command to run in parallel
+            is_octopus = "octopus" in command
+            already_mpi = "mpirun" in command
+            
+            if (is_string and is_octopus and not already_mpi):
+                print("Converting octopus command!")
+                processed_commands.append(
+                    Command(
+                        "octopus ",
+                        mpi_config=mpi_config,
+                        env={"OMP_NUM_THREADS": str(n_omp_threads)},
+                    ))
+            else:
+                processed_commands.append(command)
 
         return super().run(input_dir,
                            on=on,
-                           commands=commands,
+                           commands=processed_commands,
                            storage_dir=storage_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,

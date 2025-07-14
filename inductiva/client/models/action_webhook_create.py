@@ -28,7 +28,7 @@ class ActionWebhookCreate(BaseModel):
     ActionWebhookCreate
     """
 
-  # noqa: E501
+    # noqa: E501
     action_type: StrictStr
     webhook_url: Annotated[str,
                            Field(min_length=1, strict=True, max_length=2083)]
