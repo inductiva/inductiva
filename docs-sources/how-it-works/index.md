@@ -67,6 +67,7 @@ hidden: true
 ⬇️ Download specific files from a group of tasks <recipes/download-file-from-project>
 📤 Export your files to AWS S3 <recipes/export-files-to-aws/index>
 🧪 Generate a Dataset <recipes/generate-dataset>
+🗑️ Clean Up Storage by Condition <recipes/storage-related/index>
 ```
 
 ```{toctree}
