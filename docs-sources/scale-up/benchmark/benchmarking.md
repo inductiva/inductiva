@@ -48,7 +48,6 @@ Consider benchmarking when you need to:
 The `Benchmark` API class handles the complexity of resource provisioning, runs management, and result aggregation, allowing you to focus on defining meaningful test scenarios.
 
 ## `Benchmark` Class
-### Core Concepts
 
 A `Benchmark` object contains **runs**, where each run represents a different simulation configuration you want to compare. This might include different:
 - Machine types or sizes
