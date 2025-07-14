@@ -22,8 +22,7 @@ Please note that at the moment, the background service doesn't preserve the
 data of running simulations. So please be mindful of the time your simulations
 may take to run when specifying `auto_terminate_ts` or `auto_terminate_minutes`.
 
-The above mentioned attributes can be defined when initializing the machine
-group.
+The above mentioned attributes can be defined when initializing the resource.
 
 ```python
 import inductiva

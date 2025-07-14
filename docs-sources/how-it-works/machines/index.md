@@ -1,4 +1,4 @@
-# Resources
+# Computational Resources
 The Inductiva API provides on-demand access to computational infrastructure for running your simulations at any scale. Resources are automatically provisioned and managed, so you can focus on your simulations rather than infrastructure management.
 
 ## Get started

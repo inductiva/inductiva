@@ -43,7 +43,7 @@ setup/uninstall_inductiva
 
 ```{toctree}
 ---
-caption: Resources
+caption: Computational Resources
 maxdepth: 3
 hidden: true
 ---
