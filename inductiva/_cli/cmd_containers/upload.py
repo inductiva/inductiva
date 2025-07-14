@@ -148,12 +148,10 @@ inductiva containers upload docker://su2code/su2:latest my-containers/su2cfd.sif
     subparser.add_argument(
         "image",
         type=str,
-        help=(
-            "Docker image reference. Accepts a:\n"
-            "\t- local image name or ID (e.g., python:3.11-slim)\n"
-            "\t- Docker Hub reference URL (e.g., docker://nginx:latest)\n"
-            "\t- `.tar` archive exported from Docker"
-        ),
+        help=("Docker image reference. Accepts a:\n"
+              "\t- local image name or ID (e.g., python:3.11-slim)\n"
+              "\t- Docker Hub reference URL (e.g., docker://nginx:latest)\n"
+              "\t- `.tar` archive exported from Docker"),
     )
     subparser.add_argument(
         "output_path",
@@ -162,9 +160,7 @@ inductiva containers upload docker://su2code/su2:latest my-containers/su2cfd.sif
         help=(
             "Optional output path for the `.sif` file in Inductiva remote\n"
             "storage (e.g., `my-containers/nginx.sif`). If omitted, defaults\n"
-            "to: `my-containers/<image-name>.sif`."
-        )
-    )
+            "to: `my-containers/<image-name>.sif`."))
     subparser.add_argument(
         "-f",
         "--overwrite",

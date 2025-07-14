@@ -220,8 +220,7 @@ inductiva containers convert docker://python:3.11-slim ./python.sif
             "Docker image to convert. Accepts a:\n"
             "\t- local image name or ID (e.g., my-image:latest)\n"
             "\t- Docker Hub reference URL (e.g., docker://username/image:tag)\n"
-            "\t- `.tar` archive exported from Docker"
-        ),
+            "\t- `.tar` archive exported from Docker"),
     )
     subparser.add_argument(
         "output",

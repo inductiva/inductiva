@@ -18,6 +18,7 @@ r"""     ___  _   _  ____   _   _   ____  _____  ___ __     __ _
     |___||_| \_||____/  \___/  \____|  |_|  |___|   \_//_/   \_\
 """
 
+
 def download_example_scripts() -> List[str]:
     """Downloads example scripts from the Inductiva Github repository.
 

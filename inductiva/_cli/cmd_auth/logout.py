@@ -33,5 +33,5 @@ stored API key.
 
 This will remove the locally stored API key, requiring you to log in again
 for future interactions.
-"""    
+"""
     subparser.set_defaults(func=logout)
