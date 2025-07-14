@@ -96,7 +96,7 @@ Now that you understand the fundamentals of resources in the Inductiva API, expl
 
 - **[Computational Infrastructure →](computational-infrastructure.md)** - Learn about the underlying infrastructure and available machine types
 - **[Benchmarking →](../intro/benchmarking.md)** - Discover how to optimize resource selection for your specific simulations
-- **[Cost Management →](../guides/cost-management.md)** - Advanced techniques for optimizing your simulation costs
+- **[Cost Management →](../basics/how-much-does-it-cost.md)** - Understand all the underlying costs and how to optimize your simulation costs
 
 
 ```{toctree}
