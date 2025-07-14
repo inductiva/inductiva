@@ -1,9 +1,5 @@
 # Run a Benchmark
 
-Benchmarking helps you measure and compare the performance of different configurations, 
-like machine types or simulation settings. It’s an essential step to reduce 
-costs and speed up your simulations without losing accuracy.
-
 In this tutorial, we’ll show you how to use Inductiva’s API to run a benchmark. 
 We’ll use the [SPlisHSPlasH simulator](https://inductiva.ai/guides/splishsplash) 
 as an example, so you can follow along and learn the process step by step.
