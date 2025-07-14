@@ -132,7 +132,7 @@ class Octopus(simulators.Simulator):
             # The only command to run in parallel
             is_octopus = "octopus" in command
             already_mpi = "mpirun" in command
-            
+
             if (is_string and is_octopus and not already_mpi):
                 print("Converting octopus command!")
                 processed_commands.append(
