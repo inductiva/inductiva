@@ -133,7 +133,8 @@ the most expensive option tested, it delivers exceptional speed for
 time-critical workloads.
 
 These results demonstrate that Inductiva not only supports rapid scaling but
-also gives users flexibility to optimize for speed, cost, or a balance of both, depending on the demands of the task. 🚀
+also gives users flexibility to optimize for speed, cost, or a balance of both,
+depending on the demands of the task. 🚀
 
 If you want to benchmark your own workload in a single script please follow
 this [tutorial](https://inductiva.ai/guides/scale-up/benchmark/run-benchmarks).
