@@ -45,7 +45,7 @@ Consider benchmarking when you need to:
 - Validate that performance improvements justify increased costs
 
 ### How Benchmarks Work
-The `Benchmark` API class handles the complexity of resource provisioning, parallel execution, and result aggregation, allowing you to focus on defining meaningful test scenarios.
+The `Benchmark` API class handles the complexity of resource provisioning, runs management, and result aggregation, allowing you to focus on defining meaningful test scenarios.
 
 ## `Benchmark` Class
 ### Core Concepts
