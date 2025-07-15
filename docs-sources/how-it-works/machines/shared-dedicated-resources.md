@@ -48,7 +48,7 @@ A network of machines configured to work collaboratively on a single simulation 
 
 Choose the resource type that best fits your simulation needs:
 
-| Feature | Machine Group | Elastic Machine Group | MPI Cluster |
+| | Machine Group | Elastic Machine Group | MPI Cluster |
 |---------|---------------|----------------------|-------------|
 | **Scaling** | Fixed number of machines | Dynamic auto-scaling | Fixed cluster size |
 | **Simulation Distribution** | One simulation per machine | One simulation per machine | Single simulation across all machines |

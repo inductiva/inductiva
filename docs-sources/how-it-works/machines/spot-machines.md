@@ -40,6 +40,7 @@ task = swash.run(on=machine_group,
 ```
 
 > Note: If `spot=True` is not set, Inductiva will launch a standard on-demand machine.
+
 > Note: If `spot=True` is set but `resubmit_on_preemption=True` is not set, Inductiva will not re-launch your task if the machine is preempted.
 
 ## When to Use Spot Machines
