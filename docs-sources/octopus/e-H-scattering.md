@@ -3,6 +3,8 @@ This tutorial will show you how to run an official Octopus tutorial using the In
 
 We will cover the `e-H scattering` use case from the official Octopus tutorials[1], to help you get started with simulations.
 
+<p align="center"><img src="./_static/scattering.gif" alt="e-H Simulation"></p>
+
 ## Prerequisites
 
 Start by creating a folder called `SimulationFiles`. Inside that folder you will
@@ -92,37 +94,57 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 14/07, 15:29:45      0.771 s
-	In Queue                  at 14/07, 15:29:46      49.68 s
-	Preparing to Compute      at 14/07, 15:30:36      5.735 s
-	In Progress               at 14/07, 15:30:42      9.018 s
-		├> 1.086 s         mv gs.inp inp
-		├> 2.093 s         octopus
-		├> 1.083 s         mv inp gs.inp
-		├> 1.073 s         mv td.inp inp
-		├> 2.083 s         octopus
-		└> 1.075 s         mv inp td.inp
-	Finalizing                at 14/07, 15:30:51      0.529 s
-	Success                   at 14/07, 15:30:51      
+	Waiting for Input         at 15/07, 11:21:09      0.743 s
+	In Queue                  at 15/07, 11:21:10      41.361 s
+	Preparing to Compute      at 15/07, 11:21:52      4.081 s
+	In Progress               at 15/07, 11:21:56      685.099 s
+		├> 1.148 s         mv gs.inp inp
+		├> 2.087 s         octopus
+		├> 1.084 s         mv inp gs.inp
+		├> 1.092 s         mv e-h-scat.inp inp
+		├> 472.522 s       octopus
+		├> 1.074 s         mv inp e-h-scat.inp
+		├> 7.09 s          gnuplot plot.gp
+		└> 198.277 s       convert -delay 20 -loop 0 potential_*.png scattering.gif
+	Finalizing                at 15/07, 11:33:21      1.349 s
+	Success                   at 15/07, 11:33:22      
 
 Data:
-	Size of zipped output:    557.60 KB
-	Size of unzipped output:  1.49 MB
-	Number of output files:   51
+	Size of zipped output:    38.64 MB
+	Size of unzipped output:  102.43 MB
+	Number of output files:   2777
 
-Estimated computation cost (US$): 0.00039 US$
+Estimated computation cost (US$): 0.0045 US$
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 9 seconds.
+As you can see in the "In Progress" line, the part of the timeline that
+represents the actual execution of the simulation, the core computation time of
+this simulation was approximately 11 minutes and 25 seconds.
 
-## Testing different machines
+## Testing Different Machines
 
-Since this simulation is relatively small, using only 1D and a single atom,
-scaling it to a machine with more vCPUs will have limited impact, or none, on
-performance. However, to assess potential gains, we will scale from 4 to 8 vCPUs
-and test across multiple machine families to compare the performance improvements
-offered by different hardware generations.
+This simulation is relatively small, using only a one-dimensional setup and a
+single atom. As a result, increasing the number of vCPUs is expected to have
+minimal or no impact on performance. Nevertheless, to explore potential speedups,
+we tested configurations with 4 and 8 vCPUs across several machine families to
+compare performance across hardware generations.
+
+| Machine Type  | Execution Time         | Estimated Cost |
+| ------------- | ---------------------- | -------------- |
+| c2d-highcpu-4 | 11 minutes, 25 seconds | 0.0045 US$    |
+| c2d-highcpu-8 | 11 minutes, 22 seconds | 0.0082 US$    |
+| c3d-highcpu-4 | 11 minutes, 15 seconds | 0.0079 US$    |
+| c3d-highcpu-8 | 11 minutes, 11 seconds | 0.0150 US$    |
+| c4-highcpu-4  | 6 minutes, 51 seconds  | 0.0092 US$    |
+| c4-highcpu-8  | 7 minutes, 14 seconds  | 0.0190 US$    |
+
+The results confirm that increasing the number of vCPUs has little effect on
+performance for such a small simulation, with runtimes remaining nearly identical
+between 4 and 8 vCPUs. The newer `c4-highcpu` machines complete
+the task much faster than the `c2d` and `c3d` families, though at a higher cost.
+Among all options, `c2d-highcpu-4` is the most cost-effective, while `c4-highcpu-4`
+offers the best performance. This highlights the limited benefit of scaling CPU
+count for this particular simulation.
 
 <div class="cta-bar">
   <div class="cta-text">

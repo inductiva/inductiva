@@ -19,6 +19,16 @@ Besides the main `octopus` command you have available all utility functions, lis
 | oct-conductivity| oct-help| oct-unfold  | oct-center-geom|
 | oct-floquet  | oct-photoelectron_spectrum| oct-spin_susceptibility | oct-xyz-anim|
 
+<br>
+
+## 2. What types of post-processing can be performed using the commands list?
+
+If you want to post-process your simulation results in the cloud, the environment
+includes the `Gnuplot` and `ImageMagick` utilities.
+
+`Gnuplot` enables you to generate plots from your data using simple scripts, while
+`ImageMagick` provides tools like `convert`, which allow you to transform your
+plots into animated GIFs and perform other image manipulations.
 
 <br>
 <br>
