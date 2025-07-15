@@ -256,6 +256,14 @@ for machine_type in machine_types:
 
 **Note:** Reducing idle time too much may cause errors if the simulations cannot be submitted quickly enough. Adjust the value based on your setup.
 
+**4. Use Quotas Wisely**
+
+Consider enabling `wait_for_quotas=True` in `run()` to ensure your simulation runs without quota issues.
+```python
+# Handle resource quotas gracefully
+benchmark.run(num_repeats=3, wait_for_quotas=True)
+```
+
 Here is the final, optimized, and refactored version of the benchmark program:
 
 ```python
@@ -281,7 +289,7 @@ for machine_type in machine_types:
                                                 num_machines=num_repeats,
                                                 max_idle_time=max_idle_time))
 
-benchmark.run(num_repeats=num_repeats)
+benchmark.run(num_repeats=num_repeats, wait_for_quotas=True)
 ```
 
 ## Step 4: Export the Benchmark Data to a File

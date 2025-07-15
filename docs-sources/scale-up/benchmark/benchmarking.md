@@ -121,8 +121,6 @@ benchmark.export(fmt="json", select="distinct", status="success")
 
 ## Best Practices
 
-### Design Principles
-
 **Start Simple, Then Expand**
 Begin with a small set of representative configurations before scaling to comprehensive evaluations. This helps validate your approach and avoid costly mistakes.
 
@@ -131,66 +129,6 @@ Change only one parameter at a time when possible. This makes it easier to ident
 
 **Representative Workloads**
 Use simulation inputs that represent your actual production workloads. Synthetic benchmarks might not capture real-world performance characteristics.
-
-### Resource Management
-
-**Always Clean Up**
-```python
-# Ensure resources are terminated after benchmarking
-benchmark.wait().terminate()
-```
-
-**Monitor Costs**
-
-Regularly review resource usage to avoid unexpected charges during long-running benchmarks.
-
-**Use Quotas Wisely**
-
-Consider enabling `wait_for_quotas=True` in `run()` to ensure your simulation runs without quota issues.
-```python
-# Handle resource quotas gracefully
-benchmark.run(num_repeats=3, wait_for_quotas=True)
-```
-
-**Optimize Idle Time**
-```python
-# Minimize idle time to reduce costs
-max_idle_time = datetime.timedelta(seconds=30)
-```
-
-### Statistical Considerations
-
-**Account for Variability**
-
-Run multiple repetitions to ensure reliable results. System variability can significantly impact single-run measurements:
-
-```python
-# Minimum recommended repetitions
-benchmark.run(num_repeats=3)
-
-# For critical benchmarks, use more repetitions
-benchmark.run(num_repeats=5)
-```
-
-### Performance Optimization
-
-**Parallel Repetitions**
-
-Optimize benchmark execution time by running repetitions in parallel:
-
-```python
-num_repeats = 3
-
-for machine_type in machine_types:
-    benchmark.add_run(
-        on=resources.MachineGroup(
-            machine_type=machine_type,
-            num_machines=num_repeats  # Each repetition runs on separate machine
-        )
-    )
-
-benchmark.run(num_repeats=num_repeats)
-```
 
 ## Next Steps
 Now that you understand the fundamentals of benchmarks in the Inductiva API, explore these topics to deepen your knowledge:
