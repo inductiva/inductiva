@@ -15,7 +15,7 @@ Learn about _Resources_ — the core entity in the Inductiva API that executes y
 
 ✓ **Run anywhere** Execute simulations on cloud infrastructure, dedicated servers, or your own hardware. Switch between different environments without changing your code.
 
-✓ **Handle machine preemptions** Automatically detect and recover from machine preemptions. Interrupted simulations are restarted on other machines without manual intervention.
+✓ **Handle machine preemptions** Automatically detect and recover from machine preemptions. This is especially valuable when using cost-effective [Spot Machines](spot-machines.md), as interrupted simulations are automatically restarted on new machines without manual intervention.
 
 ✓ **Control costs** Get transparent pricing of resource usage and costs.
 

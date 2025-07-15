@@ -60,7 +60,7 @@ Choose the resource type that best fits your simulation needs:
 
 To illustrate the performance of running simulations on resources using
 the Inductiva API, we will run [SWASH](https://inductiva.ai/guides/swash) Simulator on
-`c2-standard-30` Google Cloud Platform (GCP) machines as an example.
+`c2-standard-30` Google Cloud Platform (GCP) machines as an example. To keep costs down, we will use a preemptible [Spot Machine](spot-machines.md).
 
 ```python
 import inductiva
