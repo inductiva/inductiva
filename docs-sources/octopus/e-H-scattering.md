@@ -30,7 +30,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2d-highcpu-16",
+    machine_type="c2d-highcpu-4",
 	spot=True)
 
 # Initialize the Simulator
@@ -76,7 +76,7 @@ This example consists of 4 main steps:
 4. **Generating gifs**:
    Lastly, we run the command `convert` that will convert all the plots generated into a gif file with an animation of the simulation.
 
-The simulation runs on a cloud machine of type `c2d-highcpu-16`, which provides 16 virtual CPUs. 
+The simulation runs on a cloud machine of type `c2d-highcpu-4`, which provides 4 virtual CPUs. 
 For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
 a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
@@ -115,6 +115,14 @@ Estimated computation cost (US$): 0.00039 US$
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
 the core computation time of this simulation was approximately 9 seconds.
+
+## Testing different machines
+
+Since this simulation is relatively small, using only 1D and a single atom,
+scaling it to a machine with more vCPUs will have limited impact, or none, on
+performance. However, to assess potential gains, we will scale from 4 to 8 vCPUs
+and test across multiple machine families to compare the performance improvements
+offered by different hardware generations.
 
 <div class="cta-bar">
   <div class="cta-text">
