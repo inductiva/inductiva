@@ -79,7 +79,7 @@ for input_dir in input_dirs:
 ### Notes on the Script
 
 - Spot Instances: Setting `spot=True` uses cheaper machines that may be interrupted at any time.
-More info [here](https://cloud.google.com/compute/docs/instances/spot).
+More info [here](../../how-it-works/machines/spot-machines.md).
 
 - No `task.wait()` Calls: The script doesn't call `task.wait()` inside the for loop. This is intentional.
 It allows all simulations to be submitted immediately without waiting for each other to complete.
