@@ -29,8 +29,7 @@ def register(parser):
          "Use 'SUBMITTED' for the last submitted task, 'SUBMITTED-1' for the \n"
          "second last submitted task, and so on. 'STARTED' and 'STARTED-n'\n"
          "follow the same pattern for started tasks. Or, use a specific\n"
-         "task ID to retrieve logs for a particular task."
-        ))
+         "task ID to retrieve logs for a particular task."))
 
     parser.add_argument("--stdout",
                         action="store_true",
