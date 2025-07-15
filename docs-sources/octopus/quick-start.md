@@ -117,4 +117,4 @@ the core computation time of this simulation was approximately 9 seconds.
 
 **References:**
 
-[Octopus Gitlab repository](https://gitlab.com/octopus-code/octopus/-/blob/16.1/testsuite/real_time/01-propagators.03-etrs_taylor.inp?ref_type=tags)
+[[1]Octopus Gitlab repository](https://gitlab.com/octopus-code/octopus/-/blob/16.1/testsuite/real_time/01-propagators.03-etrs_taylor.inp?ref_type=tags)

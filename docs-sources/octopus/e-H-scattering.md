@@ -3,7 +3,10 @@ This tutorial will show you how to run an official Octopus tutorial using the In
 
 We will cover the `e-H scattering` use case from the official Octopus tutorials[1], to help you get started with simulations.
 
-<p align="center"><img src="./_static/scattering.gif" alt="e-H Simulation"></p>
+<p align="center">
+  <img src="./_static/scattering.gif" alt="e-H Simulation" width="50%" height="50%">
+</p>
+
 
 ## Prerequisites
 
@@ -153,3 +156,6 @@ count for this particular simulation.
   <button  onclick="window.open('https://console.inductiva.ai/', '_blank')" target="_blank" class="cta-button">Sign In</button>
 </div>
 
+**References:**
+
+[[1]Official Octopus tutorial](https://octopus-code.org/documentation/13/tutorial/model/e-h_scattering/)
