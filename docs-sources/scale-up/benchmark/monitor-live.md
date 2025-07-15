@@ -24,7 +24,7 @@ At the top of the page, you'll find summary cards highlighting the fastest and c
 ### Visualize Trade-offs
 
 Scroll down to the plots for a deeper analysis:
-- **Execution Duration & Cost Plots**: These bar charts show the raw performance of each measure (cost, time and recommendation score) for each machine type, making it easy to see which excels in each category.
+- **Duration, Estimated Cost & Recommendation Score Plots**: These bar charts show the raw performance of each measure (duration, cost and recommendation score) for each machine type, making it easy to see which excels in each category.
 
 ![Benchmark Statistics tab 1](./_static/benchmark-stats-1.gif)
 
