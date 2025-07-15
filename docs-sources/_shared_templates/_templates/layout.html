@@ -10,7 +10,7 @@
 
 <!-- SEO meta tags -->
 <meta name="description" content="{{ project_description }}">
-<meta name="keywords" content="{{keywords | default('documentation, Inductiva.AI')}}">
+<meta name="keywords" content="{{ keywords | default('documentation, Inductiva.AI') }}">
 <link rel="canonical" href="{{ project_url }}{{ pathto('', 1) }}">
 
 <!-- OpenGraph tags -->
@@ -25,4 +25,40 @@
 <meta name="twitter:title" content="{{ title }}">
 <meta name="twitter:description" content="{{ project_description }}">
 <meta name="twitter:image" content="{{ ogp_image }}">
+{% endblock %}
+
+{% block extrabody %}
+{{ super() }}
+
+<!-- Add discord button -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const header = document.querySelector(".md-header__inner");
+        if (!header) return;
+
+        const btn = document.createElement("a");
+        btn.href = "https://discord.gg/N2zaGyWm";
+        btn.className = "md-header__button";
+        btn.textContent = "Join our Discord";
+
+        header.appendChild(btn);
+    });
+</script>
+
+<!-- discord button -->
+<style>
+    .md-header__button {
+        margin-left: 1rem;
+        padding: 0.4em 0.8em;
+        background: #2196f3;
+        color: white;
+        border-radius: 4px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .md-header__button:hover {
+        background: #1976d2;
+    }
+</style>
 {% endblock %}
