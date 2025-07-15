@@ -84,7 +84,7 @@ Estimated computation cost (US$): 0.0031 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 2 minutes and 9 seconds.
+the core computation time of this simulation was approximately 2 minutes and 9 seconds (129.192 seconds).
 
 ### Monitoring System Metrics
 
@@ -190,8 +190,8 @@ Below are the results from running the simulation with 6, 8 and 16 sub-domains:
 | c2d-highcpu-16     | 8           | 1 min 56 sec        | 0.0030 US$  |
 | c2d-highcpu-32     | 16          | 1 min 8 sec         | 0.0037 US$  |
 
-As shown by the results, we managed to run the simulation **1.9 times** faster
-with only an increase in cost of **1.19 times**, compared to the base case.
+As the results show, using **16 sub-domains**, we achieved a **1.9× speedup**
+with only a **1.19× increase in cost**, compared to the base case with **6 sub-domains**.
 
 
 <div class="cta-bar">
