@@ -325,45 +325,6 @@ benchmarks.Benchmark(name="splishsplash-fluid-cube") \
             filename="benchmark.csv")
 ```
 
-## Step 5: Visualize the Benchmark Results in the Console
-
-Now that your benchmark has run, it's time to analyze the results and identify the best machine configuration
-based on computation time and cost.
-
-The [Inductiva Console](https://console-dev.inductiva.ai/dashboard) provides a powerful UI for inspecting benchmark
-performance. Here's how you can explore your results:
-
-### 1. Go to the Benchmarks section
-
-Click on the [Benchmarks](https://console.inductiva.ai/benchmarks) tab in the sidebar. You'll see a list of all benchmarks
-you've run over time.
-
-![List of Benchmarks](./_static/list-of-benchmarks.png)
-
-### 2. Open your specific benchmark
-
-Find and click on the benchmark you're interested in — in this case, [`splishsplash-fluid-cube`](https://console.inductiva.ai/benchmarks/splishsplash-fluid-cube?tab=realtime).
-This opens a page with real-time monitoring details, including overall progress, the list of tasks, and the machine
-groups involved in the benchmark.
-
-![Benchmark Real Time tab](./_static/benchmark-real-time.png)
-
-### 3. View the statistics
-
-Navigate to the [Statistics](https://console.inductiva.ai/benchmarks/splishsplash-fluid-cube?tab=statistics) tab.
-Here, you'll find summary insights such as the **fastest** and **cheapest** machine types, along with our 
-**recommended machine** that balances both speed and cost. You'll also see comparison plots showing: execution 
-**duration** per machine type, estimated **cost** per machine type and overall **recommendation score**.
-
-![Benchmark Statistics tab 1](./_static/benchmark-stats-1.gif)
-
-### 4. Explore the Cost vs Duration plot
-
-Scroll down to find the **"Cost vs Duration"** plot. This gives you a clear visual comparison of trade-offs between 
-execution time and price — making it easier to choose the ideal machine type for your use case.
-
-![Benchmark Statistics tab 2](./_static/benchmark-stats-2.gif)
-
 ## Bonus: Adding a New Machine for Comparison
 
 You may decide to test additional machines after completing the initial benchmark. For instance, let’s add the `n2-standard-32` machine to the existing benchmark and execute only this run.

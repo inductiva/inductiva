@@ -1,11 +1,9 @@
 # Benchmarks
 
-Our **Benchmark** tool is designed to help you run and evaluate simulations systematically, 
-measuring their performance, cost, and execution time. It allows you to configure 
-benchmarking runs, export results, and manage resources. 
+The Inductiva API provides a **benchmarking tool** to help you measure, compare, and optimize simulation performance across different configurations. Make data-driven decisions about resource allocation, cost optimization, and performance tuning.
 
 ## Quick Start
-The typical workflow for running benchmarks follows three simple steps:
+The `Benchmark` class is the core of this tool, handling the complexity of resource provisioning, managing runs, and aggregating results, so you can focus on defining your test scenarios. A typical workflow involves three simple steps:
 1. **Setup** your benchmark configuration with different runs to compare
 2. **Execute** the benchmark runs and monitor their progress
 3. **Analyze** results and terminate resources to avoid unnecessary costs
@@ -31,21 +29,6 @@ benchmark.wait()
 benchmark.export(fmt="csv", filename="results.csv")
 benchmark.terminate()
 ```
-
-## Understanding Benchmarks
-
-### Why Benchmark?
-Benchmarking is essential for making informed decisions about computational resources. It helps you identify the optimal balance between performance, cost, and accuracy for your specific simulation requirements. Without systematic benchmarking, you might overpay for unnecessary compute power or accept poor performance from inadequate resources.
-
-### When to Benchmark
-Consider benchmarking when you need to:
-- Choose between different machine types
-- Evaluate the impact of simulation parameters on performance
-- Understand cost-performance trade-offs across different configurations
-- Validate that performance improvements justify increased costs
-
-### How Benchmarks Work
-The `Benchmark` API class handles the complexity of resource provisioning, runs management, and result aggregation, allowing you to focus on defining meaningful test scenarios.
 
 ## `Benchmark` Class
 
