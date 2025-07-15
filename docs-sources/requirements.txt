@@ -14,4 +14,4 @@ sphinx-reredirects
 sphinxawesome-theme
 snowballstemmer
 matplotlib
-sphinxcontrib-programoutput
+sphinx-argparse-cli

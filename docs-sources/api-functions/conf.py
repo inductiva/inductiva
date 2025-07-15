@@ -50,7 +50,7 @@ extensions = [
     'sphinxext.opengraph',
     'sphinx_sitemap',
     'sphinx_reredirects',
-    'sphinxcontrib.programoutput',  # Auto-generates docs from CLI
+    'sphinx_argparse_cli',
 ]
 
 # Enable automatic docstring discovery
