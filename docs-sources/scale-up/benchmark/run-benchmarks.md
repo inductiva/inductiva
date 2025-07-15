@@ -16,7 +16,6 @@ In this tutorial, you’ll learn how to:
 - Set up the benchmark.
 - Refine the code to reduce code redundancy and save benchmark costs.
 - Export the benchmark results.
-- Visualize and analyze results.
 
 Let’s dive in!
 
