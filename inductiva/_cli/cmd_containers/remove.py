@@ -4,6 +4,7 @@ import argparse
 import sys
 from inductiva import storage
 from inductiva.utils.input_functions import user_confirmation_prompt
+import textwrap
 
 
 def rm_container(args):
@@ -86,18 +87,16 @@ def register(parser):
         default=False,
         help="Skip confirmation prompt and delete immediately.")
 
-    subparser.epilog = \
-"""
-examples:
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            # Remove a container with confirmation
+            $ inductiva containers rm -n nginx.sif
 
-# Remove a container with confirmation
-inductiva containers rm -n nginx.sif
+            # Remove a container without confirmation prompt
+            $ inductiva containers rm -n nginx.sif -y
 
-# Remove a container without confirmation prompt
-inductiva containers rm -n nginx.sif -y
-
-# Remove a container from a specific folder
-inductiva containers rm my-custom-folder -n my-container.sif
-"""
+            # Remove a container from a specific folder
+            $ inductiva containers rm my-custom-folder -n my-container.sif
+    """)
 
     subparser.set_defaults(func=rm_container)

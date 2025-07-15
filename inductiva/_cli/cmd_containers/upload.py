@@ -11,6 +11,7 @@ from inductiva import storage, constants
 from inductiva.client.exceptions import ApiException
 from inductiva.utils.input_functions import user_confirmation_prompt
 from .convert import convert_image
+import textwrap
 
 
 def extract_image_name(image_ref: str) -> str:
@@ -127,23 +128,21 @@ def register(parser):
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
-    subparser.description = \
-"""
-Converts a Docker image (from Docker Hub, a local image, or a .tar file) into
-a SIF file using Apptainer, stores it in a temporary folder, and uploads that
-folder to your Inductiva remote storage, making it available for use with the
-Inductiva API.
-"""
+    subparser.description = textwrap.dedent("""\
+        Converts a Docker image (from Docker Hub, a local image, or a .tar
+        file) into a SIF file using Apptainer, stores it in a temporary folder,
+        and uploads that folder to your Inductiva remote storage, making it
+        available for use with the Inductiva API.
+    """)
 
-    subparser.epilog = \
-"""
-examples:
-# Convert and upload a local Docker image
-inductiva containers upload my-simulation-image
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            # Convert and upload a local Docker image
+            $ inductiva containers upload my-simulation-image
 
-# Convert and upload a Docker Hub CFD image (SU2) with a custom storage path
-inductiva containers upload docker://su2code/su2:latest my-containers/su2cfd.sif
-"""
+            # Convert and upload a Docker Hub CFD image (SU2) with a custom storage path
+            $ inductiva containers upload docker://su2code/su2:latest my-containers/su2cfd.sif
+    """)
 
     subparser.add_argument(
         "image",

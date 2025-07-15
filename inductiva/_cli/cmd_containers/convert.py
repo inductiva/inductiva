@@ -9,6 +9,7 @@ import os
 import tempfile
 from typing import TextIO
 import uuid
+import textwrap
 
 from inductiva import constants
 
@@ -190,28 +191,25 @@ def register(parser):
         help="Convert a Docker image to an Apptainer .sif file.",
         formatter_class=argparse.RawTextHelpFormatter,
     )
-    subparser.description = \
-"""
-The `inductiva containers convert` command converts a Docker image into a
-Singularity Image Format (SIF, `.sif`) file using the Apptainer.
+    subparser.description = textwrap.dedent("""\
+        Converts a Docker image into a Singularity Image Format (SIF, `.sif`)
+        file using the Apptainer.
+        
+        The Docker image can be specified as a Docker Hub URL, a local Docker
+        image reference, or a `.tar` archive.
 
-The Docker image can be specified as a Docker Hub URL, a local Docker image
-reference, or a `.tar` archive.
+        This can be useful for users that want to see the conversion result and 
+        test the SIF file before uploading it to the remote storage. 
+    """)
 
-This can be useful for users that want to see the conversion result and test
-the SIF file before uploading it to the remote storage. 
-"""
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            # Convert a local image to SIF
+            $ inductiva containers convert my-image:latest ./my-image.sif
 
-    subparser.epilog = \
-"""
-examples:
-
-# Convert a local image to SIF
-inductiva containers convert my-image:latest ./my-image.sif
-
-# Convert a Docker Hub image to SIF
-inductiva containers convert docker://python:3.11-slim ./python.sif
-"""
+            # Convert a Docker Hub image to SIF
+            $ inductiva containers convert docker://python:3.11-slim ./python.sif
+    """)
 
     subparser.add_argument(
         "image",

@@ -4,6 +4,7 @@ List all container files inside a specified (or default) storage folder.
 
 import argparse
 from inductiva import storage, client
+import textwrap
 
 
 def list_containers(args):
@@ -37,12 +38,12 @@ def register(parser):
               "including their size and estimated cost."),
         formatter_class=argparse.RawTextHelpFormatter)
 
-    subparser.description = \
-"""
-Lists all container files in remote storage under the default containers
-folder (`my-containers/`), including their size and estimated cost. You can
-also specify other container folders to list their contents.
-"""
+    subparser.description = textwrap.dedent("""\
+        Lists all container files in remote storage under the default containers
+        folder (`my-containers/`), including their size and estimated cost.
+        
+        You can also specify other container folders to list their contents.
+    """)
 
     subparser.add_argument(
         "folder",
@@ -60,18 +61,17 @@ also specify other container folders to list their contents.
         help="Maximum number of container files to list. Defaults to 10.",
     )
 
-    subparser.epilog =\
-"""
-examples:
-➜  inductiva containers ls
-NAME             SIZE        CREATION TIME
-container1.sif   200.00 MB   26/03, 16:41:14
-container2.sif   100.00 MB   26/03, 16:41:14
-container3.sif   300.00 MB   26/03, 16:41:14
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            $ inductiva containers list
+            NAME             SIZE        CREATION TIME
+            container1.sif   200.00 MB   26/03, 16:41:14
+            container2.sif   100.00 MB   26/03, 16:41:14
+            container3.sif   300.00 MB   26/03, 16:41:14
 
-Total storage size used:
-         Volume: 0.59 GB
-         Cost: 0.02 US$/month
-"""
+            Total storage size used:
+                    Volume: 0.59 GB
+                    Cost: 0.02 US$/month
+    """)
 
     subparser.set_defaults(func=list_containers)
