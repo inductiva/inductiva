@@ -7,7 +7,7 @@
 | :--- | :--- | :--- |
 | **Cost** | Standard, fixed price | Heavily discounted (60-90% off) |
 | **Reliability** | High (guaranteed availability) | Lower (can be preempted) |
-| **Best For** | Time-critical tasks, single runs, and workloads that cannot be interrupted. | Batch processing, fault-tolerant jobs, and cost-sensitive, non-urgent tasks. |
+| **Best For** | Time-critical tasks, and workloads that cannot be interrupted. | Batch processing, fault-tolerant jobs, and cost-sensitive, non-urgent tasks. |
 
 ## How Inductiva Handles Preemption
 
@@ -46,13 +46,13 @@ task = swash.run(on=machine_group,
 ## When to Use Spot Machines
 
 **✅ Use Spot Machines for:**
-- Large-scale batch processing and parameter sweeps.
-- Simulations that are fault-tolerant by design.
-- Non-urgent research and development tasks where cost is a primary concern.
-- When running a Benchmark
+- Large-scale batch processing.
+- Simulations that are fault-tolerant.
+- Non-urgent research and development tasks where cost is a concern.
+- [Benchmarking](../../scale-up/benchmark/benchmarking.md).
 
 **❌  Avoid Spot Machines for:**
-- Time-critical simulations with tight deadlines.
+- Time-critical simulations.
 - Short, single-run tasks where the potential delay from a preemption would be significant.
 - Simulations that cannot be easily or cleanly restarted.
 
@@ -61,5 +61,5 @@ In summary:
 | Pros | Cons |
 | :--- | :--- |
 | **Significant Cost Savings:** Get access to computing power at a fraction of the on-demand price, often with discounts of 60-90%. | **Preemption Risk:** The cloud provider can reclaim the machine at any time, interrupting your simulation. |
-| **Ideal for Flexible Workloads:** Excellent for tasks that are not time-critical or that can tolerate interruptions, such as large batch jobs or parameter sweeps. | **Potential Delays:** If a machine is preempted, the task must be restarted, which can lead to longer overall completion times. |
+| **Ideal for Flexible Workloads:** Excellent for tasks that are not time-critical or that can tolerate interruptions. | **Potential Delays:** If a machine is preempted, the task must be restarted, which can lead to longer overall completion times. |
 | **Efficient Resource Utilization:** Leverages the cloud provider's unused capacity, making it a highly efficient choice for scalable computing. | **Not for Critical Deadlines:** Unsuitable for urgent simulations with strict deadlines unless managed by a system that handles preemption automatically. |
