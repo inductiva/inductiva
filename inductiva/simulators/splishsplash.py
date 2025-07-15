@@ -1,5 +1,5 @@
 """SplisHSPlasH simulator module of the API."""
-from typing import Optional, Union
+from typing import Optional, Tuple, Union
 
 from inductiva import simulators, tasks, types
 
@@ -40,6 +40,9 @@ class SplishSplash(simulators.Simulator):
         vtk_to_obj_smoothing_length: Optional[float] = 2.0,
         vtk_to_obj_cube_size: Optional[float] = 1.0,
         vtk_to_obj_surface_threshold: Optional[float] = 0.6,
+        gen_gif: Optional[bool] = False,
+        gen_gif_cam_pos: Tuple[float, float, float] = (4.0, 1.0, 4.0),
+        gen_gif_cam_fp: Tuple[float, float, float] = (0.0, 0.0, 0.0),
         **kwargs,
     ) -> tasks.Task:
         """Run the SPlisHSPlasH simulation.
@@ -87,6 +90,13 @@ class SplishSplash(simulators.Simulator):
                 level that indicates the fluid surface (in multiplies of the
                 rest density).
                 Default: 0.6
+            gen_gif: Whether to generate an animated GIF from the
+                simulation output.
+            gen_gif_cam_pos: The position of the camera when generating the GIF.  
+                Default: (4.0, 1.0, 4.0).
+            gen_gif_cam_fp: The point in space the camera looks at (focus
+                point).  
+                Default: (0.0, 0.0, 0.0).
         Returns:
             Task object representing the simulation task.
         """
@@ -127,6 +137,14 @@ class SplishSplash(simulators.Simulator):
                 "--normals=on --normals-smoothing-iters=10 "
                 f"-o {vtk_to_obj_out_dir}/{vtk_to_obj_vtk_prefix}_surface"
                 "{}.obj")
+        if gen_gif:
+            commands.append("python3 /home/scripts/gen_gif.py ./vtk res.gif "
+                            f"--cam_pos {gen_gif_cam_pos[0]} "
+                            f"{gen_gif_cam_pos[1]} "
+                            f"{gen_gif_cam_pos[2]} "
+                            f"--cam_fp {gen_gif_cam_fp[0]} "
+                            f"{gen_gif_cam_fp[1]} "
+                            f"{gen_gif_cam_fp[2]}")
 
         return super().run(
             input_dir,
