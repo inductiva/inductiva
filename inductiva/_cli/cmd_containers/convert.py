@@ -192,8 +192,8 @@ def register(parser):
         formatter_class=argparse.RawTextHelpFormatter,
     )
     subparser.description = textwrap.dedent("""\
-        Converts a Docker image into a Singularity Image Format (SIF, `.sif`)
-        file using the Apptainer.
+        The `inductiva containers convert` command converts a Docker image into 
+        a Singularity Image Format (SIF, `.sif`) file using the Apptainer.
         
         The Docker image can be specified as a Docker Hub URL, a local Docker
         image reference, or a `.tar` archive.

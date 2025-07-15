@@ -61,11 +61,15 @@ def register(parser):
         help="Remove a container file from your Inductiva remote storage.",
         formatter_class=argparse.RawTextHelpFormatter)
 
-    subparser.description = (
-        "Removes a specific container file from a remote storage folder.\n"
-        "If no folder is specified, defaults to 'my-containers'. Use the\n"
-        "flag `--yes` to skip confirmation prompts.\n\n"
-        "This action is irreversible and should be used with caution.")
+    subparser.description = textwrap.dedent("""\
+        The `inductiva containers remove` command removes a specific container
+        file from a remote storage folder. If no folder is specified, defaults
+        to 'my-containers'.
+    
+        Use the flag `--yes` to skip confirmation prompts.
+        
+        This action is irreversible and should be used with caution.
+    """)
 
     subparser.add_argument(
         "folder",

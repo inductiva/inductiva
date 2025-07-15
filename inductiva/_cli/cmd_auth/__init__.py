@@ -16,7 +16,8 @@ def register(root_parser):
     parser.description = textwrap.dedent("""\
         Authentication management utilities.
 
-        Allows you to manage user authentication on Inductiva API.
+        The `inductiva auth` command allows you to manage user authentication
+        on Inductiva API.
 
         This is a fundamental aspect of your experience: you will only be able 
         to start machines and launch simulations after you are authenticated. 

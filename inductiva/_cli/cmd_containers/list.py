@@ -39,8 +39,9 @@ def register(parser):
         formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = textwrap.dedent("""\
-        Lists all container files in remote storage under the default containers
-        folder (`my-containers/`), including their size and estimated cost.
+        The `inductiva containers list` command lists all container files in
+        remote storage under the default containers folder (`my-containers/`),
+        including their size and estimated cost.
         
         You can also specify other container folders to list their contents.
     """)

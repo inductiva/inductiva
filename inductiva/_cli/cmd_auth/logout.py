@@ -28,7 +28,8 @@ def register(parser):
         formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = textwrap.dedent("""\
-        Allows you to log out by removing the stored API key.
+        The `inductiva auth logout` command allows you to log out by removing
+        the stored API key.
                                             
         This will remove the locally stored API key, requiring you to log in 
         again for future sessions.

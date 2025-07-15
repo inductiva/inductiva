@@ -113,7 +113,7 @@ def register(parser):
                                   formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = textwrap.dedent(F"""\
-        Logs you in using your API key.
+        The `inductiva auth login` command logs you in using your API key.
 
         You will be prompted to enter your API key, which you can find in
         your account on the Web Console at:

@@ -16,10 +16,10 @@ def register(root_parser):
     parser.description = textwrap.dedent("""\
         Manage custom simulation containers.
 
-        Provides utilities for managing user-defined containers, including 
-        converting Docker images to Apptainer-compatible `.sif` files and 
-        uploading them to your private Inductiva remote storage for use in
-        simulations.
+        The `inductiva containers` command provides utilities for managing
+        user-defined containers, including converting Docker images to
+        Apptainer-compatible  `.sif` files and uploading them to your private
+        Inductiva remote storage for use in simulations.
     """)
     utils.show_help_msg(parser)
 

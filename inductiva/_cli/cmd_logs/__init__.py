@@ -14,8 +14,9 @@ def register(root_parser):
         formatter_class=argparse.RawTextHelpFormatter)
 
     parser.description = textwrap.dedent("""\
-        Streams the standard output (STDOUT) of a running task in real-time,
-        useful for monitoring live execution progress.
+        The `inductiva logs` command streams the standard output (STDOUT) of a 
+        running task in real-time, useful for monitoring live execution
+        progress.
         
         This command will stream the logs being written to STDOUT by a task
         only if the task is still in progress. If the task has finished, or
