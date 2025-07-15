@@ -33,16 +33,20 @@
 <!-- Add discord button -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        console.log("script loaded");
         const sidebar = document.querySelector("#left-sidebar") || document.querySelector("aside");
         if (!sidebar) {
             console.warn("Sidebar not found");
             return;
         }
+        console.log("Found sidebar")
         const btn = document.createElement("a");
         btn.href = "https://discord.gg/N2zaGyWm";
         btn.className = "custom-sidebar-button";
         btn.textContent = "Join our Discord";
 
+        console.log("sidebar ", sidebar)
+        console.log("btn ", btn)
         sidebar.appendChild(btn);
     });
 </script>
