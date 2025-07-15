@@ -32,17 +32,17 @@
 
 <!-- Add discord button -->
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const header = document.querySelector(".md-header__inner");
-        if (!header) return;
+    const sidebar = document.querySelector("#left-sidebar") || document.querySelector("aside");
+    if (!sidebar) {
+        console.warn("Sidebar não encontrado.");
+        return;
+    }
+    const btn = document.createElement("a");
+    btn.href = "https://discord.gg/N2zaGyWm";
+    btn.className = "custom-sidebar-button";
+    btn.textContent = "Join our Discord";
 
-        const btn = document.createElement("a");
-        btn.href = "https://discord.gg/N2zaGyWm";
-        btn.className = "md-header__button";
-        btn.textContent = "Join our Discord";
-
-        header.appendChild(btn);
-    });
+    sidebar.appendChild(btn); 
 </script>
 
 <!-- discord button -->
