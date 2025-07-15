@@ -3,7 +3,7 @@
 **Spot Machines** (also known as preemptible VMs on GCP) are unused cloud machines available at a significant discount — often 60-90% less than standard on-demand machines. They offer a powerful way to reduce simulation costs. This guide explains how they work and how to use them effectively.
 
 
-| Feature | On-Demand Machines | Spot Machines |
+| | On-Demand Machines | Spot Machines |
 | :--- | :--- | :--- |
 | **Cost** | Standard, fixed price | Heavily discounted (60-90% off) |
 | **Reliability** | High (guaranteed availability) | Lower (can be preempted) |
