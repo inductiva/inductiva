@@ -134,7 +134,6 @@ class Octopus(simulators.Simulator):
             already_mpi = "mpirun" in command
 
             if (is_string and is_octopus and not already_mpi):
-                print("Converting octopus command!")
                 processed_commands.append(
                     Command(
                         "octopus ",
