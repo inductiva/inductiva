@@ -6,6 +6,7 @@ import requests
 import getpass
 import pkgutil
 import os
+import textwrap
 
 import inductiva
 from inductiva import constants, users, utils
@@ -111,35 +112,35 @@ def register(parser):
                                   help="Login using Inductiva API Key.",
                                   formatter_class=argparse.RawTextHelpFormatter)
 
-    subparser.description = F"""\
-The `inductiva auth login` command allows you to log in using your key.
+    subparser.description = textwrap.dedent(F"""\
+        Logs you in using your API key.
 
-You can obtain your API Key from your account at:
-    https://console.inductiva.ai/account
+        You will be prompted to enter your API key, which you can find in
+        your account on the Web Console at:
+            https://console.inductiva.ai/account
 
-You will be prompted to enter your API key:
-
-```
-{INDUCTIVA_ART}
-
-    You are already logged in. Run `inductiva auth logout` if you want to log 
-    out.
-    Setting a new API Key will erase the existing one.
-    To log in, you need an API Key. You can obtain it from your account at:
-        https://console.inductiva.ai/account.
-Please paste your API Key here:
-```
-
-At this stage, please copy paste your personal API key that is available from 
-your page in the Web Console at:
-    https://console.inductiva.ai/account/profile
-
-Once authenticated, your credentials will be stored locally for future
-sessions using that machine.    
-"""
+        Once authenticated, your credentials will be securely stored locally,
+        so you will not need to log in again for future sessions.
+    """)
 
     subparser.add_argument("--private",
                            action="store_true",
                            help="Hide API Key.")
+
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            $ inductiva auth login
+                 ___  _   _  ____   _   _   ____  _____  ___ __     __ _
+                |_ _|| \ | ||  _ \ | | | | / ___||_   _||_ _|\ \   / // \\
+                 | | |  \| || | | || | | || |      | |   | |  \ \ / // _ \\
+                 | | | |\  || |_| || |_| || |___   | |   | |   \ V // ___ \\
+                |___||_| \_||____/  \___/  \____|  |_|  |___|   \_//_/   \_\\
+
+                To log in, you need an API Key. You can obtain it from your 
+                account at https://console.inductiva.ai/account.
+            Please paste your API Key here: 0123456789
+            
+            ■ Welcome User!
+    """)
 
     subparser.set_defaults(func=login)
