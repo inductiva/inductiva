@@ -1,23 +1,24 @@
-# Run Your First Simulation
-This tutorial will show you how to run Octopus simulations using the Inductiva API. 
+# Run the e-H scattering tutorial
+This tutorial will show you how to run an official Octopus tutorial using the Inductiva API. 
 
-We will cover the `01-propagators.03-etrs_taylor` use case from the Octopus Gitlab repository[1], to help you get started with simulations.
+We will cover the `e-H scattering` use case from the official Octopus tutorials[1], to help you get started with simulations.
 
 ## Prerequisites
-Download the following files and save them into a folder called `SimulationFiles` with the
-respective name:
-- Download [this](https://gitlab.com/octopus-code/octopus/-/raw/16.1/testsuite/real_time/01-propagators.03-etrs_taylor.inp?ref_type=tags) file and save it as `td.inp`
-- Download [this](https://gitlab.com/octopus-code/octopus/-/raw/16.1/testsuite/real_time/02-propagators.01-gs.inp?ref_type=tags) file and save it as `gs.inp`
 
-Your `SimulationFiles` folder should look like this:
+Start by creating a folder called `SimulationFiles`. Inside that folder you will
+need to place the following files:
+- [gs.inp](https://storage.googleapis.com/inductiva-api-demo-files/octopus-tutorials/gs.inp)
+- [e-h-scat.inp](https://storage.googleapis.com/inductiva-api-demo-files/octopus-tutorials/e-h-scat.inp)
+- [plot.gp](https://storage.googleapis.com/inductiva-api-demo-files/octopus-tutorials/plot.gp)
+
+Your `SimulationFiles` should look like this:
 
 ```
 SimulationFiles/
+├── e-h-scat.inp
 ├── gs.inp
-└── td.inp
+└── plot.gp
 ```
-
-Now, you are ready to send your simulation to the Cloud.
 
 ## Running an Octopus Simulation
 Here is the code required to run an Octopus simulation using the Inductiva API:
@@ -34,16 +35,19 @@ cloud_machine = inductiva.resources.MachineGroup( \
 
 # Initialize the Simulator
 octopus = inductiva.simulators.Octopus( \
-    version="16.1",
-    use_dev=True)
+    version="16.1")
 
 commands = [
     "mv gs.inp inp",
     "octopus",
     "mv inp gs.inp",
-    "mv td.inp inp",
+    "mv e-h-scat.inp inp",
     "octopus",
-    "mv inp td.inp"
+    "mv inp e-h-scat.inp",
+    # Generate plots
+    "gnuplot plot.gp",
+    # Generate gif from plots
+    "convert -delay 20 -loop 0 potential_*.png scattering.gif"
 ]
 
 # Run simulation
@@ -60,13 +64,17 @@ task.download_outputs()
 task.print_summary()
 ```
 
-This example consists of two main steps:
+This example consists of 4 main steps:
 
 1. **Ground-State Calculation:**
    We begin by running `octopus` using the input file `qs.inp`. This step performs the ground-state calculation and generates the `restart/gs` directory, which stores the wavefunctions and other data required for the next stage.
 
 2. **Time-Dependent Simulation:**
-   In the second step, we run Octopus with the input file `td.inp`. This launches a real-time, time-dependent simulation based on **Time-Dependent Density Functional Theory (TDDFT)**, using the results from the previous ground-state step.
+   In the second step, we run Octopus with the input file `e-h-scat.inp`. It runs a time-dependent (TD) real-time propagation calculation for a one-dimensional hydrogen-like system using a soft-Coulomb potential. The system starts from scratch and models a single hydrogen atom located at position -10, with an extra electron added, leading to a negatively charged system.
+3. **Generating plots**:
+   In the third step we run a Gnuplot script that generates time-resolved plots of the electron density and exchange-correlation potential from the Octopus simulation. It creates PNG images at selected time steps, visualizing how the wave packet and potential evolve during the real-time propagation.
+4. **Generating gifs**:
+   Lastly, we run the command `convert` that will convert all the plots generated into a gif file with an animation of the simulation.
 
 The simulation runs on a cloud machine of type `c2d-highcpu-16`, which provides 16 virtual CPUs. 
 For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
@@ -115,6 +123,3 @@ the core computation time of this simulation was approximately 9 seconds.
   <button  onclick="window.open('https://console.inductiva.ai/', '_blank')" target="_blank" class="cta-button">Sign In</button>
 </div>
 
-**References:**
-
-[Octopus Gitlab repository](https://gitlab.com/octopus-code/octopus/-/blob/16.1/testsuite/real_time/01-propagators.03-etrs_taylor.inp?ref_type=tags)
