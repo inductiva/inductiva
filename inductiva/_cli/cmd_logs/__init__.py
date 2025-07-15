@@ -1,6 +1,7 @@
 """Register CLI commands for logs."""
 import argparse
 import os
+import textwrap
 
 from .. import loader, utils
 from ... import constants
@@ -12,21 +13,17 @@ def register(root_parser):
         help="Stream the logs of a running task.",
         formatter_class=argparse.RawTextHelpFormatter)
 
-    parser.description = \
-"""
-Streams the standard output (STDOUT) of a running task in real-time, useful for
-monitoring live execution progress.
-
-This command will stream the logs being written to STDOUT by a task
-only if the task is still in progress. If the task has finished, or transitioned
-to a status, the logs will not be available for streaming.
-
-Real-time streaming of a running task's standard error (STDERR) is also 
-supported via an argument.
-
-To check the status of a task, use:
-    inductiva tasks list --id <task_id>
-"""
+    parser.description = textwrap.dedent("""\
+        Streams the standard output (STDOUT) of a running task in real-time,
+        useful for monitoring live execution progress.
+        
+        This command will stream the logs being written to STDOUT by a task
+        only if the task is still in progress. If the task has finished, or
+        transitioned to a status, the logs will not be available for streaming.
+        
+        Real-time streaming of a running task's standard error (STDERR) is also 
+        supported via an argument.
+    """)
     utils.show_help_msg(parser)
 
     loader.load_commands(parser,

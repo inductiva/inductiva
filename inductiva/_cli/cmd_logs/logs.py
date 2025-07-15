@@ -1,5 +1,6 @@
 """CLI for logs."""
 import sys
+import textwrap
 
 from .. import utils as cli_utils
 from ... import tasks
@@ -51,49 +52,27 @@ def register(parser):
               "is returned if the task is not running."))
     # Register function to call when this subcommand is used
 
-    parser.epilog = \
-"""
-examples:
+    parser.epilog = textwrap.dedent("""\n
+        examples:
 
-# Real-time streaming of standard output from a specific OpenFOAM simulation
-$ inductiva logs f0bnqgf4fcr4asgi4e21tcsqa
-Websocket connected
-Opening socket connection to logs of task f0bnqgf4fcr4asgi4e21tcsqa ...
-timestep: 0.0226
-t/T: 12.2
-breaking: 0
-Fi_iter: 4 Final_residual: 3.73e-09  Fi_time: 0.00174
-breaking: 0
-Fi_iter: 4 Final_residual: 3.08e-09  Fi_time: 0.00172
-breaking: 0
-Fi_iter: 5 Final_residual: 1.68e-11  Fi_time: 0.00167
-umax: 0.102
-vmax: 0
-wmax: 0.0941
-dt: 0.0226
-wavegentime: 2.49e-05
-reinitime: 0
-gctime: 0.000539         average gctime: 0.0005
-Xtime: 0.000126  average Xtime: 0.000641
-total time: 7.62451   average time: 0.00878
-timer per step: 0.00885
-------------------------------------
-869
-simtime: 19.6
-timestep: 0.0226
-t/T: 12.2
-breaking: 0
-Fi_iter: 4 Final_residual: 2.68e-09  Fi_time: 0.00187
-...
+            # Real-time streaming of standard output from an OpenFOAM simulation
+            $ inductiva logs f0bnqgf4fcr4asgi4e21tcsqa
+            Websocket connected
+            Opening socket connection to logs of task f0bnqgf4fcr4asgi4e21tcsqa ...
+            timestep: 0.0226
+            t/T: 12.2
+            breaking: 0
+            Fi_iter: 4 Final_residual: 3.73e-09  Fi_time: 0.00174
+            ...
 
-# Real-time streaming of a specific task's standard error output
-inductiva logs <task_id> --stderr
+            # Real-time streaming of a task's standard error output
+            $ inductiva logs f0bnqgf4fcr4asgi4e21tcsqa --stderr
+            
+            # Wait for the task to start before streaming logs
+            $ inductiva logs f0bnqgf4fcr4asgi4e21tcsqa --wait
 
-# Wait for the task to start before streaming logs
-inductiva logs <task_id> --wait
-
-# Stream logs without colors
-inductiva logs <task_id> --no-color
-"""
+            # Stream logs without colors
+            $ inductiva logs f0bnqgf4fcr4asgi4e21tcsqa --no-color
+    """)
 
     parser.set_defaults(func=stream_task_logs_tail)
