@@ -20,6 +20,7 @@ def get_main_parser():
     parser = argparse.ArgumentParser(
         prog="inductiva",
         description="CLI tool for Inductiva API.",
+        formatter_class=argparse.RawTextHelpFormatter,
     )
 
     parser.add_argument(

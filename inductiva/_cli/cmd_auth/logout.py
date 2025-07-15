@@ -1,6 +1,7 @@
 """Register CLI command for logout."""
 import argparse
 import os
+import textwrap
 
 from inductiva import constants
 
@@ -26,8 +27,18 @@ def register(parser):
         help="Logout by removing the Inductiva API key.",
         formatter_class=argparse.RawTextHelpFormatter)
 
-    subparser.description = (
-        "The `inductiva logout` command allows you to log out by removing "
-        "the stored API key.\n")
+    subparser.description = textwrap.dedent("""\
+        The `inductiva auth logout` command allows you to log out by removing
+        the stored API key.
+                                            
+        This will remove the locally stored API key, requiring you to log in 
+        again for future sessions.
+    """)
+
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            $ inductiva auth logout
+            Logout successful.
+    """)
 
     subparser.set_defaults(func=logout)
