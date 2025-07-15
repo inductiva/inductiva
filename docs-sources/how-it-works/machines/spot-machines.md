@@ -2,6 +2,7 @@
 
 **Spot Machines** (also known as preemptible VMs on GCP) are unused cloud machines available at a significant discount — often 60-90% less than standard on-demand machines. They offer a powerful way to reduce simulation costs. This guide explains how they work and how to use them effectively.
 
+
 | Feature | On-Demand Machines | Spot Machines |
 | :--- | :--- | :--- |
 | **Cost** | Standard, fixed price | Heavily discounted (60-90% off) |
@@ -13,14 +14,11 @@
 The main drawback of Spot Machines is the risk of interruption. However, Inductiva provides an automatic resubmission mechanism for when you use Spot Machines to run your simulations.
 
 When a Spot Machine is preempted, Inductiva's API will:
-
 1. Detect the interruption.
 2. Reschedule the simulation.
 3. Relaunch the task on a new machine.
 
-This process is seamless and requires no manual intervention, making Spot Machines a practical and highly cost-effective option for many types of simulations.
-
-You can request Spot Machines for any resource type — MachineGroup, ElasticMachineGroup, or MPICluster — by simply setting the `spot=True` argument during initialization. **Enable automatic resubmission** by setting `resubmit_on_preemption=True` in the simulator's `run()` method.
+You can request Spot Machines for any resource type — [MachineGroup](computational_resources/machinegroup_class.md), [ElasticMachineGroup](computational_resources/elasticgroup_class.md), or [MPICluster](computational_resources/mpicluster_class.md) — by simply setting the `spot=True` argument during initialization. **Enable automatic resubmission** by setting `resubmit_on_preemption=True` in the simulator's `run()` method.
 
 This ensures you get a low-cost machine _and_ that your task will automatically restart on a new machine if the original is preempted.
 
@@ -42,20 +40,22 @@ task = swash.run(on=machine_group,
 ```
 
 > Note: If `spot=True` is not set, Inductiva will launch a standard on-demand machine.
+> Note: If `spot=True` is set but `resubmit_on_preemption=True` is not set, Inductiva will not re-launch your task if the machine is preempted.
 
 ## When to Use Spot Machines
 
-Use Spot Machines for:
+**✅ Use Spot Machines for:**
 - Large-scale batch processing and parameter sweeps.
 - Simulations that are fault-tolerant by design.
 - Non-urgent research and development tasks where cost is a primary concern.
 - When running a Benchmark
 
-Avoid Spot Machines for:
+**❌  Avoid Spot Machines for:**
 - Time-critical simulations with tight deadlines.
 - Short, single-run tasks where the potential delay from a preemption would be significant.
 - Simulations that cannot be easily or cleanly restarted.
 
+In summary:
 
 | Pros | Cons |
 | :--- | :--- |
