@@ -245,6 +245,7 @@ class Simulator(ABC):
         remote_assets: Optional[Union[str, list[str]]] = None,
         project: Optional[str] = None,
         time_to_live: Optional[str] = None,
+        on_finish_cleanup: Optional[Union[str, list[str]]] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -272,6 +273,24 @@ class Simulator(ABC):
                 "10m", "2 hours", "1h30m", or "90s". The task will be
                 automatically terminated if it exceeds this duration after
                 starting.
+            on_finish_cleanup :
+                Optional cleanup script or list of shell commands to remove
+                temporary or unwanted files generated during the simulation.
+                This helps reduce storage usage by discarding unnecessary
+                output.
+                - If a string is provided, it is treated as the path to a shell
+                script that must be included with the simulation files.
+                - If a list of strings is provided, each item is treated as an
+                individual shell command and will be executed sequentially.
+                All cleanup actions are executed in the simulation's working
+                directory, after the simulation finishes.
+                Examples:
+                    on_finish_cleanup = "my_cleanup.sh"
+
+                    on_finish_cleanup = [
+                        "rm -rf temp_dir",
+                        "rm -f logs/debug.log"
+                    ]
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
@@ -293,8 +312,17 @@ class Simulator(ABC):
         self._validate_computational_resources(on)
 
         if "commands" in kwargs:
+            
+            # Add on_finish_cleanup commands to the end of the list of commands
+            if isinstance(on_finish_cleanup,str):
+                kwargs["commands"].append(f"bash {on_finish_cleanup}")
+            if isinstance(on_finish_cleanup,list):
+                kwargs["commands"] = kwargs["commands"] + on_finish_cleanup
+
             cmds = commands.Command.commands_to_dicts(kwargs["commands"])
             kwargs["commands"] = cmds
+
+            
 
         # Get the user-specified image name. If not specified,
         # use the default image name for the current simulator
