@@ -1,4 +1,4 @@
-# $ inductiva **auth [\[subcommands\]](#subcommands) [\[flags\]](#flags)**
+# auth
 
 The `inductiva auth` command allows you to manage your
 authentication on Inductiva API.
@@ -11,9 +11,7 @@ every device you want to use Inductiva from.
 
 ## Usage
 
-```sh
-inductiva auth [-h] {login,logout} ...
-```
+$ inductiva **auth [\[subcommands\]](#subcommands) [\[flags\]](#flags)**
 
 ## Subcommands
 
@@ -54,8 +52,10 @@ inductiva auth logout
 This will remove the locally stored API key, requiring you
 to log in again for future interactions.
 
-### Flags
-- **`-h, --help`** → Show help message and exit.
+## Flags
+### **`-h, --help`**
+
+Show help message and exit.
 
 ## Need Help?
 Run the following command for more details:
