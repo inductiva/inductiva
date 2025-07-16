@@ -62,4 +62,3 @@ In summary:
 | :--- | :--- |
 | **Significant Cost Savings:** Get access to computing power at a fraction of the on-demand price, often with discounts of 60-90%. | **Preemption Risk:** The cloud provider can reclaim the machine at any time, interrupting your simulation. |
 | **Ideal for Flexible Workloads:** Excellent for tasks that are not time-critical or that can tolerate interruptions. | **Potential Delays:** If a machine is preempted, the task must be restarted, which can lead to longer overall completion times. |
-| **Efficient Resource Utilization:** Leverages the cloud provider's unused capacity, making it a highly efficient choice for scalable computing. | **Not for Critical Deadlines:** Unsuitable for urgent simulations with strict deadlines unless managed by a system that handles preemption automatically. |
