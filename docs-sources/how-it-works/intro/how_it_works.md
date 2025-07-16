@@ -45,10 +45,6 @@ resource through a unified Python code.
 of different machine configurations for your computational jobs by running a sample
 simulation across a variety of Virtual Machine (VM) options and get actionable insights.
 
-- [Templating Engine](./templating.md): Explore how the API enables you to transform
-fixed parameter values in your "base case" simulation configuration files into
-programmable variables you can adjust for running large variations of your simulation.
-
 - [Configuring Simulators](./configuring-simulators.md): Explore how the API
 wraps existing open-source software packages within layers that facilitate their
 execution across various cloud-based virtual machines and providers, transforming

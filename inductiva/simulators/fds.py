@@ -31,14 +31,15 @@ class FDS(simulators.Simulator):
             *,
             on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,
-            n_mpi_processes: Optional[int] = None,
             n_omp_threads: Optional[int] = None,
+            n_mpi_processes: Optional[int] = None,
             use_hwthread: bool = True,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
             time_to_live: Optional[str] = None,
+            on_finish_cleanup: Optional[Union[str, list[str]]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -48,6 +49,13 @@ class FDS(simulators.Simulator):
             sim_config_filename: Name of the simulation configuration file.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
                 (default), all vCPUs will be used.
+            n_omp_threads: Number of OpenMP threads to use in the simulation.
+                If not provided, it defaults to the number of available vcpus
+                of the machine group where the task will run.
+            n_mpi_processes: Number of MPI processes that will run the
+                simulation. If not provided, it defaults to 1. Note that the
+                number of MPI processes can't exceed the number of meshes
+                of the simulation case.
             use_hwthread: If specified Open MPI will attempt to discover the
                 number of hardware threads on the node, and use that as the
                 number of slots available.
@@ -67,6 +75,24 @@ class FDS(simulators.Simulator):
                 "10m", "2 hours", "1h30m", or "90s". The task will be
                 automatically terminated if it exceeds this duration after
                 starting.
+            on_finish_cleanup :
+                Optional cleanup script or list of shell commands to remove
+                temporary or unwanted files generated during the simulation.
+                This helps reduce storage usage by discarding unnecessary
+                output.
+                - If a string is provided, it is treated as the path to a shell
+                script that must be included with the simulation files.
+                - If a list of strings is provided, each item is treated as an
+                individual shell command and will be executed sequentially.
+                All cleanup actions are executed in the simulation's working
+                directory, after the simulation finishes.
+                Examples:
+                    on_finish_cleanup = "my_cleanup.sh"
+
+                    on_finish_cleanup = [
+                        "rm -rf temp_dir",
+                        "rm -f logs/debug.log"
+                    ]
         """
 
         self._input_files_exist(input_dir=input_dir,
@@ -142,4 +168,5 @@ class FDS(simulators.Simulator):
                            remote_assets=remote_assets,
                            project=project,
                            time_to_live=time_to_live,
+                           on_finish_cleanup=on_finish_cleanup,
                            **kwargs)
