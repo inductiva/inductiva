@@ -312,17 +312,15 @@ class Simulator(ABC):
         self._validate_computational_resources(on)
 
         if "commands" in kwargs:
-            
+
             # Add on_finish_cleanup commands to the end of the list of commands
-            if isinstance(on_finish_cleanup,str):
+            if isinstance(on_finish_cleanup, str):
                 kwargs["commands"].append(f"bash {on_finish_cleanup}")
-            if isinstance(on_finish_cleanup,list):
+            if isinstance(on_finish_cleanup, list):
                 kwargs["commands"] = kwargs["commands"] + on_finish_cleanup
 
             cmds = commands.Command.commands_to_dicts(kwargs["commands"])
             kwargs["commands"] = cmds
-
-            
 
         # Get the user-specified image name. If not specified,
         # use the default image name for the current simulator
