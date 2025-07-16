@@ -140,7 +140,7 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
 def register(parser):
     """Register the launch task-runner command."""
     subparser = parser.add_parser("launch",
-                                  help="Launches a Task-Runner.",
+                                  help="Launches a local Task-Runner.",
                                   formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = (
