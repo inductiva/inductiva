@@ -41,6 +41,11 @@ myst_enable_extensions = [
     # other MyST extensions
 ]
 
+html_static_path = ['_static']
+html_js_files = [
+    'discord.js',
+]
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 sphinx_tabs_valid_builders = ['html']
