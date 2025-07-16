@@ -2,7 +2,7 @@ window.addEventListener("DOMContentLoaded", function () {
   const searchBar = document.querySelector("input[type='search'], .search-input");
   if (searchBar && !document.getElementById("custom-search-icon")) {
     const img = document.createElement("img");
-    img.src = "../_shared_static/Discord-Symbol-Blurple.svg";  // Update with your actual image path
+    img.src = "_static/Discord-Symbol-Blurple.svg";  // Update with your actual image path
     img.alt = "Discord";
     img.id = "discord-icon";
     img.style.cssText = "height: 24px; margin-left: 8px; cursor: pointer;";
