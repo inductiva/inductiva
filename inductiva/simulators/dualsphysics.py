@@ -48,6 +48,7 @@ class DualSPHysics(simulators.Simulator):
         vtk_to_obj_smoothing_length: Optional[float] = 2.0,
         vtk_to_obj_cube_size: Optional[float] = 1.0,
         vtk_to_obj_surface_threshold: Optional[float] = 0.6,
+        on_finish_cleanup: Optional[Union[str, list[str]]] = None,
         **kwargs,
     ) -> tasks.Task:
         """Executes a DualSPHysics simulation.
@@ -94,6 +95,24 @@ class DualSPHysics(simulators.Simulator):
                 level that indicates the fluid surface (in multiplies of the
                 rest density).
                 Default: 0.6
+            on_finish_cleanup :
+                Optional cleanup script or list of shell commands to remove
+                temporary or unwanted files generated during the simulation.
+                This helps reduce storage usage by discarding unnecessary
+                output.
+                - If a string is provided, it is treated as the path to a shell
+                script that must be included with the simulation files.
+                - If a list of strings is provided, each item is treated as an
+                individual shell command and will be executed sequentially.
+                All cleanup actions are executed in the simulation's working
+                directory, after the simulation finishes.
+                Examples:
+                    on_finish_cleanup = "my_cleanup.sh"
+
+                    on_finish_cleanup = [
+                        "rm -rf temp_dir",
+                        "rm -f logs/debug.log"
+                    ]
         Returns:
             tasks.Task: An object representing the simulation task.
         """
@@ -138,4 +157,5 @@ class DualSPHysics(simulators.Simulator):
                            remote_assets=remote_assets,
                            project=project,
                            time_to_live=time_to_live,
+                           on_finish_cleanup=on_finish_cleanup,
                            **kwargs)
