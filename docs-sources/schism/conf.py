@@ -110,3 +110,8 @@ ogp_image = "https://inductiva.ai/builds/schism/_static/inductiva-social-banner.
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/schism'
+
+html_static_path = ['_static']
+html_js_files = [
+    'discord.js',
+]

@@ -110,3 +110,8 @@ ogp_image = "https://inductiva.ai/builds/amr-wind/_static/inductiva-social-banne
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/amr-wind'
+
+html_static_path = ['_static']
+html_js_files = [
+    'discord.js',
+]

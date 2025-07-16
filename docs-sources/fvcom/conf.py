@@ -109,3 +109,8 @@ ogp_image = "https://inductiva.ai/builds/fvcom/_static/inductiva-social-banner.j
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/fvcom'
+
+html_static_path = ['_static']
+html_js_files = [
+    'discord.js',
+]

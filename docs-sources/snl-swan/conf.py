@@ -110,3 +110,8 @@ ogp_image = "https://inductiva.ai/builds/snl-swan/_static/inductiva-social-banne
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/guides/snl-swan'
+
+html_static_path = ['_static']
+html_js_files = [
+    'discord.js',
+]
