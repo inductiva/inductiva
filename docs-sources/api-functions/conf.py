@@ -15,6 +15,11 @@ import os
 import sys
 from sphinxawesome_theme.postprocess import Icons
 
+# Customizations for sphinx-argparse-cli generated HTML file.
+import re
+import bs4
+import pathlib
+
 sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
@@ -158,3 +163,28 @@ googleanalytics_enabled = True
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/api-functions'
+
+# Customizations for sphinx-argparse-cli generated HTML file.
+def fix_newlines(text):
+    return re.sub(r'(?<!\n)\n(?!\n)', ' ', text)
+
+def fix_paragraphs(file_path):
+    text = file_path.read_text(encoding="utf-8")
+    soup = bs4.BeautifulSoup(text, "html.parser")
+    for section in soup.select('section[id^="inductiva-"]'):
+        for paragraph in section.find_all("p"):
+            paragraph.string = fix_newlines(paragraph.get_text())
+    file_path.write_text(str(soup), encoding="utf-8")
+
+def tidy_cli_html(file_path):
+    fix_paragraphs(file_path)
+
+def on_build_finished(app, exception):
+    output_dir = pathlib.Path(app.outdir)
+
+    cli_file = output_dir / "auto-cli" / "cli.html"
+    if cli_file.exists():
+        tidy_cli_html(cli_file)
+
+def setup(app):
+    app.connect("build-finished", on_build_finished)
