@@ -11,9 +11,7 @@ every device you want to use Inductiva from.
 
 ## Usage
 
-```sh
-$ inductiva **auth [\[subcommands\]](#subcommands) [\[flags\]](#flags)**
-```
+### $ inductiva **auth [\[subcommands\]](#subcommands) [\[flags\]](#flags)**
 
 ## Subcommands
 
