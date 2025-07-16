@@ -165,6 +165,7 @@ version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/api-functions'
 
 # Customizations for sphinx-argparse-cli generated HTML file.
+# Acts as a plugin to extend the functionality of sphinx-argparse-cli.
 def fix_newlines(text):
     return re.sub(r'(?<!\n)\n(?!\n)', ' ', text)
 
