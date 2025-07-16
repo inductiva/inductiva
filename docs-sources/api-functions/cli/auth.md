@@ -1,4 +1,4 @@
-# auth
+# $ inductiva **auth [\[subcommands\]](#subcommands) [\[flags\]](#flags)**
 
 The `inductiva auth` command allows you to manage your
 authentication on Inductiva API.
@@ -8,10 +8,6 @@ able to start machines and launch simulations after you are authenticated.
 Ooce authenticated, your credentials will be stored locally for future
 sessions.However, you will need to perform the authentication step from
 every device you want to use Inductiva from.
-
-## Usage
-
-### $ inductiva **auth [\[subcommands\]](#subcommands) [\[flags\]](#flags)**
 
 ## Subcommands
 

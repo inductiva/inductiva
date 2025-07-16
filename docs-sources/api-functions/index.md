@@ -7,7 +7,7 @@ maxdepth: 2
 hidden: true
 ---
 cli/overview
-cli/auth
+auth <cli/auth>
 cli/user
 cli/tasks
 cli/task-runner
