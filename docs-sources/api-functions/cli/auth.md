@@ -1,4 +1,4 @@
-# auth
+# $ inductiva **auth [\[subcommands\]](#subcommands) [\[flags\]](#flags)**
 
 The `inductiva auth` command allows you to manage your
 authentication on Inductiva API.
@@ -6,8 +6,8 @@ authentication on Inductiva API.
 This is a fundamental aspect of your experience: you will only be
 able to start machines and launch simulations after you are authenticated.
 Ooce authenticated, your credentials will be stored locally for future
-sessions. Howecer, you will need to perform the authentication step from
-every machine you want to use Inductiva from.
+sessions.However, you will need to perform the authentication step from
+every device you want to use Inductiva from.
 
 ## Usage
 
@@ -15,10 +15,7 @@ every machine you want to use Inductiva from.
 inductiva auth [-h] {login,logout} ...
 ```
 
-### Options
-- **`-h, --help`** → Show help message and exit.
-
-## Available Subcommands
+## Subcommands
 
 ### `login`
 Authenticate using your Inductiva API key.
@@ -56,6 +53,9 @@ inductiva auth logout
 
 This will remove the locally stored API key, requiring you
 to log in again for future interactions.
+
+### Flags
+- **`-h, --help`** → Show help message and exit.
 
 ## Need Help?
 Run the following command for more details:
