@@ -2,6 +2,8 @@ window.addEventListener("DOMContentLoaded", function () {
   const themeButton = document.querySelector("nav button[aria-label='Color theme switcher']");
 
   const pathParts = window.location.pathname.split('/');
+  console.log(window.location.pathname)
+  console.log(pathParts)
   const simulatorIndex = pathParts.indexOf('guides') + 1;
   const simulator = pathParts[simulatorIndex];
 
