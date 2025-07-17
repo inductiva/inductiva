@@ -15,7 +15,7 @@ class BannerDirective(Directive):
                 <div class="banner-content">
                 <div class="text">
                     <p class="headline">Ready to dive in?</p>
-                    <p class="subtext">Start your free trial today.</p>
+                    <p class="subtext">Start your free trial today and earn $5 in free credits.</p>
                 </div>
                 <div class="buttons">
                     <button class="btn primary">
