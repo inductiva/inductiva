@@ -26,11 +26,9 @@ You will be prompted to enter your API key.
      | | |  \| || | | || | | || |      | |   | |  \ \ / // _ \
      | | | |\  || |_| || |_| || |___   | |   | |   \ V // ___ \
     |___||_| \_||____/  \___/  \____|  |_|  |___|   \_//_/   \_\
-
-    You are already logged in. Run `inductiva auth logout` if you want to log out.
-    Setting a new API Key will erase the existing one.
+    
     To log in, you need an API Key. You can obtain it from your account at https://console.inductiva.ai/account.
-Please paste your API Key here:
+    Please paste your API Key here: 
 ```
 
 At this stage, please copy paste your personal API key that is available

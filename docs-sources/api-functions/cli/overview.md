@@ -1,8 +1,8 @@
 # Inductiva CLI
 
-This section documents every command and flag available in Inductiva's command-line interface (CLI).
+The **Inductiva CLI** helps you interact with the Inductiva platform directly from the terminal, enabling you to manage computational resources and tasks.
 
-The Inductiva CLI helps you interact with the Inductiva platform directly from the terminal, enabling you to manage computational resources and tasks.
+This section documents every command and flag available in Inductiva's command-line interface (CLI).
 
 With the CLI, you can:
 - Manage authentication and API keys
@@ -33,10 +33,8 @@ page in the Web Console.
      | | | |\  || |_| || |_| || |___   | |   | |   \ V // ___ \
     |___||_| \_||____/  \___/  \____|  |_|  |___|   \_//_/   \_\
     
-    You are already logged in. Run `inductiva auth logout` if you want to log out. 
-    Setting a new API Key will erase the existing one.
     To log in, you need an API Key. You can obtain it from your account at https://console.inductiva.ai/account.
-Please paste your API Key here: 
+    Please paste your API Key here: 
 ```
 
 ## Need Help?
