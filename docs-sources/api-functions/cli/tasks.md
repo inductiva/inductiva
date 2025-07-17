@@ -1,8 +1,6 @@
 # inductiva **tasks** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
-The Inductiva API allows you to run multiple simulations remotely, and for every
-simulation you submit to the API, you generate a separate [Task](../../how-it-works/tasks/index.md). 
 The `inductiva tasks` command allows you to inspect and manage all the tasks
-you are run on Inductiva.
+you run on Inductiva.
 
 ## Subcommands
 
@@ -58,10 +56,9 @@ Kill a running task.
 inductiva tasks kill TASK_ID
 ```
 The kill subcommand will prompt you for a confirmation so that you do not
-accidentally kill an important task. Note, however, that the kill subcommand
-does not stop the machine where the task was running: it just terminates the
-task, leaving the computational resources where it was running ready for
-taking other tasks.
+accidentally kill an important task.
+
+> Note: The `kill` subcommand **does not stop** the machine where the task is running: it just terminates the task, leaving the computational resources where it was running active for taking other tasks.
 
 For a specific task, we will get something like:
 ```sh
@@ -101,7 +98,7 @@ inductiva tasks last-modified-file TASK_ID
 Get the last modified file of a task:
 
 ```sh
-inductiva tasks last-modified-file qpusar8bch509k56g1hvv5yxk
+$ inductiva tasks last-modified-file qpusar8bch509k56g1hvv5yxk
 
 Most Recent File: /mnt/disks/task-runner-data/workdir/qpusar8bch509k56g1hvv5yxk/output/artifacts/stdout.txt
 Modification Time: 2025-04-03 12:58:49
@@ -127,11 +124,11 @@ List the last four tasks with their details:
 
 ```sh
 $ inductiva tasks list -n 4
-       ID                              SIMULATOR          STATUS         SUBMITTED              STARTED                COMPUTATION TIME         RESOURCE TYPE
-       jxwt0rm8s8xspdfcegtgkkana       splishsplash       started        08 Feb, 13:25:49       08 Feb, 13:26:04       *0:00:05                 c2-standard-4
-       n0zcac8rmw7xydbis3m407kb4       splishsplash       started        08 Feb, 13:25:48       08 Feb, 13:26:03       *0:00:07                 c2-standard-4
-       8nmpn4h99nyfpo4da9jw2405q       splishsplash       started        08 Feb, 13:25:47       08 Feb, 13:26:02       *0:00:09                 c2-standard-4
-       so6i93pi74b89rndircubp3v2       splishsplash       started        08 Feb, 13:25:47       08 Feb, 13:26:02       *0:00:10                 c2-standard-4
+  ID                              SIMULATOR          STATUS         SUBMITTED              STARTED                COMPUTATION TIME         RESOURCE TYPE
+  jxwt0rm8s8xspdfcegtgkkana       splishsplash       started        08 Feb, 13:25:49       08 Feb, 13:26:04       *0:00:05                 c2-standard-4
+  n0zcac8rmw7xydbis3m407kb4       splishsplash       started        08 Feb, 13:25:48       08 Feb, 13:26:03       *0:00:07                 c2-standard-4
+  8nmpn4h99nyfpo4da9jw2405q       splishsplash       started        08 Feb, 13:25:47       08 Feb, 13:26:02       *0:00:09                 c2-standard-4
+  so6i93pi74b89rndircubp3v2       splishsplash       started        08 Feb, 13:25:47       08 Feb, 13:26:02       *0:00:10                 c2-standard-4
 ```
 
 ---
@@ -189,21 +186,21 @@ inductiva tasks top TASK_ID
 Display the processes running on the machine where the task is running:
 
 ```sh
-inductiva tasks top qpusar8bch509k56g1hvv5yxk
-top - 12:00:15 up 18 min,  0 users,  load average: 1.14, 0.99, 0.58
-Threads: 226 total,   2 running, 224 sleeping,   0 stopped,   0 zombie
-%Cpu(s): 24.2 us,  1.5 sy,  0.0 ni, 72.7 id,  0.0 wa,  0.0 hi,  1.5 si,  0.0 st
-MiB Mem :  16008.2 total,  12976.4 free,   1057.1 used,   1974.7 buff/cache
-MiB Swap:      0.0 total,      0.0 free,      0.0 used.  14656.3 avail Mem 
+$ inductiva tasks top qpusar8bch509k56g1hvv5yxk
+  top - 12:00:15 up 18 min,  0 users,  load average: 1.14, 0.99, 0.58
+  Threads: 226 total,   2 running, 224 sleeping,   0 stopped,   0 zombie
+  %Cpu(s): 24.2 us,  1.5 sy,  0.0 ni, 72.7 id,  0.0 wa,  0.0 hi,  1.5 si,  0.0 st
+  MiB Mem :  16008.2 total,  12976.4 free,   1057.1 used,   1974.7 buff/cache
+  MiB Swap:      0.0 total,      0.0 free,      0.0 used.  14656.3 avail Mem 
 
-    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
-   1469 task-ru+  20   0  894208 711108  36128 R  99.9   4.3   9:56.46 d_hydro+
-   1557 task-ru+  20   0    9016   3812   3140 R   6.2   0.0   0:00.01 top
-      1 root      20   0  165128  10828   7912 S   0.0   0.1   0:01.22 systemd
-      2 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kthreadd
-      3 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_gp
-      4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_par+
-...
+      PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+    1469 task-ru+  20   0  894208 711108  36128 R  99.9   4.3   9:56.46 d_hydro+
+    1557 task-ru+  20   0    9016   3812   3140 R   6.2   0.0   0:00.01 top
+        1 root      20   0  165128  10828   7912 S   0.0   0.1   0:01.22 systemd
+        2 root      20   0       0      0      0 S   0.0   0.0   0:00.00 kthreadd
+        3 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_gp
+        4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_par+
+  ...
 ```
 
 ## Flags
