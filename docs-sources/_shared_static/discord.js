@@ -5,7 +5,7 @@ window.addEventListener("DOMContentLoaded", function () {
   console.log(window.location.pathname)
   console.log(pathParts)
   const simulatorIndex = pathParts.indexOf('guides') + 1;
-  const simulator = pathParts[simulatorIndex];
+  const simulator = pathParts[2];
 
   // Construct the static path
   const staticPath = `/builds/${simulator}/_static/`;
