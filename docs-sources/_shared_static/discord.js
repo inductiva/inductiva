@@ -1,10 +1,9 @@
 window.addEventListener("DOMContentLoaded", function () {
   const themeButton = document.querySelector("nav button[aria-label='Color theme switcher']");
-
+  // get image path based on current simulator to avoid
+  // depth problems. use /builds/simulator/_static instead of
+  // _/static or ../_static or ../../_static
   const pathParts = window.location.pathname.split('/');
-  console.log(window.location.pathname)
-  console.log(pathParts)
-  const simulatorIndex = pathParts.indexOf('guides') + 1;
   const simulator = pathParts[2];
 
   // Construct the static path
