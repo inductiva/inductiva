@@ -1,13 +1,3 @@
-body {
-  background: #f0f4f8;
-  font-family: 'Segoe UI', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-}
-
 .banner {
   background: #ffffff;
   padding: 2rem;
