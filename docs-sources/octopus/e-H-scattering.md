@@ -149,12 +149,9 @@ Among all options, `c2d-highcpu-4` is the most cost-effective, while `c4-highcpu
 offers the best performance. This highlights the limited benefit of scaling CPU
 count for this particular simulation.
 
-<div class="cta-bar">
-  <div class="cta-text">
-    <strong>Start running simulations seamlessly!</strong> You have $5 in <strong>free</strong> credits, no credit card required.
-  </div>
-  <button  onclick="window.open('https://console.inductiva.ai/', '_blank')" target="_blank" class="cta-button">Sign In</button>
-</div>
+```{banner_small}
+:origin: octopus
+```
 
 **References:**
 

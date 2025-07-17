@@ -108,9 +108,6 @@ We’ve walked through the essential steps for setting up and running a WRF simu
 By following this guide, you should now have a clear understanding of how to configure and efficiently 
 run WRF simulations on Inductiva.
 
-<div class="cta-bar">
-  <div class="cta-text">
-    <strong>Kickstart your simulations!</strong> You have $5 in <strong>free credits</strong>, no credit card required.
-  </div>
- <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_wrf&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
-</div>
+```{banner_small}
+:origin: wrf
+```

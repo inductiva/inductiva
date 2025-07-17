@@ -12,6 +12,10 @@ To simplify the workflow, this guide is split into two parts:
 
 This approach bridges the gap between raw DualSPHysics output and professional-quality visualizations using Blender.
 
+```{banner_small}
+:origin: dualsphysics
+```
+
 ```{toctree}
 :hidden:
 Convert .vtk to .obj <convert-to-obj.md>

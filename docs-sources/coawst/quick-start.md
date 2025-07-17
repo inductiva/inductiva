@@ -317,9 +317,6 @@ to input files for compiling and running **COAWST**.
 
 By following this guide, you now have a clearer understanding of how to configure and efficiently run COAWST simulations on Inductiva's platform.
 
-<div class="cta-bar">
-  <div class="cta-text">
-    <strong>Kickstart your simulations!</strong> You have $5 in <strong>free credits</strong>, no credit card required.
-  </div>
- <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_coawst&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
-</div>
+```{banner_small}
+:origin: coawst
+```
