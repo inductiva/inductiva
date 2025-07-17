@@ -21,14 +21,11 @@ You can also download the outputs from multiple tasks:
 $ inductiva tasks download TASK_1_ID_ TASK_2_ID
 ```
 
-You can download specific files from the output of the task by 
-setting the `--filenames` flag.
-
 <h4 id="flags-for-download">Flags</h4>
 
 **`--filenames`**
 
-Names of the files to download.
+Names of specific files to download.
 
 ---
 
@@ -55,7 +52,7 @@ Retrieve detailed information about a specific task.
 inductiva tasks info TASK_ID
 ```
 
-### `kill` [\[flags\]](#flags)
+### `kill` [\[flags\]](#flags-for-kill)
 Kill a running task. 
 ```sh
 inductiva tasks kill TASK_ID
@@ -66,14 +63,19 @@ does not stop the machine where the task was running: it just terminates the
 task, leaving the computational resources where it was running ready for
 taking other tasks.
 
-#### flags
+<h4 id="flags-for-kill">Flags</h4>
+
 **--wait-timeout, -w**
 
 Number of seconds to wait for the kill command. If not provided, the system sends the request without waiting a response.
 
+---
+
 **--yes, -y**
 
 Skip kill confirmation.
+
+---
 
 **--all**
 
