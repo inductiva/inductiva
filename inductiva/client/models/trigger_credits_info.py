@@ -28,7 +28,7 @@ class TriggerCreditsInfo(BaseModel):
     TriggerCreditsInfo
     """
 
-    # noqa: E501
+  # noqa: E501
     trigger_type: StrictStr
     trigger: TriggerCreditsType
     __properties: ClassVar[List[str]] = ["trigger_type", "trigger"]

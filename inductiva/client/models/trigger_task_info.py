@@ -27,7 +27,7 @@ class TriggerTaskInfo(BaseModel):
     TriggerTaskInfo
     """
 
-    # noqa: E501
+  # noqa: E501
     trigger_type: StrictStr
     task_id: StrictStr
     __properties: ClassVar[List[str]] = ["trigger_type", "task_id"]

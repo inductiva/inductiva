@@ -27,7 +27,7 @@ class BackendVersion(BaseModel):
     BackendVersion
     """
 
-    # noqa: E501
+  # noqa: E501
     version: StrictStr
     min_supported_client_version: Optional[StrictStr] = None
     __properties: ClassVar[List[str]] = [

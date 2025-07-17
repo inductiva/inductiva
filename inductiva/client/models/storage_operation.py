@@ -30,7 +30,7 @@ class StorageOperation(BaseModel):
     StorageOperation
     """
 
-    # noqa: E501
+  # noqa: E501
     id: StrictStr
     name: StorageOperationName
     status: OperationStatus

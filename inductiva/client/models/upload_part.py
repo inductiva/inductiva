@@ -28,7 +28,7 @@ class UploadPart(BaseModel):
     Part of the multipart export files endpoint.
     """
 
-    # noqa: E501
+  # noqa: E501
     part_number: StrictInt
     part_url: Annotated[str, Field(min_length=1, strict=True)]
     __properties: ClassVar[List[str]] = ["part_number", "part_url"]

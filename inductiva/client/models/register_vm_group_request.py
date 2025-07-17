@@ -30,7 +30,7 @@ class RegisterVMGroupRequest(BaseModel):
     RegisterVMGroupRequest
     """
 
-    # noqa: E501
+  # noqa: E501
     machine_type: Optional[StrictStr] = None
     name: Optional[StrictStr] = None
     provider_id: Optional[StrictStr] = 'GCP'

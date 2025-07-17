@@ -28,7 +28,7 @@ class UpdateOperationStatus(BaseModel):
     UpdateOperationStatus
     """
 
-    # noqa: E501
+  # noqa: E501
     operation_id: StrictStr
     status: OperationStatus
     error_message: Optional[StrictStr] = None
