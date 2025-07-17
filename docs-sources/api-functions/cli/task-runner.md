@@ -11,7 +11,7 @@ remote execution, and balance between cost (zero compute cost if you are
 running Tasks on your local machines) and performance (access to high-performance
 machines on the cloud via Inductiva, if needed). 
 
-## Available Subcommands
+## Subcommands
 
 ### `launch` [\[flags\]](#flags-for-launch)
 Launch a new task-runner instance.

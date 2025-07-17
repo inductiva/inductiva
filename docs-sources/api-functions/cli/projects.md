@@ -1,5 +1,4 @@
 # inductiva **projects** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
-
 The `inductiva projects` command provides utilities to manage and
 retrieve information about your projects.
 
