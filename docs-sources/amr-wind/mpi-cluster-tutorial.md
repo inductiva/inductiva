@@ -142,3 +142,10 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
 Runtime decreased as the cluster size increased. With **8 machines** (896 vCPUs), the simulation completed in **42 minutes and 12 seconds**, achieving a **speedup of 3.41x** compared to the single-machine runtime of 144 minutes.
 
 Although adding more machines yields noticeable speedups, the relatively small size of the problem means that the benefits quickly taper off, with diminishing returns becoming evident as the cluster size increases.
+
+<div class="cta-bar">
+  <div class="cta-text">
+    <strong>Kickstart your simulations!</strong> You have $5 in <strong>free credits</strong>, no credit card required.
+  </div>
+ <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_amr-wind&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
+</div>

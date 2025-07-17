@@ -88,9 +88,9 @@ options to supercharge your simulations.
 
 <div class="cta-bar">
   <div class="cta-text">
-    <strong>Start running simulations seamlessly!</strong> You have $5 in <strong>free</strong> credits, no credit card required.
+    <strong>Kickstart your simulations!</strong> You have $5 in <strong>free credits</strong>, no credit card required.
   </div>
-  <button  onclick="window.open('https://console.inductiva.ai/', '_blank')" target="_blank" class="cta-button">Sign In</button>
+  <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_openfoam&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
 </div>
 
 ## Need Help?

@@ -117,4 +117,9 @@ represents the actual execution of the simulation,
 the core computation time of this simulation was 99.3 seconds (around 1 minute
 and 39 seconds).
 
-It's that simple!
+<div class="cta-bar">
+  <div class="cta-text">
+    <strong>Kickstart your simulations!</strong> You have $5 in <strong>free credits</strong>, no credit card required.
+  </div>
+ <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_dualsphysics&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
+</div>
