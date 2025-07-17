@@ -9,6 +9,26 @@ you are run on Inductiva.
 ### `download` [\[flags\]](#flags-for-download)
 Downloads the **output** of completed tasks to your local computer. 
 
+<div style="display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap;">
+
+  <div style="flex: 1; min-width: 250px;">
+    <h4>Flags</h4>
+    <ul>
+      <li><code>--filenames=&lt;file&gt;</code><br/>Names of specific files to download.</li>
+      <li><code>--dir=&lt;directory&gt;</code><br/>Specify a custom output directory.</li>
+      <li><code>--input, -i</code><br/>Download input files.</li>
+      <li><code>--output, -o</code><br/>Download output files.</li>
+    </ul>
+  </div>
+
+  <div style="flex: 1; min-width: 300px; background: #111; padding: 1rem; border-radius: 8px;">
+    <pre><code>inductiva tasks download TASK_ID
+inductiva tasks download TASK_1_ID TASK_2_ID
+inductiva tasks download TASK_ID --filenames result.txt</code></pre>
+  </div>
+
+</div>
+
 ```sh
 inductiva tasks download TASK_ID
 ```
@@ -23,13 +43,13 @@ $ inductiva tasks download TASK_1_ID_ TASK_2_ID
 
 <h4 id="flags-for-download">Flags</h4>
 
-**`--filenames`**
+**`--filenames=<file>`**
 
 Names of specific files to download.
 
 ---
 
-**`--dir`**
+**`--dir=<directory>`**
 
 Specify an alternative the directory name for storing the files.
 
@@ -65,19 +85,19 @@ taking other tasks.
 
 <h4 id="flags-for-kill">Flags</h4>
 
-**--wait-timeout, -w**
+**`--wait-timeout, -w`**
 
 Number of seconds to wait for the kill command. If not provided, the system sends the request without waiting a response.
 
 ---
 
-**--yes, -y**
+**`--yes, -y`**
 
 Skip kill confirmation.
 
 ---
 
-**--all**
+**`--all`**
 
 Kill all running tasks.
 
@@ -89,31 +109,54 @@ Displays the last modified file of a task.
 inductiva tasks last-modified-file TASK_ID
 ```
 
-### `list` [\[flags\]](#flags)
-List all tasks associated with your account. By default, the command lists 10 tasks, unless specifying [`-n`](#flags) flag.
+### `list` [\[flags\]](#flags-for-list)
+List all tasks associated with your account. By default, the command lists 10 tasks, unless specifying `-n` flag.
 
 ```sh
 inductiva tasks list
 ```
 
-#### flags
-**--last-n, -n**
+<h4 id="flags-for-list">Flags</h4>
+
+**`--last-n, -n`**
 
 List last `N` tasks.
+
+**`--all, -a`**
+
+List all tasks.
+
+**`--id, -i`**
+
+List a task with a specific ID.
+
+**`--project-name, -p=<project>`**
+
+List the tasks of a project.
 
 ### `list-files`
 Show the current files of a running task.
 
 ```sh
-inductiva tasks list-files --id TASK_ID
+inductiva tasks list-files TASK_ID
 ```
 
-### `tail`
-Display the last lines of a task’s file output.
+### `tail` [\[flags\]](#flags-for-tail)
+Display the last lines of a **running** task’s file output.
 
 ```sh
-inductiva tasks tail --id TASK_ID -l NUMBER_OF_LINES
+inductiva tasks tail TASK_ID FILENAME
 ```
+
+<h4 id="flags-for-tail">Flags</h4>
+
+**`--lines, -l`**
+
+Number of lines to show.
+
+**`--follow, -f`**
+
+Number of lines to show.
 
 ### `top`
 
