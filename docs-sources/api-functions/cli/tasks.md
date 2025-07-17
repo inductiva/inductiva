@@ -24,7 +24,8 @@ $ inductiva tasks download TASK_1_ID_ TASK_2_ID
 You can download specific files from the output of the task by 
 setting the `--filenames` flag.
 
-#### <a id="download-flags"></a>Flags
+#### #### Flags <span id="download-flags"></span>
+
 **`--filenames`**
 
 Names of the files to download.
