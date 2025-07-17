@@ -1,9 +1,9 @@
 .banner {
   background-color: var(--cta-container-bg);
-  padding: 1rem 3rem;
+  padding: 2rem 3rem;
   border-radius: 12px;
   max-width: 1000px;
-  margin: 2rem auto;
+  margin: 4rem auto;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   display: flex;
 	flex-wrap: wrap;
@@ -18,7 +18,7 @@
 }
 
 .text {
-  max-width: 80%;
+  max-width: 60%;
 }
 
 #content .headline {
@@ -32,7 +32,7 @@
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--purple-color);
-  margin: 0.0rem 0 0 0;
+  margin: 0.25rem 0 0 0;
 }
 
 .buttons {
