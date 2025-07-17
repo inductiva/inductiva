@@ -1,4 +1,9 @@
 # The Inductiva Guide to SPlisHSPlasH
+
+```{banner}
+:origin: splishsplash
+```
+
 Your resource hub for all things SPlisHSPlasH at Inductiva. Whether you're just starting out or an experienced user, you'll find the resources you need to seamlessly run your SPlisHSPlasH simulations on Cloud machines equipped with hundreds of cores and terabytes of disk space.
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check! 

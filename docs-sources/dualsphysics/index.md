@@ -1,4 +1,9 @@
 # The Inductiva Guide to DualSPHysics
+
+```{banner}
+:origin: dualsphysics
+```
+
 Your resource hub for all things DualSPHysics at Inductiva. Whether you're just starting out or an experienced user, you'll find the resources you need to accelerate your DualSPHysics simulations using top-tier Cloud GPUs, including **NVIDIA A100** and **H100**, or run hundreds of simulations in parallel for your design optimization projects using cost-effective Cloud GPUs such as **NVIDIA L4**.
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check!
