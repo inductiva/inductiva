@@ -110,3 +110,8 @@ ogp_image = "https://inductiva.ai/builds/reef3d/_static/inductiva-social-banner.
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/reef3d'
+
+html_static_path = ['_static']
+html_js_files = [
+    'discord.js',
+]

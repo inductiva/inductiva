@@ -35,7 +35,7 @@ class TaskWithStatusHistory(BaseModel):
     TaskWithStatusHistory
     """
 
-  # noqa: E501
+    # noqa: E501
     task_id: StrictStr
     status: TaskStatusCode
     status_alias: StrictStr

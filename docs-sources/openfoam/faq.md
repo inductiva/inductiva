@@ -139,6 +139,35 @@ correctly return a non-zero exit code. That way, Inductiva can detect the
 failure and show it as such.
 
 <br>
+
+## 6. Why does my simulation keep failing with `There are not enough slots available` even though my machine has enough resources?
+Before jumping to solutions, it’s important to understand how your machine’s resources are structured.
+
+Take, for example, a machine type like `c2d-highcpu-16`, which provides 16 virtual CPUs (vCPUs). The key word here is *virtual* — while the machine can run 16 threads in parallel, it's backed by only 8 physical cores. This distinction matters.
+
+### How OpenFOAM handles resources
+The behavior of `runParallel` in OpenFOAM depends on the version you’re using:
+
+* **Some versions** (e.g., **OpenFOAM-ESI v2406**) recognize and utilize all available vCPUs. In these cases, running a simulation on all 16 vCPUs works as long as your domain is decomposed into 16 subdomains.
+
+* **Other versions** (e.g., **OpenFOAM-Foundation v8**) only detect physical cores, ignoring hyperthreads. So even if your machine reports 16 vCPUs, OpenFOAM will only "see" 8. Attempting to run with more than 8 subdomains (e.g., 16) can lead to the error:
+
+```
+There are not enough slots available
+```
+
+This happens because `runParallel` internally calls `mpirun` and lets OpenFOAM decide how many cores to use. In some versions, OpenFOAM restricts execution to physical cores only.
+
+### How to bypass this limitation
+If you want to fully utilize all your vCPUs regardless of how OpenFOAM detects resources, you can manually invoke `mpirun` with the `--use-hwthread-cpu`s` flag. For example:
+
+```bash
+mpirun --use-hwthread-cpus -np 16 simpleFoam -parallel
+```
+
+This explicitly instructs `mpirun` to include hyperthreaded (virtual) CPUs, allowing your simulation to run across all 16 vCPUs.
+
+<br>
 <br>
 
 Still can't find what you're looking for? [Contact Us](mailto:support@inductiva.ai)

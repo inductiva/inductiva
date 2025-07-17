@@ -28,7 +28,7 @@ class Quota(BaseModel):
     Quota
     """
 
-  # noqa: E501
+    # noqa: E501
     id: StrictStr
     label: StrictStr
     max_allowed: Optional[Union[StrictFloat, StrictInt]] = None

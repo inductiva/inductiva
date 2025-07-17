@@ -27,7 +27,7 @@ class DiskResizeRequest(BaseModel):
     DiskResizeRequest
     """
 
-  # noqa: E501
+    # noqa: E501
     free_space_gb: Union[StrictFloat, StrictInt]
     __properties: ClassVar[List[str]] = ["free_space_gb"]
 

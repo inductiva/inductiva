@@ -28,7 +28,7 @@ class TriggerTaskCreate(BaseModel):
     TriggerTaskCreate
     """
 
-  # noqa: E501
+    # noqa: E501
     trigger_type: StrictStr
     task_id: StrictStr
     trigger: TriggerTaskType

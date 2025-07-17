@@ -27,7 +27,7 @@ class TaskConnection(BaseModel):
     TaskConnection
     """
 
-  # noqa: E501
+    # noqa: E501
     sender_id: StrictStr
     receiver_id: Optional[StrictStr] = None
     type: Optional[StrictStr] = None

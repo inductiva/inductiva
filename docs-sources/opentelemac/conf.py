@@ -109,3 +109,8 @@ ogp_image = "https://inductiva.ai/builds/opentelemac/_static/inductiva-social-ba
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/opentelemac'
+
+html_static_path = ['_static']
+html_js_files = [
+    'discord.js',
+]

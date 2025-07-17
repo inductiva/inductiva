@@ -112,3 +112,8 @@ ogp_image = "https://inductiva.ai/builds/cp2k/_static/inductiva-social-banner.jp
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/cp2k'
+
+html_static_path = ['_static']
+html_js_files = [
+    'discord.js',
+]
