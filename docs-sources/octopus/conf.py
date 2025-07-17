@@ -114,3 +114,7 @@ ogp_image = "https://inductiva.ai/builds/octopus/_static/inductiva-social-banner
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/octopus'
+
+def setup(app):
+    from _static.banner_directive import BannerDirective
+    app.add_directive("banner", BannerDirective)
