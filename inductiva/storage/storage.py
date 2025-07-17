@@ -187,6 +187,13 @@ class ZipArchiveInfo:
     files: List[ZipFileInfo]
 
 
+@dataclass
+class ZipFileRange:
+    """Represents the byte range of a file within a ZIP archive."""
+    range_start: int
+    range_end: int
+
+
 def get_zip_contents(
     path: str,
     zip_relative_path: str = "",
@@ -226,6 +233,35 @@ def get_zip_contents(
         ) for file in archive_info.contents
     ]
     return ZipArchiveInfo(size=archive_info.size, files=files)
+
+
+def get_file_range(
+    path: str,
+    zip_relative_path: str = "",
+    filename: str = "",
+) -> ZipFileRange:
+    """
+    Retrieve the byte range (start and end) of the compressed data for a
+    specific file inside a ZIP archive.
+
+    Args:
+        path (str): The full path to the ZIP archive.
+        zip_relative_path (str, optional): The relative path inside the ZIP.
+        filename (str): The name of the file inside the ZIP to get the range.
+
+    Returns:
+        ZipFileRange: The start and end byte offsets of the file
+    """
+    api_instance = inductiva.client.StorageApi(inductiva.api.get_client())
+    response = api_instance.get_zip_file_range(
+        filename=filename,
+        zip_relative_path=zip_relative_path,
+        path=path,
+    )
+    return ZipFileRange(
+        range_start=response.range_start,
+        range_end=response.range_end,
+    )
 
 
 def upload_from_url(
@@ -451,8 +487,9 @@ def _download_file_from_inside_zip(remote_path, local_dir, pool_manager):
     else:
         raise ValueError(f"File \"{after}\" not found in \"{path}\".")
 
-    range_start = zip_file.range_start
-    range_end = range_start + zip_file.compressed_size - 1
+    byte_range = get_file_range(path, prefix + zip_relative_path, zip_filename)
+    range_start = byte_range.range_start
+    range_end = byte_range.range_end
     compress_type = zip_file.compress_type
     file_path = after + ".zip" if compress_type else after
     download_path = _resolve_local_path(url, path, local_dir, file_path, True)
