@@ -6,7 +6,7 @@ authentication on Inductiva API.
 This is a fundamental aspect of your experience: you will only be
 able to start machines and launch simulations after you are authenticated.
 Ooce authenticated, your credentials will be stored locally for future
-sessions.However, you will need to perform the authentication step from
+sessions. However, you will need to perform the authentication step from
 every device you want to use Inductiva from.
 
 ## Subcommands
@@ -49,7 +49,7 @@ This will remove the locally stored API key, requiring you
 to log in again for future interactions.
 
 ## Flags
-### **`-h, --help`**
+### `-h, --help`
 
 Show help message and exit.
 

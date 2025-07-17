@@ -8,9 +8,9 @@ hidden: true
 ---
 cli/overview
 auth <cli/auth>
-cli/user
-cli/tasks
-cli/task-runner
+user <cli/user>
+tasks <cli/tasks>
+task-runner <cli/task-runner>
 cli/logs
 cli/projects
 cli/storage

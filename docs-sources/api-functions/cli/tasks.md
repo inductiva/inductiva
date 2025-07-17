@@ -1,40 +1,44 @@
-# tasks
+# inductiva **tasks** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
 The Inductiva API allows you to run multiple simulations remotely, and for every
-simulation you submit to the API, you generate a separate Task. 
+simulation you submit to the API, you generate a separate [Task](../../how-it-works/tasks/index.md). 
 The `inductiva tasks` command allows you to inspect and manage all the tasks
 you are run on Inductiva.
 
+## Subcommands
 
-## Usage
-
-```sh
-inductiva tasks [-h] {download,info,kill,list,list-files,tail} ...
-```
-
-### Options
-- **`-h, --help`** → Show help message and exit.
-
-## Available Subcommands
-
-### `download`
-Downloads the output of completed tasks to your local machine. 
+### `download` [\[flags\]](#flags)
+Downloads the **output** of completed tasks to your local computer. 
 
 ```sh
 inductiva tasks download TASK_ID
 ```
 By default, the outputs of  the task (multiple files) will be
-stored in a local directory named `output_dir/tasks_id` inside
-your project directory. You can specify an alternative the directory 
-for storing the files with `--output_dir`. 
+stored in a local directory named `inductiva_output/{TASK_ID}/outputs` inside
+your project directory.
 
 You can also download the outputs from multiple tasks:
 ```bash
-$ inductiva tasks download task_1_id task_2_id
+$ inductiva tasks download TASK_1_ID_ TASK_2_ID
 ```
 
 You can download specific files from the output of the task by 
 setting the `--filenames` flag.
 
+#### flags
+**--filenames**
+
+Names of the files to download.
+
+**--dir**
+Specify an alternative the directory name for storing the files.
+
+**--input, -i**
+
+Option to download input files.
+
+**--output, -o**
+
+Option to download output files.
 
 ### `info`
 Retrieve detailed information about a specific task.
@@ -43,7 +47,7 @@ Retrieve detailed information about a specific task.
 inductiva tasks info TASK_ID
 ```
 
-### `kill`
+### `kill` [\[flags\]](#flags)
 Kill a running task. 
 ```sh
 inductiva tasks kill TASK_ID
@@ -54,6 +58,19 @@ does not stop the machine where the task was running: it just terminates the
 task, leaving the computational resources where it was running ready for
 taking other tasks.
 
+#### flags
+**--wait-timeout, -w**
+
+Number of seconds to wait for the kill command. If not provided, the system sends the request without waiting a response.
+
+**--yes, -y**
+
+Skip kill confirmation.
+
+**--all**
+
+Kill all running tasks.
+
 ### `last-modified-file`
 
 Displays the last modified file of a task.
@@ -62,12 +79,17 @@ Displays the last modified file of a task.
 inductiva tasks last-modified-file TASK_ID
 ```
 
-### `list`
-List all tasks associated with your account.
+### `list` [\[flags\]](#flags)
+List all tasks associated with your account. By default, the command lists 10 tasks, unless specifying [`-n`](#flags) flag.
 
 ```sh
 inductiva tasks list
 ```
+
+#### flags
+**--last-n, -n**
+
+List last `N` tasks.
 
 ### `list-files`
 Show the current files of a running task.
@@ -159,6 +181,11 @@ MiB Swap:      0.0 total,      0.0 free,      0.0 used.  14656.3 avail Mem
       4 root       0 -20       0      0      0 I   0.0   0.0   0:00.00 rcu_par+
 ...
 ```
+
+## Flags
+### `-h, --help`
+
+Show help message and exit.
 
 ## Need Help?
 Run the following command for more details:
