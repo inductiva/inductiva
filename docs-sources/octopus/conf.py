@@ -92,6 +92,9 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 shared_static_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "_shared_static"))
+
+sys.path.insert(0, shared_static_path)
+
 html_static_path = ['_static', shared_static_path]
 html_css_files = [
     'css/custom.css',
@@ -117,5 +120,5 @@ version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/octopus'
 
 def setup(app):
-    from _static.banner_directive import BannerDirective
+    from banner_directive import BannerDirective
     app.add_directive("banner", BannerDirective)
