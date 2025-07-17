@@ -1,6 +1,7 @@
 from docutils import nodes
 from docutils.parsers.rst import Directive
 
+
 class BannerDirective(Directive):
     required_arguments = 0
     option_spec = {
@@ -9,8 +10,7 @@ class BannerDirective(Directive):
 
     def run(self):
         origin = self.options.get("origin", "")
-        html = (
-            f'''
+        html = (f'''
             <div class="banner">
                 <div class="banner-content">
                 <div class="text">
@@ -24,6 +24,5 @@ class BannerDirective(Directive):
                 </div>
                 </div>
             </div>
-            '''
-        )
+            ''')
         return [nodes.raw('', html, format='html')]

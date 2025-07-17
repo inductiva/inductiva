@@ -89,10 +89,7 @@ shared_static_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "_shared_static"))
 html_static_path = ['_static', shared_static_path]
 
-html_css_files = [
-    'css/custom.css',
-    'css/banner.css'
-]
+html_css_files = ['css/custom.css', 'css/banner.css']
 pygments_style = "monokai"
 
 html_title = 'FDS'
@@ -117,6 +114,8 @@ html_js_files = [
 ]
 
 sys.path.insert(0, shared_static_path)
+
+
 def setup(app):
     from banner_directive import BannerDirective
     app.add_directive("banner", BannerDirective)
