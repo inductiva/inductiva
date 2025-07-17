@@ -1,3 +1,9 @@
+(auth)=
+# auth
+:::{.visually-hidden}
+# auth
+:::
+
 # $ inductiva **auth** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
 
 The `inductiva auth` command allows you to manage your

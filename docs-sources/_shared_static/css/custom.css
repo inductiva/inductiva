@@ -1378,3 +1378,7 @@ footer {
 .cta-button:hover {
 	background-color: var(--purple-hover-color);
 }
+
+.visually-hidden {
+    display: none;
+}
