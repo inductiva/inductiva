@@ -28,7 +28,7 @@ class TaskStep(BaseModel):
     TaskStep
     """
 
-    # noqa: E501
+  # noqa: E501
     type: StrictStr
     start_timestamp: datetime
     duration: Optional[Union[StrictFloat, StrictInt]] = None

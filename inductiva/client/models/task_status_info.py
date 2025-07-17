@@ -30,7 +30,7 @@ class TaskStatusInfo(BaseModel):
     TaskStatusInfo
     """
 
-    # noqa: E501
+  # noqa: E501
     machine_id: Optional[StrictStr] = None
     status: TaskStatusCode
     timestamp: datetime

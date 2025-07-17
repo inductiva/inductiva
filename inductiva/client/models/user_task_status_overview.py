@@ -27,7 +27,7 @@ class UserTaskStatusOverview(BaseModel):
     UserTaskStatusOverview
     """
 
-    # noqa: E501
+  # noqa: E501
     status_counts: Dict[str, StrictInt]
     __properties: ClassVar[List[str]] = ["status_counts"]
 
