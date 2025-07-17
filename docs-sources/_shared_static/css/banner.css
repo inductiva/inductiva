@@ -5,6 +5,9 @@
   max-width: 1000px;
   margin: 4rem auto;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  display: flex;
+	flex-wrap: wrap;
+	border: var(--cta-container-border);
 }
 
 .banner-content {
