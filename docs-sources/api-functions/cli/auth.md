@@ -1,4 +1,4 @@
-# $ inductiva **auth [\[subcommands\]](#subcommands) [\[flags\]](#flags)**
+# $ inductiva **auth** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
 
 The `inductiva auth` command allows you to manage your
 authentication on Inductiva API.
@@ -34,7 +34,7 @@ Please paste your API Key here:
 ```
 
 At this stage, please copy paste your personal API key that is available
-from your [User Account] (https://console.inductiva.ai/account/profile)
+from your [User Account](https://console.inductiva.ai/account/profile)
 page in the Web Console.  Once authenticated, your credentials will be
 stored locally for future sessions using that machine.
 
