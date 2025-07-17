@@ -95,6 +95,7 @@ shared_static_path = os.path.abspath(
 html_static_path = ['_static', shared_static_path]
 html_css_files = [
     'css/custom.css',
+    'css/banner.css'
 ]
 pygments_style = "monokai"
 
