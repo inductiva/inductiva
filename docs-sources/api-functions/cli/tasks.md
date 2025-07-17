@@ -9,26 +9,6 @@ you are run on Inductiva.
 ### `download` [\[flags\]](#flags-for-download)
 Downloads the **output** of completed tasks to your local computer. 
 
-<div style="display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap;">
-
-  <div style="flex: 1; min-width: 250px;">
-    <h4>Flags</h4>
-    <ul>
-      <li><code>--filenames=&lt;file&gt;</code><br/>Names of specific files to download.</li>
-      <li><code>--dir=&lt;directory&gt;</code><br/>Specify a custom output directory.</li>
-      <li><code>--input, -i</code><br/>Download input files.</li>
-      <li><code>--output, -o</code><br/>Download output files.</li>
-    </ul>
-  </div>
-
-  <div style="flex: 1; min-width: 300px; background: #111; padding: 1rem; border-radius: 8px;">
-    <pre><code>inductiva tasks download TASK_ID
-inductiva tasks download TASK_1_ID TASK_2_ID
-inductiva tasks download TASK_ID --filenames result.txt</code></pre>
-  </div>
-
-</div>
-
 ```sh
 inductiva tasks download TASK_ID
 ```
@@ -83,6 +63,15 @@ does not stop the machine where the task was running: it just terminates the
 task, leaving the computational resources where it was running ready for
 taking other tasks.
 
+For a specific task, we will get something like:
+```sh
+$ inductiva tasks kill cmvsc9qhz5iy86f6pef8uyxqt
+You are about to kill the following tasks:
+  - cmvsc9qhz5iy86f6pef8uyxqt 
+Are you sure you want to proceed (y/[N])? y
+Successfully sent kill request for task cmvsc9qhz5iy86f6pef8uyxqt.
+```
+
 <h4 id="flags-for-kill">Flags</h4>
 
 **`--wait-timeout, -w`**
@@ -109,6 +98,18 @@ Displays the last modified file of a task.
 inductiva tasks last-modified-file TASK_ID
 ```
 
+Get the last modified file of a task:
+
+```sh
+inductiva tasks last-modified-file qpusar8bch509k56g1hvv5yxk
+
+Most Recent File: /mnt/disks/task-runner-data/workdir/qpusar8bch509k56g1hvv5yxk/output/artifacts/stdout.txt
+Modification Time: 2025-04-03 12:58:49
+Current Time on Machine: 2025-04-03 12:58:50
+
+Time Since Last Modification: 0:00:01
+```
+
 ### `list` [\[flags\]](#flags-for-list)
 List all tasks associated with your account. By default, the command lists 10 tasks, unless specifying `-n` flag.
 
@@ -122,13 +123,30 @@ inductiva tasks list
 
 List last `N` tasks.
 
+List the last four tasks with their details:
+
+```sh
+$ inductiva tasks list -n 4
+       ID                              SIMULATOR          STATUS         SUBMITTED              STARTED                COMPUTATION TIME         RESOURCE TYPE
+       jxwt0rm8s8xspdfcegtgkkana       splishsplash       started        08 Feb, 13:25:49       08 Feb, 13:26:04       *0:00:05                 c2-standard-4
+       n0zcac8rmw7xydbis3m407kb4       splishsplash       started        08 Feb, 13:25:48       08 Feb, 13:26:03       *0:00:07                 c2-standard-4
+       8nmpn4h99nyfpo4da9jw2405q       splishsplash       started        08 Feb, 13:25:47       08 Feb, 13:26:02       *0:00:09                 c2-standard-4
+       so6i93pi74b89rndircubp3v2       splishsplash       started        08 Feb, 13:25:47       08 Feb, 13:26:02       *0:00:10                 c2-standard-4
+```
+
+---
+
 **`--all, -a`**
 
 List all tasks.
 
+---
+
 **`--id, -i`**
 
 List a task with a specific ID.
+
+---
 
 **`--project-name, -p=<project>`**
 
@@ -154,6 +172,8 @@ inductiva tasks tail TASK_ID FILENAME
 
 Number of lines to show.
 
+---
+
 **`--follow, -f`**
 
 Number of lines to show.
@@ -164,55 +184,6 @@ Displays the output of the `top` command from the machine running the task.
 
 ```sh
 inductiva tasks top TASK_ID
-```
-
-## Example Usage
-
-List all tasks:
-
-```sh
-inductiva tasks list
-```
-
-List the last four tasks with their details
-
-```sh
-$ inductiva tasks list -n 4
-       ID                              SIMULATOR          STATUS         SUBMITTED              STARTED                COMPUTATION TIME         RESOURCE TYPE
-       jxwt0rm8s8xspdfcegtgkkana       splishsplash       started        08 Feb, 13:25:49       08 Feb, 13:26:04       *0:00:05                 c2-standard-4
-       n0zcac8rmw7xydbis3m407kb4       splishsplash       started        08 Feb, 13:25:48       08 Feb, 13:26:03       *0:00:07                 c2-standard-4
-       8nmpn4h99nyfpo4da9jw2405q       splishsplash       started        08 Feb, 13:25:47       08 Feb, 13:26:02       *0:00:09                 c2-standard-4
-       so6i93pi74b89rndircubp3v2       splishsplash       started        08 Feb, 13:25:47       08 Feb, 13:26:02       *0:00:10                 c2-standard-4
-```
-
-```sh
-inductiva tasks info --id TASK_ID
-```
-
-Terminate a task:
-
-```sh
-inductiva tasks kill --id TASK_ID
-```
-For a specific task, we will get something like:
-```sh
-$ inductiva tasks kill cmvsc9qhz5iy86f6pef8uyxqt
-You are about to kill the following tasks:
-  - cmvsc9qhz5iy86f6pef8uyxqt 
-Are you sure you want to proceed (y/[N])? y
-Successfully sent kill request for task cmvsc9qhz5iy86f6pef8uyxqt.
-```
-
-Get the last modified file of a task:
-
-```sh
-inductiva tasks last-modified-file qpusar8bch509k56g1hvv5yxk
-
-Most Recent File: /mnt/disks/task-runner-data/workdir/qpusar8bch509k56g1hvv5yxk/output/artifacts/stdout.txt
-Modification Time: 2025-04-03 12:58:49
-Current Time on Machine: 2025-04-03 12:58:50
-
-Time Since Last Modification: 0:00:01
 ```
 
 Display the processes running on the machine where the task is running:
