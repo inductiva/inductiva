@@ -18,14 +18,14 @@
   max-width: 60%;
 }
 
-.headline {
+.banner .text p.headline {
   font-size: 1.5rem;
   font-weight: 600;
   color: var(--cta-container-text-color);
   margin: 0;
 }
 
-.subtext {
+.banner .text p.subtext {
   font-size: 1.5rem;
   font-weight: 700;
   color: #2563eb;
