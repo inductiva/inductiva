@@ -20,7 +20,6 @@ class BannerDirective(Directive):
                 <div class="buttons">
                     <button onclick="window.open('https://console.inductiva.ai/?utm_source=guide_{origin}&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="btn primary">
                     <span class="btn-main">Get Started</span>
-                    <span class="btn-sub">Free</span>
                     </button>
                 </div>
                 </div>
