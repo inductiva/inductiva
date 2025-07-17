@@ -6,7 +6,7 @@ you are run on Inductiva.
 
 ## Subcommands
 
-### `download` [\[flags\]](#download-flags)
+### `download` [\[flags\]](#down-flags)
 Downloads the **output** of completed tasks to your local computer. 
 
 ```sh
@@ -24,7 +24,7 @@ $ inductiva tasks download TASK_1_ID_ TASK_2_ID
 You can download specific files from the output of the task by 
 setting the `--filenames` flag.
 
-#### #### Flags <span id="download-flags"></span>
+#### Flags <span id="down-flags"></span>
 
 **`--filenames`**
 
