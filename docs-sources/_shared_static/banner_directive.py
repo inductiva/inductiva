@@ -10,10 +10,21 @@ class BannerDirective(Directive):
     def run(self):
         origin = self.options.get("origin", "")
         html = (
-            f'''<div class="banner">
-                <h2>FROM: {origin}. Start running simulations seamlessly!</h2>
-                <p>You have <strong>$5</strong> in free credits, no credit card required.</p>
-                <button class="sign-in-btn">Sign In</button>
-            </div>'''
+            f'''
+            <div class="banner">
+                <div class="banner-content">
+                <div class="text">
+                    <p class="headline">Ready to dive in?</p>
+                    <p class="subtext">Start your free trial today.</p>
+                </div>
+                <div class="buttons">
+                    <button class="btn primary">
+                    <span class="btn-main">Get Started</span>
+                    <span class="btn-sub">Free</span>
+                    </button>
+                </div>
+                </div>
+            </div>
+            '''
         )
         return [nodes.raw('', html, format='html')]
