@@ -62,7 +62,7 @@ Criteria to order results by. Options:
 
 ---
 
-***`--sort-order, -s`** (default: `desc`)
+**`--sort-order, -s`** (default: `desc`)
 
 Order direction of the listing. Options:
 

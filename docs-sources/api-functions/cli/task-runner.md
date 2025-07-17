@@ -25,6 +25,7 @@ inductiva task-runner launch MACHINE_GROUP_NAME
 **`--watch, --w`**
 
 Enable watch mode to monitor the task-runner's status.
+
 ---
 
 **`--hostname, --ho`**

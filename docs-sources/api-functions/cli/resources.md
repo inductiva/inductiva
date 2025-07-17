@@ -1,5 +1,4 @@
-# inductiva **esources** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
-
+# inductiva **resources** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
 The `inductiva resources` command provides utilities for managing computational resources. It allows users to estimate costs, check available machine types, list their active resources, and terminate them.
 
 ## Subcommands
@@ -87,7 +86,7 @@ Filter the available types by provider. Options:
 - `LOCAL`: list locally available machine types.
 - `GCP`: list machine types available in GCP
 
-### `list` (alias: `ls`)
+### `list ls`
 List all active computational resources associated with your account.
 
 This subcommand provides a complete snapshot of your currently running resources, including details such as machine type, whether it's elastic or spot-based, the number of active machines, and pricing.

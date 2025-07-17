@@ -2,8 +2,8 @@
 
 The `inductiva containers` command provides utilities for managing custom user containers. It allows users to convert Docker images into Apptainer-compatible .sif files and upload them to their Inductiva private storage for use in simulations.
 
-###  Subcommands
-## `convert`
+##  Subcommands
+### `convert`
 
 Transforms a local or remote Docker image into a `.sif` file using Apptainer. 
 This can be useful for users that want to see the conversion result and test the SIF file before uploading it to the remote storage. 
@@ -24,7 +24,7 @@ inductiva containers convert my-image:latest ./my-image.sif
 inductiva containers convert docker://python:3.11-slim ./python.sif
 ```
 
-## `upload`
+### `upload`
 
 Converts a Docker image to a `.sif` file and uploads it to the user's Inductiva private storage.
 
@@ -45,7 +45,7 @@ inductiva containers upload my-simulation-image
 inductiva containers upload docker://su2code/su2:latest my-containers/su2-cfd.sif
 ```
 
-## `list (ls)` [\[flags\]](#flags-for-list)
+### `list (ls)` [\[flags\]](#flags-for-list)
 List all container files stored in remote storage. If no folder is provided, it defaults to the `my-containers` directory.
 
 ```bash
@@ -77,7 +77,7 @@ Total storage size used:
 
 Limits the number of results returned.
 
-## `remove (rm)` [\[flags\]](#flags-for-remove)
+### `remove (rm)` [\[flags\]](#flags-for-remove)
 
 Delete a container file from your Inductiva remote storage.
 This action is **permanent** and cannot be undone — use with caution.
