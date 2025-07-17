@@ -117,3 +117,10 @@ if __name__ == "__main__":
     create_gif_from_images(output_path, gif_save_path)
 
 ```
+
+<div class="cta-bar">
+  <div class="cta-text">
+    <strong>Kickstart your simulations!</strong> You have $5 in <strong>free credits</strong>, no credit card required.
+  </div>
+ <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_amr-wind&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
+</div>

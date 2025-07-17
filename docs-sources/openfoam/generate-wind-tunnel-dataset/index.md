@@ -21,7 +21,7 @@ In this tutorial, we'll walk through how to:
   <div class="cta-text">
     <strong>Ready to dive in?</strong> Sign in to get started with $5 of <strong>free credits</strong>. No credit card needed!
   </div>
-  <button  onclick="window.open('https://console.inductiva.ai/', '_blank')" target="_blank" class="cta-button">Sign In</button>
+  <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_openfoam&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
 </div>
 
 
