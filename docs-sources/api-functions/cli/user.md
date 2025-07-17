@@ -2,6 +2,11 @@
 
 The `inductiva user` command allows you to view information about your Inductiva account, including available credits and active quotas.
 
+````{eval-rst}
+.. seealso::
+   For complete API documentation, see the `Users <https://inductiva.ai/guides/api-functions/api/inductiva.users>`_ class documentation
+````
+
 ## Subcommands
 
 ### `info`

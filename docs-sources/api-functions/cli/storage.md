@@ -5,6 +5,11 @@ The `inductiva storage` command allows you to manage your remote storage on the 
 Inductiva provides a [remote storage](../../how-it-works/cloud-storage/index.md) system where users can store and manage
 files related to their tasks. This command lets you list, download, remove, and calculate the total storage usage of your stored data.
 
+````{eval-rst}
+.. seealso::
+   For complete API documentation, see the `Storage <https://inductiva.ai/guides/api-functions/api/inductiva.storage>`_ class documentation
+````
+
 ## Subcommands
 
 ### `list (ls)` [\[flags\]](#flags-for-list)

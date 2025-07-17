@@ -3,6 +3,11 @@
 The `inductiva simulators` command provides utility subcommands 
 for managing the available simulators within the Inductiva API.
 
+````{eval-rst}
+.. seealso::
+   For complete API documentation, see the `Simulators <https://inductiva.ai/guides/api-functions/api/inductiva.simulators>`_ class documentation
+````
+
 ## Subcommands
 ### `list (ls)`
 List the available simulators in the Inductiva API, including the supported versions.

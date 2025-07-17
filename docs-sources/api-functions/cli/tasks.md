@@ -2,6 +2,11 @@
 The `inductiva tasks` command allows you to inspect and manage all the tasks
 you run on Inductiva.
 
+````{eval-rst}
+.. seealso::
+   For complete API documentation, see the `Tasks <https://inductiva.ai/guides/api-functions/api/inductiva.tasks>`_ class documentation
+````
+
 ## Subcommands
 
 ### `download` [\[flags\]](#flags-for-download)

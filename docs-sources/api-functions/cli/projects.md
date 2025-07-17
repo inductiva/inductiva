@@ -6,6 +6,11 @@ Projects in Inductiva serve as folders for organizing tasks.
 Using the CLI, you can list your projects and retrieve the
 outputs of all tasks in a specific projects.
 
+````{eval-rst}
+.. seealso::
+   For complete API documentation, see the `Projects <https://inductiva.ai/guides/api-functions/api/inductiva.projects>`_ class documentation
+````
+
 ## Subcommands
 
 ### `list (ls)`

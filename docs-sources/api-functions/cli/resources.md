@@ -1,6 +1,11 @@
 # inductiva **resources** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
 The `inductiva resources` command provides utilities for managing computational resources. It allows users to estimate costs, check available machine types, list their active resources, and terminate them.
 
+````{eval-rst}
+.. seealso::
+   For complete API documentation, see the `Simulators <https://inductiva.ai/guides/api-functions/api/inductiva.resources>`_ class documentation
+````
+
 ## Subcommands
 ### `start`
 Start computational resources.
