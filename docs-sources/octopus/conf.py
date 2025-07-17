@@ -41,7 +41,6 @@ myst_enable_extensions = [
     # other MyST extensions
 ]
 
-html_static_path = ['_static']
 html_js_files = [
     'discord.js',
 ]

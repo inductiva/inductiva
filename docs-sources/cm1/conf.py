@@ -112,7 +112,6 @@ language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/cm1'
 
-html_static_path = ['_static']
 html_js_files = [
     'discord.js',
 ]
