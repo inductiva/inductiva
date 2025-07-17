@@ -1,16 +1,19 @@
+"""Python directive for sphinx banner_small"""
 from docutils import nodes
 from docutils.parsers.rst import Directive
 
 
 class BannerDirective(Directive):
+    """Python directive for sphinx banner_small"""
     required_arguments = 0
     option_spec = {
         'origin': str,
     }
 
     def run(self):
-        origin = self.options.get("origin", "")
-        html = (f'''
+        origin = self.options.get('origin', '')
+        # pylint: disable=line-too-long
+        html = f'''
             <div class="banner">
                 <div class="banner-content">
                 <div class="text">
@@ -24,5 +27,5 @@ class BannerDirective(Directive):
                 </div>
                 </div>
             </div>
-            ''')
+            '''
         return [nodes.raw('', html, format='html')]
