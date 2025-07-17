@@ -1,16 +1,9 @@
 window.addEventListener("DOMContentLoaded", function () {
   const themeButton = document.querySelector("nav button[aria-label='Color theme switcher']");
 
-  const pathParts = window.location.pathname.split('/');
-  const simulatorIndex = pathParts.indexOf('guides') + 1;
-  const simulator = pathParts[simulatorIndex];
-
-  // Construct the static path
-  const staticPath = `/builds/${simulator}/_static/`;
-
   if (themeButton && !document.getElementById("discord-icon")) {
     const img = document.createElement("img");
-    img.src = staticPath+"Discord-Symbol-Blurple.svg";
+    img.src = "/builds/_static_const/Discord-Symbol-Blurple.svg";
     img.alt = "Discord";
     img.id = "discord-icon";
     img.style.cssText = `
