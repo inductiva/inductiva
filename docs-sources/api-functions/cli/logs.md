@@ -1,38 +1,15 @@
-# logs
+# inductiva **logs** [\[flags\]](#flags)
 
-The `inductiva logs` command allows you to stream the standard output (STDOUT) of a running task in real-time. This is useful for monitoring live execution progress.
-
-## Usage
+The `inductiva logs` command allows you to stream the standard output (STDOUT and STDERR) of a running task in real-time. This is useful for monitoring live execution progress.
 
 ```sh
-inductiva logs [-h] [--stdout] [--stderr] [--no-color] [--wait] [mode] <task_id>
+inductiva logs <TASK_ID>
 ```
 
-### Description
-This command will stream the logs being written to STDOUT and STDERR by a running task. 
-Logs can only be streamed while the task is still in progress. If the task has finished
-or transitioned to another status, logs will not be available for streaming.
-
-## Options
-
-- **`-h, --help`** → Show help message and exit.
-- **`--stdout`** → Stream only the standard output (STDOUT) of the task.
-- **`--stderr`** → Stream only the standard error (STDERR) output of the task.
-- **`--no-color`** → Disable colored output for better readability in plain-text environments.
-- **`--wait, -w`** → Wait for the task to start running before streaming logs. If omitted, the logs are streamed immediately or return an error if the task is not running.
-
-## Example Usage
-
-### Stream logs of a specific task:
-```sh
-inductiva logs <task_id>
-```
-
+> Note: Logs can only be streamed while the task is still **in progress**. If the task has finished or transitioned to another status, logs will not be available for streaming.
 
 Here's an example of how you can use the `logs` subcommand to check how your
-simulation is progressing. In this case, we are trying to tracking the computation
-steps, residuals, and execution times of an OpenFOAM simulation to see if everything
-is evolving as expected, in realtime:
+simulation is progressing. In this case, we are tracking the task of an [OpenFOAM](../../openfoam/index.md) simulation:
 
 ```bash
 # Stream logs in real time for a specific task
@@ -102,21 +79,34 @@ timer per step: 0.00873
 ------------------------------------
 ```
 
+## Flags
+### `-h, --help`
 
-### Stream only the error logs of a running task:
-```sh
-inductiva logs <task_id> --stderr
-```
+Show help message and exit.
 
-### Wait for a task to start before streaming logs:
-```sh
-inductiva logs <task_id> --wait
-```
+---
 
-### Stream logs without color formatting:
-```sh
-inductiva logs <task_id> --no-color
-```
+### `--stdout`
+
+Stream only the standard output (STDOUT) of the task.
+
+---
+
+### `--stderr`
+
+Stream only the standard error (STDERR) output of the task.
+
+---
+
+### `--no-color`
+
+Disable colored output for better readability in plain-text environments.
+
+---
+
+### `--wait, -w`
+
+Wait for the task to start running before streaming logs. If omitted, the logs are streamed immediately or return an error if the task is not running.
 
 ## Need Help?
 Run the following command for more details:

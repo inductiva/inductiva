@@ -1,25 +1,13 @@
-# projects
+# inductiva **projects** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
 
 The `inductiva projects` command provides utilities to manage and
-retrieve information about your projects. You can list all your projects
-and download associated task files.
+retrieve information about your projects.
 
-## Usage
-
-```sh
-inductiva projects [-h] {download,list} ...
-```
-
-### Description
 Projects in Inductiva serve as folders for organizing tasks.
 Using the CLI, you can list your projects and retrieve the
 outputs of all tasks in a specific projects.
 
-## Options
-
-- **`-h, --help`** → Show help message and exit.
-
-## Available Subcommands
+## Subcommands
 
 ### `list (ls)`
 List all existing projects associated with your account.
@@ -34,24 +22,47 @@ or using the alias:
 inductiva projects ls
 ```
 
-### `download`
-Download the task files of a specific project.
+### `download` [\[flags\]](#flags-for-download)
+Download the task files of a specific project. By default, the outputs of  the project's tasks will be
+download to a directory named `inductiva_output/{TASK_ID}/outputs`.
 
 ```sh
-inductiva projects download <project_id>
+inductiva projects download <PROJECT_NAME>
 ```
 
-## Example Usage
+<h4 id="flags-for-download">Flags</h4>
 
-### List all projects:
+**`--output-dir=<directory>`**
+
+Specify the directory to save the downloaded files.
+
+---
+
+**`--files=<filename>`**
+
+Specify the files from every project's task you want to download.
+
+For example, you can download the `stderr.txt` and `system_metrics.csv` of every task in the `default` project by doing:
+
 ```sh
-inductiva projects list
+$ inductiva projects download default --files stderr.txt system_metrics.csv
+    Downloading simulation files to inductiva_output/g4z2navzczzcb66oqbkyfoqdn/outputs...
+    Downloading simulation files to inductiva_output/0x6u6ccj3mmhzpa03xnxknrog/outputs...
+    Partial download completed to inductiva_output/g4z2navzczzcb66oqbkyfoqdn/outputs.
+    Partial download completed to inductiva_output/0x6u6ccj3mmhzpa03xnxknrog/outputs.
+    ...
 ```
 
-### Download the task files for a specific project:
-```sh
-inductiva projects download my_project_id
-```
+---
+
+**`--std`**
+
+Download the standard output and error files.
+
+## Flags
+### `-h, --help`
+
+Show help message and exit.
 
 ## Need Help?
 Run the following command for more details:

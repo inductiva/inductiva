@@ -11,12 +11,12 @@ auth <cli/auth>
 user <cli/user>
 tasks <cli/tasks>
 task-runner <cli/task-runner>
-cli/logs
-cli/projects
-cli/storage
-cli/resources
-cli/simulators
-cli/containers
+logs <cli/logs>
+projects <cli/projects>
+storage <cli/storage>
+resources <cli/resources>
+simulators <cli/simulators>
+containers <cli/containers>
 cli/faq
 ```
 

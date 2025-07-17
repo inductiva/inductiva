@@ -8,7 +8,7 @@ you run on Inductiva.
 Downloads the **output** of completed tasks to your local computer. 
 
 ```sh
-inductiva tasks download TASK_ID
+inductiva tasks download <TASK_ID>
 ```
 By default, the outputs of  the task (multiple files) will be
 stored in a local directory named `inductiva_output/{TASK_ID}/outputs` inside
@@ -16,7 +16,7 @@ your project directory.
 
 You can also download the outputs from multiple tasks:
 ```bash
-$ inductiva tasks download TASK_1_ID_ TASK_2_ID
+$ inductiva tasks download <TASK_1_ID> <TASK_2_ID>
 ```
 
 <h4 id="flags-for-download">Flags</h4>
@@ -47,13 +47,13 @@ Option to download output files.
 Retrieve detailed information about a specific task.
 
 ```sh
-inductiva tasks info TASK_ID
+inductiva tasks info <TASK_ID>
 ```
 
 ### `kill` [\[flags\]](#flags-for-kill)
 Kill a running task. 
 ```sh
-inductiva tasks kill TASK_ID
+inductiva tasks kill <TASK_ID>
 ```
 The kill subcommand will prompt you for a confirmation so that you do not
 accidentally kill an important task.
@@ -92,7 +92,7 @@ Kill all running tasks.
 Displays the last modified file of a task.
 
 ```sh
-inductiva tasks last-modified-file TASK_ID
+inductiva tasks last-modified-file <TASK_ID>
 ```
 
 Get the last modified file of a task:
@@ -153,14 +153,14 @@ List the tasks of a project.
 Show the current files of a running task.
 
 ```sh
-inductiva tasks list-files TASK_ID
+inductiva tasks list-files <TASK_ID>
 ```
 
 ### `tail` [\[flags\]](#flags-for-tail)
 Display the last lines of a **running** task’s file output.
 
 ```sh
-inductiva tasks tail TASK_ID FILENAME
+inductiva tasks tail <TASK_ID> <FILENAME>
 ```
 
 <h4 id="flags-for-tail">Flags</h4>
@@ -180,7 +180,7 @@ Number of lines to show.
 Displays the output of the `top` command from the machine running the task.
 
 ```sh
-inductiva tasks top TASK_ID
+inductiva tasks top <TASK_ID>
 ```
 
 Display the processes running on the machine where the task is running:

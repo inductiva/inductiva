@@ -1,53 +1,20 @@
-# containers
+# inductiva **containers** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
 
-The inductiva containers command provides utilities for managing custom user containers. It allows users to convert Docker images into Apptainer-compatible .sif files and upload them to their Inductiva private storage for use in simulations.
+The `inductiva containers` command provides utilities for managing custom user containers. It allows users to convert Docker images into Apptainer-compatible .sif files and upload them to their Inductiva private storage for use in simulations.
 
-# Usage
+###  Subcommands
+## `convert`
 
-```bash
-inductiva containers [-h] {convert,upload}
-```
-
-### Description
-This command enables users to:
-
-- Convert a local or remote Docker image into a Singularity Image Format (SIF) file.
-
-- Converts a docker image to SIF file and uploads to Inductiva’s remote storage, making it available for use with the Inductiva API.
-
-- List the containers default folder for visualization of container sizes and costs
-
-###  Available Subcommands
-
-- `convert` → Convert a Docker image into a `.sif` file.
-
-- `upload` → Convert and upload a Docker image directly to your Inductiva storage.
-
-- `list` → Displays the `my-containers` default folder.
-
-
-## convert
-
-The convert subcommand transforms a Docker image into a `.sif` file using Apptainer. 
+Transforms a local or remote Docker image into a `.sif` file using Apptainer. 
 This can be useful for users that want to see the conversion result and test the SIF file before uploading it to the remote storage. 
 
 ```bash
-inductiva containers convert [-h] <image> <output>
+inductiva containers convert <IMAGE> <OUTPUT>
 ```
+- `<IMAGE>` is the Docker image reference. Can be a Docher Hub reference (docker:// URL), a local image (name or ID) or a `.tar` archive exported from Docker.
+- `<OUTPUT>` is the local path to save the resulting `.sif` file.
 
-### Positional Arguments
-`image` → The Docker image to convert. Accepts:
-
-- A local image name or ID (e.g., my-image:latest)
-
-- A Docker Hub reference (e.g., docker://username/image:tag)
-
-- A .tar archive exported from Docker.
-
-`output` → The local path where the .sif file should be saved.
-
-
-### Example
+Sample usage:
 
 ```bash
 # Convert a local image to SIF
@@ -57,31 +24,18 @@ inductiva containers convert my-image:latest ./my-image.sif
 inductiva containers convert docker://python:3.11-slim ./python.sif
 ```
 
-## upload
+## `upload`
 
-The upload subcommand both converts a Docker image to a .sif file and uploads it to the user's Inductiva private storage.
-
-
-### Usage
+Converts a Docker image to a `.sif` file and uploads it to the user's Inductiva private storage.
 
 ```bash
-inductiva containers upload [-h] <image> [output_path]
+inductiva containers upload <IMAGE> [OUTPUT_PATH]
 ```
+- `<IMAGE>` is the Docker image reference. Can be a Docher Hub reference (docker:// URL), a local image (name or ID) or a `.tar` archive exported from Docker.
+- `<OUTPUT_PATH>` is the path where the `.sif` file will be stored in Inductiva storage.
+Defaults to: `my-containers/<image-name>.sif` if omitted.
 
-### Positional Arguments
-`image` → The Docker image to convert. Accepts:
-
-- A local image name or ID
-
-- A Docker Hub reference (e.g., docker://nginx:latest)
-
-- A .tar archive exported from Docker.
-
-
-`output_path` (optional) → Path where the .sif file will be stored in Inductiva storage.
-Defaults to: my-containers/<image-name>.sif if omitted.
-
-### Example
+Sample usage:
 
 ```bash
 # Convert and upload a local Docker image
@@ -90,26 +44,23 @@ inductiva containers upload my-simulation-image
 # Convert and upload a Docker Hub CFD image (SU2) with a custom storage path
 inductiva containers upload docker://su2code/su2:latest my-containers/su2-cfd.sif
 ```
-## list
 
-The list, or ls, subcommand will display the user's default container folder (my-containers).
-Where all of the existing containers can be visualized and their size / cost to keep are displayed.
-
-### Usage
+## `list (ls)` [\[flags\]](#flags-for-list)
+List all container files stored in remote storage. If no folder is provided, it defaults to the `my-containers` directory.
 
 ```bash
-inductiva containers list [-h]
+inductiva containers list [<FOLDER>]
 ```
 
-### Positional Arguments
+List container files from a specific folder:
+```sh
+inductiva containers list my-containers/project-a
+```
 
-`folder` (optional) → Path to show the content.
-`m` (optional) → max results to display.
-
-### Example
+Sample output:
 
 ```bash
-➜  inductiva containers ls
+$ inductiva containers ls
  NAME             SIZE        CREATION TIME
  container1.sif   200.00 MB   26/03, 16:41:14
  container2.sif   100.00 MB   26/03, 16:41:14
@@ -120,23 +71,24 @@ Total storage size used:
         Cost: YYY US$/month
 ```
 
-## remove
+<h4 id="flags-for-list">Flags</h4>
 
-The remove (or rm) subcommand deletes a container file from your Inductiva remote storage. This action is irreversible and should be used with caution.
+**`--max-results, -m`** (default:10)
 
+Limits the number of results returned.
+
+## `remove (rm)` [\[flags\]](#flags-for-remove)
+
+Delete a container file from your Inductiva remote storage.
+This action is **permanent** and cannot be undone — use with caution.
+
+If no folder is provided, it defaults to `my-containers`.
 
 ```bash
-inductiva containers remove [-h] -n <name> [folder] [-y]
+inductiva containers remove [<FOLDER>]
 ```
 
-
-### Positional Arguments
-
-`folder` (optional) → Folder path in remote storage. Defaults to my-containers.
-`-n, --name` (required) → The name of the container file to remove.
-`-y, --yes` (optional) → Skip confirmation prompt before deletion.
-
-### Example
+Sample usage:
 
 ```bash
 # Remove a container with confirmation
@@ -149,5 +101,26 @@ inductiva containers rm -n nginx.sif -y
 inductiva containers rm my-custom-folder -n my-container.sif
 ```
 
-If the container is found, the CLI will prompt you for confirmation unless the --yes flag is used.
+<h4 id="flags-for-remove">Flags</h4>
 
+**`--name, -n`** (required)
+
+The name of the container file to be removed.
+
+---
+
+**`--yes, -y`**
+
+Skip the confirmation prompt and delete the container immediately.
+
+## Flags
+### `-h, --help`
+
+Show help message and exit.
+
+## Need Help?
+Run the following command for more details:
+
+```sh
+inductiva containers --help
+```

@@ -1,4 +1,4 @@
-# $ inductiva **auth** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
+# inductiva **auth** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
 
 The `inductiva auth` command allows you to manage your
 authentication on Inductiva API.
