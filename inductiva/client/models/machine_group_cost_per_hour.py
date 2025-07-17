@@ -28,7 +28,7 @@ class MachineGroupCostPerHour(BaseModel):
     MachineGroupCostPerHour
     """
 
-  # noqa: E501
+    # noqa: E501
     min: Union[StrictFloat, StrictInt]
     max: Union[StrictFloat, StrictInt]
     current: Optional[Union[StrictFloat, StrictInt]] = None

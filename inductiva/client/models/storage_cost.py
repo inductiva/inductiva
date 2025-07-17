@@ -28,7 +28,7 @@ class StorageCost(BaseModel):
     StorageCost
     """
 
-  # noqa: E501
+    # noqa: E501
     estimated_monthly_cost: Union[StrictFloat, StrictInt]
     currency: Optional[CurrencyCode] = None
     __properties: ClassVar[List[str]] = ["estimated_monthly_cost", "currency"]

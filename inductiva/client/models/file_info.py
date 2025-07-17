@@ -28,7 +28,7 @@ class FileInfo(BaseModel):
     FileInfo
     """
 
-  # noqa: E501
+    # noqa: E501
     name: StrictStr
     size: Optional[StrictInt] = None
     compressed_size: Optional[StrictInt] = None

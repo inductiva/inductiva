@@ -29,7 +29,7 @@ class TaskSubmittedInfo(BaseModel):
     TaskSubmittedInfo
     """
 
-  # noqa: E501
+    # noqa: E501
     id: StrictStr
     status: TaskStatusCode
     position_in_queue: Optional[TaskPositionInQueue] = None

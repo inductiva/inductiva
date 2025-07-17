@@ -110,3 +110,8 @@ ogp_image = "https://inductiva.ai/builds/swash/_static/inductiva-social-banner.j
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/swash'
+
+html_static_path = ['_static']
+html_js_files = [
+    'discord.js',
+]

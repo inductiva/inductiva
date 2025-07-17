@@ -27,7 +27,7 @@ class TaskMetrics(BaseModel):
     TaskMetrics
     """
 
-  # noqa: E501
+    # noqa: E501
     total_seconds: Optional[Union[StrictFloat, StrictInt]] = None
     container_image_download_seconds: Optional[Union[StrictFloat,
                                                      StrictInt]] = None

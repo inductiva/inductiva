@@ -40,7 +40,7 @@ class VMGroupConfig(BaseModel):
     Schema for creating an instance group.
     """
 
-  # noqa: E501
+    # noqa: E501
     max_idle_time: Optional[Union[StrictFloat, StrictInt]] = None
     auto_terminate_ts: Optional[datetime] = None
     id: Optional[StrictStr] = None

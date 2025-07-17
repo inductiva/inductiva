@@ -109,3 +109,8 @@ ogp_image = "https://inductiva.ai/builds/splishsplash/_static/inductiva-social-b
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/splishsplash'
+
+html_static_path = ['_static']
+html_js_files = [
+    'discord.js',
+]

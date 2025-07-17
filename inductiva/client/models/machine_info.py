@@ -28,7 +28,7 @@ class MachineInfo(BaseModel):
     MachineInfo
     """
 
-  # noqa: E501
+    # noqa: E501
     uuid: StrictStr
     cpu_count_logical: StrictInt
     cpu_count_physical: StrictInt
