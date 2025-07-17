@@ -3,7 +3,7 @@ The `inductiva resources` command provides utilities for managing computational 
 
 ````{eval-rst}
 .. seealso::
-   For complete API documentation, see the `Simulators <https://inductiva.ai/guides/api-functions/api/inductiva.resources>`_ class documentation
+   For complete API documentation, see the `Resources <https://inductiva.ai/guides/api-functions/api/inductiva.resources>`_ class documentation
 ````
 
 ## Subcommands
