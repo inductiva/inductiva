@@ -47,7 +47,8 @@ input_dir = inductiva.utils.download_from_url(
 )
 
 # Initialize the Simulator
-cm1 = inductiva.simulators.CM1(version="21.1")
+cm1 = inductiva.simulators.CM1( \
+    version="21.1")
 
 # Run simulation with config files in the input directory
 task = cm1.run(
