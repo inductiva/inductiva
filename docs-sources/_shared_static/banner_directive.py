@@ -2,7 +2,7 @@ from docutils import nodes
 from docutils.parsers.rst import Directive
 
 class BannerDirective(Directive):
-    required_arguments = 1  # e.g. plot type
+    required_arguments = 0
     option_spec = {
         'origin': str,
     }
