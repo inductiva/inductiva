@@ -15,9 +15,8 @@ to more powerful machines.
 
 ## Prerequisites
 
-The required files may be downloaded [here](https://storage.googleapis.com/inductiva-api-demo-files/cm1-les-hurr-bound-layer.zip).
-Note that manual download is not necessary since the simulation script will
-donwload it.
+Download the required files [here](https://storage.googleapis.com/inductiva-api-demo-files/cm1-les-hurr-bound-layer.zip)
+and place them in a folder called `cm1-les-hurr-bound-layer`.
 
 ## Run the Simulation
 
@@ -52,7 +51,7 @@ cm1 = inductiva.simulators.CM1( \
 
 # Run simulation with config files in the input directory
 task = cm1.run(
-    input_dir=input_dir,
+    input_dir="/path/to/cm1-les-hurr-bound-layer",
     sim_config_filename="namelist.input",
     on=cloud_machine,
 )
@@ -139,6 +138,13 @@ depending on the demands of the task. 🚀
 
 If you want to benchmark your own workload in a single script please follow
 this [tutorial](https://inductiva.ai/guides/scale-up/benchmark/run-benchmarks).
+
+<div class="cta-bar">
+  <div class="cta-text">
+    <strong>Start running simulations seamlessly!</strong> You have $5 in <strong>free</strong> credits, no credit card required.
+  </div>
+  <button  onclick="window.open('https://console.inductiva.ai/', '_blank')" target="_blank" class="cta-button">Sign In</button>
+</div>
 
 ## References
 
