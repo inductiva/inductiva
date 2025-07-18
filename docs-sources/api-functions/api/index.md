@@ -21,19 +21,3 @@ Our Python Client is a library that wraps the Inductiva API calls into Python fu
 ## Set Up & Authentication
 
 To get started, follow our [Installation Guide](https://inductiva.ai/guides/how-it-works/get-started/install-guide) to install the [Inductiva Python package](https://pypi.org/project/inductiva/) and set up your environment.
-
-```{toctree}
----
-caption: Python Client
-maxdepth: 2
-hidden: true
----
-benchmarks <inductiva.benchmarks>
-projects <inductiva.projects>
-resources <inductiva.resources>
-storage <inductiva.storage>
-simulators <inductiva.simulators>
-tasks <inductiva.tasks>
-templating <inductiva.templating>
-users <inductiva.users>
-```
