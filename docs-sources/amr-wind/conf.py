@@ -111,6 +111,7 @@ html_baseurl = 'https://inductiva.ai/guides/amr-wind'
 
 html_js_files = [
     'discord.js',
+    'trackAndRedirect.js'
 ]
 
 sys.path.insert(0, shared_static_path)
