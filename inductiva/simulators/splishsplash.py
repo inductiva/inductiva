@@ -1,4 +1,5 @@
 """SplisHSPlasH simulator module of the API."""
+
 from typing import Optional, Tuple, Union
 
 from inductiva import simulators, tasks, types
@@ -24,8 +25,8 @@ class SplishSplash(simulators.Simulator):
     def run(
         self,
         input_dir: Optional[str],
-        *,
         sim_config_filename: str,
+        *,
         commands: Optional[types.Commands] = None,
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
@@ -79,7 +80,7 @@ class SplishSplash(simulators.Simulator):
                 stored.
             vtk_to_obj_vtk_prefix: Prefix of the VTK files that will be
                 converted.
-                Default: PartFluid_ 
+                Default: PartFluid_
             vtk_to_obj_particle_radius: The particle radius of the input data.
             vtk_to_obj_smoothing_length: The smoothing length radius used for
                 the SPH kernel, the kernel compact support radius will be twice
@@ -96,10 +97,10 @@ class SplishSplash(simulators.Simulator):
                 Default: 0.6
             gen_gif: Whether to generate an animated GIF from the
                 simulation output.
-            gen_gif_cam_pos: The position of the camera when generating the GIF.  
+            gen_gif_cam_pos: The position of the camera when generating the GIF.
                 Default: (4.0, 1.0, 4.0).
             gen_gif_cam_fp: The point in space the camera looks at (focus
-                point).  
+                point).
                 Default: (0.0, 0.0, 0.0).
             on_finish_cleanup :
                 Optional cleanup script or list of shell commands to remove
@@ -123,26 +124,30 @@ class SplishSplash(simulators.Simulator):
             Task object representing the simulation task.
         """
 
-        self._input_files_exist(input_dir=input_dir,
-                                remote_assets=remote_assets,
-                                sim_config_filename=sim_config_filename)
+        self._input_files_exist(
+            input_dir=input_dir,
+            remote_assets=remote_assets,
+            sim_config_filename=sim_config_filename,
+        )
 
-        if vtk_to_obj and (vtk_to_obj_vtk_dir is None or
-                           vtk_to_obj_particle_radius is None):
-            raise ValueError("When using `vtk_to_obj=True`, "
-                             "`vtk_to_obj_vtk_dir` and "
-                             "`vtk_to_obj_particle_radius` need to be defined.")
+        if vtk_to_obj and (
+            vtk_to_obj_vtk_dir is None or vtk_to_obj_particle_radius is None
+        ):
+            raise ValueError(
+                "When using `vtk_to_obj=True`, "
+                "`vtk_to_obj_vtk_dir` and "
+                "`vtk_to_obj_particle_radius` need to be defined."
+            )
 
         # Start with the default simulation commands
         default_commands = [
             "cp /SPlisHSPlasH_CPU/bin/SPHSimulator .",
             f"./SPHSimulator {sim_config_filename} --no-gui --output-dir .",
-            "rm SPHSimulator"
+            "rm SPHSimulator",
         ]
 
         # Add VTK to OBJ conversion commands if requested
         if vtk_to_obj:
-
             # If out_dir is not provided, will save in the same directory as
             # the vtk files
             if vtk_to_obj_out_dir is None:
@@ -160,15 +165,18 @@ class SplishSplash(simulators.Simulator):
                 "--mesh-smoothing-weights=on --mesh-smoothing-iters=25 "
                 "--normals=on --normals-smoothing-iters=10 "
                 f"-o {vtk_to_obj_out_dir}/{vtk_to_obj_vtk_prefix}_surface"
-                "{}.obj")
+                "{}.obj"
+            )
         if gen_gif:
-            commands.append("python3 /home/scripts/gen_gif.py ./vtk res.gif "
-                            f"--cam_pos {gen_gif_cam_pos[0]} "
-                            f"{gen_gif_cam_pos[1]} "
-                            f"{gen_gif_cam_pos[2]} "
-                            f"--cam_fp {gen_gif_cam_fp[0]} "
-                            f"{gen_gif_cam_fp[1]} "
-                            f"{gen_gif_cam_fp[2]}")
+            commands.append(
+                "python3 /home/scripts/gen_gif.py ./vtk res.gif "
+                f"--cam_pos {gen_gif_cam_pos[0]} "
+                f"{gen_gif_cam_pos[1]} "
+                f"{gen_gif_cam_pos[2]} "
+                f"--cam_fp {gen_gif_cam_fp[0]} "
+                f"{gen_gif_cam_fp[1]} "
+                f"{gen_gif_cam_fp[2]}"
+            )
 
         # Combine default commands with any additional commands provided by the user
         if commands is not None:
@@ -178,7 +186,7 @@ class SplishSplash(simulators.Simulator):
             else:
                 # If commands is already a list, use it as is
                 extra_commands = commands
-            final_commands =  extra_commands + default_commands
+            final_commands = extra_commands + default_commands
         else:
             final_commands = default_commands
 
