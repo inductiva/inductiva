@@ -17,9 +17,9 @@ At the heart of Inductiva is the API that manages all your cloud resources, simu
 
    graph TD
       subgraph User Interfaces
-         A[Python Client]
-         B[CLI]
-         C[Web Console]
+         A(Python Client)
+         B(CLI)
+         C(Web Console)
       end
 
       subgraph "Inductiva Platform"
@@ -27,8 +27,8 @@ At the heart of Inductiva is the API that manages all your cloud resources, simu
       end
 
       subgraph "Cloud Infrastructure"
-         D[Computing Resources]
-         E[Cloud Storage]
+         D(Computing Resources)
+         E(Cloud Storage)
       end
 
       A -- Programmatic Access --> API
@@ -38,17 +38,16 @@ At the heart of Inductiva is the API that manages all your cloud resources, simu
       API -- Manages --> D
       API -- Manages --> E
 
-      %% Style definitions for high contrast
-      %% Forcing black text ('color:black') on all nodes ensures readability.
-      style A fill:#FFD6D6,stroke:#A11,stroke-width:2px,color:black
-      style B fill:#E6D6FF,stroke:#41A,stroke-width:2px,color:black
-      style C fill:#D6E6FF,stroke:#11A,stroke-width:2px,color:black
-      style API fill:#FFFFCC,stroke:#881,stroke-width:2px,color:black
-      style D fill:#E8E8E8,stroke:#333,stroke-width:2px,color:black
-      style E fill:#E8E8E8,stroke:#333,stroke-width:2px,color:black
+      %% Style definitions for high-contrast, rounded nodes with mature colors.
+      style A fill:#b3cde3,stroke:#2c5b85,stroke-width:2px,color:black
+      style B fill:#c2d6c4,stroke:#3b6e3e,stroke-width:2px,color:black
+      style C fill:#d5d8dc,stroke:#566573,stroke-width:2px,color:black
+      style API fill:#fdebd0,stroke:#b58941,stroke-width:2px,color:black
+      style D fill:#f2f3f4,stroke:#5d6d7e,stroke-width:2px,color:black
+      style E fill:#f2f3f4,stroke:#5d6d7e,stroke-width:2px,color:black
 
-      linkStyle 0,1,2 stroke-width:2px,fill:none,stroke:orange;
-      linkStyle 3,4 stroke-width:2px,fill:none,stroke:green;
+      linkStyle 0,1,2 stroke-width:2px,fill:none,stroke:#4a4a4a;
+      linkStyle 3,4 stroke-width:2px,fill:none,stroke:#4a4a4a;
 
 ````
 
