@@ -82,7 +82,11 @@ If the task status shows **Success**, congratulations! You've successfully run a
 
 This simple example tested your installation on a small machine with just 4 virtual CPUs. Inductiva offers far more powerful options to supercharge your simulations.
 
-Start running simulations seamlessly! 
+Start running simulations seamlessly!
+
+```{banner_small}
+:origin: cm1
+```
 
 ## Need Help?
 If you encounter any issues or need further assistance, don't hesitate to [**Contact Us**](mailto:support@inductiva.ai). We're here to help!

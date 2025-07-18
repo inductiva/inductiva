@@ -84,9 +84,6 @@ As you can see in the “In Progress” line, the part of the timeline that repr
 
 > 💻 Want to run SFINCS directly from Deltares' repository? Check out this [tutorial](https://inductiva.ai/guides/how-it-works/bring-your-own-software/run-sfincs-directly-from-deltares-repository).
 
-<div class="cta-bar">
-  <div class="cta-text">
-    <strong>Kickstart your simulations!</strong> You have $5 in <strong>free credits</strong>, no credit card required.
-  </div>
- <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_sfincs&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
-</div>
+```{banner_small}
+:origin: sfincs
+```

@@ -89,9 +89,7 @@ shared_static_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "_shared_static"))
 html_static_path = ['_static', shared_static_path]
 
-html_css_files = [
-    'css/custom.css',
-]
+html_css_files = ['css/custom.css', 'css/banner.css']
 pygments_style = "monokai"
 
 html_favicon = 'favicon.ico'
@@ -113,7 +111,15 @@ language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/delft3d'
 
-html_static_path = ['_static']
 html_js_files = [
     'discord.js',
 ]
+
+sys.path.insert(0, shared_static_path)
+
+
+def setup(app):
+    from banner_directive import BannerDirective
+    app.add_directive("banner", BannerDirective)
+    from banner_small_directive import BannerSmallDirective
+    app.add_directive("banner_small", BannerSmallDirective)

@@ -27,7 +27,7 @@ class ZipFileRange(BaseModel):
     ZipFileRange
     """
 
-  # noqa: E501
+    # noqa: E501
     range_start: StrictInt
     range_end: StrictInt
     compress_type: StrictInt

@@ -41,7 +41,6 @@ myst_enable_extensions = [
     # other MyST extensions
 ]
 
-html_static_path = ['_static']
 html_js_files = [
     'discord.js',
 ]
@@ -92,10 +91,9 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 shared_static_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "_shared_static"))
+
 html_static_path = ['_static', shared_static_path]
-html_css_files = [
-    'css/custom.css',
-]
+html_css_files = ['css/custom.css', 'css/banner.css']
 pygments_style = "monokai"
 
 html_title = 'Octopus'
@@ -114,3 +112,12 @@ ogp_image = "https://inductiva.ai/builds/octopus/_static/inductiva-social-banner
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/octopus'
+
+sys.path.insert(0, shared_static_path)
+
+
+def setup(app):
+    from banner_directive import BannerDirective
+    app.add_directive("banner", BannerDirective)
+    from banner_small_directive import BannerSmallDirective
+    app.add_directive("banner_small", BannerSmallDirective)

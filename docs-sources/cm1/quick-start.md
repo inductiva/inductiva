@@ -160,9 +160,6 @@ Here are the results of running the same simulation on different machines:
 
 With the **Inductiva API**, you can easily scale your CM1 simulations to match your computational demands. Whether you need faster runtimes or lower costs, experimenting with different machine configurations allows you to find the optimal balance for your workflow.
 
-<div class="cta-bar">
-  <div class="cta-text">
-    <strong>Kickstart your simulations!</strong> You have $5 in <strong>free credits</strong>, no credit card required.
-  </div>
- <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_cm1&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
-</div>
+```{banner_small}
+:origin: cm1
+```
