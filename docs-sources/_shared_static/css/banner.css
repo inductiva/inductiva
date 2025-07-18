@@ -24,16 +24,16 @@
 #content .headline {
   font-size: 1.5rem;
   font-weight: 600;
-  color: var(--cta-container-text-color);
+  color: var(--purple-color);
   padding-top: 0;
   padding-bottom: 0;
   margin: 0;
 }
 
 #content .subtext {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 700;
-  color: var(--purple-color);
+  color: var(--cta-container-text-color);
   padding-top: 5px;
   padding-bottom: 0;
   margin: 0.25rem 0 0 0;
