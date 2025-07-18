@@ -46,9 +46,6 @@ At the heart of Inductiva is the API that manages all your cloud resources, simu
       style D fill:#f2f3f4,stroke:#5d6d7e,stroke-width:2px,color:black
       style E fill:#f2f3f4,stroke:#5d6d7e,stroke-width:2px,color:black
 
-      linkStyle 0,1,2 stroke-width:2px,fill:none,stroke:#4a4a4a;
-      linkStyle 3,4 stroke-width:2px,fill:none,stroke:#4a4a4a;
-
 ````
 
 
