@@ -38,9 +38,14 @@ At the heart of Inductiva is the API that manages all your cloud resources, simu
       API -- Manages --> D
       API -- Manages --> E
 
-      style A fill:#f9f,stroke:#333,stroke-width:2px
-      style B fill:#ccf,stroke:#333,stroke-width:2px
-      style C fill:#9cf,stroke:#333,stroke-width:2px
+      % Style definitions for high contrast
+      % Forcing black text ('color:black') on all nodes ensures readability.
+      style A fill:#FFD6D6,stroke:#A11,stroke-width:2px,color:black
+      style B fill:#E6D6FF,stroke:#41A,stroke-width:2px,color:black
+      style C fill:#D6E6FF,stroke:#11A,stroke-width:2px,color:black
+      style API fill:#FFFFCC,stroke:#881,stroke-width:2px,color:black
+      style D fill:#E8E8E8,stroke:#333,stroke-width:2px,color:black
+      style E fill:#E8E8E8,stroke:#333,stroke-width:2px,color:black
 
       linkStyle 0,1,2 stroke-width:2px,fill:none,stroke:orange;
       linkStyle 3,4 stroke-width:2px,fill:none,stroke:green;
