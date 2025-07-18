@@ -26,6 +26,7 @@ caption: Python Client
 maxdepth: 2
 hidden: true
 ---
+Overview <api/index>
 benchmarks <api/inductiva.benchmarks>
 projects <api/inductiva.projects>
 resources <api/inductiva.resources>
