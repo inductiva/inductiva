@@ -27,7 +27,7 @@ class MachineOperation(BaseModel):
     MachineOperation
     """
 
-  # noqa: E501
+    # noqa: E501
     operation_id: StrictStr
     __properties: ClassVar[List[str]] = ["operation_id"]
 

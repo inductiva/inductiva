@@ -28,7 +28,7 @@ class UserActivity(BaseModel):
     UserActivity
     """
 
-  # noqa: E501
+    # noqa: E501
     var_date: date = Field(alias="date")
     num_tasks: StrictInt
     __properties: ClassVar[List[str]] = ["date", "num_tasks"]

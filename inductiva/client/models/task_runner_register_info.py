@@ -28,7 +28,7 @@ class TaskRunnerRegisterInfo(BaseModel):
     Info for creating a task-runner.
     """
 
-  # noqa: E501
+    # noqa: E501
     machine_group_id: StrictStr
     create_time: datetime
     cpu_count_logical: StrictInt

@@ -27,7 +27,7 @@ class TaskPositionInQueue(BaseModel):
     TaskPositionInQueue
     """
 
-  # noqa: E501
+    # noqa: E501
     tasks_ahead: StrictInt
     __properties: ClassVar[List[str]] = ["tasks_ahead"]
 

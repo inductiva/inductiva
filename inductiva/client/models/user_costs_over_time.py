@@ -28,7 +28,7 @@ class UserCostsOverTime(BaseModel):
     UserCostsOverTime
     """
 
-  # noqa: E501
+    # noqa: E501
     var_date: date = Field(alias="date")
     cost: Union[StrictFloat, StrictInt]
     __properties: ClassVar[List[str]] = ["date", "cost"]

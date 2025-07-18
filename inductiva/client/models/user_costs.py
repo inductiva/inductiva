@@ -29,7 +29,7 @@ class UserCosts(BaseModel):
     UserCosts
     """
 
-  # noqa: E501
+    # noqa: E501
     currency: Optional[CurrencyCode] = None
     credits: Union[StrictFloat, StrictInt]
     costs: List[CostDetail]

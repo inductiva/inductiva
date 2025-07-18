@@ -32,7 +32,7 @@ class Task(BaseModel):
     Task
     """
 
-  # noqa: E501
+    # noqa: E501
     task_id: StrictStr
     status: TaskStatusCode
     status_alias: StrictStr

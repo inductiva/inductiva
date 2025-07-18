@@ -28,7 +28,7 @@ class MachineType(BaseModel):
     MachineType
     """
 
-  # noqa: E501
+    # noqa: E501
     machine_type: StrictStr
     num_vcpus: StrictInt
     ram_gb: Union[StrictFloat, StrictInt]

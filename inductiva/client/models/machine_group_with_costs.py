@@ -33,7 +33,7 @@ class MachineGroupWithCosts(BaseModel):
     MachineGroupWithCosts
     """
 
-  # noqa: E501
+    # noqa: E501
     id: StrictStr
     name: StrictStr
     machine_type: StrictStr

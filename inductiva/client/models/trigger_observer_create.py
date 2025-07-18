@@ -28,7 +28,7 @@ class TriggerObserverCreate(BaseModel):
     TriggerObserverCreate
     """
 
-  # noqa: E501
+    # noqa: E501
     trigger_type: StrictStr
     task_id: StrictStr
     trigger: TriggerObserverType

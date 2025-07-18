@@ -29,7 +29,7 @@ class EventCreate(BaseModel):
     EventCreate
     """
 
-  # noqa: E501
+    # noqa: E501
     trigger: Trigger
     action: Action
     __properties: ClassVar[List[str]] = ["trigger", "action"]

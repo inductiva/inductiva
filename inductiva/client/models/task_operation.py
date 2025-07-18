@@ -30,7 +30,7 @@ class TaskOperation(BaseModel):
     TaskOperation
     """
 
-  # noqa: E501
+    # noqa: E501
     name: TaskOperationName
     alias: StrictStr
     start_timestamp: datetime

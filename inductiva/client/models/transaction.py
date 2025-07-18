@@ -30,7 +30,7 @@ class Transaction(BaseModel):
     Transaction
     """
 
-  # noqa: E501
+    # noqa: E501
     amount: Union[StrictFloat, StrictInt]
     time: datetime
     currency: Optional[CurrencyCode] = None

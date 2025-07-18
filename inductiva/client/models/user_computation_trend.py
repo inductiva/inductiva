@@ -28,7 +28,7 @@ class UserComputationTrend(BaseModel):
     UserComputationTrend
     """
 
-  # noqa: E501
+    # noqa: E501
     var_date: date = Field(alias="date")
     computation_time: Union[StrictFloat, StrictInt]
     __properties: ClassVar[List[str]] = ["date", "computation_time"]

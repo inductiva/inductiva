@@ -31,7 +31,7 @@ class Project(BaseModel):
     Project
     """
 
-  # noqa: E501
+    # noqa: E501
     name: Annotated[str, Field(min_length=1, strict=True, max_length=128)]
     project_type: ProjectType
     id: StrictStr
