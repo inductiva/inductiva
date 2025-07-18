@@ -6,7 +6,7 @@ caption: Command Line Interface
 maxdepth: 2
 hidden: true
 ---
-cli/overview
+Introduction <cli/overview>
 auth <cli/auth>
 user <cli/user>
 tasks <cli/tasks>
@@ -26,7 +26,7 @@ caption: Python Client
 maxdepth: 2
 hidden: true
 ---
-Overview <api/index>
+Introduction <api/index>
 benchmarks <api/inductiva.benchmarks>
 projects <api/inductiva.projects>
 resources <api/inductiva.resources>
