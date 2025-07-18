@@ -29,9 +29,9 @@ inductiva containers convert docker://python:3.11-slim ./python.sif
 Converts a Docker image to a `.sif` file and uploads it to the user's Inductiva private storage.
 
 ```bash
-inductiva containers upload <IMAGE> [OUTPUT_PATH]
+inductiva containers upload <IMAGE> [<OUTPUT_PATH>]
 ```
-- `<IMAGE>` is the Docker image reference. Can be a Docher Hub reference (docker:// URL), a local image (name or ID) or a `.tar` archive exported from Docker.
+- `<IMAGE>` is the Docker image reference. Can be a Docher Hub reference (`docker://` URL), a local image (name or ID) or a `.tar` archive exported from Docker.
 - `<OUTPUT_PATH>` is the path where the `.sif` file will be stored in Inductiva storage.
 Defaults to: `my-containers/<image-name>.sif` if omitted.
 
@@ -46,7 +46,7 @@ inductiva containers upload docker://su2code/su2:latest my-containers/su2-cfd.si
 ```
 
 ### `list (ls)` [\[flags\]](#flags-for-list)
-List all container files stored in remote storage. If no folder is provided, it defaults to the `my-containers` directory.
+List all container files stored in remote storage. If **no folder is provided**, it defaults to the `my-containers` directory.
 
 ```bash
 inductiva containers list [<FOLDER>]

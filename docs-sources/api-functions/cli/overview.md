@@ -12,16 +12,16 @@ With the CLI, you can:
 
 ## CLI Command Overview
 
-| Command Group        | Subcommands                                 | API Reference                                             | Resource Guide                                                   |
+| Command        | Subcommands                                 | API Reference                                             | Resource Guide                                                   |
 |----------------------|---------------------------------------------|-----------------------------------------------------------|------------------------------------------------------------------|
-| `auth`               | `login`, `logout`                           | --                              | [Authentication Guide](../../how-it-works/get-started/install-guide.md)        |
+| `auth`               | `login`, `logout`                           | --                              | [Authentication Guide](https://inductiva.ai/guides/how-it-works/get-started/install-guide)        |
 | `tasks`              | `download`, `info`, `kill`, `last-modified-file`, `list`, `list-files`, `tail`, `top`        | [Tasks API](https://inductiva.ai/guides/api-functions/api/inductiva.tasks)                              | [Tasks Guide](../../how-it-works/tasks/index.md)                |
-| `task-runner`          | `launch`, `remove`      | --                     | [BYOH Guide](../../expand/use-local-task-runner/index.md)          |
+| `task-runner`          | `launch`, `remove`      | --                     | [BYOH Guide](https://inductiva.ai/guides/expand/use-local-task-runner/index)          |
 | `projects`           | `list`, `download`        | [Projects API](https://inductiva.ai/guides/api-functions/api/inductiva.projects)                        | --       |
 | `storage`            | `list`, `download`, `export`, `remove`, `size`                | [Storage API](https://inductiva.ai/guides/api-functions/api/inductiva.storage)                          | [Storage Guide](../../how-it-works/cloud-storage/index.md)            |
 | `resources`          | `start`, `cost`, `info`, `available`, `list`, `terminate`      | [Resources API](https://inductiva.ai/guides/api-functions/api/inductiva.resources)                      | [Machines Guide](../../how-it-works/machines/index.md)          |
 | `simulators`               | `list`              | [Simulators API](https://inductiva.ai/guides/api-functions/api/inductiva.simulators)      | [Simulators Guide](../../how-it-works/simulators/index.md)  |
-| `containers`         | `list`, `upload`, `remove`                  | --  | [BYOH Guide](../../expand/bring-your-own-software/index.md) |
+| `containers`         | `list`, `upload`, `remove`                  | --  | [BYOH Guide](https://inductiva.ai/guides/expand/bring-your-own-software/index) |
 
 ---
 
