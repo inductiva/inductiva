@@ -4,7 +4,7 @@ The **Inductiva Python Client** is a **library** that transforms the Inductiva A
 
 With the Python Client you can focus on your simulation design and analysis rather than API mechanics, making it easy to integrate high-performance computational simulations into your existing Python scripts!
 
-## Classes Overview
+## Classes & Methods Overview
 
 | Class        | Methods                                 | CLI                                             | Resource Guide                                                   |
 |----------------------|---------------------------------------------|-----------------------------------------------------------|------------------------------------------------------------------|
