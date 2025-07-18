@@ -27,4 +27,5 @@ maxdepth: 2
 hidden: true
 ---
 Introduction <api/index>
+Classes <api/classes>
 ```
