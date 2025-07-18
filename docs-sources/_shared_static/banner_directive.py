@@ -22,7 +22,7 @@ class BannerDirective(Directive):
                 </div>
                 <div class="buttons">
                     <button onclick="handleCtaClick('{origin}')" target="_blank" class="btn primary cta-button">
-                    <span class="btn-main">Get Started</span>
+                    <span class="btn-main cta-button">Get Started</span>
                     </button>
                 </div>
                 </div>
