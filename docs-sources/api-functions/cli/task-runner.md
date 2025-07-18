@@ -17,7 +17,7 @@ machines on the cloud via Inductiva, if needed).
 Launch a new task-runner instance.
 
 ```sh
-inductiva task-runner launch MACHINE_GROUP_NAME
+inductiva task-runner launch <MACHINE_GROUP_NAME>
 ```
 
 <h4 id="flags-for-launch">Flags</h4>

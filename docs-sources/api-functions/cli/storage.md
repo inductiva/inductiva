@@ -15,7 +15,7 @@ files related to their tasks. This command lets you list, download, remove, and 
 ### `list (ls)` [\[flags\]](#flags-for-list)
 List all files and folders in your remote storage.
 
-This subcommand displays the contents of your remote storage at a given `path`. If no path is provided, it lists the contents of the **root directory (`/`)**. You can customize the number of results, the sort field, and the sorting order.
+This subcommand displays the contents of your remote storage at a given `path`. If **no path is provided**, it lists the contents of the **root directory (`/`)**. You can customize the number of results, the sort field, and the sorting order.
 
 ```sh
 inductiva storage list
@@ -30,7 +30,7 @@ inductiva storage ls
 You can also specify a path:
 
 ```sh
-inductiva storage ls <PATH>
+inductiva storage ls [<PATH>]
 ```
 
 List the 10 largest folders sorted by size:
@@ -86,10 +86,10 @@ Download a file or folder from remote storage to your local machine.
 By default, the downloaded content is saved to your **current working directory**. You can optionally specify a target local directory.
 
 ```sh
-inductiva storage download <REMOTE_PATH> [LOCAL_DIR]
+inductiva storage download <REMOTE_PATH> [<LOCAL_DIR>]
 ```
 - `<REMOTE_PATH>` is the path to the file or folder in remote storage (required).
-- `[LOCAL_DIR]` is the optional destination path on your local machine.
+- `<LOCAL_DIR>` is the **optional** destination path on your local machine.
 
 Download and decompress an archived file:
 

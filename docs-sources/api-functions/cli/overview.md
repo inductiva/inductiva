@@ -1,6 +1,6 @@
 # Inductiva CLI
 
-The **Inductiva CLI** helps you interact with the Inductiva API directly from the terminal, enabling you to manage computational resources, tasks, and so much more.
+The **Inductiva CLI** helps you interact with the Inductiva API directly from the terminal, enabling you to manage computational resources, tasks, and much more.
 
 With the CLI, you can:
 - Manage authentication and API keys

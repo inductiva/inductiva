@@ -68,10 +68,10 @@ accidentally kill an important task.
 For a specific task, we will get something like:
 ```sh
 $ inductiva tasks kill cmvsc9qhz5iy86f6pef8uyxqt
-You are about to kill the following tasks:
-  - cmvsc9qhz5iy86f6pef8uyxqt 
-Are you sure you want to proceed (y/[N])? y
-Successfully sent kill request for task cmvsc9qhz5iy86f6pef8uyxqt.
+  You are about to kill the following tasks:
+    - cmvsc9qhz5iy86f6pef8uyxqt 
+  Are you sure you want to proceed (y/[N])? y
+  Successfully sent kill request for task cmvsc9qhz5iy86f6pef8uyxqt.
 ```
 
 <h4 id="flags-for-kill">Flags</h4>
@@ -105,11 +105,11 @@ Get the last modified file of a task:
 ```sh
 $ inductiva tasks last-modified-file qpusar8bch509k56g1hvv5yxk
 
-Most Recent File: /mnt/disks/task-runner-data/workdir/qpusar8bch509k56g1hvv5yxk/output/artifacts/stdout.txt
-Modification Time: 2025-04-03 12:58:49
-Current Time on Machine: 2025-04-03 12:58:50
+  Most Recent File: /mnt/disks/task-runner-data/workdir/qpusar8bch509k56g1hvv5yxk/output/artifacts/stdout.txt
+  Modification Time: 2025-04-03 12:58:49
+  Current Time on Machine: 2025-04-03 12:58:50
 
-Time Since Last Modification: 0:00:01
+  Time Since Last Modification: 0:00:01
 ```
 
 ### `list` [\[flags\]](#flags-for-list)
@@ -121,7 +121,7 @@ inductiva tasks list
 
 <h4 id="flags-for-list">Flags</h4>
 
-**`--last-n, -n`**
+**`--last-n, -n`** (default: 10)
 
 List last `N` tasks.
 

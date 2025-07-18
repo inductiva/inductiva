@@ -9,7 +9,7 @@ inductiva logs <TASK_ID>
 > Note: Logs can only be streamed while the task is still **in progress**. If the task has finished or transitioned to another status, logs will not be available for streaming.
 
 Here's an example of how you can use the `logs` subcommand to check how your
-simulation is progressing. In this case, we are tracking the task of an [OpenFOAM](../../openfoam/index.md) simulation:
+simulation is progressing. In this case, we are tracking the task of an [OpenFOAM](https://inductiva.ai/guides/openfoam) simulation:
 
 ```bash
 $ inductiva logs f0bnqgf4fcr4asgi4e21tcsqa

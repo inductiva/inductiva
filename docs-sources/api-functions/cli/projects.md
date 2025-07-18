@@ -4,7 +4,7 @@ retrieve information about your projects.
 
 Projects in Inductiva serve as folders for organizing tasks.
 Using the CLI, you can list your projects and retrieve the
-outputs of all tasks in a specific projects.
+outputs of all tasks in a specific project.
 
 ````{eval-rst}
 .. seealso::

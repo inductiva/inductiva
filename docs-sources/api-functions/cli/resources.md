@@ -1,5 +1,5 @@
 # inductiva **resources** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
-The `inductiva resources` command provides utilities for managing computational resources. It allows users to estimate costs, check available machine types, list their active resources, and terminate them.
+The `inductiva resources` command provides utilities for managing computational resources. It allows you to estimate costs, check available machine types, list active resources, and terminate them.
 
 ````{eval-rst}
 .. seealso::
@@ -15,7 +15,7 @@ inductiva resources start
 ```
 
 ### `cost` [\[flags\]](#flags-for-cost)
-Estimate the hourly cost of a machine or group of machines in the cloud.
+Estimate the **hourly** cost of a machine or group of machines in the cloud.
 
 ```bash
 inductiva resources cost <MACHINE_TYPE>
@@ -80,6 +80,7 @@ c3d-highcpu-360         360       n/a      708             14.80500774          
 <h4 id="flags-for-available">Flags</h4>
 
 **`--family, -f`**
+
 Filter available machine types by CPU family (e.g., `c3d`, etc.).
 Supports one or more values.
 
@@ -125,7 +126,7 @@ Terminate one or more active computational resources.
 inductiva resources terminate <MACHINE_GROUP_NAME> [<MACHINE_GROUP_NAME> ...]
 ```
 
-<h4 id="flags-for-available">Flags</h4>
+<h4 id="flags-for-terminate">Flags</h4>
 
 **`--yes, y`**
 

@@ -1,6 +1,6 @@
 # inductiva **containers** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
 
-The `inductiva containers` command provides utilities for managing custom user containers. It allows users to convert Docker images into Apptainer-compatible .sif files and upload them to their Inductiva private storage for use in simulations.
+The `inductiva containers` command provides utilities for managing custom user containers. It allows users to convert Docker images into Apptainer-compatible `.sif` files and upload them to their Inductiva private storage for use in simulations.
 
 ##  Subcommands
 ### `convert`
