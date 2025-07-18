@@ -4,7 +4,7 @@ Inductiva provides an API to easily run large-scale computational simulations on
 
 To cater to different workflows and user preferences, we offer three ways to interact with our API: the **Python Client**, the **Command-Line Interface (CLI)**, and the **Web Console**. While each tool can be used independently, they are designed to work together seamlessly, providing a flexible and unified experience for managing your simulations.
 
-This page explains the purpose of each component and how they fit together to form the Inductiva ecosystem.
+This page explains the purpose of each component and how they all fit together.
 
 ## How It All Connects
 
@@ -38,8 +38,8 @@ At the heart of Inductiva is the API that manages all your cloud resources, simu
       API -- Manages --> D
       API -- Manages --> E
 
-      % Style definitions for high contrast
-      % Forcing black text ('color:black') on all nodes ensures readability.
+      %% Style definitions for high contrast
+      %% Forcing black text ('color:black') on all nodes ensures readability.
       style A fill:#FFD6D6,stroke:#A11,stroke-width:2px,color:black
       style B fill:#E6D6FF,stroke:#41A,stroke-width:2px,color:black
       style C fill:#D6E6FF,stroke:#11A,stroke-width:2px,color:black
