@@ -1,6 +1,6 @@
 # Building Blocks
 
-Inductiva provides an API to run large-scale computational simulations on the cloud with ease.
+Inductiva provides an API to easily run large-scale computational simulations on the cloud.
 
 To cater to different workflows and user preferences, we offer three ways to interact with our API: the **Python Client**, the **Command-Line Interface (CLI)**, and the **Web Console**. While each tool can be used independently, they are designed to work together seamlessly, providing a flexible and unified experience for managing your simulations.
 
@@ -11,72 +11,41 @@ This page explains the purpose of each component and how they fit together to fo
 At the heart of Inductiva is the API that manages all your cloud resources, simulation tasks, and storage. The Python Client, CLI, and Web Console are simply different interfaces that communicate with these resources. This means any action you take in one tool will be immediately reflected in the others.
 
 
-```mermaid
-flowchart TD
-    %% User Types
-    subgraph Users["👥 User Types"]
-        Dev["🧑‍💻 Developers<br/>Data Scientists"]
-        Ops["⚙️ Operations<br/>Quick Tasks"]
-        Bus["📊 Business Users<br/>Non-Technical"]
-    end
+````{eval-rst}
+.. mermaid::
+   :align: center
 
-    %% Inductiva Components
-    subgraph Inductiva["🏗️ Inductiva Building Blocks"]
-        Python["🐍 Python Client<br/>Library & Scripts"]
-        CLI["💻 Command Line Interface<br/>Terminal Operations"]
-        Console["🖥️ Web Console<br/>Graphical Interface"]
-    end
+   graph TD
+      subgraph User Interfaces
+         A[Python Client]
+         B[CLI]
+         C[Web Console]
+      end
 
-    %% Core Platform
-    subgraph Platform["☁️ Inductiva Platform"]
-        API["🔌 Inductiva API"]
-        Resources["🖥️ Computational Resources"]
-        Storage["💾 Cloud Storage"]
-        Tasks["⚡ Task Management"]
-        Simulators["🔬 Simulators"]
-    end
+      subgraph "Inductiva Platform"
+         API(Inductiva API)
+      end
 
-    %% Connections - User to Tools
-    Dev --> Python
-    Dev --> CLI
-    Ops --> CLI
-    Ops --> Console
-    Bus --> Console
+      subgraph "Cloud Infrastructure"
+         D[Computing Resources]
+         E[Cloud Storage]
+      end
 
-    %% Connections - Tools to Platform
-    Python --> API
-    CLI --> API
-    Console --> API
+      A -- Programmatic Access --> API
+      B -- Terminal Commands --> API
+      C -- Visual Interaction --> API
 
-    %% Platform Internal
-    API --> Resources
-    API --> Storage
-    API --> Tasks
-    API --> Simulators
+      API -- Manages --> D
+      API -- Manages --> E
 
-    %% Use Cases
-    subgraph UseCases["📋 Common Use Cases"]
-        Scripts["📝 Automation Scripts<br/>Complex Workflows"]
-        Quick["⚡ Quick Operations<br/>Status Checks"]
-        Mgmt["📊 Data Visualization<br/>Account Management"]
-    end
+      style A fill:#f9f,stroke:#333,stroke-width:2px
+      style B fill:#ccf,stroke:#333,stroke-width:2px
+      style C fill:#9cf,stroke:#333,stroke-width:2px
 
-    %% Use Case Connections
-    Python -.-> Scripts
-    CLI -.-> Quick
-    Console -.-> Mgmt
+      linkStyle 0,1,2 stroke-width:2px,fill:none,stroke:orange;
+      linkStyle 3,4 stroke-width:2px,fill:none,stroke:green;
 
-    %% Styling
-    classDef userClass fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
-    classDef toolClass fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
-    classDef platformClass fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
-    classDef usecaseClass fill:#fff3e0,stroke:#f57c00,stroke-width:2px
-
-    class Dev,Ops,Bus userClass
-    class Python,CLI,Console toolClass
-    class API,Resources,Storage,Tasks,Simulators platformClass
-    class Scripts,Quick,Mgmt usecaseClass
-```
+````
 
 
 The following diagram illustrates this relationship:
