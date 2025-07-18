@@ -8,7 +8,6 @@ function handleCtaClick(origin) {
         eventCallback: function () {
           callbackCalled = true;
           console.log(`Event callback triggered for origin '${origin}'`);
-          callback?.(true);
         }
       });
   
