@@ -119,7 +119,7 @@ with open(env_js_path, 'w') as f:
 html_js_files = [
     'env.js',
     'discord.js',
-    'ctaClick.js',
+    'gtm_func.js',
 ]
 
 sys.path.insert(0, shared_static_path)

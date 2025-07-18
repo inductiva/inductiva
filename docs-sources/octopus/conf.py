@@ -49,7 +49,7 @@ with open(env_js_path, 'w') as f:
 html_js_files = [
     'env.js',
     'discord.js',
-    'ctaClick.js',
+    'gtm_func.js',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
