@@ -109,9 +109,15 @@ language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/amr-wind'
 
+env_js_path = os.path.join(os.path.dirname(__file__), '_static', 'env.js')
+
+with open(env_js_path, 'w') as f:
+    f.write(f'window.env = {{ GTAG_WEBSITE: "{googleanalytics_id}" }};\n')
+
 html_js_files = [
     'discord.js',
-    'ctaClick.js'
+    'ctaClick.js',
+    'env.js'
 ]
 
 sys.path.insert(0, shared_static_path)
