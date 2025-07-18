@@ -12,7 +12,7 @@ With the CLI, you can:
 
 ## CLI Command Overview
 
-| Command        | Subcommands                                 | API Reference                                             | Resource Guide                                                   |
+| Command        | Subcommands                                 | Python Client                                             | Resource Guide                                                   |
 |----------------------|---------------------------------------------|-----------------------------------------------------------|------------------------------------------------------------------|
 | `auth`               | `login`, `logout`                           | --                              | [Authentication Guide](https://inductiva.ai/guides/how-it-works/get-started/install-guide)        |
 | `tasks`              | `download`, `info`, `kill`, `last-modified-file`, `list`, `list-files`, `tail`, `top`        | [Tasks API](https://inductiva.ai/guides/api-functions/api/inductiva.tasks)                              | [Tasks Guide](../../how-it-works/tasks/index.md)                |
