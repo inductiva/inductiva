@@ -407,10 +407,17 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.size"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.size</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileRange"><code class="docutils literal notranslate"><span class="pre">ZipFileRange</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileRange.__init__"><code class="docutils literal notranslate"><span class="pre">ZipFileRange.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileRange.range_end"><code class="docutils literal notranslate"><span class="pre">ZipFileRange.range_end</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileRange.range_start"><code class="docutils literal notranslate"><span class="pre">ZipFileRange.range_start</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.copy"><code class="docutils literal notranslate"><span class="pre">copy()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.download"><code class="docutils literal notranslate"><span class="pre">download()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.export"><code class="docutils literal notranslate"><span class="pre">export()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.export_to_aws_s3"><code class="docutils literal notranslate"><span class="pre">export_to_aws_s3()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_file_range"><code class="docutils literal notranslate"><span class="pre">get_file_range()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_signed_urls"><code class="docutils literal notranslate"><span class="pre">get_signed_urls()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_space_used"><code class="docutils literal notranslate"><span class="pre">get_space_used()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_zip_contents"><code class="docutils literal notranslate"><span class="pre">get_zip_contents()</span></code></a></li>
@@ -537,6 +544,28 @@ the status of the operation.</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileRange">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ZipFileRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">range_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.ZipFileRange" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents the byte range of a file within a ZIP archive.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileRange.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">range_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#inductiva.storage.storage.ZipFileRange.__init__" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileRange.range_end">
+<span class="sig-name descname"><span class="pre">range_end</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#inductiva.storage.storage.ZipFileRange.range_end" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="inductiva.storage.storage.ZipFileRange.range_start">
+<span class="sig-name descname"><span class="pre">range_start</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#inductiva.storage.storage.ZipFileRange.range_start" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="inductiva.storage.storage.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.copy" title="Link to this definition">#</a></dt>
@@ -601,6 +630,28 @@ or folder if it is compressed. Defaults to True.</p></li>
 <dt class="sig sig-object py" id="inductiva.storage.storage.export_to_aws_s3">
 <span class="sig-name descname"><span class="pre">export_to_aws_s3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_export</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">part_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.storage.storage.export_to_aws_s3" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="inductiva.storage.storage.get_file_range">
+<span class="sig-name descname"><span class="pre">get_file_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zip_relative_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#inductiva.storage.storage.ZipFileRange" title="inductiva.storage.storage.ZipFileRange"><span class="pre">ZipFileRange</span></a></span></span><a class="headerlink" href="#inductiva.storage.storage.get_file_range" title="Link to this definition">#</a></dt>
+<dd><p>Retrieve the byte range (start and end) of the compressed data for a
+specific file inside a ZIP archive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – The full path to the ZIP archive.</p></li>
+<li><p><strong>zip_relative_path</strong> (<em>str</em><em>, </em><em>optional</em>) – The relative path inside the ZIP.</p></li>
+<li><p><strong>filename</strong> (<em>str</em>) – The name of the file inside the ZIP to get the range.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The start and end byte offsets of the file</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#inductiva.storage.storage.ZipFileRange" title="inductiva.storage.storage.ZipFileRange">ZipFileRange</a></p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="inductiva.storage.storage.get_signed_urls">
@@ -815,10 +866,17 @@ If not specified, the name will be extracted from the URL.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileInfo.size"><code class="docutils literal notranslate"><span class="pre">ZipFileInfo.size</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileRange"><code class="docutils literal notranslate"><span class="pre">ZipFileRange</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileRange.__init__"><code class="docutils literal notranslate"><span class="pre">ZipFileRange.__init__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileRange.range_end"><code class="docutils literal notranslate"><span class="pre">ZipFileRange.range_end</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.ZipFileRange.range_start"><code class="docutils literal notranslate"><span class="pre">ZipFileRange.range_start</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.copy"><code class="docutils literal notranslate"><span class="pre">copy()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.download"><code class="docutils literal notranslate"><span class="pre">download()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.export"><code class="docutils literal notranslate"><span class="pre">export()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.export_to_aws_s3"><code class="docutils literal notranslate"><span class="pre">export_to_aws_s3()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_file_range"><code class="docutils literal notranslate"><span class="pre">get_file_range()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_signed_urls"><code class="docutils literal notranslate"><span class="pre">get_signed_urls()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_space_used"><code class="docutils literal notranslate"><span class="pre">get_space_used()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.storage.storage.get_zip_contents"><code class="docutils literal notranslate"><span class="pre">get_zip_contents()</span></code></a></li>
