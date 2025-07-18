@@ -21,7 +21,7 @@ class BannerDirective(Directive):
                     <p class="subtext">Get started for free today and earn $5 in credits.</p>
                 </div>
                 <div class="buttons">
-                    <button onclick="handleCtaClick('{origin}')" target="_blank" class="btn primary cta-button">
+                    <button onclick="window.open('https://console.inductiva.ai/?utm_source=guide_{origin}&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="btn primary cta-button">
                     <span class="btn-main cta-button">Get Started</span>
                     </button>
                 </div>
