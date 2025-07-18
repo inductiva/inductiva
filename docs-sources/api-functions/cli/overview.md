@@ -2,13 +2,13 @@
 
 The **Inductiva CLI** helps you interact with the Inductiva platform directly from the terminal, enabling you to manage computational resources and tasks.
 
-This section documents every command and flag available in Inductiva's command-line interface (CLI).
-
 With the CLI, you can:
 - Manage authentication and API keys
 - Start, stop, list, and monitor [Tasks](../../how-it-works/tasks/index.md).
 - Allocate and monitor [Computational Resources](../../how-it-works/machines/index.md).
 - Manage projects and [storage files](../../how-it-works/storage/index.md)
+
+This section documents every command and flag available in Inductiva's command-line interface (CLI).
 
 ## CLI Command Overview
 
