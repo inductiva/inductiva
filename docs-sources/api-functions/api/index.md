@@ -1,8 +1,8 @@
-# Inductiva Python Client
+# Python Client
 
-Our **Python Client** is a **library** that transforms the Inductiva API interactions into simple Python code. Instead of dealing with HTTP requests, authentication headers, and JSON parsing, we provide Python functions and classes that let you manage computational resources, run simulations, organize projects, and retrieve results — all from a simple **Python script**.
+The Inductiva **Python Client** is a **library** that transforms the Inductiva API requests into simple Python code. Instead of dealing with HTTP requests, authentication headers, and JSON parsing, we provide Python functions and classes that let you manage computational resources, run simulations, organize projects, and retrieve results — all from a simple **Python script**.
 
-This library means you can focus on your simulation design and analysis rather than API mechanics, making it easy to integrate high-performance computational simulations into your existing Python scripts.
+The Python Client means you can focus on your simulation design and analysis rather than API mechanics, making it easy to integrate high-performance computational simulations into your existing Python scripts.
 
 ## Classes Overview
 
