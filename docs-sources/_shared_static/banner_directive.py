@@ -21,7 +21,7 @@ class BannerDirective(Directive):
                     <p class="subtext">Get started for free today and earn $5 in credits.</p>
                 </div>
                 <div class="buttons">
-                    <button onclick="trackAndRedirect('{origin}')" class="btn primary">
+                    <button onclick="window.open('/guides/redirect?origin={origin}', '_blank')" target="_blank" class="btn primary">
                     <span class="btn-main">Get Started</span>
                     </button>
                 </div>

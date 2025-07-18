@@ -18,7 +18,7 @@ class BannerSmallDirective(Directive):
                 <div class="cta-text">
                     <strong>Start running simulations seamlessly!</strong> You have $5 in <strong>free</strong> credits, no credit card required.
                 </div>
-                <button  onclick="trackAndRedirect('{origin}')" class="cta-button">Sign In</button>
+                <button  onclick="window.open('/guides/redirect?origin={origin}', '_blank')" target="_blank" class="cta-button">Sign In</button>
             </div>
             '''
         return [nodes.raw('', html, format='html')]
