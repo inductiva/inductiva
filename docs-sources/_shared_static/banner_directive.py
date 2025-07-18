@@ -21,7 +21,7 @@ class BannerDirective(Directive):
                     <p class="subtext">Get started for free today and earn $5 in credits.</p>
                 </div>
                 <div class="buttons">
-                    <button onclick="handleCtaClick('{origin}')" target="_blank" class="btn primary">
+                    <button onclick="handleCtaClick('{origin}')" target="_blank" class="btn primary cta-button">
                     <span class="btn-main">Get Started</span>
                     </button>
                 </div>
