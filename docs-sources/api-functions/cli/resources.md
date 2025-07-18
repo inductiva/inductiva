@@ -28,7 +28,7 @@ $ inductiva resources cost c2-standard-8 --spot -n 4
 Estimated total cost (per machine): 0.445 (0.111) $/h.
 ```
 
-<h4 id="flags-for-available">Flags</h4>
+<h4 id="flags-for-cost">Flags</h4>
 
 **`--spot`** (default: `false`)
 
@@ -136,13 +136,6 @@ Automatically answers **yes** to all confirmation prompts, allowing operations t
 **--all, -a**
 
 Terminates all resouces.
-
-### Estimating Machine Cost
-
-You can estimate the costs of the computational resources you 
-plan to use per hour. The CLI provides a cost estimation tool
-that considers the machine type, usage duration, and number of
-machines you wish to use.
 
 ## Flags
 ### `-h, --help`
