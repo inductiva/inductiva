@@ -1,11 +1,11 @@
-# Set up an MPI Cluster
-An **MPI Cluster** is a set of homogeneous machines configured to communicate and collaborate in running a single simulation. By leveraging multiple machines working together, users can execute simulations that require a level of parallelization beyond what a single machine can provide.
+# Set up and Manage an MPI Cluster
+An `MPICluster` is a set of homogeneous machines configured to communicate and collaborate in running a single simulation. By leveraging multiple machines working together, users can execute simulations that require a level of parallelization beyond what a single machine can provide.
 
 Setting up an MPI cluster is straightforward using the `MPICluster` class. You simply specify the type and number of machines to compose the cluster, along with the size of the shared disk storage accessible by all machines.
 
 With this configuration, the Inductiva API initializes the cluster, ensuring all machines can communicate effectively and access the shared storage for reading and writing data.
 
-In the example below, an AMR-Wind simulation is run on an MPICluster. For a step-by-step guide, refer to the related [tutorial](https://inductiva.ai/guides/amr-wind/mpi-cluster-tutorial).
+In the example below, an AMR-Wind simulation is run on an MPICluster. For a step-by-step guide, refer to the related [tutorial](../../../amr-wind/mpi-cluster-tutorial.md).
 
 ```python
 """AMR-Wind example."""
