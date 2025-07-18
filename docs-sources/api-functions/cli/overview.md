@@ -14,21 +14,19 @@ With the CLI, you can:
 
 | Command        | Subcommands                                 | Python Client                                             | Resource Guide                                                   |
 |----------------------|---------------------------------------------|-----------------------------------------------------------|------------------------------------------------------------------|
-| `auth`               | `login`, `logout`                           | --                              | [Authentication Guide](https://inductiva.ai/guides/how-it-works/get-started/install-guide)        |
-| `tasks`              | `download`, `info`, `kill`, `last-modified-file`, `list`, `list-files`, `tail`, `top`        | [Tasks API](https://inductiva.ai/guides/api-functions/api/inductiva.tasks)                              | [Tasks Guide](../../how-it-works/tasks/index.md)                |
-| `task-runner`          | `launch`, `remove`      | --                     | [BYOH Guide](https://inductiva.ai/guides/expand/use-local-task-runner/index)          |
-| `projects`           | `list`, `download`        | [Projects API](https://inductiva.ai/guides/api-functions/api/inductiva.projects)                        | --       |
-| `storage`            | `list`, `download`, `export`, `remove`, `size`                | [Storage API](https://inductiva.ai/guides/api-functions/api/inductiva.storage)                          | [Storage Guide](../../how-it-works/cloud-storage/index.md)            |
-| `resources`          | `start`, `cost`, `info`, `available`, `list`, `terminate`      | [Resources API](https://inductiva.ai/guides/api-functions/api/inductiva.resources)                      | [Machines Guide](../../how-it-works/machines/index.md)          |
-| `simulators`               | `list`              | [Simulators API](https://inductiva.ai/guides/api-functions/api/inductiva.simulators)      | [Simulators Guide](../../how-it-works/simulators/index.md)  |
-| `containers`         | `list`, `upload`, `remove`                  | --  | [BYOH Guide](https://inductiva.ai/guides/expand/bring-your-own-software/index) |
-
----
+| [`auth`](auth.md)               | `login`, `logout`                           | --                              | [Authentication Guide](https://inductiva.ai/guides/how-it-works/get-started/install-guide)        |
+| [`user`](user.md)               | `info`                           | [Users API](https://inductiva.ai/guides/api-functions/api/inductiva.users)                              | --        |
+| [`tasks`](tasks.md)              | `download`, `info`, `kill`, `last-modified-file`, `list`, `list-files`, `tail`, `top`        | [Tasks API](https://inductiva.ai/guides/api-functions/api/inductiva.tasks)                              | [Tasks Guide](../../how-it-works/tasks/index.md)                |
+| [`task-runner`](task-runner.md)          | `launch`, `remove`      | --                     | [BYOH Guide](https://inductiva.ai/guides/expand/use-local-task-runner/index)          |
+| [`projects`](projects.md)           | `list`, `download`        | [Projects API](https://inductiva.ai/guides/api-functions/api/inductiva.projects)                        | --       |
+| [`storage`](storage.md)            | `list`, `download`, `export`, `remove`, `size`                | [Storage API](https://inductiva.ai/guides/api-functions/api/inductiva.storage)                          | [Storage Guide](../../how-it-works/cloud-storage/index.md)            |
+| [`resources`](resources.md)          | `start`, `cost`, `info`, `available`, `list`, `terminate`      | [Resources API](https://inductiva.ai/guides/api-functions/api/inductiva.resources)                      | [Machines Guide](../../how-it-works/machines/index.md)          |
+| [`simulators`](simulators.md)               | `list`              | [Simulators API](https://inductiva.ai/guides/api-functions/api/inductiva.simulators)      | [Simulators Guide](../../how-it-works/simulators/index.md)  |
+| [`containers`](containers.md)         | `list`, `upload`, `remove`                  | --  | [BYOS Guide](https://inductiva.ai/guides/expand/bring-your-own-software/index) |
 
 ### Notes
 
 - Use `--help` with any command for more detailed usage and available flags.
-- `containers` operates on top of the remote storage system, designed specifically for `.sif` container files.
 - For safety, commands like `resources terminate` and `containers remove` include a `--yes` flag to bypass confirmation prompts.
 
 
