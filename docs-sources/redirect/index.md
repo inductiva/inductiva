@@ -6,7 +6,7 @@ You are being redirected. If nothing happens, [click here](https://console.induc
 <script>
   // Optional: Wait 1 second to allow Google Analytics to fire
   setTimeout(function () {
-    window.location.href = "https://console.inductiva.ai";
+    window.top.location.href = "https://console.inductiva.ai";
   }, 1000);
 </script>
 ```
