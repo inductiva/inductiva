@@ -1,4 +1,4 @@
-const googleanalytics_id = window.env?.GTAG_WEBSITE || "GTM-K343XQD7";
+const googleanalytics_id = window.env?.GTAG_WEBSITE || "";
 
 
 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

@@ -109,6 +109,8 @@ language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/amr-wind'
 
+#save into static a js with the env var with the GTM code for the corrent env
+#prod or dev
 env_js_path = os.path.join(os.path.dirname(__file__), '_static', 'env.js')
 
 with open(env_js_path, 'w') as f:
