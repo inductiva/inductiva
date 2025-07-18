@@ -22,7 +22,7 @@ This library means you can focus on your simulation design and analysis rather t
 
 To get started, follow our [Installation Guide](https://inductiva.ai/guides/how-it-works/get-started/install-guide) to install the [Inductiva Python package](https://pypi.org/project/inductiva/) and set up your environment.
 
-
+```{toctree}
 ---
 caption: Classes
 maxdepth: 2
@@ -36,3 +36,4 @@ simulators <api/inductiva.simulators>
 tasks <api/inductiva.tasks>
 templating <api/inductiva.templating>
 users <api/inductiva.users>
+```
