@@ -1,4 +1,5 @@
 function trackAndRedirect(origin) {
+  gtag('set', 'debug_mode', true);
   // Capture the page as the origin (e.g. /getting-started)
   origin = origin || 'unknown';
   console.log(`[DEBUG] trackAndRedirect called with origin: "${origin}"`);
