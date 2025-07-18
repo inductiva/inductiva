@@ -1,5 +1,5 @@
 """SplisHSPlasH simulator module of the API."""
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 from inductiva import simulators, tasks, types
 
@@ -24,8 +24,9 @@ class SplishSplash(simulators.Simulator):
     def run(
         self,
         input_dir: Optional[str],
-        sim_config_filename: str,
         *,
+        sim_config_filename: str,
+        commands: Optional[types.Commands] = None,
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
@@ -47,6 +48,8 @@ class SplishSplash(simulators.Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             sim_config_filename: Name of the simulation configuration file.
+            commands: Additional commands to run before or after the simulation.
+                If None, only the default simulation commands are executed.
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
             storage_dir: Directory for storing simulation results.
@@ -101,12 +104,13 @@ class SplishSplash(simulators.Simulator):
                              "`vtk_to_obj_vtk_dir` and "
                              "`vtk_to_obj_particle_radius` need to be defined.")
 
-        commands = [
+        # Start with the default simulation commands
+        default_commands = [
             "cp /SPlisHSPlasH_CPU/bin/SPHSimulator .",
             f"./SPHSimulator {sim_config_filename} --no-gui --output-dir .",
-            "rm SPHSimulator"
         ]
 
+        # Add VTK to OBJ conversion commands if requested
         if vtk_to_obj:
 
             # If out_dir is not provided, will save in the same directory as
@@ -114,7 +118,7 @@ class SplishSplash(simulators.Simulator):
             if vtk_to_obj_out_dir is None:
                 vtk_to_obj_out_dir = vtk_to_obj_vtk_dir
 
-            commands.append(
+            default_commands.append(
                 "splashsurf reconstruct "
                 f"{vtk_to_obj_vtk_dir}/{vtk_to_obj_vtk_prefix}"
                 "{}.vtk "
@@ -128,11 +132,23 @@ class SplishSplash(simulators.Simulator):
                 f"-o {vtk_to_obj_out_dir}/{vtk_to_obj_vtk_prefix}_surface"
                 "{}.obj")
 
+        # Combine default commands with any additional commands provided by the user
+        if commands is not None:
+            if isinstance(commands, str):
+                # If commands is a string, split it into a list
+                extra_commands = [commands]
+            else:
+                # If commands is already a list, use it as is
+                extra_commands = commands
+            final_commands =  extra_commands + default_commands
+        else:
+            final_commands = default_commands
+
         return super().run(
             input_dir,
-            commands=commands,
-            storage_dir=storage_dir,
             on=on,
+            commands=final_commands,
+            storage_dir=storage_dir,
             resubmit_on_preemption=resubmit_on_preemption,
             remote_assets=remote_assets,
             project=project,

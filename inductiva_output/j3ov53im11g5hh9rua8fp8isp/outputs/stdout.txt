@@ -1,0 +1,45 @@
+# COMMAND: ['cp', '/SPlisHSPlasH_CPU/bin/SPHSimulator', '.']
+# Working directory: /workdir/output/artifacts
+# Env: {}
+
+
+ -------
+# COMMAND: ['./SPHSimulator', 'Scenes/SurfaceTension_CoveredSphere_JWL+23.json', '--no-gui', '--output-dir', '.']
+# Working directory: /workdir/output/artifacts
+# Env: {}
+
+SPlisHSPlasH version: 2.13.1
+Output directory: .
+Load scene file: /workdir/output/artifacts/Scenes/SurfaceTension_CoveredSphere_JWL+23.json
+Initialize static boundary simulation
+Initialize fluid particles
+Number of fluid particles: 0
+Loading /workdir/output/artifacts/models/sphere.obj
+Number of triangles: 760
+Number of vertices: 382
+Domain - min: -1.25456, -1.25456, -1.25456
+Domain - max: 1.25456, 1.25456, 1.25456
+Set SDF resolution: 20, 20, 20
+Generate SDF
+time SDF Construction: 29.2585 ms
+Generate volume map...
+time Volume Map Construction: 87.0022 ms
+Save volume map: /workdir/output/artifacts/Scenes/Cache/sphere_sb_vm_0.02500000037252902985_s0.45456400513648986816_0.45456400513648986816_0.45456400513648986816_r20_20_20_i0_t0.cdm
+Loading /workdir/output/artifacts/models/UnitBox.obj
+Number of triangles: 12
+Number of vertices: 8
+Domain - min: -3.4948, -3.4948, -3.4948
+Domain - max: 3.4948, 3.4948, 3.4948
+Set SDF resolution: 20, 20, 20
+Generate SDF
+time SDF Construction: 6.04756 ms
+Generate volume map...
+time Volume Map Construction: 423.255 ms
+Save volume map: /workdir/output/artifacts/Scenes/Cache/UnitBox_sb_vm_0.02500000037252902985_s5.38960170745849609375_5.38960170745849609375_5.38960170745849609375_r20_20_20_i1_t0.cdm
+File not found: /workdir/output/artifacts/resources/emitter_boundary/EmitterCylinder.obj
+Domain - min: 1.79769e+308, 1.79769e+308, 1.79769e+308
+Domain - max: -1.79769e+308, -1.79769e+308, -1.79769e+308
+Set SDF resolution: 20, 20, 20
+Generate SDF
+
+ -------

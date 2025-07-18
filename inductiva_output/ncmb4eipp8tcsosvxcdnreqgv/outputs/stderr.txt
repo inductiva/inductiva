@@ -1,0 +1,19 @@
+# COMMAND: ['cp', '/SPlisHSPlasH_CPU/bin/SPHSimulator', '.']
+# Working directory: /workdir/output/artifacts
+# Env: {}
+
+
+ -------
+# COMMAND: ['chmod', '-R', '+x', 'emitter_boundary']
+# Working directory: /workdir/output/artifacts
+# Env: {}
+
+
+ -------
+# COMMAND: ['./SPHSimulator', 'Scenes/SurfaceTension_CoveredSphere_JWL+23.json', '--no-gui', '--output-dir', '.']
+# Working directory: /workdir/output/artifacts
+# Env: {}
+
+Cannot open file: /workdir/output/artifacts/resources/emitter_boundary/EmitterCylinder.obj
+Error: 
+ -------
