@@ -27,7 +27,7 @@ class UsageStatistics(BaseModel):
     UsageStatistics
     """
 
-  # noqa: E501
+    # noqa: E501
     period: Optional[StrictStr] = None
     total_core_hours_failed: Optional[Union[StrictFloat, StrictInt]] = None
     total_core_hours: Optional[Union[StrictFloat, StrictInt]] = None

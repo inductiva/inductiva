@@ -29,4 +29,3 @@ class BannerDirective(Directive):
             </div>
             '''
         return [nodes.raw('', html, format='html')]
-

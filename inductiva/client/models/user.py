@@ -30,7 +30,7 @@ class User(BaseModel):
     User
     """
 
-  # noqa: E501
+    # noqa: E501
     email: StrictStr
     username: StrictStr
     name: Optional[StrictStr] = None

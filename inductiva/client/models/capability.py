@@ -27,7 +27,7 @@ class Capability(BaseModel):
     Capability
     """
 
-  # noqa: E501
+    # noqa: E501
     id: StrictStr
     label: StrictStr
     __properties: ClassVar[List[str]] = ["id", "label"]
