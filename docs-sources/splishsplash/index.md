@@ -3,12 +3,22 @@ Your resource hub for all things SPlisHSPlasH at Inductiva. Whether you're just 
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check! 
 
-## About SPlisHSPlasH
-[SPlisHSPlasH](https://splishsplash.physics-simulation.org) is an open-source library for the simulation of fluids and solids using the Smoothed Particle Hydrodynamics (SPH) method. It efficiently models complex fluid behaviour by considering neighbouring particles. The library includes pressure solvers for the simulation of incompressible fluids and provides different methods for the simulation of viscosity, surface tension, vorticity, elasticity and drag forces.
-
 ## What You'll Find Here
-- **Tutorials:** Step-by-step guides to help you learn how to run SPlisHSPlasH through the Inductiva API. From getting started to advanced tutorials, we have you covered.
-- **Benchmarks:** A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how SPlisHSPlasH performs on different hardware configurations.
+
+### Tutorials
+Step-by-step guides to help you learn how to run SPlisHSPlasH through the Inductiva API. From getting started to advanced tutorials, we have you covered.
+
+* **Getting Started**
+    - [Test Your Inductiva Setup](https://inductiva.ai/guides/splishsplash/setup-test)
+    - [Quick Start Guide](https://inductiva.ai/guides/splishsplash/quick-start)
+
+* **Advanced Tutorials**
+    - [Generate Synthetic Data for Physics-Informed ML](https://inductiva.ai/guides/splishsplash/synthetic-data-for-piml/index)
+    - [Visualizing SPlisHSPlasH Simulations with Python](https://inductiva.ai/guides/splishsplash/visualization/index)
+
+### Benchmarks
+A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how SPlisHSPlasH performs on different hardware configurations.
+
 
 ```{toctree}
 ---

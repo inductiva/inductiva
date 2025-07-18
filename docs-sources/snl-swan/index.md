@@ -3,12 +3,16 @@ Your resource hub for all things SNL-SWAN at Inductiva. Whether you're just star
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check! 
 
-## About SNL-SWAN
-[SNL-SWAN](https://sandialabs.github.io/SNL-SWAN/) is a modification of the SWAN (Simulating WAves Nearshore) model that includes a validated Wave Energy Converter (WEC) module to improve how SWAN accounts for power performance of Wave Energy Converters (WECs) and their effect on the wave field.
-
 ## What You'll Find Here
-- **Tutorials:** Step-by-step guides to help you learn how to run SNL-SWAN through the Inductiva API. From getting started to advanced tutorials, we have you covered.
-- **Benchmarks:** A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how SNL-SWAN performs on different hardware configurations.
+
+### Tutorials
+Step-by-step guides to help you learn how to run SNL-SWAN through the Inductiva API. From getting started to advanced tutorials, we have you covered.
+
+- [Test Your Inductiva Setup](https://inductiva.ai/guides/snl-swan/setup-test)
+- [Quick Start Guide](https://inductiva.ai/guides/snl-swan/quick-start)
+
+### Benchmarks
+A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how SNL-SWAN performs on different hardware configurations.
 
 ```{toctree}
 ---

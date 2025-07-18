@@ -3,12 +3,20 @@ Your resource hub for all things CaNS at Inductiva. Whether you're just starting
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check!
 
-## About CaNS
-[CaNS](https://github.com/CaNS-World/CaNS) (Canonical Navier-Stokes) is a high-performance simulator for massively-parallel numerical simulations of fluid flows. It is specifically designed to solve problems involving incompressible, Newtonian fluids, making it a popular choice for researchers and engineers in fluid dynamics. CaNS is widely used in simulations of turbulence, vortex dynamics, and large-scale atmospheric or oceanic flows.
-
 ## What You'll Find Here
-- **Tutorials:** Step-by-step guides to help you learn how to run CaNS through the Inductiva API. From getting started to advanced tutorials, we have you covered.
-- **Benchmarks:** A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how CaNS performs on different hardware configurations.
+
+### Tutorials
+Step-by-step guides to help you learn how to run CaNS through the Inductiva API. From getting started to advanced tutorials, we have you covered.
+
+* **Getting Started**
+    - [Test Your Inductiva Setup](https://inductiva.ai/guides/cans/setup-test)
+    - [Quick Start Guide](https://inductiva.ai/guides/cans/quick-start)
+
+* **Advanced Tutorials**
+    - [Run a Temporal Boundary Layer with Stable Stratification Case](https://inductiva.ai/guides/cans/run-temporal-boundary-layer-case)
+
+### Benchmarks
+A trusted [guide](https://inductiva.ai/guides/cans/benchmarks) to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how CaNS performs on different hardware configurations.
 
 
 ```{toctree}

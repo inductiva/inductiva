@@ -1,5 +1,8 @@
 # Versions and Containers 🛠️
 
+## About CM1
+[CM1 (Cloud Model 1)](https://asap.ucar.edu/software/cm1/) is a three-dimensional, time-dependent, non-hydrostatic numerical model designed for idealized studies of mesoscale atmospheric phenomena. Researchers use it in particular to study deep convective precipitation (thunderstorms).
+
 ## Supported Versions
 Inductiva stays up to date with the latest versions of CM1. Below is a list of the supported versions, along with their respective release dates:
 

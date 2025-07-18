@@ -3,14 +3,16 @@ Your resource hub for all things COAWST at Inductiva. Whether you're just starti
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check!
 
-## About COAWST
-The [COAWST](https://www.usgs.gov/centers/whcmsc/science/coawst-a-coupled-ocean-atmosphere-wave-sediment-transport-modeling-system) COAWST Modeling System is an open-source tool that combines an ocean model, an atmosphere model, a wave model, and a sediment transport model for coastal change studies.
-
-Specifically, COAWST includes an ocean component (ROMS), an atmosphere component (WRF), a hydrology component (WRF_Hydro), wave components (SWAN, WW3 and InWave), a sediment component (USGS Community Sediment Models) and a sea ice model.
-
 ## What You'll Find Here
-- **Tutorials:** Step-by-step guides to help you learn how to run COAWST through the Inductiva API. From getting started to advanced tutorials, we have you covered.
-- **Benchmarks:** A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how COAWST performs on different hardware configurations.
+
+### Tutorials
+Step-by-step guides to help you learn how to run COAWST through the Inductiva API. From getting started to advanced tutorials, we have you covered.
+
+- [Test Your Inductiva Setup](https://inductiva.ai/guides/coawst/setup-test)
+- [Quick Start Guide](https://inductiva.ai/guides/coawst/quick-start)
+
+### Benchmarks
+A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how COAWST performs on different hardware configurations.
 
 
 ```{toctree}
