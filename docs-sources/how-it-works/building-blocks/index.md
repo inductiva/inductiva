@@ -16,17 +16,17 @@ At the heart of Inductiva is the API that manages all your cloud resources, simu
    :align: center
 
    graph TD
-      subgraph User Interfaces
+      subgraph UserInterfaces
          A(Python Client)
          B(CLI)
          C(Web Console)
       end
 
-      subgraph "Inductiva Platform"
+      subgraph InductivaPlatform
          API(Inductiva API)
       end
 
-      subgraph "Cloud Infrastructure"
+      subgraph CloudInfrastructure
          D(Computing Resources)
          E(Cloud Storage)
       end
@@ -38,13 +38,19 @@ At the heart of Inductiva is the API that manages all your cloud resources, simu
       API -- Manages --> D
       API -- Manages --> E
 
-      %% Style definitions for high-contrast, rounded nodes with mature colors.
-      style A fill:#b3cde3,stroke:#2c5b85,stroke-width:2px,color:black
-      style B fill:#c2d6c4,stroke:#3b6e3e,stroke-width:2px,color:black
-      style C fill:#d5d8dc,stroke:#566573,stroke-width:2px,color:black
-      style API fill:#fdebd0,stroke:#b58941,stroke-width:2px,color:black
-      style D fill:#f2f3f4,stroke:#5d6d7e,stroke-width:2px,color:black
-      style E fill:#f2f3f4,stroke:#5d6d7e,stroke-width:2px,color:black
+      %% Define classes for node styles
+      classDef python fill:#b3cde3,stroke:#2c5b85,stroke-width:2px,color:black
+      classDef cli fill:#c2d6c4,stroke:#3b6e3e,stroke-width:2px,color:black
+      classDef console fill:#d5d8dc,stroke:#566573,stroke-width:2px,color:black
+      classDef api fill:#fdebd0,stroke:#b58941,stroke-width:2px,color:black
+      classDef infra fill:#f2f3f4,stroke:#5d6d7e,stroke-width:2px,color:black
+
+      %% Apply classes to nodes
+      class A python
+      class B cli
+      class C console
+      class API api
+      class D,E infra
 
 ````
 
