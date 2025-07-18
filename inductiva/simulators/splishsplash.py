@@ -130,14 +130,11 @@ class SplishSplash(simulators.Simulator):
             sim_config_filename=sim_config_filename,
         )
 
-        if vtk_to_obj and (
-            vtk_to_obj_vtk_dir is None or vtk_to_obj_particle_radius is None
-        ):
-            raise ValueError(
-                "When using `vtk_to_obj=True`, "
-                "`vtk_to_obj_vtk_dir` and "
-                "`vtk_to_obj_particle_radius` need to be defined."
-            )
+        if vtk_to_obj and (vtk_to_obj_vtk_dir is None or
+                           vtk_to_obj_particle_radius is None):
+            raise ValueError("When using `vtk_to_obj=True`, "
+                             "`vtk_to_obj_vtk_dir` and "
+                             "`vtk_to_obj_particle_radius` need to be defined.")
 
         # Start with the default simulation commands
         default_commands = [
@@ -165,18 +162,15 @@ class SplishSplash(simulators.Simulator):
                 "--mesh-smoothing-weights=on --mesh-smoothing-iters=25 "
                 "--normals=on --normals-smoothing-iters=10 "
                 f"-o {vtk_to_obj_out_dir}/{vtk_to_obj_vtk_prefix}_surface"
-                "{}.obj"
-            )
+                "{}.obj")
         if gen_gif:
-            commands.append(
-                "python3 /home/scripts/gen_gif.py ./vtk res.gif "
-                f"--cam_pos {gen_gif_cam_pos[0]} "
-                f"{gen_gif_cam_pos[1]} "
-                f"{gen_gif_cam_pos[2]} "
-                f"--cam_fp {gen_gif_cam_fp[0]} "
-                f"{gen_gif_cam_fp[1]} "
-                f"{gen_gif_cam_fp[2]}"
-            )
+            commands.append("python3 /home/scripts/gen_gif.py ./vtk res.gif "
+                            f"--cam_pos {gen_gif_cam_pos[0]} "
+                            f"{gen_gif_cam_pos[1]} "
+                            f"{gen_gif_cam_pos[2]} "
+                            f"--cam_fp {gen_gif_cam_fp[0]} "
+                            f"{gen_gif_cam_fp[1]} "
+                            f"{gen_gif_cam_fp[2]}")
 
         # Combine default commands with any additional commands provided by the user
         if commands is not None:
