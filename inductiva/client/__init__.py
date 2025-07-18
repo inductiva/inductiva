@@ -47,6 +47,8 @@ from inductiva.client.models.autoscale_policy import AutoscalePolicy
 from inductiva.client.models.available_simulator_versions import AvailableSimulatorVersions
 from inductiva.client.models.backend_version import BackendVersion
 from inductiva.client.models.bucket import Bucket
+from inductiva.client.models.bulk_simulator_operation import BulkSimulatorOperation
+from inductiva.client.models.bulk_simulator_response import BulkSimulatorResponse
 from inductiva.client.models.cpu_info import CPUInfo
 from inductiva.client.models.capability import Capability
 from inductiva.client.models.compression_method import CompressionMethod
@@ -81,6 +83,7 @@ from inductiva.client.models.operation_type import OperationType
 from inductiva.client.models.order import Order
 from inductiva.client.models.organization_cost_components import OrganizationCostComponents
 from inductiva.client.models.organization_costs import OrganizationCosts
+from inductiva.client.models.processor_type import ProcessorType
 from inductiva.client.models.project import Project
 from inductiva.client.models.project_create import ProjectCreate
 from inductiva.client.models.project_statistics import ProjectStatistics
@@ -92,7 +95,13 @@ from inductiva.client.models.quota_scope import QuotaScope
 from inductiva.client.models.register_vm_group_request import RegisterVMGroupRequest
 from inductiva.client.models.select_mode import SelectMode
 from inductiva.client.models.sharing_level import SharingLevel
+from inductiva.client.models.simulator_create import SimulatorCreate
+from inductiva.client.models.simulator_response import SimulatorResponse
+from inductiva.client.models.simulator_update import SimulatorUpdate
+from inductiva.client.models.simulator_version import SimulatorVersion
+from inductiva.client.models.simulator_with_machine_types import SimulatorWithMachineTypes
 from inductiva.client.models.spot import Spot
+from inductiva.client.models.spot1 import Spot1
 from inductiva.client.models.storage_contents_with_pagination import StorageContentsWithPagination
 from inductiva.client.models.storage_cost import StorageCost
 from inductiva.client.models.storage_file_info import StorageFileInfo
@@ -122,12 +131,19 @@ from inductiva.client.models.top_up_type import TopUpType
 from inductiva.client.models.transaction import Transaction
 from inductiva.client.models.trigger import Trigger
 from inductiva.client.models.trigger1 import Trigger1
+from inductiva.client.models.trigger_credits_info import TriggerCreditsInfo
+from inductiva.client.models.trigger_credits_type import TriggerCreditsType
+from inductiva.client.models.trigger_file_exists_observer_info import TriggerFileExistsObserverInfo
 from inductiva.client.models.trigger_machine_group_create import TriggerMachineGroupCreate
 from inductiva.client.models.trigger_machine_group_info import TriggerMachineGroupInfo
 from inductiva.client.models.trigger_machine_group_type import TriggerMachineGroupType
+from inductiva.client.models.trigger_observer_create import TriggerObserverCreate
+from inductiva.client.models.trigger_observer_type import TriggerObserverType
+from inductiva.client.models.trigger_regex_observer_info import TriggerRegexObserverInfo
 from inductiva.client.models.trigger_task_create import TriggerTaskCreate
 from inductiva.client.models.trigger_task_info import TriggerTaskInfo
 from inductiva.client.models.trigger_task_type import TriggerTaskType
+from inductiva.client.models.trigger_type import TriggerType
 from inductiva.client.models.update_operation_status import UpdateOperationStatus
 from inductiva.client.models.upload_part import UploadPart
 from inductiva.client.models.usage_statistics import UsageStatistics
@@ -146,3 +162,4 @@ from inductiva.client.models.validation_error import ValidationError
 from inductiva.client.models.validation_error_loc_inner import ValidationErrorLocInner
 from inductiva.client.models.version_comparison_result import VersionComparisonResult
 from inductiva.client.models.zip_archive_info import ZipArchiveInfo
+from inductiva.client.models.zip_file_range import ZipFileRange

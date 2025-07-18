@@ -97,7 +97,7 @@ pygments_style = "monokai"
 html_title = 'DualSPHysics'
 
 # Google Analytics
-googleanalytics_id = "G-NHJ03C6M91"
+googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
 googleanalytics_enabled = True
 
 # OpenGraph protocol
@@ -110,3 +110,8 @@ ogp_image = "https://inductiva.ai/builds/dualsphysics/_static/inductiva-social-b
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/dualsphysics'
+
+html_static_path = ['_static']
+html_js_files = [
+    'discord.js',
+]

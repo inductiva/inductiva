@@ -43,6 +43,13 @@
 
 	--table-bg-color-alternate: rgb(242, 242, 242);
 	--sidebar-current-option-bg: rgb(242, 242, 242);
+
+	--purple-color: #9747ff;
+	--purple-hover-color: #7d35dc;
+
+	--cta-container-border: none;
+	--cta-container-bg: #ebebf3;
+	--cta-container-text-color: #333;
 }
 .dark {
 	--bg-color: #03020e;
@@ -71,6 +78,10 @@
 
 	--table-bg-color-alternate: #0e0e14;
 	--sidebar-current-option-bg: #15151c;
+
+	--cta-container-border: 1px solid #4c3669;
+	--cta-container-bg: #8e3bff1a;
+	--cta-container-text-color: #ffffff;
 }
 
 .border-border {
@@ -1326,4 +1337,44 @@ footer {
 .note {
 	margin: 0;
 	padding: 0.25rem 0.5rem;
+}
+
+
+
+.cta-bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 16px;
+	padding: 20px 28px;
+	border-radius: 10px;
+	max-width: 800px;
+	margin: 20px auto;
+	border: var(--cta-container-border);
+	background-color: var(--cta-container-bg)
+}
+
+.cta-text {
+	font-size: 14px;
+	color: var(--cta-container-text-color);
+	flex: 1 1 0;
+	min-width: 200px;          
+	word-break: break-word;   
+}
+
+.cta-button {
+	background-color: var(--purple-color);
+	color: white;
+	border: none;
+	padding: 0.5rem 1rem;
+	border-radius: 10px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	flex-shrink: 0;         
+}
+
+.cta-button:hover {
+	background-color: var(--purple-hover-color);
 }

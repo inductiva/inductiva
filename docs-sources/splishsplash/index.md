@@ -29,3 +29,12 @@ setup-test
 quick-start
 Generate Synthetic Data for Physics-Informed ML <synthetic-data-for-piml/index>
 ```
+
+```{toctree}
+---
+caption: Visualization
+maxdepth: 4
+hidden: true
+---
+visualization/index
+```

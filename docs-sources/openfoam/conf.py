@@ -96,7 +96,7 @@ pygments_style = "monokai"
 html_title = 'OpenFOAM'
 
 # Google Analytics
-googleanalytics_id = "G-N6GVDZ3621"
+googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
 googleanalytics_enabled = True
 
 # OpenGraph protocol
@@ -109,3 +109,8 @@ ogp_image = "https://inductiva.ai/builds/openfoam/_static/inductiva-social-banne
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/openfoam'
+
+html_static_path = ['_static']
+html_js_files = [
+    'discord.js',
+]

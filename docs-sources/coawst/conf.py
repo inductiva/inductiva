@@ -99,7 +99,7 @@ html_favicon = 'favicon.ico'
 html_title = 'COAWST'
 
 # Google Analytics
-googleanalytics_id = "G-NHJ03C6M91"
+googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
 googleanalytics_enabled = True
 
 # OpenGraph protocol
@@ -112,3 +112,8 @@ ogp_image = "https://inductiva.ai/builds/coawst/_static/inductiva-social-banner.
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/coawst'
+
+html_static_path = ['_static']
+html_js_files = [
+    'discord.js',
+]

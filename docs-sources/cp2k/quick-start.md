@@ -87,14 +87,21 @@ However, increasing the number of vCPUs on the cloud machine could improve perfo
 ## Scaling Up Your Simulation  
 Scaling up your simulation is as simple as updating the `machine_type` parameter to a 56 vCPU machine (`c2d-highcpu-56`).
 
-As mentioned above, running this simulation on a **16 vCPU** cloud machine was slower than on a similarly powered local computer. To improve performance, we upgraded to a **c2d-highcpu-56** instance with **56 vCPUs**, reducing the runtime to just **43 seconds**—with a slight cost increase to **$0.0058**.
+As mentioned above, running this simulation on a **16 vCPU** cloud machine was slower than on a similarly powered local computer. To improve performance, we upgraded to a **c2d-highcpu-56** instance with **56 vCPUs**, reducing the runtime to just **43 seconds** — with a slight cost increase to **$0.0058**.
 
-| Machine Type            | Virtual CPUs | Time              | Estimated Cost |
-|-------------------------|--------------|------------------|---------------|
-| **Local Ryzen 7 7700X** | 16           | 1 minute and 15 seconds | N/A           |
-| **Cloud c2d-highcpu-16** | 16           | 1 minute and 24 seconds | 0.0031 US$      |
-| **Cloud c2d-highcpu-56** | 56           | 43 seconds | 0.0058 US$      | 
+| Machine Type            | vCPUs | Execution Time | Estimated Cost (USD)|
+|-------------------------|-------|----------------|---------------------|
+| **Local Ryzen 7 7700X** | 16    | 1 min and 15s  | N/A                 |
+| **Cloud c2d-highcpu-16**| 16    | 1 min and 24s  | 0.0031              |
+| **Cloud c2d-highcpu-56**| 56    | 43s            | 0.0058              | 
 
 By leveraging the Inductiva API, you can efficiently scale your CP2K simulations
 to meet your computational needs. Try different machine configurations and
 optimize your workflow for faster, more cost-effective results!
+
+<div class="cta-bar">
+  <div class="cta-text">
+    <strong>Kickstart your simulations!</strong> You have $5 in <strong>free credits</strong>, no credit card required.
+  </div>
+ <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_cp2k&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
+</div>

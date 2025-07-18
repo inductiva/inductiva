@@ -26,20 +26,24 @@ def test_to_dict__without_prompts():
     }
 
 
-@mark.parametrize("command,should_fail", [
-    ("ls", False),
-    ("ls -l", False),
-    ("ls | wc", True),
-    ("ls > file.txt", True),
-    ("sort < file.txt", True),
-    ("ls & ls", True),
-    ("ls ; ls", True),
-    ("ls *", True),
-    ("ls ?", True),
-    ("ls ~", True),
-    ("ls $HOME", True),
-    ("ls $PATH", True),
-])
+@mark.parametrize(
+    "command,should_fail",
+    [
+        ("ls", False),
+        ("ls -l", False),
+        ("ls | wc", True),
+        ("ls > file.txt", True),
+        ("sort < file.txt", True),
+        ("ls & ls", True),
+        ("ls ; ls", True),
+        #Some simulators need the char * to be used
+        #example "convert -delay 20 -loop 0 potential_*.png scattering.gif"
+        ("ls *", False),
+        ("ls ?", True),
+        ("ls ~", True),
+        ("ls $HOME", True),
+        ("ls $PATH", True),
+    ])
 def test_has_special_chars(command, should_fail):
     if should_fail:
         with pytest.raises(ValueError):

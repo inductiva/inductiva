@@ -99,7 +99,7 @@ html_favicon = 'favicon.ico'
 html_title = 'WRF'
 
 # Google Analytics
-googleanalytics_id = "G-NHJ03C6M91"
+googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
 googleanalytics_enabled = True
 
 # OpenGraph protocol
@@ -112,3 +112,8 @@ ogp_image = "https://inductiva.ai/builds/wrf/_static/inductiva-social-banner.jpg
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/wrf'
+
+html_static_path = ['_static']
+html_js_files = [
+    'discord.js',
+]
