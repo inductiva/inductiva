@@ -1,10 +1,12 @@
----
-redirect: true
-html_meta:
-  "http-equiv": "refresh"
-  content: "1;url=https://console.inductiva.ai"
----
-
 # Redirecting...
 
-If you are not redirected automatically, [click here](https://console.inductiva.ai).
+You are being redirected. If nothing happens, [click here](https://console.inductiva.ai).
+
+```{raw} html
+<script>
+  // Optional: Wait 1 second to allow Google Analytics to fire
+  setTimeout(function () {
+    window.location.href = "https://console.inductiva.ai";
+  }, 1000);
+</script>
+```
