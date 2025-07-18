@@ -21,3 +21,18 @@ This library means you can focus on your simulation design and analysis rather t
 ## Set Up & Authentication
 
 To get started, follow our [Installation Guide](https://inductiva.ai/guides/how-it-works/get-started/install-guide) to install the [Inductiva Python package](https://pypi.org/project/inductiva/) and set up your environment.
+
+
+---
+caption: Classes
+maxdepth: 2
+hidden: true
+---
+benchmarks <api/inductiva.benchmarks>
+projects <api/inductiva.projects>
+resources <api/inductiva.resources>
+storage <api/inductiva.storage>
+simulators <api/inductiva.simulators>
+tasks <api/inductiva.tasks>
+templating <api/inductiva.templating>
+users <api/inductiva.users>
