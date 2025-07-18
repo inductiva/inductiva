@@ -4,7 +4,7 @@ The Inductiva **Python Client** provides a programmatic interface to the Inducti
 
 Our Python Client is a library that wraps the Inductiva API calls into Python functions and classes. With this, you can launch simulations, manage resources, and process results using straightforward Python code — no need to manage complex API endpoints manually!
 
-## Python Client Classes Overview
+## Classes Overview
 
 | Class        | Methods                                 | CLI                                             | Resource Guide                                                   |
 |----------------------|---------------------------------------------|-----------------------------------------------------------|------------------------------------------------------------------|
