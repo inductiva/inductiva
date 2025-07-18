@@ -172,7 +172,7 @@ class SplishSplash(simulators.Simulator):
                             f"{gen_gif_cam_fp[1]} "
                             f"{gen_gif_cam_fp[2]}")
 
-        # Combine default commands with any additional 
+        # Combine default commands with any additional
         # commands provided by the user
         if commands is not None:
             if isinstance(commands, str):
