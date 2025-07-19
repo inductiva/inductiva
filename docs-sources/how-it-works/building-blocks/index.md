@@ -38,17 +38,20 @@ At the heart of Inductiva is the API that manages all your cloud resources, simu
       API -- Manages --> D
       API -- Manages --> E
 
-      %% Style definitions for high contrast
-      %% Forcing black text ('color:black') on all nodes ensures readability.
-      style A fill:#FFD6D6,stroke:#A11,stroke-width:2px,color:black
-      style B fill:#E6D6FF,stroke:#41A,stroke-width:2px,color:black
-      style C fill:#D6E6FF,stroke:#11A,stroke-width:2px,color:black
-      style API fill:#FFFFCC,stroke:#881,stroke-width:2px,color:black
-      style D fill:#E8E8E8,stroke:#333,stroke-width:2px,color:black
-      style E fill:#E8E8E8,stroke:#333,stroke-width:2px,color:black
+      %% Modern mature color scheme with black text and rounded corners
+      style A fill:#4A5568,stroke:#2D3748,stroke-width:3px,color:#000000,rx:12,ry:12
+      style B fill:#553C9A,stroke:#44337A,stroke-width:3px,color:#000000,rx:12,ry:12
+      style C fill:#2B6CB0,stroke:#2C5282,stroke-width:3px,color:#000000,rx:12,ry:12
+      style API fill:#D69E2E,stroke:#B7791F,stroke-width:3px,color:#000000,rx:12,ry:12
+      style D fill:#68D391,stroke:#48BB78,stroke-width:3px,color:#000000,rx:12,ry:12
+      style E fill:#68D391,stroke:#48BB78,stroke-width:3px,color:#000000,rx:12,ry:12
 
-      linkStyle 0,1,2 stroke-width:2px,fill:none,stroke:orange;
-      linkStyle 3,4 stroke-width:2px,fill:none,stroke:green;
+      %% Enhanced link styling
+      linkStyle 0 stroke:#4A5568,stroke-width:3px
+      linkStyle 1 stroke:#553C9A,stroke-width:3px
+      linkStyle 2 stroke:#2B6CB0,stroke-width:3px
+      linkStyle 3 stroke:#D69E2E,stroke-width:3px
+      linkStyle 4 stroke:#D69E2E,stroke-width:3px
 
 ````
 
