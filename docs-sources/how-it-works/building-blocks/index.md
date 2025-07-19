@@ -2,56 +2,17 @@
 
 Inductiva provides an API to easily run large-scale computational simulations on the cloud.
 
-To cater to different workflows and user preferences, we offer three ways to interact with our API: the **Python Client**, the **Command-Line Interface (CLI)**, and the **Web Console**. While each tool can be used independently, they are designed to work together seamlessly, providing a flexible and unified experience for managing your simulations.
+To accomodate different workflows and user preferences, we offer three ways to interact with our API: the **Python Client**, the **Command-Line Interface (CLI)**, and the **Web Console**. While each tool can be used independently, they are designed to work together, providing a flexible and unified experience for managing your simulations.
 
 This page explains the purpose of each component and how they all fit together.
 
 ## How It All Connects
 
-At the heart of Inductiva is the API that manages all your cloud resources, simulation tasks, and storage. The Python Client, CLI, and Web Console are simply different interfaces that communicate with these resources. This means any action you take in one tool will be immediately reflected in the others.
-
-
-````{eval-rst}
-.. mermaid::
-   :align: center
-
-   graph TD
-      A[Python Client<br/>Programmatic Access]
-      B[CLI<br/>Terminal Commands] 
-      C[Web Console<br/>Visual Interaction]
-      API(Inductiva API)
-      D[Computing Resources]
-      E[Cloud Storage]
-
-      A --> API
-      B --> API
-      C --> API
-
-      API --> D
-      API --> E
-
-      %% Modern mature color scheme with black text and rounded corners
-      style A fill:#4A5568,stroke:#2D3748,stroke-width:3px,color:#000000,rx:12,ry:12
-      style B fill:#553C9A,stroke:#44337A,stroke-width:3px,color:#000000,rx:12,ry:12
-      style C fill:#2B6CB0,stroke:#2C5282,stroke-width:3px,color:#000000,rx:12,ry:12
-      style API fill:#D69E2E,stroke:#B7791F,stroke-width:3px,color:#000000,rx:12,ry:12
-      style D fill:#68D391,stroke:#48BB78,stroke-width:3px,color:#000000,rx:12,ry:12
-      style E fill:#68D391,stroke:#48BB78,stroke-width:3px,color:#000000,rx:12,ry:12
-
-      %% Enhanced link styling with transparent text backgrounds
-      linkStyle 0 stroke:#4A5568,stroke-width:3px
-      linkStyle 1 stroke:#553C9A,stroke-width:3px
-      linkStyle 2 stroke:#2B6CB0,stroke-width:3px
-      linkStyle 3 stroke:#D69E2E,stroke-width:3px
-      linkStyle 4 stroke:#D69E2E,stroke-width:3px
-      
-      %% Make link text backgrounds transparent
-      classDef linkText fill:transparent,stroke:none,color:#000000
-
-````
-
+At the heart of Inductiva is the API that manages all your cloud resources, simulation tasks, and storage. The Python Client, CLI, and Web Console are the different interfaces we provide to communicate with these resources. This means any action you take in one tool will be immediately reflected in the others.
 
 The following diagram illustrates this relationship:
+
+![Building Blocks](../_static/building_blocks.svg)
 
 This page explains the purpose of each component and how they fit together to form the Inductiva ecosystem.
 
