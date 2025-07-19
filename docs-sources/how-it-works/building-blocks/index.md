@@ -2,7 +2,7 @@
 
 Inductiva provides an API to easily run large-scale computational simulations on the cloud.
 
-To accomodate different workflows and user preferences, we offer three ways to interact with our API: the[Python Client](../../api-functions/api/index.md), the [Command-Line Interface (CLI)](../../api-functions/cli/overview.md), and the **Web Console**. While each tool can be used independently, they are designed to work together, providing a unified experience for managing your simulations.
+To accomodate different workflows and user preferences, we offer three ways to interact with our API: the **[Python Client](../../api-functions/api/index.md)**, the **[Command-Line Interface (CLI)](../../api-functions/cli/overview.md)**, and the **Web Console**. While each tool can be used independently, they are designed to work together, providing a unified experience for managing your simulations.
 
 This page explains the purpose of each component and how they all fit together.
 
@@ -60,8 +60,3 @@ Consider a typical workflow:
 | **Python Client** | ✅ | ✅ | ✅ | ❌ | ❌ |
 | **CLI** | ❌ | ✅ | ✅ | ❌ | ❌ |
 | **Web Console** | ❌ | ❌ | ✅ | ✅ | ✅ |
-
-| CAPABILITY | PYTHON CLIENT | WEB CONSOLE |
-| :--- | :---: | :---: |
-| **Automate Workflows** | <img src="https://your-website.com/check.png" width="24" alt="Yes"> | <img src="https://your-website.com/cross.png" width="24" alt="No"> |
-| **Visually Monitor** | <img src="https://your-website.com/cross.png" width="24" alt="No"> | <img src="https://your-website.com/check.png" width="24" alt="Yes"> |
