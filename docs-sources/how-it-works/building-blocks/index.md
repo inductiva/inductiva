@@ -16,27 +16,19 @@ At the heart of Inductiva is the API that manages all your cloud resources, simu
    :align: center
 
    graph TD
-      subgraph User Interfaces
-         A[Python Client]
-         B[CLI]
-         C[Web Console]
-      end
+      A[Python Client]
+      B[CLI]
+      C[Web Console]
+      API(Inductiva API)
+      D[Computing Resources]
+      E[Cloud Storage]
 
-      subgraph "Inductiva Platform"
-         API(Inductiva API)
-      end
+      A -->|Programmatic Access| API
+      B -->|Terminal Commands| API
+      C -->|Visual Interaction| API
 
-      subgraph "Cloud Infrastructure"
-         D[Computing Resources]
-         E[Cloud Storage]
-      end
-
-      A -- Programmatic Access --> API
-      B -- Terminal Commands --> API
-      C -- Visual Interaction --> API
-
-      API -- Manages --> D
-      API -- Manages --> E
+      API -->|Manages| D
+      API -->|Manages| E
 
       %% Modern mature color scheme with black text and rounded corners
       style A fill:#4A5568,stroke:#2D3748,stroke-width:3px,color:#000000,rx:12,ry:12
