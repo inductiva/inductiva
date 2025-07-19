@@ -38,12 +38,15 @@ At the heart of Inductiva is the API that manages all your cloud resources, simu
       style D fill:#68D391,stroke:#48BB78,stroke-width:3px,color:#000000,rx:12,ry:12
       style E fill:#68D391,stroke:#48BB78,stroke-width:3px,color:#000000,rx:12,ry:12
 
-      %% Enhanced link styling
+      %% Enhanced link styling with transparent text backgrounds
       linkStyle 0 stroke:#4A5568,stroke-width:3px
       linkStyle 1 stroke:#553C9A,stroke-width:3px
       linkStyle 2 stroke:#2B6CB0,stroke-width:3px
       linkStyle 3 stroke:#D69E2E,stroke-width:3px
       linkStyle 4 stroke:#D69E2E,stroke-width:3px
+      
+      %% Make link text backgrounds transparent
+      classDef linkText fill:transparent,stroke:none,color:#000000
 
 ````
 
