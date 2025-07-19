@@ -12,7 +12,7 @@ At the heart of Inductiva is the API that manages all your cloud resources, simu
 
 The following diagram illustrates this relationship:
 
-![Building Blocks](../_static/building_blocks.svg)
+![Building Blocks](../_static/building_blocks.png)
 
 This page explains the purpose of each component and how they fit together to form the Inductiva ecosystem.
 
