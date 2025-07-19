@@ -2,7 +2,7 @@
 
 Inductiva provides an API to easily run large-scale simulations on the cloud.
 
-To accomodate different workflows and user preferences, we offer three ways to interact with our API: the **[Python Client](../../api-functions/api/index.md)**, the **[Command-Line Interface (CLI)](https://inductiva.ai/guides/api-functions/cli/overview)**, and the **Web Console**. While each tool can be used independently, they are designed to work together, providing a unified experience for managing your simulations.
+To accomodate different workflows and user preferences, we offer three ways to interact with our API: the [Python Client](https://inductiva.ai/guides/api-functions/api/index), the [Command-Line Interface (CLI)](https://inductiva.ai/guides/api-functions/cli/overview), and the **Web Console**. While each tool can be used independently, they are designed to work together, providing a unified experience for managing your simulations.
 
 This page explains the purpose of each component and how they all fit together.
 
