@@ -2,13 +2,13 @@
 
 Inductiva provides an API to easily run large-scale computational simulations on the cloud.
 
-To accomodate different workflows and user preferences, we offer three ways to interact with our API: the **[Python Client](../../api-functions/api/index.md)**, the **[Command-Line Interface (CLI)](../../api-functions/cli/overview.md)**, and the **Web Console**. While each tool can be used independently, they are designed to work together, providing a unified experience for managing your simulations.
+To accomodate different workflows and user preferences, we offer three ways to interact with our API: the[Python Client](../../api-functions/api/index.md), the [Command-Line Interface (CLI)](../../api-functions/cli/overview.md), and the **Web Console**. While each tool can be used independently, they are designed to work together, providing a unified experience for managing your simulations.
 
 This page explains the purpose of each component and how they all fit together.
 
 ## Architecture Overview
 
-At the heart of Inductiva is the API that manages all your cloud resources, simulation tasks, and storage. The Python Client, CLI, and Web Console are the different interfaces we provide to communicate with these resources. This means any action you take in one tool will be immediately reflected in the others.
+The Inductiva API centrally manages all your cloud resources, simulation tasks, and storage. The Python Client, CLI, and Web Console are the different interfaces you can use to communicate with these resources.
 
 The following diagram illustrates this relationship:
 
@@ -18,7 +18,7 @@ The following diagram illustrates this relationship:
 
 ### Python Client: _a library that transforms API requests into simple Python code_
 
-The **Python Client** is a library that allows you to control the Inductiva API programmatically within a Python script.
+The **Python Client** is a library to control the Inductiva API programmatically within a Python script.
 
 **Best For:**
 - Automate complex or repetitive workflows 
@@ -27,7 +27,7 @@ The **Python Client** is a library that allows you to control the Inductiva API 
 
 ### Command Line Interface: _for quick terminal operations_
 
-The **Inductiva CLI** provides a fast and efficient way to interact with the API directly from the terminal. Suited for quick operations, allowing to manage resources and check on tasks without writing a full script.
+The **Inductiva CLI** provides a fast and efficient way to interact with the API directly from the terminal. Suited for quick operations and status check, without needing to writing a full script.
 
 **Best For:**
 - Check the status of a task or list all running machines.
@@ -37,7 +37,7 @@ The **Inductiva CLI** provides a fast and efficient way to interact with the API
 
 ### Web Console: _an intuitive graphical interface for visualization and management_
 
-The **Web Console** is a graphical interface (UI) that provides a visual way to monitor tasks and resources, analyze costs, see statistics and analytics and manage your account. It requires **no programming or command-line knowledge**, making it the perfect tool for getting a high-level overview, performing quick actions, and managing billing.
+The **Web Console** is a graphical interface to visually monitor tasks and resources, analyze costs, see statistics and analytics, and manage your account. It requires **no programming or command-line knowledge**, making it the most suited tool for getting a high-level overview.
 
 **Best For:**
 - Visually monitor running tasks and computational resources.
@@ -46,7 +46,7 @@ The **Web Console** is a graphical interface (UI) that provides a visual way to 
 
 ## How They Fit Together: A Unified Experience
 
-The true power of Inductiva comes from using these tools together. Because they all interact with the same API, you can mix and match them to suit your needs at any given moment.
+Inductiva's ecosystem is designed for maximum flexibility. With all three interfaces built on the same API, you can seamlessly move between Python scripts, terminal commands, and web interfaces as your workflow evolves.
 
 Consider a typical workflow:
 
@@ -60,3 +60,8 @@ Consider a typical workflow:
 | **Python Client** | ✅ | ✅ | ✅ | ❌ | ❌ |
 | **CLI** | ❌ | ✅ | ✅ | ❌ | ❌ |
 | **Web Console** | ❌ | ❌ | ✅ | ✅ | ✅ |
+
+| CAPABILITY | PYTHON CLIENT | WEB CONSOLE |
+| :--- | :---: | :---: |
+| **Automate Workflows** | <img src="https://your-website.com/check.png" width="24" alt="Yes"> | <img src="https://your-website.com/cross.png" width="24" alt="No"> |
+| **Visually Monitor** | <img src="https://your-website.com/cross.png" width="24" alt="No"> | <img src="https://your-website.com/check.png" width="24" alt="Yes"> |
