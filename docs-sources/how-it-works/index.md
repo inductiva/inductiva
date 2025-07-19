@@ -10,6 +10,7 @@ Whether you're a beginner or an advanced user, this page is designed to support 
 
 ```{toctree}
 ---
+caption: The Building Blocks
 maxdepth: 2
 hidden: true
 ---
