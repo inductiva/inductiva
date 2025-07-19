@@ -55,7 +55,7 @@ Consider a typical workflow:
 3.  **Visualize in the Console:** At any given moment, you can open the **Web Console** to visually inspect the graphical outputs, check the total cost of the run, and download the final results to your simulation tasks.
 
 
-| TOOL | AUTOMATE & SCRIPT | LAUNCH SIMULATIONS | MONITOR & OPERATE | VISUAL ANALYTICS | MANAGE ACCOUNT |
+| | AUTOMATE & SCRIPT | LAUNCH SIMULATIONS | MONITOR & OPERATE | VISUAL ANALYTICS | MANAGE ACCOUNT |
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **Python Client** | ✅ | ✅ | ✅ | ❌ | ❌ |
 | **CLI** | ❌ | ✅ | ✅ | ❌ | ❌ |
