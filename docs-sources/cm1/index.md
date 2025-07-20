@@ -15,6 +15,11 @@ Step-by-step guides to help you learn how to run CM1 through the Inductiva API. 
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how CM1 performs on different hardware configurations.
 
+
+```{banner}
+:origin: cm1
+```
+
 ```{toctree}
 ---
 caption: " "
