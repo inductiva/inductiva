@@ -97,7 +97,7 @@ machine_group.terminate()
 
 ## Task Management
 
-The [Python Client](https://inductiva.ai/guides/api-functions/api/inductiva.tasks) provides several methods for managing your tasks.
+The [Python Client](https://inductiva.ai/guides/api-functions/api/inductiva.tasks) provides several methods for managing tasks.
 
 | Method | Description | Example |
 |--------|-------------|---------|
