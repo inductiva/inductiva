@@ -32,8 +32,6 @@ Each task progresses through several main states:
 
 ## Execution Control
 
-You can configure how to wait for the task to end by using the `wait` method, which provides robust handling of task completion.
-
 ### Blocking Execution with `wait()`
 
 Convert asynchronous tasks into blocking operations by using the `wait` method. This method will block the call, forcing your script to wait until the task reaches a terminal status to continue its execution.
