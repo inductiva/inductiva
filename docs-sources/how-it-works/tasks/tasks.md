@@ -1,6 +1,6 @@
 # Tasks
 
-A `Task` is automatically created whenever you submit a simulation to the API by calling the `run` method on a simulator object. Each call to this method generates a unique `Task`, even if the arguments remain identical. This ensures separate executions for each submission of the same simulation.
+A `Task` represents a single execution of a simulation on the Inductiva platform. Tasks are automatically created when you submit a simulation to the API using the `run` method on any simulator object. Each submission creates a unique task with its own identifier, even when using identical parameters.
 
 ## Submitting Your First Task
 
@@ -30,19 +30,9 @@ print(task.id)
 # Example output: i4ir3kvv62odsfrhko4y8w2an
 ```
 
-Note that a subsequent call to `splishsplash_simulator.run()` with the same input arguments would create a new, distinct task:
+> Subsequent calls to `splishsplash_simulator.run()` with the same input arguments will create a **new task**.
 
-```python
-task2 = splishsplash_simulator.run(input_dir="splishsplash-input-example",
-                                  sim_config_filename="config.json",
-                                  on=machine_group)
-print (task2.id)
-# Example output: k9muu1vq1fc6m2oyxm0n3n8y0
-
-machine_group.terminate()
-```
-
-When a task is submitted, the API provides immediate feedback in the terminal about its position in the queue and helpful CLI commands for monitoring:
+When a task is submitted, the API provides immediate feedback in the terminal about queue position and monitoring options:
 
 ```sh
 # Number of tasks ahead in the queue: 3.
@@ -56,7 +46,9 @@ When a task is submitted, the API provides immediate feedback in the terminal ab
 #     inductiva tasks info <task_id>
 ```
 
-You can programmatically check the queue position and task status:
+---
+
+You can check task status and queue position programmatically:
 
 ```python
 # Check queue position
@@ -70,26 +62,25 @@ print(f"Current status: {task.status}")
 
 ## Unique Task Identification
 
-Every `Task` is assigned a unique alphanumeric identifier upon creation. This identifier ensures that each task is distinct and can be easily referenced.
-
-While it is possible to instantiate multiple `Task` objects using the same identifier, doing so does not create duplicate tasks on the API. Instead, all such objects point to the same underlying task, allowing you to access and manage it across different sessions.
-
-This mechanism is useful when you want to recreate a `Task` object to retrieve information about tasks you created in previous sessions:
+Every task receives a unique alphanumeric identifier that allows you to reference it across sessions:
 
 ```python
->>> import inductiva
->>>
->>> task1 = inductiva.tasks.Task("i4ir3kvv62odsfrhko4y8w2an")
->>> task2 = inductiva.tasks.Task("i4ir3kvv62odsfrhko4y8w2an")
->>> print(id(task1))
-4410160112
->>> print(id(task2))
-4389863104
->>> print(task1.id)
-i4ir3kvv62odsfrhko4y8w2an
->>> print(task2.id)
-i4ir3kvv62odsfrhko4y8w2an # Outputs the same task ID as task1.id
+import inductiva
+
+# Create task objects using existing task IDs
+task1 = inductiva.tasks.Task("i4ir3kvv62odsfrhko4y8w2an")
+task2 = inductiva.tasks.Task("i4ir3kvv62odsfrhko4y8w2an")
+
+# These are different Python objects
+print(f"task1 object ID: {id(task1)}")  # Output: 4410160112
+print(f"task2 object ID: {id(task2)}")  # Output: 4389863104
+
+# But they reference the same task
+print(f"task1 ID: {task1.id}")  # Output: i4ir3kvv62odsfrhko4y8w2an
+print(f"task2 ID: {task2.id}")  # Output: i4ir3kvv62odsfrhko4y8w2an
 ```
+
+> **Note**: Creating multiple `Task` objects with the same ID doesn't duplicate tasks on the platform. All objects reference the same underlying task.
 
 ## Task Metadata
 
@@ -123,7 +114,7 @@ And the metadata can later be retrieved by doing:
 metadata = task.get_metadata()
 ```
 
-You can also manipulate the metadata in the Task's page on the Web Console:
+You can also manipulate the metadata in the Task's page on the [Web Console]():
 
 <div align="center">
    <img src="../_static/task-metadata.png" alt="Task Metadata">

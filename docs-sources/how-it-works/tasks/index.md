@@ -1,6 +1,6 @@
 # Tasks
 
-Once you've launched a simulation, how do you track it? The answer is _Tasks_. The Inductiva API creates a **unique Task** for every simulation run, providing a dedicated object to monitor, manage, and retrieve results related to the computation from start to finish.
+Once you've launched a simulation how do you track it? The answer is **Tasks**. Inductiva API creates a unique Task for every simulation run, providing a dedicated object to monitor, manage, and retrieve results related to the computation from start to finish.
 
 
 ## Get started
