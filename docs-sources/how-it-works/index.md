@@ -25,6 +25,18 @@ hidden: true
 
 ```{toctree}
 ---
+caption: Tasks
+maxdepth: 3
+hidden: true
+---
+Overview <tasks/index>
+tasks/tasks
+tasks/tasks-execution
+tasks/tasks-lifecycle
+```
+
+```{toctree}
+---
 caption: Introduction to Inductiva API
 maxdepth: 3
 hidden: true
