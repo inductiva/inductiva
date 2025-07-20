@@ -10,7 +10,7 @@ Step-by-step guides to help you learn how to run DualSPHysics through the Induct
 
 * **Getting Started**
     - [Test Your Inductiva Setup](https://inductiva.ai/guides/dualsphysics/setup-test)
-    - [Quick Start Guide](https://inductiva.ai/guides/dualsphysics/quick-start)
+    - [Run Your First Simulation](https://inductiva.ai/guides/dualsphysics/quick-start)
 
 * **Advanced Tutorials**
     - [Run the 09_Turbine Chrono Example](https://inductiva.ai/guides/dualsphysics/run-chrono-example)

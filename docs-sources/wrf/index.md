@@ -8,7 +8,7 @@ Step-by-step guides to help you learn how to run WRF through the Inductiva API. 
 
 * **Getting Started**
     - [Test Your Inductiva Setup](https://inductiva.ai/guides/wrf/setup-test)
-    - [Quick Start Guide](https://inductiva.ai/guides/wrf/quick-start)
+    - [Run Your First Simulation](https://inductiva.ai/guides/wrf/quick-start)
 
 * **Advanced Tutorials**
     - [Automatically Generate GIFs from Your Simulation](https://inductiva.ai/guides/wrf/gif-generation)

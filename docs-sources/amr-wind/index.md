@@ -10,7 +10,7 @@ Step-by-step guides to help you learn how to run AMR-Wind through the Inductiva 
 
 * **Getting Started**
     - [Test Your Inductiva Setup](https://inductiva.ai/guides/amr-wind/setup-test)
-    - [Quick Start Guide](https://inductiva.ai/guides/amr-wind/quick-start)
+    - [Run Your First Simulation](https://inductiva.ai/guides/amr-wind/quick-start)
 
 * **Advanced Tutorials**
     - [Flow Around a Circular Cylinder](https://inductiva.ai/guides/amr-wind/run-flow-cylinder-case)

@@ -3,12 +3,21 @@ Your resource hub for all things Quantum ESPRESSO at Inductiva. Whether you're j
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check! 
 
-## About Quantum ESPRESSO
-[Quantum ESPRESSO](https://sandialabs.github.io/Quantum/) is an open-source suite widely used for electronic structure calculations and materials modeling at the nanoscale. It is based on density functional theory (DFT) and uses plane-wave basis sets to solve quantum mechanical equations for many-body systems.
-
 ## What You'll Find Here
-- **Tutorials:** Step-by-step guides to help you learn how to run Quantum ESPRESSO through the Inductiva API. From getting started to advanced tutorials, we have you covered.
-- **Benchmarks:** A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how Quantum ESPRESSO performs on different hardware configurations.
+
+### Tutorials
+Step-by-step guides to help you learn how to run Quantum ESPRESSO through the Inductiva API. From getting started to advanced tutorials, we have you covered.
+
+* **Getting Started**
+    - [Test Your Inductiva Setup](https://inductiva.ai/guides/quantumespresso/setup-test)
+    - [Run Your First Simulation](https://inductiva.ai/guides/quantumespresso/quick-start)
+
+* **Advanced Tutorials**
+    - [Run the GRIR443 Benchmark](https://inductiva.ai/guides/quantumespresso/run-grir443-benchmark)
+    - [Run GRIR443 on an MPI Cluster](https://inductiva.ai/guides/quantumespresso/run-grir443-on-mpi)
+
+### Benchmarks
+A trusted [guide](https://inductiva.ai/guides/quantumespresso/benchmarks) to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how Quantum ESPRESSO performs on different hardware configurations.
 
 ```{toctree}
 ---

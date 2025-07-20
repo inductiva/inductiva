@@ -10,7 +10,7 @@ Step-by-step guides to help you learn how to run REEF3D through the Inductiva AP
 
 * **Getting Started**
     - [Test Your Inductiva Setup](https://inductiva.ai/guides/reef3d/setup-test)
-    - [Quick Start Guide](https://inductiva.ai/guides/reef3d/quick-start)
+    - [Run Your First Simulation](https://inductiva.ai/guides/reef3d/quick-start)
 
 * **Advanced Tutorials**
     - [Run the 3D Dam Break Scenario with Obstacle](https://inductiva.ai/guides/reef3d/run-3d-dam-break-scenario)

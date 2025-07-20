@@ -10,7 +10,7 @@ Step-by-step guides to help you learn how to run CaNS through the Inductiva API.
 
 * **Getting Started**
     - [Test Your Inductiva Setup](https://inductiva.ai/guides/cans/setup-test)
-    - [Quick Start Guide](https://inductiva.ai/guides/cans/quick-start)
+    - [Run Your First Simulation](https://inductiva.ai/guides/cans/quick-start)
 
 * **Advanced Tutorials**
     - [Run a Temporal Boundary Layer with Stable Stratification Case](https://inductiva.ai/guides/cans/run-temporal-boundary-layer-case)

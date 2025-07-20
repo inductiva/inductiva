@@ -10,7 +10,7 @@ Step-by-step guides to help you learn how to run OpenFOAM through the Inductiva 
 
 * **Getting Started**
     - [Test Your Inductiva Setup](https://inductiva.ai/guides/openfoam/setup-test)
-    - [Quick Start Guide](https://inductiva.ai/guides/openfoam/quick-start)
+    - [Run Your First Simulation](https://inductiva.ai/guides/openfoam/quick-start)
 
 * **Advanced Tutorials**
     - [Generate a Wind Tunnel Simulation Dataset](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/index)

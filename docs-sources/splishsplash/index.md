@@ -10,7 +10,7 @@ Step-by-step guides to help you learn how to run SPlisHSPlasH through the Induct
 
 * **Getting Started**
     - [Test Your Inductiva Setup](https://inductiva.ai/guides/splishsplash/setup-test)
-    - [Quick Start Guide](https://inductiva.ai/guides/splishsplash/quick-start)
+    - [Run Your First Simulation](https://inductiva.ai/guides/splishsplash/quick-start)
 
 * **Advanced Tutorials**
     - [Generate Synthetic Data for Physics-Informed ML](https://inductiva.ai/guides/splishsplash/synthetic-data-for-piml/index)

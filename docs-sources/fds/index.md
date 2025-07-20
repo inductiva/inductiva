@@ -9,7 +9,7 @@ Inductiva simplifies research by making high-performance computing more accessib
 Step-by-step guides to help you learn how to run FDS through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
 - [Test Your Inductiva Setup](https://inductiva.ai/guides/fds/setup-test)
-- [Quick Start Guide](https://inductiva.ai/guides/fds/quick-start)
+- [Run Your First Simulation](https://inductiva.ai/guides/fds/quick-start)
 
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how FDS performs on different hardware configurations.
