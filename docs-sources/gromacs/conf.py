@@ -82,15 +82,18 @@ html_theme_options = {
     'show_scrolltop': True,
     'show_breadcrumbs': True,
 }
+
+html_js_files = [
+    'discord.js',
+]
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 shared_static_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "_shared_static"))
 html_static_path = ['_static', shared_static_path]
-html_css_files = [
-    'css/custom.css',
-]
+html_css_files = ['css/custom.css', 'css/banner.css']
 pygments_style = "monokai"
 
 html_title = 'GROMACS'
@@ -109,3 +112,12 @@ ogp_image = "https://inductiva.ai/builds/gromacs/_static/inductiva-social-banner
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/gromacs'
+
+sys.path.insert(0, shared_static_path)
+
+
+def setup(app):
+    from banner_directive import BannerDirective
+    app.add_directive("banner", BannerDirective)
+    from banner_small_directive import BannerSmallDirective
+    app.add_directive("banner_small", BannerSmallDirective)

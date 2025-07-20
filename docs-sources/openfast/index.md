@@ -1,4 +1,5 @@
 # The Inductiva Guide to OpenFAST
+
 Your resource hub for all things OpenFAST at Inductiva. Whether you're just starting out or an experienced user, you'll find the resources you need to **easily run hundreds of OpenFAST simulations simultaneously** and slash your development time to a fraction.
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to explore ever larger design spaces and achieve better results, while keeping your costs in check!
@@ -20,6 +21,10 @@ Step-by-step guides to help you learn how to run OpenFAST through the Inductiva 
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how OpenFAST performs on different hardware configurations.
 
+
+```{banner}
+:origin: openfast
+```
 
 ```{toctree}
 ---

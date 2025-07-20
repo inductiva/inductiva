@@ -181,3 +181,7 @@ more powerful machines with minimal changes to your code. Scaling up simply invo
 To explore detailed results, visit our [Benchmarks page](https://inductiva.ai/guides/cans/benchmarks).
 
 Stay tunned for more!
+
+```{banner_small}
+:origin: cans
+```

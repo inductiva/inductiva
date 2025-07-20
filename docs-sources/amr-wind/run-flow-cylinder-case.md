@@ -130,9 +130,6 @@ For more computationally intensive tasks, the benefits of scaling can be even mo
 custom visualizations and data extraction. For step-by-step guidance on creating slice plots and animations, 
 be sure to check out our [post-processing yt tutorial](https://inductiva.ai/guides/amr-wind/using-yt).
 
-<div class="cta-bar">
-  <div class="cta-text">
-    <strong>Kickstart your simulations!</strong> You have $5 in <strong>free credits</strong>, no credit card required.
-  </div>
- <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_amr-wind&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
-</div>
+```{banner_small}
+:origin: amr_wind
+```

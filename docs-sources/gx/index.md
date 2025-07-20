@@ -14,6 +14,10 @@ Step-by-step guides to help you learn how to run GX through the Inductiva API. F
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how GX performs on different hardware configurations.
 
+```{banner}
+:origin: gx
+```
+
 ```{toctree}
 ---
 caption: " "

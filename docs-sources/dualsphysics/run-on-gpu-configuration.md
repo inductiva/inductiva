@@ -129,3 +129,7 @@ Here are the results of running the same simulation on these machines:
 > **Note**: The times and costs listed above refer only to running the simulation and do not include the time required to convert VTK files to OBJ format. This conversion step is optional.
 
 Check out our [ParaView](https://inductiva.ai/guides/dualsphysics/paraview-for-visualization) and [Blender](https://inductiva.ai/guides/dualsphysics/blender-for-visualization) tutorials to learn how to visualize your simulation results.
+
+```{banner_small}
+:origin: dualsphysics
+```

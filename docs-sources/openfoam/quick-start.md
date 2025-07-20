@@ -193,10 +193,7 @@ Below are the results from running the simulation with 6, 8 and 16 sub-domains:
 As the results show, using **16 sub-domains**, we achieved a **1.9× speedup**
 with only a **1.19× increase in cost**, compared to the base case with **6 sub-domains**.
 
-<div class="cta-bar">
-  <div class="cta-text">
-    <strong>Kickstart your simulations!</strong> You have $5 in <strong>free credits</strong>, no credit card required.
-  </div>
- <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_openfoam&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
-</div>
+```{banner_small}
+:origin: openfoam
+```
 

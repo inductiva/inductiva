@@ -32,3 +32,7 @@ The following plot shows how the execution times and costs vary with the number 
 ```{raw} html
 :file: ./_static/cost_time_graph.html
 ```
+
+```{banner_small}
+:origin: swash
+```

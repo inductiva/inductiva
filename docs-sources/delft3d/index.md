@@ -1,4 +1,5 @@
 # Welcome to Delft3D at Inductiva 🌊
+
 Your resource hub for all things Delft3D at Inductiva. Whether you're just
 starting out or an experienced user, you'll find the resources you need to
 seamlessly run your Delft3D simulations on Cloud machines equipped with hundreds
@@ -21,6 +22,9 @@ Step-by-step guides to help you learn how to run Delft3D through the Inductiva A
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how Delft3D performs on different hardware configurations.
 
+```{banner}
+:origin: delft3d
+```
 
 ```{toctree}
 ---
