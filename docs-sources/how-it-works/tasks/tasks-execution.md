@@ -17,8 +17,8 @@ Each task progresses through several main states:
 
 | Status | Description | Next States |
 |--------|-------------|-------------|
-| `pendind-input` | Task is waiting for input files | `in-queue` |
-| `in-queue` | Task is queued in compute machine waiting for it to become available | `submitted`, `machine-terminated-in-queue` |
+| `pending-input` | Task is waiting for input files | `in-queue` |
+| `in-queue` | Task is queued in machine waiting for it to become available | `submitted` |
 | `submitted` | Task is queued and waiting for resources | `started`, `failed` |
 | `started` | Task is actively running on compute resources | `success`, `failed` |
 | `success` | Task finished successfully | - |
@@ -110,13 +110,13 @@ The [Python Client](https://inductiva.ai/guides/api-functions/api/inductiva.task
 Inductiva also provides [CLI methods](https://inductiva.ai/guides/api-functions/cli/tasks) for managing your tasks.
 
 | Command | Description | Example |
-|---------|-------------|---------|---------|
+| :--- | :--- | :--- |
 | `inductiva tasks list` | List all tasks with status and details | `inductiva tasks list -n 4` |
 | `inductiva tasks info` | Get detailed information about a task | `inductiva tasks info <task-id>` |
-| `inductiva tasks download` | Download task outputs to local machine | `inductiva tasks download <task-id>` |
+| `inductiva tasks download` | Download task outputs to a local machine | `inductiva tasks download <task-id>` |
 | `inductiva tasks kill` | Terminate a running or queued task | `inductiva tasks kill <task-id>` |
 | `inductiva tasks list-files` | Show current files of a running task | `inductiva tasks list-files --id <task-id>` |
-| `inductiva tasks tail` | Display last lines of task output | `inductiva tasks tail --id <task-id> -l 50` |
-| `inductiva tasks top` | Show system processes on task machine | `inductiva tasks top <task-id>` | - |
-| `inductiva tasks last-modified-file` | Show most recently modified file | `inductiva tasks last-modified-file <task-id>` |
+| `inductiva tasks tail` | Display last lines of task output | `inductiva tasks tail --id <task-id> -L 50` |
+| `inductiva tasks top` | Show system processes on the task machine | `inductiva tasks top <task-id>` |
+| `inductiva tasks last-modified-file` | Show the most recently modified file | `inductiva tasks last-modified-file <task-id>` |
 | `inductiva logs` | Stream task logs in real-time | `inductiva logs <task-id>` |

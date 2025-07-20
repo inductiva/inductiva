@@ -106,7 +106,7 @@ task.set_metadata({
 })
 ```
 
-> Note: both metadata keys and values must be **strings**. Any numeric values, booleans, or other data types should be converted to strings before being stored as metadata.
+> **Note**: both metadata keys and values must be **strings**. Any numeric values, booleans, or other data types should be converted to strings before being stored as metadata.
 
 And the metadata can later be retrieved by doing:
 
