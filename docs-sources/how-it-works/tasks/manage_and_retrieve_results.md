@@ -44,6 +44,8 @@ $ inductiva storage list --max-results 2 --order-by creation_time --sort-order d
 
 ```
 
+### Customizing the Remote Directory Name
+
 To specify a custom remote directory name, use the `storage_dir` argument in the simulator's run method.
 
 ```python
