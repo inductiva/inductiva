@@ -4,12 +4,22 @@ Your resource hub for all things AMR-Wind at Inductiva. Whether you're just star
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check! 
 
-## About AMR-Wind
-[AMR-Wind](https://github.com/Exawind/amr-wind) is a massively parallel, block-structured adaptive-mesh, incompressible flow solver for wind turbine and wind farm simulations. The primary applications for AMR-Wind are: performing large-eddy simulations (LES) of atmospheric boundary layer (ABL) flows and simulating wind farm turbine-wake interactions using actuator disk or actuator line models for turbines.
-
 ## What You'll Find Here
-- **Tutorials:** Step-by-step guides to help you learn how to run AMR-Wind through the Inductiva API. From getting started to advanced tutorials, we have you covered.
-- **Benchmarks:** A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how AMR-Wind performs on different hardware configurations.
+
+### Tutorials
+Step-by-step guides to help you learn how to run AMR-Wind through the Inductiva API. From getting started to advanced tutorials, we have you covered.
+
+* **Getting Started**
+    - [Test Your Inductiva Setup](https://inductiva.ai/guides/amr-wind/setup-test)
+    - [Run Your First Simulation](https://inductiva.ai/guides/amr-wind/quick-start)
+
+* **Advanced Tutorials**
+    - [Flow Around a Circular Cylinder](https://inductiva.ai/guides/amr-wind/run-flow-cylinder-case)
+    - [Run AMR-Wind Simulations Across Multiple Machines Using MPI](https://inductiva.ai/guides/amr-wind/mpi-cluster-tutorial)
+    - [AMR-Wind Post-Processing](https://inductiva.ai/guides/amr-wind/yt-for-post-processing)
+
+### Benchmarks
+A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how AMR-Wind performs on different hardware configurations.
 
 ```{banner}
 :origin: amr_wind

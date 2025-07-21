@@ -4,14 +4,18 @@ Your resource hub for all things WRF at Inductiva. Whether you're just starting 
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check!
 
-## About WRF
-The [Weather Research and Forecasting (WRF) Model](https://www.mmm.ucar.edu/models/wrf) is a state-of-the-art numerical weather prediction system developed to meet both atmospheric research and operational forecasting demands. It offers a flexible, scalable platform capable of simulating a broad spectrum of meteorological phenomena — from large-scale global patterns to localized events like thunderstorms and hurricanes. 
+### Tutorials
+Step-by-step guides to help you learn how to run WRF through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
-WRF supports high-resolution simulations and effectively captures the complex interactions between the atmosphere and other Earth system components, including land surfaces and oceans.
+* **Getting Started**
+    - [Test Your Inductiva Setup](https://inductiva.ai/guides/wrf/setup-test)
+    - [Run Your First Simulation](https://inductiva.ai/guides/wrf/quick-start)
 
-## What You'll Find Here
-- **Tutorials:** Step-by-step guides to help you learn how to run WRF through the Inductiva API. From getting started to advanced tutorials, we have you covered.
-- **Benchmarks:** A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how WRF performs on different hardware configurations.
+* **Advanced Tutorials**
+    - [Automatically Generate GIFs from Your Simulation](https://inductiva.ai/guides/wrf/gif-generation)
+
+### Benchmarks
+A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how WRF performs on different hardware configurations.
 
 ```{banner}
 :origin: wrf
