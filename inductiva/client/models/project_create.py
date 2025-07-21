@@ -29,7 +29,7 @@ class ProjectCreate(BaseModel):
     ProjectCreate
     """
 
-  # noqa: E501
+    # noqa: E501
     name: Annotated[str, Field(min_length=1, strict=True, max_length=128)]
     project_type: Optional[ProjectType] = None
     __properties: ClassVar[List[str]] = ["name", "project_type"]

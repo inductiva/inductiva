@@ -27,7 +27,7 @@ class UserMostUsedMachineTypesOverview(BaseModel):
     UserMostUsedMachineTypesOverview
     """
 
-  # noqa: E501
+    # noqa: E501
     machine_type: StrictStr
     num_of_machines_used: StrictInt
     num_tasks: StrictInt

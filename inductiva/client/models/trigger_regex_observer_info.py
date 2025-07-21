@@ -27,7 +27,7 @@ class TriggerRegexObserverInfo(BaseModel):
     TriggerRegexObserverInfo
     """
 
-  # noqa: E501
+    # noqa: E501
     trigger_type: StrictStr
     observer_id: StrictStr
     observer_type: StrictStr

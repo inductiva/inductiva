@@ -28,7 +28,7 @@ class StorageFileInfo(BaseModel):
     StorageFileInfo
     """
 
-  # noqa: E501
+    # noqa: E501
     size_bytes: Optional[StrictInt] = None
     creation_time: Optional[datetime] = None
     is_directory: StrictBool
