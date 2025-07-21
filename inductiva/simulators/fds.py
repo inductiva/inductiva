@@ -1,6 +1,6 @@
 """FDS simulator module of the API."""
 
-from typing import Optional, Union
+from typing import Optional, Union, List
 import logging
 
 from inductiva import simulators, tasks, types
@@ -30,6 +30,8 @@ class FDS(simulators.Simulator):
             sim_config_filename: str,
             *,
             on: types.ComputationalResources,
+            smokeview_casename: Optional[str] = None,
+            generate_video_filename_prefixes: Optional[List[str]] = None,
             n_vcpus: Optional[int] = None,
             n_omp_threads: Optional[int] = None,
             n_mpi_processes: Optional[int] = None,
@@ -47,6 +49,15 @@ class FDS(simulators.Simulator):
             input_dir: Path to the directory of the simulation input files.
             on: The computational resource to launch the simulation on.
             sim_config_filename: Name of the simulation configuration file.
+            smokeview_casename: If provided, smokeview will be invoked after
+                the simulation with argument `smokeview_casename`, as follows:
+                    smokeview -runscript <smokeview_casename>
+            generate_video_filename_prefixes: List of PNG filename prefixes
+                that will be used to generate a video from sequences of PNG
+                files created by smokeview. For instance, if smokeview creates
+                PNG files in the format "my_scenario_xxxx.png", where xxxx is
+                the frame number of the image, use ["my_scenario"] to generate
+                an mp4 video from those images.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
                 (default), all vCPUs will be used.
             n_omp_threads: Number of OpenMP threads to use in the simulation.
@@ -159,6 +170,15 @@ class FDS(simulators.Simulator):
                 env={"OMP_NUM_THREADS": str(n_omp_threads)},
             )
         ]
+
+        if smokeview_casename:
+            commands.append(
+                Command(f"smokeview -runscript {smokeview_casename}"))
+
+        if generate_video_filename_prefixes:
+            for filename_prefix in generate_video_filename_prefixes:
+                commands.append(
+                    Command(f"bash /scripts/make_movie.sh {filename_prefix}"))
 
         return super().run(input_dir,
                            on=on,
