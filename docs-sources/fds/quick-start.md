@@ -10,7 +10,7 @@ Before running the simulation, you’ll need to download the required input file
 **or**
 - **Download automatically** using the link provided [here](https://storage.googleapis.com/inductiva-api-demo-files/fds-tutorials/Fires.zip).
 
-Once the files are in place, you’ll be ready to submit your simulation to the Cloud.
+Once downloaded, you’ll be ready to submit your simulation to the Cloud.
 
 ## Running a FDS Simulation
 Here is the code required to run a FDS simulation using the Inductiva API:
