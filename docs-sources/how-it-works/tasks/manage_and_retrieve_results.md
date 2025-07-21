@@ -72,7 +72,7 @@ $ inductiva storage list --max-results 2 --order-by creation_time --sort-order d
 
 
 ## Downloading Results Locally
-The primary way to download results in a Python script is with the Python Client's `task.download_outputs()` method.
+The primary way to download results in a Python script is with the `task.download_outputs()` method.
 
 ```python
 task = inductiva.tasks.Task("i4ir3kvv62odsfrhko4y8w2an")

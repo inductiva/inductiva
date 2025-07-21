@@ -83,7 +83,7 @@ for i, task in enumerate(tasks):
     print(f"⏳ Waiting for task {i+1}/{len(tasks)}...")
     task.wait()
     
-    if task.status == "completed":
+    if task.status == "success":
         print(f"✅ {configs[i]} completed successfully")
         task.download_outputs(f"results/{configs[i]}")
     else:
@@ -98,12 +98,11 @@ The [Python Client](https://inductiva.ai/guides/api-functions/api/inductiva.task
 
 | Method | Description | Example |
 |--------|-------------|---------|
-| `inductiva.tasks.get()` | Retrieve recent tasks with optional filtering | `inductiva.tasks.get(last_n=10, status="completed")` |
-| `inductiva.tasks.get_all()` | Fetch all tasks (with pagination) | `inductiva.tasks.get_all(project="fluid-dynamics")` |
-| `inductiva.tasks.get_tasks()` | Flexible task retrieval with smart defaults | `inductiva.tasks.get_tasks(last_n=5, status="started")` |
+| `inductiva.tasks.get_all()` | Fetch all tasks | `inductiva.tasks.get_all(project="fluid-dynamics")` |
+| `inductiva.tasks.get_tasks()` | Retrieve N most recent tasks with optional filtering | `inductiva.tasks.get_tasks(last_n=5, status="started")` |
 | `task.wait()` | Block until task reaches terminal state | `task.wait()` |
 | `task.kill()` | Terminate a running or queued task | `task.kill()` |
-| `task.get_info()` | Fetch detailed task metadata | `task.get_info()` |
+| `task.get_info()` | Fetch detailed task information | `task.get_info()` |
 | `task.get_position_in_queue()` | Check queue position for pending tasks | `task.get_position_in_queue()` |
 | `task.download_outputs()` | Download simulation results | `task.download_outputs("./results")` |
 

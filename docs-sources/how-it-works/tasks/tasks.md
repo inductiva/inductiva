@@ -48,7 +48,7 @@ When a task is submitted, the API provides immediate feedback in the terminal ab
 
 ---
 
-You can check task status and queue position programmatically:
+You can also check task status and queue position programmatically:
 
 ```python
 # Check queue position
@@ -106,7 +106,7 @@ task.set_metadata({
 })
 ```
 
-> **Note**: both metadata keys and values must be **strings**. Any numeric values, booleans, or other data types should be converted to strings before being stored as metadata.
+> **Note**: Both metadata keys and values must be **strings**. Any numeric values, booleans, or other data types should be converted to strings before being stored as metadata.
 
 And the metadata can later be retrieved by doing:
 
@@ -114,7 +114,7 @@ And the metadata can later be retrieved by doing:
 metadata = task.get_metadata()
 ```
 
-You can also manipulate the metadata in the Task's page on the [Web Console]():
+You can also manipulate the metadata in the Task's page on the [Web Console](https://console.inductiva.ai/dashboard):
 
 <div align="center">
    <img src="../_static/task-metadata.png" alt="Task Metadata">
