@@ -50,7 +50,7 @@ task.wait()  # <- The remote simulation WILL NOT DIE if the local session is
 task.download_outputs()
 ```
 
-> Note: The `wait()` method is resilient to local interruptions. Your remote simulation will continue running even if your Python script is terminated.
+> **Note**: The `wait()` method is resilient to local interruptions. Your remote simulation will continue running even if your Python script is terminated.
 
 ### Parallel Execution Workflow
 
