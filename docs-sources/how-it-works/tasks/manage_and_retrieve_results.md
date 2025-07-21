@@ -70,19 +70,12 @@ $ inductiva storage list --max-results 2 --order-by creation_time --sort-order d
 
 
 ## Downloading Results Locally
-
-You can download a task's results using either the [Python Client](https://inductiva.ai/guides/api-functions/api/inductiva.storage) or the [CLI](https://inductiva.ai/guides/api-functions/cli/storage).
-
-### Download with Python Client
-
-The primary way to download results in a Python script is with the `task.download_outputs()` method.
+The primary way to download results in a Python script is with the Python Client's `task.download_outputs()` method.
 
 ```python
 task = inductiva.tasks.Task("i4ir3kvv62odsfrhko4y8w2an")
 task.download_outputs()
 ```
-
-In the terminal it will display:
 
 ````sh
 Downloading simulation files to inductiva_output/i4ir3kvv62odsfrhko4y8w2an/outputs/output.zip...
@@ -90,7 +83,9 @@ Downloading simulation files to inductiva_output/i4ir3kvv62odsfrhko4y8w2an/outpu
 Uncompressing the files to inductiva_output/i4ir3kvv62odsfrhko4y8w2an/outputs...
 ````
 
-By default, this method downloads all output files into a local folder structure `inductiva_output/<task_id>/`.
+For a quick way to get results from the terminal, use the `inductiva tasks download` CLI command with the task ID.
+
+By default, all output files will be download into a local folder structure `inductiva_output/<task_id>/`.
 
 #### Customizing the Download Path
 
@@ -101,6 +96,12 @@ You can override the default download location in two ways:
 ```python
 task.download_outputs(output_dir="my-sim-results")
 ```
+
+or using the CLI, pass the `--dir` argument:
+
+```sh
+inductiva tasks download i4ir3kvv62odsfrhko4y8w2an --dir my-sim-results
+````
 
 This will download the files to `my-sim-results/`.
 
@@ -147,6 +148,12 @@ output_dir = task.download_outputs(filenames=["stdout.txt", "stderr.txt"]
 Downloading simulation outputs to my_outputs/output.zip.
 100%|██████████████████████████████████████| 1.04k/1.04k [00:00<00:00, 671kB/s]
 Uncompressing the outputs to my_outputs/
+````
+
+or using the CLI:
+
+```sh
+inductiva tasks download i4ir3kvv62odsfrhko4y8w2an --filenames stdout.txt stderr.txt --dir my_outputs
 ````
 
 Checking the contents of the destination folder confirms that only the specified files were downloaded:
