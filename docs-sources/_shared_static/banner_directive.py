@@ -21,20 +21,11 @@ class BannerDirective(Directive):
                     <p class="subtext">Get started for free today and earn $5 in credits.</p>
                 </div>
                 <div class="buttons">
-                    <button onclick="handleClick()" target="_blank" class="btn primary" id="login-btn-big" >
+                    <button onclick="window.open('https://console.inductiva.ai/?utm_source=guide_{origin}&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="btn primary" id="login-btn-big" >
                     <span class="btn-main">Get Started</span>
                     </button>
                 </div>
                 </div>
             </div>
-
-            <script>
-            function handleClick() {{
-            // Give GA4 and GTM time to fire
-            setTimeout(function() {{
-                window.open('https://console.inductiva.ai/?utm_source=guide_{origin}&utm_medium=button&utm_campaign=signup', '_blank');
-            }}, 500); // Timeout for google tags to do some work
-            }}
-            </script>
             '''
         return [nodes.raw('', html, format='html')]
