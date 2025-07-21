@@ -8,9 +8,8 @@ Inductiva simplifies research by making high-performance computing more accessib
 ### Tutorials
 Step-by-step guides to help you learn how to run Octopus through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
-* **Getting Started**
-    - [Test Your Inductiva Setup](https://inductiva.ai/guides/octopus/setup-test)
-    - [Quick Start Guide](https://inductiva.ai/guides/octopus/quick-start)
+- [Test Your Inductiva Setup](https://inductiva.ai/guides/octopus/setup-test)
+- [Quick Start Guide](https://inductiva.ai/guides/octopus/quick-start)
 
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how Octopus performs on different hardware configurations.
