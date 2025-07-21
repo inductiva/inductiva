@@ -68,6 +68,6 @@ Consider a typical workflow:
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **Python Client** | ✅ | ✅ | ✅ | ❌ | ❌ |
 | **CLI** | ❌ | ✅ | ✅ | ❌ | ❌ |
-| **Web Console** | ❌ | 🚧* | ✅ | ✅ | ✅ |
+| **Web Console** | 🚧* | 🚧* | ✅ | ✅ | ✅ |
 
-*You can launch simulations in the Web Console using the [Playground](https://console.inductiva.ai/playground) Beta feature.
+*You can now run scripts and launch simulations in the Web Console using the [Playground](https://console.inductiva.ai/playground) Beta feature.
