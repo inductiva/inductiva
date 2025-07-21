@@ -65,7 +65,7 @@ task.print_summary()
 
 This simulation runs in spot mode on a `g2-standard-32` machine, featuring 32 virtual CPUs, 1 NVIDIA L4 GPU, and a 200 GB data disk.
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
