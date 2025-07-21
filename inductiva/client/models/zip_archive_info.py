@@ -28,7 +28,7 @@ class ZipArchiveInfo(BaseModel):
     ZipArchiveInfo
     """
 
-    # noqa: E501
+  # noqa: E501
     size: StrictInt
     contents: List[FileInfo]
     __properties: ClassVar[List[str]] = ["size", "contents"]

@@ -29,7 +29,7 @@ class SimulatorUpdate(BaseModel):
     Schema for updating a simulator.
     """
 
-    # noqa: E501
+  # noqa: E501
     name: Optional[StrictStr] = None
     display_name: Optional[StrictStr] = None
     recommended_machine_type: Optional[List[StrictStr]] = None

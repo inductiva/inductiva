@@ -31,7 +31,7 @@ class OrganizationCosts(BaseModel):
     OrganizationCosts
     """
 
-    # noqa: E501
+  # noqa: E501
     id: StrictStr
     name: StrictStr
     tier_id: StrictStr

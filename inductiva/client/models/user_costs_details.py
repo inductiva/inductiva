@@ -28,7 +28,7 @@ class UserCostsDetails(BaseModel):
     UserCostsDetails
     """
 
-    # noqa: E501
+  # noqa: E501
     email: StrictStr
     name: Optional[StrictStr] = None
     tier_id: StrictStr

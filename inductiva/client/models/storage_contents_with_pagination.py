@@ -28,7 +28,7 @@ class StorageContentsWithPagination(BaseModel):
     StorageContentsWithPagination
     """
 
-    # noqa: E501
+  # noqa: E501
     total_files: StrictInt
     contents: Dict[str, StorageFileInfo]
     __properties: ClassVar[List[str]] = ["total_files", "contents"]

@@ -28,7 +28,7 @@ class HTTPValidationError(BaseModel):
     HTTPValidationError
     """
 
-    # noqa: E501
+  # noqa: E501
     detail: Optional[List[ValidationError]] = None
     __properties: ClassVar[List[str]] = ["detail"]
 

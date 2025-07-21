@@ -27,7 +27,7 @@ class OperationEnd(BaseModel):
     OperationEnd
     """
 
-    # noqa: E501
+  # noqa: E501
     elapsed_time_s: Union[StrictFloat, StrictInt]
     attributes: Dict[str, Any]
     __properties: ClassVar[List[str]] = ["elapsed_time_s", "attributes"]

@@ -27,7 +27,7 @@ class CPUInfo(BaseModel):
     CPUInfo
     """
 
-    # noqa: E501
+  # noqa: E501
     cpu_cores_logical: StrictInt
     cpu_cores_physical: StrictInt
     __properties: ClassVar[List[str]] = [

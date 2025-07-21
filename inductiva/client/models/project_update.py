@@ -28,7 +28,7 @@ class ProjectUpdate(BaseModel):
     ProjectUpdate
     """
 
-    # noqa: E501
+  # noqa: E501
     name: Annotated[str, Field(min_length=1, strict=True, max_length=128)]
     __properties: ClassVar[List[str]] = ["name"]
 

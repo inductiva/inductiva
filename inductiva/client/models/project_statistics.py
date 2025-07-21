@@ -27,7 +27,7 @@ class ProjectStatistics(BaseModel):
     ProjectStatistics
     """
 
-    # noqa: E501
+  # noqa: E501
     success_rate: Union[StrictFloat, StrictInt]
     avg_task_duration_seconds: Union[StrictFloat, StrictInt]
     avg_task_compute_cost: Union[StrictFloat, StrictInt]

@@ -27,7 +27,7 @@ class VersionComparisonResult(BaseModel):
     VersionComparisonResult
     """
 
-    # noqa: E501
+  # noqa: E501
     is_valid: StrictBool
     client_version: StrictStr
     server_version: StrictStr

@@ -29,7 +29,7 @@ class EventInfo(BaseModel):
     EventInfo
     """
 
-    # noqa: E501
+  # noqa: E501
     event_id: StrictStr
     trigger: Trigger1
     action: Action1
