@@ -70,4 +70,4 @@ Consider a typical workflow:
 | **CLI** | ❌ | ✅ | ✅ | ❌ | ❌ |
 | **Web Console** | ❌ | 🚧* | ✅ | ✅ | ✅ |
 
-*You can launch simulations in the Web Console by using the [Playground](https://console.inductiva.ai/playground) Beta feature.
+*You can launch simulations in the Web Console using the [Playground](https://console.inductiva.ai/playground) Beta feature.
