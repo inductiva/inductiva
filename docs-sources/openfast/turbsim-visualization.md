@@ -200,3 +200,7 @@ plt.close()
 ```
 
 Copy and customize it to create your own output animations.
+
+```{banner_small}
+:origin: openfast
+```

@@ -101,3 +101,7 @@ You can upgrade to a next-generation cloud machine, increase the number of vCPUs
 For example, running the simulation on a machine with more vCPUs, such as the `c2d-highcpu-112`, reduces computation time from 1 hour and 17 minutes to approximately **47 minutes**, with a modest cost increase to US$0.48.
 
 It’s that simple! 🚀
+
+```{banner_small}
+:origin: xbeach
+```

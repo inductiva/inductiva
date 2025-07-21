@@ -98,3 +98,7 @@ As mentioned above, running this simulation on a **16 vCPU** cloud machine was s
 By leveraging the Inductiva API, you can efficiently scale your CP2K simulations
 to meet your computational needs. Try different machine configurations and
 optimize your workflow for faster, more cost-effective results!
+
+```{banner_small}
+:origin: cp2k
+```

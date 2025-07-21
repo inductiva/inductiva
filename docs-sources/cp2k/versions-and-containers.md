@@ -1,5 +1,8 @@
 # Versions and Containers 🛠️
 
+## About CP2K
+[CP2K](https://www.cp2k.org/about) is a model designed for atomistic and molecular simulations of solid-state, liquid, molecular, and biological systems. It targets massively parallel and linear scaling electronic structure methods and state-of-the-art ab-initio molecular dynamics (AIMD) simulations.
+
 ## Supported Versions
 Inductiva stays up to date with the latest versions of CP2K. Below is a list of the supported versions, along with their respective release dates:
 

@@ -141,43 +141,31 @@ failure and show it as such.
 <br>
 
 ## 6. Why does my simulation keep failing with `There are not enough slots available` even though my machine has enough resources?
+Before jumping to solutions, it’s important to understand how your machine’s resources are structured.
 
-Before diving into the solution, it's important to understand how your machine's
-resources are structured.
+Take, for example, a machine type like `c2d-highcpu-16`, which provides 16 virtual CPUs (vCPUs). The key word here is *virtual* — while the machine can run 16 threads in parallel, it's backed by only 8 physical cores. This distinction matters.
 
-For example, consider a machine type like `c2d-highcpu-16`, which comes with
-**16 virtual CPUs (vCPUs)**. The key word here is **virtual**. While the machine
-can run 16 threads in parallel, it only has **8 physical cores** underneath.
-This distinction is important.
+### How OpenFOAM handles resources
+The behavior of `runParallel` in OpenFOAM depends on the version you’re using:
 
-When using OpenFOAM's, the way `runParallel` is handled can depend on the
-specific version you're using:
+* **Some versions** (e.g., **OpenFOAM-ESI v2406**) recognize and utilize all available vCPUs. In these cases, running a simulation on all 16 vCPUs works as long as your domain is decomposed into 16 subdomains.
 
-* **Some OpenFOAM versions** (e.g., **OpenFOAM-ESI v2406**) detect and utilize all available vCPUs. On such versions, running a simulation on all 16 vCPUs will work as expected, as long as you decompose the domain into 16 parts.
+* **Other versions** (e.g., **OpenFOAM-Foundation v8**) only detect physical cores, ignoring hyperthreads. So even if your machine reports 16 vCPUs, OpenFOAM will only "see" 8. Attempting to run with more than 8 subdomains (e.g., 16) can lead to the error:
 
-* **Other versions** (e.g., **OpenFOAM-Foundation v8**) only recognize **physical cores**, not virtual ones. So even if your machine has 16 vCPUs, OpenFOAM will only see 8 usable cores. As a result, attempting to run with more than 8 subdomains (e.g., using 16) may lead to the error:
+```
+There are not enough slots available
+```
 
-  ```
-  There are not enough slots available
-  ```
-
-### Why this happens with `runParallel`
-
-This behavior occurs because `runParallel` internally calls `mpirun` and lets
-OpenFOAM decide how many cores to use. In some versions, OpenFOAM restricts
-execution based on physical cores only.
+This happens because `runParallel` internally calls `mpirun` and lets OpenFOAM decide how many cores to use. In some versions, OpenFOAM restricts execution to physical cores only.
 
 ### How to bypass this limitation
-
-If you want to fully utilize all your vCPUs regardless of how OpenFOAM detects
-resources, you can manually call `mpirun` with the `--use-hwthread-cpus` flag. For example:
+If you want to fully utilize all your vCPUs regardless of how OpenFOAM detects resources, you can manually invoke `mpirun` with the `--use-hwthread-cpu`s` flag. For example:
 
 ```bash
 mpirun --use-hwthread-cpus -np 16 simpleFoam -parallel
 ```
 
-This explicitly tells `mpirun` to consider hyperthreaded (virtual) CPUs,
-allowing you to run on all 16 vCPUs.
+This explicitly instructs `mpirun` to include hyperthreaded (virtual) CPUs, allowing your simulation to run across all 16 vCPUs.
 
 <br>
 <br>

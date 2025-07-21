@@ -17,12 +17,9 @@ In this tutorial, we'll walk through how to:
 - [Generate synthetic wind tunnel data at scale](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section4)
 - [Post-process and analyze simulation results](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section5)
 
-<div class="cta-bar">
-  <div class="cta-text">
-    <strong>Ready to dive in?</strong> Sign in to get started with $5 of <strong>free credits</strong>. No credit card needed!
-  </div>
-  <button  onclick="window.open('https://console.inductiva.ai/', '_blank')" target="_blank" class="cta-button">Sign In</button>
-</div>
+```{banner_small}
+:origin: openfoam
+```
 
 
 ```{toctree}
