@@ -1,4 +1,4 @@
-# Manage and Retrieve Task Results
+# Manage Task Results
 
 The **output** of a simulation is its most important artifact. The Inductiva API provides tools for managing where these results are stored remotely and for downloading them to your local machine. Remember that every simulation you run creates a `Task` object, which is the key to accessing and managing these results.
 
