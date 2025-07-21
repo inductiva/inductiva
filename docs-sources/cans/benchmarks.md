@@ -30,3 +30,7 @@ GPU configurations for CaNS simulations. The fastest machine tested, equipped wi
 a **15.7× speed-up** compared with the smallest GPU tested, a configuration with 4 vCPUs and a single NVIDIA L4 GPU.
 
 With Inductiva, you're able to seamlessly select the hardware that delivers the performance your simulations demand.
+
+```{banner_small}
+:origin: cans
+```

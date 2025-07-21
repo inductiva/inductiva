@@ -1,5 +1,11 @@
 # Versions and Containers 🛠️
 
+## About SWAN
+[SWAN](https://swanmodel.sourceforge.io) (Simulating WAves Nearshore) is a numerical wave model designed to simulate the propagation and transformation 
+of waves in coastal and nearshore areas. It is widely used in coastal 
+engineering, oceanography, and environmental studies to predict wave 
+patterns and interactions with the shoreline.
+
 ## Supported Versions
 Inductiva stays up to date with the latest versions of SWAN. Below is a list of the supported versions:
 

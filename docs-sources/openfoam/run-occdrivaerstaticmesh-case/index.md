@@ -21,12 +21,9 @@ using the **Inductiva API**.
 
 👉 Check out our [blog post](https://inductiva.ai/blog/article/from-supercomputer-to-cloud-a-new-era-for-openfoam-simulations) for the full story.
 
-<div class="cta-bar">
-  <div class="cta-text">
-    <strong>Ready to dive in?</strong> Sign in to get started with $5 of <strong>free credits</strong>. No credit card needed!
-  </div>
-  <button  onclick="window.open('https://console.inductiva.ai/', '_blank')" target="_blank" class="cta-button">Sign In</button>
-</div>
+```{banner_small}
+:origin: openfoam
+```
 
 ```{toctree}
 :hidden:

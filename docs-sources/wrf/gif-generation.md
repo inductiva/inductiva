@@ -59,3 +59,7 @@ Customize the GIF output using these parameters:
 
 This feature is ideal for quick diagnostics, presentations, or simply gaining a visual understanding 
 of your simulation results.
+
+```{banner_small}
+:origin: wrf
+```

@@ -1,5 +1,8 @@
 # Versions and Containers 🛠️
 
+## About NWChem
+[NWChem](https://www.nwchem-sw.org) is optimised for large-scale simulations on modern HPC systems, enabling the study of complex chemical phenomena. Its modular architecture allows for continuous improvement, making it a trusted tool for high-accuracy computational chemistry in both isolated molecules and extended materials. It includes a range of quantum mechanical methods such as Density Functional Theory (DFT), Hartree-Fock and post-Hartree-Fock approaches.
+
 ## Supported Versions
 Inductiva stays up to date with the latest versions of NWChem. Below is a list of the supported versions, along with their respective release dates:
 

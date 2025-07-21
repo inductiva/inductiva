@@ -317,4 +317,6 @@ to input files for compiling and running **COAWST**.
 
 By following this guide, you now have a clearer understanding of how to configure and efficiently run COAWST simulations on Inductiva's platform.
 
-Happy simulations! 🚀
+```{banner_small}
+:origin: coawst
+```

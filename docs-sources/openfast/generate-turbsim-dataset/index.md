@@ -14,6 +14,10 @@ To demonstrate this, we will use the [`5MW_Baseline`](https://github.com/OpenFAS
 This example is based on the reference case described in ["Definition of a 5-MW Reference Wind Turbine for Offshore
 System Development"](https://www.nrel.gov/docs/fy09osti/38060.pdf).
 
+```{banner_small}
+:origin: openfast
+```
+
 ```{toctree}
 :hidden:
 sections/section1.md
