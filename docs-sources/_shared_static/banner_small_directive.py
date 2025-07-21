@@ -18,7 +18,15 @@ class BannerSmallDirective(Directive):
                 <div class="cta-text">
                     <strong>Start running simulations seamlessly!</strong> You have $5 in <strong>free</strong> credits, no credit card required.
                 </div>
-                <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_{origin}&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button" id="login-btn-small">Sign In</button>
+                <button  onclick="handleClick()" target="_blank" class="cta-button" id="login-btn-small">Sign In</button>
             </div>
+            <script>
+            function handleClick() {{
+            // Give GA4 and GTM time to fire
+            setTimeout(function() {{
+                window.open('https://console.inductiva.ai/?utm_source=guide_{origin}&utm_medium=button&utm_campaign=signup', '_blank');
+            }}, 500); // Timeout for google tags to do some work
+            }}
+            </script>
             '''
         return [nodes.raw('', html, format='html')]
