@@ -33,6 +33,7 @@ Overview <tasks/index>
 tasks/tasks
 tasks/tasks-execution
 tasks/tasks-lifecycle
+tasks/manage_and_retrieve_results
 ```
 
 ```{toctree}
