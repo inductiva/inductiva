@@ -14,11 +14,6 @@ class BannerSmallDirective(Directive):
     def run(self):
         origin = self.options.get('origin', '')
 
-        #Get only active messages
-        active_keys = [key for key, val in self.BANNER_MESSAGES.items() if val.get("active")]
-
-        selected_key = random.choice(active_keys)
-
         # pylint: disable=line-too-long
         html = f'''
             <div class="cta-bar">
