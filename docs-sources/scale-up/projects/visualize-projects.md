@@ -10,7 +10,7 @@ To create a new prokect in the console:
 
 
 <div align="center">
-   <img src="create_project.png" alt="Task Metadata">
-   <figcaption align="center"><b>Create a new Prokect</b></figcaption>
+   <img src="./create_project.png" alt="Task Metadata">
+   <figcaption align="center"><b>Create a new Prokectx</b></figcaption>
 </div>
 
