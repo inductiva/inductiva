@@ -1,7 +1,7 @@
 # Versions and Containers 🛠️
 
 ## About Octopus
-[Octopus](https://www.octopus-code.org/documentation/16/) is scientific program designed to simulate the 
+[Octopus](https://octopus-code.org/documentation/13/manual/about_octopus/) is a software package designed to simulate the 
 quantum-mechanical behavior of electrons in atoms, molecules, and solids using Time-Dependent Density Functional 
 Theory (TDDFT). Its real-space grid representation allows for flexible boundary conditions and supports a wide range of 
 calculations, including ground-state properties, excited states, molecular dynamics, and electron dynamics in external fields.
