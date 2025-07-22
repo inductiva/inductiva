@@ -75,7 +75,7 @@ from inductiva.client.models.simulator_create import SimulatorCreate
 from inductiva.client.models.simulator_response import SimulatorResponse
 from inductiva.client.models.simulator_update import SimulatorUpdate
 from inductiva.client.models.simulator_version import SimulatorVersion
-from inductiva.client.models.simulator_with_machine_types import SimulatorWithMachineTypes
+from inductiva.client.models.simulator_with_machine_types_paginated import SimulatorWithMachineTypesPaginated
 from inductiva.client.models.spot import Spot
 from inductiva.client.models.spot1 import Spot1
 from inductiva.client.models.storage_contents_with_pagination import StorageContentsWithPagination
