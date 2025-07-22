@@ -1579,6 +1579,10 @@ class Task:
                 logging.info("Remote task files removed successfully.")
         except exceptions.ApiException as e:
             logging.error("An error occurred while removing the files:")
+            if getattr(e, "status", None) == 404:
+                logging.error(" > There are no remote files for this task.")
+                return False
+            
             logging.error(" > %s", json.loads(e.data)["detail"])
             return False
         return True
