@@ -29,7 +29,7 @@ const BANNER_SMALL_MESSAGES = {
 document.addEventListener("DOMContentLoaded", function () {
     // Add simulator name to global var
     const sim_name = window.location.pathname.split('/');
-    window.simulator_name = sim_name;
+    window.simulator_name = sim_name[2];
     // Big banner logic
     const bigActiveKeys = Object.keys(BANNER_BIG_MESSAGES).filter(
         (key) => BANNER_BIG_MESSAGES[key].active
