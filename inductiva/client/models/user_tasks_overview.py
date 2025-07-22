@@ -28,7 +28,7 @@ class UserTasksOverview(BaseModel):
     UserTasksOverview
     """
 
-    # noqa: E501
+  # noqa: E501
     start_date: date
     end_date: date
     username: StrictStr

@@ -27,7 +27,7 @@ class UserMostUsedSimulatorsOverview(BaseModel):
     UserMostUsedSimulatorsOverview
     """
 
-    # noqa: E501
+  # noqa: E501
     simulator: StrictStr
     num_tasks: StrictInt
     tasks_simulator_cost: Union[StrictFloat, StrictInt]

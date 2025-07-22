@@ -27,7 +27,7 @@ class Bucket(BaseModel):
     Bucket
     """
 
-    # noqa: E501
+  # noqa: E501
     provider_id: StrictStr
     name: StrictStr
     region: StrictStr

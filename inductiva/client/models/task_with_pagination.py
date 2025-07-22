@@ -28,7 +28,7 @@ class TaskWithPagination(BaseModel):
     TaskWithPagination
     """
 
-    # noqa: E501
+  # noqa: E501
     total_size: StrictInt
     tasks: List[Task]
     __properties: ClassVar[List[str]] = ["total_size", "tasks"]

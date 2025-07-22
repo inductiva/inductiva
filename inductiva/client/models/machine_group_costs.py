@@ -28,7 +28,7 @@ class MachineGroupCosts(BaseModel):
     MachineGroupCosts
     """
 
-    # noqa: E501
+  # noqa: E501
     cost: Union[StrictFloat, StrictInt]
     warning: Optional[StrictStr] = None
     currency: Optional[CurrencyCode] = None

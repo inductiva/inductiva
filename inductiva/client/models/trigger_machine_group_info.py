@@ -27,7 +27,7 @@ class TriggerMachineGroupInfo(BaseModel):
     TriggerMachineGroupInfo
     """
 
-    # noqa: E501
+  # noqa: E501
     trigger_type: StrictStr
     machine_group_id: StrictInt
     __properties: ClassVar[List[str]] = ["trigger_type", "machine_group_id"]

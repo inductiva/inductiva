@@ -27,7 +27,7 @@ class DynamicDiskResizeConfig(BaseModel):
     DynamicDiskResizeConfig
     """
 
-    # noqa: E501
+  # noqa: E501
     free_space_threshold_gb: StrictInt
     max_disk_size_gb: StrictInt
     __properties: ClassVar[List[str]] = [

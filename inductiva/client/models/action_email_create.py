@@ -27,7 +27,7 @@ class ActionEmailCreate(BaseModel):
     ActionEmailCreate
     """
 
-    # noqa: E501
+  # noqa: E501
     action_type: StrictStr
     email_address: StrictStr
     __properties: ClassVar[List[str]] = ["action_type", "email_address"]

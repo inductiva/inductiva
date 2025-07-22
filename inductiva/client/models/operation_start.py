@@ -28,7 +28,7 @@ class OperationStart(BaseModel):
     OperationStart
     """
 
-    # noqa: E501
+  # noqa: E501
     elapsed_time_s: Union[StrictFloat, StrictInt]
     name: TaskOperationName
     attributes: Dict[str, Any]

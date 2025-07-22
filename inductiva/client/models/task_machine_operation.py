@@ -29,7 +29,7 @@ class TaskMachineOperation(BaseModel):
     TaskMachineOperation
     """
 
-    # noqa: E501
+  # noqa: E501
     machine_id: StrictStr
     type: MachineOperationType
     start_timestamp: datetime

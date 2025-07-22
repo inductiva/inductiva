@@ -27,7 +27,7 @@ class TaskMetricCreate(BaseModel):
     TaskMetricCreate
     """
 
-    # noqa: E501
+  # noqa: E501
     metric: StrictStr
     value: Union[StrictFloat, StrictInt]
     __properties: ClassVar[List[str]] = ["metric", "value"]
