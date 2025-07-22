@@ -1,10 +1,11 @@
 # Versions and Containers 🛠️
 
 ## About Octopus
-[Octopus](https://octopus-code.org/documentation/13/manual/about_octopus/) is a software package designed to simulate the 
-quantum-mechanical behavior of electrons in atoms, molecules, and solids using Time-Dependent Density Functional 
-Theory (TDDFT). Its real-space grid representation allows for flexible boundary conditions and supports a wide range of 
-calculations, including ground-state properties, excited states, molecular dynamics, and electron dynamics in external fields.
+[Octopus](https://octopus-code.org/documentation/13/manual/about_octopus/) is a software package for performing 
+density-functional theory (DFT) and time-dependent density-functional theory (TDDFT) simulations. It focuses on 
+real-space methods to model electron-ion dynamics in systems under time-dependent electromagnetic fields. This simulator 
+is known for its simplicity, allowing intuitive visualizations of wave functions and electron densities. It has 
+been successfully used to calculate spectra, laser-induced processes, and more across various systems.
 
 ## Supported Versioms
 Inductiva stays up to date with the latest versions of Octopus.
