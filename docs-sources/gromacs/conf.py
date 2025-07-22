@@ -94,6 +94,7 @@ os.makedirs(os.path.dirname(env_js_path), exist_ok=True)
 with open(env_js_path, 'w') as f:
     f.write(f'window.env = {{ GTAG_WEBSITE: "{googleanalytics_id}" }};\n')
 html_js_files = [
+    'banner_texts.js'
     'env.js',
     'discord.js',
     'gtm_func.js',
