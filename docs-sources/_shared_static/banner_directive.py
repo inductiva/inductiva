@@ -13,7 +13,7 @@ class BannerDirective(Directive):
 
     BANNER_MESSAGES = {
         1:{
-            "active": False,
+            "active": True,
             "top_text":"Ready to dive in?",
             "bot_text":"Get started for free today and earn $5 in credits.",
             "button_text":"Get Started"
