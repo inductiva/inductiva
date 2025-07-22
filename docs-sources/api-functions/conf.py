@@ -183,9 +183,9 @@ def tidy_cli_html(file_path):
 def on_build_finished(app, exception):
     output_dir = pathlib.Path(app.outdir)
 
-    cli_file = output_dir / "auto-cli" / "cli.html"
-    if cli_file.exists():
-        tidy_cli_html(cli_file)
+    cli_html_dir = output_dir / "auto-cli"
+    for html_file in cli_html_dir.glob("**/*.html"):
+        tidy_cli_html(html_file)
 
 def setup(app):
     app.connect("build-finished", on_build_finished)
