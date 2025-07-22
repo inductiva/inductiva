@@ -145,3 +145,6 @@ achieve speedups of over 5× by increasing the cost by only about 65%!
 
 **How does this performance compare to a proper supercomputer?** If you’re curious, find out more [here](benchmarks) to see how these numbers compare with those from Fugaku, one of the fastest supercomputers on Earth.
 
+```{banner_small}
+:origin: quantum_espresso
+```

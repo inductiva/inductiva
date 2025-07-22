@@ -45,3 +45,7 @@ To do this, select `PartFluid_0000.vtk*` in the **Pipeline Browser** and change 
 <p align="center"><em>Figure 7: Simulation running with velocity visible</em></p>
 
 You can save your animation by going to **File > Save Animation...** and choosing your preferred format.
+
+```{banner_small}
+:origin: dualsphysics
+```

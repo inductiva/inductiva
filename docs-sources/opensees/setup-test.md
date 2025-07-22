@@ -49,3 +49,7 @@ You're ready to start running simulations seamlessly!
 
 ## Need Help?
 If you encounter any issues or need further assistance, don't hesitate to [**Contact Us**](mailto:support@inductiva.ai). We're here to help!
+
+```{banner_small}
+:origin: opensees
+```

@@ -8,7 +8,7 @@ Start by preparing the configuration files for a base case simulation model of t
 
 2. **Generalize the Base Case**
 Generalize the configuration files to allow variations of the base case. 
-Our [Templating System](https://inductiva.ai/guides/documentation/intro/templating) enables dynamic substitution 
+Our [Templating System](https://inductiva.ai/guides/scale-up/parallel-simulations/templating) enables dynamic substitution 
 of variables at runtime, making it easy to modify simulation (hyper)parameters through Python. This supports 
 both exhaustive and randomized exploration of the configuration space.
 
@@ -22,7 +22,7 @@ Whether you're a Machine Learning engineer or a simulation expert, the Inductiva
 **Ready to dive in?** 
 
 Explore these hands-on tutorials to jumpstart your journey:
-- [Generate an OpenFOAM Dataset](https://inductiva.ai/guides/openfoam/generate-openfoam-dataset/index)  
+- [Generate an OpenFOAM Dataset](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/index)  
 - [Create Synthetic Data for Physics-Informed ML](https://inductiva.ai/guides/splishsplash/synthetic-data-for-piml/index)
 
 Or, if you prefer to read, check out our blog post:

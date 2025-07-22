@@ -38,6 +38,9 @@ Here are the results:
 
 The execution time remained almost identical across all machines, regardless of the number of virtual CPUs.
 
+```{banner_small}
+:origin: openfast
+```
 
 
 

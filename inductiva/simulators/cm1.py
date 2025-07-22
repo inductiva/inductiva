@@ -34,7 +34,7 @@ class CM1(simulators.Simulator):
             init_surface: Optional[str] = None,
             input_sounding: Optional[str] = None,
             landuse: Optional[str] = None,
-            recompile: bool = True,
+            recompile: bool = False,
             on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
@@ -43,6 +43,7 @@ class CM1(simulators.Simulator):
             remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
             time_to_live: Optional[str] = None,
+            on_finish_cleanup: Optional[Union[str, list[str]]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -68,14 +69,14 @@ class CM1(simulators.Simulator):
                 of heat/momentum/moisture, or if you are using the atmospheric
                 radiation scheme, then you need to specify the surface
                 conditions. Used if you are supplying an external landuse file.
-            recompile: Enabled by default to optimize the simulation
-                performance. If set to False, the simulation will use the
-                pre-compiled version of the CM1 code. For machines with a high
-                number of vCPUs the performance optimization may not be
-                significant, so you can set this to False to save time.
-                The value is ignored if any of the files `base`, `init3d`,
-                `init_terrain`, or `init_surface` is provided, as the simulator
-                will always recompile the code in that case.
+            recompile: Recompile flag, disabled by default. The simulation will
+                use the pre-compiled version of the CM1 code. The value is
+                ignored if any of the files `base`, `init3d`, `init_terrain`,
+                or `init_surface` is provided, as the simulator will always
+                recompile the code in that case. If enabled, the simulator
+                will recompile for the machine architecture of the
+                computational resource, which may result in a performance
+                improvement (usually not significant).
             on: The computational resource to launch the simulation on.
             sim_config_filename: Name of the simulation configuration file.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
@@ -99,6 +100,24 @@ class CM1(simulators.Simulator):
                 "10m", "2 hours", "1h30m", or "90s". The task will be
                 automatically terminated if it exceeds this duration after
                 starting.
+            on_finish_cleanup :
+                Optional cleanup script or list of shell commands to remove
+                temporary or unwanted files generated during the simulation.
+                This helps reduce storage usage by discarding unnecessary
+                output.
+                - If a string is provided, it is treated as the path to a shell
+                script that must be included with the simulation files.
+                - If a list of strings is provided, each item is treated as an
+                individual shell command and will be executed sequentially.
+                All cleanup actions are executed in the simulation's working
+                directory, after the simulation finishes.
+                Examples:
+                    on_finish_cleanup = "my_cleanup.sh"
+
+                    on_finish_cleanup = [
+                        "rm -rf temp_dir",
+                        "rm -f logs/debug.log"
+                    ]
             other arguments: See the documentation of the base class.
         """
         working_dir = "/workdir/output/artifacts"
@@ -186,4 +205,5 @@ class CM1(simulators.Simulator):
                            remote_assets=remote_assets,
                            project=project,
                            time_to_live=time_to_live,
+                           on_finish_cleanup=on_finish_cleanup,
                            **kwargs)
