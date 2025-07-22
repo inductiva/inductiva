@@ -1,20 +1,49 @@
-# Real-Time Simulation Monitoring with Condition-Based Termination
+# Real-Time Monitoring & Conditional Auto Termination
 
-## The Challenge
-
-You've just run hundreds of simulations, each generating multiple output files. Now, you need to monitor their convergence and possibly stop simulations automatically when certain criteria are met. Doing this manually is tedious, error-prone, and inefficient.
+You’re running one or more simulations that take time and resources, and you want to stop them automatically once they converge based on a condition (e.g., residuals falling below a threshold). Doing this manually is tedious, error-prone, and inefficient.
 
 Why not automate real-time monitoring and condition-based termination instead?
 
 ## The Solution
 
-Inductiva allows you to monitor log files in real time and trigger actions like stopping a simulation task based on output values, for example, residuals during a CFD run.
+This recipe allows **real-time log monitoring** and **automatic stopping** of simulations when a condition is met, such as convergence. It applies to **any simulator** that writes convergence-related values (e.g., residuals) to a log file in a consistent format.
 
-Below is a Python script example for monitoring the residuals of an OpenFOAM simulation. When the residual value drops below a given threshold, the script automatically kills the task to save computing resources.
+Benefits:
+- Save computation time by terminating converged simulations automatically.
+- Monitor long-running simulations in real time without manual log checking.
+- Works with any simulator that logs convergence info, like residuals, to a file.
 
-This example uses an OpenFOAM case like the one in the [OpenFOAM Quick Start guide](https://inductiva.ai/guides/openfoam/quick-start).
 
-## Script monitor_residuals.py
+## Requirements:
+- Your simulator should **write convergence indicators** (e.g., residuals) to a **log file** during execution.
+- The relevant values must be parseable using a regex pattern (can be adjusted in the script).
+- You must know the `task_id` of the running simulation.
+
+This example is designed for the [OpenFOAM Quick Start guide](https://inductiva.ai/guides/openfoam/quick-start), but the approach is general.
+
+
+## How to Use It in Your Workflow
+First, launch your Inductiva simulation. Once you have the `task_id` (you can get it from the Python API or copy it from the web console), you’ll need to run the monitoring script (shown below) **in parallel** to start tracking the log file.
+
+```
+python my_simulation.py  # Your script that launches the simulation
+python monitor_residuals.py <task_id>  # This script monitors the simulation
+```
+
+> 💡 Make sure to run the monitoring script while the simulation is still running, so it can tail the log file in real time.
+
+
+This script:
+- Tails the simulation log file (`log.simpleFoam`) in real time.
+- Searches each line for a residual value using a regular expression.
+- If the residual falls below a threshold (default: `1e-5`), it automatically stops the running task to save resources.
+
+
+## Python Script monitor_residuals.py
+The following script can be used to monitor residuals during a simulation run. When the residual value drops below a given threshold, it automatically stops the task to save computing resources.
+
+Copy and save it to a file named `monitor_residuals.py`.
+
 
 ```python
 import re
@@ -41,7 +70,7 @@ class ResidualFilter:
                 print(f"Residual found: {residual_value}")
                 if residual_value < self.threshold:
                     self.stop = True
-                    print("Residual below threshold, killing task...")
+                    print("Residual below threshold, stopping task...")
                     self.task.kill()
 
     def flush(self):
@@ -50,7 +79,7 @@ class ResidualFilter:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Monitor and kill a task based on residual values.")
+        description="Monitor and stop a task based on residual values.")
     parser.add_argument("task_id", help="ID of the task.")
     parser.add_argument("--filename",
                         default="log.simpleFoam",
@@ -58,7 +87,7 @@ def main():
     parser.add_argument("--threshold",
                         type=float,
                         default=1e-5,
-                        help="Residual threshold to trigger task kill.")
+                        help="Residual threshold to trigger task stop.")
 
     args = parser.parse_args()
 
@@ -80,28 +109,4 @@ if __name__ == "__main__":
     main()
 ```
 
-
-## How It Works
-
-- The script tails the OpenFOAM log file (`log.simpleFoam`) in real time.
-- It searches each line for the "Final residual" value.
-- When the residual falls below a threshold (default `1e-5`), it stops (kills) the running task.
-
-
-## Usage
-
-Run the script passing the ID of your OpenFOAM task:
-
-```python monitor_residuals.py <task_id>```
-
-The script will wait for the task to start, then stream the residuals in the log file. Once the residual falls below the threshold, the task is automatically terminated.
-
-
-## Summary
-
-This approach helps you:
-
-- Save computation time by terminating converged simulations automatically.
-- Monitor long-running simulations in real time without manual log checking.
-- Integrate with any simulation platform supported by Inductiva that writes residuals or similar convergence info to log files.
-
+> 💡 If your simulator uses a different log format, adjust the regular expression in the script accordingly.
