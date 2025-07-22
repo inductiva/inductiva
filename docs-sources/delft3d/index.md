@@ -10,18 +10,17 @@ accessible and cost-effective. Use the power of the Cloud to
 **scale your simulations** and **finish your projects sooner**, while keeping
 your costs in check!
 
-## About Delft3D
-[Delft3D](https://oss.deltares.nl/web/delft3d) is a modeling suite for the simulation of hydrodynamics, 
-waves, water quality and sediment transport in coastal, river and estuarine environments. 
-It supports 2D and 3D simulations with advanced computational techniques and flexible mesh grids, 
-making it ideal for complex environments and applications such as flood forecasting and environmental management.
-
 ## What You'll Find Here
-- **Tutorials:** Step-by-step guides to help you learn how to run Delft3D through
-the Inductiva API. From getting started to advanced tutorials, we have you covered.
-- **Benchmarks:** A trusted guide to selecting the right simulation hardware for
-your needs. These benchmarks, conducted using the Inductiva platform, provide
-insight into how Delft3D performs on different hardware configurations.
+
+### Tutorials
+Step-by-step guides to help you learn how to run Delft3D through the Inductiva API. From getting started to advanced tutorials, we have you covered.
+
+- [Test Your Inductiva Setup](https://inductiva.ai/guides/delft3d/setup-test)
+- [Run Your First Simulation](https://inductiva.ai/guides/delft3d/quick-start)
+- [Run Delft3D with FLOW-WAVE coupling](https://inductiva.ai/guides/delft3d/flow-wave-coupling)
+
+### Benchmarks
+A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how Delft3D performs on different hardware configurations.
 
 ```{banner}
 :origin: delft3d

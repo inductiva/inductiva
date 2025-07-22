@@ -27,7 +27,7 @@ class SimulatorVersion(BaseModel):
     Schema for simulator version.
     """
 
-    # noqa: E501
+  # noqa: E501
     version: StrictStr
     is_development: StrictBool
     __properties: ClassVar[List[str]] = ["version", "is_development"]

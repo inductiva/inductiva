@@ -29,7 +29,7 @@ class SimulatorCreate(BaseModel):
     Schema for creating a new simulator.
     """
 
-    # noqa: E501
+  # noqa: E501
     name: StrictStr
     display_name: Optional[StrictStr] = None
     recommended_machine_type: Optional[List[StrictStr]] = None
