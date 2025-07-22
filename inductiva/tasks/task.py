@@ -1582,7 +1582,7 @@ class Task:
             if getattr(e, "status", None) == 404:
                 logging.error(" > There are no remote files for this task.")
                 return False
-            
+
             logging.error(" > %s", json.loads(e.data)["detail"])
             return False
         return True
