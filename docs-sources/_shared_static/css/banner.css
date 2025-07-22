@@ -79,7 +79,7 @@
 
 @media (max-width: 768px) {
   .banner {
-    padding: 1.5rem 1rem;
+    padding: 1rem 1rem;
     flex-direction: column;
   }
 
@@ -99,7 +99,7 @@
   }
 
   .buttons {
-    margin-top: 1.5rem;
+    margin-top: 1.0rem;
     justify-content: center;
     width: 100%;
   }
