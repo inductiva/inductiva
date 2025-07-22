@@ -18,12 +18,15 @@ def get_subparser(
     subparsers.choices.clear()
     return subparser
 
+def get_parser(command: str):
+    sub_commands = command.split(" ")
+    parser = get_main_parser()
+    for sub_command in sub_commands:
+        parser = get_subparser(parser, sub_command)
+    return parser
+
 def auth_login_parser():
-    main_parser = get_main_parser()
-    auth_parser = get_subparser(main_parser, "auth")
-    return get_subparser(auth_parser, "login")
+    return get_parser("auth login")
 
 def auth_logout_parser():
-    main_parser = get_main_parser()
-    auth_parser = get_subparser(main_parser, "auth")
-    return get_subparser(auth_parser, "logout")
+    return get_parser("auth logout")
