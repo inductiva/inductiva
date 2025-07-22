@@ -49,5 +49,9 @@ class BannerDirective(Directive):
                 </div>
                 </div>
             </div>
+            <script>
+                window.banner_text_id={selected_key};
+                window.banner_type="big";
+            </script>
             '''
         return [nodes.raw('', html, format='html')]
