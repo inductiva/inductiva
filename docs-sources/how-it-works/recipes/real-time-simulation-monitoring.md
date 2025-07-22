@@ -54,30 +54,33 @@ import inductiva
 class ResidualFilter:
 
     def __init__(self, pattern, threshold, task):
-        self.pattern = pattern
-        self.threshold = threshold
-        self.task = task
-        self.stop = False
+        self.pattern = pattern          # Regex pattern to extract residuals
+        self.threshold = threshold      # Residual threshold to stop the task
+        self.task = task                # The Inductiva task being monitored
+        self.stop = False               # Flag to avoid stopping more than once
 
     def write(self, text):
+        """Function called with new log lines."""
+
         if self.stop:
             return
 
         for line in text.splitlines():
-            match = self.pattern.search(line)
+            match = self.pattern.search(line) # Search for regex pattern
             if match:
-                residual_value = float(match.group(1))
-                print(f"Residual found: {residual_value}")
-                if residual_value < self.threshold:
+                residual = float(match.group(1))
+                print(f"Residual found: {residual}")
+                if residual < self.threshold: # Check if residual below threshold
                     self.stop = True
                     print("Residual below threshold, stopping task...")
-                    self.task.kill()
+                    self.task.kill() # Stop the task
 
     def flush(self):
         pass  # For compatibility
 
 
 def main():
+    # Parse command-line arguments
     parser = argparse.ArgumentParser(
         description="Monitor and stop a task based on residual values.")
     parser.add_argument("task_id", help="ID of the task.")
@@ -91,17 +94,21 @@ def main():
 
     args = parser.parse_args()
 
+    # Compile the regex to extract "Final residual = ..." from log lines
     pattern = re.compile(r"Final residual\s*=\s*([\d.eE+-]+)")
-    task = inductiva.tasks.Task(args.task_id)
+    
+    task = inductiva.tasks.Task(args.task_id) # Load the task using its ID
 
+    # Wait until the task actually starts computation
     task.wait_for_status("computation-started")
     print(f"Tailing {args.filename} for residuals...")
 
+    # Stream the log file and pipe output to our ResidualFilter
     task.tail_files(
         tail_files=[args.filename],
-        lines=10,
-        follow=True,
-        wait=True,
+        lines=10, # Start tailing from the last 10 lines
+        follow=True, # Keep reading new lines in real time
+        wait=True,  # Wait for the log file to be available
         fout=ResidualFilter(pattern, args.threshold, task),
     )
 
