@@ -11,17 +11,17 @@ const BANNER_BIG_MESSAGES = {
 const BANNER_SMALL_MESSAGES = {
     1: {
         active: true,
-        text: "<strong>Start running simulations seamlessly!</strong> You have $5 in <strong>free</strong> credits, no credit card required.",
-        button_text: "Sign In",
+        text: "Run your first simulation with <strong>$5 in free credits</strong> — no card needed.",
+        button_text: "Claim Free Credits",
     },
     2: {
         active: true,
-        text: "<strong>Launch simulations today</strong> with <strong>$5 free credits</strong> - no card needed.",
-        button_text: "Get $5 Free",
+        text: "Speed up your simulations — get <strong>$5 free</strong> to start instantly.",
+        button_text: "Start for Free",
     },
     3: {
         active: true,
-        text: "<strong>No more queues.</strong> Run simulations instantly with <strong>$5 free.</strong>",
+        text: "Tired of waiting? Skip queues and simulate instantly with <strong>$5 free</strong>.",
         button_text: "Simulate Now",
     },
 };
