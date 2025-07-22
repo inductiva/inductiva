@@ -1,5 +1,4 @@
 """Python directive for sphinx banner_small"""
-import random
 from docutils import nodes
 from docutils.parsers.rst import Directive
 
