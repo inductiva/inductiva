@@ -109,7 +109,7 @@ simulator = inductiva.simulators.XBeach()
 task_1 = simulator.run(
     input_dir=input_dir,
     on=machine_group,
-    project="xbeach_project"
+    project="wave_modeling"
 )
 
 # Method 2: Create task first, then assign to project
