@@ -19,8 +19,6 @@ Benefits:
 - The relevant values must be parseable using a regex pattern (can be adjusted in the script).
 - You must know the `task_id` of the running simulation.
 
-This example is designed for the [OpenFOAM Quick Start guide](https://inductiva.ai/guides/openfoam/quick-start), but the approach is general.
-
 
 ## How to Use It in Your Workflow
 First, launch your Inductiva simulation. Once you have the `task_id` (you can get it from the Python API or copy it from the web console), you’ll need to run the monitoring script (shown below) **in parallel** to start tracking the log file.
@@ -116,4 +114,4 @@ if __name__ == "__main__":
     main()
 ```
 
-> 💡 If your simulator uses a different log format, adjust the regular expression in the script accordingly.
+> 💡 This example is designed for the [OpenFOAM Quick Start guide](https://inductiva.ai/guides/openfoam/quick-start), but it can be easily updated for other simulators. If your simulator uses a different log format, adjust the regular expression in the script accordingly.
