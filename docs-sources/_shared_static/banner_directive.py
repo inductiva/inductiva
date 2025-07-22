@@ -11,15 +11,6 @@ class BannerDirective(Directive):
         'origin': str,
     }
 
-    BANNER_MESSAGES = {
-        1:{
-            "active": True,
-            "top_text":"Ready to dive in?",
-            "bot_text":"Get started for free today and earn $5 in credits.",
-            "button_text":"Get Started"
-        },
-    }
-
     def run(self):
         origin = self.options.get('origin', '')
 
@@ -33,19 +24,37 @@ class BannerDirective(Directive):
             <div class="banner">
                 <div class="banner-content">
                 <div class="text">
-                    <p class="headline">{self.BANNER_MESSAGES[selected_key]["top_text"]}</p>
-                    <p class="subtext">{self.BANNER_MESSAGES[selected_key]["bot_text"]}</p>
+                    <p class="headline">...</p>
+                    <p class="subtext">...</p>
                 </div>
                 <div class="buttons">
                     <button onclick="window.open('https://console.inductiva.ai/?utm_source=guide_{origin}&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="btn primary" id="login-btn-big" >
-                    <span class="btn-main">{self.BANNER_MESSAGES[selected_key]["button_text"]}</span>
+                    <span class="btn-main">...</span>
                     </button>
                 </div>
                 </div>
             </div>
             <script>
-                window.banner_text_id={selected_key};
+                const activeKeys = Object.keys(window.BANNER_BIG_MESSAGES).filter(
+                    (key) => BANNER_BIG_MESSAGES[key].active
+                );
+                window.banner_text_id = selectedKey = activeKeys[Math.floor(Math.random() * activeKeys.length)];
                 window.banner_type="big";
+                const selectedBanner = window.BANNER_MESSAGES[window.banner_text_id];
+                
+                // Replace the text
+                const headlineElement = document.querySelector("p.headline");
+                if (headlineElement) {{
+                    headlineElement.innerHTML = selectedBanner.top_text;
+                }}
+                const subtextElement = document.querySelector("p.subtext");
+                if (subtextElement) {{
+                    subtextElement.innerHTML = selectedBanner.bot_text;
+                }}
+                const buttonElement = document.querySelector(".buttons .btn-main");
+                if (buttonElement) {{
+                    buttonElement.innerHTML = selectedBanner.button_text;
+                }}
             </script>
             '''
         return [nodes.raw('', html, format='html')]

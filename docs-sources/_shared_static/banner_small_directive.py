@@ -11,24 +11,6 @@ class BannerSmallDirective(Directive):
         'origin': str,
     }
 
-    BANNER_MESSAGES = {
-        1:{
-            "active": True,
-            "text":"<strong>Start running simulations seamlessly!</strong> You have $5 in <strong>free</strong> credits, no credit card required.",
-            "button_text":"Sign In"
-        },
-        2:{
-            "active": True,
-            "text":"<strong>Launch simulations today</strong> with <strong>$5 free credits</strong> - no card needed.",
-            "button_text":"Get $5 Free"
-        },
-        3:{
-            "active": True,
-            "text":"<strong>No more queues.</strong> Run simulations instantly with <strong>$5 free.</strong>",
-            "button_text":"Simulate Now"
-        },
-    }
-
     def run(self):
         origin = self.options.get('origin', '')
 
@@ -41,13 +23,27 @@ class BannerSmallDirective(Directive):
         html = f'''
             <div class="cta-bar">
                 <div class="cta-text">
-                    {self.BANNER_MESSAGES[selected_key]["text"]}
+                    ...
                 </div>
-                <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_{origin}&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button" id="login-btn-small">{self.BANNER_MESSAGES[selected_key]["button_text"]}</button>
+                <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_{origin}&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button" id="login-btn-small">...</button>
             </div>
             <script>
-                window.banner_text_id={selected_key};
-                window.banner_type="big";
+                const activeKeys = Object.keys(window.BANNER_SMALL_MESSAGES).filter(
+                    (key) => BANNER_SMALL_MESSAGES[key].active
+                );
+                window.banner_text_id = selectedKey = activeKeys[Math.floor(Math.random() * activeKeys.length)];
+                window.banner_type="small";
+                const selectedBanner = window.BANNER_MESSAGES[window.banner_text_id];
+                
+                // Replace the text
+                const ctaTextElement = document.querySelector(".cta-bar .cta-text");
+                if (ctaTextElement) {{
+                    ctaTextElement.innerHTML = selectedBanner.text;
+                }}
+                const buttonElement = document.querySelector(".cta-bar .cta-button");
+                if (buttonElement) {{
+                    buttonElement.innerHTML = selectedBanner.button_text;
+                }}
             </script>
             '''
         return [nodes.raw('', html, format='html')]
