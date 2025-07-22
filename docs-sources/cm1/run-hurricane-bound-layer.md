@@ -139,12 +139,9 @@ depending on the demands of the task. 🚀
 If you want to benchmark your own workload in a single script please follow
 this [tutorial](https://inductiva.ai/guides/scale-up/benchmark/run-benchmarks).
 
-<div class="cta-bar">
-  <div class="cta-text">
-    <strong>Start running simulations seamlessly!</strong> You have $5 in <strong>free</strong> credits, no credit card required.
-  </div>
-  <button  onclick="window.open('https://console.inductiva.ai/', '_blank')" target="_blank" class="cta-button">Sign In</button>
-</div>
+```{banner_small}
+:origin: cm1
+```
 
 ## References
 
