@@ -63,12 +63,12 @@ In this basic example, we're using a cloud machine (`c2d-highcpu-16`) equipped w
 For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
 a machine with more virtual CPUs and increased memory capacity.
 
-👉 Explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
+> 👉 Explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-### Why Set `threads_per_core=1`?
+### Why Set threads_per_core=1?
 In OpenFOAM-Foundation v8, the `runParallel` function uses only **physical** CPU cores and ignores hyperthreaded ones. To match this behavior, we request machines with `threads_per_core=1`, which disables hyperthreading and makes only the physical cores available to the simulation.
 
-🔍  For a deeper explanation of this limitation, see [FAQ #6](faq.md#6-why-does-my-simulation-keep-failing-with-there-are-not-enough-slots-available-even-though-my-machine-has-enough-resources)
+> 🔍  For a deeper explanation of this limitation, see [FAQ #6](faq.md#6-why-does-my-simulation-keep-failing-with-there-are-not-enough-slots-available-even-though-my-machine-has-enough-resources)
 
 ### Simulation Summary
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
@@ -150,7 +150,7 @@ To reduce runtime even further, scale up to a larger machine.
 
 For example, move from a machine with 8 physical cores to one with 16 physical cores (`c2d-highcpu-32`, which has 32 vCPUs).
 
-### Step 1: Update Machine Configuration
+* **Step 1: Update Machine Configuration**
 Change the `machine_type` in the script:
 
 ```python
@@ -163,7 +163,7 @@ cloud_machine = inductiva.resources.MachineGroup(
 )
 ```
 
-### Step 2: Update Simulation Configuration
+* **Step 2: Update Simulation Configuration**
 Update the `system/decomposeParDict` file to divide the simulation into 16 subdomains:
 
 ```diff
@@ -190,7 +190,7 @@ hierarchicalCoeffs
 
 Now rerun the simulation using the updated script and configuration.
 
-## Performance Results
+## Results
 Here’s a comparison of the different subdomain counts and machine sizes:
 
 | Machine Type       | Subdomains | Execution Time | Estimated Cost (USD) |
@@ -200,15 +200,14 @@ Here’s a comparison of the different subdomain counts and machine sizes:
 | c2d-highcpu-32     | 16          | 1 min, 8s        | 0.0037 US$  |
 
 Compared to 6 subdomains on 8 cores, running 16 subdomains on 16 physical cores **nearly halved the simulation runtime** — 
-reducing it from 2 minutes 9 seconds to just 1 minute 8 seconds — with only a 19% increase in estimated cost.
-
-## Adapting This Workflow to Other OpenFOAM Cases
-To run other OpenFOAM simulations, follow these steps:
-- Change the `input_dir` to point to your OpenFOAM case.
-- Adjust the version and distribution in the simulator if needed.
-- Ensure your shell_script (e.g., ./Allrun) correctly sets up and runs the case.
+reducing it from 2 minutes 10 seconds to just 1 minute 8 seconds — with only a 19% increase in estimated cost.
 
 ```{banner_small}
 :origin: openfoam
 ```
 
+## Adapting This Workflow to Other OpenFOAM Cases
+To run other OpenFOAM simulations, follow these steps:
+- Change the `input_dir` to point to your OpenFOAM case.
+- Adjust the version and distribution in the simulator if needed.
+- Ensure your `shell_script` (e.g., `./Allrun`) correctly sets up and runs the case.
