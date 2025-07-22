@@ -83,12 +83,18 @@ html_theme_options = {
     'show_breadcrumbs': True,
 }
 
+# Google Analytics
+googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
+googleanalytics_enabled = True
+
 #save into static a js with the env var with the GTM code for the corrent env
 #prod or dev
 env_js_path = os.path.join(os.path.dirname(__file__), '_static', 'env.js')
+os.makedirs(os.path.dirname(env_js_path), exist_ok=True)
 with open(env_js_path, 'w') as f:
     f.write(f'window.env = {{ GTAG_WEBSITE: "{googleanalytics_id}" }};\n')
 html_js_files = [
+    'banner_texts.js',
     'env.js',
     'discord.js',
     'gtm_func.js',
@@ -104,10 +110,6 @@ html_css_files = ['css/custom.css', 'css/banner.css']
 pygments_style = "monokai"
 
 html_title = 'GROMACS'
-
-# Google Analytics
-googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
-googleanalytics_enabled = True
 
 # OpenGraph protocol
 ogp_site_name = "Inductiva.AI GROMACS"
