@@ -29,27 +29,5 @@ class BannerDirective(Directive):
                 </div>
                 </div>
             </div>
-            <script>
-                const activeKeys = Object.keys(window.BANNER_BIG_MESSAGES).filter(
-                    (key) => BANNER_BIG_MESSAGES[key].active
-                );
-                window.banner_text_id = selectedKey = activeKeys[Math.floor(Math.random() * activeKeys.length)];
-                window.banner_type="big";
-                const selectedBanner = window.BANNER_MESSAGES[window.banner_text_id];
-                
-                // Replace the text
-                const headlineElement = document.querySelector("p.headline");
-                if (headlineElement) {{
-                    headlineElement.innerHTML = selectedBanner.top_text;
-                }}
-                const subtextElement = document.querySelector("p.subtext");
-                if (subtextElement) {{
-                    subtextElement.innerHTML = selectedBanner.bot_text;
-                }}
-                const buttonElement = document.querySelector(".buttons .btn-main");
-                if (buttonElement) {{
-                    buttonElement.innerHTML = selectedBanner.button_text;
-                }}
-            </script>
             '''
         return [nodes.raw('', html, format='html')]
