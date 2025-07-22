@@ -19,6 +19,10 @@ To demonstrate this, we will use the [`5MW_OC4Semi_WSt_WavesWN`](https://github.
 This example is an extension of the reference case described in ["Definition of a 5-MW Reference Wind Turbine for Offshore
 System Development"](https://www.nrel.gov/docs/fy09osti/38060.pdf).
 
+```{banner_small}
+:origin: openfast
+```
+
 ```{toctree}
 :hidden:
 sections/section1.md

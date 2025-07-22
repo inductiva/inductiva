@@ -92,6 +92,10 @@ html_css_files = [
 ]
 pygments_style = "monokai"
 
+html_js_files = [
+    'discord.js',
+]
+
 html_favicon = 'favicon.ico'
 
 html_title = 'System Requirements'

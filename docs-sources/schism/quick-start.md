@@ -74,9 +74,6 @@ Estimated computation cost (US$): 0.0013 US$
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
 the core computation time of this simulation was 104.5 seconds (approximately 2 minutes).
 
-<div class="cta-bar">
-  <div class="cta-text">
-    <strong>Kickstart your simulations!</strong> You have $5 in <strong>free credits</strong>, no credit card required.
-  </div>
- <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_schism&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
-</div>
+```{banner_small}
+:origin: schism
+```

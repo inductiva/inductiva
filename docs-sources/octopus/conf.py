@@ -41,9 +41,15 @@ myst_enable_extensions = [
     # other MyST extensions
 ]
 
-html_static_path = ['_static']
+#save into static a js with the env var with the GTM code for the corrent env
+#prod or dev
+env_js_path = os.path.join(os.path.dirname(__file__), '_static', 'env.js')
+with open(env_js_path, 'w') as f:
+    f.write(f'window.env = {{ GTAG_WEBSITE: "{googleanalytics_id}" }};\n')
 html_js_files = [
+    'env.js',
     'discord.js',
+    'gtm_func.js',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -92,10 +98,9 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 shared_static_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "_shared_static"))
+
 html_static_path = ['_static', shared_static_path]
-html_css_files = [
-    'css/custom.css',
-]
+html_css_files = ['css/custom.css', 'css/banner.css']
 pygments_style = "monokai"
 
 html_title = 'Octopus'
@@ -114,3 +119,12 @@ ogp_image = "https://inductiva.ai/builds/octopus/_static/inductiva-social-banner
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/octopus'
+
+sys.path.insert(0, shared_static_path)
+
+
+def setup(app):
+    from banner_directive import BannerDirective
+    app.add_directive("banner", BannerDirective)
+    from banner_small_directive import BannerSmallDirective
+    app.add_directive("banner_small", BannerSmallDirective)
