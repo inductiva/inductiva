@@ -16,12 +16,12 @@ const BANNER_SMALL_MESSAGES = {
     },
     2: {
         active: true,
-        text: "Speed up your simulations — get <strong>$5 free</strong> to start instantly.",
+        text: "<strong>Speed up your simulations</strong> — get <strong>$5 free</strong> to start instantly.",
         button_text: "Start for Free",
     },
     3: {
         active: true,
-        text: "Tired of waiting? Skip queues and simulate instantly with <strong>$5 free</strong>.",
+        text: "<strong>Tired of waiting?</strong> Skip queues and simulate instantly with <strong>$5 free</strong>.",
         button_text: "Simulate Now",
     },
 };
