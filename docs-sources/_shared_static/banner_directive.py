@@ -18,12 +18,6 @@ class BannerDirective(Directive):
             "bot_text":"Get started for free today and earn $5 in credits.",
             "button_text":"Get Started"
         },
-        2:{
-            "active": True,
-            "top_text":"Join us!",
-            "bot_text":"Register for free today and earn $5 in credits.",
-            "button_text":"Get Started For Free!"
-        }
     }
 
     def run(self):

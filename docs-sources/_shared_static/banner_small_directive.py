@@ -19,8 +19,13 @@ class BannerSmallDirective(Directive):
         },
         2:{
             "active": True,
-            "text":"<strong>Register</strong> and get $5 in <strong>free</strong> credits, no credit card required.",
-            "button_text":"Register"
+            "text":"<strong>Launch simulations today</strong> with <strong>$5 free credits</strong> - no card needed.",
+            "button_text":"Get $5 Free"
+        },
+        3:{
+            "active": True,
+            "text":"<strong>No more queues.</strong> Run simulations instantly with <strong>$5 free.</strong>",
+            "button_text":"Simulate Now"
         },
     }
 
