@@ -41,6 +41,10 @@ myst_enable_extensions = [
     # other MyST extensions
 ]
 
+# Google Analytics
+googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
+googleanalytics_enabled = True
+
 #save into static a js with the env var with the GTM code for the corrent env
 #prod or dev
 env_js_path = os.path.join(os.path.dirname(__file__), '_static', 'env.js')
@@ -105,10 +109,6 @@ html_css_files = ['css/custom.css', 'css/banner.css']
 pygments_style = "monokai"
 
 html_title = 'Octopus'
-
-# Google Analytics
-googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
-googleanalytics_enabled = True
 
 # OpenGraph protocol
 ogp_site_name = "Inductiva.AI Octopus"
