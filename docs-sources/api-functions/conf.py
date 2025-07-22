@@ -169,16 +169,36 @@ html_baseurl = 'https://inductiva.ai/guides/api-functions'
 def fix_newlines(text):
     return re.sub(r'(?<!\n)\n(?!\n)', ' ', text)
 
-def fix_paragraphs(file_path):
-    text = file_path.read_text(encoding="utf-8")
-    soup = bs4.BeautifulSoup(text, "html.parser")
+def fix_paragraphs(soup):
     for section in soup.select('section[id^="inductiva-"]'):
         for paragraph in section.find_all("p"):
             paragraph.string = fix_newlines(paragraph.get_text())
-    file_path.write_text(str(soup), encoding="utf-8")
+
+# Regex to match backtick-wrapped commands starting with `inductiva`
+RE_BACKTICK_WRAPPED = re.compile(r"`(inductiva(?:\s+\w+)+)`")
+
+def sub_backtick_wrapped(text):
+    re_code = r"<code>\1</code>"
+    return RE_BACKTICK_WRAPPED.sub(re_code, text)
+
+
+def replace_backtick_wrapped(soup):
+    for paragraph in soup.find_all("p"):
+        if not paragraph.string:
+            continue
+        new_html = sub_backtick_wrapped(paragraph.string)
+        paragraph.clear()
+        paragraph.append(bs4.BeautifulSoup(new_html, "html.parser"))
+
 
 def tidy_cli_html(file_path):
-    fix_paragraphs(file_path)
+    text = file_path.read_text(encoding="utf-8")
+    soup = bs4.BeautifulSoup(text, "html.parser")
+
+    fix_paragraphs(soup)
+    replace_backtick_wrapped(soup)
+
+    file_path.write_text(str(soup), encoding="utf-8")
 
 def on_build_finished(app, exception):
     output_dir = pathlib.Path(app.outdir)
