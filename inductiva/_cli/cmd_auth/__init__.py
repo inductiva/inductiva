@@ -16,7 +16,7 @@ def register(root_parser):
     parser.description = textwrap.dedent("""\
         Authentication management utilities.
 
-        The `inductiva auth` command allows you to manage user authentication
+        The `inductiva auth` command allows you to manage your authentication
         on Inductiva API.
 
         This is a fundamental aspect of your experience: you will only be able 
@@ -24,7 +24,7 @@ def register(root_parser):
         Once authenticated, your credentials will be stored locally for future 
         sessions.
                                          
-        However, you will need to authenticate separately on each local machine 
+        However, you will need to authenticate separately on each local machine
         from which you want to use Inductiva.
     """)
 

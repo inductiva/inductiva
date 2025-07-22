@@ -35,3 +35,10 @@ tasks <api/inductiva.tasks>
 templating <api/inductiva.templating>
 users <api/inductiva.users>
 ```
+
+```{toctree}
+---
+caption: Command Line Interface
+---
+auto-cli/auth
+```
