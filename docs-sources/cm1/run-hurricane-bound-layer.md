@@ -2,7 +2,7 @@
 
 In this tutorial, we demonstrate how to simulate a simplified hurricane boundary
 layer (HBL) using Large Eddy Simulation (LES) on the Inductiva platform. This
-setup follows the methodology of Bryan et al. (2017) **[1]**.
+example is retrieved from the official CM1 repository **[1]**.
 
 The hurricane boundary layer is the lowest portion of the atmosphere in a
 tropical cyclone where turbulence, surface friction, and radial inflow are
