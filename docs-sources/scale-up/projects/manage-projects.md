@@ -7,10 +7,10 @@ Once you've created projects, you need to manage tasks within them. This guide c
 | `simulator.run(project="name")` | Add task during creation | `task = simulator.run(input_dir="data/", on=machine_group, project="coastal_study")` |
 | `project.add_task(task)` | Add existing task to project | `coastal_project.add_task(existing_task)` |
 | `project.get_tasks()` | List all tasks in project | `tasks = project.get_tasks()` |
-| `project.describe()` | Get project summary | `info = project.describe()` |
+| `str(project)` | Get project summary | `info = str(project)` |
 | `inductiva.projects.get_projects()` | List all projects | `all_projects = inductiva.projects.get_projects()` |
 
-## Adding Tasks to Projects
+## Add Tasks to Projects
 
 ### Method 1: During Task Creation
 
@@ -56,7 +56,7 @@ updated_info = task.get_info()
 print(f"Task now in project: {updated_info.project}")  # "wave_modeling"
 ```
 
-## Listing Tasks in Projects
+## List Tasks in Projects
 
 Get all tasks belonging to a project:
 

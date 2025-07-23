@@ -78,7 +78,7 @@ task = simulator.run(input_dir="data/", on=machine_group)
 ````
 
 
-## Creating a Project
+## Create a Project
 
 Create a project by instantiating the `Project` class with a descriptive name:
 

@@ -54,7 +54,7 @@ The console also provides simple tools for keeping your projects organized.
 !["Rename Project"](./_static/rename_project.png)
 
 2. Enter the new name in the dialog.
-3. Click _"Save"_ to apply the changes
+3. Click _"Rename"_ to apply the changes
 
 !["Dialog Rename Project"](./_static/dialog_rename_project.png)
 
@@ -62,7 +62,6 @@ The console also provides simple tools for keeping your projects organized.
 To better organize your work, you can move tasks from one project to another.
 
 1. In the Tasks table, check the box next to one or more tasks you wish to move.
-!["Move Task"](./_static/move-task.png)
 
 2. An action bar will appear at the top of the table. Click _"Move"_.
 
