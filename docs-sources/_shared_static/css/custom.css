@@ -1382,7 +1382,6 @@ footer {
 @media (max-width: 600px) {
 	.cta-bar {
 		flex-direction: column;
-		align-items: stretch; /* so button stretches full width */
 		text-align: center;
 	}
 
