@@ -8,7 +8,7 @@ Learn about _Projects_ — the organizational framework in the Inductiva API tha
 
 | **[Projects →](tasks.md)** | **[Manage Projects →](tasks-execution.md)** | **[Visualize Project →](tasks-lifecycle.md)** |
 |---|---|---|
-| Learn about Projects and how to create them | Manage tasks within projects and organize your simulation workflows | Understand the task's status state machine, from submission through completion |
+| Learn about Projects and how to create them | Understand how to manage and organize tasks within projects | Monitor progress and manage projects using the Web Console dashboard. |
 
 ## Features
 ✓ **Automatic organization** Every task belongs to a project — either one you specify or the default project. No orphaned simulations, everything stays organized from the start.
