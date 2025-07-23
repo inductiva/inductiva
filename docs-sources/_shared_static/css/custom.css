@@ -1379,6 +1379,11 @@ footer {
 	background-color: var(--purple-hover-color);
 }
 
+#scrolltop {
+	bottom: 5rem !important;  /* move it higher */
+	right: 1rem !important;   /* move it a bit to the left */
+}
+
 @media (max-width: 600px) {
 	.cta-bar {
 		flex-direction: column;
@@ -1389,10 +1394,5 @@ footer {
 	.cta-button {
 		width: 100%;
 		margin-top: 8px;
-	}
-
-	#scrolltop {
-		bottom: 5rem !important;  /* move it higher */
-		right: 1rem !important;   /* move it a bit to the left */
 	}
 }
