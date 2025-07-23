@@ -38,8 +38,8 @@ class BannerDirective(Directive):
                 }}, 500); // Match the animation duration
             }}
 
-            // Shake every 10 seconds
-            setInterval(triggerShake, 10000);
+            // Shake every 5 seconds
+            setInterval(triggerShake, 5000);
             </script>
             '''
         return [nodes.raw('', html, format='html')]
