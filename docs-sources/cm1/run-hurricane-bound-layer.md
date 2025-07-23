@@ -2,7 +2,7 @@
 
 In this tutorial, we demonstrate how to simulate a simplified hurricane boundary
 layer (HBL) using Large Eddy Simulation (LES) on the Inductiva platform. This
-example is retrieved from the official CM1 repository **[1]**.
+example was retrieved from the official CM1 repository **[1]**.
 
 The hurricane boundary layer is the lowest portion of the atmosphere in a
 tropical cyclone where turbulence, surface friction, and radial inflow are
@@ -108,7 +108,7 @@ scaling up is as simple as adjusting the `machine_type` parameter when
 allocating your cloud machine.
 
 We tested the same simulation across several cloud machines with increasing
-vCPU counts and next-generation architectures. The results show a clear trend:
+vCPU counts and next-generation architecture. The results show a clear trend:
 more powerful machines can dramatically reduce execution time while maintaining
 reasonable costs.
 
@@ -116,21 +116,22 @@ reasonable costs.
 |------------------|----------------|-----------|----------------------|
 | c2d-highcpu-16   | 1h 36min       | Reference | $0.14                |
 | c4-highcpu-16    | 1h 6min        | 1.45×     | $0.33                |
+| c2d-highcpu-56   | 37 min         | 2.59×     | $0.17                |
+| c4-highcpu-96    | 20 min         | 4.80×     | $0.89                |
 | c2d-highcpu-112  | 17 min         | 5.65×     | $0.17                |
-| c3d-highcpu-360  | 9 min          | 10.67×    | $0.51                |
+| c4-highcpu-192   | 11 min         | 8.73×     | $0.65                |
 
-Upgrading from `c2d-highcpu-16` (a typical entry-level machine) to
-`c4-highcpu-16` (a newer generation with the same number of vCPUs) improved
-runtime by 45%.
+Generational improvements matter. Upgrading from `c2d-highcpu-16` (a typical
+entry-level machine) to `c4-highcpu-16` (a newer generation with the same
+number of vCPUs) improved runtime by 45%.
 
 Increasing the number of vCPUs to 112 on `c2d-highcpu-112` slashed the
-execution time by over 5×, with only a slight increase in cost—offering. It's a
-great balance between speed and cost-efficiency.
+execution time by over 5×, with only a slight increase in cost—offering. It's
+one of the most cost-effective high-performance options.
 
-For maximum performance, `c3d-highcpu-360` brought the simulation time down to
-just 9 minutes, achieving a 10× speedup compared to the baseline. While it’s
-the most expensive option tested, it delivers exceptional speed for
-time-critical workloads.
+For maximum performance, `c4-highcpu-192` brought the simulation time down to
+just 11 minutes, achieving a 8× speedup compared to the baseline. It delivers
+exceptional speed for time-critical workloads.
 
 These results demonstrate that Inductiva not only supports rapid scaling but
 also gives users flexibility to optimize for speed, cost, or a balance of both,
