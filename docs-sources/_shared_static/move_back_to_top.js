@@ -1,5 +1,5 @@
 window.addEventListener('scroll', () => {
-  const buffer = 200; // px from the bottom
+  const buffer = 100; // px from the bottom
   const scrollY = window.scrollY || window.pageYOffset;
   const viewportHeight = window.innerHeight;
   const documentHeight = document.documentElement.scrollHeight;
