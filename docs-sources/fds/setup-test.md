@@ -29,7 +29,6 @@ fds = inductiva.simulators.FDS( \
 task = fds.run( \
     input_dir=input_dir,
     sim_config_filename="mccaffrey.fds",
-    n_vcpus=1,
     on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
@@ -70,7 +69,7 @@ Timeline:
 	In Progress               at 21/07, 11:15:49      36.253 s
 		└> 36.105 s        /opt/fds/Build/ompi_gnu_linux/fds_ompi_gnu_linux mccaffrey.fds
 	Finalizing                at 21/07, 11:16:25      0.528 s
-	Success                   at 21/07, 11:16:26      
+	Success                   at 21/07, 11:16:26
 
 Data:
 	Size of zipped output:    6.34 MB
@@ -86,7 +85,7 @@ If the **Task status** is marked as **Success**, congratulations! You've success
 
 You can view more details and track the full simulation progress in the [Inductiva Console](https://console.inductiva.ai/tasks).
 
-<p align="center"><img src="./_static/set-up/console-timeline.png" alt="Task summary displayed in the Inductiva Console" width="700"></p>
+<p align="center"><img src="./_static/set-up/console_timeline.png" alt="Task summary displayed in the Inductiva Console" width="700"></p>
 
 This simple example tested your installation on a small machine with just 2 virtual CPUs. Inductiva offers far more powerful options to supercharge your simulations.
 
