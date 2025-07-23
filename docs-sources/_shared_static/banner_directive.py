@@ -18,14 +18,16 @@ class BannerDirective(Directive):
 
             <div class="banner">
                 <div class="banner-content">
-                <h1>Ready to dive in?</h1>
-                <p>Get started for free today and earn <span class="highlight">$5 in credits.</span></p>
-                <button class="get-started-btn">
-                    Get Started <span class="sparkle">✨</span>
-                </button>
-                <div class="features">
+                <div class="text-section">
+                    <h1>Ready to dive in?</h1>
+                    <p>Get started for free today and earn <span class="highlight">$5 in credits.</span></p>
+                    <div class="features">
                     <span>• No credit card</span>
                     <span>• Free forever</span>
+                    </div>
+                </div>
+                <div class="button-section">
+                    <button class="get-started-btn">Get Started</button>
                 </div>
                 </div>
             </div>
