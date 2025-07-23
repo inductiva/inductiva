@@ -9,6 +9,7 @@
   display: flex;
 	flex-wrap: wrap;
 	border: var(--cta-container-border);
+  animation: fadeIn 0.5s ease-out;
 }
 
 .banner-content {
@@ -116,5 +117,14 @@
     width: 100%;
     max-width: 200px;
     padding: 0.5rem 1rem;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translateY(10px);
+  }
+  to {
+    transform: translateY(0);
   }
 }
