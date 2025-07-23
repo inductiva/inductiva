@@ -1344,14 +1344,14 @@ footer {
 .cta-bar {
 	display: flex;
 	flex-wrap: wrap;
+	flex-direction: column;
 	align-items: center;
 	gap: 16px;
-	padding: 20px 28px;
+	padding: 10px 28px;
 	border-radius: 10px;
-	max-width: 800px;
-	margin: 20px auto;
-	border: var(--cta-container-border);
-	background-color: var(--cta-container-bg)
+	max-width: 70%;
+	margin: 10px auto;
+	background: radial-gradient(circle at center, var(--cta-container-bg), var(--bg-color));
 }
 
 .cta-text {

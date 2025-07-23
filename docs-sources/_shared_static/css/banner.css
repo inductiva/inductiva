@@ -7,7 +7,6 @@
   margin-top: 1rem;
   display: flex;
 	flex-wrap: wrap;
-	border: var(--cta-container-border);
 }
 
 .banner-content {
@@ -16,7 +15,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  gap: 1rem;
+  gap: 0rem;
 }
 
 
