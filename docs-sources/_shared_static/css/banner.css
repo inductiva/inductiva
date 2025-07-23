@@ -1,176 +1,75 @@
-/* Container */
-.container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-}
-
-/* Main banner */
 .banner {
-    position: relative;
-    max-width: 28rem;
-    background: linear-gradient(135deg, hsl(240, 10%, 10%), hsl(263, 85%, 25%));
-    border-radius: 1.5rem;
-    padding: 2rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    overflow: hidden;
+  background: radial-gradient(circle at center, #1f1f2e, #0f0f1a);
+  border-radius: 1.25rem;
+  box-shadow: 0 0 40px rgba(168, 85, 247, 0.3);
+  padding: 2rem;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  position: relative;
 }
 
-/* Decorative star */
-.star-icon {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    color: hsl(280, 60%, 70%);
-    opacity: 0.6;
+.banner h1 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-bottom: 0.75rem;
 }
 
-/* Main content */
-.content {
-    text-align: center;
-    position: relative;
-    z-index: 10;
-}
-
-/* Heading */
-.heading {
-    color: white;
-    font-size: 1.875rem;
-    font-weight: bold;
-    line-height: 1.2;
-    margin-bottom: 1.5rem;
-}
-
-/* Subtitle */
-.subtitle {
-    color: hsl(240, 15%, 70%);
-    font-size: 1.125rem;
-    margin-bottom: 1.5rem;
-    line-height: 1.4;
+.banner p {
+  font-size: 1rem;
+  color: var(--text-light);
+  margin-bottom: 1.5rem;
 }
 
 .highlight {
-    color: hsl(263, 85%, 60%);
-    font-weight: 600;
+  color: var(--highlight);
+  font-weight: 600;
 }
 
-/* CTA Button */
-.cta-button {
-    background: linear-gradient(135deg, hsl(263, 85%, 60%), hsl(280, 85%, 65%));
-    color: white;
-    font-weight: 600;
-    font-size: 1rem;
-    border: none;
-    border-radius: 0.75rem;
-    padding: 1rem 2rem;
-    width: 100%;
-    max-width: 20rem;
-    margin: 0 auto 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+.get-started-btn {
+  background-color: var(--primary);
+  color: var(--text-white);
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
 }
 
-.cta-button:hover {
-    opacity: 0.9;
-    box-shadow: 0 20px 35px -3px rgba(0, 0, 0, 0.15);
-    transform: translateY(-1px);
+.get-started-btn:hover {
+  background-color: #9333ea;
 }
 
-.cta-button:active {
-    transform: translateY(0);
-}
-
-/* Features */
 .features {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    padding-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
 }
 
-.feature-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.feature-dot {
-    width: 0.5rem;
-    height: 0.5rem;
-    background-color: hsl(280, 60%, 70%);
-    border-radius: 50%;
-}
-
-.feature-text {
-    color: hsl(240, 15%, 70%);
-    font-size: 0.875rem;
-}
-
-/* Decorative blur elements */
-.blur-element {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(40px);
-    pointer-events: none;
-}
-
-.blur-bottom-left {
-    bottom: -1rem;
-    left: -1rem;
-    width: 6rem;
-    height: 6rem;
-    background-color: hsla(263, 60%, 60%, 0.2);
-}
-
-.blur-top-right {
-    top: -1rem;
-    right: -1rem;
-    width: 4rem;
-    height: 4rem;
-    background-color: hsla(280, 60%, 70%, 0.3);
-}
-
-/* Mobile responsiveness */
 @media (min-width: 768px) {
-    .banner {
-        padding: 2.5rem;
-    }
-    
-    .heading {
-        font-size: 2.25rem;
-    }
-    
-    .subtitle {
-        font-size: 1.25rem;
-    }
-    
-    .cta-button {
-        font-size: 1rem;
-        padding: 1rem 2rem;
-    }
-    
-    .feature-text {
-        font-size: 1rem;
-    }
-}
+  .banner {
+    max-width: 500px;
+    padding: 2.5rem;
+  }
 
-@media (max-width: 480px) {
-    .features {
-        gap: 1.5rem;
-    }
-    
-    .heading {
-        font-size: 1.5rem;
-    }
-    
-    .subtitle {
-        font-size: 1rem;
-    }
+  .banner h1 {
+    font-size: 2rem;
+  }
+
+  .get-started-btn {
+    font-size: 1.1rem;
+    padding: 1rem 2rem;
+  }
+
+  .features {
+    font-size: 1rem;
+  }
 }
