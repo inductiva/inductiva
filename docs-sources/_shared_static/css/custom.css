@@ -1350,7 +1350,7 @@ footer {
 	padding: 10px 28px;
 	border-radius: 10px;
 	max-width: 70%;
-	margin: 10px auto;
+	margin: 20px auto;
 	background: radial-gradient(circle at center, var(--cta-container-bg), var(--bg-color));
 }
 

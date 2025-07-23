@@ -1,6 +1,6 @@
 .banner {
   background: radial-gradient(circle at center, var(--cta-container-bg), var(--bg-color));
-  animation: pulse-brightness 4s infinite alternate ease-in-out;
+  animation: pulse-brightness 1s infinite alternate ease-in-out;
   padding: 0.7rem 3rem;
   border-radius: 12px;
   max-width: 70%;
@@ -15,7 +15,7 @@
     filter: brightness(1);
   }
   100% {
-    filter: brightness(1.2);
+    filter: brightness(1.3);
   }
 }
 
