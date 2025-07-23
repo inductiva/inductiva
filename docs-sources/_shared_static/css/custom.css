@@ -1380,8 +1380,13 @@ footer {
 }
 
 #scrolltop {
-	bottom: 5rem !important;  /* move it higher */
-	right: 1rem !important;   /* move it a bit to the left */
+  bottom: 2rem; /* fallback if class is not applied */
+  transition: bottom 0.3s ease;
+}
+
+/* When user is at the bottom of the page */
+body.at-bottom #scrolltop {
+  bottom: 5rem !important; /* move it higher */
 }
 
 @media (max-width: 600px) {
