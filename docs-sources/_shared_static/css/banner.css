@@ -86,10 +86,20 @@
 @media (max-width: 768px) {
 
   #content .headline {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
   }
   #content .subtext {
-    font-size: 1.10rem;
+    font-size: 1.0rem;
+    margin: 0.0rem 0 0 0;
+  }
+
+  .banner {
+    max-width: 100%;
+
+  }
+
+  .banner-content {
+    gap: 0rem;
   }
 
 
