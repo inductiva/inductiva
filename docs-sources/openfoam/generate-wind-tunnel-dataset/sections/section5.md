@@ -1,77 +1,143 @@
-# Results and Key Takeaways
-We successfully generated an OpenFOAM dataset in parallel by sampling the wind speed.
-This demonstrates the power of using cloud resources to efficiently scale up computational experiments. 
-Now it's time to retrieve all the results and analyze the data to extract meaningful insights from our simulations.
+## Postprocessing with Inductiva
 
-<p align="center"><img src="../../_static/bike_streamlines_U.png" alt="OpenFOAM simulation visualization" width="700"></p>
+Once all your OpenFOAM simulations have completed, the next step is often to extract useful physical quantities for analysis. Common postprocessing tasks include:
 
-## Project Summary and Output Download
-Using the Inductiva package, it is easy to get a project summary and download all the output files. The following code snippet demonstrates how to do this:
+- Extracting **force coefficients** (drag, lift, moment, etc.)
+- Generating **pressure maps** and **velocity fields**
+- Visualizing **streamlines**, **vorticity**, or **flow separation**
 
-```python
-import inductiva
+In this section, we demonstrate how to automate one such task: **extracting force coefficients**, specifically, moment, drag, lift, front lift, and rear lift—from each simulation and compiling them into a single CSV file. This allows you to compare results across configurations, such as different wind speeds.
 
-openfoam_project = inductiva.projects.Project(
-   name="openfoam_dataset")
+By running postprocessing as a cloud task with Inductiva:
+- You **avoid downloading large datasets** to your local machine
+- You **reuse existing simulation outputs** efficiently via `remote_assets`
+- You maintain a **clean and reproducible workflow**
+- You can **scale** to hundreds or thousands of simulations seamlessly
 
+---
 
-print(openfoam_project)
+### Reusing Outputs with `remote_assets`
 
-openfoam_project.download_outputs()
-```
+To make the process efficient, we don’t need to manually collect or download simulation results. Instead, we launch a new Inductiva task that directly reuses the output of the simulation tasks via the `remote_assets` feature.
 
-Executing `print(openfoam_project)` gives a summary of the main project details:
+Each previous task's output folder is referenced remotely in the cloud and accessed by the postprocessing script without needing to duplicate or transfer files.
 
-```
-Project 'openfoam_dataset' created at 2025-06-03 11:02.
+> 🔗 For more information, check out: [Reusing Files from Other Tasks](https://inductiva.ai/guides/scale-up/reuse-files/reuse-files)
 
-Total number of tasks: 25
+---
 
-Tasks by status:
-  success: 25
+### Running the Postprocessing Task
 
-Estimated total computation cost: 0.20 US$
-```
+We launch a lightweight Python task on a cloud machine and run a script (`postprocess.py`) that iterates through the output folders of all simulation tasks.
 
-Running `openfoam_project.download_outputs()` creates a folder called `inductiva_output/openfoam_project` with one folder for each simulation.
+Below is the launcher script that:
+- Collects the output files from the original simulation tasks
+- Runs the postprocessing script in a `python:slim` container
+- Waits for completion and downloads the results
 
-## Retrieve Task Metadata
-Retrieving the previously set metadata is easy with the Inductiva API.
-Below we show how you can retrieve the metadata of all the tasks in the project:
 
 ```python
 import inductiva
 
-openfoam_project = inductiva.projects.Project(
-   name="openfoam_dataset")
+# Allocate cloud machine on Google Cloud Platform
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2d-highcpu-2",
+    spot=True)
 
-for task in openfoam_project.get_tasks():
-    print(f"Task ID: {task.id}")
-    print(f"Task metadata: {task.get_metadata()}")
-    print()
+project = inductiva.projects.Project("openfoam_dataset")
+
+remote_assets = []
+for task in project.get_tasks():
+    remote_assets.append(task.info.storage_output_path)
+
+custom_simulator = inductiva.simulators.CustomImage(container_image="python:slim")
+
+task = custom_simulator.run(
+    input_dir="input_files/",
+    commands=["python postprocess.py"],
+    on=cloud_machine,
+    remote_assets=remote_assets)
+
+task.wait()
+cloud_machine.terminate()
+
+task.download_outputs()
+task.print_summary()
 ```
 
+---
+
+### The Postprocessing Script
+
+The script scans each folder, reads the last line of `forceCoeffs.dat`, and extracts the relevant aerodynamic coefficients. It then compiles the results into a structured CSV file.
+
+
+```python
+import os
+import csv
+
+# Labels for coefficient data
+coefficients_labels = ["Moment", "Drag", "Lift", "Front Lift", "Rear Lift"]
+output_csv = "all_coefficients.csv"
+rows = []
+
+cwd = os.getcwd()
+
+for folder in os.listdir(cwd):
+    folder_path = os.path.join(cwd, folder)
+    if not os.path.isdir(folder_path):
+        continue
+
+    coeffs_path = os.path.join(
+        folder_path, "postProcessing", "forceCoeffs1", "0", "forceCoeffs.dat"
+    )
+
+    try:
+        with open(coeffs_path, "r") as f:
+            lines = [line.strip() for line in f if line.strip()]
+            last_line = lines[-1]
+            parts = last_line.split()
+
+        values = list(map(float, parts[1:6]))
+        row = {"Task id": folder}
+        row.update(dict(zip(coefficients_labels, values)))
+        rows.append(row)
+
+    except Exception as e:
+        print(f"Error in '{folder}': {e}")
+
+# Write to CSV
+if rows:
+    fieldnames = ["Task id"] + coefficients_labels
+    with open(output_csv, mode="w", newline="") as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
 ```
-Task ID: 3b9n21xqqt97nbec07yzr6wzr
-Task metadata: {'wind_speed': '46', 'local_template_dir': 'variations/wind_speed_46'}
 
-Task ID: d5r521g6igus8wh9c3yy8fbry
-Task metadata: {'wind_speed': '15', 'local_template_dir': 'variations/wind_speed_15'}
+---
 
-Task ID: iqf11voamuizebwt1edukkfw9
-Task metadata: {'wind_speed': '7', 'local_template_dir': 'variations/wind_speed_7'}
+### Output
 
-..
+When the task completes, it produces an `all_coefficients.csv` file that looks like this:
+
+```
+Task id, Moment, Drag, Lift, Front Lift, Rear Lift
+3b9n21xqqt97nbec07yzr6wzr, -0.034, 0.28, -1.34, -0.52, -0.82
+d5r521g6igus8wh9c3yy8fbry, -0.056, 0.36, -1.65, -0.73, -0.92
+...
 ```
 
-## Key Takeaways
-In summary, using cloud computing for generating datasets of large-scale simulations not only increases efficiency, but also significantly reduces computational time and cost. 
+This consolidated CSV is ready for visualization, comparison, statistical analysis, or even training a surrogate model.
 
-Inductiva makes it possible and convenient to run hundreds or thousands of simulations. For example, you could now change the code for:
+---
 
-1. Cover a design space with many more parameters;
-2. Add a black-box optimizer, such as [Vizier](https://github.com/google/vizier),
-on top of the loop and add an evaluation function to analyse the result of each completed simulation and perform an intelligent exploration of the design space;
-3. Build a really large dataset of example simulations to later train a surrogate model.
+### 🔍 Why Use a Separate Task?
 
-Inductiva can simplify research by making high-performance computing more accessible and cost-effective.
+Using a separate Inductiva task for postprocessing offers several advantages:
+
+- ✅ **Reproducibility** – The script is versioned and can be rerun reliably
+- ✅ **Portability** – Easy to adapt to new datasets or workflows
+- ✅ **Efficiency** – No need to download or re-upload heavy simulation results
+- ✅ **Scalability** – Supports processing large datasets without extra effort
