@@ -130,7 +130,7 @@ execution time by over 5×, with only a slight increase in cost—offering. It's
 one of the most cost-effective high-performance options.
 
 For maximum performance, `c4-highcpu-192` brought the simulation time down to
-just 11 minutes, achieving a 8× speedup compared to the baseline. It delivers
+just 11 minutes, achieving over 8× speedup compared to the baseline. It delivers
 exceptional speed for time-critical workloads.
 
 These results demonstrate that Inductiva not only supports rapid scaling but
