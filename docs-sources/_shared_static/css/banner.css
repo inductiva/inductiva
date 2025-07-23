@@ -1,11 +1,10 @@
 .banner {
-  background-color: var(--cta-container-bg);
-  padding: 1.5rem 3rem;
+  background: radial-gradient(circle at center, var(--cta-container-bg), var(--bg-color));
+  padding: 0.7rem 3rem;
   border-radius: 12px;
   max-width: 70%;
   margin: 0rem auto;
   margin-top: 1rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   display: flex;
 	flex-wrap: wrap;
 	border: var(--cta-container-border);
@@ -26,7 +25,7 @@
 }
 
 #content .headline {
-  font-size: 1.5rem;
+  font-size: 1.0rem;
   font-weight: 600;
   color: var(--purple-color);
   padding-top: 0;
@@ -40,7 +39,7 @@
   color: var(--cta-container-text-color);
   padding-top: 5px;
   padding-bottom: 0;
-  margin: 0.25rem 0 0 0;
+  margin: 0.1rem 0 0 0;
 }
 
 .buttons {
