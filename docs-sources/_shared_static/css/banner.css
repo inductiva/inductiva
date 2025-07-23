@@ -1,24 +1,26 @@
 .banner {
-  background-color: var(--cta-container-bg);
-  padding: 1.5rem 3rem;
+  background: radial-gradient(circle at center, var(--cta-container-bg), var(--bg-color));
+  padding: 0.7rem 3rem;
   border-radius: 12px;
-  max-width: 1000px;
+  max-width: 70%;
   margin: 0rem auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-top: 1rem;
   display: flex;
 	flex-wrap: wrap;
-	border: var(--cta-container-border);
 }
 
 .banner-content {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
+  text-align: center;
+  gap: 0rem;
 }
 
+
 .text {
-  max-width: 60%;
+  max-width: 100%;
 }
 
 #content .headline {
@@ -31,16 +33,18 @@
 }
 
 #content .subtext {
-  font-size: 1.5rem;
+  font-size: 1.0rem;
   font-weight: 700;
   color: var(--cta-container-text-color);
   padding-top: 5px;
   padding-bottom: 0;
-  margin: 0.25rem 0 0 0;
+  margin: 0.1rem 0 0 0;
 }
 
 .buttons {
+  width: 100%;
   display: flex;
+  justify-content: center;
   gap: 1rem;
   margin-top: 1rem;
 }
@@ -48,6 +52,7 @@
 .btn {
   font-size: 1rem;
   padding: 0.75rem 1.25rem;
+  width: fit-content;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
@@ -78,35 +83,23 @@
 }
 
 @media (max-width: 768px) {
+
+  #content .headline {
+    font-size: 1.25rem;
+  }
+  #content .subtext {
+    font-size: 1.0rem;
+    margin: 0.0rem 0 0 0;
+  }
+
   .banner {
-    padding: 1rem 1rem;
-    flex-direction: column;
+    max-width: 100%;
+
   }
 
   .banner-content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    gap: 0rem;
   }
 
-  .text {
-    max-width: 100%;
-  }
 
-  #content .headline,
-  #content .subtext {
-    font-size: 1.25rem;
-  }
-
-  .buttons {
-    margin-top: 1.0rem;
-    justify-content: center;
-    width: 100%;
-  }
-
-  .btn {
-    width: 100%;
-    max-width: 280px;
-    padding: 0.75rem 1rem;
-  }
 }
