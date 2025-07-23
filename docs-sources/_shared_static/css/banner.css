@@ -4,6 +4,7 @@
   border-radius: 12px;
   max-width: 1000px;
   margin: 0rem auto;
+  margin-top: 1rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   display: flex;
 	flex-wrap: wrap;
@@ -81,6 +82,7 @@
   .banner {
     padding: 1rem 1rem;
     flex-direction: column;
+    max-width: 90%;
   }
 
   .banner-content {
@@ -93,9 +95,11 @@
     max-width: 100%;
   }
 
-  #content .headline,
+  #content .headline {
+    font-size: 1.35rem;
+  }
   #content .subtext {
-    font-size: 1.25rem;
+    font-size: 1.10rem;
   }
 
   .buttons {
@@ -104,9 +108,13 @@
     width: 100%;
   }
 
+  .btn-main {
+    font-size: 1rem;
+  }
+
   .btn {
     width: 100%;
-    max-width: 280px;
-    padding: 0.75rem 1rem;
+    max-width: 200px;
+    padding: 0.5rem 1rem;
   }
 }
