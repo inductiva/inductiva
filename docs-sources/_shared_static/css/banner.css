@@ -1,14 +1,14 @@
 .banner {
   background-color: var(--cta-container-bg);
-  padding: 2rem 3rem;
-  border-radius: 16px;
+  padding: 1.5rem 3rem;
+  border-radius: 12px;
   max-width: 70%;
-  margin: 1.5rem auto;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+  margin: 0rem auto;
+  margin-top: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   display: flex;
-  flex-wrap: wrap;
-  border: var(--cta-container-border);
-  animation: fadeIn 0.5s ease-out;
+	flex-wrap: wrap;
+	border: var(--cta-container-border);
 }
 
 .banner-content {
@@ -17,25 +17,30 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
+
 
 .text {
   max-width: 100%;
 }
 
 #content .headline {
-  font-size: 1.875rem;
-  font-weight: 700;
+  font-size: 1.5rem;
+  font-weight: 600;
   color: var(--purple-color);
+  padding-top: 0;
+  padding-bottom: 0;
   margin: 0;
 }
 
 #content .subtext {
-  font-size: 1.25rem;
-  font-weight: 500;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: var(--cta-container-text-color);
-  margin: 0.5rem 0 0;
+  padding-top: 5px;
+  padding-bottom: 0;
+  margin: 0.25rem 0 0 0;
 }
 
 .buttons {
@@ -43,89 +48,73 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 1.25rem;
-  flex-wrap: wrap;
+  margin-top: 1rem;
 }
 
 .btn {
   font-size: 1rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.25rem;
   width: fit-content;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.25s ease-in-out;
+  transition: all 0.2s ease-in-out;
   font-weight: 600;
   border: none;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  line-height: 1.2;
   text-align: center;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
 }
 
 .primary {
   background-color: var(--purple-color);
   color: white;
-  transition: background-color 0.3s, transform 0.2s;
+  transition: background-color 0.3s;
 }
 
 .primary:hover {
   background-color: var(--purple-hover-color);
-  transform: translateY(-2px);
 }
 
 .btn-sub {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 400;
   opacity: 0.9;
-  margin-top: 0.25rem;
-}
-
-.btn-main {
-  font-size: 1.125rem;
-  font-weight: 600;
 }
 
 @media (max-width: 768px) {
   .banner {
-    padding: 1.5rem 1rem;
+    padding: 1rem 1rem;
     flex-direction: column;
     max-width: 90%;
   }
 
-  #content .headline {
-    font-size: 1.5rem;
+  .text {
+    max-width: 100%;
   }
 
+  #content .headline {
+    font-size: 1.35rem;
+  }
   #content .subtext {
-    font-size: 1.1rem;
+    font-size: 1.10rem;
   }
 
   .buttons {
-    flex-direction: column;
-    align-items: center;
-    margin-top: 1.25rem;
-  }
-
-  .btn {
+    margin-top: 1.0rem;
+    justify-content: center;
     width: 100%;
-    max-width: 240px;
-    padding: 0.75rem 1rem;
   }
 
   .btn-main {
     font-size: 1rem;
   }
-}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .btn {
+    width: 100%;
+    max-width: 200px;
+    padding: 0.5rem 1rem;
   }
 }
