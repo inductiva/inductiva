@@ -56,6 +56,7 @@ html_js_files = [
     'env.js',
     'discord.js',
     'gtm_func.js',
+    'move_back_to_top.js',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
