@@ -1390,4 +1390,9 @@ footer {
 		width: 100%;
 		margin-top: 8px;
 	}
+
+	#scrolltop {
+		bottom: 5rem !important;  /* move it higher */
+		right: 1rem !important;   /* move it a bit to the left */
+	}
 }
