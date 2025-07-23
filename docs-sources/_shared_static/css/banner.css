@@ -13,13 +13,16 @@
 
 .banner-content {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: left;
+  gap: 1rem;
 }
 
+
 .text {
-  max-width: 60%;
+  max-width: 100%;
 }
 
 #content .headline {
@@ -41,7 +44,9 @@
 }
 
 .buttons {
+  width: 100%;
   display: flex;
+  justify-content: flex-start;
   gap: 1rem;
   margin-top: 1rem;
 }
@@ -49,6 +54,7 @@
 .btn {
   font-size: 1rem;
   padding: 0.75rem 1.25rem;
+  width: fit-content;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
@@ -83,12 +89,6 @@
     padding: 1rem 1rem;
     flex-direction: column;
     max-width: 90%;
-  }
-
-  .banner-content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
   }
 
   .text {
