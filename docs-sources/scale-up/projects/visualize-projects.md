@@ -62,8 +62,27 @@ The console also provides simple tools for keeping your projects organized.
 To better organize your work, you can move tasks from one project to another.
 
 1. In the Tasks table, check the box next to one or more tasks you wish to move.
-2. An action bar will appear at the top of the table. Click _"Move Tasks"_ button.
+!["Move Task"](./_static/move-task.png)
+
+2. An action bar will appear at the top of the table. Click _"Move"_.
+
+!["Move Task Button"](./_static/move-task-button.png)
+
 3. Select the destination project from the dropdown menu and confirm the action.
+
+!["Move Task Dialog"](./_static/move-task-dialog.gif)
+
+### Terminate a Task
+You can stop a task before it finishes. You can only terminate tasks that are in a `in queue` or `in progress` state.
+
+1. In the Tasks table, select the checkbox next to the active task you want to terminate.
+2. An action bar will appear. Click the _"Terminate"_ button.
+
+!["Terminate Task"](./_static/terminate-task.png)
+
+3. A confirmation dialog will appear. Click "_Terminate"_ again to stop the task. The task's status will then change to `killed`.
+
+!["Terminate Task Dialog"](./_static/terminate-task-dialog.png)
 
 ### Delete a Project
 1. Click the _"Delete Project"_ button next to the project title.

@@ -34,13 +34,7 @@ task = simulator.run(
 print(f"Task {task.id} submitted to project: {task.get_info().project}")
 ```
 
-> ⚠️ **Important**: If the project name you specify int the `project` argument does not exist yet, a **_new project with that name will be created_** 
-
-````{eval-rst}
-.. ⚠️Important::
-   After completing the simulations, remember to release your computational resources 
-   to avoid unnecessary charges!
-````
+> ⚠️ If the project name you specify int the `project` argument does not exist yet, a **_new project with that name will be created_** 
 
 ### Method 2: After Task Creation
 
