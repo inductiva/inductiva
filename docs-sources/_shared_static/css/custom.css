@@ -1386,7 +1386,7 @@ footer {
 
 /* When user is at the bottom of the page */
 body.at-bottom #scrolltop {
-  bottom: 5rem !important; /* move it higher */
+  bottom: 6rem !important; /* move it higher */
 }
 
 @media (max-width: 600px) {
