@@ -28,5 +28,17 @@ class BannerDirective(Directive):
                 </div>
                 </div>
             </div>
+            <script>
+            const button = document.getElementById('login-btn-big');
+
+            function triggerShake() {{
+                button.classList.add('shake');
+                setTimeout(() => {{
+                button.classList.remove('shake');
+                }}, 500); // Match the animation duration
+            }}
+
+            setInterval(triggerShake, 10000);
+            </script>
             '''
         return [nodes.raw('', html, format='html')]
