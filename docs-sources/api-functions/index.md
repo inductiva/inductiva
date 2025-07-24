@@ -44,4 +44,5 @@ auto-cli/auth
 auto-cli/containers
 auto-cli/logs
 auto-cli/projects
+auto-cli/resources
 ```
