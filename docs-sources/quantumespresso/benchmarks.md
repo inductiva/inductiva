@@ -61,7 +61,6 @@ While Inductiva’s core counts don’t exactly match Fugaku’s, two regimes pr
 - **Regime 2: Inductiva 1,440 cores vs. Fugaku 1,152 cores**  
   Inductiva edged out Fugaku by 2 seconds (a **1% improvement**) using 25% more cores. This indicates that network communication is becoming a limiting factor, where traditional HPC systems like Fugaku excel. Still, Inductiva’s comparable performance costs only **USD 1.24**, with an estimated hourly expense of about **USD 27.20**.
 
-
 ## Can Inductiva Really Beat Fugaku?
 The answer depends on the workload.
 
