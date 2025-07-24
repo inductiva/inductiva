@@ -50,8 +50,7 @@ def register(parser):
         "folder",
         nargs="?",
         type=str,
-        help="Path to a containers folder in remote storage.\n" \
-             "Defaults to `my-containers/` if omitted."
+        help="Path to a containers folder in remote storage.",
     )
 
     subparser.add_argument(
@@ -59,7 +58,7 @@ def register(parser):
         "-m",
         default=10,
         type=int,
-        help="Maximum number of container files to list. Defaults to 10.",
+        help="Maximum number of container files to list.",
     )
 
     subparser.epilog = textwrap.dedent("""\

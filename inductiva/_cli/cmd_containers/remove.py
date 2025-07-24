@@ -8,8 +8,7 @@ import textwrap
 
 
 def rm_container(args):
-    default_folder = "my-containers"
-    folder = args.folder or default_folder
+    folder = args.folder
     container_name = args.name
 
     if not container_name:
@@ -63,8 +62,8 @@ def register(parser):
 
     subparser.description = textwrap.dedent("""\
         The `inductiva containers remove` command removes a specific container
-        file from a remote storage folder. If no folder is specified, defaults
-        to 'my-containers'.
+        file from your Inductiva remote storage. If no folder is specified,
+        defaults to `my-containers/`.
     
         Use the flag `--yes` to skip confirmation prompts.
         
@@ -75,7 +74,8 @@ def register(parser):
         "folder",
         nargs="?",
         type=str,
-        help="Path to folder in remote storage. Defaults to 'my-containers/'.")
+        default="my-containers/",
+        help="Path to folder in remote storage.")
 
     subparser.add_argument("-n",
                            "--name",
