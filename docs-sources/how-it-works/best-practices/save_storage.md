@@ -29,7 +29,7 @@ Once your simulation is completed, you might end up with a large number of
 temporary or intermediate files that are no longer needed. Running a cleanup
 after the simulation can free up valuable storage space.
 
-All of our simulators allow you to pass an argument `on_finish_cleanup` that can be
+All integrated simulators allow you to pass an argument `on_finish_cleanup` that can be
 a shell script or a list of commands that will run once your simulation is finished.
 You should use this argument to delete any temporary or unwanted files to save
 on storage costs.
@@ -42,9 +42,9 @@ combines all of the process data into a single directory. Therefore, the process
 folders themselves may no longer be needed after the simulation completes.
 
 You can pass, using the `on_finish_cleanup` argument, a shell script that deletes
-all the temporary folder that are not needed once the simulation ends.
+all the temporary folders that are not needed once the simulation ends.
 
 > Take a look into our recipes to see how this is done [here](../recipes/storage-related/sections/delete-unwanted-files.md).
 
-Keep this tips in mind when running your next simulation to reduce the amount of
-data generated, keeping your storage and transfer costs in check.
+Keep this tip in mind when running your next simulation to reduce the amount of
+data generated, keeping your [storage and transfer costs](../basics/how-much-does-it-cost) in check.
