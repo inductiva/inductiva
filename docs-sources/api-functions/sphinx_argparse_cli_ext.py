@@ -99,9 +99,11 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         return section
 
     def insert_examples_sections(self, root: nodes.Node):
-        subparsers = get_subparsers(self.parser)
-        parsers = {str(self.parser): self.parser, **subparsers.choices}
+        subparsers_or_none = get_subparsers(self.parser)
+        subparsers = subparsers_or_none.choices if subparsers_or_none else {}
+        parsers = {str(self.parser): self.parser, **subparsers}
         parsers = {n: p for n, p in parsers.items() if len(n) > 2}
+        
         sections = root.findall(SphinxArgParseCliExt.is_options_section)
 
         for subcommand, node in zip(parsers, sections):

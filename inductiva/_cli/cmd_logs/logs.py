@@ -52,7 +52,7 @@ def register(parser):
               "is returned if the task is not running."))
     # Register function to call when this subcommand is used
 
-    parser.epilog = textwrap.dedent("""\n
+    parser.epilog = textwrap.dedent("""\
         examples:
 
             # Real-time streaming of standard output from an OpenFOAM simulation
@@ -63,6 +63,24 @@ def register(parser):
             t/T: 12.2
             breaking: 0
             Fi_iter: 4 Final_residual: 3.73e-09  Fi_time: 0.00174
+            breaking: 0
+            Fi_iter: 4 Final_residual: 3.08e-09  Fi_time: 0.00172
+            breaking: 0
+            Fi_iter: 5 Final_residual: 1.68e-11  Fi_time: 0.00167
+            umax: 0.102
+            vmax: 0
+            wmax: 0.0941
+            dt: 0.0226
+            wavegentime: 2.49e-05
+            reinitime: 0
+            gctime: 0.000539         average gctime: 0.0005
+            Xtime: 0.000126  average Xtime: 0.000641
+            total time: 7.62451   average time: 0.00878
+            timer per step: 0.00885
+            ------------------------------------
+            869
+            simtime: 19.6
+            timestep: 0.0226
             ...
 
             # Real-time streaming of a task's standard error output

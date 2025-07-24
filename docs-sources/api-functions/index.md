@@ -42,4 +42,5 @@ caption: Command Line Interface
 ---
 auto-cli/auth
 auto-cli/containers
+auto-cli/logs
 ```
