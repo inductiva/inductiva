@@ -1,6 +1,7 @@
 """Register CLI commands for projects."""
 import argparse
 import os
+import textwrap
 
 from inductiva import constants
 from inductiva._cli import loader, utils
@@ -13,11 +14,13 @@ def register(root_parser):
         help="Projects management utilities.",
         formatter_class=argparse.RawTextHelpFormatter)
 
-    parser.description = ("Projects management utilities.\n\n"
-                          "The `inductiva projects list` command allows you to "
-                          "consult existing projects.\n"
-                          "The `inductiva projects download` command allows you"
-                          " to download the files of the tasks of a project.\n")
+    parser.description = textwrap.dedent("""\
+        Projects management utilities.
+
+        The `inductiva projects` command offers tools to manage your projects 
+        and access related information, such as listing all projects and 
+        downloading their associated task output files.
+    """)
 
     utils.show_help_msg(parser)
 

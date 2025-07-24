@@ -71,10 +71,11 @@ def register(parser):
                            help="Name of the project to download.")
 
     subparser.description = (
-        "The `inductiva projects download` command provides "
-        "a way to download the tasks files of your projects.\n"
-        "You can specify the files to download with the --files flag \n"
-        "or download the standard output and error files with the --std flag.\n"
+        "The `inductiva projects download` command allows you to "
+        "download the task outputs associated with a specific project.\n"
+        "You can specify the files to download with the `--files` flag \n"
+        "or download the standard output and error files with the `--std` flag."
+        "\n"
         "If no files are specified, all files are downloaded.\n")
 
     subparser.add_argument("--output-dir",
