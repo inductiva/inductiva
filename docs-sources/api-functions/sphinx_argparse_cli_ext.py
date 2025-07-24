@@ -8,7 +8,7 @@ from sphinx_argparse_cli._logic import SphinxArgparseCli
 from inductiva._cli.main import get_main_parser
 
 
-def get_subparsers(
+def _get_subparsers(
     parser: argparse.ArgumentParser,) -> Optional[argparse._SubParsersAction]:
     return next(
         (action for action in parser._actions
@@ -17,11 +17,11 @@ def get_subparsers(
     )
 
 
-def get_subparser(
+def _get_subparser(
     parser: argparse.ArgumentParser,
     name: str,
 ) -> argparse.ArgumentParser:
-    subparsers = get_subparsers(parser)
+    subparsers = _get_subparsers(parser)
     return subparsers.choices[name]
 
 
@@ -29,7 +29,7 @@ def get_parser(command: str) -> argparse.ArgumentParser:
     subcommands = command.split(" ")
     parser = get_main_parser()
     for subcommand in subcommands:
-        parser = get_subparser(parser, subcommand)
+        parser = _get_subparser(parser, subcommand)
     return parser
 
 
@@ -99,22 +99,17 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         return section
 
     def insert_examples_sections(self, root: nodes.Node):
-        subparsers_or_none = get_subparsers(self.parser)
-        subparsers = subparsers_or_none.choices if subparsers_or_none else {}
-        parsers = {str(self.parser): self.parser, **subparsers}
-        parsers = {n: p for n, p in parsers.items() if len(n) > 2}
-        
-        sections = root.findall(SphinxArgParseCliExt.is_options_section)
-
-        for subcommand, node in zip(parsers, sections):
-            parser = parsers[subcommand]
+        for section in root.findall(SphinxArgParseCliExt.is_options_section):
+            title = section.next_node(nodes.title).astext()
+            command = title.removeprefix("inductiva ").removesuffix(" options")
+            parser = get_parser(command)
             if not parser.epilog:
                 continue
 
-            section = SphinxArgParseCliExt.create_section(parser.epilog)
-            parent = node.parent
-            index = parent.index(node)
-            parent.insert(index + 1, section)
+            new_section = SphinxArgParseCliExt.create_section(parser.epilog)
+            parent = section.parent
+            index = parent.index(section)
+            parent.insert(index + 1, new_section)
 
     def format_paragraph(text_node: nodes.Text):
         text = text_node.astext()
