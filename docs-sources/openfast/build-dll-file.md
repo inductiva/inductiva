@@ -21,4 +21,6 @@ mv DISCON_OC3Hywind.dll ../..
 
 That's it! You're all set.
 
-
+```{banner_small}
+:origin: openfast
+```

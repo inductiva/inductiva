@@ -120,6 +120,7 @@ html_js_files = [
     'env.js',
     'discord.js',
     'gtm_func.js',
+    'move_back_to_top.js',
 ]
 
 sys.path.insert(0, shared_static_path)
