@@ -4,7 +4,7 @@ Projects are the primary organizational unit in the Inductiva API. Every simulat
 
 ## Quick Start
 
-The `Project` class is the core organizational unit in the Inductiva API, providing a simple way to group and manage related simulation tasks. A typical workflow involves three simple steps:
+The `Project` class is the core organizational unit in the Inductiva API, providing a simple way to group and manage related tasks. A typical workflow involves three simple steps:
 1. **Create** or reference a project for organizing your work
 2. **Execute** simulation tasks within the project context
 3. **Monitor** and manage all tasks belonging to the project
@@ -24,7 +24,7 @@ simulator = inductiva.simulators.XBeach()
 # Add the task to the project during its creation
 task = simulator.run(input_dir="data/", on=machine_group, project="wave_modeling")
 
-# Or alternatively assign the task after its been created to the project
+# Or alternatively assign the task to the project after its been created
 task = simulator.run(input_dir="data/", on=machine_group)
 project.add_task(task)
 
@@ -85,8 +85,8 @@ Create a project by instantiating the `Project` class with a descriptive name:
 ```python
 import inductiva
 
-climate_project = inductiva.projects.Project("wave_modeling")
-print(climate_project)
+project = inductiva.projects.Project("wave_modeling")
+print(project)
 # Output: Project 'wave_modeling' created at 2025-07-22 11:48.
 #         Total number of tasks: 0
 
@@ -95,7 +95,7 @@ print(climate_project)
 #         Estimated total computation cost: 0 US$
 ```
 
-Or during the task submission process using gthe `run` method:
+Or during the task submission process using the `run` method:
 
 ```python
 import inductiva

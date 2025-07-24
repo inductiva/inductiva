@@ -7,7 +7,8 @@ Once you've created projects, you need to manage tasks within them. This guide c
 | `simulator.run(project="name")` | Add task during creation | `task = simulator.run(input_dir="data/", on=machine_group, project="coastal_study")` |
 | `project.add_task(task)` | Add existing task to project | `coastal_project.add_task(existing_task)` |
 | `project.get_tasks()` | List all tasks in project | `tasks = project.get_tasks()` |
-| `str(project)` | Get project summary | `info = str(project)` |
+| `project.wait()` | Wait for all the tasks in a project to complete | `coastal_project.wait()` |
+| `project.download_outputs()` | Downloads the outputs for all the tasks in the project | `coastal_project.download_outputs(output_dir="coastal_project_results")` |
 | `inductiva.projects.get_projects()` | List all projects | `all_projects = inductiva.projects.get_projects()` |
 
 ## Add Tasks to Projects
@@ -74,8 +75,72 @@ $ inductiva projects list
 
  NAME           NR_TASKS
  wave_modeling     2
- ...
+ coastal_study     5
  default   241     # default project
+```
+
+## Wait for Project Completion
+
+Use the `wait()` method to block execution until all tasks in a project complete:
+
+```python
+import inductiva
+
+project = inductiva.projects.Project("wave_modeling")
+
+print("Starting project execution...")
+project.wait()  # Blocks until all tasks are done
+print("All project tasks completed!")
+
+# Check final status of all tasks
+tasks = project.get_tasks()
+for task in tasks:
+    print(f"Task {task.id}: {task.get_status()}")
+```
+
+## Download Project Outputs
+
+Download all outputs from a project's tasks in one operation:
+
+```python
+import inductiva
+
+project = inductiva.projects.Project("wave_modeling")
+
+# Wait for completion first
+project.wait()
+
+# Download all outputs to a directory
+project.download_outputs(output_dir="wave_modeling_results")
+print("All project outputs downloaded to 'wave_modeling_results/'")
+```
+
+The downloaded directory structure will organize outputs by task:
+
+```
+wave_modeling_results/
+├── task_abc123/
+│   ├── output_file1.dat
+│   └── output_file2.log
+└── task_def456/
+    ├── output_file1.dat
+    └── output_file2.log
+```
+
+## List All Your Projects
+
+View all your projects:
+
+```python
+import inductiva
+
+# Get all projects
+all_projects = inductiva.projects.get_projects()
+
+print(f"You have {len(all_projects)} projects:")
+for project in all_projects:
+    task_count = len(project.get_tasks())
+    print(f"  • {project.name}: {task_count} tasks")
 ```
 
 ## Full Example
@@ -114,9 +179,17 @@ xbeach_project.add_task(task_2)
 project_tasks = xbeach_project.get_tasks()
 print(f"\nProject has {len(project_tasks)} tasks:")
 
-for task in project_tasks:
-    print(f"  • {task.id}: {task.get_status()}")
-    print(f"    {task.print_summary()}")
+# Wait for all tasks to complete
+print("\nWaiting for project completion...")
+xbeach_project.wait()
+
+# Download all results
+print("Downloading project outputs...")
+xbeach_project.download_outputs(output_dir="wave_modeling_results")
+
+# Final project summary
+print(f"\nProject Summary:")
+print(xbeach_project)
 
 # Clean up resources
 machine_group.terminate()
