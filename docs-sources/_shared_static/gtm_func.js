@@ -8,5 +8,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer',googleanalytics_id);
 
 //GTM variables
-const params = new URLSearchParams(window.location.search);
+//Get main frame url
+const params = new URLSearchParams(window.top.location.search);
 window.url_referrer = params.get('utm_source') || 'None';
