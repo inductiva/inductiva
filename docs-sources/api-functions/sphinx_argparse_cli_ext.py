@@ -7,14 +7,15 @@ from sphinx_argparse_cli._logic import SphinxArgparseCli
 
 from inductiva._cli.main import get_main_parser
 
+
 def get_subparsers(
-    parser: argparse.ArgumentParser,
-) -> Optional[argparse._SubParsersAction]:
+    parser: argparse.ArgumentParser,) -> Optional[argparse._SubParsersAction]:
     return next(
         (action for action in parser._actions
          if isinstance(action, argparse._SubParsersAction)),
         None,
     )
+
 
 def get_subparser(
     parser: argparse.ArgumentParser,
@@ -33,8 +34,10 @@ def get_parser(command: str) -> argparse.ArgumentParser:
 
 
 def get_parser_wrapper(command):
+
     def wrapper():
         return get_parser(command)
+
     return wrapper
 
 
@@ -56,12 +59,12 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         state_machine,
     ):
         command = content.pop()
-        func_name = command.replace(" ", "_") + "_parser" 
+        func_name = command.replace(" ", "_") + "_parser"
         wrapper = get_parser_wrapper(command)
-        
+
         import sphinx_argparse_cli_ext
         setattr(sphinx_argparse_cli_ext, func_name, wrapper)
-        
+
         options["module"] = __name__
         options["func"] = func_name
 
@@ -76,13 +79,11 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
             state,
             state_machine,
         )
-    
+
     def is_options_section(node: nodes.Node) -> bool:
-        return (
-            isinstance(node, nodes.section)
-            and (title := node.next_node(nodes.title))
-            and "options" in title.astext().lower()
-        )
+        return (isinstance(node, nodes.section) and
+                (title := node.next_node(nodes.title)) and
+                "options" in title.astext().lower())
 
     def create_section(text: str) -> nodes.Node:
         if text.startswith("examples:"):
@@ -96,17 +97,17 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         section += code_block
 
         return section
-    
+
     def insert_examples_sections(self, root: nodes.Node):
         subparsers = get_subparsers(self.parser)
-        parsers = { str(self.parser): self.parser, **subparsers.choices }
+        parsers = {str(self.parser): self.parser, **subparsers.choices}
         sections = root.findall(SphinxArgParseCliExt.is_options_section)
 
         for subcommand, node in zip(parsers, sections):
             parser = parsers[subcommand]
             if not parser.epilog:
                 continue
-            
+
             section = SphinxArgParseCliExt.create_section(parser.epilog)
             parent = node.parent
             index = parent.index(node)
@@ -123,8 +124,7 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         if len(parts) == 1:
             return
         new_children = [
-            nodes.Text(part) if i % 2 == 0
-            else nodes.literal(text=part)
+            nodes.Text(part) if i % 2 == 0 else nodes.literal(text=part)
             for i, part in enumerate(parts)
         ]
         text_node.parent.replace(text_node, new_children)
@@ -149,6 +149,7 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
             self.format_text(root, formatter)
 
         return nodes_list
+
 
 def setup(app):
     app.add_directive("sphinx_argparse_cli_ext", SphinxArgParseCliExt)
