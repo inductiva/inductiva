@@ -6,6 +6,12 @@ const BANNER_BIG_MESSAGES = {
         bot_text: "Get started for free today and earn $5 in credits.",
         button_text: "Get Started ✨",
     },
+    2: {
+        active: true,
+        top_text: "Ready to dive in?",
+        bot_text: "Get started today and get more than <strong>100 free core hours</strong> to run your simulations.",
+        button_text: "Get Started ✨",
+    },
 };
 
 const BANNER_SMALL_MESSAGES = {
@@ -24,6 +30,37 @@ const BANNER_SMALL_MESSAGES = {
         text: "<strong>Tired of waiting?</strong> Skip queues and simulate instantly with <strong>$5 free</strong>.",
         button_text: "Simulate Now",
     },
+    4: {
+        active: true,
+        text: "Run your simulations at scale with <strong>more than 100 core hours free</strong> — no card needed.",
+        button_text: "Claim Free Core Hours",
+    },
+    5: {
+        active: true,
+        text: "<strong>Speed up your simulations</strong> — get <strong>100+ core hours free</strong> to start instantly.",
+        button_text: "Start for Free",
+    },
+    6: {
+        active: true,
+        text: "<strong>Tired of waiting?</strong> Skip queues and simulate instantly with <strong>100+ core hours free</strong>.",
+        button_text: "Simulate Now",
+    },
+    7: {
+        active: true,
+        text: "Run your simulations at scale with <strong>more than 100 compute hours free</strong> — no card needed.",
+        button_text: "Claim Free Compute Hours",
+    },
+    8: {
+        active: true,
+        text: "<strong>Speed up your simulations</strong> — get <strong>100+ compute hours free</strong> to start instantly.",
+        button_text: "Start for Free",
+    },
+    9: {
+        active: true,
+        text: "<strong>Tired of waiting?</strong> Skip queues and simulate instantly with <strong>100+ compute hours free</strong>.",
+        button_text: "Simulate Now",
+    },
+
 };
 
 document.addEventListener("DOMContentLoaded", function () {
