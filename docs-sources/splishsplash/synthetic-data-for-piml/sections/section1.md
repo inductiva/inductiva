@@ -142,3 +142,7 @@ process and report any errors that may have occurred.
 
 More importantly, the output directory contains a `vtk` subdirectory, where a series of .vtk files store data 
 about the fluid particles at each simulation timestep. These .vtk files are the seeds of our dataset.
+
+```{banner}
+:origin: splishsplash
+```

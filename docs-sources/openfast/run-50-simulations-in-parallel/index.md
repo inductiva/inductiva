@@ -19,6 +19,13 @@ To demonstrate this, we will use the [`5MW_OC4Semi_WSt_WavesWN`](https://github.
 This example is an extension of the reference case described in ["Definition of a 5-MW Reference Wind Turbine for Offshore
 System Development"](https://www.nrel.gov/docs/fy09osti/38060.pdf).
 
+The tutorial is divided into the following sections:
+- [Set up the example files](https://inductiva.ai/guides/openfast/run-50-simulations-in-parallel/sections/section1)
+- [Run a single simulation using the Inductiva API](https://inductiva.ai/guides/openfast/run-50-simulations-in-parallel/sections/section2)
+- [Generalize the use case](https://inductiva.ai/guides/openfast/run-50-simulations-in-parallel/sections/section3)
+- [Launch and manage 50 simulations in parallel on the cloud](https://inductiva.ai/guides/openfast/run-50-simulations-in-parallel/sections/section4)
+- [Post-process and analyze simulation results](https://inductiva.ai/guides/openfast/run-50-simulations-in-parallel/sections/section5)
+
 ```{banner_small}
 :origin: openfast
 ```
