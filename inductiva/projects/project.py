@@ -255,7 +255,7 @@ class Project:
     def delete(self):
         """Delete a project on the backend.
         
-        This method does not delete the project's tasks, but only the project itself.
+        This method does not delete the project tasks, only the project itself.
         The tasks will be moved to the "default" project.
         """
         try:
