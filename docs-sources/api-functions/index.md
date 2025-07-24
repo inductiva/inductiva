@@ -45,4 +45,5 @@ auto-cli/containers
 auto-cli/logs
 auto-cli/projects
 auto-cli/resources
+auto-cli/simulators
 ```
