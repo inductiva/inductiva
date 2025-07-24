@@ -87,6 +87,5 @@ options to supercharge your simulations.
 :origin: octopus
 ```
 
-
 ## Need Help?
 If you encounter any issues or need further assistance, don't hesitate to [**Contact Us**](mailto:support@inductiva.ai). We're here to help!

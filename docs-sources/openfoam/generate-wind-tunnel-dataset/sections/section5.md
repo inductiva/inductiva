@@ -139,3 +139,9 @@ Using a separate Inductiva task for postprocessing offers several advantages:
 - ✅ **Portability** – Easy to adapt to new datasets or workflows
 - ✅ **Efficiency** – No need to download or re-upload heavy simulation results
 - ✅ **Scalability** – Supports processing large datasets without extra effort
+
+Inductiva can simplify research by making high-performance computing more accessible and cost-effective.
+
+```{banner_small}
+:origin: openfoam
+```
