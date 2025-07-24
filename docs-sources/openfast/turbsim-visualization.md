@@ -1,5 +1,5 @@
 # TurbSim Visualization
-In the [Generate a TurbSim Dataset](https://inductiva.ai/guides/openfast/generate-turbsim-dataset/index) tutorial, we used the [`5MW_Baseline`](https://github.com/OpenFAST/r-test/tree/v4.0.2/glue-codes/openfast/5MW_Baseline) wind example, 
+In the [Generate a TurbSim Dataset](generate-turbsim-dataset/index) tutorial, we used the [`5MW_Baseline`](https://github.com/OpenFAST/r-test/tree/v4.0.2/glue-codes/openfast/5MW_Baseline) wind example, 
 which is based on the reference case described in ["Definition of a 5-MW Reference Wind Turbine for Offshore
 System Development"](https://www.nrel.gov/docs/fy09osti/38060.pdf).
 
