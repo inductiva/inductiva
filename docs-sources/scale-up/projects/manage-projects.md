@@ -9,6 +9,7 @@ Once you've created projects, you need to manage tasks within them. This guide c
 | `project.get_tasks()` | List all tasks in project | `tasks = project.get_tasks()` |
 | `project.wait()` | Wait for all the tasks in a project to complete | `coastal_project.wait()` |
 | `project.download_outputs()` | Downloads the outputs for all the tasks in the project | `coastal_project.download_outputs(output_dir="coastal_project_results")` |
+| `project.delete()` | Delete the project and moves the tasks to the default project | `coastal_project.delte()` |
 | `inductiva.projects.get_projects()` | List all projects | `all_projects = inductiva.projects.get_projects()` |
 
 ## Add Tasks to Projects
@@ -79,7 +80,7 @@ $ inductiva projects list
  default   241     # default project
 ```
 
-## Wait for Project Completion
+## Wait for a Project
 
 Use the `wait()` method to block execution until all tasks in a project complete:
 
@@ -98,7 +99,7 @@ for task in tasks:
     print(f"Task {task.id}: {task.get_status()}")
 ```
 
-## Download Project Outputs
+## Download a Project Outputs
 
 Download all outputs from a project's tasks in one operation:
 
@@ -125,6 +126,29 @@ wave_modeling_results/
 └── task_def456/
     ├── output_file1.dat
     └── output_file2.log
+```
+
+## Delete a Project
+
+When you no longer need a project, you can delete it using the `delete()` method.
+
+> ⚠️ Deleting a project **moves all its tasks back to the default project** - the tasks themselves are **not deleted**.
+
+```python
+import inductiva
+
+# Get the project you want to delete
+project = inductiva.projects.Project("old_study")
+
+# Delete the project (tasks move to default project)
+project.delete()
+print(f"Project '{project.name}' deleted. Tasks moved to 'default' project.")
+
+# Verify tasks moved to default project
+default_project = inductiva.projects.Project("default")
+default_tasks = default_project.get_tasks()
+print(f"Default project now has {len(default_tasks)} tasks")
+
 ```
 
 ## List All Your Projects
