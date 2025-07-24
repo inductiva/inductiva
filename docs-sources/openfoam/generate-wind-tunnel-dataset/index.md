@@ -15,7 +15,8 @@ In this tutorial, we'll walk through how to:
 - [Run the simulation](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section2)
 - [Generalize the use case](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section3)
 - [Generate synthetic wind tunnel data at scale](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section4)
-- [Post-process and analyze simulation results](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section5)
+- [Postprocessing with Inductiva](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section5)
+- [Results and Key Takeaways](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section6)
 
 ```{banner_small}
 :origin: openfoam
@@ -29,4 +30,5 @@ sections/section2.md
 sections/section3.md
 sections/section4.md
 sections/section5.md
+sections/section6.md
 ```

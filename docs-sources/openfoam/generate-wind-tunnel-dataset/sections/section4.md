@@ -172,3 +172,7 @@ and distributing simulations across inexpensive cloud machines, you can drastica
 computation time and streamline large-scale studies.
 
 With just a few lines of Python, you can effortlessly scale your OpenFOAM projects - saving time, optimising resources and accelerating your research. 🚀
+
+```{banner_small}
+:origin: openfoam
+```
