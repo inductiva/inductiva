@@ -251,7 +251,7 @@ class Project:
         for task in self.get_tasks():
             base_path = output_dir or files.resolve_output_path(self.name)
             task.download_outputs(output_dir=f"{base_path}/{task.id}")
-    
+
     def delete(self):
         """Delete a project on the backend.
         
