@@ -47,13 +47,11 @@ cloud_machine = inductiva.resources.MachineGroup(
 
 project = inductiva.projects.Project("openfoam_dataset")
 
-remote_assets = []
-for task in project.get_tasks():
-    remote_assets.append(task.info.storage_output_path)
+remote_assets = [task.info.storage_output_path for task in project.get_tasks()]
 
-custom_simulator = inductiva.simulators.CustomImage(container_image="python:slim")
+python_image = inductiva.simulators.CustomImage(container_image="python:slim")
 
-task = custom_simulator.run(
+task = python_image.run(
     input_dir="input_files/",
     commands=["python postprocess.py"],
     on=cloud_machine,
