@@ -71,6 +71,7 @@ task = simulator.run(input_dir="data/", on=machine_group)
 | `add_task(task)` | Add a task to the project | Explicitly assign existing tasks |
 | `get_tasks()` | List all tasks in the project | Monitor project progress |
 | `download_outputs()` | Download outputs of all tasks in the project | Analyze project results |
+| `delete()` | Delete project and move all tasks to the defaul project | Remove project that is no longer needed |
 
 ````{eval-rst}
 .. seealso::
