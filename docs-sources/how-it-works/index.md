@@ -72,11 +72,11 @@ hidden: true
 
 ```{toctree}
 ---
-caption: Best Practices
+caption: Save Costs
 maxdepth: 2
 hidden: true
 ---
 
-💢 Minimize simulation data <best-practices/save_storage>
+💢 Minimize simulation data <save-costs/save_storage>
 
 ```
