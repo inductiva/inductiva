@@ -1,31 +1,28 @@
-# Scale your FDS simulations with MPI
 
-There are two ways of exploring multi-processing and parallelism in FDS simulations: MPI and OpenMP. The number of MPI processes
-can be used to parallelize computation for several meshes (*e.g.*, if your problem is decomposed in 4 meshes, you can leverage 4 MPI processes to speed up your simulation).
+# Scale FDS with MPI
 
-As such, the number of MPI processes that can be used in a given simulation is limited by the number of meshes in the problem.
-OpenMP is used to parallelize computations within a given mesh.
+Fire Dynamics Simulator (FDS) supports parallelism using two methods:
+- MPI (Message Passing Interface): Distributes work across multiple meshes by running separate MPI processes.
+- OpenMP: Multithreads computations within each mesh.
 
-While running your FDS via Inductiva, you retain full control of the number of MPI processes and OpenMP threads used by the simulation by settings two parameters when submitting your simulation.
-In this tutorial, we'll walk through how to configure those parameters using a small MPI scaling benchmark obtained from the [FDS GitHub repository](https://github.com/firemodels/fds/tree/FDS-6.10.1/Validation/MPI_Scaling_Tests).
+This tutorial walks you through controlling MPI and OpenMP settings when running FDS simulations on Inductiva, using a small MPI scaling benchmark from the FDS GitHub repository.
 
 
 ## Prerequisites
 
-Before running the simulation, you should have been able to [run your first FDS simulation](setup-test.md).
-You’ll also need to download the required input files. You can either:
-
+Before running the simulation, make sure you were able to [run your first FDS simulation](setup-test.md).
+You’ll also need to download the input files. You can either:
 - **Manually download** them from the [FDS GitHub repository](https://github.com/firemodels/fds/tree/FDS-6.10.1/Validation/MPI_Scaling_Tests/FDS_Input_Files) and place them in a folder named `MpiStrongScalingTest`.
 The files starting with `strong_scaling_test` are the ones needed.
 **or**
-- **Download automatically** using the link provided [here](https://storage.googleapis.com/inductiva-api-demo-files/fds-tutorials/MpiStrongScalingTest.zip).
+- **Download automatically** [here](https://storage.googleapis.com/inductiva-api-demo-files/fds-tutorials/MpiStrongScalingTest.zip).
 
-## Running the single mesh case
+## Running a Single-Mesh Simulation
 
-The input folder includes a series of FDS inputs files, with a simple simulation divided in a different number of meshes.
-For instance, the `strong_scaling_test_001.fds` has a single mesh, while the `strong_scaling_test_008.fds` is the same case divided in 8 meshes.
+The input folder contains a set of FDS input files representing the same simulation case split into varying number of meshes.
+For instance, the `strong_scaling_test_001.fds` has a single mesh, while the `strong_scaling_test_008.fds` is the same case split into 8 meshes, and so forth.
 
-The following script can be used to run the simulation:
+Here’s a script to run the single mesh case with one MPI process and one OpenMP thread:
 
 ```python
 import inductiva
@@ -57,22 +54,17 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: The `input_dir` parameter in the `fds.run` method should be set with the correct path
-> to the folder containing the input files.
+> **Note**: The `input_dir` parameter in the `fds.run` method should be set to the path
+> to your input files folder.
 
-Since the `strong_scaling_test_001.fds` refers to single mesh case, we use the `n_mpi_processes` parameter to configure the simulation to run with a single MPI process.
-As such, with the above script we run a single mesh case with one MPI process a GCP `c2d-standard-2` machine (a machine with 2 vCPUs). Note that each MPI process is using
-a single OpenMP thread.
-
-This can be confirmed by inspecting the stderr logs of the FDS command. Navigate to the [web console](http://console.inductiva.ai) and find the task you just ran.
-Navigate to the `Task Logs` tab and select stderr. You should see the following lines:
+You can verify the MPI/OpenMP setup by inspecting the stderr logs in the [Inductiva web console](http://console.inductiva.ai) in the task page under Task Logs → stderr, which should show:
 
 ```
 Number of MPI Processes:  1
 Number of OpenMP Threads: 1
 ```
 
-The outputs of `task.print_summary()` are the following:
+The task summary looks like this:
 
 ```
 Task status: Success
@@ -94,19 +86,17 @@ Data:
 Estimated computation cost (US$): 0.0057 US$
 ```
 
-The simulation took around 21 minutes to run. Let's see how to make it faster using MPI.
+The simulation took approximately 21 minutes. Let's see how to make it faster using MPI.
 
-## Running with multiple MPI processes
+## Running with Multiple MPI Processes
 
 To parallelize the simulation using MPI, we'll need:
-- A simulation case with multiple meshes;
-- A machine with multiple vCPUs;
-- Configure the `n_mpi_processes` parameter
+- A simulation case with multiple meshes (*e.g.*, `strong_scaling_test_008.fds`);
+- A machine with at least as many vCPUs as MPI processes. For the 8 mesh case,
+we can use the `c2d-standard-8`. You can find more about available machines in the (web console)[https://console.inductiva.ai/machine-groups/instance-types];
+- Configure `n_mpi_processes` accordingly.
 
-To run the 8 mesh case (`strong_scaling_test_008.fds`), we need a machine with at least 8 vCPUs,
-such as the `c2d-standard-8`. You can find more about available machines in the (web console)[https://console.inductiva.ai/machine-groups/instance-types].
-
-The updated script is as follows:
+Here’s an updated script running the 8-mesh case on a machine with 8 vCPUs:
 
 ```python
 import inductiva
@@ -138,7 +128,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-The task summary:
+The summary for this run:
 
 ```
 Task status: Success
@@ -160,16 +150,28 @@ Data:
 Estimated computation cost (US$): 0.0047 US$
 ```
 
-The simulation now ran in about 6 minutes and 20s. Around 4x faster. Note that, even though we increase parallelism by 8 times, in practice,
-inefficiences related with communication and sincronization don't allow for such speed ups.
+This run took about 6 minutes and 20 seconds — roughly a 4× speedup.
+Note that even though we increased parallelism by 8 times, real-world inefficiencies in parallel computing — such as communication and synchronization overhead — limit the actual speed-up.
 
 ## Results
 
-Here we present the simulation time and cost of the above examples, as well as the 32 mesh case.
+Below is a summary of simulation time and cost for the 1-, 8-, and 32-mesh cases:
 
-| MPI proc | Machine Type    | Time (s) | Cost (US$) |
-|----------|-----------------|----------|------------|
-| 1        | c2d-standard-2  | 1275.291 | 0.0057     |
-| 8        | c2d-standard-8  | 321.586  | 0.0047     |
-| 32       | c2d-standard-32 | 109.349  | 0.0062     |
+| MPI Processes | Machine Type    | Time (s) | Cost (USD) |
+|---------------|------------------|----------|------------|
+| 1             | c2d-standard-2   | 1275.291 | 0.0057*    |
+| 8             | c2d-standard-8   | 321.586  | 0.0047     |
+| 32            | c2d-standard-32  | 109.349  | 0.0062     |
 
+By increasing the number of meshes from 8 to 32, we observe a further **2.9× speed-up**.
+While the simulation cost does increase slightly, the benefit is you'll **get the results much faster**.
+
+With Inductiva, you have full flexibility to choose the **resources that best match your time and budget constraints.**
+
+> *Note:* The 1-process simulation appears more expensive because it only used 1 of the 2 available CPU cores. You're still billed for the whole machine, even if only one core is active.
+
+## Key Takeaways
+
+- **FDS uses MPI and OpenMP** to parallelize computations. MPI distributes work across meshes; OpenMP accelerates work within each mesh.
+- The number of **MPI processes must not exceed the number of meshes** in the simulation.
+- Inductiva gives you **full control** over the number of MPI processes and OpenMP threads — so you can balance performance and cost for your needs.

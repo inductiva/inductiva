@@ -77,8 +77,6 @@ Data:
 	Number of output files:   20
 
 Estimated computation cost (US$): 0.00017 US$
-
-Go to https://console.inductiva.ai/tasks/50rd67m7cgydco93tj3zebqh6 for more details.
 ```
 
 If the **Task status** is marked as **Success**, congratulations! You've successfully ran an FDS simulation.
