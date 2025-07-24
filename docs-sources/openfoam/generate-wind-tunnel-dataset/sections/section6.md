@@ -67,7 +67,7 @@ Task metadata: {'wind_speed': '7', 'local_template_dir': 'variations/wind_speed_
 ## Key Takeaways
 In summary, using cloud computing for generating datasets of large-scale simulations not only increases efficiency, but also significantly reduces computational time and cost. 
 
-Inductiva makes it possible and convenient to run hundreds or thousands of simulations. For example, you could now change the code for:
+Inductiva makes it possible and convenient to run hundreds or thousands of simulations. For example, you could now extend the code to:
 
 1. Cover a design space with many more parameters;
 2. Add a black-box optimizer, such as [Vizier](https://github.com/google/vizier),
