@@ -1,6 +1,7 @@
 """Register CLI commands for storage."""
 import argparse
 import os
+import textwrap
 
 from inductiva import constants
 from inductiva._cli import loader, utils
@@ -12,11 +13,16 @@ def register(root_parser):
         "storage",
         help="Remote storage management utilities.",
         formatter_class=argparse.RawTextHelpFormatter)
-    parser.description = (
-        "Remote storage management utilities.\n\n"
-        "The `inductiva storage` command oversees your data on the platform.\n"
-        "It enables listing all items, removing specific ones,\n"
-        "and calculating the total size of your storage.\n")
+    
+    parser.description = textwrap.dedent("""\
+        Remote storage management utilities. 
+                                        
+        Use the `inductiva storage` command to manage your data in Inductiva's
+        remote storage. It supports a range of operations including listing
+        files, downloading and deleting items, and calculating total storage
+        usage and cost.
+    """)
+     
     utils.show_help_msg(parser)
 
     subparsers = parser.add_subparsers(title="available subcomands")
