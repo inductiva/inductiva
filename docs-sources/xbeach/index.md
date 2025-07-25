@@ -10,12 +10,15 @@ Inductiva simplifies research by making high-performance computing more accessib
 Step-by-step guides to help you learn how to run XBeach through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
 * **Getting Started**
-    - [Test Your Inductiva Setup](https://inductiva.ai/guides/xbeach/setup-test)
-    - [Run Your First Simulation](https://inductiva.ai/guides/xbeach/quick-start)
+    - [Test Your Inductiva Setup](setup-test)
+    - [Run Your First Simulation](quick-start)
+
+* **Webinars**
+    - [🎥 Video Tutorial](webinars/xbeach-video-tutorial)
 
 * **Advanced Tutorials**
-    - [Run the Galveston Island Beach and Dune Simulation](https://inductiva.ai/guides/xbeach/run-galveston-island-example)
-    - [XBeach Visualizations with ParaView](https://inductiva.ai/guides/xbeach/paraview-for-visualization)
+    - [Run the Galveston Island Beach and Dune Simulation](run-galveston-island-example)
+    - [XBeach Visualizations with ParaView](paraview-for-visualization)
 
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how XBeach performs on different hardware configurations.
@@ -43,6 +46,17 @@ setup-test
 quick-start
 run-galveston-island-example
 ```
+
+```{toctree}
+---
+caption: Webinars
+maxdepth: 3
+hidden: true
+---
+🎥 Video Tutorial <webinars/xbeach-video-tutorial>
+```
+
+
 
 ```{toctree}
 ---
