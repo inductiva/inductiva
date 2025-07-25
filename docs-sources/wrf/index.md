@@ -8,11 +8,11 @@ Inductiva simplifies research by making high-performance computing more accessib
 Step-by-step guides to help you learn how to run WRF through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
 * **Getting Started**
-    - [Test Your Inductiva Setup](https://inductiva.ai/guides/wrf/setup-test)
-    - [Run Your First Simulation](https://inductiva.ai/guides/wrf/quick-start)
+    - [Test Your Inductiva Setup](setup-test)
+    - [Run Your First Simulation](quick-start)
 
 * **Advanced Tutorials**
-    - [Automatically Generate GIFs from Your Simulation](https://inductiva.ai/guides/wrf/gif-generation)
+    - [Automatically Generate GIFs from Your Simulation](gif-generation)
 
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how WRF performs on different hardware configurations.
