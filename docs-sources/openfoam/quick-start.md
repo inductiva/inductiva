@@ -3,6 +3,10 @@ This tutorial will show you how to run OpenFOAM simulations using the Inductiva 
 
 We will cover the `motorBike` use case from the OpenFOAM Foundation GitHub repository, to help you get started with simulations.
 
+> 📺 **Prefer video?**  
+> This guide is also available as a [webinar replay](webinars/openfoam-video-tutorial) where we walk through running **OpenFOAM on Inductiva** step by step.  
+> [_Watch it to see the process in action!_](webinars/openfoam-video-tutorial)
+
 ## Prerequisites
 Before running the simulation, you’ll need to download the required input files. You can either:
 

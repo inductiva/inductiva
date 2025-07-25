@@ -5,6 +5,10 @@ with different wind conditions, facilitating the analysis of flow behavior and p
 a controlled range of wind speeds. By leveraging cloud resources, users can run these simulations in parallel 
 and accelerate the generation of CFD data for further study or integration into downstream workflows.
 
+> 📺 **Prefer video?**  
+> This guide is also available as a [webinar replay](../webinars/openfoam-cfd-dataset.md) where we walk through running **OpenFOAM on Inductiva** step by step.  
+> [_Watch it to see the process in action!_](../webinars/openfoam-cfd-dataset.md)
+
 <p align="center"><img src="../_static/bike_pressure_field.png" alt="OpenFOAM motorBike visualization" width="700"></p>
 
 To demonstrate this process, we will use the incompressible, steady-state simpleFoam solver along with 

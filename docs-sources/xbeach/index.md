@@ -13,6 +13,9 @@ Step-by-step guides to help you learn how to run XBeach through the Inductiva AP
     - [Test Your Inductiva Setup](https://inductiva.ai/guides/xbeach/setup-test)
     - [Run Your First Simulation](https://inductiva.ai/guides/xbeach/quick-start)
 
+* **Webinars**
+    - [🎥 Video Tutorial](webinars/xbeach-video-tutorial)
+
 * **Advanced Tutorials**
     - [Run the Galveston Island Beach and Dune Simulation](https://inductiva.ai/guides/xbeach/run-galveston-island-example)
     - [XBeach Visualizations with ParaView](https://inductiva.ai/guides/xbeach/paraview-for-visualization)
@@ -43,6 +46,17 @@ setup-test
 quick-start
 run-galveston-island-example
 ```
+
+```{toctree}
+---
+caption: Webinars
+maxdepth: 3
+hidden: true
+---
+🎥 Video Tutorial <webinars/xbeach-video-tutorial>
+```
+
+
 
 ```{toctree}
 ---

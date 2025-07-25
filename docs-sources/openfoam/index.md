@@ -13,6 +13,10 @@ Step-by-step guides to help you learn how to run OpenFOAM through the Inductiva 
     - [Test Your Inductiva Setup](https://inductiva.ai/guides/openfoam/setup-test)
     - [Run Your First Simulation](https://inductiva.ai/guides/openfoam/quick-start)
 
+* **Webinars**
+    - [🎥 Video Tutorial](webinars/openfoam-video-tutorial)
+    - [▶️ Generating a CFD dataset](webinars/openfoam-cfd-dataset)
+
 * **Advanced Tutorials**
     - [Generate a Wind Tunnel Simulation Dataset](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/index)
     - [Run occDrivAerStaticMesh from the OpenFOAM HPC Benchmark Suite](https://inductiva.ai/guides/openfoam/run-occdrivaerstaticmesh-case/index)
@@ -43,6 +47,16 @@ setup-test
 quick-start
 Generate a Wind Tunnel Simulation Dataset <generate-wind-tunnel-dataset/index>
 Run occDrivAerStaticMesh from the OpenFOAM HPC Benchmark Suite <run-occdrivaerstaticmesh-case/index>
+```
+
+```{toctree}
+---
+caption: Webinars
+maxdepth: 3
+hidden: true
+---
+🎥 Video Tutorial <webinars/openfoam-video-tutorial>
+▶️ Generating a CFD dataset <webinars/openfoam-cfd-dataset>
 ```
 
 ```{toctree}
