@@ -120,7 +120,9 @@ language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/how-it-works'
 
-html_css_files = ['css/custom.css', 'css/enable_sidebar_focus.css', 'css/banner.css']
+html_css_files = [
+    'css/custom.css', 'css/enable_sidebar_focus.css', 'css/banner.css'
+]
 
 #save into static a js with the env var with the GTM code for the corrent env
 #prod or dev
