@@ -4,7 +4,7 @@ that requires significant computational resources.
 
 > 📺 **Prefer video?**  
 > This guide is also available as a [webinar replay](webinars/xbeach-video-tutorial) where we walk through running **XBeach on Inductiva** step by step.  
-> [_Watch it to see the process in action!_](webinars/xbeach-video-tutorial)
+> [Watch it to see the process in action!](webinars/xbeach-video-tutorial)
 
 
 ## Objective
