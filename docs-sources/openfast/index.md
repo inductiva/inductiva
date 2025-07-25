@@ -10,13 +10,13 @@ Inductiva simplifies research by making high-performance computing more accessib
 Step-by-step guides to help you learn how to run OpenFAST through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
 * **Getting Started**
-    - [Test Your Inductiva Setup](https://inductiva.ai/guides/openfast/setup-test)
-    - [Run Your First Simulation](https://inductiva.ai/guides/openfast/quick-start)
+    - [Test Your Inductiva Setup](setup-test)
+    - [Run Your First Simulation](quick-start)
 
 * **Advanced Tutorials**
-    - [Run 50 simulations in parallel](https://inductiva.ai/guides/openfast/run-50-simulations-in-parallel/index)
-    - [Generate a TurbSim Dataset](https://inductiva.ai/guides/openfast/generate-turbsim-dataset/index)
-    - [TurbSim Visualization](https://inductiva.ai/guides/openfast/turbsim-visualizationx)
+    - [Run 50 simulations in parallel](run-50-simulations-in-parallel/index)
+    - [Generate a TurbSim Dataset](generate-turbsim-dataset/index)
+    - [TurbSim Visualization](turbsim-visualizationx)
 
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how OpenFAST performs on different hardware configurations.

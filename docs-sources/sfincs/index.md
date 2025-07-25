@@ -12,8 +12,8 @@ where computational speed is crucial.
 ### Tutorials
 Step-by-step guides to help you learn how to run SFINCS through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
-- [Test Your Inductiva Setup](https://inductiva.ai/guides/sfincs/setup-test)
-- [Run Your First Simulation](https://inductiva.ai/guides/sfincs/quick-start)
+- [Test Your Inductiva Setup](setup-test)
+- [Run Your First Simulation](quick-start)
 
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how SFINCS performs on different hardware configurations.

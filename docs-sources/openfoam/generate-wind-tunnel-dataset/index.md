@@ -15,12 +15,12 @@ To demonstrate this process, we will use the incompressible, steady-state simple
 the **motorBike example**, which is available in the OpenFOAM repository.
 
 In this tutorial, we'll walk through how to:
-- [Review the prerequisites for running the motorBike case](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section1)
-- [Run the simulation](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section2)
-- [Generalize the use case](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section3)
-- [Generate synthetic wind tunnel data at scale](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section4)
-- [Postprocessing with Inductiva](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section5)
-- [Results and Key Takeaways](https://inductiva.ai/guides/openfoam/generate-wind-tunnel-dataset/sections/section6)
+- [Review the prerequisites for running the motorBike case](sections/section1)
+- [Run the simulation](sections/section2)
+- [Generalize the use case](sections/section3)
+- [Generate synthetic wind tunnel data at scale](sections/section4)
+- [Postprocessing with Inductiva](sections/section5)
+- [Results and Key Takeaways](sections/section6)
 
 ```{banner_small}
 :origin: openfoam
