@@ -1,6 +1,7 @@
 """List the user information via CLI."""
 from collections import defaultdict
 from datetime import datetime
+import textwrap
 from typing import TextIO, Dict
 import argparse
 import sys
@@ -150,9 +151,11 @@ def register(parser):
                                   help="List the user's information.",
                                   formatter_class=argparse.RawTextHelpFormatter)
 
-    subparser.description = ("The `inductiva user info` command provides "
-                             "an overview of your tier and credits.\n"
-                             "It shows the credits left for you to use.\n")
+    subparser.description = textwrap.dedent("""\
+        The `inductiva user info` command displays details about your Inductiva
+        account, including your user ID, email address, available credits,
+        usage quotas, and other useful information.
+    """)    
 
     _cli.utils.add_watch_argument(subparser)
 
