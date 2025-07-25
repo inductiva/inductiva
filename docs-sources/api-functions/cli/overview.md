@@ -2,27 +2,25 @@
 
 The **Inductiva CLI** helps you interact with the Inductiva API directly from the terminal, enabling you to manage computational resources, tasks, and much more.
 
-With the CLI, you can:
-- Manage authentication and API keys
-- Start, stop, list, and monitor [Tasks](../../how-it-works/tasks/index.md).
-- Allocate and monitor [Computational Resources](../../how-it-works/machines/index.md).
-- Manage projects and [storage files](../../how-it-works/storage/index.md)
-
 This section documents every command and flag available in Inductiva's command-line interface (CLI).
 
 ## CLI Command Overview
 
-| Command        | Subcommands                                 | Python Client                                             | Resource Guide                                                   |
-|----------------------|---------------------------------------------|-----------------------------------------------------------|------------------------------------------------------------------|
-| [`auth`](auth.md)               | `login`, `logout`                           | --                              | [Authentication Guide](https://inductiva.ai/guides/how-it-works/get-started/install-guide)        |
-| [`user`](user.md)               | `info`                           | [Users API](https://inductiva.ai/guides/api-functions/api/inductiva.users)                              | --        |
-| [`tasks`](tasks.md)              | `download`, `info`, `kill`, `last-modified-file`, `list`, `list-files`, `tail`, `top`        | [Tasks API](https://inductiva.ai/guides/api-functions/api/inductiva.tasks)                              | [Tasks Guide](../../how-it-works/tasks/index.md)                |
-| [`task-runner`](task-runner.md)          | `launch`, `remove`      | --                     | [BYOH Guide](https://inductiva.ai/guides/expand/use-local-task-runner/index)          |
-| [`projects`](projects.md)           | `list`, `download`        | [Projects API](https://inductiva.ai/guides/api-functions/api/inductiva.projects)                        | --       |
-| [`storage`](storage.md)            | `list`, `download`, `export`, `remove`, `size`                | [Storage API](https://inductiva.ai/guides/api-functions/api/inductiva.storage)                          | [Storage Guide](../../how-it-works/cloud-storage/index.md)            |
-| [`resources`](resources.md)          | `start`, `cost`, `info`, `available`, `list`, `terminate`      | [Resources API](https://inductiva.ai/guides/api-functions/api/inductiva.resources)                      | [Machines Guide](../../how-it-works/machines/index.md)          |
-| [`simulators`](simulators.md)               | `list`              | [Simulators API](https://inductiva.ai/guides/api-functions/api/inductiva.simulators)      | [Simulators Guide](../../how-it-works/simulators/index.md)  |
-| [`containers`](containers.md)         | `list`, `upload`, `remove`                  | --  | [BYOS Guide](https://inductiva.ai/guides/expand/bring-your-own-software/index) |
+The table below shows the available CLI commands alongside their corresponding Python Client APIs and documentation guide. Most functionality is available through both interfaces, allowing you to choose the tool that best fits your workflow. The CLI is ideal for quick operations, while the Python Client offers a more programmatic control and integration with your code.
+
+For detailed guidance on when to use each interface and how they work together, see our [Interfaces with the API](../../how-it-works/building-blocks/index.md).
+
+| Command        | Python Client                                             | Resource Guide                                                   |
+|----------------------|-----------------------------------------------------------|------------------------------------------------------------------|
+| [`auth`](auth.md)               | --                              | [Authentication Guide](https://inductiva.ai/guides/how-it-works/get-started/install-guide)        |
+| [`user`](user.md)               | [Users API](https://inductiva.ai/guides/api-functions/api/inductiva.users)                              | --        |
+| [`tasks`](tasks.md)              | [Tasks API](https://inductiva.ai/guides/api-functions/api/inductiva.tasks)                              | [Tasks Guide](../../how-it-works/tasks/index.md)                |
+| [`task-runner`](task-runner.md)          | --                     | [BYOH Guide](https://inductiva.ai/guides/expand/use-local-task-runner/index)          |
+| [`projects`](projects.md)           | [Projects API](https://inductiva.ai/guides/api-functions/api/inductiva.projects)                        | --       |
+| [`storage`](storage.md)            | [Storage API](https://inductiva.ai/guides/api-functions/api/inductiva.storage)                          | [Storage Guide](../../how-it-works/cloud-storage/index.md)            |
+| [`resources`](resources.md)          | [Resources API](https://inductiva.ai/guides/api-functions/api/inductiva.resources)                      | [Machines Guide](../../how-it-works/machines/index.md)          |
+| [`simulators`](simulators.md)               | [Simulators API](https://inductiva.ai/guides/api-functions/api/inductiva.simulators)      | [Simulators Guide](../../how-it-works/simulators/index.md)  |
+| [`containers`](containers.md)         | --  | [BYOS Guide](https://inductiva.ai/guides/expand/bring-your-own-software/index) |
 
 ### Notes
 
