@@ -22,7 +22,7 @@ The files starting with `strong_scaling_test` are the ones needed.
 The input folder contains a set of FDS input files representing the same simulation case split into varying number of meshes.
 For instance, the `strong_scaling_test_001.fds` has a single mesh, while the `strong_scaling_test_008.fds` is the same case split into 8 meshes, and so forth.
 
-Here’s a script to run the single mesh case with one MPI process and one OpenMP thread:
+Here’s a script to run the 1-mesh case with one MPI process and one OpenMP thread:
 
 ```python
 import inductiva
@@ -155,20 +155,42 @@ Note that even though we increased parallelism by 8 times, real-world inefficien
 
 ## Results
 
-Below is a summary of simulation time and cost for the 1-, 8-, and 32-mesh cases:
+Below is a summary of simulation time, cost, and speed-up for the 1-, 8-, and 32-mesh cases. The speed-up is relative to the 1-mesh case.
 
-| MPI Processes | Machine Type    | Time (s) | Cost (USD) |
-|---------------|------------------|----------|------------|
-| 1             | c2d-standard-2   | 1275.291 | 0.0057*    |
-| 8             | c2d-standard-8   | 321.586  | 0.0047     |
-| 32            | c2d-standard-32  | 109.349  | 0.0062     |
+| MPI Processes | Machine Type     | Time (s) | Cost (USD) | Speed-up   |
+|---------------|------------------|----------|------------|------------|
+| 1             | c2d-standard-2   | 1275.29  | 0.0057*    | 1.0x       |
+| 8             | c2d-standard-8   | 321.59   | 0.0047     | 4.0x       |
+| 32            | c2d-standard-32  | 109.35   | 0.0062     | 11.7x      |
 
 By increasing the number of meshes from 8 to 32, we observe a further **2.9× speed-up**.
 While the simulation cost does increase slightly, the benefit is you'll **get the results much faster**.
 
 With Inductiva, you have full flexibility to choose the **resources that best match your time and budget constraints.**
 
-> *Note:* The 1-process simulation appears more expensive because it only used 1 of the 2 available CPU cores. You're still billed for the whole machine, even if only one core is active.
+> *Note:* The 1-process simulation appears more expensive because it only used 1 of the 2 available vCPUs. You're still billed for the whole machine, even if only one core is active.
+
+## Advanced Configuration
+
+In the previous example, we leveraged hyperthreading by running as many MPI processes as there were virtual CPUs (vCPUs). By default, Google Cloud VMs provide 2 vCPUs per physical CPU core.
+
+```
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c2d-standard-8",
+    threads_per_core=1,
+    spot=True)
+```
+
+Below are the results of running the 1-mesh case with 1 MPI process on a `c2d-standard-2` machine and the 8-mesh case with 8 MPI processes on a `c2d-standard-16` machine:
+
+| MPI Processes | Machine Type     | Time (s) | Cost (USD) | Speed-up   |
+|---------------|------------------|----------|------------|------------|
+| 1             | c2d-standard-2   | 1295.13  | 0.0058     | 1.0x       |
+| 8             | c2d-standard-16  | 199.45   | 0.0057     | 6.5x       |
+
+Compared to the earlier 8-mesh run on a `c2d-standard-8` machine, this configuration achieved a higher speed-up, closer to the theoretical maximum of 8×.
+However, due to the use of a more expensive machine, the overall cost of the simulation also increased.
 
 ## Key Takeaways
 
