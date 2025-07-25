@@ -35,7 +35,7 @@ The **Python Client** is a library to control the Inductiva API programmatically
 The **Inductiva CLI** provides a fast and efficient way to interact with the API directly from the terminal, without needing to write a full script. It uses the same methods as the Python Client but eliminates the need to open an IDE or write a script for simple operations.
 
 **Best For:**
-- quick operational tasks and one-off commands
+- Quick operational tasks and one-off commands
 - Check the status of a task or list all running machines.
 - Download outputs or view logs for a specific task.
 - Manually start or terminate a resource.
@@ -61,7 +61,7 @@ Inductiva's ecosystem is designed for maximum flexibility. With all three interf
 Consider a typical workflow:
 
 1.  **Launch with Python:** Define and launch simulations using a **Python script**.
-2.  **Operate with the CLI:** Use the CLI for quick operational tasks like bulk file deletions, loading custom containers so you can [Bring Your Own Software](https://inductiva.ai/guides/expand/bring-your-own-software/index), or checking task status without opening an IDE.
+2.  **Operate with the CLI:** Use for quick operational tasks like bulk file deletions, loading custom containers so you can [Bring Your Own Software](https://inductiva.ai/guides/expand/bring-your-own-software/index), or checking task status without opening an IDE.
 3.  **Monitor in the Console:** Switch to the [Web Console](https://console.inductiva.ai/dashboard) for comprehensive visual monitoring, detailed task analytics, and cost analysis throughout your simulation lifecycle.
 
 

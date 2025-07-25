@@ -8,7 +8,7 @@ With the Python Client you can focus on your simulation design and analysis rath
 
 The table below provides an overview of the Python Client's main classes and their available methods. Most of these methods have corresponding CLI commands that offer the same functionality through the command line interface.
 
-For a more comprehensive understanding on when to use each interface and how they work together, see our [Interfaces with the API](../../how-it-works/building-blocks/index.md).
+For a more comprehensive understanding on when to use each interface and how they work together, see our [Interfaces with the API](http://inductiva.ai/guides/how-it-works/building-blocks/index) guide.
 
 | Class        | Methods                                 | CLI                                             | Resource Guide                                                   |
 |----------------------|---------------------------------------------|-----------------------------------------------------------|------------------------------------------------------------------|
