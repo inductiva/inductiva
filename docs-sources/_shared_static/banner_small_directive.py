@@ -22,7 +22,6 @@ class BannerSmallDirective(Directive):
             '''
         return nodes.raw('', html, format='html')
 
-
     def run(self):
         origin = self.options.get('origin', '')
         return [BannerSmallDirective.html(origin)]
