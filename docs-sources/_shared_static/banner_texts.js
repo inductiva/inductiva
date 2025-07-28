@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Add simulator name to global var
     const sim_name = window.location.pathname.split('/');
     window.simulator_name = sim_name[2];
+
     // Big banner logic
     const bigActiveKeys = Object.keys(BANNER_BIG_MESSAGES).filter(
         (key) => BANNER_BIG_MESSAGES[key].active
@@ -40,20 +41,17 @@ document.addEventListener("DOMContentLoaded", function () {
         window.banner_type = "big";
         const selectedBigBanner = BANNER_BIG_MESSAGES[selectedBigKey];
 
-        const headlineElement = document.querySelector("p.headline");
-        if (headlineElement) {
-        headlineElement.innerHTML = selectedBigBanner.top_text;
-        }
+        document.querySelectorAll("p.headline").forEach(el => {
+            el.innerHTML = selectedBigBanner.top_text;
+        });
 
-        const subtextElement = document.querySelector("p.subtext");
-        if (subtextElement) {
-        subtextElement.innerHTML = selectedBigBanner.bot_text;
-        }
+        document.querySelectorAll("p.subtext").forEach(el => {
+            el.innerHTML = selectedBigBanner.bot_text;
+        });
 
-        const bigButtonElement = document.querySelector(".buttons .btn-main");
-        if (bigButtonElement) {
-        bigButtonElement.innerHTML = selectedBigBanner.button_text;
-        }
+        document.querySelectorAll(".buttons .btn-main").forEach(el => {
+            el.innerHTML = selectedBigBanner.button_text;
+        });
     }
 
     // Small banner logic
@@ -66,14 +64,12 @@ document.addEventListener("DOMContentLoaded", function () {
         window.banner_type = "small";
         const selectedSmallBanner = BANNER_SMALL_MESSAGES[selectedSmallKey];
 
-        const ctaTextElement = document.querySelector(".cta-bar .cta-text");
-        if (ctaTextElement) {
-        ctaTextElement.innerHTML = selectedSmallBanner.text;
-        }
+        document.querySelectorAll(".cta-bar .cta-text").forEach(el => {
+            el.innerHTML = selectedSmallBanner.text;
+        });
 
-        const smallButtonElement = document.querySelector(".cta-bar .cta-button");
-        if (smallButtonElement) {
-        smallButtonElement.innerHTML = selectedSmallBanner.button_text;
-        }
+        document.querySelectorAll(".cta-bar .cta-button").forEach(el => {
+            el.innerHTML = selectedSmallBanner.button_text;
+        });
     }
 });
