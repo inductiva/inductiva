@@ -7,8 +7,8 @@ However, visualizing DualSPHysics simulation results in Blender is not straightf
 
 To simplify the workflow, this guide is split into two parts:
 
-* [Part 1: Converting `.vtk` to `.obj` — Preparing simulation data for Blender](https://inductiva.ai/guides/dualsphysics/convert-to-obj)
-* [Part 2: Rendering in Blender — Importing and visualizing the converted data](https://inductiva.ai/guides/dualsphysics/render-in-blender)
+* [Part 1: Converting `.vtk` to `.obj` — Preparing simulation data for Blender](convert-to-obj)
+* [Part 2: Rendering in Blender — Importing and visualizing the converted data](render-in-blender)
 
 This approach bridges the gap between raw DualSPHysics output and professional-quality visualizations using Blender.
 

@@ -1039,6 +1039,8 @@ class SimulatorsApi:
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
+        gpu_only: Optional[StrictBool] = None,
+        cpu_only: Optional[StrictBool] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1079,6 +1081,10 @@ class SimulatorsApi:
         :type page: int
         :param per_page:
         :type per_page: int
+        :param gpu_only:
+        :type gpu_only: bool
+        :param cpu_only:
+        :type cpu_only: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1116,6 +1122,8 @@ class SimulatorsApi:
             zones=zones,
             page=page,
             per_page=per_page,
+            gpu_only=gpu_only,
+            cpu_only=cpu_only,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1155,6 +1163,8 @@ class SimulatorsApi:
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
+        gpu_only: Optional[StrictBool] = None,
+        cpu_only: Optional[StrictBool] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1195,6 +1205,10 @@ class SimulatorsApi:
         :type page: int
         :param per_page:
         :type per_page: int
+        :param gpu_only:
+        :type gpu_only: bool
+        :param cpu_only:
+        :type cpu_only: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1232,6 +1246,8 @@ class SimulatorsApi:
             zones=zones,
             page=page,
             per_page=per_page,
+            gpu_only=gpu_only,
+            cpu_only=cpu_only,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1271,6 +1287,8 @@ class SimulatorsApi:
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
+        gpu_only: Optional[StrictBool] = None,
+        cpu_only: Optional[StrictBool] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1311,6 +1329,10 @@ class SimulatorsApi:
         :type page: int
         :param per_page:
         :type per_page: int
+        :param gpu_only:
+        :type gpu_only: bool
+        :param cpu_only:
+        :type cpu_only: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1348,6 +1370,8 @@ class SimulatorsApi:
             zones=zones,
             page=page,
             per_page=per_page,
+            gpu_only=gpu_only,
+            cpu_only=cpu_only,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1376,6 +1400,8 @@ class SimulatorsApi:
         zones,
         page,
         per_page,
+        gpu_only,
+        cpu_only,
         provider_id,
         _request_auth,
         _content_type,
@@ -1452,6 +1478,14 @@ class SimulatorsApi:
 
             _query_params.append(('per_page', per_page))
 
+        if gpu_only is not None:
+
+            _query_params.append(('gpu_only', gpu_only))
+
+        if cpu_only is not None:
+
+            _query_params.append(('cpu_only', cpu_only))
+
         if provider_id is not None:
 
             _query_params.append(('provider_id', provider_id.value))
@@ -1502,6 +1536,8 @@ class SimulatorsApi:
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
+        gpu_only: Optional[StrictBool] = None,
+        cpu_only: Optional[StrictBool] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1540,6 +1576,10 @@ class SimulatorsApi:
         :type page: int
         :param per_page:
         :type per_page: int
+        :param gpu_only:
+        :type gpu_only: bool
+        :param cpu_only:
+        :type cpu_only: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1576,6 +1616,8 @@ class SimulatorsApi:
             zones=zones,
             page=page,
             per_page=per_page,
+            gpu_only=gpu_only,
+            cpu_only=cpu_only,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1614,6 +1656,8 @@ class SimulatorsApi:
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
+        gpu_only: Optional[StrictBool] = None,
+        cpu_only: Optional[StrictBool] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1652,6 +1696,10 @@ class SimulatorsApi:
         :type page: int
         :param per_page:
         :type per_page: int
+        :param gpu_only:
+        :type gpu_only: bool
+        :param cpu_only:
+        :type cpu_only: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1688,6 +1736,8 @@ class SimulatorsApi:
             zones=zones,
             page=page,
             per_page=per_page,
+            gpu_only=gpu_only,
+            cpu_only=cpu_only,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1726,6 +1776,8 @@ class SimulatorsApi:
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
+        gpu_only: Optional[StrictBool] = None,
+        cpu_only: Optional[StrictBool] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1764,6 +1816,10 @@ class SimulatorsApi:
         :type page: int
         :param per_page:
         :type per_page: int
+        :param gpu_only:
+        :type gpu_only: bool
+        :param cpu_only:
+        :type cpu_only: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1800,6 +1856,8 @@ class SimulatorsApi:
             zones=zones,
             page=page,
             per_page=per_page,
+            gpu_only=gpu_only,
+            cpu_only=cpu_only,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1827,6 +1885,8 @@ class SimulatorsApi:
         zones,
         page,
         per_page,
+        gpu_only,
+        cpu_only,
         provider_id,
         _request_auth,
         _content_type,
@@ -1900,6 +1960,14 @@ class SimulatorsApi:
         if per_page is not None:
 
             _query_params.append(('per_page', per_page))
+
+        if gpu_only is not None:
+
+            _query_params.append(('gpu_only', gpu_only))
+
+        if cpu_only is not None:
+
+            _query_params.append(('cpu_only', cpu_only))
 
         if provider_id is not None:
 

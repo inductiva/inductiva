@@ -1350,7 +1350,7 @@ footer {
 	padding: 10px 28px;
 	border-radius: 10px;
 	max-width: 70%;
-	margin: 10px auto;
+	margin: 20px auto;
 	background: radial-gradient(circle at center, var(--cta-container-bg), var(--bg-color));
 }
 
@@ -1377,6 +1377,16 @@ footer {
 
 .cta-button:hover {
 	background-color: var(--purple-hover-color);
+}
+
+#scrolltop {
+  bottom: 2rem; /* fallback if class is not applied */
+  transition: bottom 0.3s ease;
+}
+
+/* When user is at the bottom of the page */
+body.at-bottom #scrolltop {
+  bottom: 6rem !important; /* move it higher */
 }
 
 @media (max-width: 600px) {

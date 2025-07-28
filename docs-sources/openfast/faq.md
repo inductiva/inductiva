@@ -30,7 +30,7 @@ Absolutely! Running multiple simulations in parallel is the best way to fully
 utilize your available cloud resources. While OpenFAST can have limitations in
 terms of parallelism for individual simulations, executing several simulations
 concurrently allows you to maximize efficiency. For detailed guidance on how to
-set this up, check out this [OpenFAST tutorial](https://inductiva.ai/guides/openfast/OpenFAST_advanced)
+set this up, check out this [OpenFAST tutorial](run-50-simulations-in-parallel/index)
 to see how you can do it.
 
 <br>

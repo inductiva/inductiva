@@ -1,5 +1,6 @@
 .banner {
   background: radial-gradient(circle at center, var(--cta-container-bg), var(--bg-color));
+  animation: pulse-brightness 1s infinite alternate ease-in-out;
   padding: 0.7rem 3rem;
   border-radius: 12px;
   max-width: 70%;
@@ -7,6 +8,15 @@
   margin-top: 1rem;
   display: flex;
 	flex-wrap: wrap;
+}
+
+@keyframes pulse-brightness {
+  0% {
+    filter: brightness(1);
+  }
+  100% {
+    filter: brightness(1.1);
+  }
 }
 
 .banner-content {
@@ -81,6 +91,20 @@
   font-weight: 400;
   opacity: 0.9;
 }
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.5s;
+}
+
 
 @media (max-width: 768px) {
 

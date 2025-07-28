@@ -10,14 +10,14 @@ Inductiva simplifies research by making high-performance computing more accessib
 Step-by-step guides to help you learn how to run DualSPHysics through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
 * **Getting Started**
-    - [Test Your Inductiva Setup](https://inductiva.ai/guides/dualsphysics/setup-test)
-    - [Run Your First Simulation](https://inductiva.ai/guides/dualsphysics/quick-start)
+    - [Test Your Inductiva Setup](setup-test)
+    - [Run Your First Simulation](quick-start)
 
 * **Advanced Tutorials**
-    - [Run the 09_Turbine Chrono Example](https://inductiva.ai/guides/dualsphysics/run-chrono-example)
-    - [Run DualSPHysics Across Different GPUs](https://inductiva.ai/guides/dualsphysics/run-on-gpu-configuration)
-    - [DualSPHysics Visualizations with ParaView](https://inductiva.ai/guides/dualsphysics/paraview-for-visualization)
-    - [DualSPHysics Visualizations with Blender](https://inductiva.ai/guides/dualsphysics/blender-for-visualization)
+    - [Run the 09_Turbine Chrono Example](run-chrono-example)
+    - [Run DualSPHysics Across Different GPUs](run-on-gpu-configuration)
+    - [DualSPHysics Visualizations with ParaView](paraview-for-visualization)
+    - [DualSPHysics Visualizations with Blender](blender-for-visualization)
 
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how DualSPHysics performs on different hardware configurations.
