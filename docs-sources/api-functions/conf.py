@@ -172,6 +172,7 @@ html_js_files = [
 
 sys.path.insert(0, shared_static_path)
 
+
 def setup(app):
     from banner_directive import BannerDirective
     app.add_directive("banner", BannerDirective)
