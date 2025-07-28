@@ -21,6 +21,10 @@ Need a refresher on the Ising model? See 2D Ising model on Wikipedia
 
 > For more on the the 2D Ising-model details, see the [2D Ising model description](https://en.wikipedia.org/wiki/Ising_model)  
 
+```{banner_small}
+:origin: run_R_stochastic_models
+```
+
 ## Prepare Your Ensemble Script
 First, wrap your simulation logic in a script that:
 - **Reads** one or more parameter values from the command line  
@@ -230,3 +234,7 @@ And that wraps up our end-to-end workflow:
 4. Merged and visualized the ensemble results
 
 You can now observe how magnetization evolves across sweeps for each base temperature and its nearby samples.
+
+```{banner_small}
+:origin: run_R_stochastic_models
+```
