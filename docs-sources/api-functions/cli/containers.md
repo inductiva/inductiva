@@ -151,3 +151,7 @@ inductiva containers rm my-custom-folder -n my-container.sif
 
 If the container is found, the CLI will prompt you for confirmation unless the --yes flag is used.
 
+
+```{banner_small}
+:origin: cli-containers
+```

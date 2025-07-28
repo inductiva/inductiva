@@ -155,4 +155,8 @@ Machine Group api-rdqprn82417bsd7id1qnac4c6 with c2-standard-4 machines successf
 
 ## Additional Resources
 For more details, visit the [Inductiva API documentation](#).
+```
 
+```{banner_small}
+:origin: cli-resources
+```

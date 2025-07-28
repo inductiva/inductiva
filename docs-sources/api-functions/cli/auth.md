@@ -63,3 +63,7 @@ Run the following command for more details:
 ```sh
 inductiva auth --help
 ```
+
+```{banner_small}
+:origin: cli-auth
+```

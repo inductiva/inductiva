@@ -69,3 +69,7 @@ AVAILABLE SIMULATORS AND VERSIONS FOR PRODUCTION RUNS:
 ## Additional Resources
 For more details, visit the [Inductiva API documentation](#).
 
+
+```{banner_small}
+:origin: cli-simulators
+```
