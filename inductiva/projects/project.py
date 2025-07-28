@@ -252,6 +252,18 @@ class Project:
             base_path = output_dir or files.resolve_output_path(self.name)
             task.download_outputs(output_dir=f"{base_path}/{task.id}")
 
+    def delete(self):
+        """Delete a project on the backend.
+        
+        This method does not delete the project tasks, only the project itself.
+        The tasks will be moved to the "default" project.
+        """
+        try:
+            return self._api.delete_project(project_name=self.name)
+        except ApiException as ex:
+            _logger.error("Failed to delete project %s", self.name, exc_info=ex)
+            raise RuntimeError(f"Unable to delete project {self.name}") from ex
+
     def __eq__(self, other) -> bool:
         return (isinstance(other, Project) and self.name == other.name and
                 self.id == other.id)

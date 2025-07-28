@@ -2,7 +2,7 @@
 To visualize DualSPHysics simulations in Blender, the raw particle data (typically stored in `.vtk` files) 
 must first be converted into a mesh format that Blender can interpret, such as `.obj`. This conversion can be easily performed using Inductiva with just a few lines of code.
 
-As an example, consider the [3D Dam Break](https://inductiva.ai/guides/dualsphysics/run-on-gpu-configuration) tutorial. In this simulation, we convert the .vtk files to .obj using the following parameters:
+As an example, consider the [3D Dam Break](run-on-gpu-configuration) tutorial. In this simulation, we convert the .vtk files to .obj using the following parameters:
 
 ```python
 # Run simulation
@@ -51,4 +51,4 @@ This integration streamlines the workflow from raw simulation data to high-quali
   Iso-surface threshold for the fluid density field, expressed as a multiple of the SPH rest density. Determines the surface level used for mesh extraction.
 
 
-Next, learn how to visualize the resulting `.obj` files in Blender in the Rendering in Blender sectio [Rendering in Blender](https://inductiva.ai/guides/dualsphysics/render-in-blender).
+Next, learn how to visualize the resulting `.obj` files in Blender in the Rendering in Blender sectio [Rendering in Blender](render-in-blender).

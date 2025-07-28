@@ -68,7 +68,7 @@ Estimated computation cost (US$): 0.00013 US$
 Given that OpenFAST does not benefit from multiple CPU cores, we chose the `n2-highcpu-2` virtual machine (VM) with 2 virtual CPUs (equivalent to 1 physical core). 
 This is one of the cheapest options on Google Cloud, costing just US$0.0081 per hour in spot mode.
 
-To demonstrate that OpenFAST does not scale with the number of cores, we also ran the same simulation on a number of better machines. For a detailed breakdown, check out our [Benchmarks](https://inductiva.ai/guides/openfast/Benchmarks) section.
+To demonstrate that OpenFAST does not scale with the number of cores, we also ran the same simulation on a number of better machines. For a detailed breakdown, check out our [Benchmarks](../../benchmarks) section.
 
 Here are the results:
 | Machine       | Number of VCPUs | Execution time | Cost |
@@ -84,3 +84,7 @@ The execution time remains almost the same on all machines, regardless of the nu
 Additionally, running the simulation on the `n2-highcpu-2` VM proves to be extremely cost-efficient, with a total cost of only 0.00013 US$.
 
 In the next part of this tutorial, we'll take things to the next level by running dozens of OpenFAST simulations in parallel on Inductiva, demonstrating the true power of cloud-based scalability. Stay tuned!
+
+```{banner_small}
+:origin: openfast
+```

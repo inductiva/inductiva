@@ -1,5 +1,8 @@
 # Versions and Containers 🛠️
 
+## About SPlisHSPlasH
+[SPlisHSPlasH](https://splishsplash.physics-simulation.org) is an open-source library for the simulation of fluids and solids using the Smoothed Particle Hydrodynamics (SPH) method. It efficiently models complex fluid behaviour by considering neighbouring particles. The library includes pressure solvers for the simulation of incompressible fluids and provides different methods for the simulation of viscosity, surface tension, vorticity, elasticity and drag forces.
+
 ## Supported Versions
 Inductiva stays up to date with the latest versions of SPlisHSPlasH. Below is a list of the supported versions, along with their respective release dates:
 

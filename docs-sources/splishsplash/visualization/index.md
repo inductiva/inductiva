@@ -7,6 +7,10 @@ to combine multiple GIFs into a single animation.
 
 <p align="center"><img src="../_static/combined_3_3.gif" alt="Visualization of 9 simulations" width="600"></p>
 
+```{banner_small}
+:origin: splishsplash
+```
+
 ```{toctree}
 :hidden:
 section1.md

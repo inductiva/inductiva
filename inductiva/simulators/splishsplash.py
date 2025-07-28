@@ -43,6 +43,7 @@ class SplishSplash(simulators.Simulator):
         gen_gif: Optional[bool] = False,
         gen_gif_cam_pos: Tuple[float, float, float] = (4.0, 1.0, 4.0),
         gen_gif_cam_fp: Tuple[float, float, float] = (0.0, 0.0, 0.0),
+        on_finish_cleanup: Optional[Union[str, list[str]]] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run the SPlisHSPlasH simulation.
@@ -97,6 +98,24 @@ class SplishSplash(simulators.Simulator):
             gen_gif_cam_fp: The point in space the camera looks at (focus
                 point).  
                 Default: (0.0, 0.0, 0.0).
+            on_finish_cleanup :
+                Optional cleanup script or list of shell commands to remove
+                temporary or unwanted files generated during the simulation.
+                This helps reduce storage usage by discarding unnecessary
+                output.
+                - If a string is provided, it is treated as the path to a shell
+                script that must be included with the simulation files.
+                - If a list of strings is provided, each item is treated as an
+                individual shell command and will be executed sequentially.
+                All cleanup actions are executed in the simulation's working
+                directory, after the simulation finishes.
+                Examples:
+                    on_finish_cleanup = "my_cleanup.sh"
+
+                    on_finish_cleanup = [
+                        "rm -rf temp_dir",
+                        "rm -f logs/debug.log"
+                    ]
         Returns:
             Task object representing the simulation task.
         """
@@ -155,5 +174,6 @@ class SplishSplash(simulators.Simulator):
             remote_assets=remote_assets,
             project=project,
             time_to_live=time_to_live,
+            on_finish_cleanup=on_finish_cleanup,
             **kwargs,
         )
