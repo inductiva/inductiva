@@ -82,22 +82,35 @@ html_theme_options = {
     'show_scrolltop': True,
     'show_breadcrumbs': True,
 }
+
+# Google Analytics
+googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
+googleanalytics_enabled = True
+
+#save into static a js with the env var with the GTM code for the corrent env
+#prod or dev
+env_js_path = os.path.join(os.path.dirname(__file__), '_static', 'env.js')
+os.makedirs(os.path.dirname(env_js_path), exist_ok=True)
+with open(env_js_path, 'w') as f:
+    f.write(f'window.env = {{ GTAG_WEBSITE: "{googleanalytics_id}" }};\n')
+html_js_files = [
+    'banner_texts.js',
+    'env.js',
+    'discord.js',
+    'gtm_func.js',
+    'move_back_to_top.js',
+]
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 shared_static_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "_shared_static"))
 html_static_path = ['_static', shared_static_path]
-html_css_files = [
-    'css/custom.css',
-]
+html_css_files = ['css/custom.css', 'css/banner.css']
 pygments_style = "monokai"
 
 html_title = 'GROMACS'
-
-# Google Analytics
-googleanalytics_id = os.getenv("GTAG_WEBSITE")
-googleanalytics_enabled = True
 
 # OpenGraph protocol
 ogp_site_name = "Inductiva.AI GROMACS"
@@ -109,3 +122,12 @@ ogp_image = "https://inductiva.ai/builds/gromacs/_static/inductiva-social-banner
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/gromacs'
+
+sys.path.insert(0, shared_static_path)
+
+
+def setup(app):
+    from banner_directive import BannerDirective
+    app.add_directive("banner", BannerDirective)
+    from banner_small_directive import BannerSmallDirective
+    app.add_directive("banner_small", BannerSmallDirective)

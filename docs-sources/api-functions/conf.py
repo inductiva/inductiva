@@ -130,6 +130,10 @@ html_static_path = ['_static', shared_static_path]
 html_css_files = ['css/custom.css', 'css/enable_sidebar_focus.css']
 pygments_style = "monokai"
 
+html_js_files = [
+    'discord.js',
+]
+
 # SEO - Add any paths that contain templates here, relative to this directory.
 templates_path = [
     os.path.relpath(
@@ -152,7 +156,7 @@ html_context = {
 }
 
 # Google Analytics
-googleanalytics_id = os.getenv("GTAG_WEBSITE")
+googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
 googleanalytics_enabled = True
 
 # sitemap.xml

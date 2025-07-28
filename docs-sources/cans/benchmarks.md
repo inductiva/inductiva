@@ -3,7 +3,7 @@ This benchmark report presents a performance comparison across various GPU confi
 guide in selecting the right simulation hardware for your computational CaNS projects.
 
 We benchmark a temporal boundary layer with stable stratification case, following the same scenario detailed in our 
-[tutorial](https://inductiva.ai/guides/cans/run-temporal-boundary-layer-case). For benchmarking purposes, the case was run 
+[tutorial](run-temporal-boundary-layer-case). For benchmarking purposes, the case was run 
 using a slightly coarser mesh, reducing the number of grid points by 25% along each spatial direction compared to the 
 original CaNS simulation.
 
@@ -30,3 +30,7 @@ GPU configurations for CaNS simulations. The fastest machine tested, equipped wi
 a **15.7× speed-up** compared with the smallest GPU tested, a configuration with 4 vCPUs and a single NVIDIA L4 GPU.
 
 With Inductiva, you're able to seamlessly select the hardware that delivers the performance your simulations demand.
+
+```{banner_small}
+:origin: cans
+```

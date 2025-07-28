@@ -82,7 +82,7 @@ We now enter a loop that is responsible for generating new input files and runni
 
 First, we iterate over the specified water depths. For each depth, we generate input files using the `render_dir` method, which replaces the `water_depth` 
 variable in our `5MW_OC4Semi_WSt_WavesWN.fst.jinja` template with the corresponding depth value. The generated input files are then stored 
-in a special folder, `target_dir` (`variations/params_for_depth_{depth}`). For more details on managing template files, check out the `TemplateManager` [documentation](https://docs.inductiva.ai/en/latest/intro_to_api/templating.html).
+in a special folder, `target_dir` (`variations/params_for_depth_{depth}`). For more details on managing template files, check out the `TemplateManager` [documentation](https://inductiva.ai/guides/scale-up/parallel-simulations/templating).
 
 Next, we initialize the OpenFAST simulator and run the simulation using the newly created input directory. Each simulation task is added to the project, 
 allowing us to track and wait for all tasks to be completed.
@@ -159,3 +159,7 @@ on a local machine with high processing power, scaling up to dozens or hundreds 
 and distributing simulations across inexpensive cloud machines, you can drastically reduce overall computation time and streamline large-scale studies.
 
 With just a few lines of Python, you can effortlessly scale your OpenFAST projects - saving time, optimising resources and accelerating your research. 🚀
+
+```{banner_small}
+:origin: openfast
+```

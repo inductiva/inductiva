@@ -1,5 +1,5 @@
 """SplisHSPlasH simulator module of the API."""
-from typing import Optional, Union
+from typing import Optional, Tuple, Union
 
 from inductiva import simulators, tasks, types
 
@@ -40,6 +40,10 @@ class SplishSplash(simulators.Simulator):
         vtk_to_obj_smoothing_length: Optional[float] = 2.0,
         vtk_to_obj_cube_size: Optional[float] = 1.0,
         vtk_to_obj_surface_threshold: Optional[float] = 0.6,
+        gen_gif: Optional[bool] = False,
+        gen_gif_cam_pos: Tuple[float, float, float] = (4.0, 1.0, 4.0),
+        gen_gif_cam_fp: Tuple[float, float, float] = (0.0, 0.0, 0.0),
+        on_finish_cleanup: Optional[Union[str, list[str]]] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run the SPlisHSPlasH simulation.
@@ -87,6 +91,31 @@ class SplishSplash(simulators.Simulator):
                 level that indicates the fluid surface (in multiplies of the
                 rest density).
                 Default: 0.6
+            gen_gif: Whether to generate an animated GIF from the
+                simulation output.
+            gen_gif_cam_pos: The position of the camera when generating the GIF.  
+                Default: (4.0, 1.0, 4.0).
+            gen_gif_cam_fp: The point in space the camera looks at (focus
+                point).  
+                Default: (0.0, 0.0, 0.0).
+            on_finish_cleanup :
+                Optional cleanup script or list of shell commands to remove
+                temporary or unwanted files generated during the simulation.
+                This helps reduce storage usage by discarding unnecessary
+                output.
+                - If a string is provided, it is treated as the path to a shell
+                script that must be included with the simulation files.
+                - If a list of strings is provided, each item is treated as an
+                individual shell command and will be executed sequentially.
+                All cleanup actions are executed in the simulation's working
+                directory, after the simulation finishes.
+                Examples:
+                    on_finish_cleanup = "my_cleanup.sh"
+
+                    on_finish_cleanup = [
+                        "rm -rf temp_dir",
+                        "rm -f logs/debug.log"
+                    ]
         Returns:
             Task object representing the simulation task.
         """
@@ -127,6 +156,14 @@ class SplishSplash(simulators.Simulator):
                 "--normals=on --normals-smoothing-iters=10 "
                 f"-o {vtk_to_obj_out_dir}/{vtk_to_obj_vtk_prefix}_surface"
                 "{}.obj")
+        if gen_gif:
+            commands.append("python3 /home/scripts/gen_gif.py ./vtk res.gif "
+                            f"--cam_pos {gen_gif_cam_pos[0]} "
+                            f"{gen_gif_cam_pos[1]} "
+                            f"{gen_gif_cam_pos[2]} "
+                            f"--cam_fp {gen_gif_cam_fp[0]} "
+                            f"{gen_gif_cam_fp[1]} "
+                            f"{gen_gif_cam_fp[2]}")
 
         return super().run(
             input_dir,
@@ -137,5 +174,6 @@ class SplishSplash(simulators.Simulator):
             remote_assets=remote_assets,
             project=project,
             time_to_live=time_to_live,
+            on_finish_cleanup=on_finish_cleanup,
             **kwargs,
         )

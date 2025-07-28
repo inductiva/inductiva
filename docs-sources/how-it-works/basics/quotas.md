@@ -3,7 +3,7 @@
 Quotas help ensure fair access to powerful computing and storage for all users, so that users always get reliable performance when they launch their simulations.
 
 You're free to use the Inductiva API as an individual user (starter plan) or join an
-organization (business or academia) - visit the [Pricing webpage](https://https://inductiva.ai/pricing) for more information.
+organization (business or academia) - visit the [Pricing webpage](https://inductiva.ai/pricing) for more information.
 
 | Quota | unit | scope* | Description | Starter | Business | Academia |
 |-------|------|-------|-------------|----------|------------|------------|

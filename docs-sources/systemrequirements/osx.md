@@ -84,7 +84,7 @@ it means we’ll need to update the **PATH environment variable** to make sure P
 
 ### Add Python to Your PATH
 
-If you saw the warning above, it’s time to update your PATH variable. This tells your system where to find Python binaries, like pip, and ensures [Inductiva’s Command Line Interface](https://docs.inductiva.ai/en/latest/cli/cli-overview.html) can be accessed later on.
+If you saw the warning above, it’s time to update your PATH variable. This tells your system where to find Python binaries, like pip, and ensures [Inductiva’s Command Line Interface](https://inductiva.ai/guides/api-functions/cli/overview) can be accessed later on.
 
 1. **Check Your Current PATH**
 
@@ -139,4 +139,4 @@ Awesome! Now that pip is updated and Python is set in your PATH, you’re all se
 
 If you run into any issues or challenges while installing the API, please reach out to us at support@inductiva.ai. We’d love to help troubleshoot and find ways to make the setup process even smoother.
 
-You can also check out our [troubleshooting guide](https://docs.inductiva.ai/en/latest/api_reference/troubleshooting.html) for more information.
+You can also check out our [troubleshooting guide](https://inductiva.ai/guides/how-it-works/basics/troubleshooting) for more information.

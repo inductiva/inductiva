@@ -5,7 +5,6 @@
 # FAQ
 
 ## 1. Why aren’t live logs showing up in the web console?
-
 FDS behaves differently from most simulators: it writes all logs to `stderr`
 instead of `stdout`. Since the web console only streams `stdout`, no logs will
 appear there during the simulation.
@@ -21,7 +20,6 @@ for viewing in the web console.
 <br>
 
 ## 2. Why can’t I use more `n_vcpus` for my simulation?
-
 FDS parallelizes simulations by assigning each mesh to a separate vCPU. If your simulation only defines a single mesh, it can only use one vCPU. Attempting to use more will result in an error.
 
 For example, this setup will only allow 1 vCPU:

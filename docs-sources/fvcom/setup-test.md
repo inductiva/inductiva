@@ -47,5 +47,9 @@ After the simulation completes, a task summary will be displayed in your termina
 
 You're ready to start running simulations seamlessly!
 
+```{banner_small}
+:origin: fvcom
+```
+
 ## Need Help?
 If you encounter any issues or need further assistance, don't hesitate to [**Contact Us**](mailto:support@inductiva.ai). We're here to help!

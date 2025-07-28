@@ -97,3 +97,7 @@ You can save your animation by going to **File > Save Animation...** and choosin
 
 That's it! You’ve completed the full workflow: from running an XBeach simulation using the DELILAH case to visualizing the results 
 in ParaView.
+
+```{banner_small}
+:origin: xbeach
+```

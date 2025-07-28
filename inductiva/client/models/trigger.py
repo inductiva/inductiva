@@ -17,12 +17,15 @@ import pprint
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, ValidationError, field_validator
 from typing import Any, List, Optional
 from inductiva.client.models.trigger_machine_group_create import TriggerMachineGroupCreate
+from inductiva.client.models.trigger_observer_create import TriggerObserverCreate
 from inductiva.client.models.trigger_task_create import TriggerTaskCreate
 from pydantic import StrictStr, Field
 from typing import Union, List, Set, Optional, Dict
 from typing_extensions import Literal, Self
 
-TRIGGER_ONE_OF_SCHEMAS = ["TriggerMachineGroupCreate", "TriggerTaskCreate"]
+TRIGGER_ONE_OF_SCHEMAS = [
+    "TriggerMachineGroupCreate", "TriggerObserverCreate", "TriggerTaskCreate"
+]
 
 
 class Trigger(BaseModel):
@@ -33,10 +36,14 @@ class Trigger(BaseModel):
     oneof_schema_1_validator: Optional[TriggerTaskCreate] = None
     # data type: TriggerMachineGroupCreate
     oneof_schema_2_validator: Optional[TriggerMachineGroupCreate] = None
+    # data type: TriggerObserverCreate
+    oneof_schema_3_validator: Optional[TriggerObserverCreate] = None
     actual_instance: Optional[Union[TriggerMachineGroupCreate,
+                                    TriggerObserverCreate,
                                     TriggerTaskCreate]] = None
     one_of_schemas: Set[str] = {
-        "TriggerMachineGroupCreate", "TriggerTaskCreate"
+        "TriggerMachineGroupCreate", "TriggerObserverCreate",
+        "TriggerTaskCreate"
     }
 
     model_config = ConfigDict(
@@ -78,15 +85,21 @@ class Trigger(BaseModel):
             )
         else:
             match += 1
+        # validate data type: TriggerObserverCreate
+        if not isinstance(v, TriggerObserverCreate):
+            error_messages.append(
+                f"Error! Input type `{type(v)}` is not `TriggerObserverCreate`")
+        else:
+            match += 1
         if match > 1:
             # more than 1 match
             raise ValueError(
-                "Multiple matches found when setting `actual_instance` in Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerTaskCreate. Details: "
+                "Multiple matches found when setting `actual_instance` in Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerObserverCreate, TriggerTaskCreate. Details: "
                 + ", ".join(error_messages))
         elif match == 0:
             # no match
             raise ValueError(
-                "No match found when setting `actual_instance` in Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerTaskCreate. Details: "
+                "No match found when setting `actual_instance` in Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerObserverCreate, TriggerTaskCreate. Details: "
                 + ", ".join(error_messages))
         else:
             return v
@@ -115,16 +128,22 @@ class Trigger(BaseModel):
             match += 1
         except (ValidationError, ValueError) as e:
             error_messages.append(str(e))
+        # deserialize data into TriggerObserverCreate
+        try:
+            instance.actual_instance = TriggerObserverCreate.from_json(json_str)
+            match += 1
+        except (ValidationError, ValueError) as e:
+            error_messages.append(str(e))
 
         if match > 1:
             # more than 1 match
             raise ValueError(
-                "Multiple matches found when deserializing the JSON string into Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerTaskCreate. Details: "
+                "Multiple matches found when deserializing the JSON string into Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerObserverCreate, TriggerTaskCreate. Details: "
                 + ", ".join(error_messages))
         elif match == 0:
             # no match
             raise ValueError(
-                "No match found when deserializing the JSON string into Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerTaskCreate. Details: "
+                "No match found when deserializing the JSON string into Trigger with oneOf schemas: TriggerMachineGroupCreate, TriggerObserverCreate, TriggerTaskCreate. Details: "
                 + ", ".join(error_messages))
         else:
             return instance
@@ -143,7 +162,7 @@ class Trigger(BaseModel):
     def to_dict(
         self
     ) -> Optional[Union[Dict[str, Any], TriggerMachineGroupCreate,
-                        TriggerTaskCreate]]:
+                        TriggerObserverCreate, TriggerTaskCreate]]:
         """Returns the dict representation of the actual instance"""
         if self.actual_instance is None:
             return None

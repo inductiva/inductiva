@@ -117,4 +117,6 @@ represents the actual execution of the simulation,
 the core computation time of this simulation was 99.3 seconds (around 1 minute
 and 39 seconds).
 
-It's that simple!
+```{banner_small}
+:origin: dualsphysics
+```

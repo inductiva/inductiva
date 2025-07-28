@@ -81,5 +81,6 @@ So, why choose Inductiva? Because with Inductiva, there’s no need to apply for
 
 Start supercomputing now.
 
-
-
+```{banner_small}
+:origin: quantum_espresso
+```

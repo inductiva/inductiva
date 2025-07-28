@@ -78,4 +78,6 @@ Estimated computation cost (US$): 0.000099 US$
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
 the core computation time of this simulation was approximately 9 seconds.
 
-It's that simple!
+```{banner_small}
+:origin: splishsplash
+```

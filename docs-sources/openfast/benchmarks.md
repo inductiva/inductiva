@@ -11,7 +11,7 @@ For a single OpenFAST simulation, a desktop machine is typically faster due to i
 The following benchmarks highlight how the execution speed of OpenFAST simulations is primarily determined by CPU clock speed, rather than the number of cores available.
 
 For this purpose, we used the `5MW_OC4Semi_WSt_WavesWN` example, an extension of the reference case from the “Definition of a 5-MW Reference Wind Turbine for Offshore System Development",
-which can be found on the OpenFAST GitHub repository and is also referenced in the [Run 50 Simulations in Parallel](https://inductiva.ai/guides/openfast/OpenFAST_advanced) tutorial.
+which can be found on the OpenFAST GitHub repository and is also referenced in the [Run 50 Simulations in Parallel](run-50-simulations-in-parallel/index) tutorial.
 
 ### Software Versions
 The software versions used for this benchmark are as follows:
@@ -38,6 +38,9 @@ Here are the results:
 
 The execution time remained almost identical across all machines, regardless of the number of virtual CPUs.
 
+```{banner_small}
+:origin: openfast
+```
 
 
 
