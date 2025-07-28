@@ -67,6 +67,7 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
 
         options["module"] = __name__
         options["func"] = func_name
+        options["usage_first"] = None
 
         super().__init__(
             name,
