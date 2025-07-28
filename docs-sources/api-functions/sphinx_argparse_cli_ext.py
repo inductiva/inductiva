@@ -68,6 +68,7 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         options["module"] = __name__
         options["func"] = func_name
         options["usage_first"] = None
+        options["epilog"] = ""
 
         super().__init__(
             name,
@@ -80,6 +81,12 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
             state,
             state_machine,
         )
+
+    def insert_transitions(self, root: nodes.Node):
+        for section in root.findall(SphinxArgParseCliExt.is_options_section):
+            parent = section.parent
+            index = parent.index(section)
+            parent.insert(index + 1, nodes.transition())
 
     def is_options_section(node: nodes.Node) -> bool:
         return (isinstance(node, nodes.section) and
@@ -137,7 +144,8 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         nodes_list = super().run()
         assert len(nodes_list) == 1
         root = nodes_list[0]
-
+        
+        self.insert_transitions(root)
         self.insert_examples_sections(root)
 
         formatters = [
