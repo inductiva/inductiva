@@ -161,3 +161,20 @@ googleanalytics_enabled = True
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/api-functions'
+
+html_js_files = [
+    'banner_texts.js',
+    'env.js',
+    'discord.js',
+    'gtm_func.js',
+    'move_back_to_top.js',
+]
+
+sys.path.insert(0, shared_static_path)
+
+
+def setup(app):
+    from banner_directive import BannerDirective
+    app.add_directive("banner", BannerDirective)
+    from banner_small_directive import BannerSmallDirective
+    app.add_directive("banner_small", BannerSmallDirective)

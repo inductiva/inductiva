@@ -150,3 +150,6 @@ Run the following command for more details:
 inductiva resources --help
 ```
 
+```{banner_small}
+:origin: cli-resources
+```

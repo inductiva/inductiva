@@ -124,3 +124,7 @@ Run the following command for more details:
 ```sh
 inductiva containers --help
 ```
+
+```{banner_small}
+:origin: cli-containers
+```

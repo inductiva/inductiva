@@ -198,3 +198,7 @@ Run the following command for more details:
 inductiva storage --help
 ```
 
+
+```{banner_small}
+:origin: cli-storage
+```

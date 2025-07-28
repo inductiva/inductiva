@@ -67,4 +67,7 @@ Run the following command for more details:
 
 ```sh
 inductiva simulators --help
+
+```{banner_small}
+:origin: cli-simulators
 ```

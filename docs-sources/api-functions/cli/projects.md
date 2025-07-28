@@ -74,3 +74,7 @@ Run the following command for more details:
 ```sh
 inductiva projects --help
 ```
+
+```{banner_small}
+:origin: cli-projects
+```

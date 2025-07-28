@@ -172,3 +172,7 @@ therefore, don't forget to terminate your resources with:
 ```bash
 $ inductiva resources terminate --all -y
 ```
+
+```{banner_small}
+:origin: set-up-elastic-machine-group
+```

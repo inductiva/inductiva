@@ -219,3 +219,7 @@ Run the following command for more details:
 ```sh
 inductiva tasks --help
 ```
+
+```{banner_small}
+:origin: cli-tasks
+```
