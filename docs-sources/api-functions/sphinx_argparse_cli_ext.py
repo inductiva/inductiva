@@ -6,6 +6,7 @@ from docutils import nodes
 from sphinx_argparse_cli._logic import SphinxArgparseCli
 
 from inductiva._cli.main import get_main_parser
+from banner_small_directive import BannerSmallDirective
 
 
 def _get_subparsers(
@@ -82,6 +83,9 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
             state_machine,
         )
 
+        origin = f"cli-{command}"
+        self.banner = BannerSmallDirective.html(origin)
+
     def insert_transitions(self, root: nodes.Node):
         for section in root.findall(SphinxArgParseCliExt.is_options_section):
             parent = section.parent
@@ -155,7 +159,7 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         for formatter in formatters:
             self.format_text(root, formatter)
 
-        return nodes_list
+        return nodes_list + [self.banner]
 
 
 def setup(app):
