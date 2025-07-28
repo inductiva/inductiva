@@ -62,3 +62,7 @@ Use the `--help` or `-h` flag with **any command** for more details:
 ```sh
 inductiva tasks --help
 ```
+
+```{banner}
+:origin: cli
+```
