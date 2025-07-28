@@ -13,7 +13,7 @@ def register(root_parser):
         "storage",
         help="Remote storage management utilities.",
         formatter_class=argparse.RawTextHelpFormatter)
-    
+
     parser.description = textwrap.dedent("""\
         Remote storage management utilities. 
                                         
@@ -22,7 +22,7 @@ def register(root_parser):
         files, downloading and deleting items, and calculating total storage
         usage and cost.
     """)
-     
+
     utils.show_help_msg(parser)
 
     subparsers = parser.add_subparsers(title="available subcomands")

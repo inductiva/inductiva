@@ -250,7 +250,7 @@ def register(parser):
         "of your active computational resources.\nFrom machine type "
         "to start time, it gives you a comprehensive overview of "
         "your resources in one place.")
-    
+
     subparser.epilog = textwrap.dedent("""\
         examples:
             $ inductiva resources list

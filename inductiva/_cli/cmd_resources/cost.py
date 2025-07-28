@@ -68,7 +68,6 @@ def register(parser):
 
     subparser.set_defaults(func=estimate_machine_cost)
 
-
     subparser.epilog = textwrap.dedent("""\
         examples:
             # Estimate the cost of using 4 machines of type c2-standard-8

@@ -70,12 +70,11 @@ def register(parser):
         This action is irreversible and should be used with caution.
     """)
 
-    subparser.add_argument(
-        "folder",
-        nargs="?",
-        type=str,
-        default="my-containers/",
-        help="Path to folder in remote storage.")
+    subparser.add_argument("folder",
+                           nargs="?",
+                           type=str,
+                           default="my-containers/",
+                           help="Path to folder in remote storage.")
 
     subparser.add_argument("-n",
                            "--name",

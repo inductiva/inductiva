@@ -155,7 +155,7 @@ def register(parser):
         The `inductiva user info` command displays details about your Inductiva
         account, including your user ID, email address, available credits,
         usage quotas, and other useful information.
-    """)    
+    """)
 
     _cli.utils.add_watch_argument(subparser)
 

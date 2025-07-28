@@ -95,7 +95,6 @@ def register(parser):
 
         Each step requires user confirmation before proceeding.
     """)
-    
 
     subparser.add_argument("name",
                            type=str,

@@ -43,7 +43,7 @@ def register(parser):
     subparser.add_argument("--all",
                            action="store_true",
                            help="List all results, ignoring --max-results.")
-    
+
     subparser.epilog = textwrap.dedent("""\
         examples:
             # List the 10 largest folders sorted by size

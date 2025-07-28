@@ -144,7 +144,7 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         nodes_list = super().run()
         assert len(nodes_list) == 1
         root = nodes_list[0]
-        
+
         self.insert_transitions(root)
         self.insert_examples_sections(root)
 
