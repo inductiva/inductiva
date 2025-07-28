@@ -68,3 +68,7 @@ Run the following command for more details:
 ```sh
 inductiva task-runner --help
 ```
+
+```{banner_small}
+:origin: cli-task-runner
+```

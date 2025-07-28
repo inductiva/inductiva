@@ -125,3 +125,6 @@ Run the following command for more details:
 inductiva logs --help
 ```
 
+```{banner_small}
+:origin: cli-logs
+```

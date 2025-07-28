@@ -29,3 +29,7 @@ Run the following command for more details:
 ```sh
 inductiva user --help
 ```
+
+```{banner_small}
+:origin: cli-user
+```
