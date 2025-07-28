@@ -13,6 +13,7 @@ Running DiffDock on Inductiva offers significant advantages for large-scale comp
 By running DiffDock—or **any software of your choice** — on Inductiva, you can harness the power of cloud computing while ensuring that your workflow scales seamlessly with your needs! ⚡️
 
 ```{banner_small}
+:origin: perform_ml_inference
 ```
 
 ```{toctree}

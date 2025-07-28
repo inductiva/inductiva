@@ -61,4 +61,5 @@ With this workflow, you've created a fast, portable, and scalable version of Dif
 You're now equipped to run custom deep learning workloads with maximum efficiency on Inductiva! ✅
 
 ```{banner_small}
+:origin: perform_ml_inference
 ```

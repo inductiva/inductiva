@@ -104,6 +104,7 @@ apptainer run ... mpirun -np 4 -use_hwthread_cpus fds mccaffrey.fds
 ```
 
 ```{banner_small}
+:origin: run_simulation_with_custom_docker_image
 ```
 
 ### Important Notes

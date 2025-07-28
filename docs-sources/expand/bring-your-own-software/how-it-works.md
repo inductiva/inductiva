@@ -84,4 +84,5 @@ task = simulator.run(
 Once the simulation is submitted, Inductiva automatically handles the environment setup, container execution, and output management.
 
 ```{banner_small}
+:origin: how_it_works
 ```

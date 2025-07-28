@@ -9,7 +9,8 @@ To help you get started and make the most of Inductiva's capabilities, we've cre
 plan and also included in our **Academia** subscription. For full details, 
 please visit our [Pricing](https://inductiva.ai/pricing) page.
 
-```{banner_small}
+```{banner}
+:origin: bring_your_own_software
 ```
 
 ```{toctree}

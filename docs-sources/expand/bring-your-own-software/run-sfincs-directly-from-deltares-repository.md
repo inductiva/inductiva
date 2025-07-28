@@ -89,4 +89,5 @@ Here are the results of running the same simulation on a few machines:
 |  c3d-highcpu-60 |      60  |   9 minutes and 45 seconds  | 0.091 US$ |
 
 ```{banner_small}
+:origin: run_sfincs_from_deltares_repo
 ```

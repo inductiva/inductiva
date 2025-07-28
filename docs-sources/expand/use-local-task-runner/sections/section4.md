@@ -9,4 +9,5 @@ keeping costs low. After you validate that your simulation is producing the inte
 state-of-the-art [cloud computational resources](https://cloud.google.com/compute/docs/machine-resource).
 
 ```{banner_small}
+:origin: use_local_task_runner
 ```

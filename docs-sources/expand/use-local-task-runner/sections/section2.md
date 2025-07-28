@@ -41,4 +41,5 @@ task.wait()
 This script shows how to configure and run a molecular dynamics simulation using GROMACS locally through the Inductiva platform.
 
 ```{banner_small}
+:origin: use_local_task_runner
 ```
