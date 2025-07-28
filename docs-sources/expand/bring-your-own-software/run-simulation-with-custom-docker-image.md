@@ -71,7 +71,6 @@ This example runs four instances of your image using the command `fds mccaffrey.
 mpirun -np 4 -use_hwthread_cpus apptainer run ... fds mccaffrey.fds
 ```
 
-
 ### Running MPI directly inside the Container
 Alternatively, you can run MPI directly within your container as shown below:
 
@@ -104,6 +103,8 @@ This is equivalent to:
 apptainer run ... mpirun -np 4 -use_hwthread_cpus fds mccaffrey.fds
 ```
 
+```{banner_small}
+```
 
 ### Important Notes
 

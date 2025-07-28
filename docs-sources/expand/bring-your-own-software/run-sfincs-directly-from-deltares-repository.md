@@ -88,4 +88,5 @@ Here are the results of running the same simulation on a few machines:
 |  c3d-highcpu-30 |      30   |  12 minutes and 55 seconds  | 0.065 US$ |
 |  c3d-highcpu-60 |      60  |   9 minutes and 45 seconds  | 0.091 US$ |
 
-It's that simple!
+```{banner_small}
+```

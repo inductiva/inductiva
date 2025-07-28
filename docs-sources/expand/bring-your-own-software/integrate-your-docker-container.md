@@ -79,3 +79,5 @@ Inductiva streamlines the process of running Docker containers in the cloud, and
 
 Whether you’re processing videos, running simulations, or deploying research tools, Inductiva simplifies the process of scaling your Docker workflows to the cloud — without the hassle.
 
+```{banner_small}
+```

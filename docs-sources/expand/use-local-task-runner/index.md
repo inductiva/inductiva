@@ -14,6 +14,9 @@ Before getting started, make sure the following are installed on your computer:
 - Inductiva Python package (`pip install inductiva`)
 - Inductiva Python package with Task-Runner support (`pip install "inductiva[task-runner]"`)
 
+```{banner_small}
+```
+
 ```{toctree}
 :hidden:
 sections/section1.md

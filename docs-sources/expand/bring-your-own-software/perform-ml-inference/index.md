@@ -10,8 +10,10 @@ Running DiffDock on Inductiva offers significant advantages for large-scale comp
 - **Massive parallelization**: You can run hundreds of DiffDock instances simultaneously on cloud GPUs, allowing you to explore millions of protein-ligand pairs quickly and efficiently.
 - **Cost-effective resources**: Because DiffDock requires only inference (rather than model training), it can run on relatively inexpensive GPUs, making it ideal for large-scale screening tasks without high computational costs.
 
-By running DiffDock—or **any software of your choice**—on Inductiva, you can harness the power of cloud computing while ensuring that your workflow scales seamlessly with your needs! ⚡️
+By running DiffDock—or **any software of your choice** — on Inductiva, you can harness the power of cloud computing while ensuring that your workflow scales seamlessly with your needs! ⚡️
 
+```{banner_small}
+```
 
 ```{toctree}
 :hidden:
