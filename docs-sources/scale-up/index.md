@@ -32,6 +32,17 @@ projects/visualize-projects
 
 ```{toctree}
 ---
+caption: Save Costs
+maxdepth: 2
+hidden: true
+---
+
+Minimize simulation data <save-costs/save_storage>
+
+```
+
+```{toctree}
+---
 caption: Reuse Files Across Simulations
 maxdepth: 3
 hidden: true
