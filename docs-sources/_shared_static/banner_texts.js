@@ -3,7 +3,7 @@ const BANNER_BIG_MESSAGES = {
     1: {
         active: true,
         top_text: "Ready to dive in?",
-        bot_text: "Get started for free today and earn $5 in credits.",
+        bot_text: "Start for free today and get $5 in compute credits.",
         button_text: "Get Started ✨",
     },
 };
