@@ -78,3 +78,7 @@ Running simulations will be killed and from this point, the `elastic_machine_gro
 object cannot be re-used.
 
 Elastic Machine Group on demand without any hassle.
+
+```{banner_small}
+:origin: how_it_works_elastic_mg
+```

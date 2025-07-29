@@ -9,3 +9,7 @@ sections/section1.md
 sections/section2.md
 sections/section3.md
 ```
+
+```{banner}
+:origin: recipes_export_to_aws
+```

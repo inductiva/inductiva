@@ -18,3 +18,7 @@ for task in all_tasks:
     task.remove_remote_files()
 ```
 > **Note**: You can query tasks by many different status. Learn more about a task lifecycle [here](https://inductiva.ai/guides/how-it-works/intro/tasks#task-lifecycle).
+
+```{banner_small}
+:origin: recipes_delete_failed
+```

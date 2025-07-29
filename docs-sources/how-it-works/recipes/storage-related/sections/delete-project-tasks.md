@@ -15,3 +15,7 @@ project = inductiva.projects.Project("my-project")
 for task in project.get_tasks():
     task.remove_remote_files()
 ```
+
+```{banner_small}
+:origin: recipes_delete_project_tasks
+```

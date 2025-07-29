@@ -61,3 +61,7 @@ task = openfoam.run( \
     ],
     on=cloud_machine)
 ```
+
+```{banner_small}
+:origin: recipes_delete_unwanted_files
+```

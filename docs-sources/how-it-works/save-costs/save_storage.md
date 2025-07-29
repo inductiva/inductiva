@@ -48,3 +48,7 @@ all the temporary folders that are not needed once the simulation ends.
 
 Keep this tip in mind when running your next simulation to reduce the amount of
 data generated, keeping your [storage and transfer costs](../basics/how-much-does-it-cost) in check.
+
+```{banner_small}
+:origin: how_it_works_save_storage
+```

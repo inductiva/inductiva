@@ -47,3 +47,7 @@ Nevertheless, you should always terminate the machine after the task finishes. Y
 ```python
 cloud_machine.terminate()
 ```
+
+```{banner_small}
+:origin: how_it_works_start_first_machine
+```

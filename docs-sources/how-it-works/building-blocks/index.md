@@ -77,3 +77,7 @@ Consider a typical workflow:
 ```{banner}
 :origin: blocks
 ```
+
+```{banner}
+:origin: how_it_works_building_blocks
+```

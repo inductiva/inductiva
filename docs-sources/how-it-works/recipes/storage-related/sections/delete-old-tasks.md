@@ -28,3 +28,7 @@ for task in all_tasks:
     if task_date is not None and task_date < cutoff_datetime:
         task.remove_remote_files()
 ```
+
+```{banner_small}
+:origin: recipes_delete_old_tasks
+```

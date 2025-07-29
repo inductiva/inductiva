@@ -64,3 +64,7 @@ Newer Generations (e.g. c4, c3, c3d) use more recent technology so they tend to 
 💰📈**Top pick**: When in doubt, use the c2d-highcpu-112 machine: it has 112 vCPUs and 224GB of RAM, providing an impressive cost/performance ratio (price around 4.62 US\$/hour and spot price of just ~0.68 US\$/hour).
 
 After narrowing down the machine that best fits your needs, let’s move on and get it started! - <a href="start-first-machine.html">Start your first cloud machine with Inductiva</a>
+
+```{banner_small}
+:origin: how_it_works_pick_machine
+```

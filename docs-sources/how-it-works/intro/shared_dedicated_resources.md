@@ -72,3 +72,7 @@ machine_group.terminate()
 
 Running the simulation on a [dedicated machine group](#dedicated-resources) with
 a `c2-standard-30` machine took **9 minutes and 37 seconds** to complete.
+
+```{banner_small}
+:origin: how_it_works_shared_dedicated_resources
+```

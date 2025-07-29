@@ -20,3 +20,7 @@ sections/delete-unwanted-files
 sections/download-and-delete
 sections/find-large-tasks
 ```
+
+```{banner}
+:origin: recipes_storage_related
+```

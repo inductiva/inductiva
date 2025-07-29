@@ -36,3 +36,7 @@ This script populates the `big_tasks` list with all tasks whose outputs exceed
 2.1 GB. You can adjust the `threshold` value to whatever limit best fits your needs.
 
 Now that you have a list of large tasks you can [download and delete](download-and-delete) them.
+
+```{banner_small}
+:origin: recipes_find_large_tasks
+```

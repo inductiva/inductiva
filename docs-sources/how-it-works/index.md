@@ -8,6 +8,10 @@ We offer **The Basic** to get you started, **Recipes** with practical scripts to
 
 Whether you're a beginner or an advanced user, this page is designed to support you at every step.
 
+```{banner}
+:origin: how_it_works_index
+```
+
 ```{toctree}
 ---
 caption: The Building Blocks

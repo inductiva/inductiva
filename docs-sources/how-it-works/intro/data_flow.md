@@ -148,3 +148,6 @@ by the user whenever required. When this process finishes the corresponding data
 in the worker is freed. Therefore, the worker storage only needs to account for a
 simulation at a time.
 
+```{banner_small}
+:origin: how_it_works_data_flow
+```
