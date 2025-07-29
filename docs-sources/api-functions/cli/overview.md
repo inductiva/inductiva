@@ -14,7 +14,7 @@ For detailed guidance on when to use each interface and how they work together, 
 |----------------------|-----------------------------------------------------------|------------------------------------------------------------------|
 | [`auth`](auth.md)               | --                              | [Authentication Guide](https://inductiva.ai/guides/how-it-works/get-started/install-guide)        |
 | [`user`](user.md)               | [Users API](https://inductiva.ai/guides/api-functions/api/inductiva.users)                              | --        |
-| [`tasks`](tasks.md)              | [Tasks API](https://inductiva.ai/guides/api-functions/api/inductiva.tasks)                              | [Tasks Guide](https://inductiva.ai/guides/how-it-works/intro/tasks)                |
+| [`tasks`](tasks.md)              | [Tasks API](https://inductiva.ai/guides/api-functions/api/inductiva.tasks)                              | [Tasks Guide](https://inductiva.ai/guides/how-it-works/tasks/index)                |
 | [`task-runner`](task-runner.md)          | --                     | [BYOH Guide](https://inductiva.ai/guides/expand/use-local-task-runner/index)          |
 | [`projects`](projects.md)           | [Projects API](https://inductiva.ai/guides/api-functions/api/inductiva.projects)                        | [Projects Guide](https://inductiva.ai/guides/scale-up/projects/index)       |
 | [`storage`](storage.md)            | [Storage API](https://inductiva.ai/guides/api-functions/api/inductiva.storage)                          | [Storage Guide](https://inductiva.ai/guides/how-it-works/intro/data_flow)            |
