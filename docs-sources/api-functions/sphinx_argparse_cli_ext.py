@@ -102,12 +102,12 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         return (isinstance(node, nodes.section) and
                 (title := node.next_node(nodes.title)) and
                 "options" in title.astext().lower())
-    
+
     @staticmethod
     def is_arguments_section(node: nodes.Node) -> bool:
         return (isinstance(node, nodes.section) and
-            (title := node.next_node(nodes.title)) and
-            "positional arguments" in title.astext().lower())
+                (title := node.next_node(nodes.title)) and
+                "positional arguments" in title.astext().lower())
 
     @staticmethod
     def create_section(parser: argparse.ArgumentParser) -> nodes.Node:
@@ -129,7 +129,7 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         for section in root.findall(SphinxArgParseCliExt.is_options_section):
             title = section.next_node(nodes.title).astext()
             command = title.removeprefix("inductiva ").removesuffix(" options")
-            
+
             parser = get_parser(command)
             if not parser.epilog:
                 continue
