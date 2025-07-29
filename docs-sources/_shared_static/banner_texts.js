@@ -56,7 +56,7 @@ const BANNER_SMALL_MESSAGES = {
     },
     10: {
         active: true,
-        text: "Still juggling simulations between two machines and a prayer? <strong>Inductiva</strong> helps you scale your simulations in minutes.",
+        text: "Still juggling simulations between two machines and a prayer? Scale up in minutes with <strong>Inductiva</strong>.",
         button_text: "Start For Free",
     },
     11: {
