@@ -165,3 +165,7 @@ Showing tasks for project: my_xbeach_project.
  q3k3ad1etqdwwfw31die00orw   xbeach      success    24 May, 13:11:21   24 May, 13:11:21   0:00:06              GCP c2-standard-4
 
 ```
+
+```{banner_small}
+:origin: how_it_works_projects
+```

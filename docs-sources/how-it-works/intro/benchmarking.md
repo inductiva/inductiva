@@ -213,3 +213,7 @@ Ready to dive in? Check out these exciting tutorials and our blog for more insig
 - [Allocating Computational Resources in a Diverse Chip Ecosystem](https://inductiva.ai/blog/article/allocating-computational-resources-in-a-diverse-chip-ecosystem)
 - [How to Run a Benchmark](https://tutorials.inductiva.ai/how_to/run-benchmarks.html)
 - [Benchmarking Computational Resources - A Use Case](https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-6.html)
+
+```{banner_small}
+:origin: how_it_works_benchmarking
+```

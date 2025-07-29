@@ -50,3 +50,7 @@ machine_group = inductiva.resources.MachineGroup(
 When omitted, these parameters will have the values mentioned above, a timestamp
 that is 36 hours in the future for `auto_terminate_ts` and 30 minutes for
 `max_idle_time`.
+
+```{banner_small}
+:origin: how_it_works_compute_janitor
+```

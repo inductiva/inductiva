@@ -1,23 +1,17 @@
-# simulators
+# inductiva **simulators** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
 
-## Overview
 The `inductiva simulators` command provides utility subcommands 
 for managing the available simulators within the Inductiva API.
 
-## Usage
-```bash
-inductiva simulators [-h] {list} ...
-```
+````{eval-rst}
+.. seealso::
+   For complete API documentation, see the `Simulators <https://inductiva.ai/guides/api-functions/api/inductiva.simulators>`_ class documentation
+````
 
-## Options
-- `-h, --help`  
-  Show this help message and exit.
+## Subcommands
+### `list (ls)`
+List the available simulators in the Inductiva API, including the supported versions.
 
-## Available Subcommands
-### `list` (alias: `ls`)
-List the available simulators in the Inductiva API.
-
-#### Usage
 ```bash
 inductiva simulators list
 ```
@@ -28,11 +22,8 @@ or using the alias:
 inductiva simulators ls
 ```
 
-#### Description
-This command retrieves and displays a list of available
-simulators supported by Inductiva, including the supported versions.
+Sample output:
 
-## Example
 ```bash
 $ inductiva simulators list
 AVAILABLE SIMULATORS AND VERSIONS FOR PRODUCTION RUNS:
@@ -66,9 +57,16 @@ AVAILABLE SIMULATORS AND VERSIONS FOR PRODUCTION RUNS:
  xbeach                1.24, 1.23
 ```
 
-## Additional Resources
-For more details, visit the [Inductiva API documentation](#).
+## Flags
+### `-h, --help`
 
+Show help message and exit.
+
+## Need Help?
+Run the following command for more details:
+
+```sh
+inductiva simulators --help
 
 ```{banner_small}
 :origin: cli-simulators
