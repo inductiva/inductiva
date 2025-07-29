@@ -80,7 +80,7 @@ def register(parser):
     subparser.add_argument("--dir",
                            type=str,
                            help="Path to the directory where input/output "
-                                "files will be downloaded.")
+                           "files will be downloaded.")
     subparser.add_argument("--input",
                            "-i",
                            action="store_true",
