@@ -56,7 +56,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 We run the simulation using the `run` method, specifying the `shell_script` that handles the execution process (in this case, `./Allrun`).
