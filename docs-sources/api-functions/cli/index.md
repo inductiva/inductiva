@@ -12,15 +12,15 @@ For detailed guidance on when to use each interface and how they work together, 
 
 | Command        | Python Client                                             | Resource Guide                                                   |
 |----------------------|-----------------------------------------------------------|------------------------------------------------------------------|
-| [`auth`](auth.md)               | --                              | [Authentication Guide](https://inductiva.ai/guides/how-it-works/get-started/install-guide)        |
-| [`user`](user.md)               | [Users API](https://inductiva.ai/guides/api-functions/api/inductiva.users)                              | --        |
-| [`tasks`](tasks.md)              | [Tasks API](https://inductiva.ai/guides/api-functions/api/inductiva.tasks)                              | [Tasks Guide](https://inductiva.ai/guides/how-it-works/tasks/index)                |
-| [`task-runner`](task-runner.md)          | --                     | [BYOH Guide](https://inductiva.ai/guides/expand/use-local-task-runner/index)          |
-| [`projects`](projects.md)           | [Projects API](https://inductiva.ai/guides/api-functions/api/inductiva.projects)                        | [Projects Guide](https://inductiva.ai/guides/scale-up/projects/index)       |
-| [`storage`](storage.md)            | [Storage API](https://inductiva.ai/guides/api-functions/api/inductiva.storage)                          | [Storage Guide](https://inductiva.ai/guides/how-it-works/intro/data_flow)            |
-| [`resources`](resources.md)          | [Resources API](https://inductiva.ai/guides/api-functions/api/inductiva.resources)                      | [Resouces Guide](https://inductiva.ai/guides/how-it-works/machines/index)          |
-| [`simulators`](simulators.md)               | [Simulators API](https://inductiva.ai/guides/api-functions/api/inductiva.simulators)      | [Simulators Guide](../../how-it-works/simulators/index.md)  |
-| [`containers`](containers.md)         | --  | [BYOS Guide](https://inductiva.ai/guides/expand/bring-your-own-software/index) |
+| [`auth`](auth.rst)               | --                              | [Authentication Guide](https://inductiva.ai/guides/how-it-works/get-started/install-guide)        |
+| [`user`](user.rst)               | [Users API](https://inductiva.ai/guides/api-functions/api/inductiva.users)                              | --        |
+| [`tasks`](tasks.rst)              | [Tasks API](https://inductiva.ai/guides/api-functions/api/inductiva.tasks)                              | [Tasks Guide](https://inductiva.ai/guides/how-it-works/tasks/index)                |
+| [`task-runner`](task-runner.rst)          | --                     | [BYOH Guide](https://inductiva.ai/guides/expand/use-local-task-runner/index)          |
+| [`projects`](projects.rst)           | [Projects API](https://inductiva.ai/guides/api-functions/api/inductiva.projects)                        | [Projects Guide](https://inductiva.ai/guides/scale-up/projects/index)       |
+| [`storage`](storage.rst)            | [Storage API](https://inductiva.ai/guides/api-functions/api/inductiva.storage)                          | [Storage Guide](https://inductiva.ai/guides/how-it-works/intro/data_flow)            |
+| [`resources`](resources.rst)          | [Resources API](https://inductiva.ai/guides/api-functions/api/inductiva.resources)                      | [Resouces Guide](https://inductiva.ai/guides/how-it-works/machines/index)          |
+| [`simulators`](simulators.rst)               | [Simulators API](https://inductiva.ai/guides/api-functions/api/inductiva.simulators)      | [Simulators Guide](../../how-it-works/simulators/index.rst)  |
+| [`containers`](containers.rst)         | --  | [BYOS Guide](https://inductiva.ai/guides/expand/bring-your-own-software/index) |
 
 ### Notes
 
