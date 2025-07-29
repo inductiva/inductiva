@@ -19,13 +19,15 @@ maxdepth: 2
 hidden: true
 ---
 
-building-blocks/index
+Overview <building-blocks/index>
+building-blocks/interfaces
+building-blocks/configuring-simulators.md
 
 ```
 
 ```{toctree}
 ---
-caption: Get Started with Inductiva 
+caption: Get Started  
 maxdepth: 3
 hidden: true
 ---
@@ -49,24 +51,6 @@ tasks/tasks
 tasks/tasks-execution
 tasks/tasks-lifecycle
 tasks/manage_and_retrieve_results
-```
-
-```{toctree}
----
-caption: Introduction to Inductiva API
-maxdepth: 3
-hidden: true
----
-
-intro/how_it_works
-intro/tasks
-intro/data_flow
-intro/benchmarking
-intro/configuring-simulators
-intro/projects
-setup/system/system-requirements
-setup/troubleshooting
-setup/uninstall_inductiva
 ```
 
 ```{toctree}
