@@ -179,5 +179,5 @@ python my_inductiva_run.py
 ```
 
 ```{banner_small}
-:origin: how_it_works_quick_start_guide
+:origin: quick-start-guide
 ```

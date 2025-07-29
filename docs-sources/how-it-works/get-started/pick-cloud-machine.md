@@ -66,5 +66,5 @@ Newer Generations (e.g. c4, c3, c3d) use more recent technology so they tend to 
 After narrowing down the machine that best fits your needs, let’s move on and get it started! - <a href="start-first-machine.html">Start your first cloud machine with Inductiva</a>
 
 ```{banner_small}
-:origin: how_it_works_pick_machine
+:origin: pick-cloud-machine
 ```

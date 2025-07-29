@@ -71,6 +71,6 @@ inductiva user info
 
 This will display your account information, confirming that the API key has been stored successfully.
 
-```{banner}
-:origin: how_it_works_install_guide
+```{banner_small}
+:origin: install-guide
 ```
