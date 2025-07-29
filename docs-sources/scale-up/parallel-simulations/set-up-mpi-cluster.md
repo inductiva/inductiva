@@ -45,3 +45,7 @@ Running it on an MPI cluster with 448 vCPUs (4×112) reduced the runtime to **59
 While the time reduction isn’t perfectly linear with the number of vCPUs, 
 the improvement remains substantial. For longer simulations, leveraging an 
 MPI cluster can drastically reduce execution time from **days to just a few hours**.
+
+```{banner_small}
+:origin: set-up-mpi-cluster
+```

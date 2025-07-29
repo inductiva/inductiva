@@ -1,5 +1,8 @@
 # Versions and Containers 🛠️
 
+## About XBeach
+[XBeach](https://oss.deltares.nl/web/xbeach/) is a powerful two-dimensional simulator designed for modeling wave propagation, sediment transport, and morphological changes in nearshore areas. It is widely used in coastal engineering to predict how shorelines evolve under the influence of waves, tides, and currents, making it an essential tool for erosion studies, coastal protection projects, and environmental impact assessments.
+
 ## Supported Versions
 Inductiva stays up to date with the latest versions of XBeach. Below is a list of the supported versions:
 

@@ -10,6 +10,17 @@ Whether you're a beginner or an advanced user, this page is designed to support 
 
 ```{toctree}
 ---
+caption: The Building Blocks
+maxdepth: 2
+hidden: true
+---
+
+building-blocks/index
+
+```
+
+```{toctree}
+---
 caption: Get Started with Inductiva 
 maxdepth: 3
 hidden: true
@@ -54,6 +65,7 @@ hidden: true
 💰 How much does a simulation cost in Inductiva? <basics/how-much-does-it-cost>
 🔒 Inductiva Quotas <basics/quotas>
 💥 How many cores can be used? <basics/how-many-cores>
+🗑️ Uninstallation guide <basics/uninstall_inductiva>
 
 ```
 
@@ -68,6 +80,7 @@ hidden: true
 📤 Export your files to AWS S3 <recipes/export-files-to-aws/index>
 🧪 Generate a Dataset <recipes/generate-dataset>
 🗑️ Clean Up Storage by Condition <recipes/storage-related/index>
+⏰ Setting a Time-to-Live on Your Simulations <recipes/set-task-ttl/set-task-ttl>
 ```
 
 ```{toctree}

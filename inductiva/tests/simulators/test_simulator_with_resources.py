@@ -315,7 +315,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             }
             if resubmit_on_preemption is not None:
                 run_kwargs[resubmit_key] = resubmit_on_preemption
-            if sim_name in ("OpenFOAM", "Delft3D"):
+            if sim_name in ("OpenFOAM", "Delft3D", "Octopus"):
                 run_kwargs["commands"] = ["ls"]
             if sim_name in ("CP2K", "OpenSees", "AmrWind"):
                 run_kwargs["sim_config_filename"] = "test_config_file"

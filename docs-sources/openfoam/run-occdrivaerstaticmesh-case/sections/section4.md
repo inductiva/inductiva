@@ -110,4 +110,6 @@ With this setup, the total computation time dropped to **7 hours and 53 minutes*
 For this particular simulation, scaling to more machines provides no additional benefit, as the 
 **communication overhead outweighs the performance gains** from the extra compute resources.
 
-
+```{banner_small}
+:origin: openfoam
+```

@@ -141,3 +141,6 @@ From the output, we can see that the project contains **400 tasks**, all **succe
 
 To discover how to generate visualizations for each simulation and bring your dataset to life, proceed to the next section: **[Visualize the Results](../../visualization/index.md)**.
 
+```{banner}
+:origin: splishsplash
+```

@@ -2,6 +2,11 @@
 This tutorial walks you through running a high-fidelity XBeach simulation using the Inductiva API, based on a real-world dataset 
 that requires significant computational resources.
 
+> 📺 **Prefer video?**  
+> This guide is also available as a [webinar replay](webinars/xbeach-video-tutorial) where we walk through running **XBeach on Inductiva** step by step.  
+> [Watch it to see the process in action!](webinars/xbeach-video-tutorial)
+
+
 ## Objective
 The goal is to demonstrate how to run the `Galveston Island` use case from the [GRIIDC repository](https://data.griidc.org/data/HI.x833.000:0001) - a research data platform from Texas A&M University-Corpus Christi’s Harte Research Institute for Gulf of Mexico Studies.
 
@@ -101,3 +106,7 @@ You can upgrade to a next-generation cloud machine, increase the number of vCPUs
 For example, running the simulation on a machine with more vCPUs, such as the `c2d-highcpu-112`, reduces computation time from 1 hour and 17 minutes to approximately **47 minutes**, with a modest cost increase to US$0.48.
 
 It’s that simple! 🚀
+
+```{banner_small}
+:origin: xbeach
+```

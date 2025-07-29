@@ -102,3 +102,7 @@ Let’s explore what happens when we use more powerful machines to run the same 
 | c2d-standard-112  | 5 minutes 37 seconds       | $0.070     |
 
 As we can see, increasing the number of vCPUs (and RAM) of the machine let's us run the simulation faster, while only slightly increasing the cost. This demonstrates Inductiva’s efficient scaling capabilities, allowing you to balance performance and budget according to your needs. Whether you prioritize speed or cost-effectiveness, Inductiva makes it easy to optimize your simulations seamlessly.
+
+```{banner_small}
+:origin: gromacs
+```
