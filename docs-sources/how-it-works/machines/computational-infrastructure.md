@@ -1,12 +1,11 @@
 # Computational Infrastructure
 
 The Inductiva API serves as a direct intermediary, bridging the gap between users 
-and the complex landscape of computational resources. It streamlines the process 
+and the complex landscape of computational resources. It simplifies the process 
 of managing and allocating computational workloads and simulation tasks, by 
 facilitating access to an expansive selection of computing options.
 
-This guide will detail how the API simplifies the orchestration of your simulations 
-and introduce you to the various computational options currently available to you!
+This guide will introduce you to the various computational options currently available to you!
 
 ## Computational Resource Management
 
@@ -31,7 +30,7 @@ Google Cloud Platform (GCP):
 - [**General-purpose Machines**](https://cloud.google.com/compute/docs/general-purpose-machines): Versatile VMs that provide a balanced mix of compute, memory, and networking resources, suitable for a wide range of simulation workloads.
 - [**Accelerator-optimized Machines**](https://cloud.google.com/compute/docs/accelerator-optimized-machines): Specialized VMs equipped with GPUs and other accelerators for high-performance computing tasks that benefit from parallel processing capabilities.
 
-Each VM family offers multiple machine types with different specifications to match your simulation requirements and budget. For detailed information about specific machine types available within each family through Inductiva, including pricing and performance characteristics, explore our complete machine catalog.
+Each VM family offers multiple machine types with different specifications to match your simulation requirements and budget. For detailed information about specific machine types available within each family through Inductiva, including pricing and performance characteristics, explore our [complete machine catalog](https://inductiva.ai/machines).
 
 These machine types allow for the customization of
 [MachineGroups](computational_resources/machinegroup_class.md),
@@ -60,7 +59,7 @@ limitations on the quantity and types of machines that you can launch. For detai
 on these limitations, please consult the
 [User Quotas](../basics/quotas.md).
 
-### Beyond Google Could Platform
+### Beyond Google Cloud Platform
 
 While the examples above focus on GCP resources, Inductiva also supports running simulations on other computational infrastructures. For comprehensive information about using your own hardware, see our [BYOH (Bring Your Own Hardware)](https://inductiva.ai/guides/expand/use-local-task-runner/index) tutorial, which explores in detail the various infrastructure options we support beyond GCP.
 
@@ -78,3 +77,7 @@ is transforming the landscape—and how it’s not always easy to find the best 
 for your job.
 
 With our [benchmarking tool](benchmarking.md), we make it easier to make smarter, cost-effective decisions for your workloads.
+
+```{banner_small}
+:origin: how_it_works_infra
+```

@@ -27,3 +27,7 @@ Explore these hands-on tutorials to jumpstart your journey:
 
 Or, if you prefer to read, check out our blog post:
 - [SimuStruct Dataset (0.1)](https://inductiva.ai/blog/article/simustruct-dataset)
+
+```{banner}
+:origin: recipe_generate_dataset
+```

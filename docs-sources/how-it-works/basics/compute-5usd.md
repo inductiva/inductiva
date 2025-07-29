@@ -7,3 +7,7 @@ This 112-core machine with 224GM of RAM can cost you as little as 0.68\$US per h
 
 At Inductiva, we empower you to make smart choices for your simulation use-case.
 Learn more about <a href="pick-cloud-machine.html">picking the right cloud machine for your simulation</a> and <a href="how-much-does-it-cost.html">how much does it cost to simulate in Inductiva</a>.
+
+```{banner_small}
+:origin: how_it_works_compute_5usd
+```

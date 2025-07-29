@@ -80,7 +80,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
@@ -128,7 +128,7 @@ For more computationally intensive tasks, the benefits of scaling can be even mo
 
 > To analyze the simulation data programmatically, Python-based tools like **yt** can be used, enabling 
 custom visualizations and data extraction. For step-by-step guidance on creating slice plots and animations, 
-be sure to check out our [post-processing yt tutorial](https://inductiva.ai/guides/amr-wind/using-yt).
+be sure to check out our [post-processing yt tutorial](using-yt).
 
 ```{banner_small}
 :origin: amr_wind

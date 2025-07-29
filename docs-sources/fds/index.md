@@ -9,10 +9,12 @@ Inductiva simplifies research by making high-performance computing more accessib
 ### Tutorials
 Step-by-step guides to help you learn how to run FDS through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
-- [Test Your Inductiva Setup](./setup-test)
-- [Run Your First Simulation](./quick-start)
-- [Scaling FDS with MPI](./scaling-with-mpi)
-- [Visualizing Results with Smokeview](./visualizing-results)
+
+- [Test Your Inductiva Setup](setup-test)
+- [Run Your First Simulation](quick-start)
+- [Scaling FDS with MPI](scaling-with-mpi)
+- [Visualizing Results with Smokeview](visualizing-results)
+
 
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how FDS performs on different hardware configurations.

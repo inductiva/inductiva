@@ -10,11 +10,11 @@ Inductiva simplifies research by making high-performance computing more accessib
 Step-by-step guides to help you learn how to run REEF3D through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
 * **Getting Started**
-    - [Test Your Inductiva Setup](https://inductiva.ai/guides/reef3d/setup-test)
-    - [Run Your First Simulation](https://inductiva.ai/guides/reef3d/quick-start)
+    - [Test Your Inductiva Setup](setup-test)
+    - [Run Your First Simulation](quick-start)
 
 * **Advanced Tutorials**
-    - [Run the 3D Dam Break Scenario with Obstacle](https://inductiva.ai/guides/reef3d/run-3d-dam-break-scenario)
+    - [Run the 3D Dam Break Scenario with Obstacle](run-3d-dam-break-scenario)
 
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how REEF3D performs on different hardware configurations.

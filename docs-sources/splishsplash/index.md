@@ -10,12 +10,12 @@ Inductiva simplifies research by making high-performance computing more accessib
 Step-by-step guides to help you learn how to run SPlisHSPlasH through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
 * **Getting Started**
-    - [Test Your Inductiva Setup](https://inductiva.ai/guides/splishsplash/setup-test)
-    - [Run Your First Simulation](https://inductiva.ai/guides/splishsplash/quick-start)
+    - [Test Your Inductiva Setup](setup-test)
+    - [Run Your First Simulation](quick-start)
 
 * **Advanced Tutorials**
-    - [Generate Synthetic Data for Physics-Informed ML](https://inductiva.ai/guides/splishsplash/synthetic-data-for-piml/index)
-    - [Visualizing SPlisHSPlasH Simulations with Python](https://inductiva.ai/guides/splishsplash/visualization/index)
+    - [Generate Synthetic Data for Physics-Informed ML](synthetic-data-for-piml/index)
+    - [Visualizing SPlisHSPlasH Simulations with Python](visualization/index)
 
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how SPlisHSPlasH performs on different hardware configurations.

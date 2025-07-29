@@ -9,11 +9,11 @@ Inductiva simplifies research by making high-performance computing more accessib
 ### Tutorials
 Step-by-step guides to help you learn how to run SWASH through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
-- [Test Your Inductiva Setup](https://inductiva.ai/guides/swash/setup-test)
-- [Run Your First Simulation](https://inductiva.ai/guides/swash/quick-start)
+- [Test Your Inductiva Setup](setup-test)
+- [Run Your First Simulation](quick-start)
 
 ### Benchmarks
-A trusted [guide](https://inductiva.ai/guides/swash/benchmarks) to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how SWASH performs on different hardware configurations.
+A trusted [guide](benchmarks) to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how SWASH performs on different hardware configurations.
 
 ```{banner}
 :origin: swash

@@ -159,3 +159,7 @@ on a local machine with high processing power, scaling up to dozens or hundreds 
 and distributing simulations across inexpensive cloud machines, you can drastically reduce overall computation time and streamline large-scale studies.
 
 With just a few lines of Python, you can effortlessly scale your OpenFAST projects - saving time, optimising resources and accelerating your research. 🚀
+
+```{banner_small}
+:origin: openfast
+```

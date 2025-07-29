@@ -75,3 +75,7 @@ used to support the status bar at the bottom of the log stream, either export th
 
 However, you don't need to do so. You can visit the Task's page on the Web Console,
 and you will find the logs of the task there ready to be downloaded.
+
+```{banner_small}
+:origin: cli-faq
+```

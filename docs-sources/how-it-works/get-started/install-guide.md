@@ -70,3 +70,7 @@ inductiva user info
 ```
 
 This will display your account information, confirming that the API key has been stored successfully.
+
+```{banner_small}
+:origin: install-guide
+```

@@ -3,6 +3,10 @@ This tutorial will show you how to run OpenFOAM simulations using the Inductiva 
 
 We will cover the `motorBike` use case from the OpenFOAM Foundation GitHub repository, to help you get started with simulations.
 
+> 📺 **Prefer video?**  
+> This guide is also available as a [webinar replay](webinars/openfoam-video-tutorial) where we walk through running **OpenFOAM on Inductiva** step by step.  
+> [Watch it to see the process in action!](webinars/openfoam-video-tutorial)
+
 ## Prerequisites
 Before running the simulation, you’ll need to download the required input files. You can either:
 
@@ -52,7 +56,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 We run the simulation using the `run` method, specifying the `shell_script` that handles the execution process (in this case, `./Allrun`).

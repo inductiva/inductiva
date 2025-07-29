@@ -27,3 +27,7 @@ inductiva storage export large_dataset.csv --bucket-name my-s3-bucket --part-siz
 ```
 
 This sets each upload chunk to be at least 100 MB, which can improve performance for large files.
+
+```{banner_small}
+:origin: recipes_aws_sec2
+```
