@@ -29,7 +29,7 @@ class CostDetail(BaseModel):
     CostDetail
     """
 
-    # noqa: E501
+  # noqa: E501
     month: StrictStr
     total: Union[StrictFloat, StrictInt]
     components: CostComponents

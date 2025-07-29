@@ -10,11 +10,11 @@ Inductiva simplifies research by making high-performance computing more accessib
 Step-by-step guides to help you learn how to run GROMACS through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
 * **Getting Started**
-    - [Test Your Inductiva Setup](https://inductiva.ai/guides/gromacs/setup-test)
-    - [Run Your First Simulation](https://inductiva.ai/guides/gromacs/quick-start)
+    - [Test Your Inductiva Setup](setup-test)
+    - [Run Your First Simulation](quick-start)
 
 * **Advanced Tutorials**
-    - [Run the benchPEP-h Benchmark](https://inductiva.ai/guides/gromacs/run-benchPEP-h-benchmark)
+    - [Run the benchPEP-h Benchmark](run-benchPEP-h-benchmark)
 
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how GROMACS performs on different hardware configurations.

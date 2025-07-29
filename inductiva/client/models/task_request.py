@@ -28,7 +28,7 @@ class TaskRequest(BaseModel):
     TaskRequest
     """
 
-    # noqa: E501
+  # noqa: E501
     simulator: StrictStr
     simulator_name_alias: Optional[StrictStr] = None
     resource_pool: StrictStr

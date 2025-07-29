@@ -20,7 +20,7 @@ window.addEventListener("DOMContentLoaded", function () {
       cursor: pointer;
       transition: filter 0.2s ease;
     `;
-    img.onclick = () => window.open("https://discord.gg/tQ5T3ATt9E", "_blank");
+    img.onclick = () => window.open("https://discord.gg/rFkHxVmAbu", "_blank");
 
     img.addEventListener("mouseover", () => {
       img.style.filter = "brightness(1.3)";

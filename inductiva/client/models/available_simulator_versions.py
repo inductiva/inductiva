@@ -27,7 +27,7 @@ class AvailableSimulatorVersions(BaseModel):
     AvailableSimulatorVersions
     """
 
-    # noqa: E501
+  # noqa: E501
     development: Dict[str, List[StrictStr]]
     production: Dict[str, List[StrictStr]]
     __properties: ClassVar[List[str]] = ["development", "production"]

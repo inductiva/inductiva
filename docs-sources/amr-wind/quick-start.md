@@ -72,7 +72,7 @@ Estimated computation cost (US$): 0.000063 US$
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
 the core computation time of this simulation was approximately 3 seconds.
 
-> You’ve only just scratched the surface with a very short simulation. Ready for real results? Check out [this tutorial](https://inductiva.ai/guides/amr-wind/run-flow-cylinder-case) to learn how to run longer simulations on high-performance machines.
+> You’ve only just scratched the surface with a very short simulation. Ready for real results? Check out [this tutorial](run-flow-cylinder-case) to learn how to run longer simulations on high-performance machines.
 
 ```{banner_small}
 :origin: amr_wind

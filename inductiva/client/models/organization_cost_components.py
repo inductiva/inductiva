@@ -29,7 +29,7 @@ class OrganizationCostComponents(BaseModel):
     OrganizationCostComponents
     """
 
-    # noqa: E501
+  # noqa: E501
     total: List[CostDetail]
     users: List[UserCostsDetails]
     infrastructure: List[CostDetail]

@@ -15,9 +15,9 @@ your costs in check!
 ### Tutorials
 Step-by-step guides to help you learn how to run Delft3D through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
-- [Test Your Inductiva Setup](https://inductiva.ai/guides/delft3d/setup-test)
-- [Run Your First Simulation](https://inductiva.ai/guides/delft3d/quick-start)
-- [Run Delft3D with FLOW-WAVE coupling](https://inductiva.ai/guides/delft3d/flow-wave-coupling)
+- [Test Your Inductiva Setup](setup-test)
+- [Run Your First Simulation](quick-start)
+- [Run Delft3D with FLOW-WAVE coupling](flow-wave-coupling)
 
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how Delft3D performs on different hardware configurations.

@@ -2,7 +2,7 @@
 OpenTelemac simulations using the Inductiva API are executed in a **single step**. Configuration is managed through a `.cas` steering file, along with additional files such as `.slf`, `.cli`, or `.bc`.
 
 ## The `.cas` File
-The `.cas` file is the cornerstone of an OpenTelemac simulation, directing the solver's operations. For example, in our [Run Your First Simulation](https://inductiva.ai/guides/opentelemac/quick-start) tutorial, the `t2d_malpasset-fine.cas` file is used to configure the Malpasset Dam Break simulation.
+The `.cas` file is the cornerstone of an OpenTelemac simulation, directing the solver's operations. For example, in our [Run Your First Simulation](quick-start) tutorial, the `t2d_malpasset-fine.cas` file is used to configure the Malpasset Dam Break simulation.
 
 ### Key aspects controlled by the `.cas` file
 

@@ -10,15 +10,15 @@ Inductiva simplifies research by making high-performance computing more accessib
 Step-by-step guides to help you learn how to run Quantum ESPRESSO through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
 * **Getting Started**
-    - [Test Your Inductiva Setup](https://inductiva.ai/guides/quantumespresso/setup-test)
-    - [Run Your First Simulation](https://inductiva.ai/guides/quantumespresso/quick-start)
+    - [Test Your Inductiva Setup](setup-test)
+    - [Run Your First Simulation](quick-start)
 
 * **Advanced Tutorials**
-    - [Run the GRIR443 Benchmark](https://inductiva.ai/guides/quantumespresso/run-grir443-benchmark)
-    - [Run GRIR443 on an MPI Cluster](https://inductiva.ai/guides/quantumespresso/run-grir443-on-mpi)
+    - [Run the GRIR443 Benchmark](run-grir443-benchmark)
+    - [Run GRIR443 on an MPI Cluster](run-grir443-on-mpi)
 
 ### Benchmarks
-A trusted [guide](https://inductiva.ai/guides/quantumespresso/benchmarks) to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how Quantum ESPRESSO performs on different hardware configurations.
+A trusted [guide](benchmarks) to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how Quantum ESPRESSO performs on different hardware configurations.
 
 ```{banner}
 :origin: quantum_espresso

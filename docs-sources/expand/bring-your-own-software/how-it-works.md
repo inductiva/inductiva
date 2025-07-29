@@ -82,3 +82,7 @@ task = simulator.run(
 - You can prepare your input files inside `./input_dir`, which will be mounted inside the container.
 
 Once the simulation is submitted, Inductiva automatically handles the environment setup, container execution, and output management.
+
+```{banner_small}
+:origin: how_it_works
+```

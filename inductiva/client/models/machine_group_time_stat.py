@@ -27,7 +27,7 @@ class MachineGroupTimeStat(BaseModel):
     MachineGroupTimeStat
     """
 
-    # noqa: E501
+  # noqa: E501
     name: StrictStr
     description: Optional[StrictStr] = ''
     value: Union[StrictFloat, StrictInt]

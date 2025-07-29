@@ -17,7 +17,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr, field_validator
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -27,9 +27,9 @@ class TriggerMachineGroupInfo(BaseModel):
     TriggerMachineGroupInfo
     """
 
-    # noqa: E501
+  # noqa: E501
     trigger_type: StrictStr
-    machine_group_id: StrictInt
+    machine_group_id: Optional[StrictInt]
     __properties: ClassVar[List[str]] = ["trigger_type", "machine_group_id"]
 
     @field_validator('trigger_type')
@@ -76,6 +76,11 @@ class TriggerMachineGroupInfo(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if machine_group_id (nullable) is None
+        # and model_fields_set contains the field
+        if self.machine_group_id is None and "machine_group_id" in self.model_fields_set:
+            _dict['machine_group_id'] = None
+
         return _dict
 
     @classmethod

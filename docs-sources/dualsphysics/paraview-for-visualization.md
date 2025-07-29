@@ -1,5 +1,5 @@
 # DualSPHysics Visualizations with ParaView
-As an example, consider the [3D Dam Break](https://inductiva.ai/guides/dualsphysics/run-on-gpu-configuration) tutorial. 
+As an example, consider the [3D Dam Break](run-on-gpu-configuration) tutorial. 
 
 By the end of that tutorial, your simulation will have completed, and the results will be downloaded to the `inductiva_output` folder on your local machine.
 

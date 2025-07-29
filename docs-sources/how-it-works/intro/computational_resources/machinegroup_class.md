@@ -77,3 +77,7 @@ $ inductiva resources terminate api-agn23rtnv0qnfn03nv93nc
 ```
 
 Machine Group on demand without any hassle.
+
+```{banner_small}
+:origin: how_it_works_mg_class
+```

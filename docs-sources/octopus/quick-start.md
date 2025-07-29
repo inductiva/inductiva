@@ -1,13 +1,12 @@
 # Run Your First Simulation
 This tutorial will show you how to run Octopus simulations using the Inductiva API. 
 
-We will cover the `01-propagators.03-etrs_taylor` use case from the Octopus Gitlab repository[1], to help you get started with simulations.
+We will cover the `01-propagators.03-etrs_taylor` use case from the Octopus Gitlab repository, to help you get started with simulations.
 
 ## Prerequisites
-Download the following files and save them into a folder called `SimulationFiles` with the
-respective name:
-- Download [this](https://gitlab.com/octopus-code/octopus/-/raw/16.1/testsuite/real_time/01-propagators.03-etrs_taylor.inp?ref_type=tags) file and save it as `td.inp`
-- Download [this](https://gitlab.com/octopus-code/octopus/-/raw/16.1/testsuite/real_time/02-propagators.01-gs.inp?ref_type=tags) file and save it as `gs.inp`
+Create a folder named `SimulationFiles`, and place the following files inside it, using the specified filenames:
+- Download [this file](https://gitlab.com/octopus-code/octopus/-/raw/16.1/testsuite/real_time/01-propagators.03-etrs_taylor.inp?ref_type=tags) and save it as `td.inp`
+- Download [this file](https://gitlab.com/octopus-code/octopus/-/raw/16.1/testsuite/real_time/02-propagators.01-gs.inp?ref_type=tags) and save it as `gs.inp`
 
 Your `SimulationFiles` folder should look like this:
 
@@ -17,7 +16,7 @@ SimulationFiles/
 └── td.inp
 ```
 
-Now, you are ready to send your simulation to the Cloud.
+You're now ready to send your simulation to the Cloud.
 
 ## Running an Octopus Simulation
 Here is the code required to run an Octopus simulation using the Inductiva API:
@@ -60,23 +59,21 @@ task.download_outputs()
 task.print_summary()
 ```
 
-This example consists of two main steps:
-
-1. **Ground-State Calculation:**
-   We begin by running `octopus` using the input file `qs.inp`. This step performs the ground-state calculation and generates the `restart/gs` directory, which stores the wavefunctions and other data required for the next stage.
-
-2. **Time-Dependent Simulation:**
-   In the second step, we run Octopus with the input file `td.inp`. This launches a real-time, time-dependent simulation based on **Time-Dependent Density Functional Theory (TDDFT)**, using the results from the previous ground-state step.
-
-The simulation runs on a cloud machine of type `c2d-highcpu-16`, which provides 16 virtual CPUs. 
-For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
-a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
-
 > **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
+This example consists of two main steps:
+1. **Ground-State Calculation:**
+   We begin by running `octopus` with the input file `qs.inp`. This performs the ground-state calculation and generates the `restart/gs` directory, which stores the wavefunctions and other data required for the next stage.
+2. **Time-Dependent Simulation:**
+   Next, we run `octopus` with the input file `td.inp`. This launches a real-time, time-dependent simulation based on **Time-Dependent Density Functional Theory (TDDFT)**, using the results obtained from the previous ground-state step.
+
+When you run the Python script above, the simulation is executed on a cloud machine of type `c2d-highcpu-16`, which provides 
+16 virtual CPUs. For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to 
+select a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
+
 To adapt this script for other Octopus simulations, replace `input_dir` with the
-path to your Octopus input files and set the Octopus `version` accordingly.
+path to your Octopus input files.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
@@ -112,6 +109,3 @@ the core computation time of this simulation was approximately 9 seconds.
 :origin: octopus
 ```
 
-**References:**
-
-[[1]Octopus Gitlab repository](https://gitlab.com/octopus-code/octopus/-/blob/16.1/testsuite/real_time/01-propagators.03-etrs_taylor.inp?ref_type=tags)

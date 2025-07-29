@@ -4,9 +4,8 @@
 
 # FAQ
 
-## 1. What Octopus commands do I have available?
-
-Besides the main `octopus` command you have available all utility functions, listed below:
+## 1. What Octopus commands are available?
+In addition to the main `octopus` command, a variety of utility functions are available, including:
 
 |       |       |       |       |
 |-------|-------|-------|-------|
@@ -21,14 +20,19 @@ Besides the main `octopus` command you have available all utility functions, lis
 
 <br>
 
-## 2. What types of post-processing can be performed using the commands list?
+2. What types of post-processing are supported with the available commands?
 
-If you want to post-process your simulation results in the cloud, the environment
-includes the `Gnuplot` and `ImageMagick` utilities.
+To post-process your simulation results in the cloud, the environment includes the utilities Gnuplot and ImageMagick.
 
-`Gnuplot` enables you to generate plots from your data using simple scripts, while
-`ImageMagick` provides tools like `convert`, which allow you to transform your
-plots into animated GIFs and perform other image manipulations.
+Gnuplot lets you create plots from your data using straightforward scripts.
+ImageMagick offers tools such as convert to transform your plots into animated GIFs and perform various image manipulations.
+
+## 2. What types of post-processing are supported with the available commands?
+To post-process your simulation results in the cloud, the environment includes the `Gnuplot` and `ImageMagick` utilities.
+
+- `Gnuplot` lets you create plots from your data using straightforward scripts
+- `ImageMagick` offers tools such as `convert` to transform your plots into animated GIFs and perform various 
+image manipulations.
 
 <br>
 <br>

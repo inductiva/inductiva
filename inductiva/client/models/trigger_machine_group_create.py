@@ -28,7 +28,7 @@ class TriggerMachineGroupCreate(BaseModel):
     TriggerMachineGroupCreate
     """
 
-    # noqa: E501
+  # noqa: E501
     trigger_type: StrictStr
     machine_group_id: StrictInt
     trigger: TriggerMachineGroupType

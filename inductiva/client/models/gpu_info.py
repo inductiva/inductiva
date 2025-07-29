@@ -27,7 +27,7 @@ class GPUInfo(BaseModel):
     GPUInfo
     """
 
-    # noqa: E501
+  # noqa: E501
     gpu_count: StrictInt
     gpu_name: StrictStr
     __properties: ClassVar[List[str]] = ["gpu_count", "gpu_name"]

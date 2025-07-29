@@ -28,7 +28,7 @@ class ValidationError(BaseModel):
     ValidationError
     """
 
-    # noqa: E501
+  # noqa: E501
     loc: List[ValidationErrorLocInner]
     msg: StrictStr
     type: StrictStr

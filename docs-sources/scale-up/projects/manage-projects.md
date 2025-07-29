@@ -1,4 +1,4 @@
-# Manage Projects
+# Manage Programmatically
 
 Once you've created projects, you need to manage tasks within them. This guide covers all the essential project management operations and organizational strategies.
 
@@ -217,4 +217,8 @@ print(xbeach_project)
 
 # Clean up resources
 machine_group.terminate()
+```
+
+```{banner_small}
+:origin: projects
 ```

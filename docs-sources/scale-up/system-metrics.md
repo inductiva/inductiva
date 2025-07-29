@@ -14,3 +14,7 @@ With the system metrics feature, you can gain valuable insights into your task's
 - Optimize Resource Allocation: Make data-driven decisions for future runs. If a task only uses a small fraction of the allocated memory and CPU, you can select a smaller, more cost-effective machine next time.
 
 For extra guidance, look into our guide to [Pick The Right Cloud Machine For Your Simulation](https://inductiva.ai/guides/how-it-works/get-started/pick-cloud-machine)
+
+```{banner_small}
+:origin: scale_up_system_metrics
+```
