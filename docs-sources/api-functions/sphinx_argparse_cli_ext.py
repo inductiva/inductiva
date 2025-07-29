@@ -1,3 +1,7 @@
+"""Custom Sphinx extension to generate CLI documentation automatically."""
+
+# pylint: disable=protected-access
+
 import argparse
 import re
 import textwrap
@@ -43,9 +47,10 @@ def get_parser_wrapper(command):
 
 
 class SphinxArgParseCliExt(SphinxArgparseCli):
+    """Custom Sphinx extension to generate CLI documentation automatically."""
 
-    RE_JOIN_LINES = re.compile(r'(?<!\n)\n(?!\n)(?=[A-Za-z])')
-    RE_INLINE_CODE = re.compile(r'`([^`]+)`')
+    RE_JOIN_LINES = re.compile(r"(?<!\n)\n(?!\n)(?=[A-Za-z])")
+    RE_INLINE_CODE = re.compile(r"`([^`]+)`")
 
     def __init__(
         self,
@@ -63,7 +68,7 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         func_name = command.replace(" ", "_") + "_parser"
         wrapper = get_parser_wrapper(command)
 
-        import sphinx_argparse_cli_ext
+        import sphinx_argparse_cli_ext # pylint: disable=import-outside-toplevel
         setattr(sphinx_argparse_cli_ext, func_name, wrapper)
 
         options["module"] = __name__
@@ -104,7 +109,7 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
 
         code_block = nodes.literal_block(text, text, language="bash")
 
-        section = nodes.section(ids=['examples-section'])
+        section = nodes.section(ids=["examples-section"])
         section += nodes.title(text="Examples")
         section += code_block
 
@@ -125,7 +130,7 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
 
     def format_paragraph(text_node: nodes.Text):
         text = text_node.astext()
-        new_text = SphinxArgParseCliExt.RE_JOIN_LINES.sub(' ', text)
+        new_text = SphinxArgParseCliExt.RE_JOIN_LINES.sub(" ", text)
         text_node.parent.replace(text_node, nodes.Text(new_text))
 
     def format_inline_code(text_node: nodes.Text):

@@ -112,7 +112,7 @@ def register(parser):
                                   help="Login using Inductiva API Key.",
                                   formatter_class=argparse.RawTextHelpFormatter)
 
-    subparser.description = textwrap.dedent(F"""\
+    subparser.description = textwrap.dedent("""\
         The `inductiva auth login` command logs you in using your API key.
 
         You will be prompted to enter your API key, which you can find in
@@ -127,7 +127,7 @@ def register(parser):
                            action="store_true",
                            help="Hide API Key.")
 
-    subparser.epilog = textwrap.dedent("""\
+    subparser.epilog = textwrap.dedent(r"""
         examples:
             $ inductiva auth login
                  ___  _   _  ____   _   _   ____  _____  ___ __     __ _
