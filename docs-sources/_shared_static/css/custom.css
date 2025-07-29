@@ -1409,19 +1409,28 @@ section[id^="inductiva-"] p {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
-  list-style: disc;
-  margin-top: 10px;
+  gap: 30px; /* more breathing room */
+  margin-top: 12px;
   padding: 0;
-  color: var(--cta-container-text-color);
+  list-style: none; /* remove default bullets */
   font-size: 14px;
+  color: var(--cta-container-text-color);
 }
 
 .banner_list_li {
+  position: relative;
+  padding-left: 14px; /* space for custom bullet */
   white-space: nowrap;
 }
 
-#banner_list_ul li::marker {
-  color: var(--purple-color); /* change bullet color */
+.banner_list_li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--purple-color);
+  font-size: 16px; /* slightly larger bullet */
+  line-height: 1;
 }
+
 
