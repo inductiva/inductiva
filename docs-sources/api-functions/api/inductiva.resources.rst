@@ -12,3 +12,6 @@ resources
    :show-inheritance:
    :undoc-members:
    :exclude-members: ProviderType, MachineTypeInfo
+
+.. banner_small::
+   :origin: pyclient-resources

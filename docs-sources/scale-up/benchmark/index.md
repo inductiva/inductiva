@@ -8,7 +8,7 @@ Learn about _Benchmarks_ — the class in the Inductiva API for systematically e
 |---|---|---|
 | Learn about Benchmarks and how you can use them to find the optimal simulation configuration. | Follow a step-by-step tutorial to set up, execute, and optimize your first benchmark. | Track benchmark progress, visualize results, and make informed decisions using the Inductiva Console. |
 
-## Features
+## Why it’s Useful
 ✓ **Compare machine types** Systematically evaluate different computational resources to find the best price-performance ratio for your simulations.
 
 ✓ **Measure performance metrics** Track execution time, cost, and other key performance indicators across multiple runs.
@@ -18,3 +18,7 @@ Learn about _Benchmarks_ — the class in the Inductiva API for systematically e
 ✓ **Export results** Export benchmark data in JSON or CSV formats for further analysis, and decision-making.
 
 ✓ **Automatic recommendations** Get recommendations for optimal machine configurations.
+
+```{banner}
+:origin: benchmark
+```

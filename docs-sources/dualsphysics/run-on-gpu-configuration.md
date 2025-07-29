@@ -84,7 +84,7 @@ and a 200 GB data disk.
 
 For visualization purposes, this script also optionally converts the simulation’s raw particle data 
 (stored as .vtk files) into mesh format (.obj), making it compatible with common visualization tools. 
-Check out this [tutorial](https://inductiva.ai/guides/dualsphysics/convert-to-obj) for more details.
+Check out this [tutorial](convert-to-obj) for more details.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
@@ -128,4 +128,8 @@ Here are the results of running the same simulation on these machines:
 
 > **Note**: The times and costs listed above refer only to running the simulation and do not include the time required to convert VTK files to OBJ format. This conversion step is optional.
 
-Check out our [ParaView](https://inductiva.ai/guides/dualsphysics/paraview-for-visualization) and [Blender](https://inductiva.ai/guides/dualsphysics/blender-for-visualization) tutorials to learn how to visualize your simulation results.
+Check out our [ParaView](paraview-for-visualization) and [Blender](blender-for-visualization) tutorials to learn how to visualize your simulation results.
+
+```{banner_small}
+:origin: dualsphysics
+```

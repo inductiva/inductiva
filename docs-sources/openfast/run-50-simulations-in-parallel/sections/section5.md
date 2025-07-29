@@ -77,3 +77,7 @@ on top of the loop and add an evaluation function to analyse the result of each 
 3. Build a really large dataset of example simulations to later train a surrogate model.
 
 Inductiva can simplify research by making high-performance computing more accessible and cost-effective.
+
+```{banner_small}
+:origin: openfast
+```

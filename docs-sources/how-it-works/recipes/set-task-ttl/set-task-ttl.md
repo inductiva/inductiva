@@ -44,3 +44,7 @@ In the [Inductiva Console](https://console.inductiva.ai/dashboard), open the
 You'll see something like this:
 
 ![TTL task details in Console](static/console-ttl.png)
+
+```{banner_small}
+:origin: recipes_task_ttl
+```

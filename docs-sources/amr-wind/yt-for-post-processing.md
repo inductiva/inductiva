@@ -117,3 +117,7 @@ if __name__ == "__main__":
     create_gif_from_images(output_path, gif_save_path)
 
 ```
+
+```{banner_small}
+:origin: amr_wind
+```

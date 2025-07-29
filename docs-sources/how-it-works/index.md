@@ -8,6 +8,21 @@ We offer **The Basic** to get you started, **Recipes** with practical scripts to
 
 Whether you're a beginner or an advanced user, this page is designed to support you at every step.
 
+```{banner}
+:origin: how_it_works_index
+```
+
+```{toctree}
+---
+caption: The Building Blocks
+maxdepth: 2
+hidden: true
+---
+
+building-blocks/index
+
+```
+
 ```{toctree}
 ---
 caption: Get Started with Inductiva 
@@ -54,6 +69,7 @@ hidden: true
 💰 How much does a simulation cost in Inductiva? <basics/how-much-does-it-cost>
 🔒 Inductiva Quotas <basics/quotas>
 💥 How many cores can be used? <basics/how-many-cores>
+🗑️ Uninstallation guide <basics/uninstall_inductiva>
 
 ```
 
@@ -67,15 +83,18 @@ hidden: true
 ⬇️ Download specific files from a group of tasks <recipes/download-file-from-project>
 📤 Export your files to AWS S3 <recipes/export-files-to-aws/index>
 🧪 Generate a Dataset <recipes/generate-dataset>
+🗑️ Clean Up Storage by Condition <recipes/storage-related/index>
+⏰ Setting a Time-to-Live on Your Simulations <recipes/set-task-ttl/set-task-ttl>
+👀 Real-Time Monitoring & Conditional Auto Termination <recipes/real-time-simulation-monitoring>
 ```
 
 ```{toctree}
 ---
-caption: Best Practices
+caption: Save Costs
 maxdepth: 2
 hidden: true
 ---
 
-💢 Minimize simulation data <best-practices/save_storage>
+💢 Minimize simulation data <save-costs/save_storage>
 
 ```

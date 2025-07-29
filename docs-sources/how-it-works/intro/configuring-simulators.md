@@ -212,3 +212,7 @@ and the commands.
 
 Explore the [available open source simulators](https://inductiva.ai/simulators)
 built into our API.
+
+```{banner_small}
+:origin: how_it_works_configuring_simulators
+```

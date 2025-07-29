@@ -19,14 +19,13 @@ def get_machine_dict(machines):
     ]
     table = defaultdict(list, {key: [] for key in column_names})
     for machine in machines:
-        status = "Off" if isinstance(machine["terminated_at"],
-                                     str) else "Active"
-        task_id = machine["current_task_id"] if isinstance(
-            machine["current_task_id"], str) else None
-        table["Host Name"].append(machine["host_name"])
-        table["Started"].append(machine["started_at"])
+        status = ("Off" if isinstance(machine.terminated_at, str) else "Active")
+        task_id = (machine.current_task_id if isinstance(
+            machine.current_task_id, str) else None)
+        table["Host Name"].append(machine.host_name)
+        table["Started"].append(machine.started_at)
         table["Status"].append(status)
-        table["Last seen"].append(machine["last_seen_at"])
+        table["Last seen"].append(machine.last_seen_at)
         table["Running task"].append(task_id)
 
     return table

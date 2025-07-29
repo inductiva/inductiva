@@ -1,5 +1,11 @@
 # Versions and Containers 🛠️
 
+## About SFINCS
+The [SFINCS](https://www.deltares.nl/en/software-and-data/products/sfincs) (Super-Fast INundation of CoastS) model is a reduced-complexity simulation 
+engine developed by Deltares. It is designed 
+to simulate compound coastal flooding with high computational efficiency 
+while maintaining reliable accuracy.
+
 ## Supported Versions
 Inductiva stays up to date with the latest versions of SFINCS. Below is a list of the supported versions:
 

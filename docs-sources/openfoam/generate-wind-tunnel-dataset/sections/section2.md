@@ -12,11 +12,15 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2d-highcpu-32",
+    machine_type="c2d-highcpu-4",
+    # 1 thread per physical core
+    threads_per_core=1,
     spot=True)
 
 # Initialize OpenFOAM stack
-openfoam = inductiva.simulators.OpenFOAM()
+openfoam = inductiva.simulators.OpenFOAM( \
+    version="8",
+    distribution="foundation")
 
 task = openfoam.run( \
     input_dir="openfoam-input-example/",
@@ -31,6 +35,8 @@ task.download_outputs()
 
 task.print_summary()
 ```
+
+> **Note**: OpenFOAM-Foundation v8 limits the simulation to use only physical cores, this is why we use `threads_per_core=1`. Learn more about this [here](../../faq.md#6-why-does-my-simulation-keep-failing-with-there-are-not-enough-slots-available-even-though-my-machine-has-enough-resources).
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown as follows.
 
@@ -62,3 +68,7 @@ the task the filesystem, and monitor logs in real time.
 ![console logs](../../_static/console_logs.png)
 
 In the next part of this tutorial, we'll take things to the next level by running dozens of OpenFOAM simulations in parallel on Inductiva, demonstrating the true power of cloud-based scalability. Stay tuned!
+
+```{banner_small}
+:origin: openfoam
+```

@@ -119,6 +119,10 @@ benchmarks.Benchmark(name="splishsplash-fluid-cube") \
     .run(num_repeats=2)
 ```
 
+```{banner_small}
+:origin: benchmarks_run_benchmark
+```
+
 ## Step 3: Refine the Code
 
 As we add more machine types to the benchmark, the code can become repetitive and overwhelming. We need to sort the data out to make it easier to read and to ensure the benchmark setup remains concise, clear, and adaptable.
@@ -290,6 +294,9 @@ for machine_type in machine_types:
 
 benchmark.run(num_repeats=num_repeats, wait_for_quotas=True)
 ```
+```{banner_small}
+:origin: benchmarks_run_benchmark_refined
+```
 
 ## Step 4: Export the Benchmark Data to a File
 
@@ -332,6 +339,10 @@ benchmarks.Benchmark(name="splishsplash-fluid-cube") \
             filename="benchmark.csv")
 ```
 
+```{banner_small}
+:origin: benchmarks_export_data
+```
+
 ## Bonus: Adding a New Machine for Comparison
 
 You may decide to test additional machines after completing the initial benchmark. For instance, let’s add the `n2-standard-32` machine to the existing benchmark and execute only this run.
@@ -366,3 +377,7 @@ benchmark = benchmarks.Benchmark(name="splishsplash-fluid-cube") \
 
 With this step, your benchmark analysis is complete, and you now have the tools 
 to continuously refine and expand your benchmarking experiments.
+
+```{banner_small}
+:origin: benchmarks_bonus_add_machine
+```

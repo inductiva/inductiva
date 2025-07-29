@@ -76,4 +76,6 @@ Go to https://console.inductiva.ai/tasks/iidkjkpk77yb79cq4w5qpgdq8 for more deta
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
 the core computation time of this simulation was approximately 5.2 seconds.
 
-It's that simple!
+```{banner_small}
+:origin: delft3d
+```
