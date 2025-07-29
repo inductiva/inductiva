@@ -49,3 +49,7 @@ simulation across a variety of Virtual Machine (VM) options and get actionable i
 wraps existing open-source software packages within layers that facilitate their
 execution across various cloud-based virtual machines and providers, transforming
 them into abstract computational tasks.
+
+```{banner_small}
+:origin: how_it_works_how_it_works
+```

@@ -91,6 +91,8 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
     os.chmod(apptainer_path, 0o777)
     apptainer_full_path = os.path.abspath(apptainer_path)
 
+    hostname = args.hostname or platform.uname().node
+
     task_runner_container = client.containers.run(
         image=constants.TASK_RUNNER_IMAGE,
         name="task-runner",
@@ -98,7 +100,7 @@ def launch_task_runner(args, fout: TextIO = sys.stdout):
             "USER_API_KEY": _api_key.get(),
             "API_URL": api_url,
             "MACHINE_GROUP_NAME": args.machine_group_name,
-            "HOST_NAME": args.hostname,
+            "HOST_NAME": hostname,
         },
         mounts=[
             docker.types.Mount(target="/executer-images",
@@ -156,7 +158,6 @@ def register(parser):
     subparser.add_argument("--hostname",
                            "-ho",
                            type=str,
-                           default=platform.uname().node,
                            help="Hostname of the Task-Runner.")
 
     subparser.add_argument("--detach",

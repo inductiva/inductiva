@@ -1400,3 +1400,7 @@ body.at-bottom #scrolltop {
 		margin-top: 8px;
 	}
 }
+
+section[id^="inductiva-"] p {
+  white-space: pre-wrap;
+}

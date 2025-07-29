@@ -131,3 +131,7 @@ installation:
 
 > **Note:** Replace `/path/to/python/Scripts` with the actual path to the
 `Scripts` folder on your system. The actual path can be seen in the warning message.
+
+```{banner_small}
+:origin: troubleshooting
+```

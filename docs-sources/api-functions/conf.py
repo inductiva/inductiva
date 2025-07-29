@@ -16,6 +16,7 @@ import sys
 from sphinxawesome_theme.postprocess import Icons
 
 sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 # -- Project information -----------------------------------------------------
 
@@ -49,7 +50,9 @@ extensions = [
     'sphinxcontrib.googleanalytics',
     'sphinxext.opengraph',
     'sphinx_sitemap',
-    'sphinx_reredirects'
+    'sphinx_reredirects',
+    'sphinx_argparse_cli',
+    'sphinx_argparse_cli_ext',
 ]
 
 # Enable automatic docstring discovery
@@ -124,7 +127,9 @@ shared_static_path = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "_shared_static"))
 html_static_path = ['_static', shared_static_path]
 
-html_css_files = ['css/custom.css', 'css/enable_sidebar_focus.css']
+html_css_files = [
+    'css/custom.css', 'css/banner.css', 'css/enable_sidebar_focus.css'
+]
 pygments_style = "monokai"
 
 html_js_files = [
@@ -161,3 +166,20 @@ googleanalytics_enabled = True
 language = 'en'
 version = 'local'
 html_baseurl = 'https://inductiva.ai/guides/api-functions'
+
+html_js_files = [
+    'banner_texts.js',
+    'env.js',
+    'discord.js',
+    'gtm_func.js',
+    'move_back_to_top.js',
+]
+
+sys.path.insert(0, shared_static_path)
+
+
+def setup(app):
+    from banner_directive import BannerDirective
+    app.add_directive("banner", BannerDirective)
+    from banner_small_directive import BannerSmallDirective
+    app.add_directive("banner_small", BannerSmallDirective)

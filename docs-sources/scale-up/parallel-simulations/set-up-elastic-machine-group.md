@@ -1,4 +1,4 @@
-# Set up an Elastic Machine Group
+# Set up and Manage an Elastic Machine Group
 
 The `ElasticMachineGroup`, similarly to the standard `MachineGroup`, is composed of 
 a group of homogeneous machines that work individually to run multiple simulations. 
@@ -35,8 +35,8 @@ elastic_machine_group.start()
 Once started, simulations can be submitted to the queue of the elastic machine group.
 
 To explore our elastic machine group, we will follow the example of 
-[running multiple simulations in parallel](./run-parallel_simulations.md), based on the 
-[templating mechanism](./templating.md)
+[running multiple simulations in parallel](../../../scale-up/parallel-simulations/run-parallel-simulations.md), based on the 
+[templating mechanism](../../../scale-up/parallel-simulations/templating.md)
 built in the Inductiva API, but now with a scalable infrastructure.
 
 ```python
@@ -80,11 +80,11 @@ the CLI commands to monitor the tasks and the resources.
 
 To track the active resources we use
 ```bash
-$ watch inductiva resources ls
+watch inductiva resources ls
 ```
 and for our last 5 tasks submitted, we tracked them with
 ```bash
-$ watch inductiva tasks list -n 5
+watch inductiva tasks list -n 5
 ```
 
 Right after launch, the elastic machine group starts with a single active machine
@@ -171,4 +171,8 @@ At the end, there will always be the number of `min_machines` active,
 therefore, don't forget to terminate your resources with:
 ```bash
 $ inductiva resources terminate --all -y
+```
+
+```{banner_small}
+:origin: set-up-elastic-machine-group
 ```
