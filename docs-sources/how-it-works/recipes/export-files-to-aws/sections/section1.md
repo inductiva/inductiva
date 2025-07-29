@@ -60,3 +60,7 @@ inductiva.storage.export(
 ```
 
 This uploads `<file_path>`, which can be a task output or a remote file, to your AWS S3 bucket.
+
+```{banner_small}
+:origin: recipes_aws_sec1
+```

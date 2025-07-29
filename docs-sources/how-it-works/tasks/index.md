@@ -10,7 +10,7 @@ Learn about _Tasks_ — the execution unit in the Inductiva API that represents 
 |---|---|---|
 | Learn about Tasks and how they are automatically generated when you submit simulations | Control a task execution flow with synchronous and asynchronous approaches | Understand the task's status state machine, from submission through completion |
 
-## Features
+## Why it's Useful
 ✓ **Automatic task creation** Every simulation submission creates a unique Task for managing that simulation. No manual setup required — just run your simulation and get instant task management.
 
 ✓ **Asynchronous execution** Submit multiple simulations without blocking your workflow. Tasks run in parallel while you continue developing, with full control over when to wait for completion.
@@ -20,3 +20,7 @@ Learn about _Tasks_ — the execution unit in the Inductiva API that represents 
 ✓ **Persistent task metadata** Store simulation parameters and custom data directly with your tasks. Eliminate external tracking systems by keeping all relevant information integrated.
 
 ✓ **Session independence** Recreate task objects across different sessions using task IDs. Continue monitoring and managing tasks even after restarting your development environment.
+
+```{banner}
+:origin: tasks
+```

@@ -158,3 +158,7 @@ accidental overwriting of files that may have been generated in a previous run.
 
 To enforce the deletion of existing files and creating new ones, you can set the 
 `overwrite` argument to `True` when calling the `renderdir` method.
+
+```{banner_small}
+:origin: how_it_works_templating
+```

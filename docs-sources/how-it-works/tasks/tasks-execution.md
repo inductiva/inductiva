@@ -119,3 +119,7 @@ Inductiva also provides [CLI methods](https://inductiva.ai/guides/api-functions/
 | `inductiva tasks top` | Show system processes on the task machine | `inductiva tasks top <task-id>` |
 | `inductiva tasks last-modified-file` | Show the most recently modified file | `inductiva tasks last-modified-file <task-id>` |
 | `inductiva logs` | Stream task logs in real-time | `inductiva logs <task-id>` |
+
+```{banner_small}
+:origin: tasks
+```

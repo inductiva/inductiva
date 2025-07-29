@@ -22,12 +22,11 @@ from typing_extensions import Annotated
 from inductiva.client.models.available_simulator_versions import AvailableSimulatorVersions
 from inductiva.client.models.bulk_simulator_operation import BulkSimulatorOperation
 from inductiva.client.models.bulk_simulator_response import BulkSimulatorResponse
-from inductiva.client.models.machine_type import MachineType
 from inductiva.client.models.providers import Providers
 from inductiva.client.models.simulator_create import SimulatorCreate
 from inductiva.client.models.simulator_response import SimulatorResponse
 from inductiva.client.models.simulator_update import SimulatorUpdate
-from inductiva.client.models.simulator_with_machine_types import SimulatorWithMachineTypes
+from inductiva.client.models.simulator_with_machine_types_paginated import SimulatorWithMachineTypesPaginated
 
 from inductiva.client.api_client import ApiClient, RequestSerialized
 from inductiva.client.api_response import ApiResponse
@@ -1037,6 +1036,11 @@ class SimulatorsApi:
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
         zones: Optional[List[StrictStr]] = None,
+        page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int,
+                                     Field(le=100, strict=True, ge=1)]] = None,
+        gpu_only: Optional[StrictBool] = None,
+        cpu_only: Optional[StrictBool] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1048,7 +1052,7 @@ class SimulatorsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> SimulatorWithMachineTypes:
+    ) -> SimulatorWithMachineTypesPaginated:
         """Get Simulator With Machine Types
 
         Get an available machine type for a particular simulator.
@@ -1073,6 +1077,14 @@ class SimulatorsApi:
         :type gpu_names: List[str]
         :param zones:
         :type zones: List[str]
+        :param page:
+        :type page: int
+        :param per_page:
+        :type per_page: int
+        :param gpu_only:
+        :type gpu_only: bool
+        :param cpu_only:
+        :type cpu_only: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1108,6 +1120,10 @@ class SimulatorsApi:
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
+            page=page,
+            per_page=per_page,
+            gpu_only=gpu_only,
+            cpu_only=cpu_only,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1115,7 +1131,7 @@ class SimulatorsApi:
             _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "SimulatorWithMachineTypes",
+            '200': "SimulatorWithMachineTypesPaginated",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
@@ -1144,6 +1160,11 @@ class SimulatorsApi:
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
         zones: Optional[List[StrictStr]] = None,
+        page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int,
+                                     Field(le=100, strict=True, ge=1)]] = None,
+        gpu_only: Optional[StrictBool] = None,
+        cpu_only: Optional[StrictBool] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1155,7 +1176,7 @@ class SimulatorsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[SimulatorWithMachineTypes]:
+    ) -> ApiResponse[SimulatorWithMachineTypesPaginated]:
         """Get Simulator With Machine Types
 
         Get an available machine type for a particular simulator.
@@ -1180,6 +1201,14 @@ class SimulatorsApi:
         :type gpu_names: List[str]
         :param zones:
         :type zones: List[str]
+        :param page:
+        :type page: int
+        :param per_page:
+        :type per_page: int
+        :param gpu_only:
+        :type gpu_only: bool
+        :param cpu_only:
+        :type cpu_only: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1215,6 +1244,10 @@ class SimulatorsApi:
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
+            page=page,
+            per_page=per_page,
+            gpu_only=gpu_only,
+            cpu_only=cpu_only,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1222,7 +1255,7 @@ class SimulatorsApi:
             _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "SimulatorWithMachineTypes",
+            '200': "SimulatorWithMachineTypesPaginated",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
@@ -1251,6 +1284,11 @@ class SimulatorsApi:
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
         zones: Optional[List[StrictStr]] = None,
+        page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int,
+                                     Field(le=100, strict=True, ge=1)]] = None,
+        gpu_only: Optional[StrictBool] = None,
+        cpu_only: Optional[StrictBool] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1287,6 +1325,14 @@ class SimulatorsApi:
         :type gpu_names: List[str]
         :param zones:
         :type zones: List[str]
+        :param page:
+        :type page: int
+        :param per_page:
+        :type per_page: int
+        :param gpu_only:
+        :type gpu_only: bool
+        :param cpu_only:
+        :type cpu_only: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1322,6 +1368,10 @@ class SimulatorsApi:
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
+            page=page,
+            per_page=per_page,
+            gpu_only=gpu_only,
+            cpu_only=cpu_only,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1329,7 +1379,7 @@ class SimulatorsApi:
             _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "SimulatorWithMachineTypes",
+            '200': "SimulatorWithMachineTypesPaginated",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
@@ -1348,6 +1398,10 @@ class SimulatorsApi:
         gpus_range,
         gpu_names,
         zones,
+        page,
+        per_page,
+        gpu_only,
+        cpu_only,
         provider_id,
         _request_auth,
         _content_type,
@@ -1416,6 +1470,22 @@ class SimulatorsApi:
 
             _query_params.append(('zones', zones))
 
+        if page is not None:
+
+            _query_params.append(('page', page))
+
+        if per_page is not None:
+
+            _query_params.append(('per_page', per_page))
+
+        if gpu_only is not None:
+
+            _query_params.append(('gpu_only', gpu_only))
+
+        if cpu_only is not None:
+
+            _query_params.append(('cpu_only', cpu_only))
+
         if provider_id is not None:
 
             _query_params.append(('provider_id', provider_id.value))
@@ -1463,6 +1533,11 @@ class SimulatorsApi:
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
         zones: Optional[List[StrictStr]] = None,
+        page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int,
+                                     Field(le=100, strict=True, ge=1)]] = None,
+        gpu_only: Optional[StrictBool] = None,
+        cpu_only: Optional[StrictBool] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1474,7 +1549,7 @@ class SimulatorsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> List[MachineType]:
+    ) -> SimulatorWithMachineTypesPaginated:
         """List All Machine Types
 
         List available machine types for the given provider and zone.
@@ -1497,6 +1572,14 @@ class SimulatorsApi:
         :type gpu_names: List[str]
         :param zones:
         :type zones: List[str]
+        :param page:
+        :type page: int
+        :param per_page:
+        :type per_page: int
+        :param gpu_only:
+        :type gpu_only: bool
+        :param cpu_only:
+        :type cpu_only: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1531,6 +1614,10 @@ class SimulatorsApi:
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
+            page=page,
+            per_page=per_page,
+            gpu_only=gpu_only,
+            cpu_only=cpu_only,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1538,7 +1625,7 @@ class SimulatorsApi:
             _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[MachineType]",
+            '200': "SimulatorWithMachineTypesPaginated",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
@@ -1566,6 +1653,11 @@ class SimulatorsApi:
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
         zones: Optional[List[StrictStr]] = None,
+        page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int,
+                                     Field(le=100, strict=True, ge=1)]] = None,
+        gpu_only: Optional[StrictBool] = None,
+        cpu_only: Optional[StrictBool] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1577,7 +1669,7 @@ class SimulatorsApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[List[MachineType]]:
+    ) -> ApiResponse[SimulatorWithMachineTypesPaginated]:
         """List All Machine Types
 
         List available machine types for the given provider and zone.
@@ -1600,6 +1692,14 @@ class SimulatorsApi:
         :type gpu_names: List[str]
         :param zones:
         :type zones: List[str]
+        :param page:
+        :type page: int
+        :param per_page:
+        :type per_page: int
+        :param gpu_only:
+        :type gpu_only: bool
+        :param cpu_only:
+        :type cpu_only: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1634,6 +1734,10 @@ class SimulatorsApi:
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
+            page=page,
+            per_page=per_page,
+            gpu_only=gpu_only,
+            cpu_only=cpu_only,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1641,7 +1745,7 @@ class SimulatorsApi:
             _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[MachineType]",
+            '200': "SimulatorWithMachineTypesPaginated",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
@@ -1669,6 +1773,11 @@ class SimulatorsApi:
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
         zones: Optional[List[StrictStr]] = None,
+        page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int,
+                                     Field(le=100, strict=True, ge=1)]] = None,
+        gpu_only: Optional[StrictBool] = None,
+        cpu_only: Optional[StrictBool] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1703,6 +1812,14 @@ class SimulatorsApi:
         :type gpu_names: List[str]
         :param zones:
         :type zones: List[str]
+        :param page:
+        :type page: int
+        :param per_page:
+        :type per_page: int
+        :param gpu_only:
+        :type gpu_only: bool
+        :param cpu_only:
+        :type cpu_only: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1737,6 +1854,10 @@ class SimulatorsApi:
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
+            page=page,
+            per_page=per_page,
+            gpu_only=gpu_only,
+            cpu_only=cpu_only,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1744,7 +1865,7 @@ class SimulatorsApi:
             _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "List[MachineType]",
+            '200': "SimulatorWithMachineTypesPaginated",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
@@ -1762,6 +1883,10 @@ class SimulatorsApi:
         gpus_range,
         gpu_names,
         zones,
+        page,
+        per_page,
+        gpu_only,
+        cpu_only,
         provider_id,
         _request_auth,
         _content_type,
@@ -1827,6 +1952,22 @@ class SimulatorsApi:
         if zones is not None:
 
             _query_params.append(('zones', zones))
+
+        if page is not None:
+
+            _query_params.append(('page', page))
+
+        if per_page is not None:
+
+            _query_params.append(('per_page', per_page))
+
+        if gpu_only is not None:
+
+            _query_params.append(('gpu_only', gpu_only))
+
+        if cpu_only is not None:
+
+            _query_params.append(('cpu_only', cpu_only))
 
         if provider_id is not None:
 

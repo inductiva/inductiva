@@ -11,10 +11,10 @@ high-performance computing environments, pre-generated meshes at multiple resolu
 reproducible simulations.
 
 In this tutorial, we'll walk through how to:
-- [Review the prerequisites for running the occDrivAerStaticMesh case](https://inductiva.ai/guides/openfoam/run-occdrivaerstaticmesh-case/sections/section1)
-- [Run the simulation on a single-machine](https://inductiva.ai/guides/openfoam/run-occdrivaerstaticmesh-case/sections/section2)
-- [Prepare the simulation for execution on an MPI cluster](https://inductiva.ai/guides/openfoam/run-occdrivaerstaticmesh-case/sections/section3)
-- [Scale the simulation across multiple machines](https://inductiva.ai/guides/openfoam/run-occdrivaerstaticmesh-case/sections/section4)
+- [Review the prerequisites for running the occDrivAerStaticMesh case](sections/section1)
+- [Run the simulation on a single-machine](sections/section2)
+- [Prepare the simulation for execution on an MPI cluster](sections/section3)
+- [Scale the simulation across multiple machines](sections/section4)
 
 This guide is divided into a few straightforward steps. Follow along to explore the performance and scalability of this simulation
 using the **Inductiva API**.

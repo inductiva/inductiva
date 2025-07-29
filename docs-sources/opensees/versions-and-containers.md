@@ -1,5 +1,10 @@
 # Versions and Containers 🛠️
 
+## About OpenSees
+[OpenSees](https://opensees.berkeley.edu) (Open System for Earthquake Engineering Simulation) is a software framework designed for the development of sequential, 
+parallel and grid-enabled finite element applications in earthquake engineering. It allows users to simulate the response of structural and 
+geotechnical systems subjected to earthquakes and other hazards using scripts written in either Tcl or Python.
+
 ## Supported Versions
 Inductiva stays up to date with the latest versions of OpenSees. Below is a list of the supported versions, along with their respective release dates:
 

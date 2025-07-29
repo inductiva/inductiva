@@ -178,7 +178,7 @@ One of the key advantages of using Inductiva is the ease with which you can scal
 more powerful machines with minimal changes to your code. Scaling up simply involves updating the 
 `machine_type` parameter when allocating the cloud machine.
 
-To explore detailed results, visit our [Benchmarks page](https://inductiva.ai/guides/cans/benchmarks).
+To explore detailed results, visit our [Benchmarks page](benchmarks).
 
 Stay tunned for more!
 

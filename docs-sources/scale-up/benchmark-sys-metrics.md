@@ -8,3 +8,7 @@ In short:
  ✅ Use system metrics afterward to refine and optimize.
 
 Both features give you clear, actionable data about how your workloads use compute resources — so you can choose the right machine, avoid waste, cut unnecessary costs, and get faster results without guesswork. In short: they help you optimize your spend and performance, every time you run a simulation.
+
+```{banner_small}
+:origin: scale_up_benchmarks_vs_system_metrics
+```

@@ -124,3 +124,6 @@ simulation!
 $ inductiva resources terminate --all
 ```
 
+```{banner_small}
+:origin: run-parallel-simulations-with-templating
+```
