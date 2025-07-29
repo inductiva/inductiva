@@ -1,9 +1,5 @@
 # Run a Benchmark
 
-Benchmarking helps you measure and compare the performance of different configurations, 
-like machine types or simulation settings. It’s an essential step to reduce 
-costs and speed up your simulations without losing accuracy.
-
 In this tutorial, we’ll show you how to use Inductiva’s API to run a benchmark. 
 We’ll use the [SPlisHSPlasH simulator](https://inductiva.ai/guides/splishsplash) 
 as an example, so you can follow along and learn the process step by step.
@@ -20,7 +16,6 @@ In this tutorial, you’ll learn how to:
 - Set up the benchmark.
 - Refine the code to reduce code redundancy and save benchmark costs.
 - Export the benchmark results.
-- Visualize and analyze results.
 
 Let’s dive in!
 
@@ -264,6 +259,14 @@ for machine_type in machine_types:
 
 **Note:** Reducing idle time too much may cause errors if the simulations cannot be submitted quickly enough. Adjust the value based on your setup.
 
+**4. Use Quotas Wisely**
+
+Consider enabling `wait_for_quotas=True` in `run()` to ensure your simulation runs without quota issues.
+```python
+# Handle resource quotas gracefully
+benchmark.run(num_repeats=3, wait_for_quotas=True)
+```
+
 Here is the final, optimized, and refactored version of the benchmark program:
 
 ```python
@@ -289,7 +292,7 @@ for machine_type in machine_types:
                                                 num_machines=num_repeats,
                                                 max_idle_time=max_idle_time))
 
-benchmark.run(num_repeats=num_repeats)
+benchmark.run(num_repeats=num_repeats, wait_for_quotas=True)
 ```
 ```{banner_small}
 :origin: benchmarks_run_benchmark_refined
@@ -338,49 +341,6 @@ benchmarks.Benchmark(name="splishsplash-fluid-cube") \
 
 ```{banner_small}
 :origin: benchmarks_export_data
-```
-
-## Step 5: Visualize the Benchmark Results in the Console
-
-Now that your benchmark has run, it's time to analyze the results and identify the best machine configuration
-based on computation time and cost.
-
-The [Inductiva Console](https://console-dev.inductiva.ai/dashboard) provides a powerful UI for inspecting benchmark
-performance. Here's how you can explore your results:
-
-### 1. Go to the Benchmarks section
-
-Click on the [Benchmarks](https://console.inductiva.ai/benchmarks) tab in the sidebar. You'll see a list of all benchmarks
-you've run over time.
-
-![List of Benchmarks](./_static/list-of-benchmarks.png)
-
-### 2. Open your specific benchmark
-
-Find and click on the benchmark you're interested in — in this case, [`splishsplash-fluid-cube`](https://console.inductiva.ai/benchmarks/splishsplash-fluid-cube?tab=realtime).
-This opens a page with real-time monitoring details, including overall progress, the list of tasks, and the machine
-groups involved in the benchmark.
-
-![Benchmark Real Time tab](./_static/benchmark-real-time.png)
-
-### 3. View the statistics
-
-Navigate to the [Statistics](https://console.inductiva.ai/benchmarks/splishsplash-fluid-cube?tab=statistics) tab.
-Here, you'll find summary insights such as the **fastest** and **cheapest** machine types, along with our 
-**recommended machine** that balances both speed and cost. You'll also see comparison plots showing: execution 
-**duration** per machine type, estimated **cost** per machine type and overall **recommendation score**.
-
-![Benchmark Statistics tab 1](./_static/benchmark-stats-1.gif)
-
-### 4. Explore the Cost vs Duration plot
-
-Scroll down to find the **"Cost vs Duration"** plot. This gives you a clear visual comparison of trade-offs between 
-execution time and price — making it easier to choose the ideal machine type for your use case.
-
-![Benchmark Statistics tab 2](./_static/benchmark-stats-2.gif)
-
-```{banner_small}
-:origin: benchmarks_vizualization
 ```
 
 ## Bonus: Adding a New Machine for Comparison
