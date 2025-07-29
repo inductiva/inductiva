@@ -102,6 +102,12 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         return (isinstance(node, nodes.section) and
                 (title := node.next_node(nodes.title)) and
                 "options" in title.astext().lower())
+    
+    @staticmethod
+    def is_arguments_section(node: nodes.Node) -> bool:
+        return (isinstance(node, nodes.section) and
+            (title := node.next_node(nodes.title)) and
+            "positional arguments" in title.astext().lower())
 
     @staticmethod
     def create_section(text: str) -> nodes.Node:
@@ -129,6 +135,24 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
             parent = section.parent
             index = parent.index(section)
             parent.insert(index + 1, new_section)
+
+    def shorten_titles(self, root: nodes.Node):
+
+        def _shorten_titles(condition, new_title):
+            for section in root.findall(condition):
+                title_node = section.next_node(nodes.title)
+                new_title_node = nodes.title(text=new_title)
+                title_node.parent.replace(title_node, new_title_node)
+
+        _shorten_titles(
+            SphinxArgParseCliExt.is_arguments_section,
+            "positional arguments",
+        )
+
+        _shorten_titles(
+            SphinxArgParseCliExt.is_options_section,
+            "options",
+        )
 
     @staticmethod
     def format_paragraph(text_node: nodes.Text):
@@ -160,6 +184,7 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
 
         self.insert_transitions(root)
         self.insert_examples_sections(root)
+        self.shorten_titles(root)
 
         formatters = [
             SphinxArgParseCliExt.format_paragraph,
