@@ -101,4 +101,6 @@ can seamlessly scale your OpenSees simulation.
 To run OpenSees scripts written in Python, all you need to do is change the `interface` parameter to `python` to match the
 file type of your OpenSeesPy use case. 
 
-It's that simple!
+```{banner_small}
+:origin: opensees
+```

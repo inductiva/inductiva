@@ -108,4 +108,6 @@ We’ve walked through the essential steps for setting up and running a WRF simu
 By following this guide, you should now have a clear understanding of how to configure and efficiently 
 run WRF simulations on Inductiva.
 
-Happy simulating! ⚡️
+```{banner_small}
+:origin: wrf
+```

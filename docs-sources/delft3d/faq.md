@@ -28,7 +28,7 @@ mpirun -np 16 $flowexedir/d_hydro.exe config_d_hydro.xml &
 $waveexedir/wave.exe r17.mdw 1
 ```
 
-For a detailed walkthrough of the setup and execution process, refer to the full [tutorial](https://inductiva.ai/guides/delft3d/flow-wave-coupling).
+For a detailed walkthrough of the setup and execution process, refer to the full [tutorial](flow-wave-coupling).
 
 <br>
 <br>

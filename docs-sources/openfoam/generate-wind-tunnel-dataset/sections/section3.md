@@ -53,12 +53,13 @@ The script below shows how we can now set the value of the `flowVelocity` parame
 ```python
 import inductiva
 
-# Allocate cloud machine
-cloud_machine = inductiva.resources.MachineGroup(
-   provider="GCP",
-   machine_type="c2d-highcpu-32",
-   spot=True
-)
+# Allocate cloud machine on Google Cloud Platform
+cloud_machine = inductiva.resources.MachineGroup( \
+    provider="GCP",
+    machine_type="c2d-highcpu-4",
+    # 1 thread per physical core
+    threads_per_core=1,
+    spot=True)
 
 wind_speed = 15
 

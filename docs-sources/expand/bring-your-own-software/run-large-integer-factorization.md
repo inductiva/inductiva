@@ -18,6 +18,10 @@ We’ll walk through:
 2.	Uploading it to Inductiva
 3.	Executing the factorization on cloud machines
 
+```{banner_small}
+:origin: run_large_integer_factorization
+```
+
 ## Building the Docker Image
 First, create a Dockerfile that installs `cado-nfs` and its dependencies:
 
@@ -200,9 +204,9 @@ In this guide, you learned how to use the Inductiva API to run arbitrary computa
 
 This demonstrates how easily custom workloads can be executed with Inductiva, unlocking access to powerful computational resources with minimal setup.
 
-
-
-
+```{banner_small}
+:origin: run_large_integer_factorization
+```
 
 
 

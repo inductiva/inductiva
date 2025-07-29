@@ -214,3 +214,6 @@ It is also possible to use a custom image, from a public Docker registry.
     :members:
     :show-inheritance:
     :undoc-members:
+
+.. banner_small::
+   :origin: pyclient-simulators

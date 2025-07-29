@@ -19,3 +19,6 @@ Tasks class
    :members:
    :show-inheritance:
    :undoc-members:
+
+.. banner_small::
+   :origin: pyclient-tasks

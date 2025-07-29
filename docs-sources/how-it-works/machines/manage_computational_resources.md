@@ -2,6 +2,8 @@
 
 Once you have created your resources, the Inductiva API provides various methods and tools for managing them. This guide covers everything from launching resources to monitoring costs and terminating them when you're done.
 
+For consistency, our examples will primarily use the [MachineGroup](computational_resources/machinegroup_class.md) class. However, these methods are universal and work identically for both [ElasticMachineGroup](computational_resources/elasticgroup_class.md) and [MPICluster](computational_resources/mpicluster_class.md) resources.
+
 ## Quick Start
 The typical workflow for managing computational resources follows three simple steps:
 1. **Start** resources when you need to run simulations
@@ -196,17 +198,9 @@ inductiva resources terminate --all
 
 All these are a blocking call that will only finish when the machines have terminated, in this way no computational resources are left up.
 
-## Advanced Features
-### Elastic Machine Groups
-
-See a more advanced tutorial on how to setup and manage Elastic Machine Groups to run parallel simulations [here](manage_resources/set-up-elastic-machine-group.md).
-
-### MPI Cluster
-See a more advanced tutorial on how to setup and manage MPI Clusters to run parallel simulations [here](manage_resources/set-up-mpi-cluster.md).
-
-### Automated Resource Monitoring
-
-Learn how Inductiva's background monitoring service automatically manages your resources to prevent waste and optimize costs [here](manage_resources/compute_monitoring.md).
+```{banner_small}
+:origin: manage_resources
+```
 
 ```{toctree}
 ---

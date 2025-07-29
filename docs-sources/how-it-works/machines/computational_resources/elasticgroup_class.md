@@ -62,3 +62,7 @@ registers the configuration on the API which can now be used to manage it furthe
 ## Managing the Elastic Machine Group
 
 Visit our [Manage Resources](../manage_computational_resources.md) guide to learn how to monitor and control your `ElasticMachineGroup` resources.
+
+```{banner_small}
+:origin: how_it_works_elastic_mg
+```

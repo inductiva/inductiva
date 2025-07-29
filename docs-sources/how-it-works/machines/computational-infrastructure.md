@@ -77,3 +77,7 @@ is transforming the landscape—and how it’s not always easy to find the best 
 for your job.
 
 With our [benchmarking tool](benchmarking.md), we make it easier to make smarter, cost-effective decisions for your workloads.
+
+```{banner_small}
+:origin: how_it_works_infra
+```

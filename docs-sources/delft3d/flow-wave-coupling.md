@@ -120,4 +120,8 @@ Estimated computation cost (US$): 0.0023 US$
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of 
 the simulation, the core computation time of this simulation was approximately 85.2 seconds.
 
-And that’s it — you’re now ready to run coupled FLOW-WAVE simulations using Delft3D on the cloud with Inductiva!
+And that’s it! You’re now ready to run coupled FLOW-WAVE simulations using Delft3D on the cloud with Inductiva!
+
+```{banner_small}
+:origin: delft3d
+```

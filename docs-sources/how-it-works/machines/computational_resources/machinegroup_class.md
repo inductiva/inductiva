@@ -55,3 +55,7 @@ to manage it further.
 ## Managing the Machine Group
 
 Visit our [Manage Resources](../manage_computational_resources.md) guide to learn how to monitor and control your `MachineGroup` resources.
+
+```{banner_small}
+:origin: how_it_works_mg_class
+```

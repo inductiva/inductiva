@@ -177,3 +177,7 @@ Whether you increase compute power or run many simulations at once, the Inductiv
 You're now equipped to integrate this workflow into larger pipelines, automate batch experiments, or develop research tools powered by Inductiva API.
 
 **Happy simulating!**
+
+```{banner_small}
+:origin: run-parallel-simulations
+```

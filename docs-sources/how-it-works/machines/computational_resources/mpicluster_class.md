@@ -51,3 +51,7 @@ the configuration on the API which can now be used to manage the cluster further
 ## Managing the MPI Cluster
 
 Visit our [Manage Resources](../manage_computational_resources.md) guide to learn how to monitor and control your `MPICluster` resources.
+
+```{banner_small}
+:origin: how_it_works_mpi_cluster
+```

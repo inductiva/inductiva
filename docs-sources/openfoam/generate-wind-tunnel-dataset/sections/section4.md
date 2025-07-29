@@ -19,8 +19,10 @@ project = inductiva.projects.Project("openfoam_dataset")
 # Allocate cloud machine
 cloud_machine = inductiva.resources.ElasticMachineGroup(
    provider="GCP",
-   machine_type="c2d-highcpu-32",
+   machine_type="c2d-highcpu-4",
    spot=True,
+   # 1 thread per physical core
+   threads_per_core=1,
    min_machines=1,
    max_machines=5)
 
@@ -170,3 +172,7 @@ and distributing simulations across inexpensive cloud machines, you can drastica
 computation time and streamline large-scale studies.
 
 With just a few lines of Python, you can effortlessly scale your OpenFOAM projects - saving time, optimising resources and accelerating your research. 🚀
+
+```{banner_small}
+:origin: openfoam
+```

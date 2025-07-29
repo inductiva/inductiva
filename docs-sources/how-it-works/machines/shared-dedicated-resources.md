@@ -90,15 +90,6 @@ task.wait()
 machine_group.terminate()
 ```
 
-## Next Steps
-
-Now that you understand the fundamentals of resources in the Inductiva API, explore these topics to deepen your knowledge:
-
-- **[Computational Infrastructure →](computational-infrastructure.md)** - Learn about the underlying infrastructure and available machine types
-- **[Benchmarking →](../intro/benchmarking.md)** - Discover how to optimize resource selection for your specific simulations
-- **[Cost Management →](../basics/how-much-does-it-cost.md)** - Understand all the underlying costs and how to optimize your simulation costs
-
-
 ```{toctree}
 ---
 caption: Resources

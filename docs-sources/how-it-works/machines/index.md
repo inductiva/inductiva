@@ -8,7 +8,7 @@ Learn about _Resources_ — the core entity in the Inductiva API that executes y
 |---|---|---|
 | Learn how to choose beteween the resources made available by our API, and understand when each option provides the best value for your specific use case | Monitor and control your resources with real-time status tracking, cost analysis, and lifecycle management through our Python API, CLI, or Web Console | Understand the diverse computational options available, from cloud machines to your own laptop, and how our API simplifies their access and orchestration |
 
-## Features
+## Why it's Useful
 ✓ **Launch resources instantly** Automatically allocate and configure compute infrastructure. No need to manually set up instances or manage infrastructure.
 
 ✓ **Scale dynamically** Scale your computational resources up or down based on your simulation demands. Handle everything from single simulations to thousands of parallel tasks.

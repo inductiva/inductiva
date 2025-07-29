@@ -1,92 +1,66 @@
-# resources
+# inductiva **resources** [\[subcommands\]](#subcommands) [\[flags\]](#flags)
+The `inductiva resources` command provides utilities for managing computational resources. It allows you to estimate costs, check available machine types, list active resources, and terminate them.
 
-## Overview
-The `inductiva resources` command provides utilities for managing computational resources. It allows users to estimate costs, check available machine types, list their active resources, and terminate them.
+````{eval-rst}
+.. seealso::
+   For complete API documentation, see the `Resources <https://inductiva.ai/guides/api-functions/api/inductiva.resources>`_ class documentation
+````
 
-## Usage
-```bash
-inductiva resources [-h] {cost,info,available,list} ...
-```
-
-## Options
-- `-h, --help`  
-  Show this help message and exit.
-
-## Available Subcommands
+## Subcommands
 ### `start`
 Start computational resources.
 
-#### Usage
 ```bash
 inductiva resources start
 ```
 
-### `cost`
-Estimate the cost of a machine in the cloud.
+### `cost` [\[flags\]](#flags-for-cost)
+Estimate the **hourly** cost of a machine or group of machines in the cloud.
 
-#### Usage
 ```bash
-inductiva resources cost
+inductiva resources cost <MACHINE_TYPE>
 ```
+
+Estimate the cost of using 4 spot machines of type **c2-standard-8**:
+
+```bash
+$ inductiva resources cost c2-standard-8 --spot -n 4
+Estimated total cost (per machine): 0.445 (0.111) $/h.
+```
+
+<h4 id="flags-for-cost">Flags</h4>
+
+**`--spot`** (default: `false`)
+
+Estimate the cost for a **spot instance** of the specified machine type.
+
+---
+
+**`--num-machines, -n`** (default: 1)
+
+Number of machines to include in the cost estimate.
+
+---
+
+**`--zone`** (default: `europe-west1-b`)
+
+Zone where the machine(s) will be launched. Pricing may vary by zone.
 
 ### `info`
 Print information related to a machine group.
 
-#### Usage
 ```bash
-inductiva resources info
+inductiva resources info <MACHINE_GROUP_NAME>
 ```
 
-### `available`
+### `available` [\[flags\]](#flags-for-available)
 List available machine types.
 
-#### Usage
 ```bash
 inductiva resources available
 ```
 
-### `list` (alias: `ls`)
-List currently active resources.
-
-#### Usage
-```bash
-inductiva resources list
-```
-
-or using the alias:
-
-```bash
-inductiva resources ls
-```
-
-### `terminate`
-Terminate resources.
-
-#### Usage
-```bash
-inductiva resources terminate
-```
-
-## Examples
-
-### Listing Available Machine Types
-```bash
-$ inductiva resources available
-
-MACHINE TYPE            VCPUS     GPUS                     MEMORY (GB)     PRICE/HOUR (USD)     ZONE
-c2-standard-4           4         n/a                      16              0.2297               europe-west1-b
-c2-standard-8           8         n/a                      32              0.4594               europe-west1-b
-c2-standard-16          16        n/a                      64              0.9188               europe-west1-b
-c2-standard-30          30        n/a                      120             1.72275              europe-west1-b
-c2-standard-60          60        n/a                      240             3.4455               europe-west1-b
-c2d-highcpu-2           2         n/a                      4               0.082538             europe-west1-b
-c2d-highcpu-4           4         n/a                      8               0.165076             europe-west1-b
-c2d-highcpu-8           8         n/a                      16              0.330152             europe-west1-b
-...
-```
-
-### Listing a specific machine Family
-This is how you list the machines of the c3d family.
+List the machines of the `c3d` family.
 
 ```bash
 $ inductiva resources available -f c3d
@@ -103,56 +77,79 @@ c3d-highcpu-360         360       n/a      708             14.80500774          
 ...
 ```
 
-### Estimating Machine Cost
+<h4 id="flags-for-available">Flags</h4>
 
-You can estimate the costs of the computational resources you 
-plan to use per hour. The CLI provides a cost estimation tool
-that considers the machine type, usage duration, and number of
-machines you wish to use.
+**`--family, -f`**
 
-Consider the following example, where you wish to estimate
-the cost of using f4 machines of type **c2-standard-8**:
+Filter available machine types by CPU family (e.g., `c3d`, etc.).
+Supports one or more values.
+
+---
+
+**`--provider, -p`** (default: `GCP`)
+
+Filter the available types by provider. Options:
+- `LOCAL`: list locally available machine types.
+- `GCP`: list machine types available in GCP
+
+### `list ls`
+List all active computational resources associated with your account.
+
+This subcommand provides a complete snapshot of your currently running resources, including details such as machine type, whether it's elastic or spot-based, the number of active machines, and pricing.
 
 ```bash
-$ inductiva resources cost c2-standard-8 --spot -n 4
-Estimated total cost (per machine): 0.445 (0.111) $/h.
+inductiva resources list
 ```
 
-### List Your Active Resources
-
-You can use the `list` subcommand to get an overview of your 
-active computational resources:
+or using the alias:
 
 ```bash
-$ inductiva resources list
-Active Resources:
-
-       NAME                                MACHINE TYPE         ELASTIC         TYPE           # MACHINES         DATA SIZE IN GB         SPOT         STARTED AT (UTC)
-       api-p3kun5wyta1hacstu4xk38ujr       c2-standard-8        False           mpi            2                  10                      False        08 Feb, 12:59:10
-       api-rdqprn82417bsd7id1qnac4c6       c2-standard-4        False           standard       16                 10                      False        08 Feb, 12:58:28
+inductiva resources ls
 ```
 
-### Terminate Resources
+> Note: No resources will be shown if none are currently active.
 
-Finally, you can terminate computational resources that are no longer needed
-using `terminate` subcommand. You can either choose a specific resource 
-by providing its name or terminate all the resources with the `--all` flag.
-All tasks running in the resources you are terminating will be immediately killed,
-no matter what stage they are in. 
-**Any of the steps require user confirmation before proceeding.** 
+Sample output:
 
-For example, you can choose to terminate all the resources:
+```sh
+$ inductiva resouces ls
+  Active Resources:
+
+ NAME                            MACHINE TYPE     ELASTIC     TYPE       # MACHINES     DATA SIZE IN GB     SPOT     CREATED AT (UTC)     IDLE TIME      MAX COST ($/HOUR)
+ api-sjv5giwarf49kt89f5em1z3rv   c4-highcpu-4     False       standard   0/1            10                  True     17/07, 20:59:32      None/0:03:00   0.689884
+```
+
+### `terminate` [\[flags\]](#flags-for-terminate)
+Terminate one or more active computational resources.
 
 ```bash
-$ inductiva resources terminate --all
-# The CLI always prompts for confirmation before terminating resources
-You are about to terminate ALL resources.
-Are you sure you want to proceed (y/[N])? y
-Terminating MPICluster(name="api-p3kun5wyta1hacstu4xk38ujr"). This may take a few minutes.
-MPI Cluster api-p3kun5wyta1hacstu4xk38ujr with c2-standard-8 x2 machines successfully terminated in 0:01:10.
-Terminating MachineGroup(name="api-rdqprn82417bsd7id1qnac4c6"). This may take a few minutes.
-Machine Group api-rdqprn82417bsd7id1qnac4c6 with c2-standard-4 machines successfully terminated in 0:01:18.
+inductiva resources terminate <MACHINE_GROUP_NAME> [<MACHINE_GROUP_NAME> ...]
+```
 
-## Additional Resources
-For more details, visit the [Inductiva API documentation](#).
+<h4 id="flags-for-terminate">Flags</h4>
 
+**`--yes, y`**
+
+Automatically answers **yes** to all confirmation prompts, allowing operations to proceed without interactive confirmation. Use with caution for irreversible actions.
+
+---
+
+**--all, -a**
+
+Terminates all resouces.
+
+## Flags
+### `-h, --help`
+
+Show help message and exit.
+
+## Need Help?
+Run the following command for more details:
+
+```sh
+inductiva resources --help
+```
+
+```{banner_small}
+:origin: cli-resources
+```
