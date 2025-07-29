@@ -112,13 +112,3 @@ hidden: true
 👀 Real-Time Monitoring & Conditional Auto Termination <recipes/real-time-simulation-monitoring>
 ```
 
-```{toctree}
----
-caption: Save Costs
-maxdepth: 2
-hidden: true
----
-
-💢 Minimize simulation data <save-costs/save_storage>
-
-```
