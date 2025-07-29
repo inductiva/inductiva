@@ -60,7 +60,6 @@ hidden: true
 
 intro/how_it_works
 intro/tasks
-intro/data_flow
 intro/benchmarking
 intro/configuring-simulators
 intro/projects
@@ -110,6 +109,17 @@ hidden: true
 🗑️ Clean Up Storage by Condition <recipes/storage-related/index>
 ⏰ Setting a Time-to-Live on Your Simulations <recipes/set-task-ttl/set-task-ttl>
 👀 Real-Time Monitoring & Conditional Auto Termination <recipes/real-time-simulation-monitoring>
+```
+
+```{toctree}
+---
+caption: Cloud Storage
+maxdepth: 2
+hidden: true
+---
+
+Minimize simulation data <cloud-storage/cloud-storage>
+
 ```
 
 ```{toctree}
