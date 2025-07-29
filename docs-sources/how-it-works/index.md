@@ -35,6 +35,7 @@ hidden: true
 📌 Pick a cloud machine for your simulation <get-started/pick-cloud-machine>
 ✈️ Start your first cloud machine with Inductiva <get-started/start-first-machine>
 🛠️ Troubleshoot installation <get-started/troubleshooting>
+🗑️ Uninstallation guide <get-started/uninstall_inductiva>
 
 ```
 
@@ -93,7 +94,6 @@ hidden: true
 💰 How much does a simulation cost in Inductiva? <basics/how-much-does-it-cost>
 🔒 Inductiva Quotas <basics/quotas>
 💥 How many cores can be used? <basics/how-many-cores>
-🗑️ Uninstallation guide <basics/uninstall_inductiva>
 
 ```
 
