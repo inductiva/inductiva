@@ -54,7 +54,18 @@ Reuse Files Across Multiple Simulations <reuse-files/reuse-files>
 
 ```{toctree}
 ---
-caption: Benchmark
+caption: Generate Dataset
+maxdepth: 3
+hidden: true
+---
+
+🧪 Generate a Dataset <generate-dataset/generate-dataset>
+
+```
+
+```{toctree}
+---
+caption: Benchmarks
 maxdepth: 2
 hidden: true
 ---
