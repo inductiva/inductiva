@@ -386,6 +386,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.add_run"><code class="docutils literal notranslate"><span class="pre">Benchmark.add_run()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.add_task"><code class="docutils literal notranslate"><span class="pre">Benchmark.add_task()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.created_at"><code class="docutils literal notranslate"><span class="pre">Benchmark.created_at</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.delete"><code class="docutils literal notranslate"><span class="pre">Benchmark.delete()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.download_outputs"><code class="docutils literal notranslate"><span class="pre">Benchmark.download_outputs()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.estimated_computation_cost"><code class="docutils literal notranslate"><span class="pre">Benchmark.estimated_computation_cost</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.export"><code class="docutils literal notranslate"><span class="pre">Benchmark.export()</span></code></a></li>
@@ -483,6 +484,14 @@ will overwrite any previously set parameters.</p></li>
 <dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.created_at">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">created_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.created_at" title="Link to this definition">#</a></dt>
 <dd><p>Returns the creation date and time of the project.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.benchmarks.benchmark.Benchmark.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.benchmarks.benchmark.Benchmark.delete" title="Link to this definition">#</a></dt>
+<dd><p>Delete a project on the backend.</p>
+<p>This method does not delete the project tasks, only the project itself.
+The tasks will be moved to the “default” project.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -751,6 +760,7 @@ should be included in the benchmarking results.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.add_run"><code class="docutils literal notranslate"><span class="pre">Benchmark.add_run()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.add_task"><code class="docutils literal notranslate"><span class="pre">Benchmark.add_task()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.created_at"><code class="docutils literal notranslate"><span class="pre">Benchmark.created_at</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.delete"><code class="docutils literal notranslate"><span class="pre">Benchmark.delete()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.download_outputs"><code class="docutils literal notranslate"><span class="pre">Benchmark.download_outputs()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.estimated_computation_cost"><code class="docutils literal notranslate"><span class="pre">Benchmark.estimated_computation_cost</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.benchmarks.benchmark.Benchmark.export"><code class="docutils literal notranslate"><span class="pre">Benchmark.export()</span></code></a></li>

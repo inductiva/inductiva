@@ -385,6 +385,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.__init__"><code class="docutils literal notranslate"><span class="pre">Project.__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.add_task"><code class="docutils literal notranslate"><span class="pre">Project.add_task()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.created_at"><code class="docutils literal notranslate"><span class="pre">Project.created_at</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.delete"><code class="docutils literal notranslate"><span class="pre">Project.delete()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.download_outputs"><code class="docutils literal notranslate"><span class="pre">Project.download_outputs()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.estimated_computation_cost"><code class="docutils literal notranslate"><span class="pre">Project.estimated_computation_cost</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.get_tasks"><code class="docutils literal notranslate"><span class="pre">Project.get_tasks()</span></code></a></li>
@@ -498,6 +499,14 @@ status.</p></li>
 <dt class="sig sig-object py" id="inductiva.projects.project.Project.created_at">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">created_at</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#inductiva.projects.project.Project.created_at" title="Link to this definition">#</a></dt>
 <dd><p>Returns the creation date and time of the project.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="inductiva.projects.project.Project.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inductiva.projects.project.Project.delete" title="Link to this definition">#</a></dt>
+<dd><p>Delete a project on the backend.</p>
+<p>This method does not delete the project tasks, only the project itself.
+The tasks will be moved to the “default” project.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -632,6 +641,7 @@ with that status.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.__init__"><code class="docutils literal notranslate"><span class="pre">Project.__init__()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.add_task"><code class="docutils literal notranslate"><span class="pre">Project.add_task()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.created_at"><code class="docutils literal notranslate"><span class="pre">Project.created_at</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.delete"><code class="docutils literal notranslate"><span class="pre">Project.delete()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.download_outputs"><code class="docutils literal notranslate"><span class="pre">Project.download_outputs()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.estimated_computation_cost"><code class="docutils literal notranslate"><span class="pre">Project.estimated_computation_cost</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva.projects.project.Project.get_tasks"><code class="docutils literal notranslate"><span class="pre">Project.get_tasks()</span></code></a></li>
