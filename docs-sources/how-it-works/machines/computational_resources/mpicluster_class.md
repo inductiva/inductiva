@@ -8,8 +8,8 @@ With the `MPICluster` class, you can create a dedicated MPI cluster on-demand th
 is configured automatically to run your simulations in a distributed manner across
 the machines.
 
-To instantiate an `MPICluster` object the following parameters can be configured:
-
+## Instantiating an `MPICluster` object
+The following parameters can be configured:
 - the `machine_type` defines the type of CPU used for each machine. This parameter
 follows the naming convention set by
 [Google Cloud](https://cloud.google.com/compute/docs/machine-types),
@@ -19,8 +19,9 @@ CPU series, a suffix that sets the number of
 per machine and the middle word refers to the level of RAM per vCPU. In the example,
 `c2` refers to an Intel Xeon Scalable processor of 2nd generation, `standard`
 means 4 GB of RAM per vCPU and will contain `16` vCPUs.
-Currently, this is the
-[list of available machine types available via the API](https://tutorials.staging.inductiva.ai/intro_to_api/computational-infrastructure.html#available-computational-resources)
+Check out the 
+[complete machine catalog available via the API](https://inductiva.ai/machines).
+- the `zone` allows to select the zone where the machines will be launched. By default, machines are launched in the `europe-west1-b` zone.
 - the `num_machines` sets the number of machines available in the cluster.
 While the computational resource is active, these machines will be reserved
 for the user.
@@ -28,7 +29,7 @@ for the user.
 the head node and shared with the worker nodes. This partition is used to store
 the input and output files of the simulations.
 - the `max_idle_time` determines the time a machine group can remain idle (without
-receiving any task) before it is terminated.
+receiving any task) before it is terminated. By default, this value is _3 minutes_.
 - the `auto_terminate_ts` defines the moment in time in which the resource will
 be automatically terminated, even if there are tasks still running.
 
@@ -49,32 +50,7 @@ the configuration on the API which can now be used to manage the cluster further
 
 ## Managing the MPI Cluster
 
-With your `mpi_cluster` object ready, starting the cluster is as simple as calling `mpi_cluster.start()`.
-
-Within a few minutes, the machines will be set up and ready to collaborate
-on running simulations. At any moment, you can check an estimate of the price
-per hour of the cluster with `mpi_cluster.estimate_cloud_cost()` and when you
-have finished you can terminate it with `mpi_cluster.terminate()`. Running
-simulations will be killed and from this point, the `mpi_cluster` object cannot
-be re-used.
-
-To simplify the workflow, the last two functions can also be performed via the CLI.
-
-First, you can check the cost of the cluster by selecting the machine type and the
-number of machines you wish to use:
-
-```bash
-$ inductiva resources cost c2-standard-4 -n 4
-Estimated total cost (per machine): 0.919 (0.230) $/h.
-```
-
-When you don't need the MPI cluster anymore, you can easily kill it with the name:
-
-```bash
-$ inductiva resources terminate api-agn23rtnv0qnfn03nv93nc
-```
-
-MPI cluster on demand without any hassle.
+Visit our [Manage Resources](../manage_computational_resources.md) guide to learn how to monitor and control your `MPICluster` resources.
 
 ```{banner_small}
 :origin: how_it_works_mpi_cluster

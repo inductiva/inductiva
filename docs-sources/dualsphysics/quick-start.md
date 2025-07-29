@@ -82,7 +82,7 @@ For larger or more compute-intensive simulations, consider adjusting the `machin
 a more powerful GPU machine. You can explore the full range of available 
 machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other DualSPHysics simulations, replace `input_dir` with the

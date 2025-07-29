@@ -18,7 +18,7 @@ For detailed guidance on when to use each interface and how they work together, 
 | [`task-runner`](task-runner.md)          | --                     | [BYOH Guide](https://inductiva.ai/guides/expand/use-local-task-runner/index)          |
 | [`projects`](projects.md)           | [Projects API](https://inductiva.ai/guides/api-functions/api/inductiva.projects)                        | [Projects Guide](https://inductiva.ai/guides/scale-up/projects/index)       |
 | [`storage`](storage.md)            | [Storage API](https://inductiva.ai/guides/api-functions/api/inductiva.storage)                          | [Storage Guide](https://inductiva.ai/guides/how-it-works/intro/data_flow)            |
-| [`resources`](resources.md)          | [Resources API](https://inductiva.ai/guides/api-functions/api/inductiva.resources)                      | [Resouces Guide](https://inductiva.ai/guides/how-it-works/intro/shared_dedicated_resources)          |
+| [`resources`](resources.md)          | [Resources API](https://inductiva.ai/guides/api-functions/api/inductiva.resources)                      | [Resouces Guide](https://inductiva.ai/guides/how-it-works/machines/index)          |
 | [`simulators`](simulators.md)               | [Simulators API](https://inductiva.ai/guides/api-functions/api/inductiva.simulators)      | [Simulators Guide](../../how-it-works/simulators/index.md)  |
 | [`containers`](containers.md)         | --  | [BYOS Guide](https://inductiva.ai/guides/expand/bring-your-own-software/index) |
 
