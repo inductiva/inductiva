@@ -110,14 +110,16 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
             "positional arguments" in title.astext().lower())
 
     @staticmethod
-    def create_section(text: str) -> nodes.Node:
+    def create_section(parser: argparse.ArgumentParser) -> nodes.Node:
+        text = parser.epilog
         if text.startswith("examples:"):
             text = text.removeprefix("examples:")
         text = textwrap.dedent(text)
 
         code_block = nodes.literal_block(text, text, language="bash")
 
-        section = nodes.section(ids=["examples-section"])
+        reference = parser.prog.replace(" ", "-") + "-examples"
+        section = nodes.section(ids=[reference])
         section += nodes.title(text="Examples")
         section += code_block
 
@@ -127,11 +129,12 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         for section in root.findall(SphinxArgParseCliExt.is_options_section):
             title = section.next_node(nodes.title).astext()
             command = title.removeprefix("inductiva ").removesuffix(" options")
+            
             parser = get_parser(command)
             if not parser.epilog:
                 continue
 
-            new_section = SphinxArgParseCliExt.create_section(parser.epilog)
+            new_section = SphinxArgParseCliExt.create_section(parser)
             parent = section.parent
             index = parent.index(section)
             parent.insert(index + 1, new_section)
@@ -146,12 +149,12 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
 
         _shorten_titles(
             SphinxArgParseCliExt.is_arguments_section,
-            "positional arguments",
+            "Positional Arguments",
         )
 
         _shorten_titles(
             SphinxArgParseCliExt.is_options_section,
-            "options",
+            "Options",
         )
 
     @staticmethod
