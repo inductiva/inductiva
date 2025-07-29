@@ -49,5 +49,6 @@ auto-cli/resources
 auto-cli/simulators
 auto-cli/storage
 auto-cli/task-runner
+auto-cli/tasks
 auto-cli/user
 ```
