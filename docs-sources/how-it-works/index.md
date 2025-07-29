@@ -21,7 +21,7 @@ hidden: true
 
 Overview <building-blocks/index>
 building-blocks/interfaces
-building-blocks/configuring-simulators.md
+building-blocks/configuring-simulators
 
 ```
 
@@ -61,7 +61,7 @@ hidden: true
 ---
 Overview <machines/index>
 machines/shared-dedicated-resources
-machines/manage_computational_resources.md
+machines/manage_computational_resources
 machines/computational-infrastructure
 machines/spot-machines
 ```
