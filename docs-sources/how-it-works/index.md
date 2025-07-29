@@ -80,6 +80,7 @@ hidden: true
 📤 Export your files to AWS S3 <recipes/export-files-to-aws/index>
 🧪 Generate a Dataset <recipes/generate-dataset>
 ⏰ Setting a Time-to-Live on Your Simulations <recipes/set-task-ttl/set-task-ttl>
+👀 Real-Time Monitoring & Conditional Auto Termination <recipes/real-time-simulation-monitoring>
 ```
 
 ```{toctree}
