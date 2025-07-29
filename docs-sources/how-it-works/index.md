@@ -19,13 +19,15 @@ maxdepth: 2
 hidden: true
 ---
 
-building-blocks/index
+Overview <building-blocks/index>
+building-blocks/interfaces
+building-blocks/configuring-simulators.md
 
 ```
 
 ```{toctree}
 ---
-caption: Get Started with Inductiva 
+caption: Get Started  
 maxdepth: 3
 hidden: true
 ---
@@ -61,6 +63,7 @@ hidden: true
 
 intro/how_it_works
 intro/tasks
+intro/data_flow
 intro/benchmarking
 intro/configuring-simulators
 intro/projects
