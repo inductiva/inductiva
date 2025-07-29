@@ -56,7 +56,7 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         self,
         name: str,
         arguments: list[str],
-        options: dict[str, str | None],
+        options: dict[str, Optional[str]],
         content,
         lineno: int,
         content_offset: int,
@@ -68,7 +68,7 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         func_name = command.replace(" ", "_") + "_parser"
         wrapper = get_parser_wrapper(command)
 
-        import sphinx_argparse_cli_ext # pylint: disable=import-outside-toplevel
+        import sphinx_argparse_cli_ext  # pylint: disable=import-outside-toplevel
         setattr(sphinx_argparse_cli_ext, func_name, wrapper)
 
         options["module"] = __name__
@@ -97,11 +97,13 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
             index = parent.index(section)
             parent.insert(index + 1, nodes.transition())
 
+    @staticmethod
     def is_options_section(node: nodes.Node) -> bool:
         return (isinstance(node, nodes.section) and
                 (title := node.next_node(nodes.title)) and
                 "options" in title.astext().lower())
 
+    @staticmethod
     def create_section(text: str) -> nodes.Node:
         if text.startswith("examples:"):
             text = text.removeprefix("examples:")
@@ -128,11 +130,13 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
             index = parent.index(section)
             parent.insert(index + 1, new_section)
 
+    @staticmethod
     def format_paragraph(text_node: nodes.Text):
         text = text_node.astext()
         new_text = SphinxArgParseCliExt.RE_JOIN_LINES.sub(" ", text)
         text_node.parent.replace(text_node, nodes.Text(new_text))
 
+    @staticmethod
     def format_inline_code(text_node: nodes.Text):
         text = text_node.astext()
         parts = SphinxArgParseCliExt.RE_INLINE_CODE.split(text)

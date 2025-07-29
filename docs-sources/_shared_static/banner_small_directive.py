@@ -10,6 +10,7 @@ class BannerSmallDirective(Directive):
         'origin': str,
     }
 
+    @staticmethod
     def html(origin: str) -> nodes.Node:
         # pylint: disable=line-too-long
         html = f'''
