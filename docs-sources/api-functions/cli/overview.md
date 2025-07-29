@@ -16,7 +16,7 @@ For detailed guidance on when to use each interface and how they work together, 
 | [`user`](user.md)               | [Users API](https://inductiva.ai/guides/api-functions/api/inductiva.users)                              | --        |
 | [`tasks`](tasks.md)              | [Tasks API](https://inductiva.ai/guides/api-functions/api/inductiva.tasks)                              | [Tasks Guide](https://inductiva.ai/guides/how-it-works/intro/tasks)                |
 | [`task-runner`](task-runner.md)          | --                     | [BYOH Guide](https://inductiva.ai/guides/expand/use-local-task-runner/index)          |
-| [`projects`](projects.md)           | [Projects API](https://inductiva.ai/guides/api-functions/api/inductiva.projects)                        | [Projects Guide](https://inductiva.ai/guides/how-it-works/intro/projects)       |
+| [`projects`](projects.md)           | [Projects API](https://inductiva.ai/guides/api-functions/api/inductiva.projects)                        | [Projects Guide](https://inductiva.ai/guides/scale-up/projects/index)       |
 | [`storage`](storage.md)            | [Storage API](https://inductiva.ai/guides/api-functions/api/inductiva.storage)                          | [Storage Guide](https://inductiva.ai/guides/how-it-works/intro/data_flow)            |
 | [`resources`](resources.md)          | [Resources API](https://inductiva.ai/guides/api-functions/api/inductiva.resources)                      | [Resouces Guide](https://inductiva.ai/guides/how-it-works/machines/index)          |
 | [`simulators`](simulators.md)               | [Simulators API](https://inductiva.ai/guides/api-functions/api/inductiva.simulators)      | [Simulators Guide](../../how-it-works/simulators/index.md)  |
