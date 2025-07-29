@@ -1404,3 +1404,24 @@ body.at-bottom #scrolltop {
 section[id^="inductiva-"] p {
   white-space: pre-wrap;
 }
+
+#banner_list_ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  list-style: disc;
+  margin-top: 10px;
+  padding: 0;
+  color: var(--cta-container-text-color);
+  font-size: 14px;
+}
+
+.banner_list_li {
+  white-space: nowrap;
+}
+
+#banner_list_ul li::marker {
+  color: var(--purple-color); /* change bullet color */
+}
+

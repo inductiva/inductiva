@@ -19,6 +19,11 @@ class BannerSmallDirective(Directive):
                     ...
                 </div>
                 <button  onclick="window.open('https://console.inductiva.ai/api/register?utm_source=guide_{origin}', '_blank')" target="_blank" class="cta-button" id="login-btn-small">...</button>
+                <ul id="banner_list_ul">
+                    <li id="banner_list_li">Start for free</li>
+                    <li id="banner_list_li">No subscription</li>
+                    <li id="banner_list_li">No credit card needed</li>
+                </ul>
             </div>
             '''
         return nodes.raw('', html, format='html')
