@@ -10,9 +10,8 @@ class BannerSmallDirective(Directive):
         'origin': str,
     }
 
-    def run(self):
-        origin = self.options.get('origin', '')
-
+    @staticmethod
+    def html(origin: str) -> nodes.Node:
         # pylint: disable=line-too-long
         html = f'''
             <div class="cta-bar">
@@ -22,4 +21,8 @@ class BannerSmallDirective(Directive):
                 <button  onclick="window.open('https://console.inductiva.ai/api/register?utm_source=guide_{origin}', '_blank')" target="_blank" class="cta-button" id="login-btn-small">...</button>
             </div>
             '''
-        return [nodes.raw('', html, format='html')]
+        return nodes.raw('', html, format='html')
+
+    def run(self):
+        origin = self.options.get('origin', '')
+        return [BannerSmallDirective.html(origin)]

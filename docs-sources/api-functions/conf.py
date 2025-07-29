@@ -16,6 +16,7 @@ import sys
 from sphinxawesome_theme.postprocess import Icons
 
 sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 # -- Project information -----------------------------------------------------
 
@@ -49,7 +50,9 @@ extensions = [
     'sphinxcontrib.googleanalytics',
     'sphinxext.opengraph',
     'sphinx_sitemap',
-    'sphinx_reredirects'
+    'sphinx_reredirects',
+    'sphinx_argparse_cli',
+    'sphinx_argparse_cli_ext',
 ]
 
 # Enable automatic docstring discovery

@@ -2,6 +2,7 @@
 import sys
 
 import argparse
+import textwrap
 import inductiva
 from inductiva.tasks.methods import get_all
 from inductiva.utils.input_functions import user_confirmation_prompt
@@ -70,13 +71,17 @@ def register(parser):
                                   help="Kill running tasks.",
                                   formatter_class=argparse.RawTextHelpFormatter)
 
-    subparser.description = (
-        "The `inductiva tasks kill` command terminates specified tasks "
-        "on the platform.\n"
-        "You can terminate multiple tasks by passive multiple ids.\n"
-        "To confirm termination without prompt, use the '-y' or '--yes' "
-        "option.\nIf you provide '-w' or '--wait-timeout', the system "
-        "does not confirm if the kill command was successful\n")
+    subparser.description = textwrap.dedent("""\
+        The `inductiva tasks kill` command terminates the specified tasks
+        on the platform. You can terminate multiple tasks by passing multiple
+        task IDs. To confirm termination without a prompt, use the `-y`
+        or `--yes` option. If you provide `-w` or `--wait-timeout`, the system
+        does not confirm whether the termination was successful.
+
+        Note: The `inductiva tasks kill` command does not stop the machine
+        where the task is running. It only terminates the task itself, leaving
+        the computational resources active and available to run other tasks.
+    """)
 
     subparser.add_argument("id",
                            type=str,
@@ -96,5 +101,14 @@ def register(parser):
     subparser.add_argument("--all",
                            action="store_true",
                            help="Kill all running tasks.")
+
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            $ inductiva tasks kill cmvsc9qhz5iy86f6pef8uyxqt
+            You are about to kill the following tasks:
+                - cmvsc9qhz5iy86f6pef8uyxqt 
+            Are you sure you want to proceed (y/[N])? y
+            Successfully sent kill request for task cmvsc9qhz5iy86f6pef8uyxqt.
+    """)
 
     subparser.set_defaults(func=kill_task)

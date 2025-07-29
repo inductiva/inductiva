@@ -6,9 +6,18 @@ import requests
 import getpass
 import pkgutil
 import os
+import textwrap
 
 import inductiva
 from inductiva import constants, users, utils
+
+INDUCTIVA_ART = \
+r"""     ___  _   _  ____   _   _   ____  _____  ___ __     __ _
+    |_ _|| \ | ||  _ \ | | | | / ___||_   _||_ _|\ \   / // \
+     | | |  \| || | | || | | || |      | |   | |  \ \ / // _ \
+     | | | |\  || |_| || |_| || |___   | |   | |   \ V // ___ \
+    |___||_| \_||____/  \___/  \____|  |_|  |___|   \_//_/   \_\
+"""
 
 
 def download_example_scripts() -> List[str]:
@@ -48,13 +57,8 @@ def login(args):
     """Prompts the user to enter their API Key and stores it securely."""
 
     # pylint: disable=trailing-whitespace,line-too-long
-    inductiva_art = r"""     ___  _   _  ____   _   _   ____  _____  ___ __     __ _
-    |_ _|| \ | ||  _ \ | | | | / ___||_   _||_ _|\ \   / // \
-     | | |  \| || | | || | | || |      | |   | |  \ \ / // _ \
-     | | | |\  || |_| || |_| || |___   | |   | |   \ V // ___ \
-    |___||_| \_||____/  \___/  \____|  |_|  |___|   \_//_/   \_\
-    """
-    print(inductiva_art)
+
+    print(INDUCTIVA_ART)
     if os.path.exists(constants.API_KEY_FILE_PATH):
         print(
             "    You are already logged in. Run `inductiva auth logout` if you "
@@ -108,13 +112,35 @@ def register(parser):
                                   help="Login using Inductiva API Key.",
                                   formatter_class=argparse.RawTextHelpFormatter)
 
-    subparser.description = (
-        "The `inductiva login` command allows you to log in using your key.\n"
-        "You can obtain your API Key from your account at "
-        "https://console.inductiva.ai/account.\n")
+    subparser.description = textwrap.dedent("""\
+        The `inductiva auth login` command logs you in using your API key.
+
+        You will be prompted to enter your API key, which you can find in
+        your account on the Web Console at:
+            https://console.inductiva.ai/account
+
+        Once authenticated, your credentials will be securely stored locally,
+        so you will not need to log in again for future sessions.
+    """)
 
     subparser.add_argument("--private",
                            action="store_true",
                            help="Hide API Key.")
+
+    subparser.epilog = textwrap.dedent(r"""
+        examples:
+            $ inductiva auth login
+                 ___  _   _  ____   _   _   ____  _____  ___ __     __ _
+                |_ _|| \ | ||  _ \ | | | | / ___||_   _||_ _|\ \   / // \\
+                 | | |  \| || | | || | | || |      | |   | |  \ \ / // _ \\
+                 | | | |\  || |_| || |_| || |___   | |   | |   \ V // ___ \\
+                |___||_| \_||____/  \___/  \____|  |_|  |___|   \_//_/   \_\\
+
+                To log in, you need an API Key. You can obtain it from your 
+                account at https://console.inductiva.ai/account.
+            Please paste your API Key here: 0123456789
+            
+            ■ Welcome User!
+    """)
 
     subparser.set_defaults(func=login)

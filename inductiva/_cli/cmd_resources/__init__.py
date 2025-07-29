@@ -17,8 +17,8 @@ def register(root_parser):
         "The `inductiva resources` command provides utilities "
         "for managing computational resources.\nIt allows you "
         "to show estimated costs of resources, "
-        "show available machine types, list current resources\n"
-        " being used, and terminate resources.\n")
+        "show available machine types, list current active resources,\n"
+        "and terminate resources.\n")
 
     utils.show_help_msg(parser)
 

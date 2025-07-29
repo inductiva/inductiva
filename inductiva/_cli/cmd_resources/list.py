@@ -1,5 +1,6 @@
 """CLI commands for listing both the active and available machine groups."""
 
+import textwrap
 from typing import TextIO
 import argparse
 import sys
@@ -187,11 +188,53 @@ def register(parser):
                            type=str,
                            help="Filter the available types by CPU series.")
 
-    subparser.description = (
-        "The `inductiva available` command provides a utility for listing the\n"
-        "available machine types by provider (default: gcp) and CPU series.\n"
-        "The list includes a description of the memory types and vCPUs "
-        "available.\n\n")
+    subparser.description = textwrap.dedent("""\
+        The `inductiva resources available` command provides a utility for
+        listing the available machine types by provider (default: `GCP`) and
+        CPU series. The list includes a description of the memory types and
+        vCPUs available.
+    """)
+
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            # List all available machine types
+            $ inductiva resources available
+
+            MACHINE TYPE            VCPUS     GPUS                     MEMORY (GB)     PRICE/HOUR (USD)     ZONE
+            a2-highgpu-1g           12        1 x NVIDIA A100 (40gb)   85.0            2.353126             us-central1-a
+            a2-highgpu-1g           12        1 x NVIDIA A100 (40gb)   85.0            3.747972             europe-west4-b
+            
+            a2-highgpu-2g           24        2 x NVIDIA A100 (40gb)   170.0           4.706252             us-central1-a
+            a2-highgpu-2g           24        2 x NVIDIA A100 (40gb)   170.0           7.495944             europe-west4-b
+            
+            a2-highgpu-4g           48        4 x NVIDIA A100 (40gb)   340.0           9.412504             us-central1-a
+            a2-highgpu-4g           48        4 x NVIDIA A100 (40gb)   340.0           14.991888            europe-west4-b
+            
+            a2-highgpu-8g           96        8 x NVIDIA A100 (40gb)   680.0           18.825008            us-central1-a
+            a2-highgpu-8g           96        8 x NVIDIA A100 (40gb)   680.0           29.983776            europe-west4-b
+            ...
+            
+            # List the available machine types of the c3d family
+            $ inductiva resources available -f c3d
+
+            MACHINE TYPE            VCPUS     GPUS     MEMORY (GB)     PRICE/HOUR (USD)     ZONE
+            c3d-highcpu-4           4         n/a      8.0             0.16508132           europe-west1-b
+            
+            c3d-highcpu-8           8         n/a      16.0            0.33016264           europe-west1-b
+            
+            c3d-highcpu-16          16        n/a      32.0            0.66032528           europe-west1-b
+            
+            c3d-highcpu-30          30        n/a      59.0            1.233750645          europe-west1-b
+            
+            c3d-highcpu-60          60        n/a      118.0           2.46750129           europe-west1-b
+            
+            c3d-highcpu-90          90        n/a      177.0           3.701251935          europe-west1-b
+            
+            c3d-highcpu-180         180       n/a      354.0           7.40250387           europe-west1-b
+            
+            c3d-highcpu-360         360       n/a      708.0           14.80500774          europe-west1-b
+            ...
+    """)
 
     subparser.set_defaults(func=list_machine_types_available)
 
@@ -207,4 +250,15 @@ def register(parser):
         "of your active computational resources.\nFrom machine type "
         "to start time, it gives you a comprehensive overview of "
         "your resources in one place.")
+
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            $ inductiva resources list
+            Active Resources:
+
+            NAME                            MACHINE TYPE     ELASTIC     TYPE       # MACHINES     DATA SIZE IN GB     SPOT     CREATED AT (UTC)     IDLE TIME      MAX COST ($/HOUR)
+            api-tgowxa5pdqxoz3kqtzdyuxay2   c2-standard-4    False       standard   0/1            10                  True     24/07, 14:37:00      None/0:03:00   0.755238
+            api-o309vfqp3i58303hz3y1dk3g5   c2-standard-4    False       standard   0/1            10                  True     24/07, 14:36:25      None/0:03:00   0.755238
+    """)
+
     subparser.set_defaults(func=list_machine_groups)
