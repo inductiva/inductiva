@@ -163,7 +163,7 @@ Or you can see the cost of a terminated resource:
 2. Click on the resource and see the value under **Cost**.
 
 
-## Terminate
+### Terminate
 Stop your resources when you're finished to avoid unnecessary costs.
 
 **Python**
@@ -208,7 +208,5 @@ caption: Manage Resources
 maxdepth: 2
 hidden: true
 ---
-manage_resources/set-up-elastic-machine-group
-manage_resources/set-up-mpi-cluster
 manage_resources/compute_monitoring
 ```

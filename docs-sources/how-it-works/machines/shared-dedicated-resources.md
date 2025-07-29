@@ -90,6 +90,10 @@ task.wait()
 machine_group.terminate()
 ```
 
+```{banner_small}
+:origin: resources
+```
+
 ```{toctree}
 ---
 caption: Resources
