@@ -29,8 +29,10 @@ Once your simulation is completed, you might end up with a large number of
 temporary or intermediate files that are no longer needed. Running a cleanup
 after the simulation can free up valuable storage space.
 
-Some simulators allow you to run specific commands after the simulation ends to
-delete unwanted files.
+All integrated simulators allow you to pass an argument `on_finish_cleanup` that can be
+a shell script or a list of commands that will run once your simulation is finished.
+You should use this argument to delete any temporary or unwanted files to save
+on storage costs.
 
 ### Example: OpenFOAM
 
@@ -39,9 +41,14 @@ Each process generates data specific to that run, but in the end, OpenFOAM
 combines all of the process data into a single directory. Therefore, the process
 folders themselves may no longer be needed after the simulation completes.
 
-Since OpenFOAM uses a shell script to execute the simulation, you can add cleanup
-commands to the end of the shell script. These commands will delete unwanted
-files, such as the process-specific folders, to free up storage space.
+You can pass, using the `on_finish_cleanup` argument, a shell script that deletes
+all the temporary folders that are not needed once the simulation ends.
 
-Keep this tips in mind when running your next simulation to reduce the amount of
-data generated, keeping your storage and transfer costs in check.
+> Take a look into our recipes to see how this is done [here](../recipes/storage-related/sections/delete-unwanted-files.md).
+
+Keep this tip in mind when running your next simulation to reduce the amount of
+data generated, keeping your [storage and transfer costs](../basics/how-much-does-it-cost) in check.
+
+```{banner_small}
+:origin: how_it_works_save_storage
+```

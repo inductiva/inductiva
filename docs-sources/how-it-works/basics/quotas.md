@@ -25,3 +25,7 @@ Also, there's a [CLI user command](https://inductiva.ai/guides/documentation/cli
 If any of these quotas establish a limit for what you can achieve with Inductiva
 API, please [reach out to us](mailto:support@inductiva.ai) and we can better
 understand your needs.
+
+```{banner_small}
+:origin: how_it_works_quotas
+```

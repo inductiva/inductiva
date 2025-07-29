@@ -75,3 +75,7 @@ $ inductiva resources terminate api-agn23rtnv0qnfn03nv93nc
 ```
 
 MPI cluster on demand without any hassle.
+
+```{banner_small}
+:origin: how_it_works_mpi_cluster
+```
