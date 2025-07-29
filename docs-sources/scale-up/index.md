@@ -33,8 +33,11 @@ caption: Benchmark
 maxdepth: 2
 hidden: true
 ---
-
+Overview <benchmark/index>
+benchmark/benchmarking
+benchmark/why-benchmarks
 Run a Benchmark <benchmark/run-benchmarks>
+benchmark/monitor-live
 
 ```
 
