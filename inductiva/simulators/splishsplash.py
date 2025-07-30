@@ -53,7 +53,7 @@ class SplishSplash(simulators.Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             sim_config_filename: Name of the simulation configuration file.
-            commands: Additional commands to run before or after the simulation.
+            commands: Additional commands to run before the simulation.
                 If None, only the default simulation commands are executed.
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
@@ -164,26 +164,19 @@ class SplishSplash(simulators.Simulator):
                 f"-o {vtk_to_obj_out_dir}/{vtk_to_obj_vtk_prefix}_surface"
                 "{}.obj")
         if gen_gif:
-            commands.append("python3 /home/scripts/gen_gif.py ./vtk res.gif "
-                            f"--cam_pos {gen_gif_cam_pos[0]} "
-                            f"{gen_gif_cam_pos[1]} "
-                            f"{gen_gif_cam_pos[2]} "
-                            f"--cam_fp {gen_gif_cam_fp[0]} "
-                            f"{gen_gif_cam_fp[1]} "
-                            f"{gen_gif_cam_fp[2]}")
+            gif_command = ("python3 /home/scripts/gen_gif.py ./vtk res.gif "
+                          f"--cam_pos {gen_gif_cam_pos[0]} "
+                          f"{gen_gif_cam_pos[1]} "
+                          f"{gen_gif_cam_pos[2]} "
+                          f"--cam_fp {gen_gif_cam_fp[0]} "
+                          f"{gen_gif_cam_fp[1]} "
+                          f"{gen_gif_cam_fp[2]}")
+            default_commands.append(gif_command)
 
         # Combine default commands with any additional
         # commands provided by the user
-        if commands is not None:
-            if isinstance(commands, str):
-                # If commands is a string, split it into a list
-                extra_commands = [commands]
-            else:
-                # If commands is already a list, use it as is
-                extra_commands = commands
-            final_commands = extra_commands + default_commands
-        else:
-            final_commands = default_commands
+        extra_commands = [commands] if isinstance(commands, str) else (commands or [])
+        final_commands = extra_commands + default_commands
 
         return super().run(
             input_dir,
