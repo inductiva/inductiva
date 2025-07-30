@@ -44,10 +44,10 @@ folders themselves may no longer be needed after the simulation completes.
 You can pass, using the `on_finish_cleanup` argument, a shell script that deletes
 all the temporary folders that are not needed once the simulation ends.
 
-> Take a look into our recipes to see how this is done [here](../recipes/storage-related/sections/delete-unwanted-files.md).
+> Take a look into our recipes to see how this is done [here](https://inductiva.ai/guides/how-it-works/recipes/storage-related/index).
 
 Keep this tip in mind when running your next simulation to reduce the amount of
-data generated, keeping your [storage and transfer costs](../basics/how-much-does-it-cost) in check.
+data generated, keeping your [storage and transfer costs](https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost) in check.
 
 ```{banner_small}
 :origin: how_it_works_save_storage

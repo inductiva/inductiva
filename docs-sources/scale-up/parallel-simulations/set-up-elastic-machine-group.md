@@ -35,8 +35,8 @@ elastic_machine_group.start()
 Once started, simulations can be submitted to the queue of the elastic machine group.
 
 To explore our elastic machine group, we will follow the example of 
-[running multiple simulations in parallel](../../../scale-up/parallel-simulations/run-parallel-simulations.md), based on the 
-[templating mechanism](../../../scale-up/parallel-simulations/templating.md)
+[running multiple simulations in parallel](https://inductiva.ai/guides/scale-up/parallel-simulations/run-parallel-simulations), based on the 
+[templating mechanism](https://inductiva.ai/guides/scale-up/parallel-simulations/templating)
 built in the Inductiva API, but now with a scalable infrastructure.
 
 ```python
