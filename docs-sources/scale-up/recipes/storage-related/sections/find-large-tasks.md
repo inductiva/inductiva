@@ -1,4 +1,4 @@
-# 🔍 Find Large projects or tasks
+# Find Large projects or tasks
 
 It’s not always obvious which projects or tasks are consuming the most storage
 space. To help you pinpoint what’s taking up significant resources, here’s a
