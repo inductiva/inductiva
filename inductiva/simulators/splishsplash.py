@@ -165,17 +165,18 @@ class SplishSplash(simulators.Simulator):
                 "{}.obj")
         if gen_gif:
             gif_command = ("python3 /home/scripts/gen_gif.py ./vtk res.gif "
-                          f"--cam_pos {gen_gif_cam_pos[0]} "
-                          f"{gen_gif_cam_pos[1]} "
-                          f"{gen_gif_cam_pos[2]} "
-                          f"--cam_fp {gen_gif_cam_fp[0]} "
-                          f"{gen_gif_cam_fp[1]} "
-                          f"{gen_gif_cam_fp[2]}")
+                           f"--cam_pos {gen_gif_cam_pos[0]} "
+                           f"{gen_gif_cam_pos[1]} "
+                           f"{gen_gif_cam_pos[2]} "
+                           f"--cam_fp {gen_gif_cam_fp[0]} "
+                           f"{gen_gif_cam_fp[1]} "
+                           f"{gen_gif_cam_fp[2]}")
             default_commands.append(gif_command)
 
         # Combine default commands with any additional
         # commands provided by the user
-        extra_commands = [commands] if isinstance(commands, str) else (commands or [])
+        extra_commands = [commands] if isinstance(commands,
+                                                  str) else (commands or [])
         final_commands = extra_commands + default_commands
 
         return super().run(
