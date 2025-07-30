@@ -2,7 +2,7 @@
 
 Inductiva provides an API to easily run large-scale simulations on the cloud.
 
-To accomodate different workflows and user preferences, we offer three ways to interact with our API: the [Python Client](https://inductiva.ai/guides/api-functions/api/index), the [Command-Line Interface (CLI)](https://inductiva.ai/guides/api-functions/cli/overview), and the [Web Console](https://console.inductiva.ai/dashboard). While each interface can be used independently, they are designed to work together, providing a unified experience for managing your simulations.
+To accomodate different workflows and user preferences, we offer three ways to interact with our API: the [Python Client](https://inductiva.ai/guides/api-functions/api/index), the [Command-Line Interface (CLI)](https://inductiva.ai/guides/api-functions/cli/index), and the [Web Console](https://console.inductiva.ai/dashboard). While each interface can be used independently, they are designed to work together, providing a unified experience for managing your simulations.
 
 This page explains the purpose of each component and how they all fit together.
 
@@ -17,7 +17,7 @@ The following diagram illustrates their relationship:
 The **Python Client** is a library to control the Inductiva API programmatically within a Python script.
 
 **Best For:**
-- Run the built-in [simulators](https://inductiva.ai/simulators)
+- Run the [built-in simulators](https://website-staging.inductiva.ai/guides/how-it-works/building-blocks/configuring-simulators)
 - Automating complex or repetitive workflows 
 - Programmatically manage resources and data storage.
 
@@ -38,7 +38,7 @@ The **Inductiva CLI** provides a fast and efficient way to interact with the API
 
 ````{eval-rst}
 .. seealso::
-   Check the complete CLI documentation `here <https://inductiva.ai/guides/api-functions/cli/overview>`_
+   Check the complete CLI documentation `here <https://inductiva.ai/guides/api-functions/cli/index>`_
 ````
 
 ### Web Console: _an intuitive graphical interface for visualization and management_
@@ -70,6 +70,7 @@ Consider a typical workflow:
 
 *You can now run scripts and launch simulations in the Web Console using the [Playground](https://console.inductiva.ai/playground) Beta feature.
 
-```{banner}
-:origin: blocks
+
+```{banner\\\_small}
+:origin: interfaces
 ```

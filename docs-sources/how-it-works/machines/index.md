@@ -19,7 +19,7 @@ Learn about _Resources_ — the core entity in the Inductiva API that executes y
 
 ✓ **Control costs** Get transparent pricing of resource usage and costs.
 
-✓ **Evaluate with Benchmarks** Intelligently match your simulation requirements with the most suitable computational resources using our [benchmarking](../intro/benchmarking.md) tool.
+✓ **Evaluate with Benchmarks** Intelligently match your simulation requirements with the most suitable computational resources using our [benchmarking](https://inductiva.ai/guides/scale-up/benchmark/index) tool.
 
 ```{banner}
 :origin: resources

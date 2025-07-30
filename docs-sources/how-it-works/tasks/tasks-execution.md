@@ -27,7 +27,7 @@ Each task progresses through several main states:
 
 ````{eval-rst}
 .. seealso::
-    For complete Task Lifecycle documentation, see our `Task Lifecycle <https://inductiva.ai/guides/how-it-works/intro/tasks-lifecycle>`_ guide
+    For complete Task Lifecycle documentation, see our `Task Lifecycle <https://website-staging.inductiva.ai/guides/how-it-works/tasks/tasks-lifecycle>`_ guide
 ````
 
 ## Execution Control

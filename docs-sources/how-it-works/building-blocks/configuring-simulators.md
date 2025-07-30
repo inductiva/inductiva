@@ -12,7 +12,7 @@ a wide range of virtual machines available on the cloud, and allow simple config
 via Python scripting. We wrap such simulation packages in a way that allows us to treat
 them as more abstract computational loads, that have inputs and produce outputs, and
 our job is “merely” just that of passing data around 
-(See [Storage and Data Flow](https://inductiva.ai/guides/how-it-works/cloud-storage))
+(See [Storage and Data Flow](https://inductiva.ai/guides/how-it-works/cloud-storage/cloud-storage))
 and assigning the simulation tasks to the appropriate computational resource (See
 [Resource Allocation Options](https://website-staging.inductiva.ai/guides/how-it-works/machines/index)).
 
