@@ -22,7 +22,7 @@ Yes — set up [S3 Event Notifications](https://docs.aws.amazon.com/AmazonS3/lat
 
 Yes. Files up to **5 TB** are supported.
 
-You can check the file size in the [Web Console](https://console.inductiva.ai/storage/storage) or in the **API** directly.
+You can check the file size in the [Web Console](https://console.inductiva.ai/storage/) or in the **API** directly.
 
 ## 5. How can Inductiva export files if it doesn't have my AWS credentials?
 
@@ -36,7 +36,7 @@ Yes, you can configure AWS credentials to restrict access to a specific S3 bucke
 
 ## 7. How much does exporting to AWS S3 cost?
 
-The data transfer costs associated with exporting files from Inductiva to AWS S3 will be included under your [storage costs](https://console.inductiva.ai/storage/storage).
+The data transfer costs associated with exporting files from Inductiva to AWS S3 will be included under your [storage costs](https://console.inductiva.ai/storage/).
 
 ## 8. Can I export multiple files at once?
 
