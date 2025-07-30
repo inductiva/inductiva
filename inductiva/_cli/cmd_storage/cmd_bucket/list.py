@@ -45,8 +45,6 @@ def register(parser):
         "The `inductiva storage bucket list` command retrieves and displays "
         "your remote storage buckets available through the Inductiva API.\n"
         "This includes information such as the bucket name, region, provider, "
-        "and whether it is internally managed by Inductiva.\n"
-        "Example:\n"
-        "  inductiva storage bucket list\n")
+        "and whether it is internally managed by Inductiva.\n")
 
     subparser.set_defaults(func=list_buckets)

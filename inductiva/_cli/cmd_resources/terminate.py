@@ -3,6 +3,7 @@ import logging
 import sys
 
 import argparse
+import textwrap
 
 from inductiva import resources
 import inductiva
@@ -82,13 +83,18 @@ def register(parser):
                                   help="Terminate resources.",
                                   formatter_class=argparse.RawTextHelpFormatter)
 
-    subparser.description = ("The `inductiva resources terminate` command "
-                             "provides a utility for terminating\n"
-                             "active computational resources. It allows you"
-                             " to specify the names of the resources\n"
-                             "to terminate, or terminate all active resources."
-                             " Multiple resources can be terminated\n"
-                             "at once by providing their names.\n\n")
+    subparser.description = textwrap.dedent("""\
+        The `inductiva resources terminate` command provides a utility for
+        terminating active computational resources. It allows you to specify
+        the names of the resources to terminate, or terminate all active
+        resources. Multiple resources can be terminated at once by providing
+        their names. 
+
+        All tasks running on the resources you are terminating will be
+        immediately killed, regardless of their current stage.
+
+        Each step requires user confirmation before proceeding.
+    """)
 
     subparser.add_argument("name",
                            type=str,
@@ -105,5 +111,16 @@ def register(parser):
     subparser.add_argument("--all",
                            action="store_true",
                            help="Terminate all machines.")
+
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            $ inductiva resources terminate --all
+            You are about to terminate ALL resources.
+            Are you sure you want to proceed (y/[N])? y
+            Terminating MPICluster(name="api-p3kun5wyta1hacstu4xk38ujr"). This may take a few minutes.
+            MPI Cluster api-p3kun5wyta1hacstu4xk38ujr with c2-standard-8 x2 machines successfully terminated in 0:01:10.
+            Terminating MachineGroup(name="api-rdqprn82417bsd7id1qnac4c6"). This may take a few minutes.
+            Machine Group api-rdqprn82417bsd7id1qnac4c6 with c2-standard-4 machines successfully terminated in 0:01:18.
+    """)
 
     subparser.set_defaults(func=terminate_machine_group)

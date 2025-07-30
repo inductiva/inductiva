@@ -80,7 +80,7 @@
 	--sidebar-current-option-bg: #15151c;
 
 	--cta-container-border: 1px solid #4c3669;
-	--cta-container-bg: #8e3bff1a;
+	--cta-container-bg: #8e3bff59;
 	--cta-container-text-color: #ffffff;
 }
 
@@ -1399,4 +1399,8 @@ body.at-bottom #scrolltop {
 		width: 100%;
 		margin-top: 8px;
 	}
+}
+
+section[id^="inductiva-"] p {
+  white-space: pre-wrap;
 }

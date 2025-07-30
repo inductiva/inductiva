@@ -1,6 +1,7 @@
 """Export the user's remote storage to another cloud."""
 
 import argparse
+import textwrap
 from inductiva.storage import storage
 
 
@@ -25,37 +26,43 @@ def register(parser):
         formatter_class=argparse.RawTextHelpFormatter,
     )
 
-    subparser.description = (
-        "The `export` command allows you to export your data to another cloud, "
-        "such as AWS S3.\n  To export to AWS S3, you need to:\n"
-        "1. Install Inductiva with `pip install inductiva[aws]`.\n"
-        "2. Configure your AWS credentials using `aws configure`.\n"
-        "3. Ensure the target S3 bucket exists and you have write permissions.")
+    subparser.description = textwrap.dedent("""\
+        The `inductiva storage export` command lets you export data from
+        your Inductiva remote storage to an external cloud provider, such as
+        AWS S3.
+
+        To export to AWS S3, follow these steps:
+        1. Install `inductiva` with `pip install inductiva[aws]`.
+        2. Configure your AWS credentials using `aws configure`.
+        3. Ensure the target S3 bucket exists and you have write
+        permissions.
+    """)
+
     subparser.add_argument(
         "path_to_export",
         type=str,
-        help="Specify the path of the file to export.",
+        help="File or folder path in Inductiva remote storage to export.",
     )
     subparser.add_argument(
         "--export-to",
         default=storage.ExportDestination.AWS_S3,
         type=storage.ExportDestination,
         choices=list(storage.ExportDestination),
-        help="Specify the export destination: aws-s3.",
+        help="External cloud service to export your data to.",
     )
 
     subparser.add_argument(
         "--file-name",
         type=str,
         required=False,
-        help="Specify the name to assign to the file being saved.",
+        help="Name to assign to the file being saved.",
     )
 
     subparser.add_argument(
         "--bucket-name",
         type=str,
         required=True,
-        help="Bucket name where to save the file.",
+        help="Name of the external cloud bucket where the file will be saved.",
     )
 
     subparser.add_argument(
@@ -63,8 +70,14 @@ def register(parser):
         type=int,
         required=False,
         default=128,
-        help=("Specify the size (in MB) of each part in the multipartupload."
+        help=("Specify the size (in MB) of each part in the multipartupload. "
               "The default is 128 MB. For example, specify 50 for 50 MB."),
     )
+
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            # Export a file to AWS S3
+            inductiva storage export --export-to aws-s3 --bucket-name my-bucket my_data/file1.txt
+    """)
 
     subparser.set_defaults(func=export)

@@ -30,3 +30,7 @@ for task in project.get_tasks():
 
 You can also download multiple files at once by providing a list of file paths.
 This way, managing large-scale simulations becomes effortless and error-free.
+
+```{banner_small}
+:origin: recipes_download_file_from_project
+```

@@ -184,7 +184,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 In this example, we're using a relatively small cloud machine (`c2-standard-4`), which is equipped with 4 virtual CPUs. 
