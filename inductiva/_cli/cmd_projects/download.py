@@ -1,6 +1,7 @@
 """Download the project tasks files via CLI."""
 import concurrent.futures as cf
 import argparse
+import textwrap
 from typing import List
 
 import inductiva
@@ -71,10 +72,11 @@ def register(parser):
                            help="Name of the project to download.")
 
     subparser.description = (
-        "The `inductiva projects download` command provides "
-        "a way to download the tasks files of your projects.\n"
-        "You can specify the files to download with the --files flag \n"
-        "or download the standard output and error files with the --std flag.\n"
+        "The `inductiva projects download` command allows you to "
+        "download the task outputs associated with a specific project.\n"
+        "You can specify the files to download with the `--files` flag \n"
+        "or download the standard output and error files with the `--std` flag."
+        "\n"
         "If no files are specified, all files are downloaded.\n")
 
     subparser.add_argument("--output-dir",
@@ -90,5 +92,25 @@ def register(parser):
     group.add_argument("--std",
                        action="store_true",
                        help="Downloads the standard output and error files.")
+
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            # Download `stderr.txt` and `system_metrics.csv` from all tasks in
+            # `my-swash-project`, and save them to the current directory.
+            $ inductiva projects download my-swash-project \\
+                    --files stderr.txt system_metrics.csv \\
+                    --output-dir .
+            Downloading simulation files to 9yhsu7cqcqemgzesuzueso1hn/outputs...
+            Downloading simulation files to e5ysb582dwofj3bw6233bae99/outputs...
+            Downloading simulation files to umpokj4e8rbx4379hsjdwfyuu/outputs...
+            Downloading simulation files to 1k3rvmf3e0cycsiiu62umg089/outputs...
+            Downloading simulation files to 9qj3fhe5tjt9bx8uvada9e8uy/outputs...
+            Partial download completed to 9yhsu7cqcqemgzesuzueso1hn/outputs.
+            Partial download completed to 1k3rvmf3e0cycsiiu62umg089/outputs.
+            Partial download completed to umpokj4e8rbx4379hsjdwfyuu/outputs.
+            Partial download completed to e5ysb582dwofj3bw6233bae99/outputs.
+            Partial download completed to 9qj3fhe5tjt9bx8uvada9e8uy/outputs.
+            Downloads completed.
+    """)
 
     subparser.set_defaults(func=download_projects)

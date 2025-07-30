@@ -184,7 +184,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 In this example, we're using a relatively small cloud machine (`c2-standard-4`), which is equipped with 4 virtual CPUs. 
@@ -317,9 +317,6 @@ to input files for compiling and running **COAWST**.
 
 By following this guide, you now have a clearer understanding of how to configure and efficiently run COAWST simulations on Inductiva's platform.
 
-<div class="cta-bar">
-  <div class="cta-text">
-    <strong>Kickstart your simulations!</strong> You have $5 in <strong>free credits</strong>, no credit card required.
-  </div>
- <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_coawst&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
-</div>
+```{banner_small}
+:origin: coawst
+```

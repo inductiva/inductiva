@@ -57,7 +57,7 @@ In this basic example, we're using a cloud machine (`c2d-highcpu-4`) equipped wi
 For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
 a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other Quantum ESPRESSO simulations, replace `input_dir` with the
@@ -88,9 +88,6 @@ Estimated computation cost (US$): 0.00011 US$
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
 the core computation time of this simulation was approximately 3.2 seconds.
 
-<div class="cta-bar">
-  <div class="cta-text">
-    <strong>Kickstart your simulations!</strong> You have $5 in <strong>free credits</strong>, no credit card required.
-  </div>
- <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_quantumespresso&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
-</div>
+```{banner_small}
+:origin: quantum_espresso
+```

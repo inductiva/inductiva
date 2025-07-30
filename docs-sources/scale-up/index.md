@@ -18,6 +18,31 @@ Set up an MPI Cluster <parallel-simulations/set-up-mpi-cluster>
 
 ```{toctree}
 ---
+caption: Projects
+maxdepth: 3
+hidden: true
+---
+
+Overview <projects/index>
+projects/projects
+projects/manage-projects
+projects/visualize-projects
+
+```
+
+```{toctree}
+---
+caption: Save Costs
+maxdepth: 2
+hidden: true
+---
+
+Minimize simulation data <save-costs/save_storage>
+
+```
+
+```{toctree}
+---
 caption: Reuse Files Across Simulations
 maxdepth: 3
 hidden: true
@@ -33,8 +58,11 @@ caption: Benchmark
 maxdepth: 2
 hidden: true
 ---
-
+Overview <benchmark/index>
+benchmark/benchmarking
+benchmark/why-benchmarks
 Run a Benchmark <benchmark/run-benchmarks>
+benchmark/monitor-live
 
 ```
 

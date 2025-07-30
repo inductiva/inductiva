@@ -65,33 +65,36 @@ After the simulation completes, a task summary will be displayed in your termina
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 10/07, 00:02:39      1.973 s
-	In Queue                  at 10/07, 00:02:41      33.46 s
-	Preparing to Compute      at 10/07, 00:03:14      4.623 s
-	In Progress               at 10/07, 00:03:19      64.347 s
-		└> 64.188 s        bash ./Allrun
-	Finalizing                at 10/07, 00:04:23      1.999 s
-	Success                   at 10/07, 00:04:25      
+	Waiting for Input         at 21/07, 14:02:08      2.004 s
+	In Queue                  at 21/07, 14:02:10      37.651 s
+	Preparing to Compute      at 21/07, 14:02:47      4.224 s
+	In Progress               at 21/07, 14:02:51      65.304 s
+		└> 65.134 s        bash ./Allrun
+	Finalizing                at 21/07, 14:03:57      1.85 s
+	Success                   at 21/07, 14:03:59      
 
 Data:
 	Size of zipped output:    99.56 MB
 	Size of unzipped output:  155.56 MB
 	Number of output files:   223
 
-Estimated computation cost (US$): 0.00052 US$
+Estimated computation cost (US$): 0.00048 US$
+
+Go to https://console.inductiva.ai/tasks/a30fb9b6zearwkrdpkz4g9qhr for more details.
 ```
 
-If the task status shows **Success**, congratulations! You've successfully run an OpenFOAM simulation.
+If the **Task status** is marked as **Success**, congratulations! You've successfully ran an OpenFOAM simulation.
+
+You can view more details and track the full simulation progress in the [Inductiva Console](https://console.inductiva.ai/tasks).
+
+<p align="center"><img src="./_static/setup-test/console_timeline.png" alt="Task summary displayed in the Inductiva Console" width="700"></p>
 
 This simple example tested your installation on a small machine with just 4 virtual CPUs. Inductiva offers far more powerful 
 options to supercharge your simulations.
 
-<div class="cta-bar">
-  <div class="cta-text">
-    <strong>Kickstart your simulations!</strong> You have $5 in <strong>free credits</strong>, no credit card required.
-  </div>
-  <button  onclick="window.open('https://console.inductiva.ai/?utm_source=guide_openfoam&utm_medium=button&utm_campaign=signup', '_blank')" target="_blank" class="cta-button">Sign In</button>
-</div>
+```{banner_small}
+:origin: openfoam
+```
 
 ## Need Help?
 If you encounter any issues or need further assistance, don't hesitate to [**Contact Us**](mailto:support@inductiva.ai). We're here to help!

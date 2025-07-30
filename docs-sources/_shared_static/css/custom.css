@@ -80,7 +80,7 @@
 	--sidebar-current-option-bg: #15151c;
 
 	--cta-container-border: 1px solid #4c3669;
-	--cta-container-bg: #8e3bff1a;
+	--cta-container-bg: #8e3bff59;
 	--cta-container-text-color: #ffffff;
 }
 
@@ -1344,14 +1344,14 @@ footer {
 .cta-bar {
 	display: flex;
 	flex-wrap: wrap;
+	flex-direction: column;
 	align-items: center;
 	gap: 16px;
-	padding: 20px 28px;
+	padding: 10px 28px;
 	border-radius: 10px;
-	max-width: 800px;
+	max-width: 70%;
 	margin: 20px auto;
-	border: var(--cta-container-border);
-	background-color: var(--cta-container-bg)
+	background: radial-gradient(circle at center, var(--cta-container-bg), var(--bg-color));
 }
 
 .cta-text {
@@ -1377,4 +1377,30 @@ footer {
 
 .cta-button:hover {
 	background-color: var(--purple-hover-color);
+}
+
+#scrolltop {
+  bottom: 2rem; /* fallback if class is not applied */
+  transition: bottom 0.3s ease;
+}
+
+/* When user is at the bottom of the page */
+body.at-bottom #scrolltop {
+  bottom: 6rem !important; /* move it higher */
+}
+
+@media (max-width: 600px) {
+	.cta-bar {
+		flex-direction: column;
+		text-align: center;
+	}
+
+	.cta-button {
+		width: 100%;
+		margin-top: 8px;
+	}
+}
+
+section[id^="inductiva-"] p {
+  white-space: pre-wrap;
 }

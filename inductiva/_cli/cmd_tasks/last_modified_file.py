@@ -1,4 +1,5 @@
 """Top command for task."""
+import textwrap
 from typing import TextIO
 import argparse
 import sys
@@ -33,13 +34,24 @@ def register(parser):
                                   formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = (
-        "The `inductiva tasks last-modified-file` command displays the last"
+        "The `inductiva tasks last-modified-file` command displays the last "
         "modified file for the simulation. It also shows the last time the file"
-        "was modified and how long it has been since that.")
+        " was modified and how long it has been since that.")
 
     subparser.add_argument("id",
                            type=str,
                            help="The ID of the task to get the last modifed "
                            "file.")
+
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            $ inductiva tasks last-modified-file qpusar8bch509k56g1hvv5yxk
+
+            Most Recent File: /mnt/disks/task-runner-data/workdir/qpusar8bch509k56g1hvv5yxk/output/artifacts/stdout.txt
+            Modification Time: 2025-04-03 12:58:49
+            Current Time on Machine: 2025-04-03 12:58:50
+
+            Time Since Last Modification: 0:00:01
+    """)
 
     subparser.set_defaults(func=last_modifed_file)

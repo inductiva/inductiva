@@ -1,4 +1,5 @@
 """List the tasks information via CLI."""
+import textwrap
 from typing import TextIO
 import argparse
 import sys
@@ -84,7 +85,7 @@ def register(parser):
                              "It lists the most recent tasks or a specific "
                              "task by ID.\n"
                              "You can control the number of tasks listed with "
-                             "the '-n' or '--last-n' option.\n")
+                             "the `-n` or `--last-n` options.\n")
 
     _cli.utils.add_watch_argument(subparser)
 
@@ -93,7 +94,7 @@ def register(parser):
                        "--last-n",
                        type=int,
                        default=10,
-                       help="List last N tasks. Default: 10.")
+                       help="List most recent tasks.")
     group.add_argument("-a",
                        "--all",
                        dest="all_tasks",
@@ -112,5 +113,16 @@ def register(parser):
                            type=str,
                            default=None,
                            help="List the tasks of a project.")
+
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            # List the last 4 tasks with their details:
+            $ inductiva tasks list -n 4
+            ID                              SIMULATOR          STATUS         SUBMITTED              STARTED                COMPUTATION TIME         RESOURCE TYPE
+            jxwt0rm8s8xspdfcegtgkkana       splishsplash       started        08 Feb, 13:25:49       08 Feb, 13:26:04       *0:00:05                 c2-standard-4
+            n0zcac8rmw7xydbis3m407kb4       splishsplash       started        08 Feb, 13:25:48       08 Feb, 13:26:03       *0:00:07                 c2-standard-4
+            8nmpn4h99nyfpo4da9jw2405q       splishsplash       started        08 Feb, 13:25:47       08 Feb, 13:26:02       *0:00:09                 c2-standard-4
+            so6i93pi74b89rndircubp3v2       splishsplash       started        08 Feb, 13:25:47       08 Feb, 13:26:02       *0:00:10                 c2-standard-4
+    """)
 
     subparser.set_defaults(func=list_tasks)

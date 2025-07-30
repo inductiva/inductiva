@@ -1,6 +1,7 @@
 """Download storage contents via CLI."""
 
 import argparse
+import textwrap
 from inductiva import storage
 
 
@@ -19,15 +20,15 @@ def register(parser):
         formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = (
-        "The `inductiva storage download` command allows you to download files "
-        "or folders from your remote storage, maintaining the original storage "
-        "path structure.\n"
+        "The `inductiva storage download` command allows you to download a file"
+        " or folder from your remote storage, maintaining the original storage "
+        "path structure, to your local machine.\n"
         "Specify the remote path, the local destination (optional), and whether"
         " to decompress the content after downloading (default: enabled).\n")
     subparser.add_argument(
         "remote_path",
         type=str,
-        help="The remote path to the file or folder to download.",
+        help="The path to the file or folder in remote storage to download.",
     )
     subparser.add_argument(
         "local_dir",
@@ -40,8 +41,13 @@ def register(parser):
     subparser.add_argument(
         "--decompress",
         action="store_true",
-        help=("Decompress the downloaded file or folder if it is compressed. "
-              "This option is enabled by default."),
+        help="Decompress the downloaded file or folder if it is compressed.",
     )
+
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            # Download and decompress an archived file
+            $ inductiva storage download my_data/archive.zip --decompress
+    """)
 
     subparser.set_defaults(func=download)
