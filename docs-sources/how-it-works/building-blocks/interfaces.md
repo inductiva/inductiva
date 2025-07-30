@@ -17,7 +17,7 @@ The following diagram illustrates their relationship:
 The **Python Client** is a library to control the Inductiva API programmatically within a Python script.
 
 **Best For:**
-- Run the [built-in simulators](https://website-staging.inductiva.ai/guides/how-it-works/building-blocks/configuring-simulators)
+- Run the [built-in simulators](https://inductiva.ai/guides/how-it-works/building-blocks/configuring-simulators)
 - Automating complex or repetitive workflows 
 - Programmatically manage resources and data storage.
 

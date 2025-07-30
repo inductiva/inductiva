@@ -35,7 +35,7 @@ cloud_machine.start()
 That’s it! That’s how simple it is to start a machine on the cloud with Inductiva - it only takes a 3-lines python script.
 Run the script and you’ll have successfully started your first machine on the cloud!
 You should now be able to see your active cloud machine in the [Console](https://console.inductiva.ai/machine-groups/active).
-If you’re struggling to create and run the python file, take a look at the [Quick Start Guide](https://website-staging.inductiva.ai/guides/how-it-works/get-started/quick-start-guide)
+If you’re struggling to create and run the python file, take a look at the [Quick Start Guide](https://inductiva.ai/guides/how-it-works/get-started/quick-start-guide)
 
 ## 3️⃣ Terminate your cloud machine
 

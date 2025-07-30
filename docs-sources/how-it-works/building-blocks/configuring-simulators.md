@@ -14,7 +14,7 @@ them as more abstract computational loads, that have inputs and produce outputs,
 our job is “merely” just that of passing data around 
 (See [Storage and Data Flow](https://inductiva.ai/guides/how-it-works/cloud-storage/cloud-storage))
 and assigning the simulation tasks to the appropriate computational resource (See
-[Resource Allocation Options](https://website-staging.inductiva.ai/guides/how-it-works/machines/index)).
+[Resource Allocation Options](https://inductiva.ai/guides/how-it-works/machines/index)).
 
 Obviously, there is a lot more happening under the hood. For starters, how do we deal
 with the fact that not all simulation software packages work in the same way and,
