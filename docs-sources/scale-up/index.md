@@ -40,7 +40,7 @@ hidden: true
 Minimize simulation data <save-costs/save_storage>
 
 ```
-
+ 
 ```{toctree}
 ---
 caption: Recipes
@@ -48,22 +48,12 @@ maxdepth: 3
 hidden: true
 ---
 
+♻️ Reuse Files Across Multiple Simulations <reuse-files/reuse-files>
 ⬇️ Download specific files from a group of tasks <recipes/download-file-from-project>
 🗑️ Clean Up Storage by Condition <recipes/storage-related/index>
 👀 Real-Time Monitoring & Conditional Auto Termination <recipes/real-time-simulation-monitoring>
 ⏰ Setting a Time-to-Live on Your Simulations <recipes/set-task-ttl/set-task-ttl>
 📤 Export your files to AWS S3 <recipes/export-files-to-aws/index>
-```
-
-```{toctree}
----
-caption: Reuse Files Across Simulations
-maxdepth: 3
-hidden: true
----
-
-Reuse Files Across Multiple Simulations <reuse-files/reuse-files>
-
 ```
 
 ```{toctree}
