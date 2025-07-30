@@ -1,6 +1,6 @@
 """Octopus module of the API."""
 import logging
-from typing import Optional, Union
+from typing import Literal, Optional, Union
 
 from inductiva import simulators, tasks, types
 from inductiva.commands.commands import Command
