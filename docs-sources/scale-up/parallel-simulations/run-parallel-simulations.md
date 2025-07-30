@@ -87,7 +87,7 @@ This approach submits all tasks as quickly as possible, maximizing parallelism a
 of the Inductiva API.
 
 - Automatic Shutdown: By default, the machine group will automatically terminate after **3 minutes** of inactivity.
-You can customize this using `max_idle_time` parameter in the [`MachineGroup` constructor](https://website-staging.inductiva.ai/guides/how-it-works/machines/computational_resources/machinegroup_class).
+You can customize this using `max_idle_time` parameter in the [`MachineGroup` constructor](https://inductiva.ai/guides/how-it-works/machines/computational_resources/machinegroup_class).
 
 ## Monitor Your Simulations in Real Time
 

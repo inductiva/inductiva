@@ -32,7 +32,7 @@ infrastructure powering your simulations, especially how the API enables you to 
 a variety of computational resources, manages your computational workload, and allocates 
 it to the appropriate computational resource through a unified Python code.
 
-- [Built-in Simulators](https://website-staging.inductiva.ai/guides/how-it-works/building-blocks/configuring-simulators):
+- [Built-in Simulators](https://inductiva.ai/guides/how-it-works/building-blocks/configuring-simulators):
 Explore how the API wraps existing open-source software packages within layers that 
 facilitate their execution across various cloud-based virtual machines and providers, 
 transforming them into abstract computational tasks.
