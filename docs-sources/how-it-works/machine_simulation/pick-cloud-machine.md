@@ -4,11 +4,11 @@ Choosing the right machine to run your simulations can make the difference betwe
 
 ## Quick Start
 
-**Browse all options** View our [complete machine catalog](https://inductiva.ai/machines) to browse all available machine type options.
+- **Browse all options:** View our [complete machine catalog](https://inductiva.ai/machines) to browse all available machine type options.
 
-**Make data-driven decisions** Run [benchmarks](https://inductiva.ai/guides/scale-up/benchmark/index) on candidate machines with representative workloads.
+- **Make data-driven decisions:** Run [benchmarks](https://inductiva.ai/guides/scale-up/benchmark/index) on candidate machines with representative workloads.
 
-**Optimize costs** Use [spot machines](../machines/spot-machines.md) for up to 60% savings.
+- **Optimize costs:** Use [spot machines](../machines/spot-machines.md) for up to 60% savings.
 
 ## Machine Families
 
@@ -16,25 +16,23 @@ Inductiva provides access to Google Cloud Platform machine families, each optimi
 
 ### Compute-Optimized Machines
 **Best for:** CPU-intensive simulations, mathematical modeling, fluid dynamics
-- **Families:** C2, C2D, C3, C3D, C4, C4A, H3
+- **Families:** C2, C2D, H3
 - **Key strength:** Highest performance per core with premium processors
-- **Typical use cases:** CFD simulations, finite element analysis, ray tracing
 - **Memory ratio:** Optimized compute-to-memory ratios (typically 2-4GB RAM per vCPU)
 
 [Learn more about compute-optimized machines →](https://cloud.google.com/compute/docs/compute-optimized-machines)
 
 ### Memory-Optimized Machines
 **Best for:** Large-scale simulations requiring extensive data in memory
-- **Families:** M1, M2, M3, X4
+- **Families:** M3
 - **Key strength:** High memory-to-vCPU ratios (8GB+ per vCPU)
-- **Typical use cases:** Large mesh simulations, in-memory databases, complex multi-physics models
 - **When to choose:** Your simulation loads large datasets or requires extensive intermediate storage
 
 [Learn more about memory-optimized machines →](https://cloud.google.com/compute/docs/memory-optimized-machines)
 
 ### General-Purpose Machines
 **Best for:** Balanced workloads, development, small to medium simulations
-- **Families:** N1, N2, N2D, N4, E2
+- **Families:** C3, C3D, C4,
 - **Key strength:** Versatile balance of compute, memory, and networking
 - **Typical use cases:** Prototyping, mixed workloads, cost-sensitive applications
 - **Cost advantage:** Best price-performance ratio for varied workloads
@@ -45,7 +43,6 @@ Inductiva provides access to Google Cloud Platform machine families, each optimi
 **Best for:** GPU-accelerated simulations, machine learning, parallel computing
 - **Families:** A2, A3, G2
 - **Key strength:** High-performance GPUs (NVIDIA Tesla, A100, H100)
-- **Typical use cases:** CUDA-accelerated simulations, molecular dynamics, AI-enhanced modeling
 - **Performance boost:** 10-100x speedup for compatible workloads
 
 [Learn more about accelerator-optimized machines →](https://cloud.google.com/compute/docs/accelerator-optimized-machines)
@@ -55,7 +52,7 @@ Inductiva provides access to Google Cloud Platform machine families, each optimi
 Machine names follow a consistent pattern: `family-profile-vcpus`
 
 ### Family Identifiers
-- **Generation:** C**4** (2024), C**3** (2023) N**2**(2020)
+- **Generation:** C**4** (2024), C**3** (2023) A**2**(2020)
 - **Architecture:**
   - **D suffix** → AMD processors (C2D, N2D)
   - **A suffix** → ARM processors (C4A, T2A)
@@ -77,7 +74,7 @@ Machine names follow a consistent pattern: `family-profile-vcpus`
 Mathematical computations, iterative algorithms, single-threaded bottlenecks.
 
 **Examples:** Finite element analysis, ray tracing, numerical modeling  
-**Recommended:** Compute-optimized families (C2, C3, C4)  
+**Recommended:** Compute-optimized families (C2, H3)  
 **Memory profile:** `highcpu` or `standard`
 
 ### Memory-Intensive Workloads
