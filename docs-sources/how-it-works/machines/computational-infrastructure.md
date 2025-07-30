@@ -30,7 +30,7 @@ Google Cloud Platform (GCP):
 - [**General-purpose Machines**](https://cloud.google.com/compute/docs/general-purpose-machines): Versatile VMs that provide a balanced mix of compute, memory, and networking resources, suitable for a wide range of simulation workloads.
 - [**Accelerator-optimized Machines**](https://cloud.google.com/compute/docs/accelerator-optimized-machines): Specialized VMs equipped with GPUs and other accelerators for high-performance computing tasks that benefit from parallel processing capabilities.
 
-Each VM family offers multiple machine types with different specifications to match your simulation requirements and budget. For detailed information about specific machine types available within each family through Inductiva, including pricing and performance characteristics, explore our [complete machine catalog](https://inductiva.ai/machines).
+Each VM family offers multiple machine types with different specifications to match your simulation requirements and budget. For detailed information about specific machine types available within each family through Inductiva, including pricing and performance characteristics, explore our [complete machine catalog](https://console.inductiva.ai/machine-groups/instance-types).
 
 These machine types allow for the customization of
 [MachineGroups](computational_resources/machinegroup_class.md),
@@ -66,7 +66,7 @@ While the examples above focus on GCP resources, Inductiva also supports running
 ````{eval-rst}
 .. seealso::
    Learn how to manage your computational resources through
-   `Inductiva's Command Line Interface <https://inductiva.ai/guides/documentation/cli/resources>`_
+   `Inductiva's Command Line Interface <https://inductiva.ai/guides/api-functions/cli/index>`_
 ```` 
 
 ## What Next? 
@@ -76,7 +76,7 @@ we talked about how the growing diversity of computing options
 is transforming the landscape—and how it’s not always easy to find the best machine 
 for your job.
 
-With our [benchmarking tool](benchmarking.md), we make it easier to make smarter, cost-effective decisions for your workloads.
+With our [benchmarking tool](https://inductiva.ai/guides/scale-up/benchmark/index), we make it easier to make smarter, cost-effective decisions for your workloads.
 
 ```{banner_small}
 :origin: how_it_works_infra

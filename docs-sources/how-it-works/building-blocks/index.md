@@ -37,7 +37,7 @@ Explore how the API wraps existing open-source software packages within layers t
 facilitate their execution across various cloud-based virtual machines and providers, 
 transforming them into abstract computational tasks.
 
-- [Storage and Data Flow](https://inductiva.ai/guides/how-it-works/cloud-storage):
+- [Storage and Data Flow](https://inductiva.ai/guides/how-it-works/cloud-storage/cloud-storage):
 Get to know the typical flow of data when you invoke a remote simulator using the 
 Inductiva API, from sending your input files to remote computational resources to 
 accessing the simulation outputs.

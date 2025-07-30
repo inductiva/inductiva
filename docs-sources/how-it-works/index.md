@@ -101,5 +101,5 @@ caption: Cloud Storage
 maxdepth: 2
 hidden: true
 ---
-Minimize simulation data <cloud-storage/cloud-storage>
+Cloud Storage <cloud-storage/cloud-storage>
 ```
