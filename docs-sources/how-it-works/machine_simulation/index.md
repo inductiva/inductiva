@@ -1,9 +1,9 @@
 # Machine-Simulation Fit
 
-Choosing the right computational resources for your simulation is crucial for optimal performance and cost efficiency. This section provides comprehensive guidance on matching your simulation requirements with the most suitable machine configurations, monitoring resource utilization, and continuously optimizing your setup.
+Choosing the right computational resources for your simulation is crucial for optimal performance and cost efficiency. This section provides comprehensive guidance on matching your simulation requirements with the most suitable machine configurations.
 
 ## Get started
-Learn how to intelligently select and optimize computational resources for your specific simulation needs. From initial machine selection to post-simulation analysis, these guides help you make data-driven decisions about your computational infrastructure.
+Learn how to select and optimize computational resources for your specific simulation needs, from initial machine selection to post-simulation analysis.
 
 | **[Pick the Right Cloud Machine →](pick-cloud-machine.md)** | **[Benchmarks vs. System Metrics →](benchmark-sys-metrics.md)** |
 |---|---|
