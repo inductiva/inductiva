@@ -1,12 +1,4 @@
-# Interfaces with the API
-
-Inductiva provides an API to easily run large-scale simulations on the cloud.
-
-To accomodate different workflows and user preferences, we offer three ways to interact with our API: the [Python Client](https://inductiva.ai/guides/api-functions/api/index), the [Command-Line Interface (CLI)](https://inductiva.ai/guides/api-functions/cli/overview), and the [Web Console](https://console.inductiva.ai/dashboard). While each interface can be used independently, they are designed to work together, providing a unified experience for managing your simulations.
-
-This page explains the purpose of each component and how they all fit together.
-
-## Architecture Overview
+# Architecture Overview
 
 The Inductiva API centrally manages all your cloud resources, simulation tasks, and storage. The Python Client, CLI, and Web Console are the different interfaces you can use to communicate with these resources.
 
@@ -14,65 +6,42 @@ The following diagram illustrates this relationship:
 
 ![Building Blocks](../_static/building_blocks.png)
 
-## The Three Building Blocks
+1. Start and manage remote Virtual Machines (VMs), operating either independently
+or collectively, that are equipped with pre-installed simulation software.
 
-### Python Client: _a library that transforms API requests into simple code_
+2. Send your simulation scripts from your laptop to one or more remote machines,
+and start the simulators.
 
-The **Python Client** is a library to control the Inductiva API programmatically within a Python script.
+3. Download simulation results, selecting either all data files generated or
+specific ones of interest.
 
-**Best For:**
-- Run the built-in [simulators](https://inductiva.ai/simulators)
-- Automating complex or repetitive workflows 
-- Programmatically manage resources and data storage.
+That’s it! While this outlines the basic flow of usage of the API, there are
+nuances and additional options available, which we'll explore in detail throughout
+this section. More specifically, you'll become familiarized with how the API
+works:
 
-````{eval-rst}
-.. seealso::
-   Check the complete Python Client documentation `here <https://inductiva.ai/guides/api-functions/api/index>`_
-````
+- [Tasks](https://inductiva.ai/guides/how-it-works/tasks/index):
+Learn about tasks, the API's core computational object, which
+gets created when you submit your simulation request, enabling you to track its
+progress and access its outputs in real-time.
 
-### Command Line Interface: _for quick terminal operations_
+- [Computational Resources](https://inductiva.ai/guides/how-it-works/machines/index):
+Discover how the API allocates and runs your simulation tasks on **dedicated** 
+computational resources. Take a further look under the hood to learn the underlying 
+infrastructure powering your simulations, especially how the API enables you to access 
+a variety of computational resources, manages your computational workload, and allocates 
+it to the appropriate computational resource through a unified Python code.
 
-The **Inductiva CLI** provides a fast and efficient way to interact with the API directly from the terminal, without needing to write a full script. It uses the same methods as the Python Client but eliminates the need to open an IDE or write a script for simple operations.
+- [Built-in Simulators](https://website-staging.inductiva.ai/guides/how-it-works/building-blocks/configuring-simulators):
+Explore how the API wraps existing open-source software packages within layers that 
+facilitate their execution across various cloud-based virtual machines and providers, 
+transforming them into abstract computational tasks.
 
-**Best For:**
-- Quick operational tasks and one-off commands
-- Check the status of a task or list all running machines.
-- Download outputs or view logs for a specific task.
-- Manually start or terminate a resource.
+- [Storage and Data Flow](https://inductiva.ai/guides/how-it-works/cloud-storage):
+Get to know the typical flow of data when you invoke a remote simulator using the 
+Inductiva API, from sending your input files to remote computational resources to 
+accessing the simulation outputs.
 
-````{eval-rst}
-.. seealso::
-   Check the complete CLI documentation `here <https://inductiva.ai/guides/api-functions/cli/overview>`_
-````
-
-### Web Console: _an intuitive graphical interface for visualization and management_
-
-The **Web Console** is a graphical interface to visually monitor tasks and resources, analyze costs, see statistics and analytics, and manage your account. It requires **no programming or command-line knowledge**, making it the most suited tool for a high-level overview.
-
-**Best For:**
-- Visually monitor resources.
-- Analyze costs and manage your credits and account settings.
-- Perform urgent actions like killing a task or terminating a machine group with a few clicks.
-
-## How They Fit Together
-
-Inductiva's ecosystem is designed for maximum flexibility. With all three interfaces built on the same API, you can seamlessly move between Python scripts, terminal commands, and the web interface as your workflow evolves.
-
-Consider a typical workflow:
-
-1.  **Launch with Python:** Define and launch simulations using a **Python script**.
-2.  **Operate with the CLI:** Use for quick operational tasks like bulk file deletions, loading custom containers so you can [Bring Your Own Software](https://inductiva.ai/guides/expand/bring-your-own-software/index), or checking task status without opening an IDE.
-3.  **Monitor in the Console:** Switch to the [Web Console](https://console.inductiva.ai/dashboard) for comprehensive visual monitoring, detailed task analytics, and cost analysis throughout your simulation lifecycle.
-
-
-
-| | AUTOMATE & SCRIPT | LAUNCH SIMULATIONS | MONITOR & OPERATE | VISUAL ANALYTICS | MANAGE ACCOUNT |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Python Client** | ✅ | ✅ | ✅ | ❌ | ❌ |
-| **CLI** | ❌ | ✅ | ✅ | ❌ | ❌ |
-| **Web Console** | 🚧* | 🚧* | ✅ | ✅ | ✅ |
-
-*You can now run scripts and launch simulations in the Web Console using the [Playground](https://console.inductiva.ai/playground) Beta feature.
 
 ```{banner}
 :origin: blocks
