@@ -85,6 +85,19 @@ machines/spot-machines
 
 ```{toctree}
 ---
+caption: Machine-Simulation Fit
+maxdepth: 3
+hidden: true
+---
+Overview <machine_simulation/index>
+machines/shared-dedicated-resources
+machines/manage_computational_resources.md
+machines/computational-infrastructure
+machines/spot-machines
+```
+
+```{toctree}
+---
 caption: The Basics
 maxdepth: 2
 hidden: true

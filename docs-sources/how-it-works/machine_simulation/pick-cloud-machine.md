@@ -1,20 +1,76 @@
-# Pick the right cloud machine for your simulation
+# Pick the Right Cloud Machine
 
-At Inductiva we make available hundreds of cloud machine types.
-These machines cover a wide range of specifications, and provide you with options at different levels of performance and cost.
+Choosing the right machine to run your simulations can make the difference between a simulation that runs in hours versus days, and between spending $10 versus $100 on compute costs. With hundreds of machine types available through Inductiva, this guide will help you navigate the options and make informed decisions that optimize both performance and cost.
 
-Here’s a short guide to help you navigate this wealth of options.
+## Quick Decision Tree
 
-## Start with the Machine Family
+**Need to get started immediately?** Use our [complete machine catalog](https://inductiva.ai/machines) to browse all available options, or jump to our [recommended configurations](#top-recommendations) for common use cases.
 
-### Leverage your workload
+**Want to make data-driven decisions?** Run [benchmarks](https://inductiva.ai/guides/scale-up/benchmark/index) on a few candidate machines with a representative subset of your workload.
 
-- General-purpose - C4, C4A, C3, C3D, N4, N2, and N2D
-Best price-performance ratio and adequate for a variety of workloads.
-- Compute-intensive - C2, C2D and H3
-Highest performance per core and optimized for compute-intensive workloads.
-- Accelerator-optimized - G2, A2 and A3
-For workloads that require GPUs.
+**Budget-conscious?** Check out our [cost optimization strategies](#cost-optimization-strategies) and [spot pricing guide](#leveraging-spot-instances).
+
+## Understanding Machine Families
+
+Inductiva provides access to several families of Virtual Machines (VMs) on Google Cloud Platform (GCP), each optimized for different computational patterns:
+
+### 🏃‍♂️ Compute-Optimized Machines
+**Best for:** CPU-intensive simulations, mathematical modeling, fluid dynamics
+- **Families:** C2, C2D, C3, C3D, C4, C4A, H3
+- **Key strength:** Highest performance per core with premium processors
+- **Typical use cases:** CFD simulations, finite element analysis, ray tracing
+- **Memory ratio:** Optimized compute-to-memory ratios (typically 2-4GB RAM per vCPU)
+
+[Learn more about compute-optimized machines →](https://cloud.google.com/compute/docs/compute-optimized-machines)
+
+### 🧠 Memory-Optimized Machines
+**Best for:** Large-scale simulations requiring extensive data in memory
+- **Families:** M1, M2, M3, X4
+- **Key strength:** High memory-to-vCPU ratios (8GB+ per vCPU)
+- **Typical use cases:** Large mesh simulations, in-memory databases, complex multi-physics models
+- **When to choose:** Your simulation loads large datasets or requires extensive intermediate storage
+
+[Learn more about memory-optimized machines →](https://cloud.google.com/compute/docs/memory-optimized-machines)
+
+### ⚖️ General-Purpose Machines
+**Best for:** Balanced workloads, development, small to medium simulations
+- **Families:** N1, N2, N2D, N4, E2
+- **Key strength:** Versatile balance of compute, memory, and networking
+- **Typical use cases:** Prototyping, mixed workloads, cost-sensitive applications
+- **Cost advantage:** Best price-performance ratio for varied workloads
+
+[Learn more about general-purpose machines →](https://cloud.google.com/compute/docs/general-purpose-machines)
+
+### 🚀 Accelerator-Optimized Machines
+**Best for:** GPU-accelerated simulations, machine learning, parallel computing
+- **Families:** A2, A3, G2
+- **Key strength:** High-performance GPUs (NVIDIA Tesla, A100, H100)
+- **Typical use cases:** CUDA-accelerated simulations, molecular dynamics, AI-enhanced modeling
+- **Performance boost:** 10-100x speedup for compatible workloads
+
+[Learn more about accelerator-optimized machines →](https://cloud.google.com/compute/docs/accelerator-optimized-machines)
+
+## Machine Naming Convention Decoded
+
+Understanding the naming pattern helps you quickly identify the best options:
+
+### Family Identifiers
+- **Generation number:** C**4**, N**2** → Year introduced (4=2024, 3=2023, 2=2020)
+- **Architecture suffix:**
+  - **D** → AMD processors (C2**D**, N2**D**)
+  - **A** → ARM processors (C4**A**, T2**A**)
+  - **G/A prefix** → GPU-equipped (G2, A3)
+  - **No suffix** → Intel processors (C2, N2, C3)
+
+### Memory Profiles
+- **highcpu:** 1-3GB RAM per vCPU → Cost-optimized for CPU-bound tasks
+- **standard:** 3-7GB RAM per vCPU → Balanced for most applications
+- **highmem:** 7-14GB RAM per vCPU → Memory-intensive workloads
+- **megamem:** 14-19GB RAM per vCPU → Very large datasets
+- **ultramem:** 24-31GB RAM per vCPU → Extreme memory requirements
+
+### vCPU Count
+The final number indicates virtual CPUs: c3d-standard-**96** has 96 vCPUs.
 
 ### Narrow down
 
