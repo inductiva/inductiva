@@ -91,8 +91,8 @@ hidden: true
 ---
 Overview <machine_simulation/index>
 machine_simulation/pick-cloud-machine
+machine_simulation/system-metrics
 machine_simulation/benchmark-sys-metrics
-machine_simulation/optimization-strategies
 ```
 
 ```{toctree}
