@@ -90,10 +90,9 @@ maxdepth: 3
 hidden: true
 ---
 Overview <machine_simulation/index>
-machines/shared-dedicated-resources
-machines/manage_computational_resources.md
-machines/computational-infrastructure
-machines/spot-machines
+machine_simulation/pick-cloud-machine
+machine_simulation/benchmark-sys-metrics
+machine_simulation/optimization-strategies
 ```
 
 ```{toctree}

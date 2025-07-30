@@ -5,9 +5,9 @@ Choosing the right computational resources for your simulation is crucial for op
 ## Get started
 Learn how to intelligently select and optimize computational resources for your specific simulation needs. From initial machine selection to post-simulation analysis, these guides help you make data-driven decisions about your computational infrastructure.
 
-| **[Pick the Right Cloud Machine →](pick-cloud-machine.md)** | **[Benchmarks vs. System Metrics →](benchmarks-vs-system-metrics.md)** | **[Optimization Strategies →](optimization-strategies.md)** |
-|---|---|---|
-| Navigate hundreds of available machine types to find the perfect balance of performance, cost, and specifications for your workload | Understand when to use benchmarks for upfront planning versus system metrics for post-simulation optimization | Advanced techniques for fine-tuning your resource allocation and improving simulation efficiency |
+| **[Pick the Right Cloud Machine →](pick-cloud-machine.md)** | **[Benchmarks vs. System Metrics →](benchmark-sys-metrics.md)** |
+|---|---|
+| Navigate hundreds of available machine types to find the perfect balance of performance, cost, and specifications for your workload | Understand when to use benchmarks for upfront planning versus system metrics for post-simulation optimization |
 
 ## Why it's Important
 
