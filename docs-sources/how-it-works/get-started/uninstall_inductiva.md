@@ -1,4 +1,4 @@
-# Uninstall the `inductiva` package
+# Uninstall the Inductiva Python package
 
 Whether you just want a completely new installation of `inductiva` or
 simply want to completely remove the package from your system, we've

@@ -18,7 +18,7 @@ Open your Terminal (Linux/MacOS) or Command Prompt/PowerShell (Windows) and ente
 pip install inductiva
 ```
 
-If you encounter any issues during installation, please refer to our <a href="/guides/how-it-works/basics/troubleshooting">troubleshooting guide</a> for assistance.
+If you encounter any issues during installation, please refer to our [troubleshooting guide](https://inductiva.ai/guides/how-it-works/get-started/troubleshooting) for assistance.
 
 ## Step 2: Authenticate Using Inductiva's CLI (Command Line Interface)
 

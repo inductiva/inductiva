@@ -58,7 +58,7 @@ While the examples above focus on GCP resources, Inductiva also supports running
 ````{eval-rst}
 .. seealso::
    Learn how to manage your computational resources through
-   `Inductiva's Command Line Interface <https://inductiva.ai/guides/documentation/cli/resources>`_
+   `Inductiva's Command Line Interface <https://inductiva.ai/guides/api-functions/cli/index>`_
 ```` 
 
 ## What Next? 
@@ -68,7 +68,7 @@ we talked about how the growing diversity of computing options
 is transforming the landscape—and how it’s not always easy to find the best machine 
 for your job.
 
-With our [benchmarking tool](benchmarking.md), we make it easier to make smarter, cost-effective decisions for your workloads.
+With our [benchmarking tool](https://inductiva.ai/guides/scale-up/benchmark/index), we make it easier to make smarter, cost-effective decisions for your workloads.
 
 ```{banner_small}
 :origin: how_it_works_infra

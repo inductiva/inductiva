@@ -40,21 +40,35 @@ hidden: true
 Minimize simulation data <save-costs/save_storage>
 
 ```
-
+ 
 ```{toctree}
 ---
-caption: Reuse Files Across Simulations
+caption: Recipes
 maxdepth: 3
 hidden: true
 ---
 
-Reuse Files Across Multiple Simulations <reuse-files/reuse-files>
+♻️ Reuse Files Across Multiple Simulations <recipes/reuse-files>
+⬇️ Download specific files from a group of tasks <recipes/download-file-from-project>
+🗑️ Clean Up Storage by Condition <recipes/storage-related/index>
+👀 Real-Time Monitoring & Conditional Auto Termination <recipes/real-time-simulation-monitoring>
+⏰ Setting a Time-to-Live on Your Simulations <recipes/set-task-ttl/set-task-ttl>
+```
+
+```{toctree}
+---
+caption: Generate Dataset
+maxdepth: 3
+hidden: true
+---
+
+🧪 Generate a Dataset <generate-dataset/generate-dataset>
 
 ```
 
 ```{toctree}
 ---
-caption: Benchmark
+caption: Benchmarks
 maxdepth: 2
 hidden: true
 ---

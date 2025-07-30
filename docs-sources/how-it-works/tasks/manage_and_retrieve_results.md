@@ -67,7 +67,7 @@ $ inductiva storage list --max-results 2 --order-by creation_time --sort-order d
 
 ````{eval-rst}
 .. seealso::
-    For complete remote storage documentation, check the `Cloud Storage section <https://inductiva.ai/guides/how-it-works/cloud-storage/index>`_
+    For complete remote storage documentation, check the `Cloud Storage section <https://inductiva.ai/guides/how-it-works/cloud-storage/cloud-storage>`_
 ````
 
 
