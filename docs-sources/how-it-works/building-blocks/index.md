@@ -20,26 +20,27 @@ nuances and additional options available, which we'll explore in detail througho
 this section. More specifically, you'll become familiarized with how the API
 works:
 
-- <a href="https://inductiva.ai/guides/how-it-works/tasks/index">Tasks</a>: 
+- [Tasks](https://inductiva.ai/guides/how-it-works/tasks/index):
 Learn about tasks, the API's core computational object, which
 gets created when you submit your simulation request, enabling you to track its
 progress and access its outputs in real-time.
 
-- <a href="https://inductiva.ai/guides/how-it-works/machines/index">Computational Resources</a>: 
-Discover how the API allocates and runs your simulation tasks on **dedicated** computational resources.
-Take a further look under the hood to learn the underlying infrastructure powering your simulations,
-especially how the API enables you to access a variety of computational resources,
-manages your computational workload, and allocates it to the appropriate computational
-resource through a unified Python code.
+- [Computational Resources](https://inductiva.ai/guides/how-it-works/machines/index):
+Discover how the API allocates and runs your simulation tasks on **dedicated** 
+computational resources. Take a further look under the hood to learn the underlying 
+infrastructure powering your simulations, especially how the API enables you to access 
+a variety of computational resources, manages your computational workload, and allocates 
+it to the appropriate computational resource through a unified Python code.
 
-- [Built-in Simulators](./configuring-simulators.md): Explore how the API
-wraps existing open-source software packages within layers that facilitate their
-execution across various cloud-based virtual machines and providers, transforming
-them into abstract computational tasks.
+- [Built-in Simulators](https://website-staging.inductiva.ai/guides/how-it-works/building-blocks/configuring-simulators):
+Explore how the API wraps existing open-source software packages within layers that 
+facilitate their execution across various cloud-based virtual machines and providers, 
+transforming them into abstract computational tasks.
 
-- <a href="https://inductiva.ai/guides/how-it-works/cloud-storage">Storage and Data Flow</a>: 
-Get to know the typical flow of data when you invoke a remote simulator using the Inductiva API, 
-from sending your input files to remote computational resources to accessing the simulation outputs.
+- [Storage and Data Flow](https://inductiva.ai/guides/how-it-works/cloud-storage):
+Get to know the typical flow of data when you invoke a remote simulator using the 
+Inductiva API, from sending your input files to remote computational resources to 
+accessing the simulation outputs.
 
 
 ```{banner}
