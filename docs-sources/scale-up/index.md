@@ -48,7 +48,7 @@ maxdepth: 3
 hidden: true
 ---
 
-♻️ Reuse Files Across Multiple Simulations <reuse-files/reuse-files>
+♻️ Reuse Files Across Multiple Simulations <recipes/reuse-files>
 ⬇️ Download specific files from a group of tasks <recipes/download-file-from-project>
 🗑️ Clean Up Storage by Condition <recipes/storage-related/index>
 👀 Real-Time Monitoring & Conditional Auto Termination <recipes/real-time-simulation-monitoring>
