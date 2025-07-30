@@ -3,7 +3,7 @@ const BANNER_BIG_MESSAGES = {
     1: {
         active: true,
         top_text: "Ready to dive in?",
-        bot_text: "Start for free today and get $5 in compute credits.",
+        bot_text: "Start for free and launch your first project in minutes.",
         button_text: "Get Started ✨",
     },
 };
@@ -106,7 +106,7 @@ const BANNER_SMALL_MESSAGES = {
     },
     20: {
         active: true,
-        text: "From simulation to dataset model — all in one Python workflow.",
+        text: "From physics-based simulation to ML-ready datasets — all in one Python workflow.",
         button_text: "Start For Free",
     },
     21: {
