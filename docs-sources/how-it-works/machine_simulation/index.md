@@ -9,7 +9,7 @@ Learn how to select and optimize computational resources for your specific simul
 |---|---|
 | Navigate hundreds of available machine types to find the perfect balance of performance, cost, and specifications for your workload | Understand when to use benchmarks for upfront planning versus system metrics for post-simulation optimization |
 
-## Why it's Important
+## Why it's Useful
 
 ✓ **Avoid over-provisioning** Choose machines with the right amount of CPU, memory, and storage to avoid paying for unused resources while ensuring your simulations run smoothly.
 
