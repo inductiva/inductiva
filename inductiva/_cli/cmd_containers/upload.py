@@ -40,7 +40,7 @@ def upload_container(args):
     output_path = args.output_path
 
     if not output_path:
-        output_path = f"{default_folder}/{image_name}.sif"
+        output_path = os.path.join(default_folder, f"{image_name}.sif")
     else:
         output_path = os.path.normpath(output_path)
 
