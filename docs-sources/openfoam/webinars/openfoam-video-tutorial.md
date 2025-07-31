@@ -5,7 +5,7 @@ In **Episode 2** of our webinar series *Run It with Inductiva.AI*, we demonstrat
 Whether you're working on aerodynamics, heat transfer, or multiphase flows, this session shows 
 how researchers and engineers are transforming simulation workflows with cloud-based computing.
 
-💡 **What You’ll Learn**:
+💡 **What you’ll learn**:
 - Why integrate OpenFOAM with Inductiva? (*Scalability, ease of use, and efficiency*)
 - Live demo: Running OpenFOAM on the Inductiva platform
 - Tips, performance metrics, and real-world applications

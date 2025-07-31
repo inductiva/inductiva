@@ -3,7 +3,7 @@ In **Episode 3** of our webinar series *Run It with Inductiva.AI*,  we show how 
 OpenFOAM dataset easily using **Inductiva’s cloud-based HPC platform**. If you're already familiar 
 with OpenFOAM, the additional setup takes fewer than 20 lines of Python.
 
-💡 **What You’ll Learn**:
+💡 **What you’ll learn**:
 - Introduction and motivation behind Machine Learning models for CFD
 - Live demo: Running OpenFOAM on the Inductiva platform
 - Generating a full dataset
