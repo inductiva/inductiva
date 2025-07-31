@@ -28,15 +28,15 @@ usage. Learn best practices for organizing and cleaning up data.
 
 
 💡 Why It’s Useful:
-* Understand the platform’s architecture – Learn how Inductiva’s core components fit together so 
+✓ Understand the platform’s architecture – Learn how Inductiva’s core components fit together so 
 you can navigate and use them effectively.
-* Launch and manage simulations with confidence – Get clear guidance from setup to output, whether 
+✓ Launch and manage simulations with confidence – Get clear guidance from setup to output, whether 
 you're running your first task or scaling up a complex project.
-* Optimize performance and costs – Make informed decisions about machines, storage, and quotas to 
+✓ Optimize performance and costs – Make informed decisions about machines, storage, and quotas to 
 get faster results and better credit efficiency.
-* Stay in control of your data and compute – Learn how simulations are executed, where your results 
+✓ Stay in control of your data and compute – Learn how simulations are executed, where your results 
 are stored, and how to monitor or clean up your resources.
-* Make the most of Inductiva’s flexibility – Whether you use built-in simulators or bring your own, 
+✓ Make the most of Inductiva’s flexibility – Whether you use built-in simulators or bring your own, 
 you’ll understand how to tailor the platform to your workflow.
 
 
