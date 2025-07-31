@@ -9,15 +9,15 @@ Learn best practices for organizing and cleaning up data.
 Remote Storage and Worker Storage, and how they all connect.
 
 ## Why it's Useful
-* Store everything in one place – Every user gets a private cloud bucket to hold 
+✓ Store everything in one place – Every user gets a private cloud bucket to hold 
 simulation inputs and outputs securely.
-* Keep your data organized – Understand how storage is linked to projects and tasks, 
+✓ Keep your data organized – Understand how storage is linked to projects and tasks, 
 so you never lose track of your results.
-* Control your storage costs – Learn how to monitor usage and clean up unnecessary 
+✓ Control your storage costs – Learn how to monitor usage and clean up unnecessary 
 files to avoid surprises.
-* Automate and manage easily – Upload, download, or delete files efficiently across 
+✓ Automate and manage easily – Upload, download, or delete files efficiently across 
 your simulations.
-* No time limits – Your data stays available as long as you need it - no automatic 
+✓ No time limits – Your data stays available as long as you need it - no automatic 
 deletion, no expiration deadlines.
 
 ```{banner}
