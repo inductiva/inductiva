@@ -12,15 +12,15 @@ storage usage, and tips to stay cost-efficient. | Learn about the limits in plac
 how they help ensure a reliable experience for everyone, and how to request increases if needed. |
 
 ## Why it's Useful
-* Plan your simulation budget confidently — Understand exactly how far your credits go and what 
+✓ Plan your simulation budget confidently — Understand exactly how far your credits go and what 
 affects your spending.
-* Choose the right resources for your needs — Match your simulations to the most cost-efficient 
+✓ Choose the right resources for your needs — Match your simulations to the most cost-efficient 
 machines and core configurations.
-* Avoid unexpected interruptions — Get clarity on platform limits (quotas) to prevent your tasks 
+✓ Avoid unexpected interruptions — Get clarity on platform limits (quotas) to prevent your tasks 
 from being blocked or delayed.
-* Scale responsibly — Learn how to make the most of your available resources and when to request 
+✓ Scale responsibly — Learn how to make the most of your available resources and when to request 
 an upgrade.
-* Make smarter decisions — Transparent cost and quota info helps you optimize both performance 
+✓ Make smarter decisions — Transparent cost and quota info helps you optimize both performance 
 and spending.
 
 ```{banner}
