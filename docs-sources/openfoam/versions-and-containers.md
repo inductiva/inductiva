@@ -1,4 +1,4 @@
-# Versions and Containers 🛠️
+# Versions and Containers ⚙️
 
 ## About OpenFOAM
 OpenFOAM is an open-source C++ toolbox designed for the development of custom numerical solvers and pre- and post-processing utilities. It is widely used for solving a variety of continuum mechanics problems, including computational fluid dynamics, solid mechanics, electromagnetism, and multiphase flow.
