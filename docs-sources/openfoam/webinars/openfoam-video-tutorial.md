@@ -1,5 +1,5 @@
 # OpenFOAM on Inductiva
-In **Episode 2** of our webinar series *Run It with Inductiva*, we demonstrate how 
+In **Episode 2** of our webinar series *Run It with Inductiva.AI*, we demonstrate how 
 **Inductiva** simplifies running complex **CFD workflows** at massive scale using **OpenFOAM**.
 
 Whether you're working on aerodynamics, heat transfer, or multiphase flows, this session shows 
