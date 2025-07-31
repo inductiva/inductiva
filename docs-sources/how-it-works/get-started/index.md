@@ -14,13 +14,13 @@ your first simulation in minutes. This hands-on walkthrough covers uploading inp
 and running a ready-to-use simulator. | Learn how to spin up your first virtual machine in the cloud. |
 
 ## Why it's Useful
-* Get up and running fast – Clear, step-by-step instructions help you install the client 
+✓ Get up and running fast – Clear, step-by-step instructions help you install the client 
 and launch your first simulation in minutes.
-* Smooth out the bumps – Troubleshooting tips make it easier to solve common setup issues 
+✓ Smooth out the bumps – Troubleshooting tips make it easier to solve common setup issues 
 without losing momentum.
-* Go beyond the basics – Learn how to start your own cloud machines and unlock more 
+✓ Go beyond the basics – Learn how to start your own cloud machines and unlock more 
 advanced workflows.
-* Full control – Clean uninstallation instructions ensure you can manage your environment 
+✓ Full control – Clean uninstallation instructions ensure you can manage your environment 
 confidently.
 
 
