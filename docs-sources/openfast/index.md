@@ -60,11 +60,11 @@ turbsim-visualization
 
 ```{toctree}
 ---
-caption: " "
+caption: 🚀 Benchmarks
 maxdepth: 1
 hidden: true
 ---
-benchmarks
+The curious case of OpenFAST <benchmarks>
 ```
 
 ```{toctree}

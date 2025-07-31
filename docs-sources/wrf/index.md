@@ -44,7 +44,7 @@ quick-start
 
 ```{toctree}
 ---
-caption: "Visualization"
+caption: "📊 Visualization"
 maxdepth: 1
 hidden: true
 ---

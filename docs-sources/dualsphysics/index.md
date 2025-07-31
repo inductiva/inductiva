@@ -49,7 +49,7 @@ run-on-gpu-configuration
 
 ```{toctree}
 ---
-caption: Visualization
+caption: 📊 Visualization
 maxdepth: 4
 hidden: true
 ---

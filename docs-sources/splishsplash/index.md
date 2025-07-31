@@ -47,7 +47,7 @@ Generate Synthetic Data for Physics-Informed ML <synthetic-data-for-piml/index>
 
 ```{toctree}
 ---
-caption: Visualization
+caption: 📊 Visualization
 maxdepth: 4
 hidden: true
 ---

@@ -1,4 +1,4 @@
-# Benchmarks
+# GPU Analysis & Results
 This benchmark report presents a performance comparison across various GPU configurations, serving as your trusted 
 guide in selecting the right simulation hardware for your computational CaNS projects.
 

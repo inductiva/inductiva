@@ -47,7 +47,7 @@ Run AMR-Wind Simulations Across Multiple Machines <mpi-cluster-tutorial>
 
 ```{toctree}
 ---
-caption: Visualization
+caption: 📊 Visualization
 maxdepth: 2
 hidden: true
 ---

@@ -1,6 +1,4 @@
-# Benchmarks
-
-## The curious case of OpenFAST
+# The curious case of OpenFAST
 OpenFAST is a software that operates on a single thread, limiting its ability to utilize the full processing capacity of modern CPUs, which often support multiple threads in parallel. As a result, the performance of OpenFAST simulations is primarily influenced by the CPU clock frequency.
 
 Interestingly, consumer desktop computers typically have higher clock frequencies compared to high-performance machines used in cloud centers. For example, desktop CPUs commonly operate between 4 and 5 GHz (with potential overclocking beyond 5.5 GHz), while cloud machines generally run at clock speeds around 3 GHz or lower.

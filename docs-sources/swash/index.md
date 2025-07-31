@@ -40,9 +40,9 @@ quick-start
 
 ```{toctree}
 ---
-caption: " "
+caption: 🚀 Benchmarks
 maxdepth: 1
 hidden: true
 ---
-benchmarks
+Results & Analysis <benchmarks>
 ```
