@@ -1,7 +1,10 @@
 # System Metrics - Fit the Machine To Your Simulation
 
-A section of the Task Detail screen - System Metrics - shows the key performance stats for the machine that ran your task, including CPU and memory usage, plus total disk read and write.  
->⚠️Please note that these metrics are not live; they become available only after your task finishes.
+A section of the Task Detail screen - System Metrics - shows the key performance statistics for the machine that ran your task, including CPU and memory usage, plus total disk read and write.
+
+![System Metrics](../_static/sys_metrics.gif)
+
+>⚠️ Please note that these metrics are **not live**; they become available only after your task finishes.
 
 With System Metrics, you can better understand how your simulation used the computational resources, helping you fine-tune machine choices for faster runs and lower costs.
 

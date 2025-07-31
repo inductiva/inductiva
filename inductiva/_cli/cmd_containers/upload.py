@@ -28,7 +28,7 @@ def extract_image_name(image_ref: str) -> str:
 
     # Split org/image and version tag
     name_part = image_ref.split("/")[-1]
-    image_name = name_part.split(":")[0]
+    image_name = "_".join(name_part.split(":"))
     return image_name
 
 
@@ -40,7 +40,7 @@ def upload_container(args):
     output_path = args.output_path
 
     if not output_path:
-        output_path = f"{default_folder}/{image_name}.sif"
+        output_path = os.path.join(default_folder, f"{image_name}.sif")
     else:
         output_path = os.path.normpath(output_path)
 
