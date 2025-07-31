@@ -8,19 +8,27 @@ to run your own software in the cloud, connect external compute resources, or
 integrate your current cloud account — all while keeping the simplicity of 
 Inductiva’s API and workflow.  
 
-📘 What’s Inside:
-- 🧩 [Bring your own software](bring-your-own-software/index.md) – Run your custom 
+## 📘 What’s Inside:
+🧩 [Bring your own software](bring-your-own-software/index.md) – Run your custom 
 code on Inductiva with containerized environments.  
-- 🖥️ [Bring your own hardware](use-local-task-runner/index.md) – Connect and use your own machines with Inductiva’s platform.  
-- ☁️ [Bring your own cloud](bring-your-own-cloud/index) – Link your existing cloud account and run simulations there seamlessly.  
+
+🖥️ [Bring your own hardware](use-local-task-runner/index.md) – Connect and use your 
+own machines with Inductiva’s platform.  
+
+☁️ [Bring your own cloud](bring-your-own-cloud/index) – Link your existing cloud 
+account and run simulations there seamlessly.  
 
 
-💡 Why It’s Useful:
-✓ Full flexibility: Use your own simulation code and containerized environments.  
-✓ Leverage private infrastructure: Run simulations on on-prem or custom machines.  
-✓ Integrate with your cloud: Use your existing cloud credits or setup.  
-✓ Keep control: Customize environments while keeping access control and reproducibility.  
-✓ Scale beyond limits: Overcome quota or cost constraints by bringing your own compute.  
+## 💡 Why It’s Useful:
+✓ **Full flexibility:** Use your own simulation code and containerized environments.  
+
+✓ **Leverage private infrastructure:** Run simulations on on-prem or custom machines.  
+
+✓ **Integrate with your cloud:** Use your existing cloud credits or setup.  
+
+✓ **Keep control:** Customize environments while keeping access control and reproducibility.  
+
+✓ **Scale beyond limits:** Overcome quota or cost constraints by bringing your own compute.  
 
 
 ```{banner}
@@ -53,5 +61,5 @@ maxdepth: 5
 hidden: true
 ---
 bring-your-own-cloud/index
-bring-your-own-cloud/export-files-to-aws/index>
+bring-your-own-cloud/export-files-to-aws/index
 ```
