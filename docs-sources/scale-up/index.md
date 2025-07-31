@@ -7,29 +7,40 @@ for advanced users. This section guides you through benchmarking, monitoring, an
 your workflows to maximize speed and minimize costs, so you can scale your projects confidently 
 and effectively.
 
-📘 What’s Inside:
-* 🔢 [Parallel Simulations](parallel-simulations/index) – Learn how to run many simulations at 
+## 📘 What’s Inside:
+🔢 [Parallel Simulations](parallel-simulations/index) – Learn how to run many simulations at 
 once using cloud resources, accelerating large experiments or parameter sweeps with minimal setup.
-* 📁 [Projects](projects/index) – Organize your work into projects to group related simulations, 
+
+📁 [Projects](projects/index) – Organize your work into projects to group related simulations, 
 streamline task tracking, and manage resource usage efficiently.
-* 💰 [Save Costs](save-costs/index) – Tips and strategies to reduce credit usage, from managing 
+
+💰 [Save Costs](save-costs/index) – Tips and strategies to reduce credit usage, from managing 
 storage and quotas to selecting efficient machines and cleaning up resources.
-* ⏩ [Recipes](recipes/index) – Ready-to-use code snippets to streamline your workflows.
-* 🧪 [Generate Dataset](generate-dataset/generate-dataset) – Use simulations to generate custom 
+
+⏩ [Recipes](recipes/index) – Ready-to-use code snippets to streamline your workflows.
+
+🧪 [Generate Dataset](generate-dataset/generate-dataset) – Use simulations to generate custom 
 datasets at scale, ideal for machine learning or research requiring labeled physical data.
-* 📊 [Benchmarks](benchmark/index) – Learn to benchmark your simulation on different machines to 
+
+📊 [Benchmarks](benchmark/index) – Learn to benchmark your simulation on different machines to 
 find the most cost-effective and performant configuration.
 
-💡 Why It’s Useful:
+
+## 💡 Why It’s Useful:
 ✓ Reduce costs and simulation time by choosing the most efficient machine type for your task.
+
 ✓ Benchmark and optimize your workloads before committing to full-scale runs.
+
 ✓ Gain performance insights with system metrics like CPU, memory, and disk usage.
-✓ Scale confidently knowing your simulations are running on the right resources.
+
+✓ Scale confidently knowing your simulations are running on the right resources. 
+
 ✓ Support high-performance use cases, from academic research to commercial engineering, 
 with minimal trial and error.
 
 
-Discover how to efficiently run larger and more complex simulations on Inductiva!
+Discover how to efficiently run larger and more complex simulations on Inductiva!   
+
 
 ```{banner}
 :origin: scale_up
