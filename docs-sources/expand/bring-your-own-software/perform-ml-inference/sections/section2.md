@@ -15,7 +15,6 @@ This command will:
 
 > **Note**: Ensure the Inductiva CLI is installed and properly configured. If you haven't done so yet, refer to the Inductiva installation guide.
 
-For more information on using personal Docker images, visit the [Inductiva documentation](https://inductiva.ai/guides/documentation/intro/private-dockers).
 
 ## Verify the Upload
 Once the image is uploaded, you can confirm it's available in your account by listing your containers:
