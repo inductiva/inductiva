@@ -35,7 +35,7 @@ versions-and-containers
 
 ```{toctree}
 ---
-caption: Tutorials
+caption: 🛠️ Tutorials
 maxdepth: 2
 hidden: true
 --- 
@@ -46,11 +46,11 @@ Run a Temporal Boundary Layer Case <run-temporal-boundary-layer-case>
 
 ```{toctree}
 ---
-caption: " "
+caption: 🚀 Benchmarks
 maxdepth: 1
 hidden: true
 ---
-benchmarks
+GPU Analysis & Results <benchmarks>
 ```
 
 ```{toctree}

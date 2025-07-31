@@ -1,4 +1,4 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
 
 ## About GX
 [GX](https://gx.readthedocs.io/en/latest/) is a GPU-native model for solving the nonlinear gyrokinetic system for low-frequency turbulence in magnetized plasmas, in particular tokamaks and stellarators, using Fourier-Hermite-Laguerre spectral methods. This software has proven ideal for fusion reactor design and optimization, as well as for general physics research.

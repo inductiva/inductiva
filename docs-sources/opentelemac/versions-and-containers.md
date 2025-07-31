@@ -1,4 +1,4 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
 
 ## About OpenTelemac
 [OpenTelemac](https://www.opentelemac.org) is a suite of open-source numerical models designed to 
