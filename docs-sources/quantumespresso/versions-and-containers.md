@@ -1,4 +1,4 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
 
 ## About Quantum ESPRESSO
 [Quantum ESPRESSO](https://sandialabs.github.io/Quantum/) is an open-source suite widely used for electronic structure calculations and materials modeling at the nanoscale. It is based on density functional theory (DFT) and uses plane-wave basis sets to solve quantum mechanical equations for many-body systems.
