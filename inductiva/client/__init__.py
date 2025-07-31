@@ -64,6 +64,7 @@ from inductiva.client.models.executer import Executer
 from inductiva.client.models.file_info import FileInfo
 from inductiva.client.models.gpu_info import GPUInfo
 from inductiva.client.models.http_validation_error import HTTPValidationError
+from inductiva.client.models.machine_filter_options import MachineFilterOptions
 from inductiva.client.models.machine_group_cost_per_hour import MachineGroupCostPerHour
 from inductiva.client.models.machine_group_costs import MachineGroupCosts
 from inductiva.client.models.machine_group_status import MachineGroupStatus
