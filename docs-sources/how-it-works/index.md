@@ -82,6 +82,18 @@ machines/spot-machines
 
 ```{toctree}
 ---
+caption: Machine-Simulation Fit
+maxdepth: 3
+hidden: true
+---
+Overview <machine_simulation/index>
+machine_simulation/pick-cloud-machine
+System Metrics <machine_simulation/system-metrics>
+machine_simulation/benchmark-sys-metrics
+```
+
+```{toctree}
+---
 caption: Cloud Storage
 maxdepth: 2
 hidden: true
