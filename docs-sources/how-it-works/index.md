@@ -54,11 +54,9 @@ caption: The Building Blocks
 maxdepth: 2
 hidden: true
 ---
-
 Overview <building-blocks/index>
 building-blocks/interfaces
 building-blocks/configuring-simulators
-
 ```
 
 ```{toctree}
@@ -67,14 +65,13 @@ caption: Get Started
 maxdepth: 3
 hidden: true
 ---
-
+Overview <get-started/index>
 🚀 Install Inductiva API in 2 steps <get-started/install-guide>
 ⏩ Quick-Start guide <get-started/quick-start-guide>
 📌 Pick a cloud machine for your simulation <get-started/pick-cloud-machine>
 ✈️ Start your first cloud machine with Inductiva <get-started/start-first-machine>
 🛠️ Troubleshoot installation <get-started/troubleshooting>
 🗑️ Uninstallation guide <get-started/uninstall_inductiva>
-
 ```
 
 ```{toctree}
@@ -83,12 +80,11 @@ caption: Costs and Quotas
 maxdepth: 2
 hidden: true
 ---
-
+Overview <basics/index>
 💲 How much compute time does 5$US provide <basics/compute-5usd>
 💰 How much does a simulation cost in Inductiva? <basics/how-much-does-it-cost>
 🔒 Inductiva Quotas <basics/quotas>
 💥 How many cores can be used? <basics/how-many-cores>
-
 ```
 
 ```{toctree}
@@ -135,5 +131,6 @@ caption: Cloud Storage
 maxdepth: 2
 hidden: true
 ---
-Cloud Storage <cloud-storage/cloud-storage>
+Overview <cloud-storage/index>
+Cloud Storage <cloud-storage/cloud-storage> 
 ```
