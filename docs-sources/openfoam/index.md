@@ -39,7 +39,7 @@ versions-and-containers
 
 ```{toctree}
 ---
-caption: Tutorials
+caption: Tutorials 🛠️
 maxdepth: 2
 hidden: true
 ---
@@ -51,12 +51,12 @@ Run occDrivAerStaticMesh from the OpenFOAM HPC Benchmark Suite <run-occdrivaerst
 
 ```{toctree}
 ---
-caption: Webinars
+caption: Watch & Learn ▶️
 maxdepth: 3
 hidden: true
 ---
-🎥 Video Tutorial <webinars/openfoam-video-tutorial>
-▶️ Generating a CFD dataset <webinars/openfoam-cfd-dataset>
+OpenFOAM on Inductiva <webinars/openfoam-video-tutorial>
+Generating a CFD Dataset <webinars/openfoam-cfd-dataset>
 ```
 
 ```{toctree}
