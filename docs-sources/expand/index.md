@@ -1,4 +1,4 @@
-## Expand 
+# Expand 
 
 The Expand section showcases how Inductiva gives you the freedom to tailor the 
 platform to your specific needs. Whether you're working with custom code, 

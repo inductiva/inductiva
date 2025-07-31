@@ -9,7 +9,7 @@ experiments or large-scale production simulations, this section helps you avoid 
 optimize your budget.
 
 
-| **[Machine-Simulation Fit →](https://inductiva.ai/guides/how-it-works/machine_simulation/index)** | **[Clean-up Storage →](https://inductiva.ai/guides/scale-up/recipes/storage-related/index)** | **[Reduce Data Generation →](save-costs/save_storage.md)** |
+| **[Machine-Simulation Fit →](https://inductiva.ai/guides/how-it-works/machine_simulation/index)** | **[Clean-up Storage →](https://inductiva.ai/guides/scale-up/recipes/storage-related/index)** | **[Reduce Data Generation →](save_storage.md)** |
 |---|---|---|
 | Choose the right computational resource for your simulation for optimal cost efficiency. | Save Storage Cost by deleting unnecessary data. | Save Storage Cost by reducing data generated in simulations. | 
 
