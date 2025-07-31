@@ -58,6 +58,15 @@ benchmarks
 
 ```{toctree}
 ---
+caption: ▶️ Watch & Learn
+maxdepth: 3
+hidden: true
+---
+Quantum ESPRESSO on Inductiva <webinars/quantumespresso-video-tutorial>
+```
+
+```{toctree}
+---
 caption: " "
 maxdepth: 1
 hidden: true
