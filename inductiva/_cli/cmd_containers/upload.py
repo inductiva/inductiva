@@ -28,7 +28,7 @@ def extract_image_name(image_ref: str) -> str:
 
     # Split org/image and version tag
     name_part = image_ref.split("/")[-1]
-    image_name = name_part.split(":")[0]
+    image_name = "_".join(name_part.split(":"))
     return image_name
 
 
