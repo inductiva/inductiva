@@ -33,7 +33,7 @@ versions-and-containers
 
 ```{toctree}
 ---
-caption: Tutorials
+caption: 🛠️ Tutorials
 maxdepth: 2
 hidden: true
 ---
@@ -44,7 +44,7 @@ quick-start
 
 ```{toctree}
 ---
-caption: "Visualization"
+caption: "📊 Visualization"
 maxdepth: 1
 hidden: true
 ---

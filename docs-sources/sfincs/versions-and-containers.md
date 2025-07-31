@@ -1,4 +1,4 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
 
 ## About SFINCS
 The [SFINCS](https://www.deltares.nl/en/software-and-data/products/sfincs) (Super-Fast INundation of CoastS) model is a reduced-complexity simulation 

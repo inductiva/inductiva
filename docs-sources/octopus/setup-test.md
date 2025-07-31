@@ -1,4 +1,4 @@
-# Test Your Inductiva Setup ⚙️
+# Test Your Inductiva Setup
 Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. 
 To confirm everything is working as expected, simply run a quick Octopus simulation — it only takes a minute!
 

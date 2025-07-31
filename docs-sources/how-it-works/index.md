@@ -1,12 +1,57 @@
 # How It Works
 
 At Inductiva, we want to provide you with the knowledge and tools you need to scale your simulations.
-
 We've prepared a collection of helpful guides to support you navigating Inductiva's platform
 with ease.
-We offer **The Basic** to get you started, **Recipes** with practical scripts to solve specific problems, and **Best Practices** to help you optimize your workflow, save time and money, and use the platform more efficiently.
 
-Whether you're a beginner or an advanced user, this page is designed to support you at every step.
+This section gives you a detailed overview of the inner workings of the Inductiva platform: from 
+how simulations are structured to how your data is managed and scaled. It's designed to help you 
+understand the building blocks so you can make the most out of Inductiva when running your simulations.
+
+## 📘 What’s Inside:
+🧱 [Building Blocks](building-blocks/index) – Explore the core structure of Inductiva—how Projects, 
+Tasks, Machine Groups, and cloud Buckets connect. This foundational overview shows how simulations are 
+organized and orchestrated, and how data flows within the platform.
+
+🚀 [Get Started](get-started/index) – A practical guide to installing Inductiva and understand the 
+onboarding flow. 
+
+💰 [Costs and Quotas](basics/index) – Understand how credits translate into compute and storage usage, 
+and see the quotas that define your resource limits. 
+
+🧩 [Tasks](tasks/index) – Unpack everything related to simulation tasks from submission to status 
+tracking and result outputs. Learn how tasks are managed and where to find key metadata to improve 
+your workflow over time.
+
+⚙️ [Computational Resources](machines/index) – A deep dive into how Machine Groups are defined, 
+scaled, and benchmarked. Learn how to choose beteween the resources made available by our API, and 
+understand when each option provides the best value for your specific use case.
+
+📁 [Cloud Storage](cloud-storage/index) – Get clarity on how Inductiva handles simulation data, 
+where task outputs live, how to access and manage them, and why storage choices impact your credit 
+usage. Learn best practices for organizing and cleaning up data.
+
+
+## 💡 Why It’s Useful:   
+✓ **Understand the platform’s architecture** – Learn how Inductiva’s core components fit together so 
+you can navigate and use them effectively.
+
+✓ **Launch and manage simulations with confidence** – Get clear guidance from setup to output, whether 
+you're running your first task or scaling up a complex project.
+
+✓ **Optimize performance and costs** – Make informed decisions about machines, storage, and quotas to 
+get faster results and better credit efficiency.
+
+✓ **Stay in control of your data and compute** – Learn how simulations are executed, where your results 
+are stored, and how to monitor or clean up your resources.
+
+✓ **Make the most of Inductiva’s flexibility** – Whether you use built-in simulators or bring your own, 
+you’ll understand how to tailor the platform to your workflow.
+
+
+Explore the foundations and use them to build more powerful workflows: from setup to scaling, 
+tuning to cleaning!
+
 
 ```{banner}
 :origin: how_it_works_index
@@ -18,24 +63,37 @@ caption: The Building Blocks
 maxdepth: 2
 hidden: true
 ---
-
-building-blocks/index
-
+Overview <building-blocks/index>
+building-blocks/interfaces
+building-blocks/configuring-simulators
 ```
 
 ```{toctree}
 ---
-caption: Get Started with Inductiva 
+caption: Get Started  
 maxdepth: 3
 hidden: true
 ---
-
+Overview <get-started/index>
 🚀 Install Inductiva API in 2 steps <get-started/install-guide>
 ⏩ Quick-Start guide <get-started/quick-start-guide>
 📌 Pick a cloud machine for your simulation <get-started/pick-cloud-machine>
 ✈️ Start your first cloud machine with Inductiva <get-started/start-first-machine>
 🛠️ Troubleshoot installation <get-started/troubleshooting>
+🗑️ Uninstallation guide <get-started/uninstall_inductiva>
+```
 
+```{toctree}
+---
+caption: Costs and Quotas
+maxdepth: 2
+hidden: true
+---
+Overview <basics/index>
+💲 How much compute time does 5$US provide <basics/compute-5usd>
+💰 How much does a simulation cost in Inductiva? <basics/how-much-does-it-cost>
+🔒 Inductiva Quotas <basics/quotas>
+💥 How many cores can be used? <basics/how-many-cores>
 ```
 
 ```{toctree}
@@ -53,72 +111,35 @@ tasks/manage_and_retrieve_results
 
 ```{toctree}
 ---
-caption: Introduction to Inductiva API
-maxdepth: 3
-hidden: true
----
-
-intro/how_it_works
-intro/tasks
-intro/data_flow
-intro/benchmarking
-intro/configuring-simulators
-intro/projects
-setup/system/system-requirements
-setup/troubleshooting
-setup/uninstall_inductiva
-```
-
-```{toctree}
----
 caption: Computational Resources
 maxdepth: 3
 hidden: true
 ---
 Overview <machines/index>
 machines/shared-dedicated-resources
-machines/manage_computational_resources.md
+machines/manage_computational_resources
 machines/computational-infrastructure
 machines/spot-machines
 ```
 
 ```{toctree}
 ---
-caption: The Basics
-maxdepth: 2
-hidden: true
----
-
-💲 How much compute time does 5$US provide <basics/compute-5usd>
-💰 How much does a simulation cost in Inductiva? <basics/how-much-does-it-cost>
-🔒 Inductiva Quotas <basics/quotas>
-💥 How many cores can be used? <basics/how-many-cores>
-🗑️ Uninstallation guide <basics/uninstall_inductiva>
-
-```
-
-```{toctree}
----
-caption: Recipes
+caption: Machine-Simulation Fit
 maxdepth: 3
 hidden: true
 ---
-
-⬇️ Download specific files from a group of tasks <recipes/download-file-from-project>
-📤 Export your files to AWS S3 <recipes/export-files-to-aws/index>
-🧪 Generate a Dataset <recipes/generate-dataset>
-🗑️ Clean Up Storage by Condition <recipes/storage-related/index>
-⏰ Setting a Time-to-Live on Your Simulations <recipes/set-task-ttl/set-task-ttl>
-👀 Real-Time Monitoring & Conditional Auto Termination <recipes/real-time-simulation-monitoring>
+Overview <machine_simulation/index>
+machine_simulation/pick-cloud-machine
+System Metrics <machine_simulation/system-metrics>
+machine_simulation/benchmark-sys-metrics
 ```
 
 ```{toctree}
 ---
-caption: Save Costs
+caption: Cloud Storage
 maxdepth: 2
 hidden: true
 ---
-
-💢 Minimize simulation data <save-costs/save_storage>
-
+Overview <cloud-storage/index>
+cloud-storage/cloud-storage
 ```

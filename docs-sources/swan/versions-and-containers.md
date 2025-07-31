@@ -1,4 +1,4 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
 
 ## About SWAN
 [SWAN](https://swanmodel.sourceforge.io) (Simulating WAves Nearshore) is a numerical wave model designed to simulate the propagation and transformation 

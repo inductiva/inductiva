@@ -34,7 +34,7 @@ versions-and-containers
 
 ```{toctree}
 ---
-caption: Tutorials
+caption: 🛠️ Tutorials
 maxdepth: 3
 hidden: true
 ---

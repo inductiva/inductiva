@@ -3,6 +3,9 @@ This tutorial will show you how to run XBeach simulations using the Inductiva AP
 
 We will cover the `Bijleveld_surfbeat_s200` test case from the [official XBeach Subversion repository](https://svn.oss.deltares.nl/repos/xbeach/) to help you get started with simulations.
 
+> 🎥 Prefer video?
+> You can also watch this as a webinar replay, where we walk through running XBeach on Inductiva step by step. [Watch the full demo here](webinars/xbeach-video-tutorial).
+
 ## Prerequisites
 Download all of the required files [here](https://svn.oss.deltares.nl/repos/xbeach/testcases/Wong2016/Bijleveld_surfbeat_s200/) and place them into a folder named `SimulationFiles`. Then, you’ll be ready to send your simulation to the Cloud.
 

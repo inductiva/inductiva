@@ -1,4 +1,4 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
 
 ## About Octopus
 [Octopus](https://octopus-code.org/documentation/13/manual/about_octopus/) is a software package for performing 

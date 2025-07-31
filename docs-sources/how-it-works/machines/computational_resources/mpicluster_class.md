@@ -20,7 +20,7 @@ per machine and the middle word refers to the level of RAM per vCPU. In the exam
 `c2` refers to an Intel Xeon Scalable processor of 2nd generation, `standard`
 means 4 GB of RAM per vCPU and will contain `16` vCPUs.
 Check out the 
-[complete machine catalog available via the API](https://inductiva.ai/machines).
+[complete machine catalog available via the API](https://console.inductiva.ai/machine-groups/instance-types).
 - the `zone` allows to select the zone where the machines will be launched. By default, machines are launched in the `europe-west1-b` zone.
 - the `num_machines` sets the number of machines available in the cluster.
 While the computational resource is active, these machines will be reserved

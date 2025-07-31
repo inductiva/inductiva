@@ -36,7 +36,7 @@ versions-and-containers
 
 ```{toctree}
 ---
-caption: Tutorials
+caption: 🛠️ Tutorials
 maxdepth: 2
 hidden: true
 ---
@@ -47,7 +47,7 @@ Generate Synthetic Data for Physics-Informed ML <synthetic-data-for-piml/index>
 
 ```{toctree}
 ---
-caption: Visualization
+caption: 📊 Visualization
 maxdepth: 4
 hidden: true
 ---

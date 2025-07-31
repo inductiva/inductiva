@@ -93,7 +93,7 @@ simulation, each with a different water level. The simulations will be submitted
 to our dedicated machine group and will run in parallel.
 
 You can check the status of these simulations through the
-[Inductiva CLI](https://inductiva.ai/guides/documentation/cli/overview),
+[Inductiva CLI](https://inductiva.ai/guides/api-functions/cli/index),
 and you'll see that it took only **1 minute** from the moment they were
 submitted until they start running:
 

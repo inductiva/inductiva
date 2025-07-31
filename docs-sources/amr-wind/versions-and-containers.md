@@ -1,4 +1,4 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
 
 ## About AMR-Wind
 [AMR-Wind](https://github.com/Exawind/amr-wind) is a massively parallel, block-structured adaptive-mesh, incompressible flow solver for wind turbine and wind farm simulations. The primary applications for AMR-Wind are: performing large-eddy simulations (LES) of atmospheric boundary layer (ABL) flows and simulating wind farm turbine-wake interactions using actuator disk or actuator line models for turbines.
