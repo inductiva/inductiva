@@ -1,5 +1,7 @@
 # Generating a CFD dataset
-In **Episode 3** of our webinar series *Run It with Inductiva*,  we show how you can generate an OpenFOAM dataset easily using **Inductiva’s cloud-based HPC platform**. If you're already familiar with OpenFOAM, the additional setup takes fewer than 20 lines of Python.
+In **Episode 3** of our webinar series *Run It with Inductiva*,  we show how you can generate an 
+OpenFOAM dataset easily using **Inductiva’s cloud-based HPC platform**. If you're already familiar 
+with OpenFOAM, the additional setup takes fewer than 20 lines of Python.
 
 💡 **What You’ll Learn**:
 - Introduction and motivation behind Machine Learning models for CFD
@@ -19,7 +21,10 @@ In **Episode 3** of our webinar series *Run It with Inductiva*,  we show how you
 </div>
 
 ## 📢 Stay Connected
-Subscribe to our [YouTube channel](https://www.youtube.com/@inductivaresearchlabs4204) and sign up for [upcoming events]() to stay updated with our latest content, expert insights, and hands-on tutorials — designed to help you master cloud-powered HPC simulation.
+Subscribe to our [YouTube channel](https://www.youtube.com/@inductivaresearchlabs4204) and sign up 
+for [upcoming events](https://lu.ma/calendar/cal-xwViWU64Q39XkHQ) to stay updated with our 
+latest content, expert insights, and hands-on tutorials — designed to help you master 
+cloud-powered HPC simulation.
 
 <br>
 

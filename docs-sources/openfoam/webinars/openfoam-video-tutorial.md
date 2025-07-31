@@ -1,7 +1,9 @@
 # OpenFOAM on Inductiva
-In **Episode 2** of our webinar series *Run It with Inductiva*, we demonstrate how **Inductiva** simplifies running complex **CFD workflows** at massive scale using **OpenFOAM**.
+In **Episode 2** of our webinar series *Run It with Inductiva*, we demonstrate how 
+**Inductiva** simplifies running complex **CFD workflows** at massive scale using **OpenFOAM**.
 
-Whether you're working on aerodynamics, heat transfer, or multiphase flows, this session shows how researchers and engineers are transforming simulation workflows with cloud-based computing.
+Whether you're working on aerodynamics, heat transfer, or multiphase flows, this session shows 
+how researchers and engineers are transforming simulation workflows with cloud-based computing.
 
 💡 **What You’ll Learn**:
 - Why integrate OpenFOAM with Inductiva? (*Scalability, ease of use, and efficiency*)
@@ -21,7 +23,10 @@ Whether you're working on aerodynamics, heat transfer, or multiphase flows, this
 </div>
 
 ## 📢 Stay Connected
-Subscribe to our [YouTube channel](https://www.youtube.com/@inductivaresearchlabs4204) and sign up for [upcoming events]() to stay updated with our latest content, expert insights, and hands-on tutorials — designed to help you master cloud-powered HPC simulation.
+Subscribe to our [YouTube channel](https://www.youtube.com/@inductivaresearchlabs4204) and sign up 
+for [upcoming events](https://lu.ma/calendar/cal-xwViWU64Q39XkHQ) to stay updated with our 
+latest content, expert insights, and hands-on tutorials — designed to help you master 
+cloud-powered HPC simulation.
 
 <br>
 
