@@ -71,6 +71,6 @@ Consider a typical workflow:
 *You can now run scripts and launch simulations in the Web Console using the [Playground](https://console.inductiva.ai/playground) Beta feature.
 
 
-```{banner\\\_small}
+```{banner_small}
 :origin: interfaces
 ```
