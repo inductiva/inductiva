@@ -1,4 +1,4 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
 
 ## About OpenSees
 [OpenSees](https://opensees.berkeley.edu) (Open System for Earthquake Engineering Simulation) is a software framework designed for the development of sequential, 

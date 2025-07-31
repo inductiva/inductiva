@@ -1,4 +1,4 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
 
 ## About SWASH
 [SWASH](https://swash.sourceforge.io) (Simulating WAves till SHore) is a numerical tool that simulates unsteady, non-hydrostatic, free-surface, rotational flow and transport phenomena in coastal waters. 

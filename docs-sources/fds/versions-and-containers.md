@@ -1,4 +1,4 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
 
 ## About FDS
 [FDS](https://pages.nist.gov/fds-smv/) (Fire Dynamics Simulator) is a computational fluid dynamics (CFD) model designed to simulate fire-driven fluid flows. FDS numerically solves the Navier-Stokes equations to model low-speed, thermally-driven flows with a focus on smoke and heat transport from fires. It is commonly used in simulations for designing smoke management systems, evaluating sprinkler and detector activation, and fire reconstructions.

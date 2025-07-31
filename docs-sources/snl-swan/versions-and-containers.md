@@ -1,4 +1,4 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
 
 ## About SNL-SWAN
 [SNL-SWAN](https://sandialabs.github.io/SNL-SWAN/) is a modification of the SWAN (Simulating WAves Nearshore) model that includes a validated Wave Energy Converter (WEC) module to improve how SWAN accounts for power performance of Wave Energy Converters (WECs) and their effect on the wave field.

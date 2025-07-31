@@ -1,4 +1,4 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
 
 ## About COAWST
 The [COAWST](https://www.usgs.gov/centers/whcmsc/science/coawst-a-coupled-ocean-atmosphere-wave-sediment-transport-modeling-system) COAWST Modeling System is an open-source tool that combines an ocean model, an atmosphere model, a wave model, and a sediment transport model for coastal change studies.

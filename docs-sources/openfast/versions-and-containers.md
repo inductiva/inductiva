@@ -1,4 +1,4 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
 
 ## About OpenFAST
 [OpenFAST](https://www2.nrel.gov/wind/nwtc/openfast) is a highly customizable open-source wind turbine dynamics simulation tool managed by the National Renewable Energy Lab (NREL). It allows engineers to analyze a range of wind turbine configurations and model them on land or offshore on fixed or floating substructures. 
