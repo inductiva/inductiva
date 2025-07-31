@@ -37,7 +37,7 @@ versions-and-containers
 
 ```{toctree}
 ---
-caption: OpenFast Tutorials
+caption: 🛠️ OpenFast Tutorials
 maxdepth: 4
 hidden: true
 ---
@@ -50,7 +50,7 @@ build-dll-file
 
 ```{toctree}
 ---
-caption: TurbSim Tutorials
+caption: 🛠️ TurbSim Tutorials
 maxdepth: 4
 hidden: true
 ---

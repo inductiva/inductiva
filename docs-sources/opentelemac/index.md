@@ -32,7 +32,7 @@ configuring-telemac-simulations
 
 ```{toctree}
 ---
-caption: Tutorials
+caption: 🛠️ Tutorials
 maxdepth: 2
 hidden: true
 ---
