@@ -1,5 +1,6 @@
 """List the user projects information via CLI."""
 from collections import defaultdict
+import textwrap
 from typing import TextIO
 import argparse
 import sys
@@ -45,5 +46,17 @@ def register(parser):
                              "It lists all your available projects.")
 
     _cli.utils.add_watch_argument(subparser)
+
+    subparser.epilog = textwrap.dedent("""
+        examples:
+            $ inductiva projects list
+
+            NAME                                   NR_TASKS
+            openfoam-dambreak-2d-standard            5
+            openfoam-dambreak-3d-highres            22
+            xbeach-storm-surge-portugal-coast       10
+            openfast-wind-turbine                    4
+            xbeach-sediment-transport-validation     8
+    """)
 
     subparser.set_defaults(func=get_projects)

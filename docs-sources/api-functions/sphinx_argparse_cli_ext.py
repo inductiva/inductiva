@@ -111,7 +111,7 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
 
     @staticmethod
     def create_section(parser: argparse.ArgumentParser) -> nodes.Node:
-        text = parser.epilog
+        text = parser.epilog.strip()
         if text.startswith("examples:"):
             text = text.removeprefix("examples:")
         text = textwrap.dedent(text)
