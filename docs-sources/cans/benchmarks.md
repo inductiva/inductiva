@@ -15,14 +15,14 @@ which allow us to evaluate how scaling hardware resources affects simulation spe
 
 Below is a detailed comparison of execution times and speed-ups across different machine types:
 
-| Machine Type    | vCPUs | GPU            | GPU Count | Execution Time| Estimated Cost (USD) | Speed-up  |
-| --------------- | ----- | ---------------| --------- | ------------- | ---------- | --------- |
-| g2-standard-4   | 4     | NVIDIA L4      | 1         | 25h, 3 min    | 6.86       | Reference |
-| g2-standard-24  | 24    | NVIDIA L4      | 2         | 15h, 55 min   | 10.75      | 1.57x     |
-| a2-highgpu-1    | 12    | NVIDIA A100    | 1         | 4h, 44 min    | 7.38       | 5.29x     |
-| a2-highgpu-2    | 24    | NVIDIA A100    | 2         | 2h, 47 min    | 8.85       | 9.00x     |
-| a3-highgpu-1    | 26    | NVIDIA H100    | 1         | 2h, 26 min    | 6.52       | 10.29x    |
-| a3-highgpu-2    | 52    | NVIDIA H100    | 2         | 1h, 36 min    | 8.64       | 15.65x    |
+| Machine Type    | vCPUs | GPU            | GPU Count | Execution Time | Speed-up  | Estimated Cost (USD) |
+|-----------------|-------|----------------|-----------|----------------|-----------|-----------------------|
+| g2-standard-4   | 4     | NVIDIA L4      | 1         | 25h, 3 min     | Reference | 6.86                  |
+| g2-standard-24  | 24    | NVIDIA L4      | 2         | 15h, 55 min    | 1.57x     | 10.75                 |
+| a2-highgpu-1    | 12    | NVIDIA A100    | 1         | 4h, 44 min     | 5.29x     | 7.38                  |
+| a2-highgpu-2    | 24    | NVIDIA A100    | 2         | 2h, 47 min     | 9.00x     | 8.85                  |
+| a3-highgpu-1    | 26    | NVIDIA H100    | 1         | 2h, 26 min     | 10.29x    | 6.52                  |
+| a3-highgpu-2    | 52    | NVIDIA H100    | 2         | 1h, 36 min     | 15.65x    | 8.64                  |
 
 ## Summary
 The benchmark results clearly demonstrate the substantial performance gains achievable by leveraging more powerful 

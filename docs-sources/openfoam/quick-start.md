@@ -198,9 +198,9 @@ Here’s a comparison of the different subdomain counts and machine sizes:
 
 | Machine Type       | Subdomains | Execution Time | Estimated Cost (USD) |
 |--------------------|-------------|----------------------|------------|
-| c2d-highcpu-16     | 6           | 2 min, 9s        | 0.0031 US$  |
-| c2d-highcpu-16     | 8           | 1 min, 56s        | 0.0030 US$  |
-| c2d-highcpu-32     | 16          | 1 min, 8s        | 0.0037 US$  |
+| c2d-highcpu-16     | 6           | 2 min, 9s        | 0.0031       |
+| c2d-highcpu-16     | 8           | 1 min, 56s       | 0.0030      |
+| c2d-highcpu-32     | 16          | 1 min, 8s        | 0.0037      |
 
 Compared to 6 subdomains on 8 cores, running 16 subdomains on 16 physical cores **nearly halved the simulation runtime** — 
 reducing it from 2 minutes 10 seconds to just 1 minute 8 seconds — with only a 19% increase in estimated cost.

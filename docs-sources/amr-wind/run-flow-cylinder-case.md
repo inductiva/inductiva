@@ -118,11 +118,11 @@ For example, running the simulation on a next-generation machine with the same n
 
 Alternivately, switching from a cloud machine equivalent to your laptop (`c2d-highcpu-16`) to one with more vCPUs (**c2d-highcpu-112**) reduces runtime to just **37 minutes**.
 
-| Machine Type     | vCPUs | Execution Time | Estimated Cost (USD) | Speedup   |
-|------------------|-------|----------------|------------|-----------|
-| c2d-highcpu-16   | 16    | 1h 35min       | $0.38      | Reference |
-| c2d-highcpu-112  | 112   | 37 min         | $0.38      | 2.57×     |
-| c4-highcpu-16    | 16    | 73 min         | $0.37      | 1.97×     |
+| Machine Type     | vCPUs | Execution Time | Speedup   | Estimated Cost (USD) |
+|------------------|-------|----------------|-----------|-----------------------|
+| c2d-highcpu-16   | 16    | 1h, 35 min     | Reference | 0.38                 |
+| c2d-highcpu-112  | 112   | 37 min         | 2.57×     | 0.38                 |
+| c4-highcpu-16    | 16    | 73 min         | 1.97×     | 0.37                 |
 
 For more computationally intensive tasks, the benefits of scaling can be even more significant. 🚀
 

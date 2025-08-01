@@ -152,7 +152,7 @@ That’s all it takes to scale your simulation to a 16 vCPU machine.
 ### Performance Comparison
 Here are the results of running the same simulation on different machines:
 
-| Machine Type             | Virtual CPUs     | Time             | Estimated Cost (USD) |
+| Machine Type             | vCPUs     | Execution Time             | Estimated Cost (USD) |
 |--------------------------|------------------|------------------|----------------------|
 | **Local Ryzen 7 7700X**  | 16               | 1 min, 20s       | N/A                  |
 | **Cloud c3d-highcpu-16** | 16               | 1 min, 3s        | 0.0051               |
