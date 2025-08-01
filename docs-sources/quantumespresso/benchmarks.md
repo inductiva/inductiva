@@ -44,12 +44,12 @@ Below are Inductiva’s results:
 
 <div align="center">
 
-| VM Type              | Number of VMs | Total Cores (NP) | Time (seconds) | Cost (USD) |
+| Machine Type             | Number of Machines | Physical Cores | Execution Time | Estimated Cost (USD) |
 |----------------------|---------------|------------------|----------------|------------|
-| c3d-highcpu-360      | 1             | 180              | 787            | 0.75       |
-| c3d-highcpu-360      | 2             | 360              | 399            | 0.77       |
-| c3d-highcpu-360      | 4             | 720              | 210            | 0.83       |
-| c3d-highcpu-360      | 8             | 1440             | 154            | 1.24       |
+| c3d-highcpu-360      | 1             | 180              | 787 s            | 0.75       |
+| c3d-highcpu-360      | 2             | 360              | 399 s            | 0.77       |
+| c3d-highcpu-360      | 4             | 720              | 210 s            | 0.83       |
+| c3d-highcpu-360      | 8             | 1440             | 154 s            | 1.24       |
 
 </div>
 
