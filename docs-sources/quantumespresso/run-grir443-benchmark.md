@@ -115,11 +115,11 @@ transition from using the **highmem** variant (8 GB RAM per vCPU) to the **stand
 
 | Machine Type       | Execution Time        | Estimated Cost (USD) |
 |--------------------|-----------------------|---------------------|
-| c3d-highmem-30     | 1 hour, 57 minutes    | 0.91                |
-| c3d-standard-60    | 55 minutes, 38 seconds| 0.64                |
-| c3d-standard-90    | 41 minutes, 19 seconds| 0.71                |
-| c3d-highcpu-180    | 25 minutes, 24 seconds| 0.72                |
-| c3d-highcpu-360    | 13 minutes, 20 seconds| 0.76                |
+| c3d-highmem-30     | 1h, 57 min    | 0.91                |
+| c3d-standard-60    | 55 min, 38s| 0.64                |
+| c3d-standard-90    | 41 min, 19s| 0.71                |
+| c3d-highcpu-180    | 25 min, 24s| 0.72                |
+| c3d-highcpu-360    | 13 min, 20s| 0.76                |
 
 Solid results for less than a dollar!
 

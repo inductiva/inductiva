@@ -4,7 +4,7 @@ Choosing the right machine to run your simulations can make the difference betwe
 
 ## Quick Start
 
-- **Browse all options:** View our [complete machine catalog](https://inductiva.ai/machines) to browse all available machine type options.
+- **Browse all options:** View our [complete machine catalog](https://console.inductiva.ai/machine-groups/instance-types) to browse all available machine type options.
 
 - **Make data-driven decisions:** Run [benchmarks](https://inductiva.ai/guides/scale-up/benchmark/index) on candidate machines with representative workloads.
 
