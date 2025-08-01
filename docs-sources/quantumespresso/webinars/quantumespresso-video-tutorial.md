@@ -5,10 +5,11 @@ In **Episode 4** of our webinar series *Run It with Inductiva.AI*, we demonstrat
 Whether you’re calculating band structures, total energies, phonons, or simulating materials under strain, the Inductiva platform helps you move from setup to results faster, with high-performance infrastructure built for large-scale quantum simulations.
 
 💡 **What you’ll learn**:
-- Why integrate Quantum ESPRESSO with Inductiva? (*Scalability, ease of use, and efficiency*)
-- Live demo: Running Quantum ESPRESSO on the Inductiva platform
-- Tips, performance metrics, and real-world applications
-- Q&A and next steps to get started
+- How to run Quantum ESPRESSO simulations on Inductiva.AI
+- Live demo on the platform
+- Q&A / Next Steps
+
+<br>
 
 > 👉 [Register here](https://lu.ma/8slt3i90?tk=ZQD5AY) to attend the webinar.
 
