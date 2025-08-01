@@ -101,7 +101,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>Machine Type</td>
     <td>Nº of Machines</td>
     <td>vCPUs</td>
-    <td>Duration (min:s)</td>
+    <td>Execution Time</td>
     <td>Speedup</td>
     <td>Estimated Cost (USD)</td>
   </tr>
@@ -109,7 +109,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>c2d-highmem-112</td>
     <td>1</td>
     <td>112</td>
-    <td>144:00</td>
+    <td>144 min</td>
     <td>Baseline</td>
     <td>3.60</td>
   </tr>
@@ -117,7 +117,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>c2d-highmem-112</td>
     <td>2</td>
     <td>224</td>
-    <td>90:00</td>
+    <td>90 min</td>
     <td>1.60x</td>
     <td>4.82</td>
   </tr>
@@ -125,7 +125,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>c2d-highmem-112</td>
     <td>4</td>
     <td>448</td>
-    <td>59:10</td>
+    <td>59 min, 10s</td>
     <td>2.43x</td>
     <td>6.94</td>
   </tr>
@@ -133,7 +133,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>c2d-highmem-112</td>
     <td>8</td>
     <td>896</td>
-    <td>42:12</td>
+    <td>42 min, 12s</td>
     <td>3.41x</td>
     <td>10.87</td>
   </tr>

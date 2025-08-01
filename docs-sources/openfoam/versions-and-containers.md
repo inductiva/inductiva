@@ -23,5 +23,5 @@ We’ll be happy to accommodate your request!
 ## Container Images
 Each version of OpenFOAM in the Inductiva API has its own publicly available container image, 
 so you can also use it to run simulations. These images are hosted in our Docker Hub repository, 
-[Kutu](https://hub.docker.com/r/inductiva/kutu/tags?name=openfoam), and you can find the 
+[Kutu](https://github.com/inductiva/kutu/tree/main/simulators), and you can find the 
 Dockerfile details for each version [here](https://github.com/inductiva/kutu/tree/main/simulators/openfoam).

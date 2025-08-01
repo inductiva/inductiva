@@ -92,11 +92,11 @@ By increasing the number of vCPUs, we can substantially decrease the simulation 
 
 Here are the results of running the same simulation on a few machines:
 
-|  Machine Type  | Virtual CPUs |Execution Time| Estimated Cost |
+|  Machine Type  | Virtual CPUs |Execution Time| Estimated Cost (USD) |
 |:--------------:|:------------:|:------------:|:--------------:|
-|  c2d-highcpu-16 |       16      | 32 minutes 5 seconds | 0.072 US$    |
-|  c2d-highcpu-56 |       56      | 14 minutes 15 seconds | 0.11 US$    |
-| c2d-highcpu-112 |      112      | 8 minutes 37 seconds  | 0.14 US$    |
+|  c2d-highcpu-16 |       16      | 32 min, 5 s | 0.072     |
+|  c2d-highcpu-56 |       56      | 14 min, 15s| 0.11     |
+| c2d-highcpu-112 |      112      | 8 min, 37s  | 0.14   |
 
 Still in the testing phase? No problem! Just skip this step for now and start
 with a machine with fewer vCPUs. Once you're satisfied with your results, you

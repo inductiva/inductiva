@@ -184,10 +184,10 @@ cloud_machine = inductiva.resources.MachineGroup( \
 
 Below are the results of running the 1-mesh case with 1 MPI process on a `c2d-standard-2` machine and the 8-mesh case with 8 MPI processes on a `c2d-standard-16` machine:
 
-| MPI Processes | Machine Type     | Time (s) | Cost (USD) | Speed-up   |
-|---------------|------------------|----------|------------|------------|
-| 1             | c2d-standard-2   | 1295.13  | 0.0058     | 1.0x       |
-| 8             | c2d-standard-16  | 199.45   | 0.0057     | 6.5x       |
+| MPI Processes | Machine Type     | Execution Time | Speed-up | Estimated Cost (USD) |
+|---------------|------------------|----------------|----------|-----------------------|
+| 1             | c2d-standard-2   | 21 min, 35 s   | 1.0x     | 0.0058                |
+| 8             | c2d-standard-16  | 3 min, 19 s    | 6.5x     | 0.0057                |
 
 Compared to the earlier 8-mesh run on a `c2d-standard-8` machine, this configuration achieved a higher speed-up, closer to the theoretical maximum of 8×.
 However, due to the use of a more expensive machine, the overall cost of the simulation also increased.
