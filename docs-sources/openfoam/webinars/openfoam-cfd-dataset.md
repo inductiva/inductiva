@@ -7,7 +7,7 @@ with OpenFOAM, the additional setup takes fewer than 20 lines of Python.
 - Introduction and motivation behind Machine Learning models for CFD
 - Live demo: Running OpenFOAM on the Inductiva platform
 - Generating a full dataset
-- Q&A and next steps to get started
+- Q&A / Next Steps
 
 ## ▶️ Watch the Episode
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">

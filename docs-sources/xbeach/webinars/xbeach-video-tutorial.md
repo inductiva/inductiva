@@ -6,10 +6,9 @@ just scalable performance.
 From modeling coastal erosion to predicting storm impacts, see how researchers and engineers are accelerating their work with Inductiva’s integrated simulation workflows.
 
 💡 **What you’ll learn**:
-- Why integrate XBeach with Inductiva? (*Scalability, ease of use, and efficiency*)
-- Live demo: Running XBeach on the Inductiva platform
-- Tips, performance metrics, and real-world applications
-- Q&A and next steps to get started
+- How to run XBeach simulations on Inductiva.AI
+- Live demo on the platform
+- Q&A / Next Steps
 
 ## ▶️ Watch the Episode
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%;">
