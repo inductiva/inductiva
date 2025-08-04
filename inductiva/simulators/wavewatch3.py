@@ -25,7 +25,7 @@ class WaveWatch3(simulators.Simulator):
     def run(self,
             input_dir: Optional[str],
             *,
-            commands: types.Commands,
+            commands: types.Commands = None,
             shell_script: Optional[str] = None,
             switch: Optional[str] = None,
             custom_switch: Optional[str] = None,
