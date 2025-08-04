@@ -4,7 +4,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2d-highcpu-4",
+    machine_type="c3d-highcpu-360",
     spot=True)
 
 # Initialize the Simulator
