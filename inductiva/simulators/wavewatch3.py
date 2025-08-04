@@ -88,12 +88,8 @@ class WaveWatch3(simulators.Simulator):
         compile_commands = []
 
         # Check if both commands and shell_script are provided or if neither is
-        if commands is not None and shell_script is not None:
-            raise ValueError("You must provide either 'commands' or "
-                             "'shell_script', not both.")
-
-        elif commands is None and shell_script is None:
-            raise ValueError("You must provide either 'commands' or "
+        if (commands is None) == (shell_script is None):
+            raise ValueError("You must provide exactly one of 'commands' or "
                              "'shell_script'.")
 
         # Check if switch and custom_switch are both provided or if neither is
