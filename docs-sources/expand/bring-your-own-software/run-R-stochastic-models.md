@@ -223,7 +223,7 @@ print(f"✔ Saved envelope plot for T₀={BASE_TEMPERATURE} → {out_png}")
 
 The image below shows the result of this ensemble run:
 
-<img src=./_static/magnetization_T0_3.0.png></img>
+<img src="../_static/magnetization_T0_3.0.png"></img>
 
 ## Wrapping Up
 And that wraps up our end-to-end workflow:
