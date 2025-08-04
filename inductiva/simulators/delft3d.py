@@ -77,13 +77,9 @@ class Delft3D(simulators.Simulator):
                     ]
             other arguments: See the documentation of the base class.
         """
-
-        if commands is None and shell_script is None:
-            raise ValueError("Either commands or shell_script "
-                             "must be provided.")
-        if commands is not None and shell_script is not None:
-            raise ValueError("Only one of commands or shell_script "
-                             "can be provided.")
+        if (commands is None) == (shell_script is None):
+            raise ValueError("You must provide exactly one of 'commands' or "
+                             "'shell_script'.")
 
         if shell_script is not None:
             #Check if the shell script exists

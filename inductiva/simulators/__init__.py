@@ -5,6 +5,7 @@ from .splishsplash import SplishSplash
 from .dualsphysics import DualSPHysics
 from .custom_image import CustomImage
 from .opentelemac import OpenTelemac
+from .wavewatch3 import WaveWatch3
 from .openfoam import OpenFOAM
 from .opensees import OpenSees
 from .openfast import OpenFAST
