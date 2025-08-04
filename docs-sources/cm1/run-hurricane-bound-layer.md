@@ -114,12 +114,12 @@ reasonable costs.
 
 | Machine Type     | Execution Time | Speedup   | Estimated Cost (USD) |
 |------------------|----------------|-----------|----------------------|
-| c2d-highcpu-16   | 1h 36min       | Reference | $0.14                |
-| c4-highcpu-16    | 1h 6min        | 1.45×     | $0.33                |
-| c2d-highcpu-56   | 37 min         | 2.59×     | $0.17                |
-| c4-highcpu-96    | 20 min         | 4.80×     | $0.89                |
-| c2d-highcpu-112  | 17 min         | 5.65×     | $0.17                |
-| c4-highcpu-192   | 11 min         | 8.73×     | $0.65                |
+| c2d-highcpu-16   | 1h, 36 min       | Reference | 0.14                |
+| c4-highcpu-16    | 1h, 6 min        | 1.45×     | 0.33                |
+| c2d-highcpu-56   | 37 min         | 2.59×     | 0.17                |
+| c4-highcpu-96    | 20 min         | 4.80×     | 0.89                |
+| c2d-highcpu-112  | 17 min         | 5.65×     | 0.17                |
+| c4-highcpu-192   | 11 min         | 8.73×     | 0.65                |
 
 Generational improvements matter. Upgrading from `c2d-highcpu-16` (a typical
 entry-level machine) to `c4-highcpu-16` (a newer generation with the same

@@ -26,13 +26,13 @@ The software versions used for this benchmark are as follows:
 To demonstrate that OpenFAST’s performance doesn’t scale with the number of cores, we ran the same use case on a local machine and on an n2-highcpu virtual machine with different vCPUs.
 
 Here are the results:
-| Machine Type  | Number of VCPUs | Execution Time | Estimated Cost |
+| Machine Type  | vCPUs | Execution Time | Estimated Cost (USD) |
 |---------------|-----------------|----------------|-----------|
-| n2-highcpu-2  | 2               |34.1 s          |0.00013 US$|
-| n2-highcpu-4  | 4               |35.0 s          |0.00031 US$|
-| n2-highcpu-8  | 8               |30.4 s          |0.00034 US$|
-| n2-highcpu-16 | 16              |30.9 s          |0.00065 US$|
-| n2-highcpu-32 | 32              |30.2 s          |0.0012 US$ |
+| n2-highcpu-2  | 2               |34.1 s          |0.00013|
+| n2-highcpu-4  | 4               |35.0 s          |0.00031|
+| n2-highcpu-8  | 8               |30.4 s          |0.00034|
+| n2-highcpu-16 | 16              |30.9 s          |0.00065|
+| n2-highcpu-32 | 32              |30.2 s          |0.0012 |
 
 The execution time remained almost identical across all machines, regardless of the number of virtual CPUs.
 
