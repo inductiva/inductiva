@@ -4,6 +4,7 @@ from typing import Optional, Union
 from inductiva import simulators, tasks, types
 
 
+@simulators.simulator.mpi_enabled
 class WaveWatch3(simulators.Simulator):
     """Class to invoke a generic WAVEWATCH III simulation on the API.
     """
