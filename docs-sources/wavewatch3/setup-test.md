@@ -22,7 +22,8 @@ input_dir = inductiva.utils.download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-wavewatch3 = inductiva.simulators.WaveWatch3(version="11-2024")
+wavewatch3 = inductiva.simulators.WaveWatch3(
+     version="11-2024")
 
 # List of commands to run
 commands = ["ww3_grid", "ww3_prep", "ww3_shel"]
