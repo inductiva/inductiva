@@ -1,5 +1,5 @@
 # Test Your Inductiva Setup
-Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick WAVEWATCH III simulation — it only takes a few seconds!
+Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick WAVEWATCH III simulation — it only takes a minute!
 
 ## Step 1: Copy and Run the Code
 
@@ -64,7 +64,26 @@ The WAVEWATCH III simulation will then be sent to a cloud machine for execution.
 After the simulation completes, a task summary will be displayed in your terminal, as shown below. 
 
 ```
+Task status: Success
 
+Timeline:
+	Waiting for Input         at 05/08, 09:07:28      0.789 s
+	In Queue                  at 05/08, 09:07:29      36.552 s
+	Preparing to Compute      at 05/08, 09:08:06      4.851 s
+	In Progress               at 05/08, 09:08:11      70.786 s
+		├> 64.133 s        bash /home/compile_ww3.sh switch_PR3_UQ_MPI true
+		├> 1.071 s         ww3_grid
+		├> 1.075 s         ww3_prep
+		└> 4.087 s         ww3_shel
+	Finalizing                at 05/08, 09:09:21      13.692 s
+	Success                   at 05/08, 09:09:35      
+
+Data:
+	Size of zipped output:    636.81 MB
+	Size of unzipped output:  1.48 GB
+	Number of output files:   5274
+
+Estimated computation cost (US$): 0.00060 US$
 ```
 
 If the task status shows **Success**, congratulations! You've successfully run an WAVEWATCH III simulation.
