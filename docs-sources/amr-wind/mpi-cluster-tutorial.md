@@ -16,9 +16,9 @@ All you need to do is update the resource allocation from `MachineGroup` to `MPI
 # Allocate a multi-machine MPI cluster on Google Cloud Platform
 - cloud_machine = inductiva.resources.MachineGroup(
 + cloud_machine = inductiva.resources.MPICluster(
-    machine_type="c2d-highcpu-112",
+    machine_type="c2d-highmem-112",
 +   num_machines=2,
-    data_disk_gb=100,
+    data_disk_gb=200,
     spot=True)
 ```
 
@@ -66,7 +66,7 @@ import inductiva
 
 # Allocate a multi-machine MPI cluster on Google Cloud Platform
 cloud_machine = inductiva.resources.MPICluster(
-    machine_type="c2d-highcpu-112",
+    machine_type="c2d-highmem-112",
     num_machines=2,
     data_disk_gb=200,
     spot=True
