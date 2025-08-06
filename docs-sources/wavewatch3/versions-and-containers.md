@@ -7,9 +7,9 @@ modeling and includes features for shallow water and surf zones, enabling applic
 
 ## Supported Versions
 Inductiva stays up to date with the latest versions of WAVEWATCH III. Below is a list of the supported 
-versions, along with their respective release dates:
+versions:
 
-- **11-2024** ( ,)
+- **11-2024** (retrieved from the model’s official GitHub repository in November 2024, since there have been no new formal releases, only commits to the latest official release 6.07)
 
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!
