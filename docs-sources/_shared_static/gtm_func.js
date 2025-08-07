@@ -10,4 +10,4 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 //GTM variables
 //Get main frame url
 const params = new URLSearchParams(window.top.location.search);
-window.url_referrer = params.get('utm_source') || 'None';
+window.url_referrer = params.get('guides_cta_origin') || 'None';
