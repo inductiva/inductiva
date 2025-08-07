@@ -27,9 +27,10 @@ class BannerSmallDirective(Directive):
             <script>
             function openInductivaRegister(origin) {{
                 // current URL query string, including '?'
-                const params = window.location.search;
+                const params = new URL(window.parent.location.href).search;
                 const baseUrl = 'https://console.inductiva.ai/api/register?guides_cta_origin=guide_' + origin;
                 const url = baseUrl + params;
+                console.log("[BannerSmall] Opening URL:", url);
                 window.open(url, '_blank');
             }}
             </script>
