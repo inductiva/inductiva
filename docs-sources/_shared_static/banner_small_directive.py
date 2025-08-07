@@ -18,7 +18,7 @@ class BannerSmallDirective(Directive):
                 <div class="cta-text" style="text-align: center">
                     ...
                 </div>
-                <button  onclick="window.open('https://console.inductiva.ai/api/register?utm_source=guide_{origin}', '_blank')" target="_blank" class="cta-button" id="login-btn-small">...</button>
+                <button  onclick="window.open('https://console.inductiva.ai/api/register?guides_cta_origin=guide_{origin}', '_blank')" target="_blank" class="cta-button" id="login-btn-small">...</button>
             </div>
             '''
         return nodes.raw('', html, format='html')

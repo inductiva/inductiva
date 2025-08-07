@@ -22,7 +22,7 @@ class BannerDirective(Directive):
                     <p class="subtext">...</p>
                 </div>
                 <div class="buttons">
-                    <button onclick="window.open('https://console.inductiva.ai/api/register?utm_source=guide_{origin}', '_blank')" target="_blank" class="btn primary" id="login-btn-big" >
+                    <button onclick="window.open('https://console.inductiva.ai/api/register?guides_cta_origin=guide_{origin}', '_blank')" target="_blank" class="btn primary" id="login-btn-big" >
                     <span class="btn-main">...</span>
                     </button>
                 </div>
