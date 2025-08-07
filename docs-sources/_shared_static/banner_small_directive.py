@@ -29,7 +29,11 @@ class BannerSmallDirective(Directive):
                 // current URL query string, including '?'
                 const params = new URL(window.parent.location.href).search;
                 const baseUrl = 'https://console.inductiva.ai/api/register?guides_cta_origin=guide_' + origin;
-                const url = baseUrl + params;
+                
+                const url = params
+                    ? baseUrl + '&' + params.slice(1)  // Remove the initial '?' and prepend '&'
+                    : baseUrl;
+
                 console.log("[BannerSmall] Opening URL:", url);
                 window.open(url, '_blank');
             }}
