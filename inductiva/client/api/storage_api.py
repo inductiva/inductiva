@@ -2915,6 +2915,7 @@ class StorageApi:
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
+        path_filter: Optional[StrictStr] = None,
         path: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -2941,6 +2942,8 @@ class StorageApi:
         :type page: int
         :param per_page:
         :type per_page: int
+        :param path_filter:
+        :type path_filter: str
         :param path:
         :type path: str
         :param _request_timeout: timeout setting for this request. If one
@@ -2971,6 +2974,7 @@ class StorageApi:
             recursive=recursive,
             page=page,
             per_page=per_page,
+            path_filter=path_filter,
             path=path,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -2998,6 +3002,7 @@ class StorageApi:
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
+        path_filter: Optional[StrictStr] = None,
         path: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -3024,6 +3029,8 @@ class StorageApi:
         :type page: int
         :param per_page:
         :type per_page: int
+        :param path_filter:
+        :type path_filter: str
         :param path:
         :type path: str
         :param _request_timeout: timeout setting for this request. If one
@@ -3054,6 +3061,7 @@ class StorageApi:
             recursive=recursive,
             page=page,
             per_page=per_page,
+            path_filter=path_filter,
             path=path,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -3081,6 +3089,7 @@ class StorageApi:
         page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
+        path_filter: Optional[StrictStr] = None,
         path: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -3107,6 +3116,8 @@ class StorageApi:
         :type page: int
         :param per_page:
         :type per_page: int
+        :param path_filter:
+        :type path_filter: str
         :param path:
         :type path: str
         :param _request_timeout: timeout setting for this request. If one
@@ -3137,6 +3148,7 @@ class StorageApi:
             recursive=recursive,
             page=page,
             per_page=per_page,
+            path_filter=path_filter,
             path=path,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -3158,6 +3170,7 @@ class StorageApi:
         recursive,
         page,
         per_page,
+        path_filter,
         path,
         _request_auth,
         _content_type,
@@ -3198,6 +3211,10 @@ class StorageApi:
         if per_page is not None:
 
             _query_params.append(('per_page', per_page))
+
+        if path_filter is not None:
+
+            _query_params.append(('path_filter', path_filter))
 
         if path is not None:
 
