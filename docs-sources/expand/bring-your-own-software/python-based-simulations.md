@@ -71,10 +71,10 @@ following code snippet:
 import inductiva
 
 machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2d-highcpu-16",
+    provider="GCP",
+    machine_type="c3d-highcpu-16",
     data_disk_gb=20,
-    spot=True,
-)
+    spot=True)
 
 python_image = inductiva.simulators.CustomImage(
     container_image="inductiva://my-containers/my-python-image.sif")
