@@ -18,8 +18,26 @@ class BannerSmallDirective(Directive):
                 <div class="cta-text" style="text-align: center">
                     ...
                 </div>
-                <button  onclick="window.open('https://console.inductiva.ai/api/register?utm_source=guide_{origin}', '_blank')" target="_blank" class="cta-button" id="login-btn-small">...</button>
+                <button
+                    onclick="openInductivaRegister('{origin}')"
+                    class="cta-button"
+                    id="login-btn-small">...</button>
             </div>
+
+            <script>
+            function openInductivaRegister(origin) {{
+                // current URL query string, including '?'
+                const params = new URL(window.parent.location.href).search;
+                const baseUrl = 'https://console.inductiva.ai/api/register?guides_cta_origin=guide_' + origin;
+                
+                const url = params
+                    ? baseUrl + '&' + params.slice(1)  // Remove the initial '?' and prepend '&'
+                    : baseUrl;
+
+                console.log("[BannerSmall] Opening URL:", url);
+                window.open(url, '_blank');
+            }}
+            </script>
             '''
         return nodes.raw('', html, format='html')
 
