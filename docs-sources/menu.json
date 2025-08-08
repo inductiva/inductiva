@@ -1,0 +1,219 @@
+{
+  "Simulators": [
+    {
+      "title": "",
+      "layout": {
+        "columns": 4,
+        "showTitle": false
+      },
+      "children": [
+        {
+          "title": "AMR-Wind",
+          "path": "amr-wind/index"
+        },
+        {
+          "title": "CanNS",
+          "path": "cans/index"
+        },
+        {
+          "title": "CM1",
+          "path": "cm1/index"
+        },
+        {
+          "title": "COAWST",
+          "path": "coawst/index"
+        },
+        {
+          "title": "CP2K",
+          "path": "cp2k/index"
+        },
+        {
+          "title": "Delft3D",
+          "path": "delft3d/index"
+        },
+        {
+          "title": "DualSPHysics",
+          "path": "dualsphysics/index"
+        },
+        {
+          "title": "FDS",
+          "path": "fds/index"
+        },
+        {
+          "title": "FVCOM",
+          "path": "fvcom/index"
+        },
+        {
+          "title": "GROMACS",
+          "path": "gromacs/index"
+        },
+        {
+          "title": "GX",
+          "path": "gx/index"
+        },
+        {
+          "title": "NWChem",
+          "path": "nwchem/index"
+        },
+        {
+          "title": "Octopus",
+          "path": "octopus/index"
+        },
+        {
+          "title": "OpenFAST",
+          "path": "openfast/index"
+        },
+        {
+          "title": "OpenFOAM",
+          "path": "openfoam/index"
+        },
+        {
+          "title": "OpenSees",
+          "path": "opensees/index"
+        },
+        {
+          "title": "OpenTelemac",
+          "path": "opentelemac/index"
+        },
+        {
+          "title": "Quantum ESPRESSO",
+          "path": "quantumespresso/index"
+        },
+        {
+          "title": "REEF3D",
+          "path": "reef3d/index"
+        },
+        {
+          "title": "SCHISM",
+          "path": "schism/index"
+        },
+        {
+          "title": "SFINCS",
+          "path": "sfincs/index"
+        },
+        {
+          "title": "SNL-SWAN",
+          "path": "snl-swan/index"
+        },
+        {
+          "title": "SPlisHSPlasH",
+          "path": "splishsplash/index"
+        },
+        {
+          "title": "SWAN",
+          "path": "swan/index"
+        },
+        {
+          "title": "SWASH",
+          "path": "swash/index"
+        },
+        {
+          "title": "WAVEWATCH III",
+          "path": "wavewatch3/index"
+        },
+        {
+          "title": "WRF",
+          "path": "wrf/index"
+        },
+        {
+          "title": "XBeach",
+          "path": "xbeach/index"
+        }
+      ]
+    }
+  ],
+  "Resources": [
+    {
+      "title": "How it works",
+      "children": [
+        {
+          "title": "The Building Blocks",
+          "path": "how-it-works/building-blocks/index"
+        },
+        {
+          "title": "Get Started",
+          "path": "how-it-works/get-started/index"
+        },
+        {
+          "title": "Costs and Quotas",
+          "path": "how-it-works/basics/index"
+        },
+        {
+          "title": "Tasks",
+          "path": "how-it-works/tasks/index"
+        },
+        {
+          "title": "Computational Resources",
+          "path": "how-it-works/machines/index"
+        },
+        {
+          "title": "Machine-Simulation Fit",
+          "path": "how-it-works/machine_simulation/index"
+        },
+        {
+          "title": "Cloud Storage",
+          "path": "how-it-works/cloud-storage/index"
+        }
+      ]
+    },
+    {
+      "title": "Scale Up",
+      "children": [
+        {
+          "title": "Parallel Simulations",
+          "path": "scale-up/parallel-simulations/index"
+        },
+        {
+          "title": "Projects",
+          "path": "scale-up/projects/index"
+        },
+        {
+          "title": "Save Costs",
+          "path": "scale-up/save-costs/index"
+        },
+        {
+          "title": "Recipes",
+          "path": "scale-up/recipes/index"
+        },
+        {
+          "title": "Generate Dataset",
+          "path": "scale-up/generate-dataset/generate-dataset"
+        },
+        {
+          "title": "Benchmarks",
+          "path": "scale-up/benchmark/index"
+        }
+      ]
+    },
+    {
+      "title": "Expand",
+      "children": [
+        {
+          "title": "Bring Your Own Software",
+          "path": "expand/bring-your-own-software/index"
+        },
+        {
+          "title": "Bring Your Own Hardware",
+          "path": "expand/use-local-task-runner/index"
+        },
+        {
+          "title": "Bring Your Own Cloud",
+          "path": "expand/bring-your-own-cloud/index"
+        }
+      ]
+    },
+    {
+      "title": "API Functions",
+      "children": [
+        {
+          "title": "Command Line Interface",
+          "path": "api-functions/cli/index"
+        },
+        {
+          "title": "Python Client",
+          "path": "api-functions/api/index"
+        }
+      ]
+    }
+  ]
+}
