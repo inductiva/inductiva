@@ -22,12 +22,26 @@ class BannerDirective(Directive):
                     <p class="subtext">...</p>
                 </div>
                 <div class="buttons">
-                    <button onclick="window.open('https://console.inductiva.ai/api/register?utm_source=guide_{origin}', '_blank')" target="_blank" class="btn primary" id="login-btn-big" >
+                    <button onclick="openInductivaRegister('{origin}')" target="_blank" class="btn primary" id="login-btn-big" >
                     <span class="btn-main">...</span>
                     </button>
                 </div>
                 </div>
             </div>
+            <script>
+            function openInductivaRegister(origin) {{
+                // current URL query string, including '?'
+                const params = new URL(window.parent.location.href).search;
+                const baseUrl = 'https://console.inductiva.ai/api/register?guides_cta_origin=guide_' + origin;
+                
+                const url = params
+                    ? baseUrl + '&' + params.slice(1)  // Remove the initial '?' and prepend '&'
+                    : baseUrl;
+
+                console.log("[Banner] Opening URL:", url);
+                window.open(url, '_blank');
+            }}
+            </script>
             <script>
             const button = document.getElementById('login-btn-big');
 
