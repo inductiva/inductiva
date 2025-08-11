@@ -40,9 +40,11 @@ class MachineType(BaseModel):
     zone: Optional[StrictStr] = None
     num_gpus: Optional[StrictInt] = None
     gpu_name: Optional[StrictStr] = None
+    spot_price: Optional[Union[StrictFloat, StrictInt]] = None
     __properties: ClassVar[List[str]] = [
         "machine_type", "num_vcpus", "ram_gb", "price", "provider_id",
-        "threads_per_core", "spot", "region", "zone", "num_gpus", "gpu_name"
+        "threads_per_core", "spot", "region", "zone", "num_gpus", "gpu_name",
+        "spot_price"
     ]
 
     model_config = ConfigDict(
@@ -112,6 +114,11 @@ class MachineType(BaseModel):
         if self.gpu_name is None and "gpu_name" in self.model_fields_set:
             _dict['gpu_name'] = None
 
+        # set to None if spot_price (nullable) is None
+        # and model_fields_set contains the field
+        if self.spot_price is None and "spot_price" in self.model_fields_set:
+            _dict['spot_price'] = None
+
         return _dict
 
     @classmethod
@@ -134,6 +141,7 @@ class MachineType(BaseModel):
             "region": obj.get("region"),
             "zone": obj.get("zone"),
             "num_gpus": obj.get("num_gpus"),
-            "gpu_name": obj.get("gpu_name")
+            "gpu_name": obj.get("gpu_name"),
+            "spot_price": obj.get("spot_price")
         })
         return _obj
