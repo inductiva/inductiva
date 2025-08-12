@@ -18,7 +18,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictInt
 from typing import Any, ClassVar, Dict, List
-from inductiva.client.models.machine_type import MachineType
+from inductiva.client.models.machine_type_with_spot_price import MachineTypeWithSpotPrice
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -27,7 +27,7 @@ class SimulatorWithMachineTypesPaginated(BaseModel):
     """
     Schema for paginated available machine types (simple).
     """ # noqa: E501
-    available_machine_types: List[MachineType]
+    available_machine_types: List[MachineTypeWithSpotPrice]
     total_size: StrictInt
     __properties: ClassVar[List[str]] = [
         "available_machine_types", "total_size"
@@ -90,7 +90,7 @@ class SimulatorWithMachineTypesPaginated(BaseModel):
 
         _obj = cls.model_validate({
             "available_machine_types": [
-                MachineType.from_dict(_item)
+                MachineTypeWithSpotPrice.from_dict(_item)
                 for _item in obj["available_machine_types"]
             ] if obj.get("available_machine_types") is not None else None,
             "total_size":

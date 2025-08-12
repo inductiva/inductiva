@@ -23,9 +23,9 @@ from typing import Optional, Set
 from typing_extensions import Self
 
 
-class MachineType(BaseModel):
+class MachineTypeWithSpotPrice(BaseModel):
     """
-    MachineType
+    MachineTypeWithSpotPrice
     """
 
   # noqa: E501
@@ -40,9 +40,11 @@ class MachineType(BaseModel):
     zone: Optional[StrictStr] = None
     num_gpus: Optional[StrictInt] = None
     gpu_name: Optional[StrictStr] = None
+    spot_price: Optional[Union[StrictFloat, StrictInt]] = None
     __properties: ClassVar[List[str]] = [
         "machine_type", "num_vcpus", "ram_gb", "price", "provider_id",
-        "threads_per_core", "spot", "region", "zone", "num_gpus", "gpu_name"
+        "threads_per_core", "spot", "region", "zone", "num_gpus", "gpu_name",
+        "spot_price"
     ]
 
     model_config = ConfigDict(
@@ -62,7 +64,7 @@ class MachineType(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of MachineType from a JSON string"""
+        """Create an instance of MachineTypeWithSpotPrice from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -112,11 +114,16 @@ class MachineType(BaseModel):
         if self.gpu_name is None and "gpu_name" in self.model_fields_set:
             _dict['gpu_name'] = None
 
+        # set to None if spot_price (nullable) is None
+        # and model_fields_set contains the field
+        if self.spot_price is None and "spot_price" in self.model_fields_set:
+            _dict['spot_price'] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of MachineType from a dict"""
+        """Create an instance of MachineTypeWithSpotPrice from a dict"""
         if obj is None:
             return None
 
@@ -134,6 +141,7 @@ class MachineType(BaseModel):
             "region": obj.get("region"),
             "zone": obj.get("zone"),
             "num_gpus": obj.get("num_gpus"),
-            "gpu_name": obj.get("gpu_name")
+            "gpu_name": obj.get("gpu_name"),
+            "spot_price": obj.get("spot_price")
         })
         return _obj

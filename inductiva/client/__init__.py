@@ -76,6 +76,7 @@ from inductiva.client.models.machine_info import MachineInfo
 from inductiva.client.models.machine_operation import MachineOperation
 from inductiva.client.models.machine_operation_type import MachineOperationType
 from inductiva.client.models.machine_type import MachineType
+from inductiva.client.models.machine_type_with_spot_price import MachineTypeWithSpotPrice
 from inductiva.client.models.multi_part_export_operation import MultiPartExportOperation
 from inductiva.client.models.operation_end import OperationEnd
 from inductiva.client.models.operation_start import OperationStart
