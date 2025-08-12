@@ -17,11 +17,12 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
 from pydantic import Field, StrictBool, StrictFloat, StrictInt, StrictStr
-from typing import Any, List, Optional, Union
+from typing import List, Optional, Union
 from typing_extensions import Annotated
 from inductiva.client.models.available_simulator_versions import AvailableSimulatorVersions
 from inductiva.client.models.bulk_simulator_operation import BulkSimulatorOperation
 from inductiva.client.models.bulk_simulator_response import BulkSimulatorResponse
+from inductiva.client.models.machine_filter_options import MachineFilterOptions
 from inductiva.client.models.providers import Providers
 from inductiva.client.models.simulator_create import SimulatorCreate
 from inductiva.client.models.simulator_response import SimulatorResponse
@@ -1019,6 +1020,241 @@ class SimulatorsApi:
             _request_auth=_request_auth)
 
     @validate_call
+    def get_machine_filter_options(
+        self,
+        provider_id: Optional[Providers] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> MachineFilterOptions:
+        """Get Machine Filter Options
+
+        Get available filter options for machine types.  This endpoint returns all available filter options calculated from the complete dataset of machine types for the given provider.
+
+        :param provider_id:
+        :type provider_id: Providers
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_machine_filter_options_serialize(
+            provider_id=provider_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index)
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "MachineFilterOptions",
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout)
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+    @validate_call
+    def get_machine_filter_options_with_http_info(
+        self,
+        provider_id: Optional[Providers] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[MachineFilterOptions]:
+        """Get Machine Filter Options
+
+        Get available filter options for machine types.  This endpoint returns all available filter options calculated from the complete dataset of machine types for the given provider.
+
+        :param provider_id:
+        :type provider_id: Providers
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_machine_filter_options_serialize(
+            provider_id=provider_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index)
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "MachineFilterOptions",
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout)
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+    @validate_call
+    def get_machine_filter_options_without_preload_content(
+        self,
+        provider_id: Optional[Providers] = None,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Get Machine Filter Options
+
+        Get available filter options for machine types.  This endpoint returns all available filter options calculated from the complete dataset of machine types for the given provider.
+
+        :param provider_id:
+        :type provider_id: Providers
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._get_machine_filter_options_serialize(
+            provider_id=provider_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index)
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "MachineFilterOptions",
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout)
+        return response_data.response
+
+    def _get_machine_filter_options_serialize(
+        self,
+        provider_id,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {}
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
+                                List[Tuple[str, bytes]]]] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if provider_id is not None:
+
+            _query_params.append(('provider_id', provider_id.value))
+
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])
+
+        # authentication setting
+        _auth_settings: List[str] = []
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/simulators/machine-types/filter-options',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth)
+
+    @validate_call
     def get_simulator_with_machine_types(
         self,
         simulator_name: StrictStr,
@@ -1031,7 +1267,6 @@ class SimulatorsApi:
         price_range: Optional[Annotated[
             List[Union[StrictFloat, StrictInt]],
             Field(min_length=2, max_length=2)]] = None,
-        spot: Optional[Any] = None,
         gpus_range: Optional[Annotated[
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
@@ -1041,6 +1276,7 @@ class SimulatorsApi:
                                      Field(le=100, strict=True, ge=1)]] = None,
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
+        machine_class: Optional[List[StrictStr]] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1069,8 +1305,6 @@ class SimulatorsApi:
         :type memory_range: List[int]
         :param price_range:
         :type price_range: List[float]
-        :param spot:
-        :type spot: Spot1
         :param gpus_range:
         :type gpus_range: List[int]
         :param gpu_names:
@@ -1085,6 +1319,8 @@ class SimulatorsApi:
         :type gpu_only: bool
         :param cpu_only:
         :type cpu_only: bool
+        :param machine_class:
+        :type machine_class: List[str]
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1116,7 +1352,6 @@ class SimulatorsApi:
             vcpus_range=vcpus_range,
             memory_range=memory_range,
             price_range=price_range,
-            spot=spot,
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
@@ -1124,6 +1359,7 @@ class SimulatorsApi:
             per_page=per_page,
             gpu_only=gpu_only,
             cpu_only=cpu_only,
+            machine_class=machine_class,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1155,7 +1391,6 @@ class SimulatorsApi:
         price_range: Optional[Annotated[
             List[Union[StrictFloat, StrictInt]],
             Field(min_length=2, max_length=2)]] = None,
-        spot: Optional[Any] = None,
         gpus_range: Optional[Annotated[
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
@@ -1165,6 +1400,7 @@ class SimulatorsApi:
                                      Field(le=100, strict=True, ge=1)]] = None,
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
+        machine_class: Optional[List[StrictStr]] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1193,8 +1429,6 @@ class SimulatorsApi:
         :type memory_range: List[int]
         :param price_range:
         :type price_range: List[float]
-        :param spot:
-        :type spot: Spot1
         :param gpus_range:
         :type gpus_range: List[int]
         :param gpu_names:
@@ -1209,6 +1443,8 @@ class SimulatorsApi:
         :type gpu_only: bool
         :param cpu_only:
         :type cpu_only: bool
+        :param machine_class:
+        :type machine_class: List[str]
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1240,7 +1476,6 @@ class SimulatorsApi:
             vcpus_range=vcpus_range,
             memory_range=memory_range,
             price_range=price_range,
-            spot=spot,
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
@@ -1248,6 +1483,7 @@ class SimulatorsApi:
             per_page=per_page,
             gpu_only=gpu_only,
             cpu_only=cpu_only,
+            machine_class=machine_class,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1279,7 +1515,6 @@ class SimulatorsApi:
         price_range: Optional[Annotated[
             List[Union[StrictFloat, StrictInt]],
             Field(min_length=2, max_length=2)]] = None,
-        spot: Optional[Any] = None,
         gpus_range: Optional[Annotated[
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
@@ -1289,6 +1524,7 @@ class SimulatorsApi:
                                      Field(le=100, strict=True, ge=1)]] = None,
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
+        machine_class: Optional[List[StrictStr]] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1317,8 +1553,6 @@ class SimulatorsApi:
         :type memory_range: List[int]
         :param price_range:
         :type price_range: List[float]
-        :param spot:
-        :type spot: Spot1
         :param gpus_range:
         :type gpus_range: List[int]
         :param gpu_names:
@@ -1333,6 +1567,8 @@ class SimulatorsApi:
         :type gpu_only: bool
         :param cpu_only:
         :type cpu_only: bool
+        :param machine_class:
+        :type machine_class: List[str]
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1364,7 +1600,6 @@ class SimulatorsApi:
             vcpus_range=vcpus_range,
             memory_range=memory_range,
             price_range=price_range,
-            spot=spot,
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
@@ -1372,6 +1607,7 @@ class SimulatorsApi:
             per_page=per_page,
             gpu_only=gpu_only,
             cpu_only=cpu_only,
+            machine_class=machine_class,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1394,7 +1630,6 @@ class SimulatorsApi:
         vcpus_range,
         memory_range,
         price_range,
-        spot,
         gpus_range,
         gpu_names,
         zones,
@@ -1402,6 +1637,7 @@ class SimulatorsApi:
         per_page,
         gpu_only,
         cpu_only,
+        machine_class,
         provider_id,
         _request_auth,
         _content_type,
@@ -1420,6 +1656,7 @@ class SimulatorsApi:
             'gpus_range': 'multi',
             'gpu_names': 'multi',
             'zones': 'multi',
+            'machine_class': 'multi',
         }
 
         _path_params: Dict[str, str] = {}
@@ -1454,10 +1691,6 @@ class SimulatorsApi:
 
             _query_params.append(('price_range', price_range))
 
-        if spot is not None:
-
-            _query_params.append(('spot', spot))
-
         if gpus_range is not None:
 
             _query_params.append(('gpus_range', gpus_range))
@@ -1485,6 +1718,10 @@ class SimulatorsApi:
         if cpu_only is not None:
 
             _query_params.append(('cpu_only', cpu_only))
+
+        if machine_class is not None:
+
+            _query_params.append(('machine_class', machine_class))
 
         if provider_id is not None:
 
@@ -1528,7 +1765,6 @@ class SimulatorsApi:
         price_range: Optional[Annotated[
             List[Union[StrictFloat, StrictInt]],
             Field(min_length=2, max_length=2)]] = None,
-        spot: Optional[Any] = None,
         gpus_range: Optional[Annotated[
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
@@ -1538,6 +1774,7 @@ class SimulatorsApi:
                                      Field(le=100, strict=True, ge=1)]] = None,
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
+        machine_class: Optional[List[StrictStr]] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1564,8 +1801,6 @@ class SimulatorsApi:
         :type memory_range: List[int]
         :param price_range:
         :type price_range: List[float]
-        :param spot:
-        :type spot: Spot1
         :param gpus_range:
         :type gpus_range: List[int]
         :param gpu_names:
@@ -1580,6 +1815,8 @@ class SimulatorsApi:
         :type gpu_only: bool
         :param cpu_only:
         :type cpu_only: bool
+        :param machine_class:
+        :type machine_class: List[str]
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1610,7 +1847,6 @@ class SimulatorsApi:
             vcpus_range=vcpus_range,
             memory_range=memory_range,
             price_range=price_range,
-            spot=spot,
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
@@ -1618,6 +1854,7 @@ class SimulatorsApi:
             per_page=per_page,
             gpu_only=gpu_only,
             cpu_only=cpu_only,
+            machine_class=machine_class,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1648,7 +1885,6 @@ class SimulatorsApi:
         price_range: Optional[Annotated[
             List[Union[StrictFloat, StrictInt]],
             Field(min_length=2, max_length=2)]] = None,
-        spot: Optional[Any] = None,
         gpus_range: Optional[Annotated[
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
@@ -1658,6 +1894,7 @@ class SimulatorsApi:
                                      Field(le=100, strict=True, ge=1)]] = None,
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
+        machine_class: Optional[List[StrictStr]] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1684,8 +1921,6 @@ class SimulatorsApi:
         :type memory_range: List[int]
         :param price_range:
         :type price_range: List[float]
-        :param spot:
-        :type spot: Spot1
         :param gpus_range:
         :type gpus_range: List[int]
         :param gpu_names:
@@ -1700,6 +1935,8 @@ class SimulatorsApi:
         :type gpu_only: bool
         :param cpu_only:
         :type cpu_only: bool
+        :param machine_class:
+        :type machine_class: List[str]
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1730,7 +1967,6 @@ class SimulatorsApi:
             vcpus_range=vcpus_range,
             memory_range=memory_range,
             price_range=price_range,
-            spot=spot,
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
@@ -1738,6 +1974,7 @@ class SimulatorsApi:
             per_page=per_page,
             gpu_only=gpu_only,
             cpu_only=cpu_only,
+            machine_class=machine_class,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1768,7 +2005,6 @@ class SimulatorsApi:
         price_range: Optional[Annotated[
             List[Union[StrictFloat, StrictInt]],
             Field(min_length=2, max_length=2)]] = None,
-        spot: Optional[Any] = None,
         gpus_range: Optional[Annotated[
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
@@ -1778,6 +2014,7 @@ class SimulatorsApi:
                                      Field(le=100, strict=True, ge=1)]] = None,
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
+        machine_class: Optional[List[StrictStr]] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1804,8 +2041,6 @@ class SimulatorsApi:
         :type memory_range: List[int]
         :param price_range:
         :type price_range: List[float]
-        :param spot:
-        :type spot: Spot1
         :param gpus_range:
         :type gpus_range: List[int]
         :param gpu_names:
@@ -1820,6 +2055,8 @@ class SimulatorsApi:
         :type gpu_only: bool
         :param cpu_only:
         :type cpu_only: bool
+        :param machine_class:
+        :type machine_class: List[str]
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1850,7 +2087,6 @@ class SimulatorsApi:
             vcpus_range=vcpus_range,
             memory_range=memory_range,
             price_range=price_range,
-            spot=spot,
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
@@ -1858,6 +2094,7 @@ class SimulatorsApi:
             per_page=per_page,
             gpu_only=gpu_only,
             cpu_only=cpu_only,
+            machine_class=machine_class,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1879,7 +2116,6 @@ class SimulatorsApi:
         vcpus_range,
         memory_range,
         price_range,
-        spot,
         gpus_range,
         gpu_names,
         zones,
@@ -1887,6 +2123,7 @@ class SimulatorsApi:
         per_page,
         gpu_only,
         cpu_only,
+        machine_class,
         provider_id,
         _request_auth,
         _content_type,
@@ -1905,6 +2142,7 @@ class SimulatorsApi:
             'gpus_range': 'multi',
             'gpu_names': 'multi',
             'zones': 'multi',
+            'machine_class': 'multi',
         }
 
         _path_params: Dict[str, str] = {}
@@ -1937,10 +2175,6 @@ class SimulatorsApi:
 
             _query_params.append(('price_range', price_range))
 
-        if spot is not None:
-
-            _query_params.append(('spot', spot))
-
         if gpus_range is not None:
 
             _query_params.append(('gpus_range', gpus_range))
@@ -1968,6 +2202,10 @@ class SimulatorsApi:
         if cpu_only is not None:
 
             _query_params.append(('cpu_only', cpu_only))
+
+        if machine_class is not None:
+
+            _query_params.append(('machine_class', machine_class))
 
         if provider_id is not None:
 

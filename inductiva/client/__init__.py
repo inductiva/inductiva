@@ -64,6 +64,7 @@ from inductiva.client.models.executer import Executer
 from inductiva.client.models.file_info import FileInfo
 from inductiva.client.models.gpu_info import GPUInfo
 from inductiva.client.models.http_validation_error import HTTPValidationError
+from inductiva.client.models.machine_filter_options import MachineFilterOptions
 from inductiva.client.models.machine_group_cost_per_hour import MachineGroupCostPerHour
 from inductiva.client.models.machine_group_costs import MachineGroupCosts
 from inductiva.client.models.machine_group_status import MachineGroupStatus
@@ -101,7 +102,6 @@ from inductiva.client.models.simulator_update import SimulatorUpdate
 from inductiva.client.models.simulator_version import SimulatorVersion
 from inductiva.client.models.simulator_with_machine_types_paginated import SimulatorWithMachineTypesPaginated
 from inductiva.client.models.spot import Spot
-from inductiva.client.models.spot1 import Spot1
 from inductiva.client.models.storage_contents_with_pagination import StorageContentsWithPagination
 from inductiva.client.models.storage_cost import StorageCost
 from inductiva.client.models.storage_file_info import StorageFileInfo
