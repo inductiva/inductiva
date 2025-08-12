@@ -5,15 +5,11 @@ from inductiva import simulators, tasks, types
 from inductiva.commands import Command, MPIConfig
 
 
-
 class Calculix(simulators.Simulator):
     """Class to invoke a generic Calculix simulation on the API.
     """
 
-    def __init__(self,
-                 /,
-                 version: Optional[str] = None,
-                 use_dev: bool = False):
+    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
         """Initialize the Calculix simulator.
 
         Args:
@@ -94,9 +90,10 @@ class Calculix(simulators.Simulator):
             n_vcpus = on.available_vcpus
 
         commands = [
-            Command(f"ccx -i {sim_config_filename[:-4]}",env={
-                "OMP_NUM_THREADS": str(n_vcpus),
-            })
+            Command(f"ccx -i {sim_config_filename[:-4]}",
+                    env={
+                        "OMP_NUM_THREADS": str(n_vcpus),
+                    })
         ]
 
         return super().run(input_dir,
