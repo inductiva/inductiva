@@ -1004,6 +1004,7 @@ class TasksApi:
         status: Optional[TaskStatusCode] = None,
         project: Optional[StrictStr] = None,
         active: Optional[StrictBool] = None,
+        task_id_filter: Optional[StrictStr] = None,
         sort: Annotated[
             Optional[List[Optional[StrictStr]]],
             Field(
@@ -1023,7 +1024,7 @@ class TasksApi:
     ) -> TaskWithPagination:
         """Get User Tasks
 
-        Get tasks of authenticated user with flexible sorting and filtering.  This endpoint is used to retrieve the tasks of the authenticated user. The \"per_page\" and \"page\" query parameters are used to paginate the results. Pagination is indexed from 1. The \"status\" query parameter can be used to filter the tasks by status. You can also use the 'sort' query parameter for advanced sorting. Example: ?sort=create_time:desc&sort=status:asc
+        Get tasks of authenticated user with flexible sorting and filtering.  This endpoint is used to retrieve the tasks of the authenticated user. The \"per_page\" and \"page\" query parameters are used to paginate the results. Pagination is indexed from 1. The \"status\" query parameter can be used to filter the tasks by status. The \"task_id_filter\" query parameter can be used to filter tasks by task ID. You can also use the 'sort' query parameter for advanced sorting. Example: ?sort=create_time:desc&sort=status:asc
 
         :param page:
         :type page: int
@@ -1035,6 +1036,8 @@ class TasksApi:
         :type project: str
         :param active:
         :type active: bool
+        :param task_id_filter:
+        :type task_id_filter: str
         :param sort: Sort fields in format 'field:order'. Example: create_time:desc, status:asc
         :type sort: List[Optional[str]]
         :param _request_timeout: timeout setting for this request. If one
@@ -1064,6 +1067,7 @@ class TasksApi:
                                                 status=status,
                                                 project=project,
                                                 active=active,
+                                                task_id_filter=task_id_filter,
                                                 sort=sort,
                                                 _request_auth=_request_auth,
                                                 _content_type=_content_type,
@@ -1091,6 +1095,7 @@ class TasksApi:
         status: Optional[TaskStatusCode] = None,
         project: Optional[StrictStr] = None,
         active: Optional[StrictBool] = None,
+        task_id_filter: Optional[StrictStr] = None,
         sort: Annotated[
             Optional[List[Optional[StrictStr]]],
             Field(
@@ -1110,7 +1115,7 @@ class TasksApi:
     ) -> ApiResponse[TaskWithPagination]:
         """Get User Tasks
 
-        Get tasks of authenticated user with flexible sorting and filtering.  This endpoint is used to retrieve the tasks of the authenticated user. The \"per_page\" and \"page\" query parameters are used to paginate the results. Pagination is indexed from 1. The \"status\" query parameter can be used to filter the tasks by status. You can also use the 'sort' query parameter for advanced sorting. Example: ?sort=create_time:desc&sort=status:asc
+        Get tasks of authenticated user with flexible sorting and filtering.  This endpoint is used to retrieve the tasks of the authenticated user. The \"per_page\" and \"page\" query parameters are used to paginate the results. Pagination is indexed from 1. The \"status\" query parameter can be used to filter the tasks by status. The \"task_id_filter\" query parameter can be used to filter tasks by task ID. You can also use the 'sort' query parameter for advanced sorting. Example: ?sort=create_time:desc&sort=status:asc
 
         :param page:
         :type page: int
@@ -1122,6 +1127,8 @@ class TasksApi:
         :type project: str
         :param active:
         :type active: bool
+        :param task_id_filter:
+        :type task_id_filter: str
         :param sort: Sort fields in format 'field:order'. Example: create_time:desc, status:asc
         :type sort: List[Optional[str]]
         :param _request_timeout: timeout setting for this request. If one
@@ -1151,6 +1158,7 @@ class TasksApi:
                                                 status=status,
                                                 project=project,
                                                 active=active,
+                                                task_id_filter=task_id_filter,
                                                 sort=sort,
                                                 _request_auth=_request_auth,
                                                 _content_type=_content_type,
@@ -1178,6 +1186,7 @@ class TasksApi:
         status: Optional[TaskStatusCode] = None,
         project: Optional[StrictStr] = None,
         active: Optional[StrictBool] = None,
+        task_id_filter: Optional[StrictStr] = None,
         sort: Annotated[
             Optional[List[Optional[StrictStr]]],
             Field(
@@ -1197,7 +1206,7 @@ class TasksApi:
     ) -> RESTResponseType:
         """Get User Tasks
 
-        Get tasks of authenticated user with flexible sorting and filtering.  This endpoint is used to retrieve the tasks of the authenticated user. The \"per_page\" and \"page\" query parameters are used to paginate the results. Pagination is indexed from 1. The \"status\" query parameter can be used to filter the tasks by status. You can also use the 'sort' query parameter for advanced sorting. Example: ?sort=create_time:desc&sort=status:asc
+        Get tasks of authenticated user with flexible sorting and filtering.  This endpoint is used to retrieve the tasks of the authenticated user. The \"per_page\" and \"page\" query parameters are used to paginate the results. Pagination is indexed from 1. The \"status\" query parameter can be used to filter the tasks by status. The \"task_id_filter\" query parameter can be used to filter tasks by task ID. You can also use the 'sort' query parameter for advanced sorting. Example: ?sort=create_time:desc&sort=status:asc
 
         :param page:
         :type page: int
@@ -1209,6 +1218,8 @@ class TasksApi:
         :type project: str
         :param active:
         :type active: bool
+        :param task_id_filter:
+        :type task_id_filter: str
         :param sort: Sort fields in format 'field:order'. Example: create_time:desc, status:asc
         :type sort: List[Optional[str]]
         :param _request_timeout: timeout setting for this request. If one
@@ -1238,6 +1249,7 @@ class TasksApi:
                                                 status=status,
                                                 project=project,
                                                 active=active,
+                                                task_id_filter=task_id_filter,
                                                 sort=sort,
                                                 _request_auth=_request_auth,
                                                 _content_type=_content_type,
@@ -1259,6 +1271,7 @@ class TasksApi:
         status,
         project,
         active,
+        task_id_filter,
         sort,
         _request_auth,
         _content_type,
@@ -1301,6 +1314,10 @@ class TasksApi:
         if active is not None:
 
             _query_params.append(('active', active))
+
+        if task_id_filter is not None:
+
+            _query_params.append(('task_id_filter', task_id_filter))
 
         if sort is not None:
 

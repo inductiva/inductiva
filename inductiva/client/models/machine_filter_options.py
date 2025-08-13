@@ -16,21 +16,28 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictInt
-from typing import Any, ClassVar, Dict, List
-from inductiva.client.models.machine_type_with_spot_price import MachineTypeWithSpotPrice
+from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List, Union
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class SimulatorWithMachineTypesPaginated(BaseModel):
+class MachineFilterOptions(BaseModel):
     """
-    Schema for paginated available machine types (simple).
+    Schema for machine filter options  calculated from available machine types.
     """ # noqa: E501
-    available_machine_types: List[MachineTypeWithSpotPrice]
-    total_size: StrictInt
+    machine_families_options: List[StrictStr]
+    machine_configs_options: List[StrictStr]
+    gpu_types_options: List[StrictStr]
+    zone_options: List[StrictStr]
+    vcpus_range: List[StrictInt]
+    gpus_range: List[StrictInt]
+    memory_range: List[StrictInt]
+    price_range: List[Union[StrictFloat, StrictInt]]
     __properties: ClassVar[List[str]] = [
-        "available_machine_types", "total_size"
+        "machine_families_options", "machine_configs_options",
+        "gpu_types_options", "zone_options", "vcpus_range", "gpus_range",
+        "memory_range", "price_range"
     ]
 
     model_config = ConfigDict(
@@ -50,7 +57,7 @@ class SimulatorWithMachineTypesPaginated(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of SimulatorWithMachineTypesPaginated from a JSON string"""
+        """Create an instance of MachineFilterOptions from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -70,18 +77,11 @@ class SimulatorWithMachineTypesPaginated(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in available_machine_types (list)
-        _items = []
-        if self.available_machine_types:
-            for _item_available_machine_types in self.available_machine_types:
-                if _item_available_machine_types:
-                    _items.append(_item_available_machine_types.to_dict())
-            _dict['available_machine_types'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of SimulatorWithMachineTypesPaginated from a dict"""
+        """Create an instance of MachineFilterOptions from a dict"""
         if obj is None:
             return None
 
@@ -89,11 +89,13 @@ class SimulatorWithMachineTypesPaginated(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "available_machine_types": [
-                MachineTypeWithSpotPrice.from_dict(_item)
-                for _item in obj["available_machine_types"]
-            ] if obj.get("available_machine_types") is not None else None,
-            "total_size":
-                obj.get("total_size")
+            "machine_families_options": obj.get("machine_families_options"),
+            "machine_configs_options": obj.get("machine_configs_options"),
+            "gpu_types_options": obj.get("gpu_types_options"),
+            "zone_options": obj.get("zone_options"),
+            "vcpus_range": obj.get("vcpus_range"),
+            "gpus_range": obj.get("gpus_range"),
+            "memory_range": obj.get("memory_range"),
+            "price_range": obj.get("price_range")
         })
         return _obj

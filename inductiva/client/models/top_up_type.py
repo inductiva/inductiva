@@ -27,6 +27,7 @@ class TopUpType(str, Enum):
     INITIAL_CREDITS = 'initial_credits'
     OFFER = 'offer'
     STRIPE_PAYMENT = 'stripe_payment'
+    OTHER_PAYMENT = 'other_payment'
     BOOST = 'boost'
 
     @classmethod
