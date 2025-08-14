@@ -41,7 +41,7 @@ class BannerSmallDirective(Directive):
                     ? baseUrl + '&' + params.slice(1)  // Remove the initial '?' and prepend '&'
                     : baseUrl;
 
-                console.log("[Banner] Opening URL:", url);
+                console.log("[BannerSmall] Opening URL:", url);
                 window.open(url, '_blank');
             }}
             </script>
