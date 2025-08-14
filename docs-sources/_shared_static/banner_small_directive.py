@@ -37,7 +37,7 @@ class BannerSmallDirective(Directive):
                 // Get referrer domain only, remove protocol and www
                 let referrerDomain = '';
                 try {{
-                    const refUrl = new URL(document.referrer);
+                    const refUrl = new URL(window.parent.document.referrer);
                     referrerDomain = refUrl.hostname.replace(/^www\./, ''); // Remove www.
                 }} catch (e) {{
                     // If referrer is empty or invalid, leave as empty string
