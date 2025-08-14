@@ -14,6 +14,7 @@ class BannerDirective(Directive):
         origin = self.options.get('origin', '')
 
         # pylint: disable=line-too-long
+        # pylint: disable=anomalous-backslash-in-string
         html = f'''
             <div class="banner">
                 <div class="banner-content">

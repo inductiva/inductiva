@@ -13,6 +13,7 @@ class BannerSmallDirective(Directive):
     @staticmethod
     def html(origin: str) -> nodes.Node:
         # pylint: disable=line-too-long
+        # pylint: disable=anomalous-backslash-in-string
         html = f'''
             <div class="cta-bar">
                 <div class="cta-text" style="text-align: center">
