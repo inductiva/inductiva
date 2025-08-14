@@ -1,6 +1,9 @@
 """ Triggers for events."""
 
 from pydantic import BaseModel
+
+from inductiva.client.models.trigger_machine_group_type import \
+    TriggerMachineGroupType
 from inductiva.client.models.trigger_task_type import TriggerTaskType
 
 
@@ -66,4 +69,22 @@ class ObserverFileRegex(Trigger):
             "trigger": "file_regex_observer",
             "file_path": self.file_path,
             "regex": self.regex,
+        }
+
+
+class MachineGroupPreemption(Trigger):
+    """
+    Trigger that is activated when a spot machine from the machine group is
+    preempted.
+
+    Attributes:
+        machine_group_id (str): UUID of the machine group.
+    """
+    machine_group_id: str
+
+    def get_trigger(self):
+        return {
+            "machine_group_id": self.machine_group_id,
+            "trigger": TriggerMachineGroupType.MACHINE_GROUP_PREEMPTION,
+            "trigger_type": "machine_group"
         }
