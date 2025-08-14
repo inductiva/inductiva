@@ -13,6 +13,7 @@ class BannerSmallDirective(Directive):
     @staticmethod
     def html(origin: str) -> nodes.Node:
         # pylint: disable=line-too-long
+        # pylint: disable=anomalous-backslash-in-string
         html = f'''
             <div class="cta-bar">
                 <div class="cta-text" style="text-align: center">
@@ -26,10 +27,16 @@ class BannerSmallDirective(Directive):
 
             <script>
             function openInductivaRegister(origin) {{
-                // current URL query string, including '?'
+                // Current URL query string, including '?'
                 const params = new URL(window.parent.location.href).search;
-                const baseUrl = 'https://console.inductiva.ai/api/register?utm_guides_cta_origin=guide_' + origin;
+                const parentPath = new URL(window.parent.location.href).pathname;
                 
+                // Replace "/" with "_", remove leading/trailing underscores if any
+                const utmPath = parentPath.replace(/\//g, '_').replace(/^_+|_+$/g, '');
+
+                const baseUrl = 'https://console.inductiva.ai/api/register?utm_cta_origin=guide_' 
+                    + origin + '&utm_path=' + encodeURIComponent(utmPath);
+
                 const url = params
                     ? baseUrl + '&' + params.slice(1)  // Remove the initial '?' and prepend '&'
                     : baseUrl;
