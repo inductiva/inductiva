@@ -13,8 +13,10 @@ import logging
 import inductiva
 import inductiva.client
 import inductiva.client.models
+import inductiva.events
 from inductiva import api, users, logs
 from inductiva.commands.mpiconfig import MPIConfig
+from inductiva.events import triggers, actions
 from inductiva.resources.utils import ProviderType
 from inductiva.utils import format_utils
 
@@ -65,6 +67,7 @@ class BaseMachineGroup(ABC):
     auto_terminate_ts: Optional[datetime.datetime] = None
     auto_terminate_minutes: Optional[int] = None
     spot: bool = True
+    preemption_notifications: bool = True
 
     mpi_version: str = "4.1.6"
     np: int = None
@@ -344,6 +347,11 @@ class BaseMachineGroup(ABC):
             register_vm_group_request=instance_group_config,)
 
         self._update_attributes_from_response(body)
+
+        if self.preemption_notifications:
+            trigger = triggers.MachineGroupPreemption(machine_group_id=self._id)
+            action = actions.EmailNotification(email_address="email@email.com")
+            inductiva.events.register(trigger=trigger, action=action)
 
         self._log_machine_group_info()
 
