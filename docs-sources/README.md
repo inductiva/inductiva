@@ -55,3 +55,10 @@ To update documentation on the website, follow this process:
 3. To publish the changes to the **[production website](https://inductiva.ai/)**, create a pull request and then merge the changes to **`main`**.
 4. If you want to **change what appears in the website's submenus** (like **Simulators** or **Resources**), edit the structure of the file `docs-sources/menu.json`.  
    This file defines which groups and items appear, how they are organized, and how many columns are shown.
+
+---
+
+## Checking for Broken Links
+
+To ensure the documentation stays reliable, run the ["Documentation Linkchecker" workflow](https://github.com/inductiva/inductiva/actions/workflows/docs-link-checker.yml).  
+This workflow generates a CSV report listing any broken links it finds, so you can quickly identify and fix them.
