@@ -21,6 +21,41 @@ ARTIFACTS_DIRNAME = "artifacts"
 INPUT_DIRNAME = "sim_dir"
 
 
+def _normalize_file(path: str) -> None:
+    """
+    Normalize line endings of a file in place for `.txt` and `.sh` files.
+
+    - Checks the first line for Windows-style line endings (`\r\n`).
+    - If CRLF is found, rewrites the entire file converting CRLF to LF.
+    - If not, the file is left unchanged.
+
+    Args:
+        path (str): Path to the file to normalize.
+    """
+    _, ext = os.path.splitext(path)
+    if ext.lower() not in {".txt", ".sh"}:
+        return
+
+    with open(path, "rb") as f:
+        first_line = f.readline()
+        print(f"Checking Normalizing file {path}...")
+        if b"\r\n" not in first_line:
+            return  # nothing to do
+        print(f"Normalizing file {path}...")
+
+        # Normalize file in place
+        tmp_path = path + ".tmp"
+        with open(tmp_path, "wb") as f_out:
+            # Normalize first line
+            f_out.write(re.sub(rb'\r\n', b'\n', first_line))
+            # Normalize remaining lines
+            for line in f:
+                f_out.write(re.sub(rb'\r\n', b'\n', line))
+
+        # Replace original file
+        os.replace(tmp_path, path)
+
+
 def pack_input(input_dir, zip_name) -> str:
     """Pack all inputs into a zip file.
 
@@ -43,6 +78,13 @@ def pack_input(input_dir, zip_name) -> str:
 
         if input_dir:
             shutil.copytree(input_dir, dst_fullpath)
+
+            # Normalize all .txt and .sh files in the copied directory
+            for root, _, files in os.walk(dst_fullpath):
+                for file in files:
+                    if file.lower().endswith((".txt", ".sh")):
+                        file_path = os.path.join(root, file)
+                        _normalize_file(file_path)
 
         # Zip everything in the temporary directory into a single zip file
         zip_path = shutil.make_archive(
@@ -259,4 +301,5 @@ def decompress_zip(zip_path: pathlib.Path, output_dir: pathlib.Path):
                 output_dir,
             )
         else:
+            zip_f.extractall(output_dir)
             zip_f.extractall(output_dir)
