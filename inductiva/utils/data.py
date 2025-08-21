@@ -302,4 +302,3 @@ def decompress_zip(zip_path: pathlib.Path, output_dir: pathlib.Path):
             )
         else:
             zip_f.extractall(output_dir)
-            zip_f.extractall(output_dir)
