@@ -410,7 +410,7 @@ def _resolve_local_path(
     local_path = os.path.join(local_base_dir, relative_path)
     if append_path:
         local_path = os.path.join(local_path, append_path)
-    local_path = re.sub(r'[<>:"|?*]', '_', local_path)
+    local_path = re.sub(r"[<>:\"|?*]", "_", local_path)
 
     os.makedirs(os.path.dirname(local_path), exist_ok=True)
 
