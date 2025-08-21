@@ -109,19 +109,19 @@ def test__construct_remote_paths(
 
 
 @pytest.mark.parametrize(
-    "content, suffix, expected",
+    'content, suffix, expected',
     [
         # Case 1: CRLF endings in .txt → should normalize to LF
-        (b"line1\r\nline2\r\nline3\r\n", ".txt", b"line1\nline2\nline3\n"),
+        (b'line1\r\nline2\r\nline3\r\n', '.txt', b'line1\nline2\nline3\n'),
         # Case 2: LF endings in .txt → unchanged
-        (b"line1\nline2\nline3\n", ".txt", b"line1\nline2\nline3\n"),
+        (b'line1\nline2\nline3\n', '.txt', b'line1\nline2\nline3\n'),
         # Case 3: Non .txt/.sh file → unchanged
-        (b"line1\r\nline2\r\n", ".bin", b"line1\r\nline2\r\n"),
+        (b'line1\r\nline2\r\n', '.bin', b'line1\r\nline2\r\n'),
         # Case 4: CRLF endings in .sh → should normalize to LF
-        (b"#!/bin/bash\r\necho Hello\r\n", ".sh", b"#!/bin/bash\necho Hello\n"),
+        (b'#!/bin/bash\r\necho Hello\r\n', '.sh', b'#!/bin/bash\necho Hello\n'),
     ])
 def test_normalize_file(tmp_path, content, suffix, expected):
-    tmp_file = tmp_path / f"test{suffix}"
+    tmp_file = tmp_path / f'test{suffix}'
     tmp_file.write_bytes(content)
 
     _normalize_file(str(tmp_file))
