@@ -16,6 +16,7 @@ import fsspec
 import urllib3
 
 import logging
+import re
 
 ARTIFACTS_DIRNAME = "artifacts"
 INPUT_DIRNAME = "sim_dir"
@@ -73,6 +74,8 @@ def extract_subdir_files(zip_fp: zipfile.ZipFile, dir_name: str,
 
         src_file = zip_fp.open(member)
         target_relative_path = pathlib.Path(member).relative_to(dir_name)
+        target_relative_path = re.sub(r'[<>:"|?*]', "_",
+                                      str(target_relative_path))
         target_path = os.path.join(output_dir, target_relative_path)
 
         os.makedirs(os.path.dirname(target_path), exist_ok=True)
