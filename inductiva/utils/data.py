@@ -7,6 +7,7 @@ configurations related to paths where certain files are expected to be.
 """
 import os
 import pathlib
+import re
 import zipfile
 import tempfile
 import shutil
@@ -47,10 +48,10 @@ def _normalize_file(path: str) -> None:
         tmp_path = path + ".tmp"
         with open(tmp_path, "wb") as f_out:
             # Normalize first line
-            f_out.write(re.sub(rb'\r\n', b'\n', first_line))
+            f_out.write(re.sub(rb"\r\n", b"\n", first_line))
             # Normalize remaining lines
             for line in f:
-                f_out.write(re.sub(rb'\r\n', b'\n', line))
+                f_out.write(re.sub(rb"\r\n", b"\n", line))
 
         # Replace original file
         os.replace(tmp_path, path)
