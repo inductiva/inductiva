@@ -13,6 +13,7 @@ import shutil
 from typing import Callable, List
 from tqdm import tqdm
 import fsspec
+import urllib
 import urllib3
 
 import logging
@@ -54,6 +55,32 @@ def pack_input(input_dir, zip_name) -> str:
     return zip_path
 
 
+def unquote_url_path(url: str) -> str:
+    """Extract and unquote the path part of a URL.
+
+    Examples:
+        >>> unquote_url_path("http://example.com/files/my%20file.txt")
+        '/files/my file.txt'
+        >>> unquote_url_path("https://host/path%3Cname%3E.zip")
+        '/path<name>.zip'
+    """
+    return urllib.parse.unquote(urllib.parse.urlparse(url).path)
+
+
+def sanitize_path(path: str) -> str:
+    """Replace characters invalid in filesystem paths with underscores.
+
+    Characters replaced: < > : " | ? *
+
+    Examples:
+        >>> sanitize_path("unsafe<name>|file?.txt")
+        'unsafe_name__file_.txt'
+        >>> sanitize_path("already_safe.txt")
+        'already_safe.txt'
+    """
+    return re.sub(r'[<>:"|?*]', "_", path)
+
+
 def extract_subdir_files(zip_fp: zipfile.ZipFile, dir_name: str,
                          output_dir: pathlib.Path):
     """Util function to extract the contents of a directory in a ZIP archive.
@@ -74,8 +101,7 @@ def extract_subdir_files(zip_fp: zipfile.ZipFile, dir_name: str,
 
         src_file = zip_fp.open(member)
         target_relative_path = pathlib.Path(member).relative_to(dir_name)
-        target_relative_path = re.sub(r'[<>:"|?*]', "_",
-                                      str(target_relative_path))
+        target_relative_path = sanitize_path(str(target_relative_path))
         target_path = os.path.join(output_dir, target_relative_path)
 
         os.makedirs(os.path.dirname(target_path), exist_ok=True)
