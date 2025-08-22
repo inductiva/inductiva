@@ -25,7 +25,7 @@ You'll be prompted to enter:
 - Default region
 - Output format (e.g., JSON)
 
-> Your credentials are **never sent to Inductiva**. For more details, see [FAQ #5](https://inductiva.ai/guides/how-it-works/recipes/export-files-to-aws/sections/section3#how-can-inductiva-export-files-if-it-doesn-t-have-my-aws-credentials) below.
+> Your credentials are **never sent to Inductiva**. For more details, see [FAQ #5](https://inductiva.ai/guides/expand/bring-your-own-cloud/export-files-to-aws/sections/section3#how-can-inductiva-export-files-if-it-doesn-t-have-my-aws-credentials) below.
 
 ## 3. Export Files to AWS S3
 
