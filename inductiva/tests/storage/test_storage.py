@@ -108,17 +108,17 @@ def test__construct_remote_paths(
     assert remote_file_paths == expected_remote_paths
 
 
-@pytest.mark.parametrize("url,expected", [
-    ("http://example.com/my%20file.txt", "/my file.txt"),
-    ("https://server/folder/path%3Cname%3E.zip", "/folder/path<name>.zip"),
+@pytest.mark.parametrize('url,expected', [
+    ('http://example.com/my%20file.txt', '/my file.txt'),
+    ('https://server/folder/path%3Cname%3E.zip', '/folder/path<name>.zip'),
 ])
 def test_unquote_url_path(url, expected):
     assert utils.data.unquote_url_path(url) == expected
 
 
-@pytest.mark.parametrize("raw,expected", [
-    ("un:safe<name>|file?.txt", "un_safe_name__file_.txt"),
-    ("already_safe.txt", "already_safe.txt"),
+@pytest.mark.parametrize('raw,expected', [
+    ('un:safe<name>|file?.txt', 'un_safe_name__file_.txt'),
+    ('already_safe.txt', 'already_safe.txt'),
 ])
 def test_sanitize_path(raw, expected):
     assert utils.data.sanitize_path(raw) == expected
