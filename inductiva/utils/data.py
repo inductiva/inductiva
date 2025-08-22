@@ -39,10 +39,8 @@ def _normalize_file(path: str) -> None:
 
     with open(path, "rb") as f:
         first_line = f.readline()
-        print(f"Checking Normalizing file {path}...")
         if b"\r\n" not in first_line:
             return  # nothing to do
-        print(f"Normalizing file {path}...")
 
         # Normalize file in place
         tmp_path = path + ".tmp"
