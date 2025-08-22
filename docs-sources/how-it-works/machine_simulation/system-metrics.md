@@ -16,7 +16,7 @@ With the system metrics feature, you can gain valuable insights into your task's
 - Identify Resource Bottlenecks: Easily determine if your task's performance is being limited by CPU, memory, or disk I/O, allowing you to address the specific constraint.
 - Optimize Resource Allocation: Make data-driven decisions for future runs. If a task only uses a small fraction of the allocated memory and CPU, you can select a smaller, more cost-effective machine next time.
 
-For extra guidance, look into our guide to [Pick The Right Cloud Machine For Your Simulation](https://inductiva.ai/guides/how-it-works/get-started/pick-cloud-machine)
+For extra guidance, look into our guide to [Pick The Right Cloud Machine For Your Simulation](https://inductiva.ai/guides/how-it-works/machine_simulation/pick-cloud-machine)
 
 ```{banner_small}
 :origin: scale_up_system_metrics
