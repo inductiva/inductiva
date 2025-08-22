@@ -16,7 +16,6 @@ from typing import List, Literal, Optional, Tuple
 
 import concurrent.futures
 import tqdm
-import re
 
 import inductiva
 from inductiva import constants
