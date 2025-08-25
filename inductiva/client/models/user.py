@@ -40,6 +40,7 @@ class User(BaseModel):
     credits_currency: Optional[CurrencyCode] = None
     terms_and_conditions_decision: TermsAndConditions
     terms_and_conditions_decision_ts: Optional[datetime] = None
+    extra_metadata: Optional[Dict[str, StrictStr]] = None
     registration_ts: datetime
     costs_fee_percentage: Union[StrictFloat, StrictInt]
     terminate_resources_credits_threshold: Union[StrictFloat, StrictInt]
@@ -47,7 +48,7 @@ class User(BaseModel):
         "email", "username", "name", "organization", "tier",
         "total_available_credits", "credits_currency",
         "terms_and_conditions_decision", "terms_and_conditions_decision_ts",
-        "registration_ts", "costs_fee_percentage",
+        "extra_metadata", "registration_ts", "costs_fee_percentage",
         "terminate_resources_credits_threshold"
     ]
 
@@ -103,6 +104,11 @@ class User(BaseModel):
         if self.terms_and_conditions_decision_ts is None and "terms_and_conditions_decision_ts" in self.model_fields_set:
             _dict['terms_and_conditions_decision_ts'] = None
 
+        # set to None if extra_metadata (nullable) is None
+        # and model_fields_set contains the field
+        if self.extra_metadata is None and "extra_metadata" in self.model_fields_set:
+            _dict['extra_metadata'] = None
+
         return _dict
 
     @classmethod
@@ -133,6 +139,8 @@ class User(BaseModel):
                 obj.get("terms_and_conditions_decision"),
             "terms_and_conditions_decision_ts":
                 obj.get("terms_and_conditions_decision_ts"),
+            "extra_metadata":
+                obj.get("extra_metadata"),
             "registration_ts":
                 obj.get("registration_ts"),
             "costs_fee_percentage":
