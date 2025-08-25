@@ -399,7 +399,7 @@ def _resolve_local_path(
     append_path=None,
     strip_zip=False,
 ):
-    remote_url_path = urllib.parse.urlparse(url).path
+    remote_url_path = utils.data.unquote_url_path(url)
     index = remote_url_path.find(remote_base_path)
     relative_path = remote_url_path[index:]
 
@@ -409,6 +409,7 @@ def _resolve_local_path(
     local_path = os.path.join(local_base_dir, relative_path)
     if append_path:
         local_path = os.path.join(local_path, append_path)
+    local_path = utils.data.sanitize_path(local_path)
 
     os.makedirs(os.path.dirname(local_path), exist_ok=True)
 
