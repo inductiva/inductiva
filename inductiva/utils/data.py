@@ -18,7 +18,6 @@ import urllib
 import urllib3
 
 import logging
-import re
 
 ARTIFACTS_DIRNAME = "artifacts"
 INPUT_DIRNAME = "sim_dir"
