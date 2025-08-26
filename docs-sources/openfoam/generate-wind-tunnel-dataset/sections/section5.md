@@ -22,7 +22,7 @@ To make the process efficient, we don’t need to manually collect or download s
 
 Each previous task's output folder is referenced remotely in the cloud and accessed by the postprocessing script without needing to duplicate or transfer files.
 
-> 🔗 For more information, check out: [Reusing Files from Other Tasks](https://inductiva.ai/guides/scale-up/reuse-files/reuse-files)
+> 🔗 For more information, check out: [Reusing Files from Other Tasks](https://inductiva.ai/guides/scale-up/recipes/reuse-files)
 
 ---
 
