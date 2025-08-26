@@ -1,7 +1,7 @@
 # Visualizing Results with Smokeview
 
 [Smokeview](https://github.com/firemodels/smv) is a tool for visualizing the results of Fire Dynamics Simulator (FDS) simulations.
-In this tutorial, we’ll show how to run Smokeview **directly on Inductiva** after your FDS simulation finishes, using the "Town House Kitchen Fire" example from the [Smokeview repository](https://github.com/firemodels/smv/tree/6.9.1/Verification/Visualization).
+In this tutorial, we’ll show how to run Smokeview **directly on Inductiva** after your FDS simulation finishes, using the "Town House Kitchen Fire" example from the [Smokeview repository](https://github.com/firemodels/smv/tree/SMV-6.9.1/Verification/Visualization).
 
 ## Prerequisites
 
