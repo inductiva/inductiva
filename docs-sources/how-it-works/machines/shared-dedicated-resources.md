@@ -15,10 +15,8 @@ parallel processing.
 - **Key benefit**: Parallel execution of separate simulation tasks
 - **Learn more**: [Machine Group documentation](computational_resources/machinegroup_class.md)
 
-````{eval-rst}
-.. seealso::
-   For complete API documentation including all parameters, methods, and configuration options, see the `MachineGroup <https://inductiva.ai/guides/api-functions/api/inductiva.resources#inductiva.resources.machine_groups.MachineGroup>`_ class documentation
-```` 
+
+> For complete API documentation including all parameters, methods, and configuration options, see the [MachineGroup](https://inductiva.ai/guides/api-functions/api/inductiva.resources#inductiva.resources.machine_groups.MachineGroup) class documentation
 
 ### Elastic Machine Group
 Similar to Machine Group but with dynamic scaling capabilities that automatically adjust the number of machines based on your simulation queue, ensuring efficient resource utilization and cost optimization.
@@ -27,10 +25,8 @@ Similar to Machine Group but with dynamic scaling capabilities that automaticall
 - **Key benefit**: Automatic scaling based on simulation demand
 - **Learn more**: [Elastic Machine Group documentation](computational_resources/elasticgroup_class.md)
 
-````{eval-rst}
-.. seealso::
-   For complete API documentation including all parameters, methods, and configuration options, see the `ElasticMachineGroup <https://inductiva.ai/guides/api-functions/api/inductiva.resources#inductiva.resources.machine_groups.ElasticMachineGroup>`_ class documentation
-````
+
+> For complete API documentation including all parameters, methods, and configuration options, see the [ElasticMachineGroup](https://inductiva.ai/guides/api-functions/api/inductiva.resources#inductiva.resources.machine_groups.ElasticMachineGroup) class documentation
 
 ### MPI Cluster
 A network of machines configured to work collaboratively on a single simulation task, distributing the computational workload across multiple CPUs for maximum performance on complex simulations.
@@ -39,10 +35,7 @@ A network of machines configured to work collaboratively on a single simulation 
 - **Key benefit**: Parallel processing within a single simulation
 - **Learn more**: [MPI Cluster documentation](computational_resources/mpicluster_class.md)
 
-````{eval-rst}
-.. seealso::
-   For complete API documentation including all parameters, methods, and configuration options, see the `MPICluster <https://inductiva.ai/guides/api-functions/api/inductiva.resources#inductiva.resources.machine_groups.MPICluster>`_ class documentation
-````
+> For complete API documentation including all parameters, methods, and configuration options, see the [MPICluster](https://inductiva.ai/guides/api-functions/api/inductiva.resources#inductiva.resources.machine_groups.MPICluster) class documentation
 
 ## Choosing the Right Resource
 

@@ -25,10 +25,8 @@ Each task progresses through several main states:
 | `failed` | Task encountered an error | - |
 | `killed` | Task was manually terminated | - |
 
-````{eval-rst}
-.. seealso::
-    For complete Task Lifecycle documentation, see our `Task Lifecycle <https://inductiva.ai/guides/how-it-works/tasks/tasks-lifecycle>`_ guide
-````
+
+> For complete Task Lifecycle documentation, see our [Task Lifecycle](https://inductiva.ai/guides/how-it-works/tasks/tasks-lifecycle) guide
 
 ## Execution Control
 

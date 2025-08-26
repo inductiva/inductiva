@@ -48,10 +48,8 @@ A `Benchmark` object contains **runs**, where each run represents a different si
 | `export()` | Save results to file | For analysis and reporting |
 | `terminate()` | Clean up resources | Always call when finished |
 
-````{eval-rst}
-.. seealso::
-   For complete API documentation including all parameters, methods, and configuration options, see the `Benchmark <https://inductiva.ai/guides/api-functions/api/inductiva.benchmarks>`_ class documentation
-````
+
+> For complete API documentation including all parameters, methods, and configuration options, see the [Benchmark](https://inductiva.ai/guides/api-functions/api/inductiva.benchmarks) class documentation
 
 ## Code Examples
 
