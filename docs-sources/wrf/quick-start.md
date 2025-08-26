@@ -47,7 +47,7 @@ In this basic example, we're using a cloud machine (`c2d-highcpu-16`) equipped w
 For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
 a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other WRF simulations, replace input_dir with the path
@@ -92,11 +92,11 @@ By increasing the number of vCPUs, we can substantially decrease the simulation 
 
 Here are the results of running the same simulation on a few machines:
 
-|  Machine Type  | Virtual CPUs |Execution Time| Estimated Cost |
+|  Machine Type  | Virtual CPUs |Execution Time| Estimated Cost (USD) |
 |:--------------:|:------------:|:------------:|:--------------:|
-|  c2d-highcpu-16 |       16      | 32 minutes 5 seconds | 0.072 US$    |
-|  c2d-highcpu-56 |       56      | 14 minutes 15 seconds | 0.11 US$    |
-| c2d-highcpu-112 |      112      | 8 minutes 37 seconds  | 0.14 US$    |
+|  c2d-highcpu-16 |       16      | 32 min, 5 s | 0.072     |
+|  c2d-highcpu-56 |       56      | 14 min, 15s| 0.11     |
+| c2d-highcpu-112 |      112      | 8 min, 37s  | 0.14   |
 
 Still in the testing phase? No problem! Just skip this step for now and start
 with a machine with fewer vCPUs. Once you're satisfied with your results, you
@@ -108,4 +108,6 @@ We’ve walked through the essential steps for setting up and running a WRF simu
 By following this guide, you should now have a clear understanding of how to configure and efficiently 
 run WRF simulations on Inductiva.
 
-Happy simulating! ⚡️
+```{banner_small}
+:origin: wrf
+```

@@ -44,7 +44,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other OpenFAST simulations, replace `input_dir` with the
@@ -76,4 +76,6 @@ Estimated computation cost (US$): 0.000058 US$
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
 the core computation time of this simulation was approximately 3.5 seconds.
 
-It's that simple!
+```{banner_small}
+:origin: openfast
+```

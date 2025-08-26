@@ -1,4 +1,4 @@
-# Test Your Inductiva Setup ⚙️
+# Test Your Inductiva Setup
 Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick SNL-SWAN simulation — it only takes a few seconds!
 
 ## Step 1: Copy and Run the Code
@@ -44,6 +44,10 @@ task.print_summary()
 After the simulation completes, a task summary will be displayed in your terminal. If the task status shows **Success**, congratulations! You've successfully run an SNL-SWAN simulation.
 
 You're ready to start running simulations seamlessly!
+
+```{banner_small}
+:origin: snl_swan
+```
 
 ## Need Help?
 If you encounter any issues or need further assistance, don't hesitate to [**Contact Us**](mailto:support@inductiva.ai). We're here to help!

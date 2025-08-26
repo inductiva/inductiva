@@ -25,8 +25,9 @@ class TriggerMachineGroupType(str, Enum):
     allowed enum values
     """
     MACHINE_GROUP_TERMINATED = 'machine_group_terminated'
-    MACHINE_GROUP_PREEMPTED = 'machine_group_preempted'
     MACHINE_GROUP_TIME_LIMIT_REACHED = 'machine_group_time_limit_reached'
+    MACHINE_GROUP_PENDING_START = 'machine_group_pending_start'
+    MACHINE_GROUP_PREEMPTION = 'machine_group_preemption'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:

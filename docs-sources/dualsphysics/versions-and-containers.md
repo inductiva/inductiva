@@ -1,4 +1,7 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
+
+## About DualSPHysics
+[DualSPHysics](https://dual.sphysics.org/) is a Smoothed Particle Hydrodynamics (SPH) model developed to study complex free-surface flows that require high computational resources.
 
 ## Supported Versions
 Inductiva stays up to date with the latest versions of DualSPHysics. Below is a list of the supported versions, along with their respective release dates:

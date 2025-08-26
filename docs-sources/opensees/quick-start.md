@@ -45,7 +45,7 @@ In this basic example, we're using a cloud machine (`c2d-highcpu-4`) equipped wi
 For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
 a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other OpenSees simulations, replace `input_dir` with the
@@ -87,11 +87,11 @@ to 9.4 seconds.
 
 Here are the results of running the same simulation on a few machines:
 
-|  Machine Type  | Virtual CPUs |Execution Time| Estimated Cost |
+|  Machine Type  | Virtual CPUs |Execution Time| Estimated Cost (USD) |
 |:--------------:|:------------:|:------------:|:--------------:|
-|  c2d-highcpu-4 |       4      | 27.2 seconds | 0.00031 US$    |
-|  c2d-highcpu-8 |       8      | 14.2 seconds | 0.00034 US$    |
-| c2d-highcpu-16 |      16      | 9.4 seconds  | 0.00046 US$    |
+|  c2d-highcpu-4 |       4      | 27.2s | 0.00031    |
+|  c2d-highcpu-8 |       8      | 14.2s | 0.00034    |
+| c2d-highcpu-16 |      16      | 9.4s  | 0.00046    |
 
 Still in the testing phase? No problem! Just skip this step for now and start
 with a machine with fewer vCPUs. Once you're satisfied with your results, you
@@ -101,4 +101,6 @@ can seamlessly scale your OpenSees simulation.
 To run OpenSees scripts written in Python, all you need to do is change the `interface` parameter to `python` to match the
 file type of your OpenSeesPy use case. 
 
-It's that simple!
+```{banner_small}
+:origin: opensees
+```

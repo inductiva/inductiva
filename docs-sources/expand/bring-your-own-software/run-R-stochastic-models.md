@@ -1,7 +1,7 @@
 # Run Statistical Ensembles with Inductiva
 In this guide, you’ll learn how to run **statistical ensembles** in parallel using Inductiva, so you can turn any parameter sweep or distribution into dozens (or hundreds!) of simultaneous simulations. We’ll demonstrate with a classic 2D Ising-model Metropolis Monte Carlo in R, but this workflow works with *any* function or simulation script that takes parameters and outputs results.
 
-<img src=./_static/animation.gif></img>
+<img src="../_static/animation.gif"></img>
 
 Rather than looping through parameters one at a time, Inductiva lets you launch a group of machines, run tasks concurrently, and collect outputs automatically. This means you can get ensemble results in **minutes** instead of **hours**.
 
@@ -20,6 +20,10 @@ using a few lines of code.
 Need a refresher on the Ising model? See 2D Ising model on Wikipedia
 
 > For more on the the 2D Ising-model details, see the [2D Ising model description](https://en.wikipedia.org/wiki/Ising_model)  
+
+```{banner_small}
+:origin: run_R_stochastic_models
+```
 
 ## Prepare Your Ensemble Script
 First, wrap your simulation logic in a script that:
@@ -219,7 +223,7 @@ print(f"✔ Saved envelope plot for T₀={BASE_TEMPERATURE} → {out_png}")
 
 The image below shows the result of this ensemble run:
 
-<img src=./_static/magnetization_T0_3.0.png></img>
+<img src="../_static/magnetization_T0_3.0.png"></img>
 
 ## Wrapping Up
 And that wraps up our end-to-end workflow:
@@ -230,3 +234,7 @@ And that wraps up our end-to-end workflow:
 4. Merged and visualized the ensemble results
 
 You can now observe how magnetization evolves across sweeps for each base temperature and its nearby samples.
+
+```{banner_small}
+:origin: run_R_stochastic_models
+```

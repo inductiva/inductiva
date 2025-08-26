@@ -37,8 +37,8 @@ the machine group will consist of 5 identical machines. Why 5? Because there are
 simulation — specifically, 5 different water levels (as shown below). Each simulation will be assigned to its own
 machine, allowing them to run in parallel and speed up execution by a factor of 5.
 
-- `spot` enables the use of spot instances. These are cheaper versions of the selected machine type, but they
-come with the risk of being interrupted at any time. You can learn more about spot instances [here](https://cloud.google.com/compute/docs/instances/spot).
+- `spot` enables the use of [spot instances](../../how-it-works/machines/spot-machines.md). These are cheaper versions of the selected machine type, but they
+come with the risk of being interrupted at any time.
 
 ## 2. Preparing Simulation Inputs
 Download and prepare the input files for your simulations:
@@ -93,7 +93,7 @@ simulation, each with a different water level. The simulations will be submitted
 to our dedicated machine group and will run in parallel.
 
 You can check the status of these simulations through the
-[Inductiva CLI](https://inductiva.ai/guides/documentation/cli/overview),
+[Inductiva CLI](https://inductiva.ai/guides/api-functions/cli/index),
 and you'll see that it took only **1 minute** from the moment they were
 submitted until they start running:
 
@@ -124,3 +124,6 @@ simulation!
 $ inductiva resources terminate --all
 ```
 
+```{banner_small}
+:origin: run-parallel-simulations-with-templating
+```

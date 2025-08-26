@@ -19,9 +19,13 @@ are only applicable to each item individually.
 
 ## How to check quotas
 
-The web Console's Dashboard shows the user'squotas, and their usage in real-time.
-Also, there's a [CLI user command](https://inductiva.ai/guides/documentation/cli/user)
+The web Console's Dashboard shows the user's quotas, and their usage in real-time.
+Also, there's a [CLI user command](https://inductiva.ai/guides/api-functions/cli/user)
 
 If any of these quotas establish a limit for what you can achieve with Inductiva
 API, please [reach out to us](mailto:support@inductiva.ai) and we can better
 understand your needs.
+
+```{banner_small}
+:origin: how_it_works_quotas
+```

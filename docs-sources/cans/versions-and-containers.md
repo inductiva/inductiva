@@ -1,4 +1,7 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
+
+## About CaNS
+[CaNS](https://github.com/CaNS-World/CaNS) (Canonical Navier-Stokes) is a high-performance simulator for massively-parallel numerical simulations of fluid flows. It is specifically designed to solve problems involving incompressible, Newtonian fluids, making it a popular choice for researchers and engineers in fluid dynamics. CaNS is widely used in simulations of turbulence, vortex dynamics, and large-scale atmospheric or oceanic flows.
 
 ## Supported Versions
 Inductiva stays up to date with the latest versions of CaNS. Below is a list of the supported versions, along with their respective release dates:

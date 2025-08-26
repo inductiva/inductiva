@@ -79,12 +79,12 @@ task.print_summary()
 This simulation runs in spot mode on a `g2-standard-16` machine, featuring 16 virtual CPUs, 1 NVIDIA L4 GPU, 
 and a 200 GB data disk.
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 For visualization purposes, this script also optionally converts the simulation’s raw particle data 
 (stored as .vtk files) into mesh format (.obj), making it compatible with common visualization tools. 
-Check out this [tutorial](https://inductiva.ai/guides/dualsphysics/convert-to-obj) for more details.
+Check out this [tutorial](convert-to-obj) for more details.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
@@ -120,12 +120,16 @@ You also need to specify `zone="europe-west4-b"` when creating the machine, as t
 
 Here are the results of running the same simulation on these machines:
 
-|  Machine Type  | GPU         |Execution Time          | Estimated Cost |
+|  Machine Type  | GPU         |Execution Time          | Estimated Cost (USD) |
 |:--------------:|:-----------:|:----------------------:|:--------------:|
-|  g2-standard-16| NVIDIA L4   | 1 hour 36 minutes      | 0.66 US$    |
-|  a2-highgpu-1g | NVIDIA A100 | 1 hour 2 minutes       | 0.61 US$    |
-|  a3-highgpu-1g | NVIDIA H100 | 34 minutes 33 seconds  | 1.55 US$    |
+|  g2-standard-16| NVIDIA L4   | 1h, 36 min             | 0.66    |
+|  a2-highgpu-1g | NVIDIA A100 | 1h, 2 min              | 0.61    |
+|  a3-highgpu-1g | NVIDIA H100 | 34 min, 33s            | 1.55    |
 
 > **Note**: The times and costs listed above refer only to running the simulation and do not include the time required to convert VTK files to OBJ format. This conversion step is optional.
 
-Check out our [ParaView](https://inductiva.ai/guides/dualsphysics/paraview-for-visualization) and [Blender](https://inductiva.ai/guides/dualsphysics/blender-for-visualization) tutorials to learn how to visualize your simulation results.
+Check out our [ParaView](paraview-for-visualization) and [Blender](blender-for-visualization) tutorials to learn how to visualize your simulation results.
+
+```{banner_small}
+:origin: dualsphysics
+```

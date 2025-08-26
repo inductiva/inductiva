@@ -177,3 +177,7 @@ cd path/to/your/.py/file
 ```python
 python my_inductiva_run.py
 ```
+
+```{banner_small}
+:origin: quick-start-guide
+```

@@ -44,12 +44,12 @@ Below are Inductiva’s results:
 
 <div align="center">
 
-| VM Type              | Number of VMs | Total Cores (NP) | Time (seconds) | Cost (USD) |
+| Machine Type             | Number of Machines | Physical Cores | Execution Time | Estimated Cost (USD) |
 |----------------------|---------------|------------------|----------------|------------|
-| c3d-highcpu-360      | 1             | 180              | 787            | 0.75       |
-| c3d-highcpu-360      | 2             | 360              | 399            | 0.77       |
-| c3d-highcpu-360      | 4             | 720              | 210            | 0.83       |
-| c3d-highcpu-360      | 8             | 1440             | 154            | 1.24       |
+| c3d-highcpu-360      | 1             | 180              | 787 s            | 0.75       |
+| c3d-highcpu-360      | 2             | 360              | 399 s            | 0.77       |
+| c3d-highcpu-360      | 4             | 720              | 210 s            | 0.83       |
+| c3d-highcpu-360      | 8             | 1440             | 154 s            | 1.24       |
 
 </div>
 
@@ -60,7 +60,6 @@ While Inductiva’s core counts don’t exactly match Fugaku’s, two regimes pr
 
 - **Regime 2: Inductiva 1,440 cores vs. Fugaku 1,152 cores**  
   Inductiva edged out Fugaku by 2 seconds (a **1% improvement**) using 25% more cores. This indicates that network communication is becoming a limiting factor, where traditional HPC systems like Fugaku excel. Still, Inductiva’s comparable performance costs only **USD 1.24**, with an estimated hourly expense of about **USD 27.20**.
-
 
 ## Can Inductiva Really Beat Fugaku?
 The answer depends on the workload.
@@ -81,5 +80,6 @@ So, why choose Inductiva? Because with Inductiva, there’s no need to apply for
 
 Start supercomputing now.
 
-
-
+```{banner_small}
+:origin: quantum_espresso
+```

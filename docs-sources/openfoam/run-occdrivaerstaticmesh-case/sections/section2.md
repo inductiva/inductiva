@@ -66,3 +66,7 @@ Next, we’ll show you how to scale this same simulation across multiple machine
 reduce simulation time - by up to **1.8x**!
 
 Stay tuned!
+
+```{banner_small}
+:origin: openfoam
+```

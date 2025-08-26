@@ -23,6 +23,8 @@ from inductiva.client.models.autoscale_policy import AutoscalePolicy
 from inductiva.client.models.available_simulator_versions import AvailableSimulatorVersions
 from inductiva.client.models.backend_version import BackendVersion
 from inductiva.client.models.bucket import Bucket
+from inductiva.client.models.bulk_simulator_operation import BulkSimulatorOperation
+from inductiva.client.models.bulk_simulator_response import BulkSimulatorResponse
 from inductiva.client.models.cpu_info import CPUInfo
 from inductiva.client.models.capability import Capability
 from inductiva.client.models.compression_method import CompressionMethod
@@ -38,6 +40,7 @@ from inductiva.client.models.executer import Executer
 from inductiva.client.models.file_info import FileInfo
 from inductiva.client.models.gpu_info import GPUInfo
 from inductiva.client.models.http_validation_error import HTTPValidationError
+from inductiva.client.models.machine_filter_options import MachineFilterOptions
 from inductiva.client.models.machine_group_cost_per_hour import MachineGroupCostPerHour
 from inductiva.client.models.machine_group_costs import MachineGroupCosts
 from inductiva.client.models.machine_group_status import MachineGroupStatus
@@ -49,6 +52,7 @@ from inductiva.client.models.machine_info import MachineInfo
 from inductiva.client.models.machine_operation import MachineOperation
 from inductiva.client.models.machine_operation_type import MachineOperationType
 from inductiva.client.models.machine_type import MachineType
+from inductiva.client.models.machine_type_with_spot_price import MachineTypeWithSpotPrice
 from inductiva.client.models.multi_part_export_operation import MultiPartExportOperation
 from inductiva.client.models.operation_end import OperationEnd
 from inductiva.client.models.operation_start import OperationStart
@@ -57,6 +61,7 @@ from inductiva.client.models.operation_type import OperationType
 from inductiva.client.models.order import Order
 from inductiva.client.models.organization_cost_components import OrganizationCostComponents
 from inductiva.client.models.organization_costs import OrganizationCosts
+from inductiva.client.models.processor_type import ProcessorType
 from inductiva.client.models.project import Project
 from inductiva.client.models.project_create import ProjectCreate
 from inductiva.client.models.project_statistics import ProjectStatistics
@@ -68,6 +73,11 @@ from inductiva.client.models.quota_scope import QuotaScope
 from inductiva.client.models.register_vm_group_request import RegisterVMGroupRequest
 from inductiva.client.models.select_mode import SelectMode
 from inductiva.client.models.sharing_level import SharingLevel
+from inductiva.client.models.simulator_create import SimulatorCreate
+from inductiva.client.models.simulator_response import SimulatorResponse
+from inductiva.client.models.simulator_update import SimulatorUpdate
+from inductiva.client.models.simulator_version import SimulatorVersion
+from inductiva.client.models.simulator_with_machine_types_paginated import SimulatorWithMachineTypesPaginated
 from inductiva.client.models.spot import Spot
 from inductiva.client.models.storage_contents_with_pagination import StorageContentsWithPagination
 from inductiva.client.models.storage_cost import StorageCost
@@ -129,3 +139,4 @@ from inductiva.client.models.validation_error import ValidationError
 from inductiva.client.models.validation_error_loc_inner import ValidationErrorLocInner
 from inductiva.client.models.version_comparison_result import VersionComparisonResult
 from inductiva.client.models.zip_archive_info import ZipArchiveInfo
+from inductiva.client.models.zip_file_range import ZipFileRange

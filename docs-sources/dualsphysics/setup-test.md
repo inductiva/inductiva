@@ -1,4 +1,4 @@
-# Test Your Inductiva Setup ⚙️
+# Test Your Inductiva Setup
 Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick DualSPHysics simulation — it only takes a few seconds!
 
 ## Step 1: Copy and Run the Code
@@ -82,6 +82,10 @@ Estimated computation cost (US$): 0.0017 US$
 If the task status shows **Success**, congratulations! You've successfully run an DualSPHysics simulation.
 
 This simple example tested your installation on a small machine with just 4 virtual CPUs. Inductiva offers far more powerful options to supercharge your simulations.
+
+```{banner_small}
+:origin: dualsphysics
+```
 
 ## Need Help?
 If you encounter any issues or need further assistance, don't hesitate to [**Contact Us**](mailto:support@inductiva.ai). We're here to help!

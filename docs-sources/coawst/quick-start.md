@@ -184,7 +184,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 In this example, we're using a relatively small cloud machine (`c2-standard-4`), which is equipped with 4 virtual CPUs. 
@@ -303,10 +303,10 @@ Therefore, to scale up the simulation, you'll need to modify the following three
 #### Results
 Below is a list of the simulations with their respective results:
 
-|   Machine Type  | Virtual CPUs |     Execution Time     | Estimated Cost |
+|   Machine Type  | vCPUs |     Execution Time     | Estimated Cost (USD) |
 |:---------------:|:------------:|:----------------------:|:--------------:|
-|  c2-standard-4  |       4      | 9 hours and 47 minutes |     0.71 US$   |
-|  c2-standard-60 |      60      |  1 hour and 3 seconds  |     1.37 US$   |
+|  c2-standard-4  |       4      | 9h, 47 min             |     0.71   |
+|  c2-standard-60 |      60      | 1h                     |     1.37   |
 
 For these simulations, we divided the number of virtual CPUs available on each machine equally among the three models (1, 20, and 36 virtual CPUs, respectively).
 We used the following values for `Ntile` and `nproc`: (1 1), (4 5), and (6 6), respectively.
@@ -317,4 +317,6 @@ to input files for compiling and running **COAWST**.
 
 By following this guide, you now have a clearer understanding of how to configure and efficiently run COAWST simulations on Inductiva's platform.
 
-Happy simulations! 🚀
+```{banner_small}
+:origin: coawst
+```

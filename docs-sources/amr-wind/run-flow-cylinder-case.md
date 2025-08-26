@@ -80,7 +80,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
@@ -118,16 +118,18 @@ For example, running the simulation on a next-generation machine with the same n
 
 Alternivately, switching from a cloud machine equivalent to your laptop (`c2d-highcpu-16`) to one with more vCPUs (**c2d-highcpu-112**) reduces runtime to just **37 minutes**.
 
-| Machine Type     | vCPUs | Execution Time | Estimated Cost (USD) | Speedup   |
-|------------------|-------|----------------|------------|-----------|
-| c2d-highcpu-16   | 16    | 1h 35min       | $0.38      | Reference |
-| c2d-highcpu-112  | 112   | 37 min         | $0.38      | 2.57×     |
-| c4-highcpu-16    | 16    | 73 min         | $0.37      | 1.97×     |
+| Machine Type     | vCPUs | Execution Time | Speedup   | Estimated Cost (USD) |
+|------------------|-------|----------------|-----------|-----------------------|
+| c2d-highcpu-16   | 16    | 1h, 35 min     | Reference | 0.38                 |
+| c2d-highcpu-112  | 112   | 37 min         | 2.57×     | 0.38                 |
+| c4-highcpu-16    | 16    | 73 min         | 1.97×     | 0.37                 |
 
 For more computationally intensive tasks, the benefits of scaling can be even more significant. 🚀
 
-<br>
-
 > To analyze the simulation data programmatically, Python-based tools like **yt** can be used, enabling 
 custom visualizations and data extraction. For step-by-step guidance on creating slice plots and animations, 
-be sure to check out our [post-processing yt tutorial](https://inductiva.ai/guides/amr-wind/using-yt).
+be sure to check out our [post-processing yt tutorial](using-yt).
+
+```{banner_small}
+:origin: amr_wind
+```

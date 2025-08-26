@@ -16,9 +16,9 @@ All you need to do is update the resource allocation from `MachineGroup` to `MPI
 # Allocate a multi-machine MPI cluster on Google Cloud Platform
 - cloud_machine = inductiva.resources.MachineGroup(
 + cloud_machine = inductiva.resources.MPICluster(
-    machine_type="c2d-highcpu-112",
+    machine_type="c2d-highmem-112",
 +   num_machines=2,
-    data_disk_gb=100,
+    data_disk_gb=200,
     spot=True)
 ```
 
@@ -66,7 +66,7 @@ import inductiva
 
 # Allocate a multi-machine MPI cluster on Google Cloud Platform
 cloud_machine = inductiva.resources.MPICluster(
-    machine_type="c2d-highcpu-112",
+    machine_type="c2d-highmem-112",
     num_machines=2,
     data_disk_gb=200,
     spot=True
@@ -101,7 +101,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>Machine Type</td>
     <td>Nº of Machines</td>
     <td>vCPUs</td>
-    <td>Duration (min:s)</td>
+    <td>Execution Time</td>
     <td>Speedup</td>
     <td>Estimated Cost (USD)</td>
   </tr>
@@ -109,7 +109,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>c2d-highmem-112</td>
     <td>1</td>
     <td>112</td>
-    <td>144:00</td>
+    <td>144 min</td>
     <td>Baseline</td>
     <td>3.60</td>
   </tr>
@@ -117,7 +117,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>c2d-highmem-112</td>
     <td>2</td>
     <td>224</td>
-    <td>90:00</td>
+    <td>90 min</td>
     <td>1.60x</td>
     <td>4.82</td>
   </tr>
@@ -125,7 +125,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>c2d-highmem-112</td>
     <td>4</td>
     <td>448</td>
-    <td>59:10</td>
+    <td>59 min, 10s</td>
     <td>2.43x</td>
     <td>6.94</td>
   </tr>
@@ -133,7 +133,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
     <td>c2d-highmem-112</td>
     <td>8</td>
     <td>896</td>
-    <td>42:12</td>
+    <td>42 min, 12s</td>
     <td>3.41x</td>
     <td>10.87</td>
   </tr>
@@ -142,3 +142,7 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
 Runtime decreased as the cluster size increased. With **8 machines** (896 vCPUs), the simulation completed in **42 minutes and 12 seconds**, achieving a **speedup of 3.41x** compared to the single-machine runtime of 144 minutes.
 
 Although adding more machines yields noticeable speedups, the relatively small size of the problem means that the benefits quickly taper off, with diminishing returns becoming evident as the cluster size increases.
+
+```{banner_small}
+:origin: amr_wind
+```

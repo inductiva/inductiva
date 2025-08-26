@@ -41,7 +41,7 @@ In this basic example, we're using a cloud machine (`c2d-highcpu-4`) equipped wi
 For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
 a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other AMR-Wind simulations, replace `input_dir` with the
@@ -72,8 +72,8 @@ Estimated computation cost (US$): 0.000063 US$
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
 the core computation time of this simulation was approximately 3 seconds.
 
-It's that simple!
+> You’ve only just scratched the surface with a very short simulation. Ready for real results? Check out [this tutorial](run-flow-cylinder-case) to learn how to run longer simulations on high-performance machines.
 
-<br>
-
-> You’ve only just scratched the surface with a very short simulation. Ready for real results? Check out [this tutorial](https://inductiva.ai/guides/amr-wind/run-flow-cylinder-case) to learn how to run longer simulations on high-performance machines.
+```{banner_small}
+:origin: amr_wind
+```

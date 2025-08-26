@@ -89,12 +89,12 @@ A major benefit of using Inductiva is how easily you can scale your simulations 
 
 Below are the results of running this simulation on increasingly larger MPI clusters, compared to the single-node setup (shown in the first row):
 
-| Machines (`num_machines`) | MPI Processes (`np`) | Time (s) | Speedup | Cost (USD) |
+| Machines (`num_machines`) | MPI Processes (`np`) | Time | Speedup | Cost (USD) |
 |---------------------------|----------------------|----------|---------|------------|
-| 1                         | 360                  | 800      | —       | 0.76       |
-| 2                         | 720                  | 415      | 1.93×   | 0.81       |
-| 4                         | 1440                 | 275      | 2.91×   | 1.11       |
-| 8                         | 2880                 | 188      | 4.26×   | 1.50       |
+| 1                         | 360                  | 800s      | —       | 0.76       |
+| 2                         | 720                  | 415s      | 1.93×   | 0.81       |
+| 4                         | 1440                 | 275s      | 2.91×   | 1.11       |
+| 8                         | 2880                 | 188s      | 4.26×   | 1.50       |
 
 > **Note**: Hyperthreading is enabled.
 
@@ -145,3 +145,6 @@ achieve speedups of over 5× by increasing the cost by only about 65%!
 
 **How does this performance compare to a proper supercomputer?** If you’re curious, find out more [here](benchmarks) to see how these numbers compare with those from Fugaku, one of the fastest supercomputers on Earth.
 
+```{banner_small}
+:origin: quantum_espresso
+```

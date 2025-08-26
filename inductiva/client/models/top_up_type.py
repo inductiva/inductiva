@@ -24,10 +24,11 @@ class TopUpType(str, Enum):
     """
     allowed enum values
     """
+    BANK_TRANSFER = 'bank_transfer'
+    BOOST = 'boost'
     INITIAL_CREDITS = 'initial_credits'
     OFFER = 'offer'
     STRIPE_PAYMENT = 'stripe_payment'
-    BOOST = 'boost'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
