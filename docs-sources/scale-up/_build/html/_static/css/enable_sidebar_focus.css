@@ -1,0 +1,58 @@
+/* 
+  this css manage the visibility of sidebar sections dynamically.
+  By default, all sections (titles and items) are displayed. 
+  When a section is marked as "current" (active), only that section and its content 
+  will be visible in the sidebar. All other sections will be hidden.
+  The main goal is to create a cleaner, focused navigation experience, where users
+  can only see the relevant section they are interacting with, reducing visual noise.
+*/
+/* if there is an active section (ul.current), hide everything else */
+#left-sidebar:has(ul.current) .caption,
+#left-sidebar:has(ul.current) ul,
+#left-sidebar:has(ul.current) ul li {
+	display: none;
+}
+
+/* show the ul.current and its list items */
+#left-sidebar:has(ul.current) ul.current,
+#left-sidebar:has(ul.current) ul.current li {
+	display: block;
+}
+
+/* show the caption (title) before the ul.current */
+#left-sidebar:has(ul.current) ul.current ~ .caption,
+#left-sidebar:has(ul.current) ul.current ~ .caption + ul {
+	display: none;
+}
+
+/* ensure the title (caption) and its corresponding list (ul.current) are visible */
+#left-sidebar:has(ul.current) .caption + ul.current {
+	display: block;
+}
+
+/* make sure the caption is visible when it has an adjacent ul.current */
+#left-sidebar:has(ul.current) .caption:has(+ ul.current) {
+	display: block;
+	padding-top: 0;
+}
+
+/* show the <ul> with x-show="expanded" if it is expanded (visible) (when collapsible)*/
+#left-sidebar ul[x-show="expanded"]:not([style*="display: none"]) {
+	display: block !important;
+}
+
+/* if x-show="false", hide the <ul> (already the default behavior but since the previous one overlaps this, we have to reaffirm) */
+#left-sidebar ul[x-show="false"] {
+	display: none !important;
+}
+
+/* ensure that the current section's <ul> is not hidden by x-show */
+#left-sidebar:has(ul.current)
+	ul[x-show="expanded"]:not([style*="display: none"]) {
+	display: block !important;
+}
+
+/* ensure that the current section's <ul> is visible even if x-show="false" is used on sibling sections */
+#left-sidebar:has(ul.current) ul[x-show="false"]:not(.current) {
+	display: none !important;
+}
