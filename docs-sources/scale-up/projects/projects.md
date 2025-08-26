@@ -73,10 +73,8 @@ task = simulator.run(input_dir="data/", on=machine_group)
 | `download_outputs()` | Download outputs of all tasks in the project | Analyze project results |
 | `delete()` | Delete project and move all tasks to the defaul project | Remove project that is no longer needed |
 
-````{eval-rst}
-.. seealso::
-   For complete API documentation including all parameters, methods, and configuration options, see the `Projects <https://inductiva.ai/guides/api-functions/api/inductiva.projects>`_ class documentation
-````
+
+> For complete API documentation including all parameters, methods, and configuration options, see the [Projects](https://inductiva.ai/guides/api-functions/api/inductiva.projects) class documentation
 
 
 ## Create a Project

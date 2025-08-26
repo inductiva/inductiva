@@ -21,6 +21,7 @@ The **Python Client** is a library to control the Inductiva API programmatically
 - Automating complex or repetitive workflows 
 - Programmatically manage resources and data storage.
 
+
 > Check the full Python Client documentation [here](https://inductiva.ai/guides/api-functions/api/index)
 
 ### Command Line Interface: _for quick terminal operations_
@@ -32,6 +33,7 @@ The **Inductiva CLI** provides a fast and efficient way to interact with the API
 - Check the status of a task or list all running machines.
 - Download outputs or view logs for a specific task.
 - Manually start or terminate a resource.
+
 
 > Check out the full CLI documentation [here](https://inductiva.ai/guides/api-functions/cli/index)
 
