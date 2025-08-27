@@ -8,6 +8,7 @@ from .opentelemac import OpenTelemac
 from .wavewatch3 import WaveWatch3
 from .openfoam import OpenFOAM
 from .opensees import OpenSees
+from .calculix import Calculix
 from .openfast import OpenFAST
 from .snl_swan import SNLSWAN
 from .amr_wind import AmrWind

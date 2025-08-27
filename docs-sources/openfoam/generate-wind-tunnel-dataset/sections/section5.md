@@ -9,6 +9,7 @@ Once all your OpenFOAM simulations have completed, the next step is often to ext
 In this section, we demonstrate how to automate one such task: **extracting force coefficients**, specifically, moment, drag, lift, front lift, and rear lift—from each simulation and compiling them into a single CSV file. This allows you to compare results across configurations, such as different wind speeds.
 
 By running postprocessing as a cloud task with Inductiva:
+
 - You **avoid downloading large datasets** to your local machine
 - You **reuse existing simulation outputs** efficiently via `remote_assets`
 - You maintain a **clean and reproducible workflow**
@@ -22,7 +23,7 @@ To make the process efficient, we don’t need to manually collect or download s
 
 Each previous task's output folder is referenced remotely in the cloud and accessed by the postprocessing script without needing to duplicate or transfer files.
 
-> 🔗 For more information, check out: [Reusing Files from Other Tasks](https://inductiva.ai/guides/scale-up/reuse-files/reuse-files)
+> 🔗 For more information, check out: [Reusing Files from Other Tasks](https://inductiva.ai/guides/scale-up/recipes/reuse-files)
 
 ---
 
@@ -31,10 +32,10 @@ Each previous task's output folder is referenced remotely in the cloud and acces
 We launch a lightweight Python task on a cloud machine and run a script (`postprocess.py`) that iterates through the output folders of all simulation tasks.
 
 Below is the launcher script that:
+
 - Collects the output files from the original simulation tasks
 - Runs the postprocessing script in a `python:slim` container
 - Waits for completion and downloads the results
-
 
 ```python
 import inductiva
@@ -69,7 +70,6 @@ task.print_summary()
 ### The Postprocessing Script
 
 The script scans each folder, reads the last line of `forceCoeffs.dat`, and extracts the relevant aerodynamic coefficients. It then compiles the results into a structured CSV file.
-
 
 ```python
 import os

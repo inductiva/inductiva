@@ -7,18 +7,50 @@ configurations related to paths where certain files are expected to be.
 """
 import os
 import pathlib
+import re
 import zipfile
 import tempfile
 import shutil
 from typing import Callable, List
 from tqdm import tqdm
 import fsspec
+import urllib
 import urllib3
 
 import logging
 
 ARTIFACTS_DIRNAME = "artifacts"
 INPUT_DIRNAME = "sim_dir"
+
+
+def _normalize_file(path: str) -> None:
+    """
+    Normalize line endings of a file in place for `.txt` and `.sh` files.
+
+    - Checks the first line for Windows-style line endings (`\r\n`).
+    - If CRLF is found, rewrites the entire file converting CRLF to LF.
+    - If not, the file is left unchanged.
+
+    Args:
+        path (str): Path to the file to normalize.
+    """
+    _, ext = os.path.splitext(path)
+    if ext.lower() not in {".txt", ".sh"}:
+        return
+
+    with open(path, "rb") as f:
+        first_line = f.readline()
+        if b"\r\n" not in first_line:
+            return  # nothing to do
+
+    # Normalize file in place
+    tmp_path = path + ".tmp"
+    with open(path, "rb") as f_in, open(tmp_path, "wb") as f_out:
+        for line in f_in:
+            f_out.write(re.sub(rb"\r\n", b"\n", line))
+
+    # Replace original file
+    os.replace(tmp_path, path)
 
 
 def pack_input(input_dir, zip_name) -> str:
@@ -44,6 +76,13 @@ def pack_input(input_dir, zip_name) -> str:
         if input_dir:
             shutil.copytree(input_dir, dst_fullpath)
 
+            # Normalize all .txt and .sh files in the copied directory
+            for root, _, files in os.walk(dst_fullpath):
+                for file in files:
+                    if file.lower().endswith((".txt", ".sh")):
+                        file_path = os.path.join(root, file)
+                        _normalize_file(file_path)
+
         # Zip everything in the temporary directory into a single zip file
         zip_path = shutil.make_archive(
             os.path.join(tempfile.gettempdir(), zip_name), "zip", tmpdir_path)
@@ -51,6 +90,32 @@ def pack_input(input_dir, zip_name) -> str:
         logging.debug("Compressed inputs to %s", zip_path)
 
     return zip_path
+
+
+def unquote_url_path(url: str) -> str:
+    """Extract and unquote the path part of a URL.
+
+    Examples:
+        >>> unquote_url_path("http://example.com/files/my%20file.txt")
+        '/files/my file.txt'
+        >>> unquote_url_path("https://host/path%3Cname%3E.zip")
+        '/path<name>.zip'
+    """
+    return urllib.parse.unquote(urllib.parse.urlparse(url).path)
+
+
+def sanitize_path(path: str) -> str:
+    """Replace characters invalid in filesystem paths with underscores.
+
+    Characters replaced: < > : " | ? *
+
+    Examples:
+        >>> sanitize_path("unsafe<name>|file?.txt")
+        'unsafe_name__file_.txt'
+        >>> sanitize_path("already_safe.txt")
+        'already_safe.txt'
+    """
+    return re.sub(r'[<>:"|?*]', "_", path)
 
 
 def extract_subdir_files(zip_fp: zipfile.ZipFile, dir_name: str,
@@ -73,6 +138,7 @@ def extract_subdir_files(zip_fp: zipfile.ZipFile, dir_name: str,
 
         src_file = zip_fp.open(member)
         target_relative_path = pathlib.Path(member).relative_to(dir_name)
+        target_relative_path = sanitize_path(str(target_relative_path))
         target_path = os.path.join(output_dir, target_relative_path)
 
         os.makedirs(os.path.dirname(target_path), exist_ok=True)

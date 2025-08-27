@@ -27,6 +27,7 @@ class TriggerCreditsType(str, Enum):
     CREDITS_EXHAUSTED = 'credits_exhausted'
     CREDITS_BELOW_PERCENTAGE = 'credits_below_percentage'
     CREDITS_BELOW_STORAGE_COST = 'credits_below_storage_cost'
+    CREDITS_OFFER = 'credits_offer'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
