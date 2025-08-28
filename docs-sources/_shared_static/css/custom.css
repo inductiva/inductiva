@@ -1415,7 +1415,7 @@ section[id^="inductiva-"] p {
 /* Try it in playground button */
 #content a.try-playground-button {
 	text-decoration: none;
-	color: #80f4bc;
+	color: var(--playground-button);
 	font-weight: bold;
 	display: inline-flex;
 	align-items: center;
@@ -1424,7 +1424,7 @@ section[id^="inductiva-"] p {
   }
   
   #content a.try-playground-button:hover {
-	color: #6ddba6;
+	color: var(--playground-button-hover);
   }
   
   #content a.try-playground-button .icon {
