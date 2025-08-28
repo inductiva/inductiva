@@ -1404,3 +1404,25 @@ body.at-bottom #scrolltop {
 section[id^="inductiva-"] p {
   white-space: pre-wrap;
 }
+
+
+/* Try it in playground button */
+.try-playground-button {
+	text-decoration: none;
+	color: #80f4bc;
+	font-weight: bold;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	transition: color 0.2s;
+  }
+  
+  .try-playground-button:hover {
+	color: #6ddba6;
+  }
+  
+  .try-playground-button .icon {
+	width: 1em;
+	height: 1em;
+	display: inline-block;
+  }
