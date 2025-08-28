@@ -13,7 +13,9 @@ fds = inductiva.simulators.FDS()
 task = fds.run( \
     input_dir="path/to/my/fds/files",
     sim_config_filename="my_config_file.fds",
-    on=cloud_machine)
+    on=cloud_machine,
+    n_mpi_processes=180,
+    n_omp_threads=1)
 
 # Wait for the simulation to finish and download the results
 task.wait()
