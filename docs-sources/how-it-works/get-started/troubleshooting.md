@@ -4,8 +4,7 @@ In this troubleshooting section, we aim to guide you through resolving issues
 related to incorrect or incomplete installation of the Inductiva package
 or its dependencies.
 
-If you find bugs, need help, or want to talk to the developers, reach out to us on
-[support@inductiva.ai](mailto:support@inductiva.ai).
+If you find bugs, need help, or want to talk to the developers, reach out to us on Inductiva’s Discord: [join here](https://discord.com/invite/p9tjqBhuZ5) if you’re new, or [head to the server](https://discord.com/channels/1389190271723638804/1389235177456402502) if you’re already a member.
 
 
 ---

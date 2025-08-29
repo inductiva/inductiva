@@ -4,7 +4,7 @@ The Inductiva API provides on-demand access to computational infrastructure for 
 ## Get started
 Learn about _Resources_ — the core entity in the Inductiva API that executes your simulations. Resources can be cloud machines, your personal computer, or dedicated hardware, all managed through our API that handles its allocation, scaling, and monitoring automatically.
 
-| **[Resources →](shared-dedicated-resources.md)** | **[Manage Resources →](manage-computational-resources.md)** | **[Computational Infrastructure →](computational-infrastructure.md)** |
+| **[Resources →](shared-dedicated-resources.md)** | **[Manage Resources →](manage_computational_resources.md)** | **[Computational Infrastructure →](computational-infrastructure.md)** |
 |---|---|---|
 | Learn how to choose beteween the resources made available by our API, and understand when each option provides the best value for your specific use case | Monitor and control your resources with real-time status tracking, cost analysis, and lifecycle management through our Python API, CLI, or Web Console | Understand the diverse computational options available, from cloud machines to your own laptop, and how our API simplifies their access and orchestration |
 
