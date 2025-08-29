@@ -43,7 +43,7 @@ task.print_summary()
   <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
     <path d="M8 5v14l11-7z"/>
   </svg>
-  Try it on our online Python Editor
+  Try it on our Python Editor, on any device
 </a>
 
 ## Step 2: Verify the Task Status
