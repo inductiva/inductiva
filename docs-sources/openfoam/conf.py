@@ -102,10 +102,6 @@ ogp_site_name = "Inductiva.AI OpenFOAM"
 ogp_site_url = "https://inductiva.ai/guides/openfoam"
 ogp_image = "https://inductiva.ai/builds/openfoam/_static/inductiva-social-banner.jpg"
 
-# Disable automatic canonical generation by sphinxext-opengraph.
-# The canonical tag is instead generated on the website itself.
-ogp_enable_canonical = False
-
 # sitemap.xml
 # See https://sphinx-sitemap.readthedocs.io/
 language = 'en'
