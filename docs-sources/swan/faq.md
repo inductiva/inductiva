@@ -28,6 +28,30 @@ Also, `swanrun` expects the simulation file in the `file.swn` format, while
 `swan.exe` expects the simulation file with the name `INPUT`.
 
 <br>
+
+## 2. Does SWAN support unstructured grids?
+
+Yes, but only in specific versions.
+
+SWAN introduced support for unstructured grids starting from **version 41.45A**.
+Therefore, if you choose **version 41.51** or later, you can enable unstructured
+grid support by setting the `command` argument to `unswan`:
+
+```python
+swan = inductiva.simulators.SWAN( \
+    version="41.51")
+
+task = swan.run(
+    input_dir=input_dir,
+    sim_config_filename="a11refr.swn",
+    command="unswan",
+    on=cloud_machine
+)
+```
+
+> **Note:** Since **version 41.45A** is not available on Inductiva, only **41.51** and newer versions can be used for simulations with unstructured grids.
+
+<br>
 <br>
 
 Still can't find what you're looking for? [Contact Us](mailto:support@inductiva.ai)
