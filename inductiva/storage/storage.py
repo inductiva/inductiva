@@ -1,4 +1,5 @@
 """Methods to interact with the user storage resources."""
+import tenacity
 import json
 import datetime
 import itertools
@@ -156,6 +157,7 @@ def _print_contents_table(contents):
     )
 
 
+@tenacity.retry(wait=tenacity.wait_exponential(multiplier=1, min=4, max=30))
 def get_signed_urls(
     paths: List[str],
     operation: Literal["upload", "download"],
