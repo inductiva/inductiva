@@ -92,6 +92,11 @@ class SWAN(simulators.Simulator):
                     ]
         """
 
+        if self.version and command == "unswan" and self.version in {
+                "41.31", "41.45"
+        }:
+            raise ValueError("Unswan version 41.31 or 41.45 is not supported.")
+
         if command not in ("swanrun", "swan.exe"):
             raise ValueError("Invalid command. Use 'swanrun' or 'swan.exe'.")
 
@@ -147,6 +152,14 @@ class SWAN(simulators.Simulator):
             swan_exe_command = Command(f"swan.exe {sim_config_filename}",
                                        mpi_config=mpi_config)
             commands.append(swan_exe_command)
+        elif command == "unswan":
+
+            #if the user does not provide n_vcpus use all available by default
+            omp_flag = f"-omp {n_vcpus or on.available_vcpus}"
+
+            swanrun_command = Command(
+                f"unswanrun -input {config_file_only} {omp_flag}")
+            commands.append(swanrun_command)
         return super().run(input_dir,
                            on=on,
                            storage_dir=storage_dir,
