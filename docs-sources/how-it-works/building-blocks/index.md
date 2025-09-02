@@ -1,6 +1,6 @@
 # Architecture Overview
 
-The Inductiva API centrally manages all your cloud resources, simulation tasks, and storage. The Python Client, CLI, and Web Console are the different interfaces you can use to communicate with these resources.
+JUST A TEST The Inductiva API centrally manages all your cloud resources, simulation tasks, and storage. The Python Client, CLI, and Web Console are the different interfaces you can use to communicate with these resources.
 
 The following diagram illustrates this relationship:
 
