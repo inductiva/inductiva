@@ -97,8 +97,9 @@ class SWAN(simulators.Simulator):
         }:
             raise ValueError("Unswan version 41.31 or 41.45 is not supported.")
 
-        if command not in ("swanrun", "swan.exe"):
-            raise ValueError("Invalid command. Use 'swanrun' or 'swan.exe'.")
+        if command not in ("swanrun", "swan.exe", "unswan"):
+            raise ValueError("Invalid command. Use 'swanrun', 'swan.exe' or "
+                             "'unswan'.")
 
         if sim_config_filename is None and command == "swanrun":
             raise ValueError("Simulation configuration file "
