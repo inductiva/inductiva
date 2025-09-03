@@ -24,12 +24,11 @@ This tutorial showcases an example involving a two-storey unreinforced masonry b
 representative of the pre-code masonry building stock in metropolitan area of Lisbon. All the data
 required for the development of numerical models was gathered in the scope of the [STAND4HERITAGE](https://stand4heritage.org) project (New STANDards for seismic assessment of built cultural HERITAGE).
 
-<image2 and caption - ask Caicedo>
+<image1 and caption>
 
 ## Prerequisites
-Download the required files [here](<link to input files>) and place them in a folder called `SimulationFiles`. 
+Download the required files [here]() and place them in a folder called `SimulationFiles`. 
 
--> Are these really prerequisites?
 - Output files folder to save the results of the analysis.
 - Records folder, where the 30 acceleration time-histories required for the IDAs are
 located.
@@ -185,14 +184,12 @@ Capacity curves are presented based on the 50th, 16th, and 84th percentiles of t
 
 Next, the damage states of Immediate Occupancy (IO), Collapse Prevention (CP), and Near Collapse (NC) are identified. The IO limit is defined approximately at the end of the elastic branch. CP is identified when the slope of the capacity curve decreases to 20% of the initial elastic slope. Finally, NC is indicated by the appearance of the flatline.
 
-<image2 and caption - ask Caicedo>
+<image2 and caption>
 
 Fragility functions denote the likelihood of exceedance of a specified EDP value corresponding to each limit state, as shown in the figure below.
 
-<image3 and caption - ask Caicedo>
+<image3 and caption>
 
 The figures below illustrate the convergence of the median and dispersion of the fragility functions, based on the 30 observations for each limit state.
 
-<image4/5 and caption - ask Caicedo>
-
-## -> I think it's lacking a conclusion or an ending section
+<image4/5 and caption>
