@@ -2,10 +2,10 @@
 
 Quotas help ensure fair access to powerful computing and storage for all users, so that users always get reliable performance when they launch their simulations.
 
-You're free to use the Inductiva API as an individual user (starter plan) or join an
-organization (business or academia) - visit the [Pricing webpage](https://inductiva.ai/pricing) for more information.
+You're free to use the Inductiva API as an individual user (individual plan) or join an
+organization (enterprise or academia) - visit the [Pricing webpage](https://inductiva.ai/pricing) for more information.
 
-| Quota | unit | scope* | Description | Starter | Business | Academia |
+| Quota | unit | scope* | Description | Individual | Enterprise | Academia |
 |-------|------|-------|-------------|----------|------------|------------|
 | Maximum number of VCPUs | vcpu | global | Total number of VCPUs across all running machine instances plus the number of VCPUs of the instance to be requested must not exceed the quota limit | 300 | 10000 | 10000 |
 | Maximum price per hour across all instances | USD | global | Accumulated price per hour of all active machine instances, plus the price of the instance to be requested, must not exceed the quota | 10 | 1000 | 1000 |
