@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-delft3d = Delft3D()
+delft3d = Delft3D(version="6.04.00")
 
 # List of commands to run
 commands = ["mpirun -np 4 d_hydro.exe config_d_hydro.xml"]

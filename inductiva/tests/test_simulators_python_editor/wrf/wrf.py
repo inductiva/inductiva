@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-wrf = WRF()
+wrf = WRF(version="4.6.1")
 
 # Run simulation
 task = wrf.run( \

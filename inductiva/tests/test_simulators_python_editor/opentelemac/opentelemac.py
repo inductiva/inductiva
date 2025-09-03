@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-opentelemac = OpenTelemac()
+opentelemac = OpenTelemac(version="8p4r0")
 
 # List of commands to run
 commands = ["telemac2d.py t2d_malpasset-fine.cas --ncsize=16"]

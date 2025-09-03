@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-wavewatch3 = WaveWatch3()
+wavewatch3 = WaveWatch3(version="11-2024")
 
 # Define the commands to run the simulation
 commands = [ \

@@ -17,7 +17,7 @@ commands = ["openfast 5MW_OC4Semi_WSt_WavesWN/"
             "5MW_OC4Semi_WSt_WavesWN.fst"]
 
 # Initialize the simulator
-openfast = OpenFAST()
+openfast = OpenFAST(version="4.0.2")
 
 # Run simulation
 task = openfast.run( \

@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-fds = FDS()
+fds = FDS(version="6.10.1")
 
 # Run simulation
 task = fds.run( \

@@ -12,7 +12,7 @@ input_dir = download_from_url(
     "swan-input-example.zip", True)
 
 # Initialize the Simulator
-swan = SWAN()
+swan = SWAN(version="41.45")
 
 # Run simulation
 task = swan.run( \

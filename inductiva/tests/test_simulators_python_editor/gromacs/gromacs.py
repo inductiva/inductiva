@@ -28,7 +28,7 @@ commands = [
 ]
 
 # Initialize the Simulator
-gromacs = GROMACS()
+gromacs = GROMACS(version="2022.2")
 
 # Run simulation
 task = gromacs.run( \

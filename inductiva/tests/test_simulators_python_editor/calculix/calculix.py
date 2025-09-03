@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-calculix = Calculix()
+calculix = Calculix(version="2.22")
 
 # Run simulation
 task = calculix.run( \

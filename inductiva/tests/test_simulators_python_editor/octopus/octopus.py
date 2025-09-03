@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-octopus = Octopus()
+octopus = Octopus(version="16.1")
 
 # Run simulation
 task = octopus.run( \

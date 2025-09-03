@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-gx = GX()
+gx = GX(version="11-2024")
 
 # Run simulation
 task = gx.run( \

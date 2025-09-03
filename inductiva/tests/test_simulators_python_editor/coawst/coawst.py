@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-coawst = COAWST()
+coawst = COAWST(version="3.8")
 
 # Run simulation
 task = coawst.run( \

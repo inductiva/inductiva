@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-sfincs = SFINCS()
+sfincs = SFINCS(version="2.2.1")
 
 # Run simulation
 task = sfincs.run( \

@@ -15,7 +15,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-cm1 = CM1()
+cm1 = CM1(version="21.1")
 
 # Run simulation
 task = cm1.run( \

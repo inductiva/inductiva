@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-cans = CaNS()
+cans = CaNS(version="2.4.0")
 
 # Run simulation
 task = cans.run( \

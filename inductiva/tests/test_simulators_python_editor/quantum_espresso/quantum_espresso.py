@@ -26,7 +26,7 @@ commands = [
 ]
 
 # Initialize simulator
-qe = QuantumEspresso()
+qe = QuantumEspresso(version="7.4.1")
 
 # Run simulation
 task = qe.run( \

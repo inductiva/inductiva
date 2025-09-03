@@ -12,7 +12,7 @@ input_dir = download_from_url(
     "schism-input-example.zip", True)
 
 # Initialize the Simulator
-schism = SCHISM()
+schism = SCHISM(version="5.11.0")
 
 # Run simulation
 task = schism.run( \

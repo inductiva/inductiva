@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-swash = SWASH()
+swash = SWASH(version="10.05")
 
 # Run simulation
 task = swash.run( \

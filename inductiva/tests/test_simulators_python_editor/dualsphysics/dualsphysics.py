@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-dualsphysics = DualSPHysics()
+dualsphysics = DualSPHysics(version="5.2.1")
 
 # Run simulation
 task = dualsphysics.run( \

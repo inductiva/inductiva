@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-amr_wind = AmrWind()
+amr_wind = AmrWind(version="3.4.1")
 
 # Run simulation
 task = amr_wind.run( \

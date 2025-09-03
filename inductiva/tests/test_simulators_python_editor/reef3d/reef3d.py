@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-reef3d = REEF3D()
+reef3d = REEF3D(version="24.02")
 
 # Run simulation
 task = reef3d.run( \

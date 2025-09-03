@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-fvcom = FVCOM()
+fvcom = FVCOM(version="5.1.0")
 
 # Run simulation with config files in the input directory
 task = fvcom.run( \

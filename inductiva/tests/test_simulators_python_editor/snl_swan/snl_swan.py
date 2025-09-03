@@ -12,7 +12,7 @@ input_dir = download_from_url(
     "snlswan-input-example.zip", True)
 
 # Initialize the Simulator
-snlswan = SNLSWAN()
+snlswan = SNLSWAN(version="2.2")
 
 # Run simulation
 task = snlswan.run( \

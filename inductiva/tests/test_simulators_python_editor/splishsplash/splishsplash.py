@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-splishsplash = SplishSplash()
+splishsplash = SplishSplash(version="2.13.0")
 
 # Run simulation
 task = splishsplash.run( \

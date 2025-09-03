@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-cp2k = CP2K()
+cp2k = CP2K(version="2025.1")
 
 # Run simulation
 task = cp2k.run( \

@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-nwchem = NWChem()
+nwchem = NWChem(version="7.2.3")
 
 # Run simulation
 task = nwchem.run( \

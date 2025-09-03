@@ -13,7 +13,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-xbeach = XBeach()
+xbeach = XBeach(version="1.24")
 
 # Run simulation
 task = xbeach.run( \
