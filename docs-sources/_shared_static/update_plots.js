@@ -1,7 +1,7 @@
 // _static/js/darkmode-plotly.js
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize darkMode from localStorage
-  let darkMode = localStorage.getItem("theme") || "light";
+  let darkMode = localStorage.getItem("theme") || "dark";
 
   // Apply theme to Plotly plots
   function applyPlotlyTheme() {
