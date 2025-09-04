@@ -1,32 +1,32 @@
-// _static/js/darkmode-plotly.js
 document.addEventListener("DOMContentLoaded", () => {
-  // Initialize darkMode from localStorage
+  // Initial theme from localStorage or default
   let darkMode = localStorage.getItem("theme") || "dark";
 
-  // Apply theme to Plotly plots
-  function applyPlotlyTheme() {
-    if (!window.Plotly) return; // Skip if Plotly not loaded
-    console.log("Im here")
-    const newTemplate = darkMode === "dark" ? "plotly_dark" : "plotly_white";
-    document.querySelectorAll(".js-plotly-plot").forEach(plot => {
-      console.log("Updating plot theme to:", newTemplate);
-      Plotly.update(plot, {}, { template: newTemplate });
+  // Function to update SVG backgrounds
+  function updateSVGBackgrounds() {
+    const svgs = document.querySelectorAll("svg.main-svg");
+    const bgColor = darkMode === "dark" ? "#ffffff7a" : "#ffffff";
+    svgs.forEach(svg => {
+      svg.style.background = bgColor;
     });
   }
 
-  // Initial application
-  applyPlotlyTheme();
+  // Apply initial background
+  updateSVGBackgrounds();
 
-  // Hook up your toggle button
+  // Hook theme toggle button (assumes aria-label="Color theme switcher")
   const btn = document.querySelector('button[aria-label="Color theme switcher"]');
   if (btn) {
     btn.addEventListener("click", () => {
-        console.log("Clicked theme button");
+      // Toggle theme
       darkMode = darkMode === "light" ? "dark" : "light";
-      console.log("New theme:", darkMode);
       localStorage.setItem("theme", darkMode);
+
+      // Optional: toggle class on <html> for site styles
       document.documentElement.classList.toggle("dark-mode", darkMode === "dark");
-      applyPlotlyTheme();
+
+      // Update all SVG backgrounds
+      updateSVGBackgrounds();
     });
   }
 });
