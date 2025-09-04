@@ -25,4 +25,4 @@ task = amr_wind.run( \
 task.wait()
 machine.terminate()
 
-print("=== Amazing! Your simulation has finished! ===")
+print("\n === Amazing! Your simulation has finished! ===")

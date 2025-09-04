@@ -22,7 +22,7 @@ task = cans.run( \
     on=machine,
     n_vcpus=4)
 
-task.wait(silent_mode=True)
+task.wait()
 machine.terminate()
 
-print("=== Amazing! Your simulation has finished! ===")
+print("\n === Amazing! Your simulation has finished! ===")

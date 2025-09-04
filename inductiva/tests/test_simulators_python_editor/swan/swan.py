@@ -20,7 +20,7 @@ task = swan.run( \
     sim_config_filename="a11refr.swn",
     on=machine)
 
-task.wait(silent_mode=True)
+task.wait()
 machine.terminate()
 
-print("=== Amazing! Your simulation has finished! ===")
+print("\n === Amazing! Your simulation has finished! ===")
