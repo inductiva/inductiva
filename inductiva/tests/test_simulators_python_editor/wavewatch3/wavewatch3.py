@@ -4,16 +4,19 @@ from inductiva.simulators import WaveWatch3
 from inductiva.utils import download_from_url
 
 # Instantiate machine group
-machine = MachineGroup(machine_type="c2d-highcpu-4", spot=True)
+machine = MachineGroup( \
+    machine_type="c2d-highcpu-4", spot=True)
 
 # Set simulation input directory
 input_dir = download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "https://storage.googleapis.com/"
+    "inductiva-api-demo-files/"
     "wavewatch3-input-example.zip",
     unzip=True)
 
 # Initialize the Simulator
-wavewatch3 = WaveWatch3(version="11-2024")
+wavewatch3 = WaveWatch3( \
+    version="11-2024")
 
 # Define the commands to run the simulation
 commands = [ \

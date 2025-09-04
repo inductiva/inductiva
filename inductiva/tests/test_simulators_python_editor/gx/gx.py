@@ -4,16 +4,19 @@ from inductiva.simulators import GX
 from inductiva.utils import download_from_url
 
 # Instantiate machine group
-gpu_machine = MachineGroup(machine_type="g2-standard-4")
+gpu_machine = MachineGroup( \
+    machine_type="g2-standard-4")
 
 # Set simulation input directory
 input_dir = download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "https://storage.googleapis.com/"
+    "inductiva-api-demo-files/"
     "gx-input-example.zip",
     unzip=True)
 
 # Initialize the Simulator
-gx = GX(version="11-2024")
+gx = GX( \
+    version="11-2024")
 
 # Run simulation
 task = gx.run( \
