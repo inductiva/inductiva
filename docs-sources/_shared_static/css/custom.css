@@ -50,6 +50,9 @@
 	--cta-container-border: none;
 	--cta-container-bg: #ebebf3;
 	--cta-container-text-color: #333;
+
+	--playground-button: #9747ff;
+	--playground-button-hover: #7931d7;
 }
 .dark {
 	--bg-color: #03020e;
@@ -82,6 +85,9 @@
 	--cta-container-border: 1px solid #4c3669;
 	--cta-container-bg: #8e3bff59;
 	--cta-container-text-color: #ffffff;
+
+	--playground-button: #80f4bc;
+	--playground-button-hover: #67dda4;
 }
 
 .border-border {
@@ -1404,3 +1410,25 @@ body.at-bottom #scrolltop {
 section[id^="inductiva-"] p {
   white-space: pre-wrap;
 }
+
+
+/* Try it in playground button */
+#content a.try-playground-button {
+	text-decoration: none;
+	color: var(--playground-button);
+	font-weight: bold;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	transition: color 0.2s;
+  }
+  
+  #content a.try-playground-button:hover {
+	color: var(--playground-button-hover);
+  }
+  
+  #content a.try-playground-button .icon {
+	width: 1em;
+	height: 1em;
+	display: inline-block;
+  }

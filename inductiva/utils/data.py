@@ -43,17 +43,14 @@ def _normalize_file(path: str) -> None:
         if b"\r\n" not in first_line:
             return  # nothing to do
 
-        # Normalize file in place
-        tmp_path = path + ".tmp"
-        with open(tmp_path, "wb") as f_out:
-            # Normalize first line
-            f_out.write(re.sub(rb"\r\n", b"\n", first_line))
-            # Normalize remaining lines
-            for line in f:
-                f_out.write(re.sub(rb"\r\n", b"\n", line))
+    # Normalize file in place
+    tmp_path = path + ".tmp"
+    with open(path, "rb") as f_in, open(tmp_path, "wb") as f_out:
+        for line in f_in:
+            f_out.write(re.sub(rb"\r\n", b"\n", line))
 
-        # Replace original file
-        os.replace(tmp_path, path)
+    # Replace original file
+    os.replace(tmp_path, path)
 
 
 def pack_input(input_dir, zip_name) -> str:

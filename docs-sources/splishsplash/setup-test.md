@@ -41,6 +41,13 @@ task.download_outputs()
 task.print_summary()
 ```
 
+<a href="https://console.inductiva.ai/editor?simulator_name=splishsplash" class="try-playground-button" target="_blank">
+  <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M8 5v14l11-7z"/>
+  </svg>
+  Try it on our Python Editor, on any device
+</a>
+
 ## Step 2: Verify the Task Status
 After the simulation completes, a task summary will be displayed in your terminal. If the task status shows **Success**, congratulations! You've successfully run a SPlisHSPlasH simulation.
 

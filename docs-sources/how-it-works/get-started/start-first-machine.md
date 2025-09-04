@@ -14,7 +14,7 @@ Start a machine with 3 lines of Python code without worrying about any configura
 ## 1️⃣ Pick your cloud machine
 
 Inductiva provides you access to hundreds of cutting-edge cloud machines and empowers you to select the best option for your simulation use-case.
-Follow <a href="pick-cloud-machine.html">the guide</a> we prepared.
+Follow <a href="https://inductiva.ai/guides/how-it-works/machine_simulation/index">the guide</a> we prepared.
 
 After narrowing down the machine that best fits your needs, let’s move on and get it started!
 

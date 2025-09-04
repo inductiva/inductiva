@@ -23,6 +23,7 @@ from inductiva.client.models.autoscale_policy import AutoscalePolicy
 from inductiva.client.models.available_simulator_versions import AvailableSimulatorVersions
 from inductiva.client.models.backend_version import BackendVersion
 from inductiva.client.models.bucket import Bucket
+from inductiva.client.models.bulk_notification_response import BulkNotificationResponse
 from inductiva.client.models.bulk_simulator_operation import BulkSimulatorOperation
 from inductiva.client.models.bulk_simulator_response import BulkSimulatorResponse
 from inductiva.client.models.cpu_info import CPUInfo
@@ -54,6 +55,7 @@ from inductiva.client.models.machine_operation_type import MachineOperationType
 from inductiva.client.models.machine_type import MachineType
 from inductiva.client.models.machine_type_with_spot_price import MachineTypeWithSpotPrice
 from inductiva.client.models.multi_part_export_operation import MultiPartExportOperation
+from inductiva.client.models.notification_type import NotificationType
 from inductiva.client.models.operation_end import OperationEnd
 from inductiva.client.models.operation_start import OperationStart
 from inductiva.client.models.operation_status import OperationStatus
@@ -132,6 +134,9 @@ from inductiva.client.models.user_costs_details import UserCostsDetails
 from inductiva.client.models.user_costs_over_time import UserCostsOverTime
 from inductiva.client.models.user_most_used_machine_types_overview import UserMostUsedMachineTypesOverview
 from inductiva.client.models.user_most_used_simulators_overview import UserMostUsedSimulatorsOverview
+from inductiva.client.models.user_notification_create import UserNotificationCreate
+from inductiva.client.models.user_notification_list import UserNotificationList
+from inductiva.client.models.user_notification_response import UserNotificationResponse
 from inductiva.client.models.user_task_status_overview import UserTaskStatusOverview
 from inductiva.client.models.user_tasks_overview import UserTasksOverview
 from inductiva.client.models.vm_group_config import VMGroupConfig
