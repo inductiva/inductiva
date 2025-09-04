@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   applyPlotlyTheme();
 
   // Hook up your toggle button
-  const btn = document.getElementById("themeToggleButton");
+  const btn = document.querySelector('button[aria-label="Color theme switcher"]');
   if (btn) {
     btn.addEventListener("click", () => {
         console.log("Clicked theme button");
