@@ -64,10 +64,7 @@ inductiva resources start c2-standard-4 \
   --s
 ```
 
-````{eval-rst}
-.. seealso::
-   Run :literal:`inductiva resources start --help` to see the full command syntax, arguments and options
-```` 
+> Run `inductiva resources start --help` to see the full command syntax, arguments and options
 
 ### List
 List and check the details of your active resources.

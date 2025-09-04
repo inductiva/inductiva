@@ -116,10 +116,7 @@ At a first glance, such a laptop seems like a reasonably powerful machine and yo
 
 > The actual performance improvement you'll see depends heavily on your specific simulation code, how well it parallelizes, and whether your workload is CPU-bound, memory-bound, or I/O-bound. We recommend running [benchmarks](https://inductiva.ai/guides/scale-up/benchmark/index) to measure real performance with your specific workloads.
 
-````{eval-rst}
-.. seealso::
-   When in doubt, use the c2d-highcpu-112 machine: it has 112 vCPUs and 224GB of RAM, providing an impressive cost/performance ratio (price around 4.62 US\$/hour and spot price of just ~0.68 US\$/hour).
-````
+> When in doubt, use the c2d-highcpu-112 machine: it has 112 vCPUs and 224GB of RAM, providing an impressive cost/performance ratio (price around 4.62 US\$/hour and spot price of just ~0.68 US\$/hour).
 
 ```{banner_small}
 :origin: pick-cloud-machine
