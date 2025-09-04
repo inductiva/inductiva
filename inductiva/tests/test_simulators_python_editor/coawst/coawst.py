@@ -4,16 +4,19 @@ from inductiva.simulators import COAWST
 from inductiva.utils import download_from_url
 
 # Instantiate machine group
-machine = MachineGroup(machine_type="c2d-highcpu-4")
+machine = MachineGroup( \
+    machine_type="c2d-highcpu-4")
 
 # Set simulation input directory
 input_dir = download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "https://storage.googleapis.com/"
+    "inductiva-api-demo-files/"
     "coawst-input-example.zip",
     unzip=True)
 
 # Initialize the Simulator
-coawst = COAWST(version="3.8")
+coawst = COAWST( \
+    version="3.8")
 
 # Run simulation
 task = coawst.run( \

@@ -4,16 +4,19 @@ from inductiva.simulators import Calculix
 from inductiva.utils import download_from_url
 
 # Instantiate machine group
-machine = MachineGroup(machine_type="c2d-highcpu-4")
+machine = MachineGroup( \
+    machine_type="c2d-highcpu-4")
 
 # Set simulation input directory
 input_dir = download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "https://storage.googleapis.com/"
+    "inductiva-api-demo-files/"
     "calculix-input-example.zip",
     unzip=True)
 
 # Initialize the Simulator
-calculix = Calculix(version="2.22")
+calculix = Calculix( \
+    version="2.22")
 
 # Run simulation
 task = calculix.run( \
