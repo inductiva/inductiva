@@ -16,9 +16,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # List of commands to run
-commands = [
-    "pw_openmp.x -i Al_qe_pseudo.in"
-]
+commands = ["pw_openmp.x -i Al_qe_pseudo.in"]
 
 # Initialize simulator
 qe = QuantumEspresso( \
