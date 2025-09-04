@@ -34,3 +34,16 @@ class WebhookNotification(Action):
 
     def get_action(self):
         return {"webhook_url": self.webhook_url, "action_type": "webhook"}
+
+
+class KillTaskAction(Action):
+    """
+    Action that kills a task.
+
+    Attributes:
+        task_id (str): The ID of the task to kill.
+    """
+    task_id: str
+
+    def get_action(self):
+        return {"task_id": self.task_id, "action_type": "kill_task"}
