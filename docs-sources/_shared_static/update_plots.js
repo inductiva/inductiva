@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Apply theme to Plotly plots
   function applyPlotlyTheme() {
     if (!window.Plotly) return; // Skip if Plotly not loaded
+    console.log("Im here")
     const newTemplate = darkMode === "dark" ? "plotly_dark" : "plotly_white";
     document.querySelectorAll(".js-plotly-plot").forEach(plot => {
       Plotly.update(plot, {}, { template: newTemplate });
@@ -19,7 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("themeToggleButton");
   if (btn) {
     btn.addEventListener("click", () => {
+        console.log("Clicked theme button");
       darkMode = darkMode === "light" ? "dark" : "light";
+      console.log("New theme:", darkMode);
       localStorage.setItem("theme", darkMode);
       document.documentElement.classList.toggle("dark-mode", darkMode === "dark");
       applyPlotlyTheme();
