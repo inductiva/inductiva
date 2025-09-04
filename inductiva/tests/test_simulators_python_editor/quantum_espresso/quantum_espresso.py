@@ -2,7 +2,6 @@
 from inductiva.resources.machine_groups import MachineGroup
 from inductiva.simulators import QuantumEspresso
 from inductiva.utils import download_from_url
-from inductiva.commands import MPIConfig, Command
 
 # Instantiate machine group
 machine = MachineGroup( \
