@@ -21,7 +21,7 @@ task = gx.run( \
     sim_config_filename="itg_w7x_adiabatic_electrons.in",
     on=gpu_machine)
 
-task.wait(silent_mode=True)
+task.wait()
 gpu_machine.terminate()
 
-print("=== Amazing! Your simulation has finished! ===")
+print("\n === Amazing! Your simulation has finished! ===")
