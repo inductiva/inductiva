@@ -7,7 +7,7 @@ organization (business or academia) - visit the [Pricing webpage](https://induct
 
 | Quota | unit | scope* | Description | Starter | Business | Academia |
 |-------|------|-------|-------------|----------|------------|------------|
-| Maximum number of VCPUs | vcpu | global | Total number of VCPUs across all running machine instances plus the number of VCPUs of the instance to be requested must not exceed the quota limit | 300 | 10000 | 10000 |
+| Maximum number of VCPUs | vcpu | global | Total number of VCPUs across all running machine instances plus the number of VCPUs of the instance to be requested must not exceed the quota limit | 720 | 10000 | 10000 |
 | Maximum price per hour across all instances | USD | global | Accumulated price per hour of all active machine instances, plus the price of the instance to be requested, must not exceed the quota | 10 | 1000 | 1000 |
 | Maximum simultaneous instances | instance | global | Maximum number of machine instances running simultaneously at any moment | 10 | 100 | 100 |
 | Maximum disk size | GB | instance | Maximum size of the disk that can be assigned to each individual machine in a machine group | 1000 | 5000 | 5000 |
