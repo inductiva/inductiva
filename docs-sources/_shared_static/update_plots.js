@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Im here")
     const newTemplate = darkMode === "dark" ? "plotly_dark" : "plotly_white";
     document.querySelectorAll(".js-plotly-plot").forEach(plot => {
+      console.log("Updating plot theme to:", newTemplate);
       Plotly.update(plot, {}, { template: newTemplate });
     });
   }
