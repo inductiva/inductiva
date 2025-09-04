@@ -1,6 +1,6 @@
 # 📨 Simulation Notifications via Observer Events
 
-> **Note:** This tutorial demonstrates **passive tracking**, observer triggers run on Inductiva servers
+> **Note:** This tutorial demonstrates **passive tracking**, where observer triggers run **on the background**
 > and automatically send notifications when events occur.
 > For **active tracking**, refer to the [Real-Time Monitoring & Auto Termination tutorial](<real-time-simulation-monitoring>), where monitoring runs
 > on your local machine.
@@ -24,14 +24,13 @@ such as sending an email.
 
 Key features:
 
-- Detect when a file **exists**, or when its contents **match a regex**.
-- Supports **capturing groups** in regex to extract relevant information.
-- Works with **any simulator** that writes logs or intermediate files.
-- Flexible for detecting **errors, warnings, milestones, or custom progress markers**.
+- Detect when a file **has been created**, such as an error file, or when its contents **match a regular expression**.
+- Supports **capturing groups** in matched regular expressions to extract relevant information.
+- Works with **any simulator** that writes logs or intermediate files to disk.
 
 ## Example Use Cases
 
-- **Error detection:** Catch critical messages hidden in logs.
+- **Error detection:** Catch critical messages in logs.
 - **Progress tracking:** Watch for intermediate results or checkpoint files.
 - **Completion alerts:** Notify when a `done` flag appears.
 - **Value monitoring:** Extract numbers from logs (e.g., residuals, energy, temperature) using regex.
@@ -49,23 +48,51 @@ Key features:
 > [https://docs.python.org/3/library/re.html](https://docs.python.org/3/library/re.html)
 
 
-## How Observers Work
+## Observer Classes
 
-There are two main types of observer triggers:
+Inductiva provides two main observer trigger classes for monitoring file events:
 
-1. **File-Based Triggers** – Detect when a specific file appears. Useful for milestone detection, completion flags, or error files.  
-2. **Log-Based Triggers (Regex)** – Detect patterns inside log files, including errors, warnings, or numeric values. Can capture groups to extract detailed information like step number or error messages.
+### 1. ObserverFileExists
 
+Detects when a specific file appears in your task's working directory.
 
-## File-Based Trigger – Detect When a File Appears
+**Parameters:**
+- `task_id` (str): The ID of the task to monitor
+- `file_path` (str): The path of the file to watch for (relative to task directory)
 
-- **Purpose:** Trigger an email notification when a specific file is created.
-- **Use case:** Completion flags, error files, or other milestones.
+**Use cases:** Completion flags, error files, or other milestone files.
 
+### 2. ObserverFileRegex
+
+Detects patterns inside log files using regular expressions.
+
+**Parameters:**
+- `task_id` (str): The ID of the task to monitor  
+- `file_path` (str): The path of the log file to monitor
+- `regex` (str): Regular expression pattern to match against file contents
+
+**Use cases:** Error detection, progress tracking, value monitoring with captured groups.
+
+> 💡 If you are new to regex, see the official Python regex guide:
+> [https://docs.python.org/3/library/re.html](https://docs.python.org/3/library/re.html)
+
+## Email Notifications
+
+The `EmailNotification` action sends email alerts when observer triggers are activated.
+
+**Parameters:**
+- `email_address` (str): The email address to send notifications to
+
+## Registering Observers
+
+Once you understand the observer classes, you can register them using `events.register()`:
+
+### File-Based Observer Registration
 
 ```python
-# ===== File-Based Trigger =====
 from inductiva import events
+
+# Register an observer that triggers when "done.flag" appears
 events.register(
     trigger=events.triggers.ObserverFileExists(
         task_id=task.id,
@@ -74,22 +101,19 @@ events.register(
         email_address="your@email.com")
 )
 ```
+
+**Result:** You'll receive an email when the `done.flag` file is created.
+
 Email received:
 ![File email](static/file-email.png)
 
-## Log-Based Trigger – Detect Patterns with Regex
-
-- **Purpose**: Trigger an email when a line in a log matches a regex.
-- **How it works**: You provide a regular expression (regex) that matches the content you want to detect. The observer continuously scans the log file and triggers the action whenever a match occurs.
-- **Flexibility**: Can detect errors, warnings, or any custom string pattern. Optional **match groups** allow you to extract specific parts of the line for more detailed notifications.
-
-> 💡 If you are new to regex, see the official Python regex guide:
-> [https://docs.python.org/3/library/re.html](https://docs.python.org/3/library/re.html)
+### Log-Based Observer Registration
 
 ```python
-# ===== Log-Based Trigger =====
-# Regex captures groups: (\d+) = step number, (.+) = error message
 from inductiva import events
+
+# Register an observer that triggers on error patterns in logs
+# Regex captures groups: (\d+) = step number, (.+) = error message
 events.register(
     trigger=events.triggers.ObserverFileRegex(
         task_id=task.id,
@@ -100,12 +124,18 @@ events.register(
 )
 ```
 
-**Explanation**: Regex can capture groups, such as step number and message.  
-Regex: `ERROR at step (\d+): (.+)`  
- - `(\d+)`: captures the step number  
- - `(.+)`: captures the error message  
+**Result:** You'll receive an email whenever a line in `output.log` matches the error pattern.
 
-**Example**: If a log line reads `ERROR at step 42: Overflow in calculation`, then `(\d+)` - `42` and `(.+)` - `Overflow in calculation`.
+**Regex Explanation:**
+- `ERROR at step (\d+): (.+)` matches error messages with step numbers
+- `(\d+)`: captures the step number  
+- `(.+)`: captures the error message  
+
+**Example:** If a log line reads `ERROR at step 42: Overflow in calculation`, then:
+- `(\d+)` captures `42`
+- `(.+)` captures `Overflow in calculation`
 
 Email received:
 ![Regex email](static/regex-email.png)
+
+Observers are an easy-to-use and flexible mechanism for monitoring simulation progress and automatically responding to important events.
