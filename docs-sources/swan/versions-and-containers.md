@@ -9,7 +9,7 @@ patterns and interactions with the shoreline.
 ## Supported Versions
 Inductiva stays up to date with the latest versions of SWAN. Below is a list of the supported versions:
 
-- **41.51** With support for unstructured grids (unswan)
+- **41.51** With support for unstructured grids (UnSWAN)
 - **41.45**
 - **41.31**
 
