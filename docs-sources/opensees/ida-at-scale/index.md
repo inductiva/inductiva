@@ -1,38 +1,37 @@
-# IDAs on Inductiva: Run 300 Simulations in Parallel
+# IDA at Scale: Seismic Assessment of URM Structures
 
 *This tutorial was written by* [Daniel Caicedo](mailto:caicedod93@gmail.com) *in collaboration with the* **Inductiva Team**
 
 <br>
 
-**Incremental Dynamic Analysis (IDA)** is a computational method widely used in Performance-
-Based Earthquake Engineering (PBEE) to evaluate the seismic performance of structures. This 
-method generates response curves across a range of earthquake intensity levels, enabling a
-probabilistic assessment of structural behaviour and associated seismic risk.
+**Incremental Dynamic Analysis (IDA)** is a computational method widely used in **Performance-Based Earthquake Engineering (PBEE)** to assess the seismic performance of structures. It generates response curves across a range of earthquake intensity levels, enabling a probabilistic evaluation of structural behaviour and associated seismic risk.
 
-To date, the applicability of this technique for the case of unreinforced masonry constructions has been limited due to the **complexity of numerical models** and the **large computational burden** associated.
+However, applying this method to **unreinforced masonry (URM)** buildings has historically been limited due to two main challenges:
+1. The **complexity of numerical models** needed to accurately capture URM behavior;
+2. The **computational burden** of executing hundreds or thousands of simulations.
 
-The first challenge is addressed by developing efficient structural models in OpenSees based on three-
-dimensional macroelements to capture the in-plane (IP) and out-of-plane (OOP) mechanisms,
-while also incorporating the effects of non-linear floor-to-wall connections and wall-to-wall
-interlocking. 
+The first challenge is addressed by developing efficient structural models in OpenSees, using three-
+dimensional macroelements to capture the in-plane (IP) and out-of-plane (OOP) mechanisms. These models also account for non-linear floor-to-wall connections and wall-to-wall interlocking.
 
-The second, and more significant, challenge is tackled by leveraging the Inductiva
-platform, which enables the execution of large-scale simulations through high-performance
-computing (HPC) resources.
+The second, and often more limiting, challenge lies not only in running a large number of simulations, but also in having the infrastructure required to support them. 
 
-This tutorial showcases an example involving a two-storey unreinforced masonry building,
-representative of the pre-code masonry building stock in metropolitan area of Lisbon. All the data
-required for the development of numerical models was gathered in the scope of the [STAND4HERITAGE](https://stand4heritage.org) project (New STANDards for seismic assessment of built cultural HERITAGE).
+While traditional HPC clusters can handle these workloads, practical constraints (such as queue times, shared node usage, and job scheduling policies) can limit how efficiently simulations are executed, especially in large or iterative studies.
 
-<image1 and caption>
+Running simulations on cloud-based HPC is not required to perform IDA, but it offers clear advantages. It removes the need to manage physical infrastructure, provides dedicated compute resources, and enables parallel execution at scale. This reduces overall runtime and makes large-scale studies more efficient and accessible.
 
-## Prerequisites
-Download the required files [here]() and place them in a folder called `SimulationFiles`. 
+This is where **Inductiva** steps in, allowing you to focus on developing accurate structural models and analysing results, without being constrained by **hardware limitations** or **sequential processing**.
 
-- Output files folder to save the results of the analysis.
-- Records folder, where the 30 acceleration time-histories required for the IDAs are
-located.
-- Record duration file to be read during the execution of the script.
+In this tutorial, we walk through a practical example involving a two-storey unreinforced masonry building, representative of the pre-code masonry building stock in the Lisbon metropolitan area.
+
+All data used in this example was collected as part of the [STAND4HERITAGE](https://stand4heritage.org) project — New STANDards for seismic assessment of built cultural HERITAGE.
+
+<Image1 and caption placeholder>
+
+
+
+
+
+
 
 ## Run 50 Simulations in Parallel
 This section demonstrates how to run 50 Incremental Dynamic Analyses (IDAs) in parallel using an elastic group of cloud machines. The process is divided into six main code sections.
