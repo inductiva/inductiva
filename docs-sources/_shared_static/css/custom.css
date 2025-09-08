@@ -1126,11 +1126,6 @@ table p {
 	font-weight: 500;
 }
 
-#left-sidebar,
-#right-sidebar {
-	background-color: transparent;
-}
-
 #content .menu-scroll::-webkit-scrollbar {
 	display: none;
 }
