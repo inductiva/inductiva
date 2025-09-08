@@ -52,15 +52,13 @@ When running Quantum ESPRESSO simulations, you can configure **MPI** settings by
 cloud_machine = inductiva.resources.MachineGroup(
     provider="GCP",
     machine_type="c2d-highcpu-4",
-    spot=True
-)
+    spot=True)
 
 # Configure MPI settings for the machine
 cloud_machine.set_mpi_config(
     mpi_version="4.1.6",      # MPI version to use
     np=2,                     # Number of MPI processes
-    use_hwthread_cpus=False   # Whether to use hyperthreading
-)
+    use_hwthread_cpus=False)   # Whether to use hyperthreading
 ```
 
 In this example, the specified MPI configuration will automatically be applied to all commands that support MPI.
