@@ -9,6 +9,10 @@
 This benchmark evaluates the performance of the **CP2K** simulator by running an **ab-initio molecular dynamics (AIMD)** simulation of liquid water.  
 The test is based on the standard **H2O-64** benchmark from CP2K but extended to **H2O-512** (512 water molecules, 1536 atoms, 4096 electrons) to better leverage **cloud scalability**.
 
+<Alert status="info">
+*The original input files can be found [here](https://github.com/cp2k/cp2k/blob/master/benchmarks/QS/H2O-512.inp).*
+</Alert>
+
 ### 🔬 Simulation Details
 
 | **Property**                | **H2O-512** Configuration                |
