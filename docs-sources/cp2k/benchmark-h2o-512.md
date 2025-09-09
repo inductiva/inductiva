@@ -50,7 +50,7 @@ The software versions used in this benchmark were the following:
 
 > **Note:**  
 > Results for **local machines** and certain cloud configurations with **16 vCPUs** are **intentionally omitted**.  
-> The **H₂O-512 benchmark** represents a **large-scale simulation** (1536 atoms, 4096 electrons) that demands significant computational power and memory.  
+> The **H2O-512 benchmark** represents a **large-scale simulation** (1536 atoms, 4096 electrons) that demands significant computational power and memory.  
 > - On **local machines** and some **16-vCPU instances**, the **available memory** is insufficient to complete the simulation.  
 
 
