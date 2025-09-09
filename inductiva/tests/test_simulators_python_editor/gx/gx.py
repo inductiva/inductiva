@@ -26,5 +26,6 @@ task = gx.run( \
 
 task.wait()
 gpu_machine.terminate()
+task.print_summary()
 
 print("\n === Amazing! Your simulation has finished! ===")
