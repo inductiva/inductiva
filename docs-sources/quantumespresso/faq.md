@@ -34,14 +34,50 @@ Here is a list of the commands available to run Quantum ESPRESSO, in alphabetica
 
 Our Quantum ESPRESSO build supports both **MPI** and **OpenMP** parallelization. The parallelization method depends on the binary you choose to run.
 
-* To use **MPI**, run the standard executable, e.g. `pw.x`.
+* To use **MPI**, run the standard executable, e.g. `pw.x`. Inductiva will take care of setting the MPI configurations automatically for you, based on the machine you selected before.
 * To use **OpenMP**, run the executable with the `_openmp` suffix, e.g. `pw_openmp.x`.
 
 This allows you to select the most suitable parallelization strategy for your simulation.
 
 <br>
 
-## 3. How can I configure my MPI settings?
+
+## 3. How does Inductiva implicitly set MPI configurations for me?
+
+When you run a **Quantum ESPRESSO** simulation using the **Inductiva API**, the MPI settings are **automatically configured** based on the computational resources you choose.
+This means you **don’t need to manually set MPI parameters** for each command, Inductiva handles it for you.
+
+For example:
+
+```python
+# Allocate a machine on Google Cloud Platform
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2d-highcpu-16",
+    spot=True)
+```
+
+For this machine, Inductiva will automatically apply the following MPI configurations:
+
+| MPI Parameter           | Value |
+| ----------------------- | ----- |
+| **np**                  | 16    |
+| **use\_hwthread\_cpus** | True  |
+
+* `np` → Number of MPI processes
+* `use_hwthread_cpus` → Whether hyperthreading is enabled
+
+These settings will be applied to **all commands that support MPI**, for example:
+
+```python
+commands = [
+    "pw.x -i Al_local_pseudo.in"
+]
+```
+
+<br>
+
+## 4. How can I explicitly configure my MPI settings?
 
 When running Quantum ESPRESSO simulations, you can configure **MPI** settings by specifying the `MPIConfig` parameters in your computational resource.
 
