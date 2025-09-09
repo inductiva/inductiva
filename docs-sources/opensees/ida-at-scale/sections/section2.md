@@ -8,7 +8,9 @@ number of machines, which automatically turn on or off based on workload, ensuri
 Since some simulations may take longer than others, this elastic setup avoids idle waiting. Once a machine completes its assigned 
 tasks and no further simulations are queued, it automatically shuts down. This dynamic scaling optimizes cloud usage and helps reduce computational costs.
 
-Because the **EESD OpenSees distribution** runs on a **single thread**, it cannot take full advantage of multi-core CPUs. To maximize throughput, it’s more efficient to run multiple small machines, such as `c2d-highcpu-2` instances with 2 virtual CPUs, concurrently. This approach enables high parallelism while keeping resource usage and cost under control.
+Because the **EESD OpenSees distribution** runs on a **single thread**, it cannot take full advantage of multi-core CPUs. 
+To maximize throughput, it’s more efficient to run multiple small machines, such as `c2d-highcpu-2` instances with 2 virtual 
+CPUs, concurrently. This approach enables high parallelism while keeping resource usage and cost under control.
 
 ```python
 # Allocate an Elastic Machine Group on Google Cloud Platform
@@ -27,15 +29,16 @@ Once the cloud machines are allocated, we move on to defining the simulation inp
 
 We start by specifying the directory that contains the input files for the analyses.
 
-Next, we specify the EESD OpenSees version to use. In this case, version 3.0.2, which includes the 3D macroelement, `OrthotropicMembraneSection`, and `NoTensionSection3d` commands, as well as support for non-symmetric tangent stiffness in ND-zeroLength elements.
+Next, we specify the EESD OpenSees version to use. In this case, version 3.0.2, which includes the 3D macroelement, `OrthotropicMembraneSection`, and `NoTensionSection3d` commands, as well as support for non-symmetric tangent stiffness in 
+ND-zeroLength elements.
 
 To keep simulation data organized and make result handling easier, we group everything into a project using the Project class.
 
 ```python
-# Simulation input files
+# Input files path
 input_dir = r"C:/Path/To/Input/Files"
 
-# Initialize the simulator
+# Initialize the Simulator
 opensees = inductiva.simulators.OpenSees(
     interface="eesd",
     version="3.0.2")
@@ -47,14 +50,18 @@ project_name = "B2_3P_Tutorial"
 > Learn more about the `Project` class [here](https://inductiva.ai/guides/scale-up/projects/projects).
 
 ## Section 3: Computing Analysis Parameters
-Then, we define the analysis range for the 30 records used in the IDA, along with the corresponding EQfactor values, which denote the level of intensity to scale the ground motion records.
+Then, we define the analysis range for the 30 records used in the IDA, along with the corresponding EQfactor values, which denote 
+the level of intensity to scale the ground motion records.
 
-We also define numerical damping, required for non-linear dynamic analyses. Rayleigh damping is specified in OpenSees via the Rayleigh command, which needs two parameters, alpha and beta, based on two fundamental frequencies of the structure. In this example, the Rayleigh damping is calibrated based on the 1<sup>st</sup> and 6<sup>th</sup> frequencies of the building. A damping ratio of 5% is assumed, typical for this type of analysis.
+We also define numerical damping, required for non-linear dynamic analyses. Rayleigh damping is specified in OpenSees via the 
+Rayleigh command, which needs two parameters, alpha and beta, based on two fundamental frequencies of the structure. In this example, 
+the Rayleigh damping is calibrated based on the 1<sup>st</sup> and 6<sup>th</sup> frequencies of the building. A damping ratio of 5% 
+is assumed, typical for this type of analysis.
 
 ```python
-# Variables of the analysis
-# 30 bidirectional acceleration time-series to perform Incremental Dynamic Analysis
-analysis_range = range(1,31)
+# Analysis variables
+analysis_range = range(1,31) # 30 bidirectional acceleration time-series to perform IDA
+
 # Scaling factor for the earthquake time-series
 EQfactor_values = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50]
 
@@ -67,15 +74,17 @@ alpha,beta = dp.damping(Ti, Tj, damping_percentage)
 ```
 
 ## Section 4: Initializing the Simulation Loop and `TemplateManager`
-This section starts the loops over `analysis_range` and `EQfactor_values`. Each record is scaled to the specified intensity level, meaning the input files are rewritten at each iteration with updated parameters.
+This section starts the loops over `analysis_range` and `EQfactor_values`. Each record is scaled to the specified intensity level, 
+meaning the input files are rewritten at each iteration with updated parameters.
 
-To automate this process, the `TemplateManager` tool is used. It overwrites the `.jinja` input files by replacing placeholders ({{ }}) with the appropriate parameter values at each step.
+To automate this process, the `TemplateManager` tool is used. It overwrites the `.jinja` input files by replacing placeholders ({{ }}) 
+with the appropriate parameter values at each step.
 
 ```python
-# Folder paths
 # Including the .jinja files
 input_files_template = os.path.join(input_dir, "inputFiles_template")
 output_folder = os.path.join(input_dir, "outputFiles")
+
 # Ensure output folder exists
 os.makedirs(output_folder, exist_ok=True)
 
@@ -105,7 +114,8 @@ for ii in analysis_range:
 > Learn more about the `TemplateManager` class [here](https://inductiva.ai/guides/scale-up/parallel-simulations/templating).
 
 ## Section 5: Running the Simulations and Assigning Metadata
-Within the loops, each simulation is executed by calling the batch file. Metadata is also defined for each run, capturing information essential for future post-processing.
+Within the loops, each simulation is executed by calling the batch file. Metadata is also defined for each run, capturing 
+information essential for future post-processing.
 
 ```python
         batch_file_path = os.path.join(input_dir_folder, "Prototype_b2_3p_batch.tcl")
@@ -132,7 +142,8 @@ Within the loops, each simulation is executed by calling the batch file. Metadat
 ```
 
 ## Section 6: Monitoring Progress and Downloading Results
-In the final stage, we wait for all simulations to complete. Once finished, the output data is automatically downloaded for further analysis, and the cloud machine group is terminated.
+In the final stage, we wait for all simulations to complete. Once finished, the output data is automatically downloaded for 
+further analysis, and the cloud machine group is terminated.
 
 ```python
 inductiva.projects.Project(project_name).wait()

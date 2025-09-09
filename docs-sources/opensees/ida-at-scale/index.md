@@ -15,15 +15,25 @@ dimensional macroelements to capture the in-plane (IP) and out-of-plane (OOP) me
 
 The second, and often more limiting, challenge lies not only in running a large number of simulations, but also in having the infrastructure required to support them. 
 
-Running simulations on cloud-based HPC is not required to perform IDA, but it offers clear advantages. It removes the need to manage physical infrastructure, provides dedicated compute resources, and enables parallel execution at scale. This reduces overall runtime and makes large-scale studies more efficient and accessible.
+Running simulations on cloud-based HPC is not required to perform IDA, but it offers clear advantages. It removes the need to 
+manage physical infrastructure, provides dedicated compute resources, and enables parallel execution at scale. This reduces overall 
+runtime and makes large-scale studies more efficient and accessible.
 
-This is where **Inductiva** steps in, allowing you to focus on developing accurate structural models and analysing results, without being constrained by **hardware limitations** or **sequential processing**.
+This is where **Inductiva** steps in, allowing you to focus on developing accurate structural models and analysing results, without 
+being constrained by **hardware limitations** or **sequential processing**.
 
-In this tutorial, we walk through a practical example involving a two-storey unreinforced masonry building, representative of the pre-code masonry building stock in the Lisbon metropolitan area.
+In this tutorial, we walk through a practical example involving a two-storey unreinforced masonry building, representative of the 
+pre-code masonry building stock in the Lisbon metropolitan area.
 
-All data used in this example was collected as part of the [STAND4HERITAGE](https://stand4heritage.org) project — New STANDards for seismic assessment of built cultural HERITAGE.
+All data used in this example was collected as part of the [STAND4HERITAGE](https://stand4heritage.org) project — New STANDards for 
+seismic assessment of built cultural HERITAGE.
 
-<p align="center"><img src="../_static/image1" alt="caption1" width="700"></p>
+<p align="center"><img src="../_static/image1" alt="caption1" width="700"></p> - ask Daniel
+
+The tutorial is divided into the following sections:
+- [Kickstart Your Simulation Workflow](sections/section1)
+- [Run 50 Simulations in Parallel](sections/section2)
+- [Results and Key Takeaways](sections/section3)
 
 ```{toctree}
 :hidden:
