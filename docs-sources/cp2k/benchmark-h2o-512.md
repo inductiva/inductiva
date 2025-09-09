@@ -63,7 +63,7 @@ This plot shows how the total runtime of the simulation varies across different 
 This plot compares the **execution cost** against the **simulation runtime**, helping identify the **sweet spot** between **speed** and **cost efficiency**.
 
 ```{raw} html
-:file: ./_static/time_graph.html
+:file: ./_static/cost_time_graph.html
 ```
 
 ---
