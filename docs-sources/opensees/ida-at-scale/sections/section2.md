@@ -60,12 +60,18 @@ is assumed, typical for this type of analysis.
 
 ```python
 # Analysis variables
-analysis_range = range(1,31) # 30 bidirectional acceleration time-series to perform IDA
+# 30 bidirectional acceleration time-series to perform IDA
+analysis_range = range(1,31)
 
 # Scaling factor for the earthquake time-series
-EQfactor_values = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50]
+EQfactor_values = [
+    0.05, 0.10, 0.15,
+    0.20, 0.25, 0.30,
+    0.35, 0.40, 0.45,
+    0.50]
 
-# Computing the parameters for a 5% fraction damping based on the 1st and 6th frequencies
+# Computing the parameters for a 5% fraction
+# damping based on the 1st and 6th frequencies
 damping_percentage = 0.05
 Ti = 0.09970895596567399 # 1st vibration period
 Tj = 0.04970502055069268 # 6th vibration period
@@ -82,14 +88,19 @@ with the appropriate parameter values at each step.
 
 ```python
 # Including the .jinja files
-input_files_template = os.path.join(input_dir, "inputFiles_template")
-output_folder = os.path.join(input_dir, "outputFiles")
+input_files_template = os.path.join(
+    input_dir, "inputFiles_template")
+output_folder = os.path.join(
+    input_dir, "outputFiles")
 
 # Ensure output folder exists
-os.makedirs(output_folder, exist_ok=True)
+os.makedirs(
+    output_folder, exist_ok=True)
 
-records_duration_file = os.path.join(input_dir, "records_duration.txt")
-records_duration = np.loadtxt(records_duration_file, delimiter=' ')
+records_duration_file = os.path.join(
+    input_dir, "records_duration.txt")
+records_duration = np.loadtxt(
+    records_duration_file, delimiter=' ')
 
 # Loop over all combinations of ii and EQfactor
 for ii in analysis_range:
@@ -118,12 +129,16 @@ Within the loops, each simulation is executed by calling the batch file. Metadat
 information essential for future post-processing.
 
 ```python
-        batch_file_path = os.path.join(input_dir_folder, "Prototype_b2_3p_batch.tcl")
-        shutil.copy(batch_file_path, input_dir)
+        batch_file_path = os.path.join(
+            input_dir_folder, "Prototype_b2_3p_batch.tcl")
+        shutil.copy(
+            batch_file_path, input_dir)
 
         # Extract file name and extension
-        batch_file_name = os.path.basename(batch_file_path)
-        name_batch, ext_batch = os.path.splitext(batch_file_name)
+        batch_file_name = os.path.basename(
+            batch_file_path)
+        name_batch, ext_batch = os.path.splitext(
+            batch_file_name)
         
         # Run simulation
         task = opensees.run(

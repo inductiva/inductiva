@@ -53,7 +53,11 @@ project_name = "B2_3P_Tutorial"
 # Computing Analysis Parameters
 analysis_range = range(1,31) 
 
-EQfactor_values = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50]
+EQfactor_values = [
+    0.05, 0.10, 0.15,
+    0.20, 0.25, 0.30,
+    0.35, 0.40, 0.45,
+    0.50]
 
 damping_percentage = 0.05
 Ti = 0.09970895596567399
@@ -62,13 +66,17 @@ Tj = 0.04970502055069268
 alpha,beta = dp.damping(Ti, Tj, damping_percentage)
 
 # Initializing the Simulation Loop and TemplateManager
-input_files_template = os.path.join(input_dir, "inputFiles_template")
-output_folder = os.path.join(input_dir, "outputFiles")
+input_files_template = os.path.join(
+    input_dir, "inputFiles_template")
+output_folder = os.path.join(
+    input_dir, "outputFiles")
 
 os.makedirs(output_folder, exist_ok=True)
 
-records_duration_file = os.path.join(input_dir, "records_duration.txt")
-records_duration = np.loadtxt(records_duration_file, delimiter=' ')
+records_duration_file = os.path.join(
+    input_dir, "records_duration.txt")
+records_duration = np.loadtxt(
+    records_duration_file, delimiter=' ')
 
 for ii in analysis_range:
     for EQfactor in EQfactor_values:
@@ -88,26 +96,28 @@ for ii in analysis_range:
             ii=ii,
             max_time=max_time)
 
-# Running the Simulations and Assigning Metadata
-batch_file_path = os.path.join(input_dir_folder, "Prototype_b2_3p_batch.tcl")
-shutil.copy(batch_file_path, input_dir)
+        # Running the Simulations and Assigning Metadata
+        batch_file_path = os.path.join(
+            input_dir_folder, "Prototype_b2_3p_batch.tcl")
+        shutil.copy(
+            batch_file_path, input_dir)
 
-batch_file_name = os.path.basename(batch_file_path)
+        batch_file_name = os.path.basename(
+            batch_file_path)
         name_batch, ext_batch = os.path.splitext(batch_file_name)
-        
-task = opensees.run(
-input_dir=input_dir,
-sim_config_filename=batch_file_name,
-on=cloud_machine,
-project=project_name,
-resubmit_on_preemption=True)
-        
-task.set_metadata({
-"factor": str(EQfactor),
-"Current_Analysis": str(ii),
-"Record_duration": str(max_time),
-"Project_name": project_name,
-})
+                
+        task = opensees.run(
+            input_dir=input_dir,
+            sim_config_filename=batch_file_name,
+            on=cloud_machine,
+            project=project_name,
+            resubmit_on_preemption=True)
+                
+        task.set_metadata({
+            "factor": str(EQfactor),
+            "Current_Analysis": str(ii),
+            "Record_duration": str(max_time),
+            "Project_name": project_name})
 
 # Monitoring Progress and Downloading Results
 inductiva.projects.Project(project_name).wait()
