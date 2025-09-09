@@ -44,6 +44,12 @@ The software versions used in this benchmark were the following:
 | Operating System       |Ubuntu 22.04.5 LTS|
 | kernel                 | 6.8.0-65-generic                     |
 
+> **Note:**  
+> Results for **local machines** and certain cloud configurations with **16 vCPUs** are **intentionally omitted**.  
+> The **H₂O-512 benchmark** represents a **large-scale simulation** (1536 atoms, 4096 electrons) that demands significant computational power and memory.  
+> - On **local machines** and some **16-vCPU instances**, the **available memory** is insufficient to complete the simulation.  
+
+
 ## ⚡ Results
 
 We evaluated performance across multiple configurations, comparing execution times and analyzing the **cost vs runtime** trade-off.
