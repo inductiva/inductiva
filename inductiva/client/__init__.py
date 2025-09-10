@@ -47,6 +47,7 @@ from inductiva.client.models.autoscale_policy import AutoscalePolicy
 from inductiva.client.models.available_simulator_versions import AvailableSimulatorVersions
 from inductiva.client.models.backend_version import BackendVersion
 from inductiva.client.models.bucket import Bucket
+from inductiva.client.models.bulk_notification_response import BulkNotificationResponse
 from inductiva.client.models.bulk_simulator_operation import BulkSimulatorOperation
 from inductiva.client.models.bulk_simulator_response import BulkSimulatorResponse
 from inductiva.client.models.cpu_info import CPUInfo
@@ -64,6 +65,7 @@ from inductiva.client.models.executer import Executer
 from inductiva.client.models.file_info import FileInfo
 from inductiva.client.models.gpu_info import GPUInfo
 from inductiva.client.models.http_validation_error import HTTPValidationError
+from inductiva.client.models.last_preemption import LastPreemption
 from inductiva.client.models.machine_filter_options import MachineFilterOptions
 from inductiva.client.models.machine_group_cost_per_hour import MachineGroupCostPerHour
 from inductiva.client.models.machine_group_costs import MachineGroupCosts
@@ -75,9 +77,11 @@ from inductiva.client.models.machine_group_with_costs import MachineGroupWithCos
 from inductiva.client.models.machine_info import MachineInfo
 from inductiva.client.models.machine_operation import MachineOperation
 from inductiva.client.models.machine_operation_type import MachineOperationType
+from inductiva.client.models.machine_preemption_statistics import MachinePreemptionStatistics
 from inductiva.client.models.machine_type import MachineType
 from inductiva.client.models.machine_type_with_spot_price import MachineTypeWithSpotPrice
 from inductiva.client.models.multi_part_export_operation import MultiPartExportOperation
+from inductiva.client.models.notification_type import NotificationType
 from inductiva.client.models.operation_end import OperationEnd
 from inductiva.client.models.operation_start import OperationStart
 from inductiva.client.models.operation_status import OperationStatus
@@ -91,6 +95,7 @@ from inductiva.client.models.project_create import ProjectCreate
 from inductiva.client.models.project_statistics import ProjectStatistics
 from inductiva.client.models.project_type import ProjectType
 from inductiva.client.models.project_update import ProjectUpdate
+from inductiva.client.models.provider_preemption_statistics import ProviderPreemptionStatistics
 from inductiva.client.models.providers import Providers
 from inductiva.client.models.quota import Quota
 from inductiva.client.models.quota_scope import QuotaScope
@@ -156,6 +161,9 @@ from inductiva.client.models.user_costs_details import UserCostsDetails
 from inductiva.client.models.user_costs_over_time import UserCostsOverTime
 from inductiva.client.models.user_most_used_machine_types_overview import UserMostUsedMachineTypesOverview
 from inductiva.client.models.user_most_used_simulators_overview import UserMostUsedSimulatorsOverview
+from inductiva.client.models.user_notification_create import UserNotificationCreate
+from inductiva.client.models.user_notification_list import UserNotificationList
+from inductiva.client.models.user_notification_response import UserNotificationResponse
 from inductiva.client.models.user_task_status_overview import UserTaskStatusOverview
 from inductiva.client.models.user_tasks_overview import UserTasksOverview
 from inductiva.client.models.vm_group_config import VMGroupConfig
@@ -164,3 +172,4 @@ from inductiva.client.models.validation_error_loc_inner import ValidationErrorLo
 from inductiva.client.models.version_comparison_result import VersionComparisonResult
 from inductiva.client.models.zip_archive_info import ZipArchiveInfo
 from inductiva.client.models.zip_file_range import ZipFileRange
+from inductiva.client.models.zone_preemption_statistics import ZonePreemptionStatistics

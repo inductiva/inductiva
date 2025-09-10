@@ -21,6 +21,7 @@ OpenTelemac has a modular structure and supports unstructured meshes, high perfo
 Inductiva stays up to date with the latest versions of OpenTelemac. Below is a list of the supported versions, along with their respective release dates:
 
 - **9.0.0** (Dec., 2024)
+- **8p4r1** (Nov., 2023)
 - **8p4r0** (Dec., 2022)
 - **8p1r2** (Dec., 2021)
 

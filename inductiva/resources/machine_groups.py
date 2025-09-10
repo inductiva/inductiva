@@ -66,6 +66,8 @@ class BaseMachineGroup(ABC):
     auto_terminate_minutes: Optional[int] = None
     spot: bool = True
 
+    # MPI configuration
+    mpi_config: MPIConfig = None
     mpi_version: str = "4.1.6"
     np: int = None
     use_hwthread_cpus: bool = True
@@ -158,11 +160,14 @@ class BaseMachineGroup(ABC):
         return self._gpu_info.get("gpu_count", 0)
 
     def set_mpi_config(self,
+                       mpi_config: Optional[MPIConfig] = None,
                        mpi_version: str = "4.1.6",
                        np: Optional[int] = None,
                        use_hwthread_cpus: bool = True):
         """Set the MPI configuration for the cluster.
         Args:
+            mpi_config: An MPIConfig object containing the MPI configuration.
+                Will take precedence over other arguments if provided.
             mpi_version: The version of MPI to be used on the machines.
             np: The number of processes to use for MPI commands.
             use_hwthread_cpus: Whether to use hyperthreading or not.
@@ -170,9 +175,12 @@ class BaseMachineGroup(ABC):
         self.mpi_version = mpi_version
         self.use_hwthread_cpus = use_hwthread_cpus
         self.np = np or self.available_vcpus
+        self.mpi_config = mpi_config
 
     def get_mpi_config(self):
         """Get the MPI configuration for the cluster."""
+        if self.mpi_config is not None:
+            return self.mpi_config
         return MPIConfig(self.mpi_version,
                          np=self.np,
                          use_hwthread_cpus=self.use_hwthread_cpus)

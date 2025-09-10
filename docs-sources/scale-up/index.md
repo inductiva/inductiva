@@ -99,6 +99,7 @@ Overview <recipes/index>
 🗑️ Clean Up Storage by Condition <recipes/storage-related/index>
 👀 Real-Time Monitoring & Conditional Auto Termination <recipes/real-time-simulation-monitoring>
 ⏰ Setting a Time-to-Live on Your Simulations <recipes/set-task-ttl/set-task-ttl>
+📨 Simulation Notifications via Observer Events <recipes/observer-events>
 ```
 
 ```{toctree}

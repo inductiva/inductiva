@@ -12,12 +12,14 @@ Below is a list of the supported versions, along with their respective release d
 
 OpenFOAM (ESI)
 
+- **25.06** (Jul., 2025)
 - **24.12** (Dec., 2024)
 - **24.06** (Jun., 2024)
 - **22.06** (Jun., 2022)
 
 OpenFOAM (Foundation)
 
+- **13** (Jul., 2025)
 - **12** (Jul., 2024)
 - **8** (Jul., 2020)
 

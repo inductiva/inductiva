@@ -12,6 +12,10 @@
           "path": "amr-wind/index"
         },
         {
+          "title": "CalculiX",
+          "path": "calculix/index"
+        },
+        {
           "title": "CanNS",
           "path": "cans/index"
         },

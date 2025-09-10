@@ -1,6 +1,6 @@
 # 🗑️ Clean Up Storage by Condition
 
-As you run more simulations on Inductiva, storage used by failed, outdated, or large tasks can accumulate quickly, potentially [increasing costs](../../basics/how-much-does-it-cost) and cluttering your project space. This guide shows you how to identify and clean up unnecessary storage by:
+As you run more simulations on Inductiva, storage used by failed, outdated, or large tasks can accumulate quickly, potentially <a href="https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost">increasing costs</a> and cluttering your project space. This guide shows you how to identify and clean up unnecessary storage by:
 
 * [Deleting failed](sections/delete-failed-tasks.md)
 * [Deleting old tasks](sections/delete-old-tasks.md)

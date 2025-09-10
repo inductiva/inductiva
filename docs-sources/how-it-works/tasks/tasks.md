@@ -114,7 +114,7 @@ And the metadata can later be retrieved by doing:
 metadata = task.get_metadata()
 ```
 
-You can also manipulate the metadata in the Task's page on the [Web Console](https://console.inductiva.ai/dashboard):
+You can also manipulate the metadata in the Task's page on the [Web Console](https://console.inductiva.ai/tasks):
 
 <div align="center">
    <img src="../_static/task-metadata.png" alt="Task Metadata">

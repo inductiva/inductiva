@@ -29,5 +29,6 @@ task = coawst.run( \
 
 task.wait()
 machine.terminate()
+task.print_summary()
 
 print("\n === Amazing! Your simulation has finished! ===")
