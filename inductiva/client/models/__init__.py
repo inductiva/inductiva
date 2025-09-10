@@ -41,6 +41,7 @@ from inductiva.client.models.executer import Executer
 from inductiva.client.models.file_info import FileInfo
 from inductiva.client.models.gpu_info import GPUInfo
 from inductiva.client.models.http_validation_error import HTTPValidationError
+from inductiva.client.models.last_preemption import LastPreemption
 from inductiva.client.models.machine_filter_options import MachineFilterOptions
 from inductiva.client.models.machine_group_cost_per_hour import MachineGroupCostPerHour
 from inductiva.client.models.machine_group_costs import MachineGroupCosts
@@ -52,6 +53,7 @@ from inductiva.client.models.machine_group_with_costs import MachineGroupWithCos
 from inductiva.client.models.machine_info import MachineInfo
 from inductiva.client.models.machine_operation import MachineOperation
 from inductiva.client.models.machine_operation_type import MachineOperationType
+from inductiva.client.models.machine_preemption_statistics import MachinePreemptionStatistics
 from inductiva.client.models.machine_type import MachineType
 from inductiva.client.models.machine_type_with_spot_price import MachineTypeWithSpotPrice
 from inductiva.client.models.multi_part_export_operation import MultiPartExportOperation
@@ -69,6 +71,7 @@ from inductiva.client.models.project_create import ProjectCreate
 from inductiva.client.models.project_statistics import ProjectStatistics
 from inductiva.client.models.project_type import ProjectType
 from inductiva.client.models.project_update import ProjectUpdate
+from inductiva.client.models.provider_preemption_statistics import ProviderPreemptionStatistics
 from inductiva.client.models.providers import Providers
 from inductiva.client.models.quota import Quota
 from inductiva.client.models.quota_scope import QuotaScope
@@ -145,3 +148,4 @@ from inductiva.client.models.validation_error_loc_inner import ValidationErrorLo
 from inductiva.client.models.version_comparison_result import VersionComparisonResult
 from inductiva.client.models.zip_archive_info import ZipArchiveInfo
 from inductiva.client.models.zip_file_range import ZipFileRange
+from inductiva.client.models.zone_preemption_statistics import ZonePreemptionStatistics
