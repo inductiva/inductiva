@@ -3,6 +3,7 @@ import logging
 from typing import List, Optional, Union
 
 from inductiva import simulators, tasks, types
+from inductiva.commands.commands import Command
 
 
 @simulators.simulator.mpi_enabled
@@ -113,6 +114,12 @@ class QuantumEspresso(simulators.Simulator):
                         "rm -f logs/debug.log"
                     ]
         """
+        for i, command in enumerate(commands):
+            # convert string commands into commands with mpi config with the
+            # default values from the computational resource
+            if (isinstance(command, str) and
+                    not any(x in command for x in ("mpirun", "_openmp"))):
+                commands[i] = Command(command, mpi_config=on.get_mpi_config())
         return super().run(input_dir,
                            on=on,
                            commands=commands,

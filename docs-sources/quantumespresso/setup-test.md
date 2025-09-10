@@ -17,11 +17,6 @@ cloud_machine = inductiva.resources.MachineGroup( \
     machine_type="c2d-highcpu-4",
     spot=True)
 
-mpi_config = MPIConfig( \
-    version="4.1.6",
-    np=2,
-    use_hwthread_cpus=False)
-
 # Download the input files into a folder
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -30,9 +25,7 @@ input_dir = inductiva.utils.download_from_url(
 
 # List of commands to run
 commands = [
-    Command("pw.x -i Al_local_pseudo.in", mpi_config=mpi_config),
-    # openMP command should not be used with MPI
-    "pw_openmp.x -i Al_qe_pseudo.in"
+    "pw.x -i Al_local_pseudo.in"
 ]
 
 # Initialize the Simulator

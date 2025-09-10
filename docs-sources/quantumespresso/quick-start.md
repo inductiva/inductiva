@@ -24,14 +24,9 @@ cloud_machine = inductiva.resources.MachineGroup( \
     machine_type="c2d-highcpu-4",
     spot=True)
 
-mpi_config = MPIConfig( \
-    version="4.1.6",
-    np=4,
-    use_hwthread_cpus=True)
-
 # List of commands to run
 commands = [
-    Command("pw.x -i Al.pw", mpi_config=mpi_config),
+    "pw.x -i Al.pw"
 ]
 
 # Initialize the Simulator
