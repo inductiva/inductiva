@@ -1,8 +1,10 @@
 # Run a Temporal Boundary Layer with Stable Stratification Case
 
-*This tutorial was written by* [Pedro Simões](mailto:P.SimoesCosta@tudelft.nl) *in collaboration with the* **Inductiva Team**
+*This tutorial was written by* **Pedro Simões Costa (TU Delft)** *in collaboration with the* **Inductiva Team**
 
-<br>
+*Special thanks to **Dr. Baptiste Hardy (TU Delft)** for his support in devising this temporal boundary layer setup.*
+
+---
 
 The numerical simulation of a temporally evolving, stably stratified boundary
 layer offers a clear computational sandbox for exploring fundamental fluid
@@ -19,7 +21,7 @@ and parallel to the wall. This asymptotically approximates the development of
 windflow over a surface as it approaches a parallel state, allowing simple
 interpretation of turbulent processes.
 
-Stability plays a crucial role in altering boundary layer dynamics. To better understand its effects, let's examine the types of stratification conditions:
+Stability plays a crucial role in altering boundary layer dynamics [1]. To better understand its effects, let's examine the types of stratification conditions:
 
 - **Neutral stratification** (no vertical temperature gradient) provides a baseline scenario where temperature doesn't affect the wind turbulence dynamics.
 
@@ -31,9 +33,15 @@ Stability plays a crucial role in altering boundary layer dynamics. To better un
 
 - Conversely, in **unstable stratification** (cooler air above warmer air), buoyancy amplifies vertical motions, enhancing turbulence and thickening the boundary layer.
 
+*(not animaned here)*
+
 Simulating these different stratification conditions provides insight into how buoyancy and turbulence interact to shape the wind boundary layer.
 
 This tutorial focuses on simulating **stable stratification**, where warmer air overlies cooler air, as it closely reflects common atmospheric conditions - particularly at night due to radiative cooling of the land surface or during stable weather patterns.
+
+<br>
+
+[1] Nieuwstadt, Frans T.M. *"The turbulent structure of the stable, nocturnal boundary layer."* Journal of Atmospheric Sciences 41.14 (1984): 2202–2216.
 
 ## Simulate Stable Stratification
 
@@ -73,7 +81,7 @@ dims(1:2) = 0, 0, ipencil_axis = 3
 &scalar
 iniscal(:)             = 'tbl'
 alphai(:)              = 710.  ! = Pr/nu = 500 * 0.71
-beta                   = 0. ! = Gr/Re_D^2, Gr = 1e3, Re_D=500
+beta                   = -0.004 ! = Gr/Re_D^2, Gr = 1e3, Re_D=500
 cbcscal(0:1,1:3,:)     = 'P'  ,'P' ,  'P','P',  'D','N'
 bcscal(0:1,1:3,:)      =  0.,0. ,   0.,0. ,   1.,0.
 is_sforced(:)          = F
@@ -108,6 +116,10 @@ to:
 ```
 ng(1:3) = 576, 576, 384
 ```
+
+To simulate neutral or unstable stratification instead of the stable case, simply modify the `beta` parameter in the configuration file:
+- Set `beta = 0` for neutral stratification
+- Set `beta = 0.004` for unstable stratification
 
 ### Running the Simulation
 Here is the code required to run the simulation using the Inductiva API:
