@@ -91,10 +91,13 @@ cloud_machine = inductiva.resources.MachineGroup(
     spot=True)
 
 # Configure MPI settings for the machine
+mpi_config = inductiva.commands.MPIConfig(
+    version="4.1.6",            # MPI version to use
+    np=2,                       # Number of MPI processes
+    use_hwthread_cpus=False)    # Whether to use hyperthreading
+
 cloud_machine.set_mpi_config(
-    mpi_version="4.1.6",      # MPI version to use
-    np=2,                     # Number of MPI processes
-    use_hwthread_cpus=False)   # Whether to use hyperthreading
+    mpi_config = mpi_config)
 ```
 
 In this example, the specified MPI configuration will automatically be applied to all commands that support MPI.
