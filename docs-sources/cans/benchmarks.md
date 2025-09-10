@@ -33,7 +33,9 @@ Below is a detailed comparison of execution times and speed-ups across different
 
 <p align="center"><em>Table 1: Benchmark results on Inductiva</em></p>
 
-To further validate the performance, we calculated the wall-time per time step, per grid cell, per GPU. Each time step in CaNS involves 3 RK3 substeps, with a large Poisson equation being solved at each substep. In this simulation mode of CaNS (with is_impdiff_1d = T set in the configuration file), the expected performance is around 1 nanosecond per grid cell per GPU. These estimates are summarized below:
+To further validate the performance, we calculated the wall-time per time step, per grid cell, per GPU. Each time step in CaNS involves 
+3 RK3 substeps, with a large Poisson equation being solved at each substep. In this simulation mode of CaNS (with `is_impdiff_1d = T` 
+set in the configuration file), the expected performance is around 1 nanosecond per grid cell per GPU. These estimates are summarized below:
 
 | Machine Type    | GPU Type     | GPU Count | Execution Time | Time per Cell-Step × GPUs (s) |
 |-----------------|--------------|-----------|----------------|-------------------------------|
@@ -47,11 +49,16 @@ To further validate the performance, we calculated the wall-time per time step, 
 <p align="center"><em>Table 2: Estimates calculated by Pedro Simões Costa</em></p>
 
 ## Summary
-The benchmark results clearly demonstrate the substantial performance benefits of using higher-end GPUs for CaNS simulations. The best-performing setup, equipped with two **NVIDIA H100** GPUs, achieved a **15.7× speed-up** over the baseline machine with a single NVIDIA L4 GPU, reducing execution time from 25 hours to just 1 hour and 36 minutes.
+The benchmark results clearly demonstrate the substantial performance benefits of using higher-end GPUs for CaNS simulations. 
+The best-performing setup, equipped with two **NVIDIA H100** GPUs, achieved a **15.7× speed-up** over the baseline machine with 
+a single NVIDIA L4 GPU, reducing execution time from 25 hours to just 1 hour and 36 minutes.
 
-These gains, however, are subject to the limits of strong scaling: as GPU count increases while the problem size remains fixed, each GPU handles a smaller workload, leading to reduced occupancy and less-than-linear scaling. 
+These gains, however, are subject to the limits of strong scaling: as GPU count increases while the problem size remains fixed, 
+each GPU handles a smaller workload, leading to reduced occupancy and less-than-linear scaling. 
 
-Comparing the measured execution times (Table 1) with theoretical estimates derived from wall-time per grid cell per GPU (Table 2), we observe strong agreement across all machines. The anticipated performance of approximately 1 nanosecond per cell per GPU was consistently achieved, confirming the robustness and reliability of both the Inductiva platform and the CaNS solver.
+Comparing the measured execution times (Table 1) with theoretical estimates derived from wall-time per grid cell per GPU (Table 2), 
+we observe strong agreement across all machines. The anticipated performance of approximately 1 nanosecond per cell per GPU 
+was consistently achieved, confirming the robustness and reliability of both the Inductiva platform and the CaNS solver.
 
 With Inductiva, you’re able to seamlessly select the hardware that delivers the performance your simulations demand.
 
