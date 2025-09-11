@@ -2,7 +2,7 @@
 
 *This tutorial was written by* **Pedro Costa (TU Delft)** *in collaboration with the* **Inductiva Team**
 
-*Special thanks to **Dr. Baptiste Hardy (TU Delft)** for his support in devising this temporal boundary layer setup.*
+*Special thanks to* **Dr. Baptiste Hardy (TU Delft)** *for his support in devising this temporal boundary layer setup.*
 
 ---
 
@@ -10,26 +10,22 @@ The numerical simulation of a temporally evolving, stably stratified boundary
 layer offers a clear computational sandbox for exploring fundamental fluid
 dynamics relevant to atmospheric wind flows.
 
-Understanding boundary layer physics is critical in atmospheric modeling because
-wind characteristics, turbulence structure, and mixing processes strongly depend
-on boundary layer dynamics. The temporal boundary layer (TBL) setup is useful
-for understanding boundary layer turbulence at high Reynolds numbers typical of
-atmospheric flows. The higher the Reynolds number of a wind flow boundary layer,
-the more "locally parallel" the flow is. The TBL flow consists of a moving bottom
-wall with constant velocity, with turbulence being entrained to the flow vertically
-and parallel to the wall. This asymptotically approximates the development of
-windflow over a surface as it approaches a parallel state, allowing simple
-interpretation of turbulent processes.
+Understanding boundary layer physics is critical in atmospheric modeling because wind characteristics, turbulence structure, 
+and mixing processes strongly depend on boundary layer dynamics. The temporal boundary layer (TBL) setup is useful for understanding
+boundary layer turbulence at high Reynolds numbers typical of atmospheric flows. The higher the Reynolds number 
+of a wind flow boundary layer, the more "locally parallel" the flow is. The TBL flow consists of a moving bottom wall with 
+constant velocity, with turbulence being entrained to the flow vertically and parallel to the wall. This asymptotically approximates 
+the development of windflow over a surface as it approaches a parallel state, allowing simple interpretation of turbulent processes.
 
 Stability plays a crucial role in altering boundary layer dynamics [1]. To better understand its effects, let's examine the types of stratification conditions:
 
 - **Neutral stratification** (no vertical temperature gradient) provides a baseline scenario where temperature doesn't affect the wind turbulence dynamics.
 
-<img src="_static/tempField_neutralTDBL.gif" alt="Demo Animation"/>
+<img src="_static/tempField_neutralTDBL.gif" alt="Neutral Stratification Animation"/>
 
 - In **stable stratification**, temperature decreases with the height (that is, denser air near the surface and lighter air above), and buoyancy suppresses vertical movements, reducing turbulent mixing, and overall boundary layer growth.
 
-<img src="_static/tempField_stableTDBL.gif" alt="Demo Animation"/>
+<img src="_static/tempField_stableTDBL.gif" alt="Stable Stratification Animation"/>
 
 - Conversely, in **unstable stratification** (cooler air above warmer air), buoyancy amplifies vertical motions, enhancing turbulence and thickening the boundary layer.
 

@@ -2,7 +2,7 @@
 
 *Benchmarks conducted by **Inductiva** with technical support from* **Pedro Costa (TU Delft)**
 
-*Special thanks to **Dr. Baptiste Hardy (TU Delft)** for his support in devising this temporal boundary layer setup.*
+*Special thanks to* **Dr. Baptiste Hardy (TU Delft)** *for his support in devising this temporal boundary layer setup.*
 
 ---
 
@@ -13,9 +13,9 @@ We benchmark a temporal boundary layer with stable stratification case, followin
 [tutorial](run-temporal-boundary-layer-case).
 
 ## Results
-The benchmarks cover a range of cloud machines with different GPUs. The reference setup is the most affordable and 
-smallest configuration, featuring 4 virtual CPUs (vCPUs) paired with a single **NVIDIA L4 GPU**. Other configurations that were 
-tested include more powerful machines with increased CPU counts and higher-performance GPUs, such as the **NVIDIA A100** and **H100**, 
+The benchmarks cover a range of cloud machines with different GPUs. The reference setup is the most affordable and smallest 
+configuration, featuring 4 virtual CPUs (vCPUs) paired with a single **NVIDIA L4 GPU**. Other configurations that were tested 
+include more powerful machines with increased CPU counts and higher-performance GPUs, such as the **NVIDIA A100** and **H100**, 
 which allow us to evaluate how scaling hardware resources affects simulation speed.
 
 Below is a detailed comparison of execution times and speed-ups across different machine types:
@@ -31,9 +31,10 @@ Below is a detailed comparison of execution times and speed-ups across different
 
 <p align="center"><em>Table 1: Benchmark results on Inductiva</em></p>
 
-To further validate the performance, we calculated the wall-time per time step, per grid cell, per GPU. Each time step in CaNS involves 
-3 RK3 substeps, with a large Poisson equation being solved at each substep. In this simulation mode of CaNS (with `is_impdiff_1d = T` 
-set in the configuration file), the expected performance is around 1 nanosecond per grid cell per GPU. These estimates are summarized below:
+To further validate the performance, we calculated the wall-time per time step, per grid cell, per GPU. Each time step in CaNS 
+involves 3 RK3 substeps, with a large Poisson equation being solved at each substep. In this simulation mode of CaNS (with 
+`is_impdiff_1d = T` set in the configuration file), the expected performance is around 1 nanosecond per grid cell per GPU. 
+These estimates are summarized below:
 
 | Machine Type    | GPU Type     | GPU Count | Execution Time | Time per Cell-Step × GPUs (s) |
 |-----------------|--------------|-----------|----------------|-------------------------------|
