@@ -286,7 +286,6 @@ class TaskInfo:
                     table_str += (f"\t\t{ascii_char}> {duration:<15} "
                                   f"{sub_item['alias']}\n")
 
-
         table_str += f"\nData:\n{data_metrics_table}\n"
         if self.estimated_computation_cost:
             estimated_cost = format_utils.currency_formatter(
