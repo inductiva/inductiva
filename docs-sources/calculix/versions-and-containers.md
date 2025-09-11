@@ -12,7 +12,7 @@ problems and large-scale industrial models.
 ## Supported Versions
 Inductiva stays up to date with the latest versions of CalculiX. Below is a list of the supported versions, along with their respective release dates:
 
-- **2.22** (May., 2024)
+- **2.22** (May, 2024)
 
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!
