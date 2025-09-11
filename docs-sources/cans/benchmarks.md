@@ -1,8 +1,8 @@
 # GPU Analysis & Results
 
-*Benchmarks conducted by **Inductiva** with technical support from* **Pedro Costa (TU Delft)**
+Benchmarks conducted by **Inductiva** with technical support from **Pedro Costa (TU Delft)**
 
-*Special thanks to* **Dr. Baptiste Hardy (TU Delft)** *for his support in devising this temporal boundary layer setup.*
+*Special thanks to **Dr. Baptiste Hardy (TU Delft)** for his support in devising this temporal boundary layer setup*
 
 ---
 
@@ -20,7 +20,7 @@ which allow us to evaluate how scaling hardware resources affects simulation spe
 
 Below is a detailed comparison of execution times and speed-ups across different machine types:
 
-| Machine Type    | vCPUs | GPU            | GPU Count | Execution Time | Speed-up  | Estimated Cost (USD) |
+| Machine Type    | vCPUs | GPU Type       | GPU Count | Execution Time | Speed-up  | Estimated Cost (USD)  |
 |-----------------|-------|----------------|-----------|----------------|-----------|-----------------------|
 | g2-standard-4   | 4     | NVIDIA L4      | 1         | 25h, 3 min     | Reference | 6.86                  |
 | g2-standard-24  | 24    | NVIDIA L4      | 2         | 15h, 55 min    | 1.57x     | 10.75                 |
@@ -38,12 +38,12 @@ These estimates are summarized below:
 
 | Machine Type    | GPU Type     | GPU Count | Execution Time | Time per Cell-Step × GPUs (s) |
 |-----------------|--------------|-----------|----------------|-------------------------------|
-| g2-standard-4   | NVIDIA L4    | 1         | 25h 3m         | 1.769e-08                     |
-| g2-standard-24  | NVIDIA L4    | 2         | 15h 55m        | 2.247e-08                     |
-| a2-highgpu-1    | NVIDIA A100  | 1         | 4h 44m         | 3.343e-09                     |
-| a2-highgpu-2    | NVIDIA A100  | 2         | 2h 47m         | 3.929e-09                     |
-| a3-highgpu-1    | NVIDIA H100  | 1         | 2h 26m         | 1.719e-09                     |
-| a3-highgpu-2    | NVIDIA H100  | 2         | 1h 36m         | 2.259e-09                     |
+| g2-standard-4   | NVIDIA L4    | 1         | 25h, 3 min     | 1.769e-08                     |
+| g2-standard-24  | NVIDIA L4    | 2         | 15h, 55 min    | 2.247e-08                     |
+| a2-highgpu-1    | NVIDIA A100  | 1         | 4h, 44 min     | 3.343e-09                     |
+| a2-highgpu-2    | NVIDIA A100  | 2         | 2h, 47 min     | 3.929e-09                     |
+| a3-highgpu-1    | NVIDIA H100  | 1         | 2h, 26 min     | 1.719e-09                     |
+| a3-highgpu-2    | NVIDIA H100  | 2         | 1h, 36 min     | 2.259e-09                     |
 
 <p align="center"><em>Table 2: Estimates calculated by Pedro Simões Costa</em></p>
 
