@@ -1,8 +1,8 @@
 # GPU Analysis & Results
 
-*Benchmarks conducted by **Inductiva** with technical support from **Pedro Costa (TU Delft)***
+Benchmarks conducted by **Inductiva** with technical support from **Pedro Costa (TU Delft)**
 
-*Special thanks to **Dr. Baptiste Hardy (TU Delft)** for his support in devising this temporal boundary layer setup.*
+*Special thanks to **Dr. Baptiste Hardy (TU Delft)** for his support in devising this temporal boundary layer setup*
 
 ---
 
