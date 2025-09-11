@@ -2,7 +2,7 @@
 
 *This tutorial was written by* **Pedro Costa (TU Delft)** *in collaboration with the* **Inductiva Team**
 
-*Special thanks to **Dr. Baptiste Hardy (TU Delft)** for his support in devising this temporal boundary layer setup.*
+*Special thanks to* **Dr. Baptiste Hardy (TU Delft)** *for his support in devising this temporal boundary layer setup.*
 
 ---
 
