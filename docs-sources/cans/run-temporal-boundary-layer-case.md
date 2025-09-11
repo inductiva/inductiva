@@ -33,7 +33,7 @@ Stability plays a crucial role in altering boundary layer dynamics [1]. To bette
 
 - Conversely, in **unstable stratification** (cooler air above warmer air), buoyancy amplifies vertical motions, enhancing turbulence and thickening the boundary layer.
 
-*(not animaned here)*
+*(not animated here)*
 
 Simulating these different stratification conditions provides insight into how buoyancy and turbulence interact to shape the wind boundary layer.
 
@@ -51,7 +51,7 @@ following contents:
 
 ```
 &dns
-ng(1:3) = 768, 768, 512
+ng(1:3) = 576, 576, 384
 l(1:3) = 150, 75, 80
 gtype = 2, gr = 2.
 cfl = 0.95, dtmax = 1.e5
@@ -102,19 +102,6 @@ is_poisson_pcr_tdma = F
 &other_options
 is_debug = T, is_timing = T
 /
-```
-
-To reduce the simulation time, we will use a slightly coarser mesh with 25% fewer grid points along each spatial direction 
-compared to the original simulation. To apply this change, update the following line from:
-
-```
-ng(1:3) = 768, 768, 512 
-```
-
-to:
-
-```
-ng(1:3) = 576, 576, 384
 ```
 
 To simulate neutral or unstable stratification instead of the stable case, simply modify the `beta` parameter in the configuration file:
@@ -191,8 +178,6 @@ more powerful machines with minimal changes to your code. Scaling up simply invo
 `machine_type` parameter when allocating the cloud machine.
 
 To explore detailed results, visit our [Benchmarks page](benchmarks).
-
-Stay tunned for more!
 
 ```{banner_small}
 :origin: cans
