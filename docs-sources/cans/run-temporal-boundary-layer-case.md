@@ -25,11 +25,11 @@ Stability plays a crucial role in altering boundary layer dynamics [1]. To bette
 
 - **Neutral stratification** (no vertical temperature gradient) provides a baseline scenario where temperature doesn't affect the wind turbulence dynamics.
 
-<img src="_static/tempField_neutralTDBL.gif" alt="Demo Animation"/>
+<img src="_static/tempField_neutralTDBL.gif" alt="Neutral Stratification Animation"/>
 
 - In **stable stratification**, temperature decreases with the height (that is, denser air near the surface and lighter air above), and buoyancy suppresses vertical movements, reducing turbulent mixing, and overall boundary layer growth.
 
-<img src="_static/tempField_stableTDBL.gif" alt="Demo Animation"/>
+<img src="_static/tempField_stableTDBL.gif" alt="Stable Stratification Animation"/>
 
 - Conversely, in **unstable stratification** (cooler air above warmer air), buoyancy amplifies vertical motions, enhancing turbulence and thickening the boundary layer.
 
