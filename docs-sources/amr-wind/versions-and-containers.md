@@ -6,6 +6,9 @@
 ## Supported Versions
 Inductiva stays up to date with the latest versions of AMR-Wind. Below is a list of the supported versions, along with their respective release dates:
 
+- **3.7.0** (Sep., 2025) - with GPU support
+- **3.6.0** (Jul., 2025) - with GPU support
+- **3.5.0** (Jun., 2025) - with GPU support
 - **3.4.1** (Apr., 2025) - with GPU support
 - **3.4.0** (Feb., 2025) - with GPU support
 - **1.4.0** (Apr., 2024) - with GPU support

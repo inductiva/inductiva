@@ -6,6 +6,7 @@
 ## Supported Versions
 Inductiva stays up to date with the latest versions of CaNS. Below is a list of the supported versions, along with their respective release dates:
 
+- **3.1.0** (Aug., 2025) - with GPU support
 - **3.0.0** (Apr., 2025) - with GPU support
 - **2.4.0** (Jan., 2025) - with GPU support
 - **2.3.4** (Apr., 2024) for CPU

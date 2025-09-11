@@ -1,39 +1,43 @@
 # Run a Temporal Boundary Layer with Stable Stratification Case
 
-*This tutorial was written by* [Pedro Simões](mailto:P.SimoesCosta@tudelft.nl) *in collaboration with the* **Inductiva Team**
+This tutorial was written by **Pedro Costa (TU Delft)** in collaboration with the **Inductiva Team**
 
-<br>
+*Special thanks to **Dr. Baptiste Hardy (TU Delft)** for his support in devising this temporal boundary layer setup*
+
+---
 
 The numerical simulation of a temporally evolving, stably stratified boundary
 layer offers a clear computational sandbox for exploring fundamental fluid
 dynamics relevant to atmospheric wind flows.
 
-Understanding boundary layer physics is critical in atmospheric modeling because
-wind characteristics, turbulence structure, and mixing processes strongly depend
-on boundary layer dynamics. The temporal boundary layer (TBL) setup is useful
-for understanding boundary layer turbulence at high Reynolds numbers typical of
-atmospheric flows. The higher the Reynolds number of a wind flow boundary layer,
-the more "locally parallel" the flow is. The TBL flow consists of a moving bottom
-wall with constant velocity, with turbulence being entrained to the flow vertically
-and parallel to the wall. This asymptotically approximates the development of
-windflow over a surface as it approaches a parallel state, allowing simple
-interpretation of turbulent processes.
+Understanding boundary layer physics is critical in atmospheric modeling because wind characteristics, turbulence structure, 
+and mixing processes strongly depend on boundary layer dynamics. The temporal boundary layer (TBL) setup is useful for understanding
+boundary layer turbulence at high Reynolds numbers typical of atmospheric flows. The higher the Reynolds number 
+of a wind flow boundary layer, the more "locally parallel" the flow is. The TBL flow consists of a moving bottom wall with 
+constant velocity, with turbulence being entrained to the flow vertically and parallel to the wall. This asymptotically approximates 
+the development of windflow over a surface as it approaches a parallel state, allowing simple interpretation of turbulent processes.
 
-Stability plays a crucial role in altering boundary layer dynamics. To better understand its effects, let's examine the types of stratification conditions:
+Stability plays a crucial role in altering boundary layer dynamics [1]. To better understand its effects, let's examine the types of stratification conditions:
 
 - **Neutral stratification** (no vertical temperature gradient) provides a baseline scenario where temperature doesn't affect the wind turbulence dynamics.
 
-<img src="_static/tempField_neutralTDBL_Re1000-13863.gif" alt="Demo Animation"/>
+<img src="_static/tempField_neutralTDBL.gif" alt="Neutral Stratification Animation"/>
 
 - In **stable stratification**, temperature decreases with the height (that is, denser air near the surface and lighter air above), and buoyancy suppresses vertical movements, reducing turbulent mixing, and overall boundary layer growth.
 
-<img src="_static/tempField_neutralTDBL_Re1000-13863.gif" alt="Demo Animation"/>
+<img src="_static/tempField_stableTDBL.gif" alt="Stable Stratification Animation"/>
 
 - Conversely, in **unstable stratification** (cooler air above warmer air), buoyancy amplifies vertical motions, enhancing turbulence and thickening the boundary layer.
+
+*(not animated here)*
 
 Simulating these different stratification conditions provides insight into how buoyancy and turbulence interact to shape the wind boundary layer.
 
 This tutorial focuses on simulating **stable stratification**, where warmer air overlies cooler air, as it closely reflects common atmospheric conditions - particularly at night due to radiative cooling of the land surface or during stable weather patterns.
+
+<br>
+
+[1] Nieuwstadt, Frans T.M. *"The turbulent structure of the stable, nocturnal boundary layer."* Journal of Atmospheric Sciences 41.14 (1984): 2202–2216.
 
 ## Simulate Stable Stratification
 
@@ -43,7 +47,7 @@ following contents:
 
 ```
 &dns
-ng(1:3) = 768, 768, 512
+ng(1:3) = 576, 576, 384
 l(1:3) = 150, 75, 80
 gtype = 2, gr = 2.
 cfl = 0.95, dtmax = 1.e5
@@ -73,7 +77,7 @@ dims(1:2) = 0, 0, ipencil_axis = 3
 &scalar
 iniscal(:)             = 'tbl'
 alphai(:)              = 710.  ! = Pr/nu = 500 * 0.71
-beta                   = 0. ! = Gr/Re_D^2, Gr = 1e3, Re_D=500
+beta                   = -0.004 ! = Gr/Re_D^2, Gr = 1e3, Re_D=500
 cbcscal(0:1,1:3,:)     = 'P'  ,'P' ,  'P','P',  'D','N'
 bcscal(0:1,1:3,:)      =  0.,0. ,   0.,0. ,   1.,0.
 is_sforced(:)          = F
@@ -96,18 +100,9 @@ is_debug = T, is_timing = T
 /
 ```
 
-To reduce the simulation time, we will use a slightly coarser mesh with 25% fewer grid points along each spatial direction 
-compared to the original simulation. To apply this change, update the following line from:
-
-```
-ng(1:3) = 768, 768, 512 
-```
-
-to:
-
-```
-ng(1:3) = 576, 576, 384
-```
+To simulate neutral or unstable stratification instead of the stable case, simply modify the `beta` parameter in the configuration file:
+- Set `beta = 0` for neutral stratification
+- Set `beta = 0.004` for unstable stratification
 
 ### Running the Simulation
 Here is the code required to run the simulation using the Inductiva API:
@@ -179,8 +174,6 @@ more powerful machines with minimal changes to your code. Scaling up simply invo
 `machine_type` parameter when allocating the cloud machine.
 
 To explore detailed results, visit our [Benchmarks page](benchmarks).
-
-Stay tunned for more!
 
 ```{banner_small}
 :origin: cans
