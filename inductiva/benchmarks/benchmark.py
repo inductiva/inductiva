@@ -133,7 +133,7 @@ class Benchmark(projects.Project):
         ))
         return self
 
-    def run(self, num_repeats: int = 2, wait_for_quotas: bool = True) -> Self:
+    def run(self, num_repeats: int = 2, wait_for_quotas: bool = True, resubmit_on_preemption: bool = False ) -> Self:
         """
         Executes all added runs.
 
@@ -148,6 +148,10 @@ class Benchmark(projects.Project):
                 program will actively wait in a loop, periodically sleeping and
                 checking for quotas. If `False`, the program crashes if quotas
                 are not available (default is `True`).
+            resubmit_on_preemption (bool): Resubmit task for execution when
+                previous execution attempts were preempted. Only applicable when
+                using a preemptible resource, i.e., resource instantiated with
+                `spot=True`.
 
         Returns:
             Self: The current instance for method chaining.
@@ -166,7 +170,7 @@ class Benchmark(projects.Project):
                 simulator.run(input_dir=input_dir,
                               on=machine_group,
                               project=self.name,
-                              resubmit_on_preemption=True,
+                              resubmit_on_preemption=resubmit_on_preemption,
                               verbose=self.verbose,
                               **kwargs)
         self.runs.clear()
