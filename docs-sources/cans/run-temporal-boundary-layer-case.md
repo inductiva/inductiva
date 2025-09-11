@@ -10,16 +10,12 @@ The numerical simulation of a temporally evolving, stably stratified boundary
 layer offers a clear computational sandbox for exploring fundamental fluid
 dynamics relevant to atmospheric wind flows.
 
-Understanding boundary layer physics is critical in atmospheric modeling because
-wind characteristics, turbulence structure, and mixing processes strongly depend
-on boundary layer dynamics. The temporal boundary layer (TBL) setup is useful
-for understanding boundary layer turbulence at high Reynolds numbers typical of
-atmospheric flows. The higher the Reynolds number of a wind flow boundary layer,
-the more "locally parallel" the flow is. The TBL flow consists of a moving bottom
-wall with constant velocity, with turbulence being entrained to the flow vertically
-and parallel to the wall. This asymptotically approximates the development of
-windflow over a surface as it approaches a parallel state, allowing simple
-interpretation of turbulent processes.
+Understanding boundary layer physics is critical in atmospheric modeling because wind characteristics, turbulence structure, 
+and mixing processes strongly depend on boundary layer dynamics. The temporal boundary layer (TBL) setup is useful for understanding
+boundary layer turbulence at high Reynolds numbers typical of atmospheric flows. The higher the Reynolds number 
+of a wind flow boundary layer, the more "locally parallel" the flow is. The TBL flow consists of a moving bottom wall with 
+constant velocity, with turbulence being entrained to the flow vertically and parallel to the wall. This asymptotically approximates 
+the development of windflow over a surface as it approaches a parallel state, allowing simple interpretation of turbulent processes.
 
 Stability plays a crucial role in altering boundary layer dynamics [1]. To better understand its effects, let's examine the types of stratification conditions:
 
