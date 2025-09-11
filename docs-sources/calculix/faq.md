@@ -1,19 +1,13 @@
-**Find answers to commonly asked questions about Calculix.**
+**Find answers to commonly asked questions about CalculiX.**
 
 <br>
 
 # FAQ
 
-## 1. I can't use CalculiX GraphiX `cgx`. Why?
+## 1. Why can't I use CalculiX GraphiX (`cgx`)?
+The `cgx` command is not included in the CalculiX container images provided by Inductiva, as it is a graphical user interface (GUI) tool. Our containers are designed for command-line operations only.
 
-The `cgx` command is not available in the CalculiX container images provided by
-Inductiva. This is because `cgx` is a graphical user interface (GUI) tool, and
-our container images are designed for command-line operations only.
-
-Our recommendation is to run any pre-processing or post-processing on your local
-machine using `cgx`, and then use the Inductiva API to run the actual
-simulation on the cloud.
-
+For pre- and post-processing, we recommend using `cgx` on your local machine. Once your setup is complete, you can run the simulation in the cloud using the Inductiva API.
 
 <br>
 <br>

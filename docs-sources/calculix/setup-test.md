@@ -1,12 +1,12 @@
 # Test Your Inductiva Setup
-Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick Calculix simulation — it only takes a few seconds!
+Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick CalculiX simulation — it only takes a few seconds!
 
 ## Step 1: Copy and Run the Code
 
 1. Copy the code below and save it as `example.py` on your Desktop (or in your preferred directory).
 
 ```python
-"""Calculix example"""
+"""CalculiX example"""
 import inductiva
 
 # Instantiate machine group
@@ -60,7 +60,7 @@ python example.py
 
 > **Note**: On some systems, you might need to use `python3` instead of `python`.
 
-All the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. The Calculix simulation will then be sent to a cloud machine for execution.
+All the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. The CalculiX simulation will then be sent to a cloud machine for execution.
 
 ## Step 2: Verify the Task Status
 After the simulation completes, a task summary will be displayed in your terminal, as shown below. 
@@ -85,7 +85,7 @@ Data:
 Estimated computation cost (US$): 0.000046 US$
 ```
 
-If the task status shows **Success**, congratulations! You've successfully run a Calculix simulation.
+If the task status shows **Success**, congratulations! You've successfully run a CalculiX simulation.
 
 This simple example tested your installation on a small machine with just 4 virtual CPUs. Inductiva offers far more powerful options to supercharge your simulations.
 
