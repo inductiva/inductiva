@@ -107,6 +107,7 @@ class TaskInfo:
         self.computation_end_time = None
         self.end_time = None
         self.estimated_computation_cost = None
+        self.extra_params = None
         self.time_metrics = self.TimeMetrics()
         self.data_metrics = self.DataMetrics()
         self.status_history = []
@@ -377,7 +378,6 @@ class Task:
 
     @classmethod
     def from_api_info(cls, info: models.Task) -> "Task":
-
         task = cls(info.task_id)
         task._info = TaskInfo(**info.to_dict())
         task._status = models.TaskStatusCode(info.status)

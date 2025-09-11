@@ -10,6 +10,7 @@ from typing_extensions import Self
 from inductiva import types, resources, projects, simulators, client
 from inductiva.client.models import TaskStatusCode
 from inductiva.projects.project import ProjectType
+from inductiva.resources.machine_groups import MachineGroup
 from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -313,3 +314,23 @@ class Benchmark(projects.Project):
                 logging.warning(api_exception)
 
         return self
+
+    def re_run_preempted(self, simulator):
+        """
+        Will attempt to re-run all the tasks that failed due to preemptions.
+        """
+        # Get all preempted tasks
+        preempted_tasks = self.get_tasks(status="spot-instance-preempted")
+
+        for task in preempted_tasks:
+            # Create MachineGroup
+            mg = MachineGroup(machine_type=task.info.executer.vm_type,data_disk_gb=task.info.executer.memory//1024//1024//1024)
+
+            # Runs the task with the same inputs 
+            simulators.simulator.Simulator.run(simulator,
+                                               input_dir=None,
+                                               remote_assets=f"{task.id}/input",
+                                               project=self.name,
+                                               on=mg, 
+                                               **task.info.extra_params
+                                               )
