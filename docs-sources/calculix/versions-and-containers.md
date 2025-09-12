@@ -1,13 +1,11 @@
 # ⚙️ Versions and Containers
 
 ## About CalculiX
-[CalculiX](https://www.calculix.de/) is an open-source Finite Element Analysis
-(FEA) software package designed for solving structural, thermal, and coupled
-mechanical problems. Inspired by commercial codes like Abaqus, CalculiX supports
-linear and nonlinear static analysis, dynamic analysis, contact problems, and
-heat transfer simulations. It uses an input file format similar to Abaqus,
-making it familiar to many engineers, and can handle both small-scale academic
-problems and large-scale industrial models.
+[CalculiX](https://www.calculix.de/) is an open-source Finite Element Analysis (FEA) software package designed to solve 
+structural, thermal, and coupled mechanical problems. Inspired by commercial codes like Abaqus, CalculiX supports linear 
+and nonlinear static analysis, dynamic simulations, contact mechanics, and heat transfer analysis. It uses an input file 
+format similar to Abaqus, making it familiar to many engineers, and is well-suited for both small-scale academic projects 
+and large-scale industrial models.
 
 ## Supported Versions
 Inductiva stays up to date with the latest versions of CalculiX. Below is a list of the supported versions, along with their respective release dates:
