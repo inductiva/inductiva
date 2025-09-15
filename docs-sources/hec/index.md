@@ -6,14 +6,14 @@ Inductiva simplifies research by making high-performance computing more accessib
 ## What You'll Find Here
 
 ### Tutorials
-Step-by-step guides to help you learn how to run CalculiX through the Inductiva API. From getting started to advanced tutorials, we have you covered.
+Step-by-step guides to help you learn how to run HEC through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
 * **Getting Started**
     - [Test Your Inductiva Setup](setup-test)
     - [Run Your First Simulation](quick-start)
 
 ### Benchmarks
-A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how CalculiX performs on different hardware configurations.
+A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how HEC performs on different hardware configurations.
 
 ```{banner}
 :origin: hec_index

@@ -1,4 +1,4 @@
-**Find answers to commonly asked questions about CalculiX.**
+**Find answers to commonly asked questions about HEC.**
 
 <br>
 
