@@ -92,14 +92,14 @@ html_static_path = ['_static', shared_static_path]
 html_css_files = ['css/custom.css', 'css/banner.css']
 pygments_style = "monokai"
 
-html_title = 'Calculix'
+html_title = 'CalculiX'
 
 # Google Analytics
 googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
 googleanalytics_enabled = True
 
 # OpenGraph protocol
-ogp_site_name = "Inductiva.AI Calculix"
+ogp_site_name = "Inductiva.AI CalculiX"
 ogp_site_url = "https://inductiva.ai/guides/calculix"
 ogp_image = "https://inductiva.ai/builds/calculix/_static/inductiva-social-banner.jpg"
 
