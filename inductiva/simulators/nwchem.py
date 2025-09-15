@@ -85,6 +85,10 @@ class NWChem(simulators.Simulator):
                     ]
         """
 
+        if n_vcpus == 1:
+            raise ValueError("Invalid configuration: n_vcpus must be at least 2"
+                             " (got 1).")
+
         self._input_files_exist(input_dir=input_dir,
                                 remote_assets=remote_assets,
                                 sim_config_filename=sim_config_filename)
