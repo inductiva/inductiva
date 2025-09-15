@@ -4,7 +4,7 @@ import inductiva
 # Allocate Google cloud machine
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c4-highcpu-4")
+    machine_type="c2d-highcpu-4")
 
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
