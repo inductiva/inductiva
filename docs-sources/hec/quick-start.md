@@ -1,39 +1,111 @@
 # Run Your First Simulation
-This tutorial will show you how to run CalculiX simulations using the Inductiva API. 
+This tutorial will show you how to run HEC-RAS simulations using the Inductiva API. 
 
-We will cover the `large stuctural test example` from the [official CalculiX website](https://www.dhondt.de/) to help you get started with simulations.
+We will cover the `Muncie example` from the [official Linux Release Notes](https://www.hec.usace.army.mil/software/hec-ras/documentation/HEC-RAS_66_Linux_Build_Release_Notes.pdf) to help you get started with simulations.
 
 ## Prerequisites
-Download the required files [here](https://www.dhondt.de/ccx_2.22.structest.tar.bz2) and the simulation files will be placed inside the `CalculiX/ccx_2.22/structest` folder. Then, you’ll be ready to send your simulation to the Cloud.
+Download the required files [here](https://www.hec.usace.army.mil/software/hec-ras/downloads/Linux_RAS_v66.zip) and the simulation files will be placed inside the `Linux_RAS_v66/Muncie/wrk_source` folder.
 
-## Running a CalculiX Simulation
-Here is the code required to run a CalculiX simulation using the Inductiva API:
+Before we start there is just one thing you need to do. Copy the
+`Linux_RAS_v66/remove_HDF5_Results_Sed.py` script into the
+`Linux_RAS_v66/Muncie/wrk_source` folder.
+
+### Simulation Workflow in HEC-RAS
+
+This simulation is executed in **six main steps**, each corresponding to a command. Below we explain what each step does and why it is necessary:
+
+1. **Preprocess the Geometry**
+
+   ```bash
+   RasGeomPreprocess Muncie.p04.tmp.hdf x04
+   ```
+
+   This command updates the **hydraulic property tables** in the temporary geometry file (`Muncie.p04.tmp.hdf`). These tables are needed for the unsteady flow simulation to run correctly.
+
+2. **Rename the Geometry File**
+
+   ```bash
+   mv Muncie.p04.tmp.hdf Muncie.p04.hdf
+   ```
+
+   The python script in the next step always produces a file named `*.tmp.hdf`. To avoid errors due to the file already existing we should to do this rename to avoid conflicts.
+
+3. **Remove Results from the HDF5 File**
+
+   ```bash
+   python3 remove_HDF5_Results_Sed.py Muncie.p04.hdf
+   ```
+
+   This script deletes the **results data groups** (for both unsteady flow and unsteady sediment) from the HDF5 file.
+
+   * This cleanup step is necessary because there is currently **no Linux version of the RasUnsteadySediment** program.
+   * Without removing these groups, the unsteady simulation would not start correctly.
+
+4. **Run the Unsteady Flow Simulation**
+
+   ```bash
+   RasUnsteady Muncie.p04.tmp.hdf x04
+   ```
+
+   This command runs the **RAS Unsteady solver**, which performs the unsteady flow calculations based on the geometry and boundary conditions.
+
+   * Again, the solver outputs results into a temporary file named `Muncie.p04.tmp.hdf`.
+
+5. **Rename the Unsteady Output File**
+
+   ```bash
+   mv Muncie.p04.tmp.hdf Muncie.p04.hdf
+   ```
+
+   After the unsteady simulation completes, we rename the output file back to `Muncie.p04.hdf`.
+
+6. **Run the Steady Flow Simulation**
+
+   ```bash
+   RasSteady Muncie.r04
+   ```
+
+   Finally, we run the **RAS Steady solver** using the steady simulation plan file (`Muncie.r04`). This step produces steady flow results for the same system.
+
+## Running a HEC-RAS Simulation
+Here is the code required to run a HEC-RAS simulation using the Inductiva API:
 
 ```python
-"""CalculiX example"""
+"""HEC-RAS example."""
 import inductiva
 
-# Instantiate machine group
+# Allocate Google cloud machine
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
     machine_type="c2d-highcpu-4")
 
 # Initialize the Simulator
-calculix = inductiva.simulators.Calculix( \
-    version="2.22")
+hec_ras = inductiva.simulators.Hec( \
+    distribution="ras",
+    version="6.6",
+    use_dev=True)
 
-# Run simulation with config files in the input directory
-task = calculix.run( \
-    input_dir="/Path/to/structest",
-    sim_config_filename="contact2e.inp",
+# Specify the HEC-RAS commands you want to run, separated by commas
+hec_ras_commands = [
+        'RasGeomPreprocess Muncie.p04.tmp.hdf x04',
+        'mv Muncie.p04.tmp.hdf Muncie.p04.hdf',
+        'python3 remove_HDF5_Results_Sed.py Muncie.p04.hdf',
+        'RasUnsteady Muncie.p04.tmp.hdf x04',
+        'mv Muncie.p04.tmp.hdf Muncie.p04.hdf',
+        'RasSteady Muncie.r04']
+
+# Run simulation
+task = hec_ras.run( \
+    input_dir="/Path/to/wrk_source",,
+    commands=hec_ras_commands,
     on=cloud_machine)
 
+# Wait for the simulation to finish and download the results
 task.wait()
 cloud_machine.terminate()
 
 task.download_outputs()
 
-task.print_summary()
 
 ```
 
@@ -44,8 +116,8 @@ a machine with more virtual CPUs and increased memory capacity. You can explore 
 > **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-To adapt this script for other CalculiX simulations, replace `input_dir` with the
-path to your CalculiX input files and set the `sim_config_filename` accordingly.
+To adapt this script for other HEC-RAS simulations, replace `input_dir` with the
+path to your HEC-RAS input files.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
@@ -53,25 +125,30 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 12/08, 11:29:31      0.86 s
-	In Queue                  at 12/08, 11:29:32      42.632 s
-	Preparing to Compute      at 12/08, 11:30:15      1.404 s
-	In Progress               at 12/08, 11:30:16      353.357 s
-		└> 353.201 s       ccx -i contact2e
-	Finalizing                at 12/08, 11:36:09      0.514 s
-	Success                   at 12/08, 11:36:10      
+	Waiting for Input         at 15/09, 11:13:11      1.244 s
+	In Queue                  at 15/09, 11:13:12      33.81 s
+	Preparing to Compute      at 15/09, 11:13:46      4.372 s
+	In Progress               at 15/09, 11:13:50      39.885 s
+		├> 1.928 s         RasGeomPreprocess Muncie.p04.tmp.hdf x04
+		├> 1.082 s         mv Muncie.p04.tmp.hdf Muncie.p04.hdf
+		├> 1.078 s         python3 remove_HDF5_Results_Sed.py Muncie.p04.hdf
+		├> 31.105 s        RasUnsteady Muncie.p04.tmp.hdf x04
+		├> 1.09 s          mv Muncie.p04.tmp.hdf Muncie.p04.hdf
+		└> 3.082 s         RasSteady Muncie.r04
+	Finalizing                at 15/09, 11:14:30      0.839 s
+	Success                   at 15/09, 11:14:31      
 
 Data:
-	Size of zipped output:    1.41 MB
-	Size of unzipped output:  4.77 MB
+	Size of zipped output:    24.52 MB
+	Size of unzipped output:  36.50 MB
 	Number of output files:   9
 
-Estimated computation cost (US$): 0.0023 US$
+Estimated computation cost (US$): 0.00032 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 5 minutes and 53 seconds.
+the core computation time of this simulation was approximately 40 seconds.
 
 ```{banner_small}
-:origin: calculix_quick_start
+:origin: hec_quick_start
 ```

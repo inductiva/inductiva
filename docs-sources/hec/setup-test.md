@@ -78,20 +78,25 @@ After the simulation completes, a task summary will be displayed in your termina
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 12/08, 09:09:28      1.081 s
-	In Queue                  at 12/08, 09:09:29      58.415 s
-	Preparing to Compute      at 12/08, 09:10:27      1.416 s
-	In Progress               at 12/08, 09:10:29      3.056 s
-		└> 2.864 s         ccx -i hueeber3
-	Finalizing                at 12/08, 09:10:32      0.547 s
-	Success                   at 12/08, 09:10:32      
+	Waiting for Input         at 15/09, 11:13:11      1.244 s
+	In Queue                  at 15/09, 11:13:12      33.81 s
+	Preparing to Compute      at 15/09, 11:13:46      4.372 s
+	In Progress               at 15/09, 11:13:50      39.885 s
+		├> 1.928 s         RasGeomPreprocess Muncie.p04.tmp.hdf x04
+		├> 1.082 s         mv Muncie.p04.tmp.hdf Muncie.p04.hdf
+		├> 1.078 s         python3 remove_HDF5_Results_Sed.py Muncie.p04.hdf
+		├> 31.105 s        RasUnsteady Muncie.p04.tmp.hdf x04
+		├> 1.09 s          mv Muncie.p04.tmp.hdf Muncie.p04.hdf
+		└> 3.082 s         RasSteady Muncie.r04
+	Finalizing                at 15/09, 11:14:30      0.839 s
+	Success                   at 15/09, 11:14:31      
 
 Data:
-	Size of zipped output:    216.18 KB
-	Size of unzipped output:  1.87 MB
-	Number of output files:   8
+	Size of zipped output:    24.52 MB
+	Size of unzipped output:  36.50 MB
+	Number of output files:   9
 
-Estimated computation cost (US$): 0.000046 US$
+Estimated computation cost (US$): 0.00032 US$
 ```
 
 If the task status shows **Success**, congratulations! You've successfully run a HEC-RAS simulation.
