@@ -22,13 +22,17 @@ runtime and makes large-scale studies more efficient and accessible.
 This is where **Inductiva** steps in, allowing you to focus on developing accurate structural models and analysing results, without 
 being constrained by **hardware limitations** or **sequential processing**.
 
+Additionally, Inductiva streamlines simulation management by allowing you to start from a single base case and automatically generate multiple variations through changes to key parameters. This simplifies setting up and running large batches of simulations quickly and effortlessly.
+
 In this tutorial, we walk through a practical example involving a two-storey unreinforced masonry building, representative of the 
-pre-code masonry building stock in the Lisbon metropolitan area.
+pre-code masonry building stock in the Lisbon metropolitan area. To realistically capture seismic demand, we apply 10 intensity levels 
+to 30 different earthquake ground motion records selected from real-world events relevant to the region’s seismic hazard. This results 
+in a total of 300 IDA simulations, all run in parallel to demonstrate efficient large-scale analysis.
 
 All data used in this example was collected as part of the [STAND4HERITAGE](https://stand4heritage.org) project — New STANDards for 
 seismic assessment of built cultural HERITAGE.
 
-<p align="center"><img src="../_static/prototype.jpeg" alt="Prototype" width="700"></p> 
+<p align="center"><img src="../_static/prototype.jpeg" alt="Prototype" width="400"></p> 
 
 The tutorial is divided into the following sections:
 - [Kickstart Your Simulation Workflow](sections/section1)
