@@ -1,8 +1,44 @@
-# Run 50 Simulations in Parallel
-Let's walk through each of the six sections of the simulation script.
+# Run 300 Simulations in Parallel
+Let's walk through each of the seven sections of the simulation script.
 
-## Section 1: Allocating the Cloud Machine Group
-We begin by allocating an **Elastic Machine Group** to run the simulations. This group is configured with a minimum and maximum 
+## Section 1: Defining the Damping Function
+We begin by defining a **damping function** that calculates the coefficients α and β, which are essential for modeling energy dissipation 
+in structural systems.
+
+This function takes as input the periods of two vibration modes and a target damping ratio, then returns coefficients that ensure 
+consistent damping across a range of frequencies.
+
+These coefficients are fundamental in OpenSees simulations, as they enable a realistic representation of how structures lose 
+vibrational energy under dynamic loading.
+
+```python
+# Defining the Damping Function
+def damping(Ti, Tj, ksi):
+    """
+    Calculate damping coefficients alpha and beta.
+
+    Parameters:
+        Ti (float): Period of the first mode.
+        Tj (float): Period of the second mode.
+        ksi (float): Damping ratio.
+
+    Returns:
+        tuple: (alpha, beta) damping coefficients.
+    """
+    fi = 1 / Ti
+    fj = 1 / Tj
+
+    wi = 2 * math.pi * fi
+    wj = 2 * math.pi * fj
+
+    alpha = ksi * 2 * wi * wj / (wi + wj)
+    beta = ksi * 2 / (wi + wj)
+
+    return alpha, beta
+```
+
+## Section 2: Allocating the Cloud Machine Group
+Next, we allocate an **Elastic Machine Group** to run the simulations. This group is configured with a minimum and maximum 
 number of machines, which automatically turn on or off based on workload, ensuring efficient use of resources.
 
 Since some simulations may take longer than others, this elastic setup avoids idle waiting. Once a machine completes its assigned 
@@ -24,7 +60,7 @@ cloud_machine = inductiva.resources.ElasticMachineGroup(
 
 > Learn more about the `ElasticMachineGroup` class [here](https://inductiva.ai/guides/how-it-works/machines/computational_resources/elasticgroup_class).
 
-## Section 2: Project Setup and Simulator Configuration
+## Section 3: Project Setup and Simulator Configuration
 Once the cloud machines are allocated, we move on to defining the simulation inputs and selecting the simulator.
 
 We start by specifying the directory that contains the input files for the analyses.
@@ -36,7 +72,7 @@ To keep simulation data organized and make result handling easier, we group ever
 
 ```python
 # Input files path
-input_dir = r"C:/Path/To/Input/Files"
+input_dir = r"/Path/to/Tutorial/Files"
 
 # Initialize the Simulator
 opensees = inductiva.simulators.OpenSees(
@@ -49,9 +85,8 @@ project_name = "B2_3P_Tutorial"
 
 > Learn more about the `Project` class [here](https://inductiva.ai/guides/scale-up/projects/projects).
 
-## Section 3: Computing Analysis Parameters
-Then, we define the analysis range for the 30 records used in the IDA, along with the corresponding EQfactor values, which denote 
-the level of intensity to scale the ground motion records.
+## Section 4: Computing Analysis Parameters
+Next, we define the analysis range for the 30 ground motion records used in the IDA, along with their corresponding EQfactor values, which represent the intensity scaling levels for each record. For every one of the 30 earthquake records, sourced from events around the world, we apply 10 different intensity levels.
 
 We also define numerical damping, required for non-linear dynamic analyses. Rayleigh damping is specified in OpenSees via the 
 Rayleigh command, which needs two parameters, alpha and beta, based on two fundamental frequencies of the structure. In this example, 
@@ -79,7 +114,7 @@ Tj = 0.04970502055069268 # 6th vibration period
 alpha,beta = dp.damping(Ti, Tj, damping_percentage)
 ```
 
-## Section 4: Initializing the Simulation Loop and `TemplateManager`
+## Section 5: Initializing the Simulation Loop and `TemplateManager`
 This section starts the loops over `analysis_range` and `EQfactor_values`. Each record is scaled to the specified intensity level, 
 meaning the input files are rewritten at each iteration with updated parameters.
 
@@ -109,7 +144,8 @@ for ii in analysis_range:
         print(f"Processing ii={ii}, EQfactor={EQfactor:.2f}")
         max_time = records_duration[ii-1]
 
-        input_dir_folder = "not visible in the PDF draft - ask Daniel"
+        #Place where the rendered simulation files will be placed
+        input_dir_folder = r"/Path/to/Tutorial/Files/inputFiles"
 
         inductiva.TemplateManager.render_dir(
             source_dir=input_files_template,
@@ -124,7 +160,7 @@ for ii in analysis_range:
 
 > Learn more about the `TemplateManager` class [here](https://inductiva.ai/guides/scale-up/parallel-simulations/templating).
 
-## Section 5: Running the Simulations and Assigning Metadata
+## Section 6: Running the Simulations and Assigning Metadata
 Within the loops, each simulation is executed by calling the batch file. Metadata is also defined for each run, capturing 
 information essential for future post-processing.
 
@@ -156,7 +192,7 @@ information essential for future post-processing.
         })
 ```
 
-## Section 6: Monitoring Progress and Downloading Results
+## Section 7: Monitoring Progress and Downloading Results
 In the final stage, we wait for all simulations to complete. Once finished, the output data is automatically downloaded for 
 further analysis, and the cloud machine group is terminated.
 
@@ -166,4 +202,4 @@ inductiva.projects.Project(project_name).download_outputs()
 cloud_machine.terminate()
 ```
 
-Now that we’ve covered each of the six code sections in detail, let’s move on to the final tutorial section to analyze the results.
+Now that we’ve covered each of the seven code sections in detail, let’s move on to the final tutorial section to analyze the results.

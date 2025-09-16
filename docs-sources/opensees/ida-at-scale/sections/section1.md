@@ -5,7 +5,6 @@ To follow this tutorial, either as a hands-on walkthrough or as a reference for 
 the simulation files [here](https://storage.googleapis.com/inductiva-api-demo-files/opensees-tutorials/IDA-at-scale.zip).
 
 The files are organized into three folders to support both pre- and post-processing:
-
 - `inputFiles_template` – contains the FEM model definition and analysis scripts, including the dynamic analysis template 
 (`.jinja` file) that will be modified within the script’s loops
 - `outputFiles` – the directory where the analysis results will be saved
@@ -17,22 +16,53 @@ A record duration file, `records_duration.txt`, is also included and will be rea
 The Python code provided below is designed to run OpenSees simulations on Inductiva’s cloud infrastructure. It is fully adaptable 
 and can be customized for virtually any OpenSees use case.
 
-In this example, we demonstrate how to run **50 Incremental Dynamic Analyses (IDAs) in parallel**, showcasing a typical 
+In this example, we demonstrate how to run **300 Incremental Dynamic Analyses (IDAs) in parallel**, showcasing a typical 
 high-throughput simulation workflow using the **EESD OpenSees distribution**.
 
-The code is divided into six key sections:
-1. Allocating the Cloud Machine Group
-2. Setting Up the Project and Configuring the Simulator
-3. Computing Analysis Parameters
-4. Initializing the Simulation Loop and `TemplateManager`
-5. Running the Simulations and Assigning Metadata
-6. Monitoring Progress and Downloading Results
+The code is divided into seven key sections:
+1. Defining the Damping Function
+2. Allocating the Cloud Machine Group
+3. Setting Up the Project and Configuring the Simulator
+4. Computing Analysis Parameters
+5. Initializing the Simulation Loop and `TemplateManager`
+6. Running the Simulations and Assigning Metadata
+7. Monitoring Progress and Downloading Results
 
 We’ll guide you through each of these sections to help you understand both the structure and flexibility of the workflow.
 
 Copy the code and save it as a Python file - your simulation script - for execution after reviewing the following sections.
 
 ```python
+import numpy as np
+import os
+import shutil
+import inductiva
+import math
+
+# Defining the Damping Function
+def damping(Ti, Tj, ksi):
+    """
+    Calculate damping coefficients alpha and beta.
+
+    Parameters:
+        Ti (float): Period of the first mode.
+        Tj (float): Period of the second mode.
+        ksi (float): Damping ratio.
+
+    Returns:
+        tuple: (alpha, beta) damping coefficients.
+    """
+    fi = 1 / Ti
+    fj = 1 / Tj
+
+    wi = 2 * math.pi * fi
+    wj = 2 * math.pi * fj
+
+    alpha = ksi * 2 * wi * wj / (wi + wj)
+    beta = ksi * 2 / (wi + wj)
+
+    return alpha, beta
+
 # Allocating the Cloud Machine Group
 cloud_machine = inductiva.resources.ElasticMachineGroup(
     provider="GCP",
@@ -41,8 +71,8 @@ cloud_machine = inductiva.resources.ElasticMachineGroup(
     min_machines=1,
     max_machines=50)
 
-# Setting Up the Project and Configuring the Simulator
-input_dir = r"C:/Path/To/Input/Files"
+# Setting up the project and configuring the simulator
+input_dir = r"/Path/to/Tutorial/Files"
 
 opensees = inductiva.simulators.OpenSees(
     interface="eesd",
@@ -63,9 +93,9 @@ damping_percentage = 0.05
 Ti = 0.09970895596567399
 Tj = 0.04970502055069268
 
-alpha,beta = dp.damping(Ti, Tj, damping_percentage)
+alpha,beta = damping(Ti, Tj, damping_percentage)
 
-# Initializing the Simulation Loop and TemplateManager
+# Initializing the simulation loop and TemplateManager
 input_files_template = os.path.join(
     input_dir, "inputFiles_template")
 output_folder = os.path.join(
@@ -84,7 +114,8 @@ for ii in analysis_range:
         print(f"Processing ii={ii}, EQfactor={EQfactor:.2f}")
         max_time = records_duration[ii-1]
 
-        input_dir_folder = "not visible in the PDF draft - ask Daniel"
+        #Directory where the rendered simulation files will be placed
+        input_dir_folder = r"/Path/to/Tutorial/Files/inputFiles"
 
         inductiva.TemplateManager.render_dir(
             source_dir=input_files_template,
@@ -96,7 +127,7 @@ for ii in analysis_range:
             ii=ii,
             max_time=max_time)
 
-        # Running the Simulations and Assigning Metadata
+        # Running the simulations and assigning metadata
         batch_file_path = os.path.join(
             input_dir_folder, "Prototype_b2_3p_batch.tcl")
         shutil.copy(
@@ -119,7 +150,7 @@ for ii in analysis_range:
             "Record_duration": str(max_time),
             "Project_name": project_name})
 
-# Monitoring Progress and Downloading Results
+# Monitoring progress and downloading results
 inductiva.projects.Project(project_name).wait()
 inductiva.projects.Project(project_name).download_outputs()
 cloud_machine.terminate()
