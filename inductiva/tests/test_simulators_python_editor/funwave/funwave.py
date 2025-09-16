@@ -1,6 +1,6 @@
-"""NWChem example."""
+"""FUNWAVE example."""
 from inductiva.resources.machine_groups import MachineGroup
-from inductiva.simulators import NWChem
+from inductiva.simulators import FUNWAVE
 from inductiva.utils import download_from_url
 
 # Instantiate machine group
@@ -11,17 +11,17 @@ machine = MachineGroup( \
 input_dir = download_from_url(
     "https://storage.googleapis.com/"
     "inductiva-api-demo-files/"
-    "nwchem-input-example.zip",
+    "funwave-input-example.zip",
     unzip=True)
 
 # Initialize the Simulator
-nwchem = NWChem( \
-    version="7.2.3")
+funwave = FUNWAVE( \
+    version="3.6")
 
 # Run simulation
-task = nwchem.run( \
+task = funwave.run( \
     input_dir=input_dir,
-    sim_config_filename="h2o_sp_scf.nw",
+    sim_config_filename="input.txt",
     on=machine)
 
 task.wait()

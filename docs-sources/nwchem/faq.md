@@ -36,6 +36,17 @@ task = nwchem.run(
 number of cores on your machine. From there, you can experiment with the value to optimize performance.
 
 <br>
+
+## 2. Why does NWChem fail when I set `n_vcpus=1`?
+
+If NWChem was compiled with the `MPI-PR` (MPI Progress Rank) backend for ARMCI, it requires at least **two MPI ranks** to run.  
+This is because one MPI rank is reserved as a **progress rank** (responsible for handling communication), and the remaining ranks are used for computation.
+
+### What this means for you
+- If you set `n_vcpus=1`, NWChem will fail because there are no compute ranks left after reserving one for progress.
+- The minimum is `n_vcpus=2`: one rank will serve as the progress rank, and the other as the compute rank.
+
+<br>
 <br>
 
 Still can't find what you're looking for? [Contact Us](mailto:support@inductiva.ai)

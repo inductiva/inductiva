@@ -15,12 +15,14 @@ from .amr_wind import AmrWind
 from .octopus import Octopus
 from .delft3d import Delft3D
 from .gromacs import GROMACS
+from .funwave import FUNWAVE
 from .reef3d import REEF3D
 from .xbeach import XBeach
 from .schism import SCHISM
 from .sfincs import SFINCS
 from .nwchem import NWChem
 from .coawst import COAWST
+from .hec import Hec
 from .mohid import MOHID
 from .fvcom import FVCOM
 from .swash import SWASH

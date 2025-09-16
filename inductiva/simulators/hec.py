@@ -1,37 +1,46 @@
-"""NWChem simulator module of the API."""
-
+"""Hydrologic Engineering Center (HEC) module of the API."""
 from typing import Optional, Union
 
 from inductiva import simulators, tasks, types
-from inductiva.commands.commands import Command
-from inductiva.commands.mpiconfig import MPIConfig
 
 
-@simulators.simulator.mpi_enabled
-class NWChem(simulators.Simulator):
-    """Class to invoke a generic NWChem simulation on the API."""
+class Hec(simulators.Simulator):
+    """Class to invoke a generic HEC simulation on the API.
 
-    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
-        """Initialize the NWChem simulator.
+    """
+
+    def __init__(self,
+                 /,
+                 distribution: str = "ras",
+                 version: Optional[str] = None,
+                 use_dev: bool = False):
+        """Initialize the HEC simulator.
 
         Args:
-            version (str): The version of the simulator to use. If None, the
+            distribution (str): Software from HEC to be used. Example: "ras"
+            version (str): The version of the software to use. If None, the
                 latest available version in the platform is used.
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
         """
+
+        self._distribution = distribution.upper()
+
         super().__init__(version=version, use_dev=use_dev)
         self.simulator = "arbitrary_commands"
-        self.simulator_name_alias = "nwchem"
+        self.simulator_name_alias = f"hec_{distribution.lower()}"
+
+    @property
+    def name(self):
+        """Get the name of the simulator."""
+        return "HEC-" + self._distribution
 
     def run(self,
             input_dir: Optional[str],
-            sim_config_filename: str,
+            commands: types.Commands,
             *,
             on: types.ComputationalResources,
-            n_vcpus: Optional[int] = None,
-            use_hwthread: bool = True,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[Union[str, list[str]]] = None,
@@ -43,13 +52,8 @@ class NWChem(simulators.Simulator):
 
         Args:
             input_dir: Path to the directory of the simulation input files.
+            commands: List of commands to run using the HEC simulator.
             on: The computational resource to launch the simulation on.
-            sim_config_filename: Name of the simulation configuration file.
-            n_vcpus: Number of vCPUs to use in the simulation. If not provided
-                (default), all vCPUs will be used.
-            use_hwthread: If specified Open MPI will attempt to discover the
-                number of hardware threads on the node, and use that as the
-                number of slots available.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
@@ -84,31 +88,12 @@ class NWChem(simulators.Simulator):
                         "rm -f logs/debug.log"
                     ]
         """
-
-        if n_vcpus == 1:
-            raise ValueError("Invalid configuration: n_vcpus must be at least 2"
-                             " (got 1).")
-
-        self._input_files_exist(input_dir=input_dir,
-                                remote_assets=remote_assets,
-                                sim_config_filename=sim_config_filename)
-
-        mpi_kwargs = {}
-        mpi_kwargs["use_hwthread_cpus"] = use_hwthread
-        if n_vcpus is not None:
-            mpi_kwargs["np"] = n_vcpus
-
-        mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
-        commands = [
-            Command(f"nwchem {sim_config_filename}", mpi_config=mpi_config)
-        ]
-
         return super().run(input_dir,
                            on=on,
                            commands=commands,
                            storage_dir=storage_dir,
-                           remote_assets=remote_assets,
                            resubmit_on_preemption=resubmit_on_preemption,
+                           remote_assets=remote_assets,
                            project=project,
                            time_to_live=time_to_live,
                            on_finish_cleanup=on_finish_cleanup,

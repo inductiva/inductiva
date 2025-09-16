@@ -1,4 +1,4 @@
-"""NWChem simulator module of the API."""
+"""FUNWAVE simulator module of the API."""
 
 from typing import Optional, Union
 
@@ -8,11 +8,27 @@ from inductiva.commands.mpiconfig import MPIConfig
 
 
 @simulators.simulator.mpi_enabled
-class NWChem(simulators.Simulator):
-    """Class to invoke a generic NWChem simulation on the API."""
+class FUNWAVE(simulators.Simulator):
+    """Class to invoke a generic FUNWAVE simulation on the API."""
+
+    # Saves in which line each flag is (in the Makefile)
+    # Will be used to comment/uncomment the line if the flag is used or not
+    FLAG_TO_LINE_MAP = {
+        "COUPLING": 11,
+        "ZALPHA": 12,
+        "MANNING": 13,
+        "VESSEL": 14,
+        "METEO": 15,
+        "WIND": 16,
+        "SEDIMENT": 17,
+        "CHECK_MASS_CONSERVATION": 18,
+        "TMP": 19,
+        "TRACKING": 20,
+        "DEEP_DRAFT_VESSEL": 21,
+    }
 
     def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
-        """Initialize the NWChem simulator.
+        """Initialize the FUNWAVE simulator.
 
         Args:
             version (str): The version of the simulator to use. If None, the
@@ -23,12 +39,22 @@ class NWChem(simulators.Simulator):
         """
         super().__init__(version=version, use_dev=use_dev)
         self.simulator = "arbitrary_commands"
-        self.simulator_name_alias = "nwchem"
+        self.simulator_name_alias = "funwave"
 
+    # pylint: disable=unused-argument
     def run(self,
             input_dir: Optional[str],
             sim_config_filename: str,
             *,
+            COUPLING: Optional[bool] = False,
+            ZALPHA: Optional[bool] = False,
+            MANNING: Optional[bool] = False,
+            VESSEL: Optional[bool] = False,
+            METEO: Optional[bool] = False,
+            WIND: Optional[bool] = False,
+            SEDIMENT: Optional[bool] = False,
+            CHECK_MASS_CONSERVATION: Optional[bool] = False,
+            TRACKING: Optional[bool] = False,
             on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
@@ -45,6 +71,25 @@ class NWChem(simulators.Simulator):
             input_dir: Path to the directory of the simulation input files.
             on: The computational resource to launch the simulation on.
             sim_config_filename: Name of the simulation configuration file.
+            COUPLING : bool, optional
+                Nesting mode.
+            ZALPHA : bool, optional
+                Activate Z-alpha parameterization for numerical dispersion and
+                nonlinear wave handling.
+            MANNING : bool, optional
+                Use Manning formula for bottom friction.
+            VESSEL : bool, optional
+                Include shipwake module.
+            METEO : bool, optional
+                Include meteo tsunami module.
+            WIND : bool, optional
+                Include wind effect.
+            SEDIMENT : bool, optional
+                Include sediment and morphological module.
+            CHECK_MASS_CONSERVATION : bool, optional
+                Correct mass conservation problem caused by wetting/drying.
+            TRACKING : bool, optional
+                Include Lagrangian tracking module.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
                 (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
@@ -85,10 +130,6 @@ class NWChem(simulators.Simulator):
                     ]
         """
 
-        if n_vcpus == 1:
-            raise ValueError("Invalid configuration: n_vcpus must be at least 2"
-                             " (got 1).")
-
         self._input_files_exist(input_dir=input_dir,
                                 remote_assets=remote_assets,
                                 sim_config_filename=sim_config_filename)
@@ -99,8 +140,22 @@ class NWChem(simulators.Simulator):
             mpi_kwargs["np"] = n_vcpus
 
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
-        commands = [
-            Command(f"nwchem {sim_config_filename}", mpi_config=mpi_config)
+
+        commands = ["cp /FUNWAVE-TVD-Version_3.6/Makefile ."]
+
+        # Add sed commands for flags set to True
+        for flag, line in self.FLAG_TO_LINE_MAP.items():
+            if locals().get(flag, False):
+                # If the flag is true it will remove the comment from the
+                # Makefile according to the line in FLAG_TO_LINE_MAP
+                commands.append(f"sed -i '{line}s/^# *//' Makefile")
+
+        commands += [
+            "make",
+            Command(f"funwave-work/compiled_funwave {sim_config_filename}",
+                    mpi_config=mpi_config),
+            "rm -r funwave-work",
+            "rm Makefile",
         ]
 
         return super().run(input_dir,
