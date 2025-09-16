@@ -29,7 +29,7 @@ Also, `swanrun` expects the simulation file in the `file.swn` format, while
 
 <br>
 
-## 2. Does SWAN support unstructured grids?
+## 2. Is it possible to run UnSWAN (UNstructured mesh SWAN) using Inductiva?
 
 Yes, but only in specific versions.
 

@@ -38,3 +38,12 @@ hidden: true
 setup-test
 quick-start
 ```
+
+```{toctree}
+---
+caption: 🚀 Benchmarks
+maxdepth: 1
+hidden: true
+---
+H2O-512 Benchmark <benchmark-h2o-512>
+```

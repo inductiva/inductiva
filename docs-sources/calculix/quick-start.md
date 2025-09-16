@@ -1,16 +1,16 @@
 # Run Your First Simulation
-This tutorial will show you how to run Calculix simulations using the Inductiva API. 
+This tutorial will show you how to run CalculiX simulations using the Inductiva API. 
 
-We will cover the `large stuctural test example` from the [Official Calculix website](https://www.dhondt.de/) to help you get started with simulations.
+We will cover the `large stuctural test example` from the [official CalculiX website](https://www.dhondt.de/) to help you get started with simulations.
 
 ## Prerequisites
 Download the required files [here](https://www.dhondt.de/ccx_2.22.structest.tar.bz2) and the simulation files will be placed inside the `CalculiX/ccx_2.22/structest` folder. Then, you’ll be ready to send your simulation to the Cloud.
 
-## Running a Calculix Simulation
-Here is the code required to run a Calculix simulation using the Inductiva API:
+## Running a CalculiX Simulation
+Here is the code required to run a CalculiX simulation using the Inductiva API:
 
 ```python
-"""Calculix example"""
+"""CalculiX example"""
 import inductiva
 
 # Instantiate machine group
@@ -44,8 +44,8 @@ a machine with more virtual CPUs and increased memory capacity. You can explore 
 > **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-To adapt this script for other Calculix simulations, replace `input_dir` with the
-path to your Calculix input files and set the `sim_config_filename` accordingly.
+To adapt this script for other CalculiX simulations, replace `input_dir` with the
+path to your CalculiX input files and set the `sim_config_filename` accordingly.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 

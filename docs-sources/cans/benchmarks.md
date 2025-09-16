@@ -31,12 +31,9 @@ Below is a detailed comparison of execution times and speed-ups across different
 
 <p align="center"><em>Table 1: Benchmark results on Inductiva</em></p>
 
-To further validate the performance, we calculated the wall-time per time step, per grid cell, per GPU. Each time step in CaNS 
-involves 3 RK3 substeps, with a large Poisson equation being solved at each substep. In this simulation mode of CaNS (with 
-`is_impdiff_1d = T` set in the configuration file), the expected performance is around 1 nanosecond per grid cell per GPU. 
-These estimates are summarized below:
+To further assess performance, we calculated the scaled time per cell, defined as the wall-clock time multiplied by the number of GPUs and divided by the total number of cells. Each time step in CaNS consists of three RK3 substeps, with a large Poisson equation being solved at each substep. In this simulation mode of CaNS (with `is_impdiff_1d = T` set in the configuration file), the expected scaled time per cell on A100 GPUs is on the order of nanoseconds. These estimates are summarized below:
 
-| Machine Type    | GPU Type     | GPU Count | Execution Time | Time per Cell-Step × GPUs (s) |
+| Machine Type    | GPU Type     | GPU Count | Execution Time | Scaled Time per Cell (s)      |
 |-----------------|--------------|-----------|----------------|-------------------------------|
 | g2-standard-4   | NVIDIA L4    | 1         | 25h, 3 min     | 1.769e-08                     |
 | g2-standard-24  | NVIDIA L4    | 2         | 15h, 55 min    | 2.247e-08                     |
@@ -45,7 +42,7 @@ These estimates are summarized below:
 | a3-highgpu-1    | NVIDIA H100  | 1         | 2h, 26 min     | 1.719e-09                     |
 | a3-highgpu-2    | NVIDIA H100  | 2         | 1h, 36 min     | 2.259e-09                     |
 
-<p align="center"><em>Table 2: Estimates calculated by Pedro Simões Costa</em></p>
+<p align="center"><em>Table 2: Scale time per cell estimates calculated by Pedro Costa</em></p>
 
 ## Summary
 The benchmark results clearly demonstrate the substantial performance benefits of using higher-end GPUs for CaNS simulations. 
