@@ -8,7 +8,7 @@ including HEC-RAS (River Analysis System) and HEC-FDA (Flood Damage Reduction An
 to support water resources planning and decision-making.
 
 ## Supported Versions
-Inductiva stays up to date with the latest versions of HEC sftwares. Below is a
+Inductiva stays up to date with the latest versions of HEC softwares. Below is a
 list of the supported versions, along with their respective release dates:
 
 - HEC-RAS
