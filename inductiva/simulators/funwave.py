@@ -145,7 +145,8 @@ class FUNWAVE(simulators.Simulator):
         # Add sed commands for flags set to True
         for flag, line in self.FLAG_TO_LINE_MAP.items():
             if locals().get(flag, False):
-                print(f"flag {flag} detected")
+                # If the flag is true it will remove the comment from the
+                # Makefile according to the line in FLAG_TO_LINE_MAP
                 commands.append(f"sed -i '{line}s/^# *//' Makefile")
 
         commands += [
