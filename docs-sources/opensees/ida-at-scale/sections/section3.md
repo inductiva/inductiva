@@ -44,7 +44,7 @@ Performing IDAs at this level of detail typically requires significant computati
 
 Inductiva automates the creation of hundreds of simulation configurations by starting from a single base case and programmatically varying key parameters. Simultaneously, it leverages parallel cloud computing to run these simulations across multiple machines at once.
 
-By combining automated setup with scalable execution, a process that would normally take **over 150 hours** sequentially can be completed in just **5 hours and 28 minutes** using 200 `c2d-highcpu-2` machines running in parallel.
+By combining automated setup with scalable execution, a process that would normally take **over 150 hours** sequentially can be completed in just **5 hours and 28 minutes** using 300 `c2d-highcpu-2` machines running in parallel.
 
 This demonstrates how Inductiva can dramatically accelerate large-scale structural simulations, enabling faster insights while making more efficient use of computational resources.
 
