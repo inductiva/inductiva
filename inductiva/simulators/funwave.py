@@ -14,17 +14,17 @@ class FUNWAVE(simulators.Simulator):
     # Saves in which line each flag is (in the Makefile)
     # Will be used to comment/uncomment the line if the flag is used or not
     FLAG_TO_LINE_MAP = {
-        "COUPLING":11,
-        "ZALPHA":12,
-        "MANNING":13,
-        "VESSEL":14,
-        "METEO":15,
-        "WIND":16,
-        "SEDIMENT":17,
-        "CHECK_MASS_CONSERVATION":18,
-        "TMP":19,
-        "TRACKING":20,
-        "DEEP_DRAFT_VESSEL":21,
+        "COUPLING": 11,
+        "ZALPHA": 12,
+        "MANNING": 13,
+        "VESSEL": 14,
+        "METEO": 15,
+        "WIND": 16,
+        "SEDIMENT": 17,
+        "CHECK_MASS_CONSERVATION": 18,
+        "TMP": 19,
+        "TRACKING": 20,
+        "DEEP_DRAFT_VESSEL": 21,
     }
 
     def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
@@ -141,7 +141,7 @@ class FUNWAVE(simulators.Simulator):
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
 
         commands = ["cp /FUNWAVE-TVD-Version_3.6/Makefile ."]
-        
+
         # Add sed commands for flags set to True
         for flag, line in self.FLAG_TO_LINE_MAP.items():
             if locals().get(flag, False):
@@ -150,7 +150,8 @@ class FUNWAVE(simulators.Simulator):
 
         commands += [
             "make",
-            Command(f"funwave-work/compiled_funwave {sim_config_filename}", mpi_config=mpi_config),
+            Command(f"funwave-work/compiled_funwave {sim_config_filename}",
+                    mpi_config=mpi_config),
             "rm -r funwave-work",
             "rm Makefile",
         ]
