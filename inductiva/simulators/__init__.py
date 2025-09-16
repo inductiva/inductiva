@@ -15,6 +15,7 @@ from .amr_wind import AmrWind
 from .octopus import Octopus
 from .delft3d import Delft3D
 from .gromacs import GROMACS
+from .funwave import FUNWAVE
 from .reef3d import REEF3D
 from .xbeach import XBeach
 from .schism import SCHISM
