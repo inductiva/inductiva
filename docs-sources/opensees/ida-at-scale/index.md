@@ -26,8 +26,7 @@ Additionally, Inductiva streamlines simulation management by allowing you to sta
 
 In this tutorial, we walk through a practical example involving a two-storey unreinforced masonry building, representative of the 
 pre-code masonry building stock in the Lisbon metropolitan area. To realistically capture seismic demand, we apply 10 intensity levels 
-to 30 different earthquake ground motion records selected from real-world events relevant to the region’s seismic hazard. This results 
-in a total of 300 IDA simulations, all run in parallel to demonstrate efficient large-scale analysis.
+to 30 different earthquake ground motion records selected from real-world events. This results in a total of 300 IDA simulations, all run in parallel to demonstrate efficient large-scale analysis.
 
 All data used in this example was collected as part of the [STAND4HERITAGE](https://stand4heritage.org) project — New STANDards for 
 seismic assessment of built cultural HERITAGE.
