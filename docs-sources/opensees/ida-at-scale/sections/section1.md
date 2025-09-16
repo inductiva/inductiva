@@ -123,7 +123,7 @@ for ii in analysis_range:
         print(f"Processing ii={ii}, EQfactor={EQfactor:.2f}")
         max_time = records_duration[ii-1]
 
-        #Place where the rendered simulation files will be placed
+        #Folder where the rendered simulation files will be placed
         input_dir_folder = r"/Path/to/Tutorial/Files/inputFiles"
 
         #Render the templates into simulation files with
