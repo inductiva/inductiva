@@ -40,9 +40,12 @@ for each limit state.
 
 Together, these results give a clear and thorough picture of the structure’s performance and reliability during seismic events.
 
-Performing IDAs to this level of detail typically demands significant computational time. However, with Inductiva’s cloud platform, 
-the process is completely transformed. What normally would take **over 150 hours** to run sequentially can be done in just 
-**5 hours and 28 minutes** by running 200 `c2d-highcpu-2` machines in parallel.
+Performing IDAs at this level of detail typically requires significant computational time and manual effort to set up and manage hundreds of simulations. With Inductiva’s cloud platform, however, the entire process is transformed.
 
-This shows how Inductiva can dramatically speed up large-scale structural simulations, helping you get faster insights while 
-using computational resources more efficiently.
+Inductiva automates the creation of hundreds of simulation configurations by starting from a single base case and programmatically varying key parameters. Simultaneously, it leverages parallel cloud computing to run these simulations across multiple machines at once.
+
+By combining automated setup with scalable execution, a process that would normally take **over 150 hours** sequentially can be completed in just **5 hours and 28 minutes** using 200 `c2d-highcpu-2` machines running in parallel.
+
+This demonstrates how Inductiva can dramatically accelerate large-scale structural simulations, enabling faster insights while making more efficient use of computational resources.
+
+
