@@ -12,7 +12,6 @@ These coefficients are fundamental in OpenSees simulations, as they enable a rea
 vibrational energy under dynamic loading.
 
 ```python
-# Defining the Damping Function
 def damping(Ti, Tj, ksi):
     """
     Calculate damping coefficients alpha and beta.
@@ -55,7 +54,7 @@ cloud_machine = inductiva.resources.ElasticMachineGroup(
     machine_type="c2d-highcpu-2",
     spot=True,
     min_machines=1,
-    max_machines=50)
+    max_machines=300)
 ```
 
 > Learn more about the `ElasticMachineGroup` class [here](https://inductiva.ai/guides/how-it-works/machines/computational_resources/elasticgroup_class).
@@ -137,6 +136,7 @@ records_duration_file = os.path.join(
 records_duration = np.loadtxt(
     records_duration_file, delimiter=' ')
 
+# Initializing the Simulation Loop
 # Loop over all combinations of ii and EQfactor
 for ii in analysis_range:
     for EQfactor in EQfactor_values:
@@ -147,6 +147,8 @@ for ii in analysis_range:
         #Place where the rendered simulation files will be placed
         input_dir_folder = r"/Path/to/Tutorial/Files/inputFiles"
 
+        #Render the templates into simulation files with
+        #EQfactor, alpha, beta and ii values replaced
         inductiva.TemplateManager.render_dir(
             source_dir=input_files_template,
             target_dir=input_dir_folder,
@@ -176,7 +178,7 @@ information essential for future post-processing.
         name_batch, ext_batch = os.path.splitext(
             batch_file_name)
         
-        # Run simulation
+        # Running the Simulations
         task = opensees.run(
             input_dir=input_dir,
             sim_config_filename=batch_file_name,
@@ -184,6 +186,7 @@ information essential for future post-processing.
             project=project_name,
             resubmit_on_preemption=True)
         
+        #Assigning Metadata
         task.set_metadata({
             "factor": str(EQfactor),
             "Current_Analysis": str(ii),
@@ -197,6 +200,7 @@ In the final stage, we wait for all simulations to complete. Once finished, the 
 further analysis, and the cloud machine group is terminated.
 
 ```python
+# Monitoring Progress and Downloading Results
 inductiva.projects.Project(project_name).wait()
 inductiva.projects.Project(project_name).download_outputs()
 cloud_machine.terminate()
