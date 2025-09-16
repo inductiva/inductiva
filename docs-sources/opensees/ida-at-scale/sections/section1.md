@@ -39,6 +39,7 @@ import shutil
 import inductiva
 import math
 
+# Defining the Damping Function
 def damping(Ti, Tj, ksi):
     """
     Calculate damping coefficients alpha and beta.

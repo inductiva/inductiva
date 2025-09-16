@@ -12,6 +12,7 @@ These coefficients are fundamental in OpenSees simulations, as they enable a rea
 vibrational energy under dynamic loading.
 
 ```python
+# Defining the Damping Function
 def damping(Ti, Tj, ksi):
     """
     Calculate damping coefficients alpha and beta.
