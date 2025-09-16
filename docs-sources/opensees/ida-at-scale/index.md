@@ -10,8 +10,9 @@ However, applying this method to **unreinforced masonry (URM)** buildings has hi
 1. The **complexity of numerical models** needed to accurately capture URM behavior;
 2. The **computational burden** of executing hundreds or thousands of simulations.
 
-The first challenge is addressed by developing efficient structural models in OpenSees, using three-
-dimensional macroelements to capture the in-plane (IP) and out-of-plane (OOP) mechanisms. These models also account for non-linear floor-to-wall connections and wall-to-wall interlocking.
+The first challenge is addressed by developing efficient structural models in OpenSees, using three-dimensional macroelements 
+to capture the in-plane (IP) and out-of-plane (OOP) mechanisms. These models also account for non-linear floor-to-wall connections 
+and wall-to-wall interlocking.
 
 The second, and often more limiting, challenge lies not only in running a large number of simulations, but also in having the infrastructure required to support them. 
 
