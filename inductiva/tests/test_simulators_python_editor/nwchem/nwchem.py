@@ -22,7 +22,6 @@ nwchem = NWChem( \
 task = nwchem.run( \
     input_dir=input_dir,
     sim_config_filename="h2o_sp_scf.nw",
-    n_vcpus=1,
     on=machine)
 
 task.wait()
