@@ -1,8 +1,18 @@
 # Run 50 Simulations in Parallel
 Let's walk through each of the six sections of the simulation script.
 
-## Section 1: Allocating the Cloud Machine Group
-We begin by allocating an **Elastic Machine Group** to run the simulations. This group is configured with a minimum and maximum 
+## Section 1: Damping function and allocating the Cloud Machine Group
+
+We start by defining the damping function, which calculates the coefficients α
+and β used to model energy dissipation in structural systems.
+This function takes as input the periods of two vibration modes and a target
+damping ratio, and returns coefficients that ensure the damping is distributed
+consistently across frequencies.
+
+These coefficients are fundamental in OpenSees simulations, as they allow us to
+realistically capture how structures lose vibrational energy during dynamic loading.
+
+We then allocate an **Elastic Machine Group** to run the simulations. This group is configured with a minimum and maximum 
 number of machines, which automatically turn on or off based on workload, ensuring efficient use of resources.
 
 Since some simulations may take longer than others, this elastic setup avoids idle waiting. Once a machine completes its assigned 
@@ -13,6 +23,35 @@ To maximize throughput, it’s more efficient to run multiple small machines, su
 CPUs, concurrently. This approach enables high parallelism while keeping resource usage and cost under control.
 
 ```python
+import numpy as np
+import os
+import shutil
+import inductiva
+import math
+
+def damping(Ti, Tj, ksi):
+    """
+    Calculate damping coefficients alpha and beta.
+
+    Parameters:
+        Ti (float): Period of the first mode.
+        Tj (float): Period of the second mode.
+        ksi (float): Damping ratio.
+
+    Returns:
+        tuple: (alpha, beta) damping coefficients.
+    """
+    fi = 1 / Ti
+    fj = 1 / Tj
+
+    wi = 2 * math.pi * fi
+    wj = 2 * math.pi * fj
+
+    alpha = ksi * 2 * wi * wj / (wi + wj)
+    beta = ksi * 2 / (wi + wj)
+
+    return alpha, beta
+
 # Allocate an Elastic Machine Group on Google Cloud Platform
 cloud_machine = inductiva.resources.ElasticMachineGroup(
     provider="GCP",
@@ -36,7 +75,7 @@ To keep simulation data organized and make result handling easier, we group ever
 
 ```python
 # Input files path
-input_dir = r"C:/Path/To/Input/Files"
+input_dir = r"/Path/to/Tutorial/Files"
 
 # Initialize the Simulator
 opensees = inductiva.simulators.OpenSees(
@@ -109,7 +148,8 @@ for ii in analysis_range:
         print(f"Processing ii={ii}, EQfactor={EQfactor:.2f}")
         max_time = records_duration[ii-1]
 
-        input_dir_folder = "not visible in the PDF draft - ask Daniel"
+        #Place where the rendered simulation files will be placed
+        input_dir_folder = r"/Path/to/Tutorial/Files/inputFiles"
 
         inductiva.TemplateManager.render_dir(
             source_dir=input_files_template,

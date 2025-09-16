@@ -33,6 +33,37 @@ We’ll guide you through each of these sections to help you understand both the
 Copy the code and save it as a Python file - your simulation script - for execution after reviewing the following sections.
 
 ```python
+import numpy as np
+import os
+import shutil
+import inductiva
+import math
+
+def damping(Ti, Tj, ksi):
+    """
+    Calculate damping coefficients alpha and beta.
+
+    Parameters:
+        Ti (float): Period of the first mode.
+        Tj (float): Period of the second mode.
+        ksi (float): Damping ratio.
+
+    Returns:
+        tuple: (alpha, beta) damping coefficients.
+    """
+    fi = 1 / Ti
+    fj = 1 / Tj
+
+    wi = 2 * math.pi * fi
+    wj = 2 * math.pi * fj
+
+    alpha = ksi * 2 * wi * wj / (wi + wj)
+    beta = ksi * 2 / (wi + wj)
+
+    return alpha, beta
+
+
+
 # Allocating the Cloud Machine Group
 cloud_machine = inductiva.resources.ElasticMachineGroup(
     provider="GCP",
@@ -42,7 +73,7 @@ cloud_machine = inductiva.resources.ElasticMachineGroup(
     max_machines=50)
 
 # Setting Up the Project and Configuring the Simulator
-input_dir = r"C:/Path/To/Input/Files"
+input_dir = r"/Path/to/Tutorial/Files"
 
 opensees = inductiva.simulators.OpenSees(
     interface="eesd",
@@ -63,7 +94,7 @@ damping_percentage = 0.05
 Ti = 0.09970895596567399
 Tj = 0.04970502055069268
 
-alpha,beta = dp.damping(Ti, Tj, damping_percentage)
+alpha,beta = damping(Ti, Tj, damping_percentage)
 
 # Initializing the Simulation Loop and TemplateManager
 input_files_template = os.path.join(
@@ -84,7 +115,8 @@ for ii in analysis_range:
         print(f"Processing ii={ii}, EQfactor={EQfactor:.2f}")
         max_time = records_duration[ii-1]
 
-        input_dir_folder = "not visible in the PDF draft - ask Daniel"
+        #Place where the rendered simulation files will be placed
+        input_dir_folder = r"/Path/to/Tutorial/Files/inputFiles"
 
         inductiva.TemplateManager.render_dir(
             source_dir=input_files_template,
