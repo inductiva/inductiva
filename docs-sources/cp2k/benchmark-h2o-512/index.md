@@ -1,7 +1,7 @@
 # CP2K Benchmark: H2O-512 Scaling on the Cloud
 
 <p align="right">
-    <small>Last Updated on: 2025-09-09</small>
+    <small>Last Updated on: 2025-09-17</small>
 </p>
 
 ## 📌 Overview
