@@ -16,25 +16,22 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt
-from typing import Any, ClassVar, Dict, List, Union
+from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class CostComponents(BaseModel):
+class OrchestrationCostInfo(BaseModel):
     """
-    CostComponents
+    OrchestrationCostInfo
     """
 
   # noqa: E501
-    compute: Union[StrictFloat, StrictInt]
-    storage: Union[StrictFloat, StrictInt]
-    data_transfer: Union[StrictFloat, StrictInt]
-    task_orchestration: Union[StrictFloat, StrictInt]
-    __properties: ClassVar[List[str]] = [
-        "compute", "storage", "data_transfer", "task_orchestration"
-    ]
+    charged: Union[StrictFloat, StrictInt]
+    undiscounted: Union[StrictFloat, StrictInt]
+    currency: Optional[StrictStr] = 'USD'
+    __properties: ClassVar[List[str]] = ["charged", "undiscounted", "currency"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -53,7 +50,7 @@ class CostComponents(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of CostComponents from a JSON string"""
+        """Create an instance of OrchestrationCostInfo from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -77,7 +74,7 @@ class CostComponents(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of CostComponents from a dict"""
+        """Create an instance of OrchestrationCostInfo from a dict"""
         if obj is None:
             return None
 
@@ -85,9 +82,12 @@ class CostComponents(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "compute": obj.get("compute"),
-            "storage": obj.get("storage"),
-            "data_transfer": obj.get("data_transfer"),
-            "task_orchestration": obj.get("task_orchestration")
+            "charged":
+                obj.get("charged"),
+            "undiscounted":
+                obj.get("undiscounted"),
+            "currency":
+                obj.get("currency")
+                if obj.get("currency") is not None else 'USD'
         })
         return _obj

@@ -19,6 +19,7 @@ import json
 from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from inductiva.client.models.cost_components import CostComponents
+from inductiva.client.models.cost_components_partial import CostComponentsPartial
 from inductiva.client.models.cost_type import CostType
 from typing import Optional, Set
 from typing_extensions import Self
@@ -33,10 +34,12 @@ class CostDetail(BaseModel):
     month: StrictStr
     total: Union[StrictFloat, StrictInt]
     components: CostComponents
+    undiscounted_components: Optional[CostComponentsPartial] = None
     type: CostType
     warning: Optional[StrictStr] = None
     __properties: ClassVar[List[str]] = [
-        "month", "total", "components", "type", "warning"
+        "month", "total", "components", "undiscounted_components", "type",
+        "warning"
     ]
 
     model_config = ConfigDict(
@@ -79,6 +82,16 @@ class CostDetail(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of components
         if self.components:
             _dict['components'] = self.components.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of undiscounted_components
+        if self.undiscounted_components:
+            _dict[
+                'undiscounted_components'] = self.undiscounted_components.to_dict(
+                )
+        # set to None if undiscounted_components (nullable) is None
+        # and model_fields_set contains the field
+        if self.undiscounted_components is None and "undiscounted_components" in self.model_fields_set:
+            _dict['undiscounted_components'] = None
+
         # set to None if warning (nullable) is None
         # and model_fields_set contains the field
         if self.warning is None and "warning" in self.model_fields_set:
@@ -103,6 +116,9 @@ class CostDetail(BaseModel):
             "components":
                 CostComponents.from_dict(obj["components"])
                 if obj.get("components") is not None else None,
+            "undiscounted_components":
+                CostComponentsPartial.from_dict(obj["undiscounted_components"])
+                if obj.get("undiscounted_components") is not None else None,
             "type":
                 obj.get("type"),
             "warning":

@@ -36,6 +36,7 @@ class RegisterVMGroupRequest(BaseModel):
     provider_id: Optional[StrictStr] = 'GCP'
     threads_per_core: Optional[StrictInt] = 2
     disk_size_gb: Optional[StrictInt] = 10
+    disk_auto_delete: Optional[StrictBool] = True
     max_idle_time: Optional[Union[StrictFloat, StrictInt]] = None
     auto_terminate_ts: Optional[datetime] = None
     dynamic_disk_resize_config: Optional[DynamicDiskResizeConfig] = None
@@ -53,10 +54,11 @@ class RegisterVMGroupRequest(BaseModel):
     gpu_name: Optional[StrictStr] = None
     __properties: ClassVar[List[str]] = [
         "machine_type", "name", "provider_id", "threads_per_core",
-        "disk_size_gb", "max_idle_time", "auto_terminate_ts",
-        "dynamic_disk_resize_config", "custom_vm_image", "num_vms", "min_vms",
-        "max_vms", "type", "is_elastic", "spot", "cpu_cores_logical",
-        "cpu_cores_physical", "zone", "gpu_count", "gpu_name"
+        "disk_size_gb", "disk_auto_delete", "max_idle_time",
+        "auto_terminate_ts", "dynamic_disk_resize_config", "custom_vm_image",
+        "num_vms", "min_vms", "max_vms", "type", "is_elastic", "spot",
+        "cpu_cores_logical", "cpu_cores_physical", "zone", "gpu_count",
+        "gpu_name"
     ]
 
     model_config = ConfigDict(
@@ -196,6 +198,9 @@ class RegisterVMGroupRequest(BaseModel):
             "disk_size_gb":
                 obj.get("disk_size_gb")
                 if obj.get("disk_size_gb") is not None else 10,
+            "disk_auto_delete":
+                obj.get("disk_auto_delete")
+                if obj.get("disk_auto_delete") is not None else True,
             "max_idle_time":
                 obj.get("max_idle_time"),
             "auto_terminate_ts":
