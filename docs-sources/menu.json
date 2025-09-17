@@ -44,6 +44,10 @@
           "path": "fds/index"
         },
         {
+          "title": "FUNWAVE",
+          "path": "funwave/index"
+        },
+        {
           "title": "FVCOM",
           "path": "fvcom/index"
         },
