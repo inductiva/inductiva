@@ -56,8 +56,8 @@ For this benchmark, some machine configurations had to be excluded due to insuff
 Regarding the `c2` machine family, only the `standard` configuration was tested, since this is the only option available. `c2` machines do not offer a `highcpu` variant.
 
 See the results of the benchmark on the following pages:
-- [Execution Times Comparison](setup-test)
-- [Cost vs Time](quick-start)
+- [Execution Times Comparison](exec-time)
+- [Cost vs Time](cost-v-time)
 
 ```{toctree}
 :hidden:
