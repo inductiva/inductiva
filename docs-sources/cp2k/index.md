@@ -44,8 +44,8 @@ quick-start
 ```{toctree}
 ---
 caption: 🚀 Benchmarks
-maxdepth: 1
+maxdepth: 2
 hidden: true
 ---
-H2O-512 Benchmark <./benchmark-h2o-512/index>
+H2O-512 Benchmark <benchmark-h2o-512/index>
 ```
