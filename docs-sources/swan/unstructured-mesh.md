@@ -26,6 +26,7 @@ swan = inductiva.simulators.SWAN(\
 # Run simulation
 task = swan.run(input_dir="/Path/to/f32harin",
     sim_config_filename="f32har01.swn",
+	# run unswan
 	command="unswan",
     on=cloud_machine)
 
