@@ -3,7 +3,7 @@
 This plot shows how the total runtime of the simulation varies across different configurations.
 
 ```{raw} html
-:file: ./_static/time_graph.html
+:file: ../_static/time_graph.html
 ```
 
 ```{banner_small}
