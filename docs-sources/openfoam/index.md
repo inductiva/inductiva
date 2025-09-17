@@ -1,17 +1,17 @@
 # Welcome to OpenFOAM at Inductiva
 
-ola
-
 Your resource hub for all things OpenFOAM at Inductiva. Whether you're just starting out or an experienced user, you'll find the resources you need to seamlessly run your OpenFOAM simulations on Cloud machines equipped with hundreds of cores and terabytes of disk space.
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check!
 
-<a href="https://console.inductiva.ai/editor?simulator_name=amr_wind" class="try-playground-button" target="_blank">
-  <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M8 5v14l11-7z"/>
-  </svg>
-  Start simulating now! Try it on Inductiva Python Editor - our online tool for Python development
-</a>
+<div style="margin: 20px 0;">
+  <div style="font-size: 12px; color: #9CA3AF; margin-bottom: 6px;">Try our online Python Editor - write and run OpenFOAM code in your browser</div>
+  <a href="https://console.inductiva.ai/editor?simulator_name=amr_wind" 
+     style="display: block; width: 100%; padding: 16px 24px; font-size: 16px; font-weight: bold; background-color: #2563EB; color: white; text-decoration: none; text-align: center; border-radius: 8px; box-sizing: border-box;"
+     target="_blank">
+    Start Simulating Now
+  </a>
+</div>
 
 ## What You'll Find Here
 
