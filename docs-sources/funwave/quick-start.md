@@ -74,7 +74,6 @@ machine_group = inductiva.resources.MachineGroup(
 funwave = inductiva.simulators.FUNWAVE( \
     version="3.6")
 
-
 task = funwave.run(
     input_dir="/Path/to/work/folder",
     sim_config_filename="input.txt",
