@@ -17,21 +17,21 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt
-from typing import Any, ClassVar, Dict, List, Union
+from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class CostComponents(BaseModel):
+class CostComponentsPartial(BaseModel):
     """
-    CostComponents
+    CostComponentsPartial
     """
 
   # noqa: E501
-    compute: Union[StrictFloat, StrictInt]
-    storage: Union[StrictFloat, StrictInt]
-    data_transfer: Union[StrictFloat, StrictInt]
-    task_orchestration: Union[StrictFloat, StrictInt]
+    compute: Optional[Union[StrictFloat, StrictInt]] = None
+    storage: Optional[Union[StrictFloat, StrictInt]] = None
+    data_transfer: Optional[Union[StrictFloat, StrictInt]] = None
+    task_orchestration: Optional[Union[StrictFloat, StrictInt]] = None
     __properties: ClassVar[List[str]] = [
         "compute", "storage", "data_transfer", "task_orchestration"
     ]
@@ -53,7 +53,7 @@ class CostComponents(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of CostComponents from a JSON string"""
+        """Create an instance of CostComponentsPartial from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -73,11 +73,31 @@ class CostComponents(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if compute (nullable) is None
+        # and model_fields_set contains the field
+        if self.compute is None and "compute" in self.model_fields_set:
+            _dict['compute'] = None
+
+        # set to None if storage (nullable) is None
+        # and model_fields_set contains the field
+        if self.storage is None and "storage" in self.model_fields_set:
+            _dict['storage'] = None
+
+        # set to None if data_transfer (nullable) is None
+        # and model_fields_set contains the field
+        if self.data_transfer is None and "data_transfer" in self.model_fields_set:
+            _dict['data_transfer'] = None
+
+        # set to None if task_orchestration (nullable) is None
+        # and model_fields_set contains the field
+        if self.task_orchestration is None and "task_orchestration" in self.model_fields_set:
+            _dict['task_orchestration'] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of CostComponents from a dict"""
+        """Create an instance of CostComponentsPartial from a dict"""
         if obj is None:
             return None
 
