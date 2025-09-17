@@ -15,6 +15,8 @@ Step-by-step guides to help you learn how to run CP2K through the Inductiva API.
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how CP2K performs on different hardware configurations.
 
+- [H2O-512 Benchmark](./benchmark-h2o-512/index.md)
+
 ```{banner}
 :origin: cp2k
 ```
@@ -45,5 +47,5 @@ caption: 🚀 Benchmarks
 maxdepth: 1
 hidden: true
 ---
-H2O-512 Benchmark <benchmark-h2o-512>
+H2O-512 Benchmark <./benchmark-h2o-512/index>
 ```
