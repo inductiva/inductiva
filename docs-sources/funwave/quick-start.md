@@ -1,64 +1,19 @@
 # Run Your First Simulation
 This tutorial will show you how to run FUNWAVE simulations using the Inductiva API. 
 
-We will cover the `standing_waves` use case from the [BENCHMARK_FUNWAVE GitHub repository](https://github.com/fengyanshi/BENCHMARK_FUNWAVE/tree/master) to help you get started with simulations.
+We will cover the `meteo_tsunami` use case from the [FUNWAVE GitHub repository](https://github.com/fengyanshi/FUNWAVE-TVD/tree/Version_3.6) to help you get started with simulations.
+
+<div align="center">
+  <img src="_static/funwave_animation.gif" alt="Demo Animation" width="400"/>
+</div>
+
 
 
 ## Prerequisites
 
-First, download the required files from the [repository](https://github.com/fengyanshi/BENCHMARK_FUNWAVE/tree/master/standing_waves).
+First, download the required files from the [repository](https://github.com/fengyanshi/FUNWAVE-TVD/releases/tag/Version_3.6).
 
-After downloading, move all the files inside the `initial` folder into the `work` folder.
-
-Your `work` folder should then look like this:
-
-```
-ls -lg
-total 1632
--rw-rw-r--@ 1 staff     178 Nov 10  2024 Grid_Range.out
--rw-rw-r--@ 1 staff   29654 Nov 10  2024 LOG.txt
--rw-rw-r--@ 1 staff    3603 Nov 10  2024 eta0.txt
--rwxr-xr-x@ 1 staff  768584 Nov 10  2024 funwave_ab
--rw-rw-r--@ 1 staff    4987 Sep 17 11:11 input.txt
--rw-rw-r--@ 1 staff      17 Nov 10  2024 stat.txt
--rw-rw-r--@ 1 staff    1750 Nov 10  2024 time_dt.out
--rw-rw-r--@ 1 staff    3603 Nov 10  2024 u0.txt
--rw-rw-r--@ 1 staff    3603 Nov 10  2024 v0.txt
-```
-
----
-
-### Editing the `input.txt` file
-
-Next, we need to update the configuration in `input.txt`:
-
-1. **Set the output folder**
-   Change the results directory to:
-
-   ```
-   RESULT_FOLDER = ./output/
-   ```
-
-2. **Fix the input file paths**
-   Update the following variables to match the files you just copied into the `work` folder:
-
-   ```
-   ETA_FILE = eta0.txt
-   U_FILE   = u0.txt
-   V_FILE   = v0.txt
-   ```
-
-3. **Adjust CPU configuration**
-   To run the simulation on 16 vCPUs, set:
-
-   ```
-   PX = 4
-   PY = 4
-   ```
-
-That’s it! 🎉
-Your setup is now ready, and you have everything needed to run the simulation.
-
+After the download all your simulation files will be in the `FUNWAVE-TVD-Version_3.6/simple_cases/meteo_tsunami` folder.
 
 ## Running a FUNWAVE Simulation
 Here is the code required to run a FUNWAVE simulation using the Inductiva API:
@@ -68,16 +23,17 @@ import inductiva
 
 machine_group = inductiva.resources.MachineGroup(
     provider="GCP",
-    machine_type="c3d-highcpu-16",
+    machine_type="c3d-highcpu-4",
     spot=True)
 
 funwave = inductiva.simulators.FUNWAVE( \
     version="3.6")
 
+
 task = funwave.run(
-    input_dir="/Path/to/work/folder",
+    input_dir="/Path/to/meteo_tsunami",
     sim_config_filename="input.txt",
-    n_vcpus=16,
+    METEO=True,
     on=machine_group)
 
 # Wait for the simulation to finish and download the results
@@ -101,28 +57,58 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 17/09, 11:12:02      0.911 s
-	In Queue                  at 17/09, 11:12:03      35.114 s
-	Preparing to Compute      at 17/09, 11:12:38      9.047 s
-	In Progress               at 17/09, 11:12:47      36.94 s
-		├> 1.082 s         cp /FUNWAVE-TVD-Version_3.6/Makefile .
-		├> 10.089 s        make
-		├> 23.11 s         /opt/openmpi/4.1.6/bin/mpirun --np 16 --use-hwthread-cpus funwave-work/compiled_funwave input.txt
-		├> 1.098 s         rm -r funwave-work
-		└> 1.087 s         rm Makefile
-	Finalizing                at 17/09, 11:13:24      0.59 s
-	Success                   at 17/09, 11:13:24      
+	Waiting for Input         at 17/09, 11:53:28      0.843 s
+	In Queue                  at 17/09, 11:53:29      36.668 s
+	Preparing to Compute      at 17/09, 11:54:06      3.942 s
+	In Progress               at 17/09, 11:54:10      316.143 s
+		├> 1.004 s         cp /FUNWAVE-TVD-Version_3.6/Makefile .
+		├> 1.004 s         sed -i 15s/^# *// Makefile
+		├> 12.09 s         make
+		├> 299.351 s       /opt/openmpi/4.1.6/bin/mpirun --np 4 --use-hwthread-cpus funwave-work/compiled_funwave input.txt
+		├> 1.09 s          rm -r funwave-work
+		└> 1.081 s         rm Makefile
+	Finalizing                at 17/09, 11:59:26      2.311 s
+	Success                   at 17/09, 11:59:28      
 
 Data:
-	Size of zipped output:    847.00 KB
-	Size of unzipped output:  1.77 MB
-	Number of output files:   216
+	Size of zipped output:    75.06 MB
+	Size of unzipped output:  325.32 MB
+	Number of output files:   352
 
-Estimated computation cost (US$): 0.0021 US$
+Estimated computation cost (US$): 0.0038 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 37 seconds.
+the core computation time of this simulation was approximately 5 minutes and 16 seconds.
+
+## Scaling Up Your Simulation
+To run your simulation on a larger machine, you’ll need to make a few small changes to both your `input.txt` file 
+and your Python script.
+
+### Required Changes
+Update the following parameters:
+
+* In `input.txt`:
+	- Set `PX` = 4
+	- Set `PY` = 4
+* In your Python script:
+	- Set `machine_type` = "c3d-highcpu-16"
+	- Set `n_vcpus` = 16
+
+> **Note**: `PX * PY` need to be equal to `n_vcpus`.
+
+That’s all it takes to scale your simulation to a 16 vCPU machine.
+
+### Performance Comparison
+Here are the results of running the same simulation on different machines:
+
+| Machine Type             | vCPUs     | Execution Time             | Estimated Cost (USD) |
+|--------------------------|------------------|------------------|----------------------|
+| **c3d-highcpu-4** | 4               | 5 min, 16s        | 0.0038               |
+| **c3d-highcpu-16** | 16               | 1 min, 52s        | 0.0051               |
+| **c3d-highcpu-60** | 60               | 1 min, 0s       | 0.010                |
+
+With the **Inductiva API**, you can easily scale your FUNWAVE simulations to match your computational demands. Whether you need faster runtimes or lower costs, experimenting with different machine configurations allows you to find the optimal balance for your workflow.
 
 ```{banner_small}
 :origin: funwave-quick-start
