@@ -1,4 +1,6 @@
-# Welcome to OpenFOAM at Inductiva test
+# Welcome to OpenFOAM at Inductiva
+
+ola
 
 Your resource hub for all things OpenFOAM at Inductiva. Whether you're just starting out or an experienced user, you'll find the resources you need to seamlessly run your OpenFOAM simulations on Cloud machines equipped with hundreds of cores and terabytes of disk space.
 
@@ -8,7 +10,7 @@ Inductiva simplifies research by making high-performance computing more accessib
   <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
     <path d="M8 5v14l11-7z"/>
   </svg>
-  Start simulating now! Try it on Inductiva's Python Editor - our online tool for Python development
+  Start simulating now! Try it on Inductiva Python Editor - our online tool for Python development
 </a>
 
 ## What You'll Find Here
