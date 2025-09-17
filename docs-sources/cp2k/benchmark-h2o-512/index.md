@@ -49,11 +49,36 @@ The software versions used in this benchmark were the following:
 | kernel                 | 6.8.0-65-generic                     |
 
 
-## Computational resources tested
+## Computational Resources Tested
 
-For this benchmark, some machine configurations had to be excluded due to insufficient resources. Specifically, we skipped the `c3d-highcpu-16` and `c2d-highcpu-16` configurations because of memory limitations. Tests on our local machines were also omitted for the same reason.
+The benchmark was conducted on the following machine families:
 
-Regarding the `c2` machine family, only the `standard` configuration was tested, since this is the only option available. `c2` machines do not offer a `highcpu` variant.
+### Intel-based
+- **C2**  
+  Intel Xeon Scalable (Cascade Lake)
+
+- **C3**  
+  Intel Xeon Scalable (Sapphire Rapids)
+
+- **C4**  
+  Intel Xeon Scalable (Granite Rapids) — latest generation
+
+### AMD-based
+- **C2D**  
+  AMD EPYC (Rome)
+
+- **C3D**  
+  AMD EPYC (Genoa)
+
+- **C4D**  
+  AMD EPYC (Turin) — latest generation
+
+### Notes on Machine Selection
+- Some configurations were excluded due to **insufficient memory**:  
+  - `c3d-highcpu-16`  
+  - `c2d-highcpu-16`  
+  - local test machines  
+- For the **C2 family**, only the `standard` configuration was tested, as `highcpu` variants are not available.
 
 See the results of the benchmark on the following pages:
 - [Execution Times Comparison](exec-time)
