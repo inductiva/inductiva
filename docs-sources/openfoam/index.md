@@ -7,7 +7,7 @@ Inductiva simplifies research by making high-performance computing more accessib
 <div style="text-align: center; margin: 20px 0;">
   <div style="font-size: 12px; margin-bottom: 6px;">Try our online Python Editor - run OpenFOAM simulations in your browser</div>
   <a href="https://console.inductiva.ai/editor?simulator_name=amr_wind" 
-     style="display: inline-block; width: 55%; padding: 16px 24px; font-size: 14px; font-weight: bold; background-color: var(--playground-button); color: black; text-decoration: none; text-align: center; border-radius: 8px; box-sizing: border-box;"
+     style="display: inline-block; width: 55%; padding: 16px 24px; font-size: 14px; font-weight: bold; background-color: var(--playground-button); color: black; text-align: center; border-radius: 8px;"
      target="_blank">
     Start Simulating Now
   </a>
