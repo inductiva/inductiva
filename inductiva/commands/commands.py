@@ -88,3 +88,37 @@ class Command:
             if isinstance(cmd, Command) else Command(cmd).to_dict()
             for cmd in commands
         ]
+    
+    @classmethod
+    def dicts_to_commands(cls, dicts: list[Dict]) -> list["Command"]:
+        """
+        Convert a list of dictionaries into a list of Command objects.
+
+        Args:
+            dicts: List of dictionaries, each representing a command.
+
+        Returns:
+            List of Command objects.
+
+        Example:
+        >>> dicts = [
+        ...   {"cmd": "gmx pdb2gmx -f protein.pdb", "prompts": ["y", "y"]},
+        ...   {"cmd": "terminate", "prompts": []}
+        ... ]
+        >>> Command.dicts_to_commands(dicts)
+        [Command("gmx pdb2gmx -f protein.pdb", "y", "y"),
+         Command("terminate")]
+        """
+        commands = []
+        for d in dicts:
+            cmd = d.get("cmd")
+            prompts = d.get("prompts", [])
+            mpi_config = d.get("mpi_config")
+            env = d.get("env", {})
+
+            if mpi_config is not None:
+                mpi_config = MPIConfig.from_dict(mpi_config)
+
+            commands.append(cls(cmd, *prompts, mpi_config=mpi_config, env=env))
+
+        return commands

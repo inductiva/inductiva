@@ -12,6 +12,7 @@ from inductiva.client.models import TaskStatusCode
 from inductiva.projects.project import ProjectType
 from inductiva.resources.machine_groups import MachineGroup
 from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
+import inductiva
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -134,7 +135,10 @@ class Benchmark(projects.Project):
         ))
         return self
 
-    def run(self, num_repeats: int = 2, wait_for_quotas: bool = True, resubmit_on_preemption: bool = False ) -> Self:
+    def run(self,
+            num_repeats: int = 2,
+            wait_for_quotas: bool = True,
+            resubmit_on_preemption: bool = False) -> Self:
         """
         Executes all added runs.
 
@@ -324,13 +328,26 @@ class Benchmark(projects.Project):
 
         for task in preempted_tasks:
             # Create MachineGroup
-            mg = MachineGroup(machine_type=task.info.executer.vm_type,data_disk_gb=task.info.executer.memory//1024//1024//1024)
+            mg = MachineGroup(machine_type=task.info.executer.vm_type,
+                              data_disk_gb=task.info.executer.memory // 1024 //
+                              1024 // 1024)
 
-            # Runs the task with the same inputs 
-            simulators.simulator.Simulator.run(simulator,
-                                               input_dir=None,
-                                               remote_assets=f"{task.id}/input",
-                                               project=self.name,
-                                               on=mg, 
-                                               **task.info.extra_params
-                                               )
+            dict_commands = task.info.extra_params["commands"]
+
+            list_of_commands = inductiva.commands.Command.dicts_to_commands(
+                dict_commands)
+
+            #Copy the simulation files from the task id folder
+            #To my current folder
+            # list_of_commands = [f"cp -a {task.id}/. ."] + list_of_commands
+            list_of_commands = ["ls"] + list_of_commands
+            task.info.extra_params["commands"] = list_of_commands
+
+            # Runs the task with the same inputs
+            simulators.simulator.Simulator.run(
+                simulator,
+                input_dir=None,
+                remote_assets=f"{task.id}/input.zip",
+                project=self.name + "test_new_branch",
+                on=mg,
+                **task.info.extra_params)

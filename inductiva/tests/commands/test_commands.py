@@ -3,6 +3,7 @@ import pytest
 from pytest import mark
 
 from inductiva import commands
+from inductiva.commands import Command
 from inductiva.commands.mpiconfig import MPIConfig
 
 
@@ -99,3 +100,57 @@ def test_to_dict__mpi_config_is_none():
         "mpi_config": None,
         "env": {}
     }
+
+
+def test_to_dict_and_from_dict_roundtrip():
+    cfg = MPIConfig("4.1.6", np=4, use_hwthread_cpus=True)
+
+    d = cfg.to_dict()
+    assert d["version"] == "4.1.6"
+    assert d["options"] == {"np": 4, "use-hwthread-cpus": True}
+
+    # Round-trip check
+    cfg2 = MPIConfig.from_dict(d)
+    assert cfg2.version == "4.1.6"
+    assert cfg2.options == {"np": 4, "use_hwthread_cpus": True}
+
+def test_from_dict_handles_missing_options():
+    d = {"version": "1.10.7"}
+    cfg = MPIConfig.from_dict(d)
+    assert cfg.version == "1.10.7"
+    assert cfg.options == {}
+
+def test_dicts_to_commands_basic():
+    dicts = [
+        {"cmd": "gmx pdb2gmx -f protein.pdb", "prompts": ["y", "y"]},
+        {"cmd": "terminate", "prompts": []},
+    ]
+
+    cmds = Command.dicts_to_commands(dicts)
+
+    assert len(cmds) == 2
+    assert isinstance(cmds[0], Command)
+    assert cmds[0].cmd == "gmx pdb2gmx -f protein.pdb"
+    assert cmds[0].prompts == ["y", "y"]
+    assert cmds[1].cmd == "terminate"
+    assert cmds[1].prompts == []
+
+def test_dicts_to_commands_with_mpi_config():
+    d = [
+        {
+            "cmd": "mpirun myprog",
+            "prompts": [],
+            "mpi_config": {
+                "version": "4.1.6",
+                "options": {"np": 2, "use-hwthread-cpus": True},
+            },
+        }
+    ]
+
+    cmds = Command.dicts_to_commands(d)
+    cmd = cmds[0]
+
+    assert cmd.cmd == "mpirun myprog"
+    assert isinstance(cmd.mpi_config, MPIConfig)
+    assert cmd.mpi_config.version == "4.1.6"
+    assert cmd.mpi_config.options == {"np": 2, "use_hwthread_cpus": True}
