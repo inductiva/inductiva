@@ -1,6 +1,6 @@
-"""Calculix example"""
+"""CalculiX example"""
 from inductiva.resources.machine_groups import MachineGroup
-from inductiva.simulators import Calculix
+from inductiva.simulators import CalculiX
 from inductiva.utils import download_from_url
 
 # Instantiate machine group
@@ -15,7 +15,7 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-calculix = Calculix( \
+calculix = CalculiX( \
     version="2.22")
 
 # Run simulation

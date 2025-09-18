@@ -1,40 +1,32 @@
-"""Hydrologic Engineering Center (HEC) module of the API."""
+"""HEC-RAS module of the API."""
 from typing import Optional, Union
 
 from inductiva import simulators, tasks, types
 
 
-class Hec(simulators.Simulator):
-    """Class to invoke a generic HEC simulation on the API.
+class HecRas(simulators.Simulator):
+    """Class to invoke a generic HEC-RAS simulation on the API.
 
     """
 
-    def __init__(self,
-                 /,
-                 distribution: str = "ras",
-                 version: Optional[str] = None,
-                 use_dev: bool = False):
+    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
         """Initialize the HEC simulator.
 
         Args:
-            distribution (str): Software from HEC to be used. Example: "ras"
             version (str): The version of the software to use. If None, the
                 latest available version in the platform is used.
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
         """
-
-        self._distribution = distribution.upper()
-
         super().__init__(version=version, use_dev=use_dev)
         self.simulator = "arbitrary_commands"
-        self.simulator_name_alias = f"hec_{distribution.lower()}"
+        self.simulator_name_alias = "hec_ras"
 
     @property
     def name(self):
         """Get the name of the simulator."""
-        return "HEC-" + self._distribution
+        return "HEC-RAS"
 
     def run(self,
             input_dir: Optional[str],
@@ -52,7 +44,7 @@ class Hec(simulators.Simulator):
 
         Args:
             input_dir: Path to the directory of the simulation input files.
-            commands: List of commands to run using the HEC simulator.
+            commands: List of commands to run using the HEC-RAS simulator.
             on: The computational resource to launch the simulation on.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when

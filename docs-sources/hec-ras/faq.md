@@ -1,4 +1,4 @@
-**Find answers to commonly asked questions about HEC.**
+**Find answers to commonly asked questions about HEC-RAS.**
 
 <br>
 

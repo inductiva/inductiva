@@ -1,16 +1,16 @@
-"""Calculix module of the API for numerical simulations of fluid flows."""
+"""CalculiX module of the API for numerical simulations of fluid flows."""
 from typing import Optional, Union
 
 from inductiva import simulators, tasks, types
 from inductiva.commands import Command
 
 
-class Calculix(simulators.Simulator):
-    """Class to invoke a generic Calculix simulation on the API.
+class CalculiX(simulators.Simulator):
+    """Class to invoke a generic CalculiX simulation on the API.
     """
 
     def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
-        """Initialize the Calculix simulator.
+        """Initialize the CalculiX simulator.
 
         Args:
             version (str): The version of the simulator to use. If None, the

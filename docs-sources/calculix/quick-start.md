@@ -19,7 +19,7 @@ cloud_machine = inductiva.resources.MachineGroup( \
     machine_type="c2d-highcpu-4")
 
 # Initialize the Simulator
-calculix = inductiva.simulators.Calculix( \
+calculix = inductiva.simulators.CalculiX( \
     version="2.22")
 
 # Run simulation with config files in the input directory
