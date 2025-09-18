@@ -21,8 +21,7 @@ input_dir = inductiva.utils.download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-hec_ras = inductiva.simulators.Hec( \
-    distribution="ras",
+hec_ras = inductiva.simulators.HecRas( \
     version="6.6")
 
 # Specify the HEC-RAS commands you want to run, separated by commas
@@ -104,7 +103,7 @@ If the task status shows **Success**, congratulations! You've successfully run a
 This simple example tested your installation on a small machine with just 4 virtual CPUs. Inductiva offers far more powerful options to supercharge your simulations.
 
 ```{banner_small}
-:origin: hec_setup_test
+:origin: hec-ras_setup_test
 ```
 
 ## Need Help?

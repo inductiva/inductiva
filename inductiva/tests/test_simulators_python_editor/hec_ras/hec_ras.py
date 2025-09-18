@@ -1,6 +1,6 @@
 """HEC-RAS example."""
 from inductiva.resources.machine_groups import MachineGroup
-from inductiva.simulators import Hec
+from inductiva.simulators import HecRas
 from inductiva.utils import download_from_url
 
 # Allocate Google cloud machine
@@ -15,8 +15,8 @@ input_dir = download_from_url(
     unzip=True)
 
 # Initialize the Simulator
-hec_ras = Hec( \
-    distribution="ras")
+hec_ras = HecRas( \
+    version="6.6")
 
 # Specify the HEC-RAS commands you want to run, separated by commas
 hec_ras_commands = [

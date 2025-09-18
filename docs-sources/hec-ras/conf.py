@@ -92,22 +92,22 @@ html_static_path = ['_static', shared_static_path]
 html_css_files = ['css/custom.css', 'css/banner.css']
 pygments_style = "monokai"
 
-html_title = 'HEC'
+html_title = 'HEC-RAS'
 
 # Google Analytics
 googleanalytics_id = os.getenv("GTAG_WEBSITE", "GTM-K343XQD7")
 googleanalytics_enabled = True
 
 # OpenGraph protocol
-ogp_site_name = "Inductiva.AI HEC"
-ogp_site_url = "https://inductiva.ai/guides/hec"
-ogp_image = "https://inductiva.ai/builds/hec/_static/inductiva-social-banner.jpg"
+ogp_site_name = "Inductiva.AI HEC-RAS"
+ogp_site_url = "https://inductiva.ai/guides/hec-ras"
+ogp_image = "https://inductiva.ai/builds/hec-ras/_static/inductiva-social-banner.jpg"
 
 # sitemap.xml
 # See https://sphinx-sitemap.readthedocs.io/
 language = 'en'
 version = 'local'
-html_baseurl = 'https://inductiva.ai/guides/hec'
+html_baseurl = 'https://inductiva.ai/guides/hec-ras'
 
 #save into static a js with the env var with the GTM code for the corrent env
 #prod or dev

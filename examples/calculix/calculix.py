@@ -1,4 +1,4 @@
-"""Calculix example"""
+"""CalculiX example"""
 import inductiva
 
 # Instantiate machine group
@@ -7,7 +7,7 @@ cloud_machine = inductiva.resources.MachineGroup( \
     machine_type="c3d-highcpu-180")
 
 # Initialize the Simulator
-calculix = inductiva.simulators.Calculix( \
+calculix = inductiva.simulators.CalculiX( \
     version="2.22")
 
 # Run simulation with config files in the input directory

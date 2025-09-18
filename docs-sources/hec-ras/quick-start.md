@@ -80,10 +80,8 @@ cloud_machine = inductiva.resources.MachineGroup( \
     machine_type="c2d-highcpu-4")
 
 # Initialize the Simulator
-hec_ras = inductiva.simulators.Hec( \
-    distribution="ras",
-    version="6.6",
-    use_dev=True)
+hec_ras = inductiva.simulators.HecRas( \
+    version="6.6")
 
 # Specify the HEC-RAS commands you want to run, separated by commas
 hec_ras_commands = [
@@ -150,5 +148,5 @@ As you can see in the "In Progress" line, the part of the timeline that represen
 the core computation time of this simulation was approximately 40 seconds.
 
 ```{banner_small}
-:origin: hec_quick_start
+:origin: hec-ras_quick_start
 ```
