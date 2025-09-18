@@ -9,10 +9,7 @@ class HecRas(simulators.Simulator):
 
     """
 
-    def __init__(self,
-                 /,
-                 version: Optional[str] = None,
-                 use_dev: bool = False):
+    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
         """Initialize the HEC simulator.
 
         Args:
