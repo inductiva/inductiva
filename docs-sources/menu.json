@@ -40,6 +40,10 @@
           "path": "dualsphysics/index"
         },
         {
+          "title": "Elmer",
+          "path": "elmer/index"
+        },
+        {
           "title": "FDS",
           "path": "fds/index"
         },
