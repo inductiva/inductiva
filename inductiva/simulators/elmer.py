@@ -10,10 +10,7 @@ class Elmer(simulators.Simulator):
     """Class to invoke a generic Elmer simulation on the API.
     """
 
-    def __init__(self,
-                 /,
-                 version: Optional[str] = None,
-                 use_dev: bool = False):
+    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
         """Initialize the Elmer simulator.
 
         Args:
@@ -100,7 +97,9 @@ class Elmer(simulators.Simulator):
         for i, command in enumerate(commands):
             # Add mpirun if command is a string, contains 'ElmerSolver_mpi', and
             # does not already contain 'mpirun'
-            if isinstance(command, str) and "ElmerSolver_mpi" in command and "mpirun" not in command:
+            if isinstance(
+                    command, str
+            ) and "ElmerSolver_mpi" in command and "mpirun" not in command:
                 commands[i] = Command(command, mpi_config=on.get_mpi_config())
 
         return super().run(input_dir,
