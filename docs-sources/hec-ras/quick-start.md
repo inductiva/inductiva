@@ -1,18 +1,17 @@
 # Run Your First Simulation
 This tutorial will show you how to run HEC-RAS simulations using the Inductiva API. 
 
-We will cover the `Muncie example` from the [official Linux Release Notes](https://www.hec.usace.army.mil/software/hec-ras/documentation/HEC-RAS_66_Linux_Build_Release_Notes.pdf) to help you get started with simulations.
+We will cover the `Muncie Test` from the [HEC-RAS Linux Release Notes](https://www.hec.usace.army.mil/software/hec-ras/documentation/HEC-RAS_66_Linux_Build_Release_Notes.pdf) to help you get started with simulations.
 
 ## Prerequisites
-Download the required files [here](https://www.hec.usace.army.mil/software/hec-ras/downloads/Linux_RAS_v66.zip) and the simulation files will be placed inside the `Linux_RAS_v66/Muncie/wrk_source` folder.
+Download the required files [here](https://www.hec.usace.army.mil/software/hec-ras/downloads/Linux_RAS_v66.zip). The simulation files will be placed inside the `Linux_RAS_v66/Muncie/wrk_source` folder.
 
-Before we start there is just one thing you need to do. Copy the
+Before we begin, there's one more step: copy the
 `Linux_RAS_v66/remove_HDF5_Results_Sed.py` script into the
 `Linux_RAS_v66/Muncie/wrk_source` folder.
 
-### Simulation Workflow in HEC-RAS
-
-This simulation is executed in **six main steps**, each corresponding to a command. Below we explain what each step does and why it is necessary:
+## Simulation Workflow in HEC-RAS
+This simulation is executed in **six main steps**, each corresponding to a command. Below is an explanation of what each step does and why it’s necessary.
 
 1. **Preprocess the Geometry**
 
@@ -20,7 +19,7 @@ This simulation is executed in **six main steps**, each corresponding to a comma
    RasGeomPreprocess Muncie.p04.tmp.hdf x04
    ```
 
-   This command updates the **hydraulic property tables** in the temporary geometry file (`Muncie.p04.tmp.hdf`). These tables are needed for the unsteady flow simulation to run correctly.
+   This command updates the **hydraulic property tables** in the temporary geometry file (`Muncie.p04.tmp.hdf`). These tables are essential for running the unsteady flow simulation properly.
 
 2. **Rename the Geometry File**
 
@@ -28,7 +27,7 @@ This simulation is executed in **six main steps**, each corresponding to a comma
    mv Muncie.p04.tmp.hdf Muncie.p04.hdf
    ```
 
-   The python script in the next step always produces a file named `*.tmp.hdf`. To avoid errors due to the file already existing we should to do this rename to avoid conflicts.
+   The Python script in the next step always generates a file named `*.tmp.hdf`. To avoid conflicts with existing files, we rename the geometry file to `Muncie.p04.hdf`.
 
 3. **Remove Results from the HDF5 File**
 
@@ -38,18 +37,15 @@ This simulation is executed in **six main steps**, each corresponding to a comma
 
    This script deletes the **results data groups** (for both unsteady flow and unsteady sediment) from the HDF5 file.
 
-   * This cleanup step is necessary because there is currently **no Linux version of the RasUnsteadySediment** program.
-   * Without removing these groups, the unsteady simulation would not start correctly.
-
+   This cleanup step is necessary because there is currently **no Linux version** of the `RasUnsteadySediment` program. If these groups are not removed, the unsteady simulation will fail to start correctly.
+   
 4. **Run the Unsteady Flow Simulation**
 
    ```bash
    RasUnsteady Muncie.p04.tmp.hdf x04
    ```
 
-   This command runs the **RAS Unsteady solver**, which performs the unsteady flow calculations based on the geometry and boundary conditions.
-
-   * Again, the solver outputs results into a temporary file named `Muncie.p04.tmp.hdf`.
+   This command runs the **RAS Unsteady solver**, which performs the unsteady flow calculations based on the geometry and boundary conditions. As before, the solver outputs the results to a temporary file named `Muncie.p04.tmp.hdf`.
 
 5. **Rename the Unsteady Output File**
 
@@ -65,7 +61,7 @@ This simulation is executed in **six main steps**, each corresponding to a comma
    RasSteady Muncie.r04
    ```
 
-   Finally, we run the **RAS Steady solver** using the steady simulation plan file (`Muncie.r04`). This step produces steady flow results for the same system.
+   Finally, we run the **RAS Steady solver** using the steady simulation plan file (`Muncie.r04`). This step generates steady flow results for the same system.
 
 ## Running a HEC-RAS Simulation
 Here is the code required to run a HEC-RAS simulation using the Inductiva API:
@@ -103,8 +99,6 @@ task.wait()
 cloud_machine.terminate()
 
 task.download_outputs()
-
-
 ```
 
 In this basic example, we're using a cloud machine (`c2d-highcpu-4`) equipped with 4 virtual CPUs. 
@@ -144,8 +138,8 @@ Data:
 Estimated computation cost (US$): 0.00032 US$
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 40 seconds.
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of 
+the simulation, the core computation time of this simulation was approximately 40 seconds.
 
 ```{banner_small}
 :origin: hec-ras_quick_start
