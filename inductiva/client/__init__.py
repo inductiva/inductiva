@@ -92,6 +92,7 @@ from inductiva.client.models.order import Order
 from inductiva.client.models.organization_cost_components import OrganizationCostComponents
 from inductiva.client.models.organization_costs import OrganizationCosts
 from inductiva.client.models.processor_type import ProcessorType
+from inductiva.client.models.product_price import ProductPrice
 from inductiva.client.models.project import Project
 from inductiva.client.models.project_create import ProjectCreate
 from inductiva.client.models.project_statistics import ProjectStatistics
