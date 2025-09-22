@@ -1,6 +1,6 @@
 # IDA at Scale: Seismic Assessment of URM Structures
 
-This tutorial was written by **Daniel Caicedo** in collaboration with the **Inductiva Team**
+This tutorial was written by [Daniel Caicedo](https://www.researchgate.net/profile/Daniel-Caicedo-5) in collaboration with the **Inductiva Team**, within the framework of the research activities of the [Stand4Heritage (S4H) Team](https://www.linkedin.com/company/stand4heritage/posts/?feedView=all)
 
 ---
 
