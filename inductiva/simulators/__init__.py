@@ -23,6 +23,7 @@ from .schism import SCHISM
 from .sfincs import SFINCS
 from .nwchem import NWChem
 from .coawst import COAWST
+from .elmer import Elmer
 from .mohid import MOHID
 from .fvcom import FVCOM
 from .swash import SWASH
