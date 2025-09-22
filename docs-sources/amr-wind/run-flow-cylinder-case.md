@@ -50,7 +50,7 @@ amr_wind = inductiva.simulators.AmrWind(\
 
 # Run simulation
 task = amr_wind.run(input_dir="/Path/to/flow-cylinder-case",
-	n_vcpus=1, # Number of GPUs
+	n_vcpus=1, # number of GPUs
     sim_config_filename="ib_cylinder_Re_300.inp",
     on=cloud_machine)
 
@@ -101,7 +101,7 @@ The results are summarized in the table below:
 
 | Machine Type     | vCPUs | GPU         | GPU Count | Execution Time | Estimated Cost (USD) |
 |------------------|-------|-------------|-----------|----------------|--------------------- |
-| c2d-highcpu-16   | 16    | -           | -         |                |                      |
+| c2d-highcpu-16   | 16    | -           | -         | 6h, 55 min     | 0.59                 |
 | c2d-highcpu-112  | 112   | -           | -         | 1h, 30 min     | 0.86                 |
 | g2-standard-12   | 12    | NVIDIA L4   | 1         | 2h, 40 min     | 1.02                 |
 | g2-standard-24   | 24    | NVIDIA L4   | 2         | 1h, 45 min     | 1.33                 |
@@ -111,11 +111,7 @@ The results are summarized in the table below:
 | a3-highgpu-2g    | 52    | NVIDIA H100 | 2         | 37 min, 14s    | 3.12                 |
 
 
-Running this simulation a cloud machine equivalent to your laptop (`c2-highcou-16`) would take ** minutes**. By increasing the number of vCPUs from 16 to 112 (`c2d-highcpu-112`) reduces runtime to just ** minutes**.
-
-Opting to run the simulation on GPUs delivers an even greater speedup, completing the task approximately **3 times faster**.
-
-Running the simulation on a machine comparable to a standard laptop (`c2d-highcpu-16`) would take significantly longer. Upgrading to a machine with 112 vCPUs (`c2d-highcpu-112`) brings the runtime down to just 1 hour and 30 minutes.
+Running the simulation on a machine comparable to a standard laptop (`c2d-highcpu-16`) would take **6h and 55 minutes**. Upgrading to a machine with 112 vCPUs (`c2d-highcpu-112`) brings the runtime down to just **1 hour and 30 minutes**.
 
 Switching to GPU-powered machines offers even greater acceleration—completing the simulation up to 3 times faster than CPU-only alternatives.
 
