@@ -110,10 +110,7 @@ The results are summarized in the table below:
 | a3-highgpu-1g    | 26    | NVIDIA H100 | 1         | 31 min, 59s    | 1.34                 |
 | a3-highgpu-2g    | 52    | NVIDIA H100 | 2         | 37 min, 14s    | 3.12                 |
 
-
-Running the simulation on a machine comparable to a standard laptop (`c2d-highcpu-16`) would take **6h and 55 minutes**. Upgrading to a machine with 112 vCPUs (`c2d-highcpu-112`) brings the runtime down to just **1 hour and 30 minutes**.
-
-Switching to GPU-powered machines offers even greater acceleration—completing the simulation up to 3 times faster than CPU-only alternatives.
+Running the simulation on a machine comparable to a standard laptop (`c2d-highcpu-16`) would take **6h and 55 minutes**. Upgrading to a machine with 112 vCPUs (`c2d-highcpu-112`) brings the runtime down to just **1 hour and 30 minutes**. Switching to GPU-powered machines offers even greater acceleration.
 
 For more demanding workloads, the benefits of scaling become even more pronounced. Since this particular case is not computationally heavy enough to benefit from scaling to 2 NVIDIA A100 or 2 NVIDIA H100 GPUs, diminishing returns are expected.
 
