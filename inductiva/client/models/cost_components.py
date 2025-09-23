@@ -31,7 +31,10 @@ class CostComponents(BaseModel):
     compute: Union[StrictFloat, StrictInt]
     storage: Union[StrictFloat, StrictInt]
     data_transfer: Union[StrictFloat, StrictInt]
-    __properties: ClassVar[List[str]] = ["compute", "storage", "data_transfer"]
+    task_orchestration: Union[StrictFloat, StrictInt]
+    __properties: ClassVar[List[str]] = [
+        "compute", "storage", "data_transfer", "task_orchestration"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -84,6 +87,7 @@ class CostComponents(BaseModel):
         _obj = cls.model_validate({
             "compute": obj.get("compute"),
             "storage": obj.get("storage"),
-            "data_transfer": obj.get("data_transfer")
+            "data_transfer": obj.get("data_transfer"),
+            "task_orchestration": obj.get("task_orchestration")
         })
         return _obj

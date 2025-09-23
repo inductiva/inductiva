@@ -54,6 +54,7 @@ from inductiva.client.models.cpu_info import CPUInfo
 from inductiva.client.models.capability import Capability
 from inductiva.client.models.compression_method import CompressionMethod
 from inductiva.client.models.cost_components import CostComponents
+from inductiva.client.models.cost_components_partial import CostComponentsPartial
 from inductiva.client.models.cost_detail import CostDetail
 from inductiva.client.models.cost_type import CostType
 from inductiva.client.models.currency_code import CurrencyCode
@@ -86,10 +87,12 @@ from inductiva.client.models.operation_end import OperationEnd
 from inductiva.client.models.operation_start import OperationStart
 from inductiva.client.models.operation_status import OperationStatus
 from inductiva.client.models.operation_type import OperationType
+from inductiva.client.models.orchestration_cost_info import OrchestrationCostInfo
 from inductiva.client.models.order import Order
 from inductiva.client.models.organization_cost_components import OrganizationCostComponents
 from inductiva.client.models.organization_costs import OrganizationCosts
 from inductiva.client.models.processor_type import ProcessorType
+from inductiva.client.models.product_price import ProductPrice
 from inductiva.client.models.project import Project
 from inductiva.client.models.project_create import ProjectCreate
 from inductiva.client.models.project_statistics import ProjectStatistics

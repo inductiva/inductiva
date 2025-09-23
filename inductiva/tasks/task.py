@@ -264,7 +264,6 @@ class TaskInfo:
                           f"{formatted_timestamp:<20} {duration}\n")
 
             for index, sub_item in enumerate(item.get("operations", [])):
-
                 if index + 1 == len(item.get("operations", [])):
                     ascii_char = "└"
                 else:
@@ -283,6 +282,9 @@ class TaskInfo:
                         "command" in sub_item["attributes"]):
                     table_str += (f"\t\t{ascii_char}> {duration:<15} "
                                   f"{sub_item['attributes']['command']}\n")
+                elif item["alias"] == "Spot Reclaimed":
+                    table_str += (f"\t\t{ascii_char}> {duration:<15} "
+                                  f"{sub_item['alias']}\n")
 
         table_str += f"\nData:\n{data_metrics_table}\n"
         if self.estimated_computation_cost:
