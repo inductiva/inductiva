@@ -39,6 +39,8 @@ def damping(Ti, Tj, ksi):
 ## 2. Project and File Path Configuration
 To manage and organize simulation data, we group everything into a **Project**. We also define the input file paths required for the analyses.
 
+Update the `tutorial_folder` variable to point to the path of the downloaded IDA-at-scale folder.
+
 ```python
 # Organize all data into a Project
 project_name = "B2_3P_Tutorial"
@@ -89,3 +91,5 @@ Tj = 0.04970502055069268 # 6th vibration period
 alpha, beta = damping(Ti, Tj, damping_percentage)
 # ---- Analysis variables ----
 ```
+
+With all case-related settings complete, let's explore how to run the 300 simulations on the cloud using Inductiva.
