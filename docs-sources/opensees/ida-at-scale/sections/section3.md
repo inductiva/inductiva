@@ -40,8 +40,8 @@ opensees = inductiva.simulators.OpenSees(
 ```
 
 ## 3. Initializing the Simulation Loop and Running the Simulations
-This section starts the loops over `analysis_range` and `EQfactor_values`. Each record is scaled to the specified intensity level, 
-meaning the input files are rewritten at each iteration with updated parameters.
+This section goes through every combination of analysis case (`analysis_range`) and scaling factor (`EQfactor_values`). Each record is scaled to the specified intensity level and then 
+the input files are rewritten at each iteration with updated parameters.
 
 To automate this process, the `TemplateManager` tool is used. It overwrites the `.jinja` input files by replacing placeholders ({{ }}) with the appropriate parameter values at each step.
 
