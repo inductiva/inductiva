@@ -32,7 +32,7 @@ Some commands will run sequentially, while others may run in parallel.
 
 For this case, we’ve prepared a complete list of required commands. Simply download the `commands.txt` [here](https://storage.googleapis.com/inductiva-api-demo-files/commands.txt) and place it in your `highLiftConfiguration` directory. 
 
-If you’d prefer to do it yourself, check out our [documentation](https://inductiva.ai/guides/openfoam/convert-allrun-script-into-python-commands)
+If you’d prefer to do it yourself, check out our [documentation](convert-allrun-script-into-python-commands)
 
 ## Running the Simulation on an MPI Cluster
 Here's how to launch your simulation using the Inductiva API:
