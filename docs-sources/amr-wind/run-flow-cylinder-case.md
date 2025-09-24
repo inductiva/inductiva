@@ -22,12 +22,9 @@ Download the required files [here](https://storage.googleapis.com/inductiva-api-
 ### Case Modifications
 To support a more compute-intensive workload than the original configuration, we made the following changes to the input file (`ib_cylinder_Re_300.inp`):
 
-- **Increased `time.max_step` from 20 to 2000**
-This extension avoids the skew caused by the slower initial warm-up iterations and ensures a longer runtime, enabling a more accurate and meaningful performance comparison across machines.
-- **Increased `time.plot_interval` from 10 to 2000**
-Since intermediate results are not of interest in this case, we set the plotting frequency equal to the maximum number of time steps. This ensures that only the final result is written, reducing unnecessary output.
-- **Increased `amr.n_cell` from 64 64 16 to 256 256 64**
-The mesh resolution was increased by a factor of four in each dimension to fully utilize the GPU. The original case was too small to reflect representative performance. With refinement zones included, the final mesh contains nearly 16 million cells.
+* **Increased `time.max_step` from 20 to 2000** - This extension avoids the skew caused by the slower initial warm-up iterations and ensures a longer runtime, enabling a more accurate and meaningful performance comparison across machines.
+* **Increased `time.plot_interval` from 10 to 2000** - Since intermediate results are not of interest in this case, we set the plotting frequency equal to the maximum number of time steps. This ensures that only the final result is written, reducing unnecessary output.
+* **Increased `amr.n_cell` from 64 64 16 to 256 256 64** - The mesh resolution was increased by a factor of four in each dimension to fully utilize the GPU. The original case was too small to reflect representative performance. With refinement zones included, the final mesh contains nearly 16 million cells.
 
 ## Running the Simulation
 Below is the code required to run the simulation using the Inductiva API.
