@@ -125,7 +125,7 @@ Be sure to check out [this tutorial](mpi-cluster-tutorial), where we’ll explor
 ```{toctree}
 :hidden:
 run-exafoam-microbenchmark.md
-convert-allrun-script-into-python-commands.md
-mpi-cluster-tutorial.md
+From Allrun to list of commands <convert-allrun-script-into-python-commands.md>
+Scale to an MPI Cluster <mpi-cluster-tutorial.md>
 
 ```
