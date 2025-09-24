@@ -43,6 +43,16 @@
 
 	--table-bg-color-alternate: rgb(242, 242, 242);
 	--sidebar-current-option-bg: rgb(242, 242, 242);
+
+	--purple-color: #9747ff;
+	--purple-hover-color: #7d35dc;
+
+	--cta-container-border: none;
+	--cta-container-bg: #ebebf3;
+	--cta-container-text-color: #333;
+
+	--playground-button: #9747ff;
+	--playground-button-hover: #7931d7;
 }
 .dark {
 	--bg-color: #03020e;
@@ -71,6 +81,13 @@
 
 	--table-bg-color-alternate: #0e0e14;
 	--sidebar-current-option-bg: #15151c;
+
+	--cta-container-border: 1px solid #4c3669;
+	--cta-container-bg: #8e3bff59;
+	--cta-container-text-color: #ffffff;
+
+	--playground-button: #80f4bc;
+	--playground-button-hover: #67dda4;
 }
 
 .border-border {
@@ -1111,7 +1128,7 @@ table p {
 
 #left-sidebar,
 #right-sidebar {
-	background-color: transparent;
+	background-color: var(--bg-color);
 }
 
 #content .menu-scroll::-webkit-scrollbar {
@@ -1327,3 +1344,91 @@ footer {
 	margin: 0;
 	padding: 0.25rem 0.5rem;
 }
+
+
+
+.cta-bar {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	align-items: center;
+	gap: 16px;
+	padding: 10px 28px;
+	border-radius: 10px;
+	max-width: 70%;
+	margin: 20px auto;
+	background: radial-gradient(circle at center, var(--cta-container-bg), var(--bg-color));
+}
+
+.cta-text {
+	font-size: 14px;
+	color: var(--cta-container-text-color);
+	flex: 1 1 0;
+	min-width: 200px;          
+	word-break: break-word;   
+}
+
+.cta-button {
+	background-color: var(--purple-color);
+	color: white;
+	border: none;
+	padding: 0.5rem 1rem;
+	border-radius: 10px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	flex-shrink: 0;         
+}
+
+.cta-button:hover {
+	background-color: var(--purple-hover-color);
+}
+
+#scrolltop {
+  bottom: 2rem; /* fallback if class is not applied */
+  transition: bottom 0.3s ease;
+}
+
+/* When user is at the bottom of the page */
+body.at-bottom #scrolltop {
+  bottom: 6rem !important; /* move it higher */
+}
+
+@media (max-width: 600px) {
+	.cta-bar {
+		flex-direction: column;
+		text-align: center;
+	}
+
+	.cta-button {
+		width: 100%;
+		margin-top: 8px;
+	}
+}
+
+section[id^="inductiva-"] p {
+  white-space: pre-wrap;
+}
+
+
+/* Try it in playground button */
+#content a.try-playground-button {
+	text-decoration: none;
+	color: var(--playground-button);
+	font-weight: bold;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	transition: color 0.2s;
+  }
+  
+  #content a.try-playground-button:hover {
+	color: var(--playground-button-hover);
+  }
+  
+  #content a.try-playground-button .icon {
+	width: 1em;
+	height: 1em;
+	display: inline-block;
+  }

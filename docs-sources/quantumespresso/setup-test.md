@@ -1,4 +1,4 @@
-# Test Your Inductiva Setup ⚙️
+# Test Your Inductiva Setup
 Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick Quantum ESPRESSO simulation — it only takes a few seconds!
 
 ## Step 1: Copy and Run the Code
@@ -17,11 +17,6 @@ cloud_machine = inductiva.resources.MachineGroup( \
     machine_type="c2d-highcpu-4",
     spot=True)
 
-mpi_config = MPIConfig( \
-    version="4.1.6",
-    np=2,
-    use_hwthread_cpus=False)
-
 # Download the input files into a folder
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -30,9 +25,7 @@ input_dir = inductiva.utils.download_from_url(
 
 # List of commands to run
 commands = [
-    Command("pw.x -i Al_local_pseudo.in", mpi_config=mpi_config),
-    # openMP command should not be used with MPI
-    "pw_openmp.x -i Al_qe_pseudo.in"
+    "pw.x -i Al_local_pseudo.in"
 ]
 
 # Initialize the Simulator
@@ -54,10 +47,21 @@ task.download_outputs()
 task.print_summary()
 ```
 
+<a href="https://console.inductiva.ai/editor?simulator_name=quantumespresso" class="try-playground-button" target="_blank">
+  <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M8 5v14l11-7z"/>
+  </svg>
+  Try it on our Python Editor, on any device
+</a>
+
 ## Step 2: Verify the Task Status
 After the simulation completes, a task summary will be displayed in your terminal. If the task status shows **Success**, congratulations! You've successfully run a Quantum ESPRESSO simulation.
 
 You're ready to start running simulations seamlessly!
+
+```{banner_small}
+:origin: quantum_espresso
+```
 
 ## Need Help?
 If you encounter any issues or need further assistance, don't hesitate to [**Contact Us**](mailto:support@inductiva.ai). We're here to help!

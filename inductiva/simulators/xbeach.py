@@ -1,4 +1,5 @@
 """XBeach module of the API."""
+import logging
 from typing import Optional, Union
 
 from inductiva import simulators, tasks, types
@@ -30,12 +31,14 @@ class XBeach(simulators.Simulator):
             on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
-            sim_config_filename: Optional[str] = "params.txt",
+            sim_config_filename: Optional[str] = None,
             export_vtk: bool = False,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
+            time_to_live: Optional[str] = None,
+            on_finish_cleanup: Optional[Union[str, list[str]]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -43,6 +46,9 @@ class XBeach(simulators.Simulator):
             input_dir: Path to the directory of the simulation input files.
             on: The computational resource to launch the simulation on.
             sim_config_filename: Name of the simulation configuration file.
+                Deprecated: This parameter is no longer used and will be removed
+                in a future version. Please use `params.txt` in the input
+                directory instead.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
                 (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
@@ -61,12 +67,41 @@ class XBeach(simulators.Simulator):
                 assigned. If None, the task will be assigned to
                 the default project. If the project does not exist, it will be
                 created.
+            time_to_live: Maximum allowed runtime for the task, specified as a
+                string duration. Supports common time duration formats such as
+                "10m", "2 hours", "1h30m", or "90s". The task will be
+                automatically terminated if it exceeds this duration after
+                starting.
+            on_finish_cleanup :
+                Optional cleanup script or list of shell commands to remove
+                temporary or unwanted files generated during the simulation.
+                This helps reduce storage usage by discarding unnecessary
+                output.
+                - If a string is provided, it is treated as the path to a shell
+                script that must be included with the simulation files.
+                - If a list of strings is provided, each item is treated as an
+                individual shell command and will be executed sequentially.
+                All cleanup actions are executed in the simulation's working
+                directory, after the simulation finishes.
+                Examples:
+                    on_finish_cleanup = "my_cleanup.sh"
+
+                    on_finish_cleanup = [
+                        "rm -rf temp_dir",
+                        "rm -f logs/debug.log"
+                    ]
             other arguments: See the documentation of the base class.
         """
 
+        if sim_config_filename is not None:
+            logging.warning(
+                "Deprecated: This parameter is no longer used and will be "
+                "removed in a future version. Please use `params.txt` in the "
+                "input directory instead.")
+
         self._input_files_exist(input_dir=input_dir,
                                 remote_assets=remote_assets,
-                                sim_config_filename=sim_config_filename)
+                                sim_config_filename="params.txt")
 
         mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
@@ -74,9 +109,7 @@ class XBeach(simulators.Simulator):
             mpi_kwargs["np"] = n_vcpus
 
         mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
-        commands = [
-            Command(f"xbeach {sim_config_filename}", mpi_config=mpi_config)
-        ]
+        commands = [Command("xbeach", mpi_config=mpi_config)]
 
         # Conditionally append the VTK-export step
         if export_vtk:
@@ -91,4 +124,6 @@ class XBeach(simulators.Simulator):
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            project=project,
+                           time_to_live=time_to_live,
+                           on_finish_cleanup=on_finish_cleanup,
                            **kwargs)

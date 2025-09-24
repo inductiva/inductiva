@@ -1,10 +1,10 @@
-# Test Your Inductiva Setup ⚙️
-Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick OpenFOAM simulation — it only takes a few seconds!
+# Test Your Inductiva Setup
+Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. 
+To confirm everything is working as expected, simply run a quick OpenFOAM simulation — it only takes a minute!
 
 ## Step 1: Copy and Run the Code
-To get started, copy the code below and paste it into a Python script.
 
-When you run the script, all the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. The OpenFOAM simulation will then be sent to a cloud machine for execution.
+1. Copy the code below and save it as `example.py` on your Desktop (or in your preferred directory).
 
 ```python
 """OpenFOAM example."""
@@ -42,10 +42,66 @@ task.download_outputs()
 task.print_summary()
 ```
 
-## Step 2: Verify the Task Status
-After the simulation completes, a task summary will be displayed in your terminal. If the task status shows **Success**, congratulations! You've successfully run an OpenFOAM simulation.
+<a href="https://console.inductiva.ai/editor?simulator_name=openfoam" class="try-playground-button" target="_blank">
+  <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M8 5v14l11-7z"/>
+  </svg>
+  Try it on our Python Editor, on any device
+</a>
 
-You're ready to start running simulations seamlessly!
+2. Open your command line, then navigate to the Desktop by running:
+
+```
+cd ~/Desktop
+```
+
+3. Execute the Python script by running:
+
+```
+python example.py
+```
+
+> **Note**: On some systems, you might need to use `python3` instead of `python`.
+
+All the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. The OpenFOAM simulation will then be sent to a cloud machine for execution.
+
+## Step 2: Verify the Task Status
+After the simulation completes, a task summary will be displayed in your terminal, as shown below. 
+
+```
+Task status: Success
+
+Timeline:
+	Waiting for Input         at 21/07, 14:02:08      2.004 s
+	In Queue                  at 21/07, 14:02:10      37.651 s
+	Preparing to Compute      at 21/07, 14:02:47      4.224 s
+	In Progress               at 21/07, 14:02:51      65.304 s
+		└> 65.134 s        bash ./Allrun
+	Finalizing                at 21/07, 14:03:57      1.85 s
+	Success                   at 21/07, 14:03:59      
+
+Data:
+	Size of zipped output:    99.56 MB
+	Size of unzipped output:  155.56 MB
+	Number of output files:   223
+
+Estimated computation cost (US$): 0.00048 US$
+
+Go to https://console.inductiva.ai/tasks/a30fb9b6zearwkrdpkz4g9qhr for more details.
+```
+
+If the **Task status** is marked as **Success**, congratulations! You've successfully ran an OpenFOAM simulation.
+
+You can view more details and track the full simulation progress in the [Inductiva Console](https://console.inductiva.ai/tasks).
+
+<p align="center"><img src="./_static/setup-test/console_timeline.png" alt="Task summary displayed in the Inductiva Console" width="700"></p>
+
+This simple example tested your installation on a small machine with just 4 virtual CPUs. Inductiva offers far more powerful 
+options to supercharge your simulations.
+
+```{banner_small}
+:origin: openfoam
+```
 
 ## Need Help?
 If you encounter any issues or need further assistance, don't hesitate to [**Contact Us**](mailto:support@inductiva.ai). We're here to help!

@@ -11,7 +11,6 @@ Using the Inductiva package, it is easy to get a project summary and download al
 ```python
 import inductiva
 
-
 turbsim_project = inductiva.projects.Project(
    name="turbsim_dataset")
 
@@ -35,6 +34,11 @@ Estimated total computation cost: 0.0067 US$
 ```
 
 Running `openfast_project.download_outputs()` creates a folder called `inductiva_output/turbsim_project` with one folder for each simulation.
+
+The project information is also available on the [Inductiva Web Console](https://console.inductiva.ai) on the projects tab:
+
+<p align="center"><img src="../../_static/console_projects.png" alt="TurbSim console projects" width="700"></p>
+
 
 ## Retrieve Task Metadata
 Retrieving the previously set metadata is easy with the Inductiva API.
@@ -62,8 +66,12 @@ Task metadata: {'URef': '12', 'seed_1': '144736085', 'seed_2': '-2036154925', 'l
 Task ID: 1vp0ajszufcang0qct0vt2ytb
 Task metadata: {'URef': '13', 'seed_1': '-124466270', 'seed_2': '-864712422', 'local_template_dir': 'variations/s1_-124466270/s2_-864712422/URef_13'}
 
-..
+...
 ```
+
+You can also check the task metadata on the [Inductiva Web Console](https://console.inductiva.ai/):
+<p align="center"><img src="../../_static/console_metadata.png" alt="TurbSim console metadata" width="700"></p>
+
 
 ## Key Takeaways
 In summary, using cloud computing for generating datasets of large-scale simulations not only increases efficiency, but also significantly reduces computational time and cost. 

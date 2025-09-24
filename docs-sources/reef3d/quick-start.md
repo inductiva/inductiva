@@ -31,7 +31,7 @@ reef3d = inductiva.simulators.REEF3D( \
 
 # Run simulation
 task = reef3d.run(input_dir="/Path/to/RegularWavePropagation",
-    n_vcpu=16,
+    n_vcpu=8,
     on=cloud_machine)
 
 # Wait for the simulation to finish and download the results
@@ -47,7 +47,7 @@ In this basic example, we're using a cloud machine (`c2d-highcpu-8`) equipped wi
 For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
 a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 The number of virtual CPUs (`n_vcpus`) is the parameter used to configure the simulation parallelism. This value must be consistently set to the same parameter `M 10` in both the `control.txt` and `ctrl.txt` configuration files.
@@ -81,4 +81,6 @@ Estimated computation cost (US$): 0.00051 US$
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
 the core computation time of this simulation was approximately 20 seconds.
 
-It's that simple!
+```{banner_small}
+:origin: reef3d
+```

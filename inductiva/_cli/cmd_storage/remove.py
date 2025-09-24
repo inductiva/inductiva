@@ -1,5 +1,6 @@
 """Remove the user's remote storage contents via CLI."""
 import argparse
+import textwrap
 
 import inductiva
 from ...localization import translator as __
@@ -34,10 +35,10 @@ def register(parser):
         help="Remove files or directories from remote storage.",
         formatter_class=argparse.RawTextHelpFormatter)
     subparser.description = (
-        "The `inductiva storage remove` command deletes specified remote paths "
-        "from the platform.\n"
-        "Use with caution — this action is irreversible and will permanently "
-        "remove the selected files or directories from remote storage.\n\n")
+        "The `inductiva storage remove` command deletes specific files or"
+        "folders from your Inductiva remote storage.\n"
+        "Use it with caution. This action is irreversible and will permanently "
+        "remove the selected files or directories from your remote storage.\n")
 
     subparser.add_argument("paths",
                            type=str,
@@ -57,5 +58,15 @@ def register(parser):
                            action="store_true",
                            default=False,
                            help="Remove all data from remote storage.")
+
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            $ inductiva storage remove 0bet8jrpp2gz974n42nsd9n2p/
+            You are about to remove the following paths from your remote storage space:
+            - 0bet8jrpp2gz974n42nsd9n2p/
+            Are you sure you want to proceed (y/[N])? y
+            Removing '0bet8jrpp2gz974n42nsd9n2p/' from remote storage...
+            Successfully removed '0bet8jrpp2gz974n42nsd9n2p/' from remote storage.
+    """)
 
     subparser.set_defaults(func=remove)

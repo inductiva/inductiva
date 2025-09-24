@@ -20,7 +20,7 @@ numerical parameters, and output files.
 ## 2. Can I manually set and run OpenFOAM commands?
 Yes, absolutely! For greater flexibility, you can manually define and run each command step-by-step, giving you full control over your simulation.
 
-Here’s an example of how to set commands manually:
+Here's an example of how to set commands manually:
 
 ```python
 commands_single_machine = [
@@ -40,7 +40,132 @@ task = openfoam.run(
     on=cloud_machine)
 ```
 
-For more details on available commands and MPI configuration, check out the Custom Docker Images documentation.
+<br>
+
+## 3. How do I run OpenFOAM commands in parallel?
+Running OpenFOAM commands in parallel involves configuring your parallel execution settings and then running 
+commands either **via a shell script** or **individually**.
+
+### Using a shell script
+You can run OpenFOAM commands in parallel within a script by either:
+
+* Using the helper command: `runParallel <command>`
+* Running with MPI directly: `mpirun -np 4 <command>`
+
+### Running individual commands
+If you're running commands manually (not via a script), you can still execute them in parallel by either:
+
+* Using the helper: `runParallel <command>`
+* Adding the `-parallel` flag directly to the command, for example: `simpleFoam -parallel`
+
+When a command includes the `-parallel` flag, it is automatically recognized as parallel execution. 
+
+The following two commands are equivalent:
+
+```bash
+runParallel simpleFoam
+simpleFoam -parallel
+```
+
+Internally, both run as:
+
+```bash
+mpirun -np <num_processes> simpleFoam -parallel
+```
+
+### Configuring parallel execution
+Before running your simulation, set the parallel settings in your machine configuration. For example:
+
+```python
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2d-standard-112",
+    np=5,                  # Number of processes (default: max threads)
+    use_hwthread_cpus=False, # Use hyperthreading (default: True)
+    mpi_version="4.1.6",     # MPI version (default: 4.1.6)
+    spot=True
+)
+```
+
+With this configuration, a command such as `simpleFoam -parallel` will be executed as:
+
+```bash
+mpirun -np 5 --use-hwthread-cpus simpleFoam -parallel
+```
+
+This runs the simulation using 5 processes, disables hyperthreading, and uses MPI version 4.1.6.
+
+> **Note**: These parallel settings (number of processes, hyperthreading, and MPI version) apply only when using the `-parallel` flag. 
+If you use `runParallel`, OpenFOAM manages parallelism internally and ignores these settings.
+
+<br>
+
+
+## 4. Do your simulations work on your laptop but not on Inductiva?
+
+If your simulation runs successfully on your local machine but fails on Inductiva,
+it’s likely due to a version mismatch.
+
+Make sure you're using the same software version and distribution
+(e.g., ESI or Foundation) on both your machine and Inductiva. If the version
+you need isn’t available on Inductiva yet,
+[contact us](mailto:support@inductiva.ai) — we’ll be happy to add it as soon as possible.
+
+<br>
+
+## 5. My simulation fails, but the console shows Success. What’s going on?
+
+This usually means your `Allrun` script is not properly reporting errors.
+
+Inductiva checks whether a simulation succeeded by looking at the script’s
+**exit code**. A non-zero code means failure. However, in your case, a command
+like `runApplication blockMesh` might be failing, but the script continues to
+execute, often ending with a command like `echo "Simulation Complete!"`,
+which returns a success code (`0`).
+
+Because the final command succeeds, the whole script appears successful, even
+though a key step failed.
+
+### How to fix it
+
+Add this line to the top of your `Allrun` script:
+
+```bash
+set -e
+```
+
+This will make the script stop immediately if any command fails, and it will
+correctly return a non-zero exit code. That way, Inductiva can detect the
+failure and show it as such.
+
+<br>
+
+## 6. Why does my simulation keep failing with `There are not enough slots available` even though my machine has enough resources?
+Before jumping to solutions, it’s important to understand how your machine’s resources are structured.
+
+Take, for example, a machine type like `c2d-highcpu-16`, which provides 16 virtual CPUs (vCPUs). The key word here is *virtual* — while the machine can run 16 threads in parallel, it's backed by only 8 physical cores. This distinction matters.
+
+### How OpenFOAM handles resources
+The behavior of `runParallel` in OpenFOAM depends on the version you’re using:
+
+* **Some versions** (e.g., **OpenFOAM-ESI v2406**) recognize and utilize all available vCPUs. In these cases, running a simulation on all 16 vCPUs works as long as your domain is decomposed into 16 subdomains.
+
+* **Other versions** (e.g., **OpenFOAM-Foundation v8**) only detect physical cores, ignoring hyperthreads. So even if your machine reports 16 vCPUs, OpenFOAM will only "see" 8. Attempting to run with more than 8 subdomains (e.g., 16) can lead to the error:
+
+```
+There are not enough slots available
+```
+
+This happens because `runParallel` internally calls `mpirun` and lets OpenFOAM decide how many cores to use. In some versions, OpenFOAM restricts execution to physical cores only.
+
+### How to bypass this limitation
+If you want to fully utilize all your vCPUs regardless of how OpenFOAM detects resources, you can manually invoke `mpirun` with the `--use-hwthread-cpu`s` flag. For example:
+
+```bash
+mpirun --use-hwthread-cpus -np 16 simpleFoam -parallel
+```
+
+This explicitly instructs `mpirun` to include hyperthreaded (virtual) CPUs, allowing your simulation to run across all 16 vCPUs.
 
 <br>
 <br>

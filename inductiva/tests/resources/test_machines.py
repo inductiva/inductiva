@@ -3,6 +3,7 @@ from unittest import mock
 import pytest
 
 import inductiva
+from inductiva.client import models
 from inductiva.resources.machine_groups import BaseMachineGroup
 
 
@@ -24,7 +25,7 @@ def fake_register(self, **kwargs):  # pylint: disable = unused-argument
 @mock.patch.object(inductiva.resources.MPICluster, "__init__", fake_init)
 def test_machines__mpicluster__register():
     """Check the registering of a MPICluster.
-    
+
     Goal: Verify that the MPICluster is initializating and the registration is
     processed, by mocking it instead of calling the API.
     """
@@ -43,7 +44,7 @@ def test_machines__mpicluster__register():
 @mock.patch.object(inductiva.resources.MachineGroup, "__init__", fake_init)
 def test_machines__machine_group__register():
     """Check the registering of a MachineGroup.
-    
+
     Goal: Verify that the MachineGroup is initializating correctly based on a
     mock registration.
     """
@@ -66,7 +67,7 @@ def test_machines__machine_group__register():
 def test_machines__machine_group__invalid_threads_per_core():
     """Check the registering of a MachineGroup fails with
     threads_per_core different than 1 or 2.
-    
+
     Goal: Verify that the MachineGroup threads_per_core validation is working
     correctly based on a mock registration.
     """
@@ -138,90 +139,180 @@ def test_machines__machine_group__dynamic_disk_resize_config__not_resizable():
 def fake_get_quotas_small():
     """Fake get_quotas function."""
     return {
-        "max_vcpus": {
-            "max_allowed": 1.0,
-            "in_use": 0.0
-        },
-        "max_instances": {
-            "max_allowed": 1.0,
-            "in_use": 0.0
-        },
-        "max_price_hour": {
-            "max_allowed": 1.0,
-            "in_use": 0.0
-        },
-        "max_disk_size": {
-            "max_allowed": 1.0,
-            "in_use": None
-        },
-        "mg_max_idle": {
-            "max_allowed": 1.0,
-            "in_use": None
-        },
-        "mg_max_ttl": {
-            "max_allowed": 1.0,
-            "in_use": None
-        }
+        "max_vcpus":
+            models.Quota(
+                id="max_vcpus",
+                max_allowed=1.0,
+                in_use=0.0,
+                label="",
+                unit="",
+                scope=models.QuotaScope.GLOBAL,
+            ),
+        "max_instances":
+            models.Quota(
+                id="max_instances",
+                max_allowed=1.0,
+                in_use=0.0,
+                label="",
+                unit="",
+                scope=models.QuotaScope.GLOBAL,
+            ),
+        "max_price_hour":
+            models.Quota(
+                id="max_price_hour",
+                max_allowed=1.0,
+                in_use=0.0,
+                label="",
+                unit="",
+                scope=models.QuotaScope.GLOBAL,
+            ),
+        "max_disk_size":
+            models.Quota(
+                id="max_disk_size",
+                max_allowed=1.0,
+                in_use=None,
+                label="",
+                unit="",
+                scope=models.QuotaScope.INSTANCE,
+            ),
+        "mg_max_idle":
+            models.Quota(
+                id="mg_max_idle",
+                max_allowed=1.0,
+                in_use=None,
+                label="",
+                unit="",
+                scope=models.QuotaScope.INSTANCE,
+            ),
+        "mg_max_ttl":
+            models.Quota(
+                id="mg_max_ttl",
+                max_allowed=1.0,
+                in_use=None,
+                label="",
+                unit="",
+                scope=models.QuotaScope.INSTANCE,
+            ),
     }
 
 
 def fake_get_quotas_normal():
     """Fake get_quotas function."""
     return {
-        "max_vcpus": {
-            "max_allowed": 100.0,
-            "in_use": 0.0
-        },
-        "max_instances": {
-            "max_allowed": 10.0,
-            "in_use": 0.0
-        },
-        "max_price_hour": {
-            "max_allowed": 20.0,
-            "in_use": 0.0
-        },
-        "max_disk_size": {
-            "max_allowed": 50.0,
-            "in_use": None
-        },
-        "mg_max_idle": {
-            "max_allowed": 150.0,
-            "in_use": None
-        },
-        "mg_max_ttl": {
-            "max_allowed": 48.0,
-            "in_use": None
-        }
+        "max_vcpus":
+            models.Quota(
+                id="max_vcpus",
+                max_allowed=100.0,
+                in_use=0.0,
+                label="",
+                unit="",
+                scope=models.QuotaScope.GLOBAL,
+            ),
+        "max_instances":
+            models.Quota(
+                id="max_instances",
+                max_allowed=10.0,
+                in_use=0.0,
+                label="",
+                unit="",
+                scope=models.QuotaScope.GLOBAL,
+            ),
+        "max_price_hour":
+            models.Quota(
+                id="max_price_hour",
+                max_allowed=20.0,
+                in_use=0.0,
+                label="",
+                unit="",
+                scope=models.QuotaScope.GLOBAL,
+            ),
+        "max_disk_size":
+            models.Quota(
+                id="max_disk_size",
+                max_allowed=50.0,
+                in_use=None,
+                label="",
+                unit="",
+                scope=models.QuotaScope.INSTANCE,
+            ),
+        "mg_max_idle":
+            models.Quota(
+                id="mg_max_idle",
+                max_allowed=150.0,
+                in_use=None,
+                label="",
+                unit="",
+                scope=models.QuotaScope.INSTANCE,
+            ),
+        "mg_max_ttl":
+            models.Quota(
+                id="mg_max_ttl",
+                max_allowed=48.0,
+                in_use=None,
+                label="",
+                unit="",
+                scope=models.QuotaScope.INSTANCE,
+            ),
     }
 
 
 def fake_get_quotas_no_total_num_machines():
     """Fake get_quotas function."""
     return {
-        "max_vcpus": {
-            "max_allowed": 100.0,
-            "in_use": 0.0
-        },
-        "max_instances": {
-            "max_allowed": 0.0,
-            "in_use": 0.0
-        },
-        "max_price_hour": {
-            "max_allowed": 20.0,
-            "in_use": 0.0
-        },
-        "max_disk_size": {
-            "max_allowed": 50.0,
-            "in_use": None
-        },
-        "mg_max_idle": {
-            "max_allowed": 150.0,
-            "in_use": None
-        },
-        "mg_max_ttl": {
-            "max_allowed": 48.0,
-            "in_use": None
-        }
+        "max_vcpus":
+            models.Quota(
+                id="max_vcpus",
+                max_allowed=100.0,
+                in_use=0.0,
+                label="",
+                unit="",
+                scope=models.QuotaScope.GLOBAL,
+            ),
+        "max_instances":
+            models.Quota(
+                id="max_instances",
+                max_allowed=0.0,
+                in_use=0.0,
+                label="",
+                unit="",
+                scope=models.QuotaScope.GLOBAL,
+            ),
+        "max_price_hour":
+            models.Quota(
+                id="max_price_hour",
+                max_allowed=20.0,
+                in_use=0.0,
+                label="",
+                unit="",
+                scope=models.QuotaScope.GLOBAL,
+            ),
+        "max_disk_size":
+            models.Quota(
+                id="max_disk_size",
+                max_allowed=50.0,
+                in_use=None,
+                label="",
+                unit="",
+                scope=models.QuotaScope.INSTANCE,
+            ),
+        "mg_max_idle":
+            models.Quota(
+                id="mg_max_idle",
+                max_allowed=150.0,
+                in_use=None,
+                label="",
+                unit="",
+                scope=models.QuotaScope.INSTANCE,
+            ),
+        "mg_max_ttl":
+            models.Quota(
+                id="mg_max_ttl",
+                max_allowed=48.0,
+                in_use=None,
+                label="",
+                unit="",
+                scope=models.QuotaScope.INSTANCE,
+            ),
     }
 
 

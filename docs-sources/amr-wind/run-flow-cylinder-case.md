@@ -1,10 +1,9 @@
 # Flow Around a Circular Cylinder 🌀
 This tutorial will simulate a flow over a cylinder case using AMR-Wind. This classic fluid dynamics problem reveals the changes in flow behavior depending on the Reynolds number (Re).
 
-We will cover the `ib_cylinder_Re_300` use case from the test files folder of the [AMR-Wind GitHub repository](https://github.com/Exawind/amr-wind/tree/v3.4.0).
+We will cover the `ib_cylinder_Re_300` use case from the test files folder of the [AMR-Wind GitHub repository](https://github.com/Exawind/amr-wind/tree/main/test/test_files/ib_cylinder_Re_300).
 
-We will also demonstrate Inductiva’s ability to efficiently scale this use case, starting with a cloud 
-machine equivalent to a typical laptop and then scaling up to a more powerful instance.
+To demonstrate Inductiva's scalability, we will run the same simulation on cloud machines with varying levels of computational power.
 
 <img src="_static/Re100.gif" alt="Demo Animation" width="400"/>  <img src="_static/Re10000.gif" alt="Demo Animation" width="400"/>
 
@@ -18,76 +17,19 @@ At Re = 300, the flow becomes fully three-dimensional and unsteady. This makes i
 ## Run the Circular Cylinder Case
 
 ### Prerequisites
-Download the required files [here](https://github.com/Exawind/amr-wind/tree/main/test/test_files/ib_cylinder_Re_300) and place them in a folder called `SimulationFiles`. 
+Download the required files [here](https://storage.googleapis.com/inductiva-api-demo-files/flow-cylinder-case-files.zip).
 
 ### Case Modifications
-To improve the visibility of vortex shedding and optimize computational efficiency, the original case setup was modified with the following changes:
+To support a more compute-intensive workload than the original configuration, we made the following changes to the input file (`ib_cylinder_Re_300.inp`):
 
-* Changing stopping criteria from `max_steps` to `stop_time`, so that the simulation runs for a physical time of 10s.
-
-```diff
-- time.stop_time               =   -10.0     # Max (simulated) time to evolve
-+ time.stop_time               =   10.0 
-- time.max_step                =   20        # Max number of time steps
-+ time.max_step                =   -20 
-```
-
-* Increasing time step size to reduce computation time.
-
-```diff 
-- time.cfl              =   0.45         # CFL factor
-+ time.cfl              =   1.0
-```
-
-* Decreasing plotting frequency to reduce number of output files.
-
-```diff 
-- time.plot_interval            =  10       # Steps between plot files
-+ time.plot_interval            =  100      # Reduced output frequency to limit file size
-```
-
-* Adding vorticity magnitude as a new derived output.
-
-```diff 
-- io.derived_outputs = "components(velocity,0,1)" "components(gp,0,1)"
-+ io.derived_outputs = "components(velocity,0,1)" "components(gp,0,1)" "mag_vorticity"
-```
-
-*  Changing Re from 100 to 1000 to induce faster formation of vortices.
-
-```diff 
-- transport.viscosity = 1.0e-3   # Set for Re = D*v/mu = 100;
-+ transport.viscosity = 1.0e-4   #Adjusted for Re = 1000
-```
-
-* Adjusting the flow domain so that vortices are more visible, and proportional modification is made on the mesh. Additionally, to reduce computation time, the mesh refinement is reduced from 2 levels to 1. 
-
-```diff 
-- amr.n_cell     = 64 64 16   # Grid cells at coarsest AMRlevel
-+ amr.n_cell     = 128 64 8 # Doubled x-divisions to match domain size                                                                                         
-- amr.max_level = 2
-+ amr.max_level = 1
-
-- geometry.prob_lo        =   -0.5 -0.5 -0.125
-+ geometry.prob_lo        =   -0.3 -0.5 -0.0625 # Cylinder offset to extend wake region
-- geometry.prob_hi        =    0.5  0.5  0.125
-+ geometry.prob_hi        =    1.7  0.5  0.0625  
-```
-
-* Associated modifications have to be performed on the `static_box.refine` file as well. Here, we remove the 2nd level of mesh refinement to reduce computation time:
-
-```diff
-
-- 2 # Number of levels of refinement
-+ 1
-  1 # Number of refinement boxes in the first level
- -0.125 -0.125 -0.125 0.5 0.125 0.125 
-- 1 # Number of refinement boxes in the second level
-- -0.0625 -0.0625 -0.125 0.0625 0.0625 0.125 
-```
+* **Increased `time.max_step` from 20 to 2000** - This extension avoids the skew caused by the slower initial warm-up iterations and ensures a longer runtime, enabling a more accurate and meaningful performance comparison across machines.
+* **Increased `time.plot_interval` from 10 to 2000** - Since intermediate results are not of interest in this case, we set the plotting frequency equal to the maximum number of time steps. This ensures that only the final result is written, reducing unnecessary output.
+* **Increased `amr.n_cell` from 64 64 16 to 256 256 64** - The mesh resolution was increased by a factor of four in each dimension to fully utilize the GPU. The original case was too small to reflect representative performance. With refinement zones included, the final mesh contains nearly 16 million cells.
 
 ## Running the Simulation
-Here is the code required to run the simulation using the Inductiva API:
+Below is the code required to run the simulation using the Inductiva API.
+
+In this example, we use a `g2-standard-12` cloud machine, equipped with 12 virtual CPUs (vCPUs) and an NVIDIA L4 GPU.
 
 ```python
 """AMR-Wind example."""
@@ -96,7 +38,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2d-highcpu-16",
+    machine_type="g2-standard-12",
     spot=True)
 
 # Initialize the Simulator
@@ -104,7 +46,8 @@ amr_wind = inductiva.simulators.AmrWind(\
     version="3.4.1")
 
 # Run simulation
-task = amr_wind.run(input_dir="/Path/to/SimulationFiles",
+task = amr_wind.run(input_dir="/Path/to/flow-cylinder-case",
+	n_vcpus=1, # number of GPUs
     sim_config_filename="ib_cylinder_Re_300.inp",
     on=cloud_machine)
 
@@ -115,14 +58,10 @@ cloud_machine.terminate()
 task.download_outputs()
 
 task.print_summary()
-
 ```
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
-
-In this example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs, comparable 
-in performance to a typical laptop.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
@@ -130,31 +69,54 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-        Waiting for Input         at 29/05, 12:53:41      0.647 s
-        In Queue                  at 29/05, 12:53:42      42.442 s
-        Preparing to Compute      at 29/05, 12:54:24      2.136 s
-        In Progress               at 29/05, 12:54:26      386.527 s
-                └> 386.39 s        /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus amr_wind ib_cylinder_Re_300.inp
-        Finalizing                at 29/05, 13:00:53      1.005 s
-        Success                   at 29/05, 13:00:54      
+	Waiting for Input         at 17/09, 14:13:24      0.868 s
+	In Queue                  at 17/09, 14:13:24      48.062 s
+	Preparing to Compute      at 17/09, 14:14:13      22.299 s
+	In Progress               at 17/09, 14:14:35      9560.343 s
+		└> 9560.17 s       /opt/openmpi/4.1.6/bin/mpirun --np 1 --use-hwthread-cpus amr_wind ib_cylinder_Re_300.inp
+	Finalizing                at 17/09, 16:53:55      7.382 s
+	Success                   at 17/09, 16:54:03      
 
 Data:
-        Size of zipped output:    100.37 MB
-        Size of unzipped output:  205.39 MB
-        Number of output files:   940
+	Size of zipped output:    463.29 MB
+	Size of unzipped output:  1.49 GB
+	Number of output files:   20
 
-Estimated computation cost (US$): 0.012 US$
+Estimated computation cost (US$): 1.03 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that
 represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 386.5 seconds (6 minutes and 27 seconds).
+the core computation time of this simulation was approximately 2 hours and 39 minutes (9560 seconds).
 
-To analyze the simulation data programmatically, Python-based tools like **yt** can be used, enabling custom visualizations and data extraction. For step-by-step guidance on creating slice plots and animations, be sure to check out our [post-processing yt tutorial](https://inductiva.ai/guides/amr-wind/using-yt).
+## Upgrading to Powerful Machines
+One of Inductiva’s key advantages is how easily you can scale your simulations to larger, more powerful machines with minimal code changes. Scaling up simply requires updating the `machine_type` parameter when allocating your cloud machine.
 
-## Scaling Up the Simulation
-One of the key advantages of using Inductiva is the ease with which you can scale your simulations to larger, more powerful machines with minimal changes to your code. Scaling up simply involves updating the `machine_type` parameter when creating your MachineGroup.
+To demonstrate the performance benefits of scaling, we ran the same simulation on a variety of cloud machines, including several GPU-equipped instances like the `g2-standard-12`, as well as CPU-only machines with increasing core counts.
 
-In this case, simply switching the cloud machine from c2d-highcpu-16 (16 vCPUs) to c2d-highcpu-32 (32 vCPUs) reduces computation time from 386.5 seconds to 270.5 seconds. For more computationally demanding tasks, the scaling benefits can be even more pronounced.
+The results are summarized in the table below:
 
-May your residuals drop fast and your vortices stay coherent. Happy simulating!
+| Machine Type     | vCPUs | GPU         | GPU Count | Execution Time | Estimated Cost (USD) |
+|------------------|-------|-------------|-----------|----------------|--------------------- |
+| c2d-highcpu-16   | 16    | -           | -         | 6h, 55 min     | 0.59                 |
+| c2d-highcpu-112  | 112   | -           | -         | 1h, 30 min     | 0.86                 |
+| g2-standard-12   | 12    | NVIDIA L4   | 1         | 2h, 39 min     | 1.02                 |
+| g2-standard-24   | 24    | NVIDIA L4   | 2         | 1h, 45 min     | 1.33                 |
+| a2-highgpu-1g    | 12    | NVIDIA A100 | 1         | 48 min, 4s     | 1.19                 |
+| a2-highgpu-2g    | 24    | NVIDIA A100 | 2         | 57 min, 40s    | 2.86                 |
+| a3-highgpu-1g    | 26    | NVIDIA H100 | 1         | 31 min, 59s    | 1.34                 |
+| a3-highgpu-2g    | 52    | NVIDIA H100 | 2         | 37 min, 14s    | 3.12                 |
+
+Running the simulation on a machine comparable to a standard laptop (`c2d-highcpu-16`) would take **6h and 55 minutes**. Upgrading to a machine with 112 vCPUs (`c2d-highcpu-112`) brings the runtime down to just **1 hour and 30 minutes**. Switching to GPU-powered machines offers even greater acceleration.
+
+For more demanding workloads, the benefits of scaling become even more pronounced. Since this particular case is not computationally heavy enough to benefit from scaling to 2 NVIDIA A100 or 2 NVIDIA H100 GPUs, diminishing returns are expected.
+
+With Inductiva's flexible cloud infrastructure, you can choose from a wide range of cutting-edge machines to match your specific need — whether optimizing for cost, runtime, or both.
+
+> To analyze the simulation data programmatically, Python-based tools like **yt** can be used, enabling 
+custom visualizations and data extraction. For step-by-step guidance on creating slice plots and animations, 
+be sure to check out our [post-processing yt tutorial](using-yt).
+
+```{banner_small}
+:origin: amr_wind
+```

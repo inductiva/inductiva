@@ -1,4 +1,9 @@
-# Versions and Containers 🛠️
+# ⚙️ Versions and Containers
+
+## About COAWST
+The [COAWST](https://www.usgs.gov/centers/whcmsc/science/coawst-a-coupled-ocean-atmosphere-wave-sediment-transport-modeling-system) COAWST Modeling System is an open-source tool that combines an ocean model, an atmosphere model, a wave model, and a sediment transport model for coastal change studies.
+
+Specifically, COAWST includes an ocean component (ROMS), an atmosphere component (WRF), a hydrology component (WRF_Hydro), wave components (SWAN, WW3 and InWave), a sediment component (USGS Community Sediment Models) and a sea ice model.
 
 ## Supported Versions
 Inductiva stays up to date with the latest versions of COAWST. Below is a list of the supported versions, along with their respective release dates:

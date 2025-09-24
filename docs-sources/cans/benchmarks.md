@@ -1,21 +1,63 @@
-# Benchmarks
-This benchmark report presents a performance and cost comparison across various CPU and GPU configurations, serving as your trusted guide in selecting the right simulation hardware for your computational CaNS projects.
+# GPU Analysis & Results
 
-We benchmark a temporal boundary layer case with stable stratification, the same scenario detailed in our [tutorial](https://inductiva.ai/guides/cans/run-temporal-boundary-layer-case). For benchmarking purposes, we executed 1% of the original CaNS simulation.
+Benchmarks conducted by **Inductiva** with technical support from **Pedro Costa (TU Delft)**
 
-## Results 📊
-Below is a detailed comparison of execution times and costs across different machine types:
+*Special thanks to **Dr. Baptiste Hardy (TU Delft)** for his support in devising this temporal boundary layer setup*
 
-| Machine Type    | vCPUs | GPU                | GPU Count | Duration          | Cost      | Speed-up |
-| --------------- | ----- | ------------------ | --------- | ----------------- | --------- | -------- |
-| c3d-highcpu-90  | 90    | -                  | 0         | 28 minutes 11 sec | 0.49 US$ | 0.28x    |
-| c3d-highcpu-180 | 180   | -                  | 0         | 17 minutes 16 sec | 0.64 US$ | 0.46x    |
-| c3d-highcpu-360 | 360   | -                  | 0         | 10 minutes 20 sec | 0.89 US$ | 0.78x    |
-| a3-highgpu-1    | 26    | NVIDIA H100 (80GB) | 1         | 8 minutes 1 sec   | 0.63 US$ | 1.00x    |
-| a3-highgpu-2    | 52    | NVIDIA H100 (80GB) | 2         | 9 minutes 1 sec   | 1.25 US$ | 0.89x    |
-| a3-highgpu-4    | 104   | NVIDIA H100 (80GB) | 4         | 6 minutes 5 sec   | 2.05 US$ | 1.32x    |
-| a3-highgpu-8    | 208   | NVIDIA H100 (80GB) | 8         | 6 minutes 8 sec   | 3.99 US$ | 1.30x    |
+---
 
-Speed-ups and cost-efficiency gains are expected to be even more significant when running the full simulation.
+This benchmark report presents a performance comparison across various GPU configurations, serving as your trusted 
+guide in selecting the right simulation hardware for your computational CaNS projects.
 
-The data illustrates that scaling up hardware resources does not always translate into linear performance improvements. In some cases, increased overhead, such as inter-GPU communication or suboptimal resource utilization, can lead to even longer runtimes. Careful benchmarking is therefore essential to find the right balance between speed, cost, and efficiency for your specific computational needs.
+We benchmark a temporal boundary layer with stable stratification case, following the same scenario detailed in our 
+[tutorial](run-temporal-boundary-layer-case).
+
+## Results
+The benchmarks cover a range of cloud machines with different GPUs. The reference setup is the most affordable and smallest 
+configuration, featuring 4 virtual CPUs (vCPUs) paired with a single **NVIDIA L4 GPU**. Other configurations that were tested 
+include more powerful machines with increased CPU counts and higher-performance GPUs, such as the **NVIDIA A100** and **H100**, 
+which allow us to evaluate how scaling hardware resources affects simulation speed.
+
+Below is a detailed comparison of execution times and speed-ups across different machine types:
+
+| Machine Type    | vCPUs | GPU Type       | GPU Count | Execution Time | Speed-up  | Estimated Cost (USD)  |
+|-----------------|-------|----------------|-----------|----------------|-----------|-----------------------|
+| g2-standard-4   | 4     | NVIDIA L4      | 1         | 25h, 3 min     | Reference | 6.86                  |
+| g2-standard-24  | 24    | NVIDIA L4      | 2         | 15h, 55 min    | 1.57x     | 10.75                 |
+| a2-highgpu-1    | 12    | NVIDIA A100    | 1         | 4h, 44 min     | 5.29x     | 7.38                  |
+| a2-highgpu-2    | 24    | NVIDIA A100    | 2         | 2h, 47 min     | 9.00x     | 8.85                  |
+| a3-highgpu-1    | 26    | NVIDIA H100    | 1         | 2h, 26 min     | 10.29x    | 6.52                  |
+| a3-highgpu-2    | 52    | NVIDIA H100    | 2         | 1h, 36 min     | 15.65x    | 8.64                  |
+
+<p align="center"><em>Table 1: Benchmark results on Inductiva</em></p>
+
+To further assess performance, we calculated the scaled time per cell, defined as the wall-clock time multiplied by the number of GPUs and divided by the total number of cells. Each time step in CaNS consists of three RK3 substeps, with a large Poisson equation being solved at each substep. In this simulation mode of CaNS (with `is_impdiff_1d = T` set in the configuration file), the expected scaled time per cell on A100 GPUs is on the order of nanoseconds. These estimates are summarized below:
+
+| Machine Type    | GPU Type     | GPU Count | Execution Time | Scaled Time per Cell (s)      |
+|-----------------|--------------|-----------|----------------|-------------------------------|
+| g2-standard-4   | NVIDIA L4    | 1         | 25h, 3 min     | 1.769e-08                     |
+| g2-standard-24  | NVIDIA L4    | 2         | 15h, 55 min    | 2.247e-08                     |
+| a2-highgpu-1    | NVIDIA A100  | 1         | 4h, 44 min     | 3.343e-09                     |
+| a2-highgpu-2    | NVIDIA A100  | 2         | 2h, 47 min     | 3.929e-09                     |
+| a3-highgpu-1    | NVIDIA H100  | 1         | 2h, 26 min     | 1.719e-09                     |
+| a3-highgpu-2    | NVIDIA H100  | 2         | 1h, 36 min     | 2.259e-09                     |
+
+<p align="center"><em>Table 2: Scale time per cell estimates calculated by Pedro Costa</em></p>
+
+## Summary
+The benchmark results clearly demonstrate the substantial performance benefits of using higher-end GPUs for CaNS simulations. 
+The best-performing setup, equipped with two **NVIDIA H100** GPUs, achieved a **15.7× speed-up** over the baseline machine with 
+a single NVIDIA L4 GPU, reducing execution time from 25 hours to just 1 hour and 36 minutes.
+
+These gains, however, are subject to the limits of strong scaling: as GPU count increases while the problem size remains fixed, 
+each GPU handles a smaller workload, leading to reduced occupancy and less-than-linear scaling. 
+
+Comparing the measured execution times (Table 1) with theoretical estimates derived from wall-time per grid cell per GPU (Table 2), 
+we observe strong agreement across all machines. The anticipated performance of approximately 1 nanosecond per cell per GPU 
+was consistently achieved, confirming the robustness and reliability of both the Inductiva platform and the CaNS solver.
+
+With Inductiva, you’re able to seamlessly select the hardware that delivers the performance your simulations demand.
+
+```{banner_small}
+:origin: cans
+```

@@ -32,12 +32,14 @@ class SWAN(simulators.Simulator):
         sim_config_filename: Optional[str],
         remote_assets: Optional[Union[str, list[str]]] = None,
         project: Optional[str] = None,
+        time_to_live: Optional[str] = None,
         resubmit_on_preemption: bool = False,
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         n_vcpus: Optional[int] = None,
         use_hwthread: bool = True,
         command: str = "swanrun",
+        on_finish_cleanup: Optional[Union[str, list[str]]] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -65,10 +67,39 @@ class SWAN(simulators.Simulator):
                 assigned. If None, the task will be assigned to
                 the default project. If the project does not exist, it will be
                 created.
+            time_to_live: Maximum allowed runtime for the task, specified as a
+                string duration. Supports common time duration formats such as
+                "10m", "2 hours", "1h30m", or "90s". The task will be
+                automatically terminated if it exceeds this duration after
+                starting.
+            on_finish_cleanup :
+                Optional cleanup script or list of shell commands to remove
+                temporary or unwanted files generated during the simulation.
+                This helps reduce storage usage by discarding unnecessary
+                output.
+                - If a string is provided, it is treated as the path to a shell
+                script that must be included with the simulation files.
+                - If a list of strings is provided, each item is treated as an
+                individual shell command and will be executed sequentially.
+                All cleanup actions are executed in the simulation's working
+                directory, after the simulation finishes.
+                Examples:
+                    on_finish_cleanup = "my_cleanup.sh"
+
+                    on_finish_cleanup = [
+                        "rm -rf temp_dir",
+                        "rm -f logs/debug.log"
+                    ]
         """
 
-        if command not in ("swanrun", "swan.exe"):
-            raise ValueError("Invalid command. Use 'swanrun' or 'swan.exe'.")
+        if self.version and command == "unswan" and self.version in {
+                "41.31", "41.45"
+        }:
+            raise ValueError("Unswan version 41.31 or 41.45 is not supported.")
+
+        if command not in ("swanrun", "swan.exe", "unswan"):
+            raise ValueError("Invalid command. Use 'swanrun', 'swan.exe' or "
+                             "'unswan'.")
 
         if sim_config_filename is None and command == "swanrun":
             raise ValueError("Simulation configuration file "
@@ -122,6 +153,14 @@ class SWAN(simulators.Simulator):
             swan_exe_command = Command(f"swan.exe {sim_config_filename}",
                                        mpi_config=mpi_config)
             commands.append(swan_exe_command)
+        elif command == "unswan":
+
+            #if the user does not provide n_vcpus use all available by default
+            omp_flag = f"-omp {n_vcpus or on.available_vcpus}"
+
+            swanrun_command = Command(
+                f"unswanrun -input {config_file_only} {omp_flag}")
+            commands.append(swanrun_command)
         return super().run(input_dir,
                            on=on,
                            storage_dir=storage_dir,
@@ -130,4 +169,6 @@ class SWAN(simulators.Simulator):
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            project=project,
+                           time_to_live=time_to_live,
+                           on_finish_cleanup=on_finish_cleanup,
                            **kwargs)

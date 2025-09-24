@@ -2,19 +2,19 @@
 
 import argparse
 
+import inductiva.client
 import inductiva
-from inductiva.client.apis.tags import storage_api
 from inductiva.utils import format_utils
 
 
 def list_buckets(_):
     """List the user's buckets accessible via the Inductiva API."""
-    api = storage_api.StorageApi(inductiva.api.get_client())
+    api = inductiva.client.StorageApi(inductiva.api.get_client())
     response_list_buckets = api.list_buckets()
     response_default_bucket = api.get_default_bucket()
 
-    buckets = [dict(schema) for schema in response_list_buckets.body]
-    default_bucket = dict(response_default_bucket.body)
+    buckets = [schema.model_dump() for schema in response_list_buckets]
+    default_bucket = response_default_bucket.model_dump()
     for bucket in buckets:
         bucket["is_default"] = "yes" if bucket == default_bucket else "no"
         bucket["is_internal"] = "yes" if bucket["is_internal"] else "no"
@@ -45,8 +45,6 @@ def register(parser):
         "The `inductiva storage bucket list` command retrieves and displays "
         "your remote storage buckets available through the Inductiva API.\n"
         "This includes information such as the bucket name, region, provider, "
-        "and whether it is internally managed by Inductiva.\n"
-        "Example:\n"
-        "  inductiva storage bucket list\n")
+        "and whether it is internally managed by Inductiva.\n")
 
     subparser.set_defaults(func=list_buckets)

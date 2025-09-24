@@ -16,9 +16,9 @@ All you need to do is update the resource allocation from `MachineGroup` to `MPI
 # Allocate a multi-machine MPI cluster on Google Cloud Platform
 - cloud_machine = inductiva.resources.MachineGroup(
 + cloud_machine = inductiva.resources.MPICluster(
-    machine_type="c2d-highcpu-112",
+    machine_type="c2d-highmem-112",
 +   num_machines=2,
-    data_disk_gb=100,
+    data_disk_gb=200,
     spot=True)
 ```
 
@@ -28,13 +28,6 @@ by using the neutral Atmospheric Boundary Layer case from the [AMR-Wind GitHub r
 ## Prerequisites
 Download the required input files from the official
 [ExaWind Benchmarks repository](https://github.com/Exawind/exawind-benchmarks/tree/main/amr-wind/atmospheric_boundary_layer/neutral/input_files) and place them in a folder named `SimulationFiles`.
-
-Make sure to update the simulation configuration file (`abl_neutral.inp`) by
-setting the `time.stop_time` parameter to:
-
-```
-time.stop_time = 120.0
-```
 
 To evaluate scalability under heavier workloads, increase the mesh refinement by modifying the `amr.n_cell` parameter in the same file. Change it from:
 
@@ -46,6 +39,19 @@ to:
 
 ```
 amr.n_cell              = 1024 1024 368 # Grid cells at coarsest AMRlevel
+```
+
+For benchmarking purposes, we will shorten the simulation run time to 0.1% of its original length. To achieve this, 
+update the simulation configuration file (`abl_neutral.inp`) by changing the `time.stop_time parameter` from:
+
+```
+time.stop_time = 120000.0
+```
+
+to:
+
+```
+time.stop_time = 120.0
 ```
 
 You're now ready to launch your simulation!
@@ -60,7 +66,7 @@ import inductiva
 
 # Allocate a multi-machine MPI cluster on Google Cloud Platform
 cloud_machine = inductiva.resources.MPICluster(
-    machine_type="c2d-highcpu-112",
+    machine_type="c2d-highmem-112",
     num_machines=2,
     data_disk_gb=200,
     spot=True
@@ -94,54 +100,49 @@ Below are the results of running this simulation on a multi-node MPI cluster, co
   <tr>
     <td>Machine Type</td>
     <td>Nº of Machines</td>
-    <td>Cores</td>
-    <td>Duration (min:s)</td>
+    <td>vCPUs</td>
+    <td>Execution Time</td>
     <td>Speedup</td>
+    <td>Estimated Cost (USD)</td>
   </tr>
   <tr>
     <td>c2d-highmem-112</td>
     <td>1</td>
     <td>112</td>
-    <td>144:00</td>
+    <td>144 min</td>
     <td>Baseline</td>
+    <td>3.60</td>
   </tr>
   <tr>
     <td>c2d-highmem-112</td>
     <td>2</td>
     <td>224</td>
-    <td>90:00</td>
+    <td>90 min</td>
     <td>1.60x</td>
+    <td>4.82</td>
   </tr>
   <tr>
     <td>c2d-highmem-112</td>
     <td>4</td>
     <td>448</td>
-    <td>59:10</td>
+    <td>59 min, 10s</td>
     <td>2.43x</td>
+    <td>6.94</td>
   </tr>
   <tr>
     <td>c2d-highmem-112</td>
     <td>8</td>
     <td>896</td>
-    <td>42:12</td>
+    <td>42 min, 12s</td>
     <td>3.41x</td>
-  </tr>
-  <tr>
-    <td>c2d-highmem-112</td>
-    <td>12</td>
-    <td>1344</td>
-    <td>34:15</td>
-    <td>4.20x</td>
-  </tr>
-  <tr>
-    <td>c2d-highmem-112</td>
-    <td>16</td>
-    <td>1792</td>
-    <td>30:48</td>
-    <td>4.68x</td>
+    <td>10.87</td>
   </tr>
 </table>
 
-Runtime consistently decreased as the cluster size grew. The best performance was recorded with **16 machines** (1792 vCPUs), completing the simulation in **30 minutes and 48 seconds** — a major improvement over the single-machine runtime of **144 minutes**.
+Runtime decreased as the cluster size increased. With **8 machines** (896 vCPUs), the simulation completed in **42 minutes and 12 seconds**, achieving a **speedup of 3.41x** compared to the single-machine runtime of 144 minutes.
 
-Nonetheless, speedup does not scale linearly with the number of vCPUs. While the 4- and 8- machine setups showed solid performance gains, adding more machines beyond that point yielded diminishing returns.
+Although adding more machines yields noticeable speedups, the relatively small size of the problem means that the benefits quickly taper off, with diminishing returns becoming evident as the cluster size increases.
+
+```{banner_small}
+:origin: amr_wind
+```

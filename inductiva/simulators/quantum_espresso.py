@@ -3,6 +3,7 @@ import logging
 from typing import List, Optional, Union
 
 from inductiva import simulators, tasks, types
+from inductiva.commands.commands import Command
 
 
 @simulators.simulator.mpi_enabled
@@ -69,6 +70,8 @@ class QuantumEspresso(simulators.Simulator):
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[Union[str, list[str]]] = None,
             project: Optional[str] = None,
+            time_to_live: Optional[str] = None,
+            on_finish_cleanup: Optional[Union[str, list[str]]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:
@@ -87,7 +90,36 @@ class QuantumEspresso(simulators.Simulator):
                 assigned. If None, the task will be assigned to
                 the default project. If the project does not exist, it will be
                 created.
+            time_to_live: Maximum allowed runtime for the task, specified as a
+                string duration. Supports common time duration formats such as
+                "10m", "2 hours", "1h30m", or "90s". The task will be
+                automatically terminated if it exceeds this duration after
+                starting.
+            on_finish_cleanup :
+                Optional cleanup script or list of shell commands to remove
+                temporary or unwanted files generated during the simulation.
+                This helps reduce storage usage by discarding unnecessary
+                output.
+                - If a string is provided, it is treated as the path to a shell
+                script that must be included with the simulation files.
+                - If a list of strings is provided, each item is treated as an
+                individual shell command and will be executed sequentially.
+                All cleanup actions are executed in the simulation's working
+                directory, after the simulation finishes.
+                Examples:
+                    on_finish_cleanup = "my_cleanup.sh"
+
+                    on_finish_cleanup = [
+                        "rm -rf temp_dir",
+                        "rm -f logs/debug.log"
+                    ]
         """
+        for i, command in enumerate(commands):
+            # convert string commands into commands with mpi config with the
+            # default values from the computational resource
+            if (isinstance(command, str) and
+                    not any(x in command for x in ("mpirun", "_openmp"))):
+                commands[i] = Command(command, mpi_config=on.get_mpi_config())
         return super().run(input_dir,
                            on=on,
                            commands=commands,
@@ -97,4 +129,6 @@ class QuantumEspresso(simulators.Simulator):
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            project=project,
+                           time_to_live=time_to_live,
+                           on_finish_cleanup=on_finish_cleanup,
                            **kwargs)

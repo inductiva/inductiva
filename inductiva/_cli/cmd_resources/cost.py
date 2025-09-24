@@ -1,6 +1,7 @@
 """CLI commands to get costs of computational resources."""
 
 import argparse
+import textwrap
 
 from inductiva import resources
 from inductiva.utils import format_utils
@@ -37,13 +38,15 @@ def register(parser):
         help="Estimate cost of a machine in the cloud.",
         formatter_class=argparse.RawTextHelpFormatter)
 
-    subparser.description = (
-        "The `inductiva cost` command provides a utility"
-        " for estimating the cost\n"
-        "of a machine in the cloud. It allows you to specify"
-        " the type of machine\n"
-        "and the number of machines, and it can calculate the"
-        " cost for spot instances.\n\n")
+    subparser.description = textwrap.dedent("""\
+        Estimate the costs of the computational resources you plan to use per
+        hour.
+                                            
+        The `inductiva resources cost` command helps you estimate the cost of
+        a machine on the cloud. It allows you to specify the machine type,
+        number of machines, zones, and whether you're using spot instances.
+    """)
+
     subparser.add_argument("machine_type",
                            type=str,
                            help="Type of machine to launch.")
@@ -64,3 +67,10 @@ def register(parser):
                            help="Zone where the machines will be launched.")
 
     subparser.set_defaults(func=estimate_machine_cost)
+
+    subparser.epilog = textwrap.dedent("""\
+        examples:
+            # Estimate the cost of using 4 machines of type c2-standard-8
+            $ inductiva resources cost c2-standard-8 --spot -n 4
+            Estimated total cost (per machine): 0.48 US$ (0.12 US$)/h.
+    """)

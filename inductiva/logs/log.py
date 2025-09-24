@@ -76,7 +76,7 @@ def _get_traceback_first_and_last_lines(exc_traceback, n_lines: int,
 def _handle_api_exception(exc_type, exc_value, exc_traceback,
                           is_notebook: bool):
     if issubclass(exc_type, exceptions.ApiException) and \
-        400 <= exc_value.status  < 500:
+        400 <= exc_value.status < 500:
         detail = json.loads(exc_value.body)["detail"]
 
         # Gets the last N lines of the traceback
@@ -173,7 +173,7 @@ def mute_logging():
     """
     Decorator to temporarily set logging level to ERROR
     during function execution and restore it afterward.
-    
+
     Example:
         @mute_logging()
         def my_function():

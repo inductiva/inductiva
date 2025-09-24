@@ -9,3 +9,6 @@ If a single machine isn’t sufficient, the user can combine resources from mult
 💡**Inductiva's top pick**: the c2d-highcpu-112 machine. 
 It has 112 vCPUs and 224GB of RAM, providing an impressive cost/performance ratio (price around 4.62 US\$/hour and spot price of just ~0.68 US\$/hour).
 
+```{banner_small}
+:origin: how_it_works_how_many_cores
+```

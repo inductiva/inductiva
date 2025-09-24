@@ -1,4 +1,4 @@
-# Test Your Inductiva Setup ⚙️
+# Test Your Inductiva Setup
 Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick SFINCS simulation — it only takes a few seconds!
 
 ## Step 1: Copy and Run the Code
@@ -39,10 +39,21 @@ task.download_outputs()
 task.print_summary()
 ```
 
+<a href="https://console.inductiva.ai/editor?simulator_name=sfincs" class="try-playground-button" target="_blank">
+  <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M8 5v14l11-7z"/>
+  </svg>
+  Try it on our Python Editor, on any device
+</a>
+
 ## Step 2: Verify the Task Status
 After the simulation completes, a task summary will be displayed in your terminal. If the task status shows **Success**, congratulations! You've successfully run an SFINCS simulation.
 
 You're ready to start running simulations seamlessly!
+
+```{banner_small}
+:origin: sfincs
+```
 
 ## Need Help?
 If you encounter any issues or need further assistance, don't hesitate to [**Contact Us**](mailto:support@inductiva.ai). We're here to help!

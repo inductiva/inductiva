@@ -1,5 +1,5 @@
 # Build a DLL file
-In the [Run 50 Simulations in Parallel](https://inductiva.ai/guides/openfast/OpenFAST_advanced) tutorial, we used the `5MW_OC4Semi_WSt_WavesWN` example, an extension of the reference case from the “Definition of a 5-MW Reference Wind Turbine for Offshore System Development”, which can be found on the [OpenFAST GitHub repository](https://github.com/OpenFAST/r-test/tree/v4.0.2/glue-codes/openfast/5MW_OC4Semi_WSt_WavesWN).
+In the [Run 50 Simulations in Parallel](run-50-simulations-in-parallel/index) tutorial, we used the `5MW_OC4Semi_WSt_WavesWN` example, an extension of the reference case from the “Definition of a 5-MW Reference Wind Turbine for Offshore System Development”, which can be found on the [OpenFAST GitHub repository](https://github.com/OpenFAST/r-test/tree/v4.0.2/glue-codes/openfast/5MW_OC4Semi_WSt_WavesWN).
 
 In some cases, including the **OC3 Hywind**, it is necessary to build the `DISCON_OC3Hywind.dll` file.
 
@@ -21,4 +21,6 @@ mv DISCON_OC3Hywind.dll ../..
 
 That's it! You're all set.
 
-
+```{banner_small}
+:origin: openfast
+```

@@ -49,7 +49,7 @@ For larger or more compute-intensive simulations, consider adjusting the `machin
 a machine with more virtual CPUs or one equipped with GPUs. You can explore the full range of available 
 machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other CP2K simulations, replace `input_dir` with the
@@ -87,14 +87,18 @@ However, increasing the number of vCPUs on the cloud machine could improve perfo
 ## Scaling Up Your Simulation  
 Scaling up your simulation is as simple as updating the `machine_type` parameter to a 56 vCPU machine (`c2d-highcpu-56`).
 
-As mentioned above, running this simulation on a **16 vCPU** cloud machine was slower than on a similarly powered local computer. To improve performance, we upgraded to a **c2d-highcpu-56** instance with **56 vCPUs**, reducing the runtime to just **43 seconds**—with a slight cost increase to **$0.0058**.
+As mentioned above, running this simulation on a **16 vCPU** cloud machine was slower than on a similarly powered local computer. To improve performance, we upgraded to a **c2d-highcpu-56** instance with **56 vCPUs**, reducing the runtime to just **43 seconds** — with a slight cost increase to **$0.0058**.
 
-| Machine Type            | Virtual CPUs | Time              | Estimated Cost |
-|-------------------------|--------------|------------------|---------------|
-| **Local Ryzen 7 7700X** | 16           | 1 minute and 15 seconds | N/A           |
-| **Cloud c2d-highcpu-16** | 16           | 1 minute and 24 seconds | 0.0031 US$      |
-| **Cloud c2d-highcpu-56** | 56           | 43 seconds | 0.0058 US$      | 
+| Machine Type            | vCPUs | Execution Time | Estimated Cost (USD)|
+|-------------------------|-------|----------------|---------------------|
+| **Local Ryzen 7 7700X** | 16    | 1 min, 15s  | N/A                 |
+| **Cloud c2d-highcpu-16**| 16    | 1 min, 24s  | 0.0031              |
+| **Cloud c2d-highcpu-56**| 56    | 43s            | 0.0058              | 
 
 By leveraging the Inductiva API, you can efficiently scale your CP2K simulations
 to meet your computational needs. Try different machine configurations and
 optimize your workflow for faster, more cost-effective results!
+
+```{banner_small}
+:origin: cp2k
+```

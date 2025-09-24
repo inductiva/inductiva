@@ -19,6 +19,7 @@ def run_simulation(
     remote_assets: Optional[List[str]] = None,
     simulator_name_alias: Optional[str] = None,
     project_name: Optional[str] = None,
+    time_to_live: Optional[str] = None,
     verbose: bool = True,
     **kwargs: Any,
 ) -> tasks.Task:
@@ -50,6 +51,7 @@ def run_simulation(
                                   simulator_obj=simulator_obj,
                                   remote_assets=remote_assets,
                                   project_name=project_name,
+                                  time_to_live=time_to_live,
                                   verbose=verbose)
 
     if not isinstance(task_id, str):

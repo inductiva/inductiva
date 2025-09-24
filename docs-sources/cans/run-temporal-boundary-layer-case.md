@@ -1,39 +1,43 @@
 # Run a Temporal Boundary Layer with Stable Stratification Case
 
-*This tutorial was written by* [Pedro Simões](mailto:P.SimoesCosta@tudelft.nl) *in collaboration with the* **Inductiva Team**
+This tutorial was written by **Pedro Costa (TU Delft)** in collaboration with the **Inductiva Team**
 
-<br>
+*Special thanks to **Dr. Baptiste Hardy (TU Delft)** for his support in devising this temporal boundary layer setup*
+
+---
 
 The numerical simulation of a temporally evolving, stably stratified boundary
 layer offers a clear computational sandbox for exploring fundamental fluid
 dynamics relevant to atmospheric wind flows.
 
-Understanding boundary layer physics is critical in atmospheric modeling because
-wind characteristics, turbulence structure, and mixing processes strongly depend
-on boundary layer dynamics. The temporal boundary layer (TBL) setup is useful
-for understanding boundary layer turbulence at high Reynolds numbers typical of
-atmospheric flows. The higher the Reynolds number of a wind flow boundary layer,
-the more "locally parallel" the flow is. The TBL flow consists of a moving bottom
-wall with constant velocity, with turbulence being entrained to the flow vertically
-and parallel to the wall. This asymptotically approximates the development of
-windflow over a surface as it approaches a parallel state, allowing simple
-interpretation of turbulent processes.
+Understanding boundary layer physics is critical in atmospheric modeling because wind characteristics, turbulence structure, 
+and mixing processes strongly depend on boundary layer dynamics. The temporal boundary layer (TBL) setup is useful for understanding
+boundary layer turbulence at high Reynolds numbers typical of atmospheric flows. The higher the Reynolds number 
+of a wind flow boundary layer, the more "locally parallel" the flow is. The TBL flow consists of a moving bottom wall with 
+constant velocity, with turbulence being entrained to the flow vertically and parallel to the wall. This asymptotically approximates 
+the development of windflow over a surface as it approaches a parallel state, allowing simple interpretation of turbulent processes.
 
-Stability plays a crucial role in altering boundary layer dynamics. To better understand its effects, let's examine the types of stratification conditions:
+Stability plays a crucial role in altering boundary layer dynamics [1]. To better understand its effects, let's examine the types of stratification conditions:
 
 - **Neutral stratification** (no vertical temperature gradient) provides a baseline scenario where temperature doesn't affect the wind turbulence dynamics.
 
-<img src="_static/tempField_neutralTDBL_Re1000-13863.gif" alt="Demo Animation"/>
+<img src="_static/tempField_neutralTDBL.gif" alt="Neutral Stratification Animation"/>
 
 - In **stable stratification**, temperature decreases with the height (that is, denser air near the surface and lighter air above), and buoyancy suppresses vertical movements, reducing turbulent mixing, and overall boundary layer growth.
 
-<img src="_static/tempField_neutralTDBL_Re1000-13863.gif" alt="Demo Animation"/>
+<img src="_static/tempField_stableTDBL.gif" alt="Stable Stratification Animation"/>
 
 - Conversely, in **unstable stratification** (cooler air above warmer air), buoyancy amplifies vertical motions, enhancing turbulence and thickening the boundary layer.
+
+*(not animated here)*
 
 Simulating these different stratification conditions provides insight into how buoyancy and turbulence interact to shape the wind boundary layer.
 
 This tutorial focuses on simulating **stable stratification**, where warmer air overlies cooler air, as it closely reflects common atmospheric conditions - particularly at night due to radiative cooling of the land surface or during stable weather patterns.
+
+<br>
+
+[1] Nieuwstadt, Frans T.M. *"The turbulent structure of the stable, nocturnal boundary layer."* Journal of Atmospheric Sciences 41.14 (1984): 2202–2216.
 
 ## Simulate Stable Stratification
 
@@ -43,7 +47,7 @@ following contents:
 
 ```
 &dns
-ng(1:3) = 768, 768, 512
+ng(1:3) = 576, 576, 384
 l(1:3) = 150, 75, 80
 gtype = 2, gr = 2.
 cfl = 0.95, dtmax = 1.e5
@@ -73,7 +77,7 @@ dims(1:2) = 0, 0, ipencil_axis = 3
 &scalar
 iniscal(:)             = 'tbl'
 alphai(:)              = 710.  ! = Pr/nu = 500 * 0.71
-beta                   = 0. ! = Gr/Re_D^2, Gr = 1e3, Re_D=500
+beta                   = -0.004 ! = Gr/Re_D^2, Gr = 1e3, Re_D=500
 cbcscal(0:1,1:3,:)     = 'P'  ,'P' ,  'P','P',  'D','N'
 bcscal(0:1,1:3,:)      =  0.,0. ,   0.,0. ,   1.,0.
 is_sforced(:)          = F
@@ -96,20 +100,9 @@ is_debug = T, is_timing = T
 /
 ```
 
-To shorten the simulation time, we will run only 1% of the original simulation.
-To do this, update the following line:
-
-```
-nstep = 40000, time_max = 2000., tw_max = 0.1  
-```
-
-to:
-
-```
-nstep = 400, time_max = 20., tw_max = 0.1  
-```
-
-This adjustment significantly reduces the simulation duration while maintaining the overall configuration. If desired, the full simulation can be run by keeping the original values.
+To simulate neutral or unstable stratification instead of the stable case, simply modify the `beta` parameter in the configuration file:
+- Set `beta = 0` for neutral stratification
+- Set `beta = 0.004` for unstable stratification
 
 ### Running the Simulation
 Here is the code required to run the simulation using the Inductiva API:
@@ -121,7 +114,7 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
         provider="GCP",
-        machine_type="a3-highgpu-1g",
+        machine_type="a2-highgpu-2g",
         zone="europe-west4-b",
         data_disk_gb=100,
         spot=True)
@@ -145,8 +138,8 @@ task.print_summary()
 
 ```
 
-> **Note**: `spot` machines are available at substantial discounts, but your simulation job may be preempted if
-> the Cloud provider reclaims the spot machine.
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
@@ -154,30 +147,34 @@ When the simulation is complete, we terminate the machine, download the results 
 Task status: Success
 
 Timeline:
-	Waiting for Input         at 22/05, 09:13:45      0.818 s
-	In Queue                  at 22/05, 09:13:46      57.083 s
-	Preparing to Compute      at 22/05, 09:14:43      22.052 s
-	In Progress               at 22/05, 09:15:05      493.001 s
-		├> 2.083 s         mkdir -p data
-		└> 490.643 s       /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus --np 1 cans input.nml
-	Finalizing                at 22/05, 09:23:18      404.624 s
-	Success                   at 22/05, 09:30:02      
+	Waiting for Input         at 08/06, 15:06:42      0.758 s
+	In Queue                  at 08/06, 15:06:43      65.05 s
+	Preparing to Compute      at 08/06, 15:07:48      17.726 s
+	In Progress               at 08/06, 15:08:06      10029.364 s
+		├> 1.07 s          mkdir -p data
+		└> 10028.036 s     /opt/openmpi/4.1.6/bin/mpirun --np 2 --use-hwthread-cpus cans input.nml
+	Finalizing                at 08/06, 17:55:15      640.376 s
+	Success                   at 08/06, 18:05:56      
 
 Data:
-	Size of zipped output:    15.59 GB
-	Size of unzipped output:  19.37 GB
-	Number of output files:   42
+	Size of zipped output:    19.72 GB
+	Size of unzipped output:  22.20 GB
+	Number of output files:   2639
 
-Estimated computation cost (US$): 0.65 US$
+Estimated computation cost (US$): 8.86 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that
 represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 8 minutes and 13 seconds.
+the core computation time of this simulation was approximately 2 hours and 47 minutes.
 
 ### Scaling Up the Simulation
-One of the benefits of using Inductiva is the ability to scale simulations to bigger and faster machines with minimal code changes. In this case, only the `machine_type` argument needs to be updated during MachineGroup creation.
+One of the key advantages of using Inductiva is the ease with which you can scale your simulations to larger, 
+more powerful machines with minimal changes to your code. Scaling up simply involves updating the 
+`machine_type` parameter when allocating the cloud machine.
 
-To explore detailed results, visit our [Benchmarks page](https://inductiva.ai/guides/cans/benchmarks).
+To explore detailed results, visit our [Benchmarks page](benchmarks).
 
-Stay tunned for more!
+```{banner_small}
+:origin: cans
+```

@@ -147,3 +147,7 @@ There’s more to explore, like adding an HDRI environment to enhance
 lighting and realism, but we'll save that for another tutorial. For now, feel free to adjust the material and camera settings to get the visual effect you want.
 
 Happy rendering!
+
+```{banner_small}
+:origin: dualsphysics
+```
