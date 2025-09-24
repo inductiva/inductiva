@@ -87,7 +87,7 @@ Estimated computation cost (US$): 1.03 US$
 
 As you can see in the "In Progress" line, the part of the timeline that
 represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 2 hour and 39 minutes (9560 seconds).
+the core computation time of this simulation was approximately 2 hours and 39 minutes (9560 seconds).
 
 ## Upgrading to Powerful Machines
 One of Inductiva’s key advantages is how easily you can scale your simulations to larger, more powerful machines with minimal code changes. Scaling up simply requires updating the `machine_type` parameter when allocating your cloud machine.
@@ -100,7 +100,7 @@ The results are summarized in the table below:
 |------------------|-------|-------------|-----------|----------------|--------------------- |
 | c2d-highcpu-16   | 16    | -           | -         | 6h, 55 min     | 0.59                 |
 | c2d-highcpu-112  | 112   | -           | -         | 1h, 30 min     | 0.86                 |
-| g2-standard-12   | 12    | NVIDIA L4   | 1         | 2h, 40 min     | 1.02                 |
+| g2-standard-12   | 12    | NVIDIA L4   | 1         | 2h, 39 min     | 1.02                 |
 | g2-standard-24   | 24    | NVIDIA L4   | 2         | 1h, 45 min     | 1.33                 |
 | a2-highgpu-1g    | 12    | NVIDIA A100 | 1         | 48 min, 4s     | 1.19                 |
 | a2-highgpu-2g    | 24    | NVIDIA A100 | 2         | 57 min, 40s    | 2.86                 |
