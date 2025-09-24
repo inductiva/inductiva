@@ -2,7 +2,6 @@
 from typing import List, Optional, Union
 
 from inductiva import simulators, tasks, types
-from inductiva.commands.commands import Command
 
 
 class FreeFEM(simulators.Simulator):
