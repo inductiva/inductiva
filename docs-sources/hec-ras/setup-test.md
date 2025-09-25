@@ -44,7 +44,6 @@ task.wait()
 cloud_machine.terminate()
 
 task.download_outputs()
-
 ```
 
 <a href="https://console.inductiva.ai/editor?simulator_name=hec_ras" class="try-playground-button" target="_blank">

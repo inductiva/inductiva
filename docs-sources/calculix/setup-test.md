@@ -31,6 +31,7 @@ task = calculix.run( \
     on=cloud_machine,
     n_vcpus=4)
 
+# Wait for the simulation to finish and download the results
 task.wait()
 cloud_machine.terminate()
 

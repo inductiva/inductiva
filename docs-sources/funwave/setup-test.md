@@ -1,10 +1,9 @@
 # Test Your Inductiva Setup
-Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick FUNWAVE simulation — it only takes a few seconds!
+Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick HEC-RAS simulation — it only takes a few seconds!
 
 ## Step 1: Copy and Run the Code
-To get started, copy the code below and paste it into a Python script.
 
-When you run the script, all the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. The FUNWAVE simulation will then be sent to a cloud machine for execution.
+1. Copy the code below and save it as `example.py` on your Desktop (or in your preferred directory).
 
 ```python
 """FUNWAVE example."""
@@ -31,6 +30,7 @@ task = funwave.run( \
     sim_config_filename="input.txt",
     on=cloud_machine)
 
+# Wait for the simulation to finish and download the results
 task.wait()
 cloud_machine.terminate()
 
@@ -46,10 +46,32 @@ task.print_summary()
   Try it on our Python Editor, on any device
 </a>
 
-## Step 2: Verify the Task Status
-After the simulation completes, a task summary will be displayed in your terminal. If the task status shows **Success**, congratulations! You've successfully run an FUNWAVE simulation.
+2. Open your command line, then navigate to the Desktop by running:
 
-You're ready to start running simulations seamlessly!
+```
+cd ~/Desktop
+```
+
+3. Execute the Python script by running:
+
+```
+python example.py
+```
+
+> **Note**: On some systems, you might need to use `python3` instead of `python`.
+
+All the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. The FUNWAVE simulation will then be sent to a cloud machine for execution.
+
+## Step 2: Verify the Task Status
+After the simulation completes, a task summary will be displayed in your terminal, as shown below. 
+
+```
+
+```
+
+If the task status shows **Success**, congratulations! You've successfully run a FUNWAVE simulation.
+
+This simple example tested your installation on a small machine with just 4 virtual CPUs. Inductiva offers far more powerful options to supercharge your simulations.
 
 ```{banner_small}
 :origin: funwave-setup-test
@@ -57,3 +79,10 @@ You're ready to start running simulations seamlessly!
 
 ## Need Help?
 If you encounter any issues or need further assistance, don't hesitate to [**Contact Us**](mailto:support@inductiva.ai). We're here to help!
+
+
+
+
+
+
+

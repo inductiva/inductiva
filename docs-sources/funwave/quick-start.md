@@ -7,29 +7,27 @@ We will cover the `meteo_tsunami` use case from the [FUNWAVE GitHub repository](
   <img src="_static/funwave_animation.gif" alt="Demo Animation" width="400"/>
 </div>
 
-
-
 ## Prerequisites
-
-First, download the required files from the [repository](https://github.com/fengyanshi/FUNWAVE-TVD/releases/tag/Version_3.6).
-
-After the download all your simulation files will be in the `FUNWAVE-TVD-Version_3.6/simple_cases/meteo_tsunami` folder.
+Download the required files [here](https://github.com/fengyanshi/FUNWAVE-TVD/releases/tag/Version_3.6). The simulation files will be placed inside the `FUNWAVE-TVD-Version_3.6/simple_cases/meteo_tsunami` folder.
 
 ## Running a FUNWAVE Simulation
 Here is the code required to run a FUNWAVE simulation using the Inductiva API:
 
 ```python
+"""FUNWAVE example."""
 import inductiva
 
+# Allocate a machine on Google Cloud Platform
 machine_group = inductiva.resources.MachineGroup(
     provider="GCP",
     machine_type="c3d-highcpu-4",
     spot=True)
 
+# Initialize the Simulator
 funwave = inductiva.simulators.FUNWAVE( \
     version="3.6")
 
-
+# Run simulation
 task = funwave.run(
     input_dir="/Path/to/meteo_tsunami",
     sim_config_filename="input.txt",
@@ -79,28 +77,28 @@ Estimated computation cost (US$): 0.0038 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 5 minutes and 16 seconds.
+the core computation time of this simulation was 316 seconds (approximately 5 minutes and 16 seconds).
 
 ## Scaling Up Your Simulation
-To run your simulation on a larger machine, you’ll need to make a few small changes to both your `input.txt` file 
-and your Python script.
+To run your simulation on a more powerful machine, you'll need to make a few small adjustments to both your `input.txt` file and your Python script.
 
 ### Required Changes
-Update the following parameters:
+To increase the number of vCPUs to 16, update the following parameters:
 
 * In `input.txt`:
 	- Set `PX` = 4
 	- Set `PY` = 4
 * In your Python script:
 	- Set `machine_type` = "c3d-highcpu-16"
-	- Set `n_vcpus` = 16
 
-> **Note**: `PX * PY` need to be equal to `n_vcpus`.
+> **Note**: The product of `PX * PY` must equal to the number of vCPUs on the machine.
 
-That’s all it takes to scale your simulation to a 16 vCPU machine.
+If you're scaling to a machine with more vCPUs or switching to a different machine type, follow the same pattern:
+* Set `PX` and `PY` such that `PX * PY = number of vCPUs`
+* Update `machine_type` accordingly in your script
 
 ### Performance Comparison
-Here are the results of running the same simulation on different machines:
+Below are the results of running the same simulation on different machine configurations:
 
 | Machine Type             | vCPUs     | Execution Time             | Estimated Cost (USD) |
 |--------------------------|------------------|------------------|----------------------|
@@ -108,7 +106,7 @@ Here are the results of running the same simulation on different machines:
 | **c3d-highcpu-16** | 16               | 1 min, 52s        | 0.0051               |
 | **c3d-highcpu-60** | 60               | 1 min, 0s       | 0.010                |
 
-With the **Inductiva API**, you can easily scale your FUNWAVE simulations to match your computational demands. Whether you need faster runtimes or lower costs, experimenting with different machine configurations allows you to find the optimal balance for your workflow.
+With the Inductiva API, scaling your FUNWAVE simulations is simple and efficient. Whether you're aiming for faster runtimes or reduced costs, experimenting with different machine configurations helps you find the best setup for your specific needs.
 
 ```{banner_small}
 :origin: funwave-quick-start
