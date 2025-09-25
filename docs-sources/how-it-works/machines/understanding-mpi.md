@@ -53,6 +53,8 @@ For example, a CPU with 2 physical cores can provide 4 vCPUs.
   <img src="./_static/machine.png" alt="Machine Schema">
 </div>
 
+![Machine Schema](./_static/machine.png)
+
 
 So, in the machine `c2d-highcpu-4`:
 
