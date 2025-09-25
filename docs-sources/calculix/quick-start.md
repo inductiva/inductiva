@@ -16,7 +16,8 @@ import inductiva
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2d-highcpu-4")
+    machine_type="c2d-highcpu-4",
+	spot=True)
 
 # Initialize the Simulator
 calculix = inductiva.simulators.CalculiX( \

@@ -2,7 +2,7 @@
 
 ## About Elmer
 [Elmer](https://www.elmerfem.org/blog/) is an open-source finite element
-software for multiphysical simulations. It allows users to solve complex
+software for multiphysical simulations. It enables users to solve complex
 engineering and scientific problems involving fluid dynamics, structural
 mechanics, heat transfer, electromagnetics, and more. Elmer provides a flexible
 framework with a modular architecture, supporting both pre-defined solvers and

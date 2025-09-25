@@ -1,5 +1,5 @@
 # Test Your Inductiva Setup
-Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick HEC-RAS simulation — it only takes a few seconds!
+Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. To confirm everything is working as expected, simply run a quick FUNWAVE simulation — it only takes a few seconds!
 
 ## Step 1: Copy and Run the Code
 
@@ -66,7 +66,27 @@ All the necessary simulation artifacts and configuration files will be automatic
 After the simulation completes, a task summary will be displayed in your terminal, as shown below. 
 
 ```
+Task status: Success
 
+Timeline:
+	Waiting for Input         at 25/09, 10:46:34      0.887 s
+	In Queue                  at 25/09, 10:46:35      33.676 s
+	Preparing to Compute      at 25/09, 10:47:09      4.119 s
+	In Progress               at 25/09, 10:47:13      50.9 s
+		├> 1.081 s         cp /FUNWAVE-TVD-Version_3.6/Makefile .
+		├> 11.084 s        make
+		├> 36.113 s        /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus funwave-work/compiled_funwave input.txt
+		├> 1.091 s         rm -r funwave-work
+		└> 1.088 s         rm Makefile
+	Finalizing                at 25/09, 10:48:04      0.555 s
+	Success                   at 25/09, 10:48:04      
+
+Data:
+	Size of zipped output:    4.45 MB
+	Size of unzipped output:  25.79 MB
+	Number of output files:   220
+
+Estimated computation cost (US$): 0.00036 US$
 ```
 
 If the task status shows **Success**, congratulations! You've successfully run a FUNWAVE simulation.
