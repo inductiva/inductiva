@@ -5,6 +5,8 @@ import threading
 import sys
 import os
 import platform
+import subprocess
+import tempfile
 from inductiva import _cli, constants, _api_key, api_url
 
 _docker_imported = True
@@ -35,8 +37,187 @@ def join_container_streams(*containers, fout: TextIO = sys.stdout):
         thread.join()
 
 
+def create_startup_script(api_key: str, api_url: str, machine_group_name: str) -> str:
+    """Create the startup script for GCP VM."""
+    script_content = f"""#!/bin/bash
+
+set -e
+
+# -------------------------------
+# 1. Install Docker
+# -------------------------------
+apt update
+apt install -y docker.io
+
+systemctl enable docker
+systemctl start docker
+
+# -------------------------------
+# 2. Prepare directories and volume
+# -------------------------------
+mkdir -p /home/runner/apptainer
+chmod 777 /home/runner/apptainer
+
+docker volume create workdir
+
+# -------------------------------
+# 3. Pull Docker images
+# -------------------------------
+docker pull inductiva/task-runner:latest
+docker pull inductiva/file-tracker:latest
+
+# -------------------------------
+# 4. Read metadata and export env variables
+# -------------------------------
+for var in INDUCTIVA_API_KEY INDUCTIVA_API_URL MACHINE_GROUP_NAME; do
+    export "$var"=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/attributes/$var" -H "Metadata-Flavor: Google")
+    echo "$var=${{!var}}"
+done
+
+# -------------------------------
+# 5. Launch file-tracker
+# -------------------------------
+docker run -d --name file-tracker \\
+  --network host \\
+  -v workdir:/workdir \\
+  -e API_URL="$INDUCTIVA_API_URL" \\
+  -e USER_API_KEY="$INDUCTIVA_API_KEY" \\
+  inductiva/file-tracker:latest
+
+# -------------------------------
+# 6. Launch task-runner
+# -------------------------------
+docker run -d --name task-runner \\
+  --network host \\
+  --privileged \\
+  --platform linux/amd64 \\
+  -v /home/runner/apptainer:/executer-images \\
+  -v workdir:/workdir \\
+  --add-host host.docker.internal:host-gateway \\
+  -e EXECUTER_IMAGES_DIR=/executer-images \\
+  -e API_URL="$INDUCTIVA_API_URL" \\
+  -e USER_API_KEY="$INDUCTIVA_API_KEY" \\
+  -e MACHINE_GROUP_NAME="$MACHINE_GROUP_NAME" \\
+  -e HOST_NAME="${{TASK_RUNNER_HOSTNAME:-$(hostname)}}" \\
+  inductiva/task-runner:latest
+
+# -------------------------------
+# 7. Monitor task-runner and shutdown VM if it stops
+# -------------------------------
+METADATA_URL="http://metadata.google.internal/computeMetadata/v1/instance"
+VM_NAME=$(curl -s -H "Metadata-Flavor: Google" "$METADATA_URL/name")
+ZONE=$(curl -s -H "Metadata-Flavor: Google" "$METADATA_URL/zone" | awk -F/ '{{print $4}}')
+
+while true; do
+    sleep 10
+    if [ -z "$(docker ps -q -f name=task-runner)" ]; then
+        echo "Task runner stopped, deleting VM..."
+        gcloud compute instances delete "$VM_NAME" --zone="$ZONE" --quiet
+        break
+    fi
+done
+"""
+    return script_content
+
+
+def check_gcloud_installed() -> bool:
+    """Check if gcloud CLI is installed and authenticated."""
+    try:
+        subprocess.run(['gcloud', '--version'], 
+                              capture_output=True, text=True, check=True)
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
+
+
+def check_gcloud_auth() -> bool:
+    """Check if gcloud is authenticated."""
+    try:
+        result = subprocess.run(['gcloud', 'auth', 'list', '--filter=status:ACTIVE'], 
+                              capture_output=True, text=True, check=True)
+        return 'ACTIVE' in result.stdout
+    except subprocess.CalledProcessError:
+        return False
+
+
+def launch_task_runner_gcp(args, fout: TextIO = sys.stdout):
+    """Launches a Task-Runner on GCP."""
+    
+    if not check_gcloud_installed():
+        print("Error: gcloud CLI is not installed or not in PATH.", file=fout)
+        print("Please install gcloud CLI: https://cloud.google.com/sdk/docs/install", file=fout)
+        print("Or install with: pip install 'inductiva[gcp]'", file=fout)
+        return
+    
+    if not check_gcloud_auth():
+        print("Error: gcloud is not authenticated.", file=fout)
+        print("Please run 'gcloud auth login' to authenticate.", file=fout)
+        return
+    
+    api_key = _api_key.get()
+    if not api_key:
+        print("Error: No API key found. Please set your API key first.", file=fout)
+        return
+    
+    startup_script = create_startup_script(api_key, api_url, args.machine_group_name)
+    
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.sh', delete=False) as f:
+        f.write(startup_script)
+        script_path = f.name
+    
+    try:
+        cmd = [
+            'gcloud', 'compute', 'instances', 'create', args.machine_group_name,
+            '--zone', args.zone,
+            '--machine-type', args.machine_type,
+            '--image-family', args.image_family,
+            '--image-project', args.image_project,
+            '--scopes', 'https://www.googleapis.com/auth/cloud-platform',
+            '--metadata', f'INDUCTIVA_API_KEY={api_key},INDUCTIVA_API_URL={api_url},MACHINE_GROUP_NAME={args.machine_group_name}',
+            '--metadata-from-file', f'startup-script={script_path}'
+        ]
+        
+        if args.preemptible:
+            cmd.append('--preemptible')
+        
+        if args.hostname:
+            cmd.extend(['--metadata', f'TASK_RUNNER_HOSTNAME={args.hostname}'])
+        
+        print(f"Creating GCP VM '{args.machine_group_name}' in zone '{args.zone}'...", file=fout)
+        print(f"Machine type: {args.machine_type}", file=fout)
+        if args.preemptible:
+            print("Using preemptible instance (spot pricing)", file=fout)
+        
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        
+        if result.returncode == 0:
+            print("GCP VM created successfully!", file=fout)
+            print(f"VM Name: {args.machine_group_name}", file=fout)
+            print(f"Zone: {args.zone}", file=fout)
+            print("The task-runner will start automatically once the VM is ready.", file=fout)
+        else:
+            print("Failed to create GCP VM:", file=fout)
+            print(result.stderr, file=fout)
+            
+    except Exception as e:
+        print(f"Error creating GCP VM: {e}", file=fout)
+    finally:
+        try:
+            os.unlink(script_path)
+        except OSError:
+            pass
+
+
 def launch_task_runner(args, fout: TextIO = sys.stdout):
     """Launches a Task-Runner."""
+    if args.provider == 'gcp':
+        launch_task_runner_gcp(args, fout)
+    else:  # local
+        launch_task_runner_local(args, fout)
+
+
+def launch_task_runner_local(args, fout: TextIO = sys.stdout):
+    """Launches a Task-Runner locally using Docker."""
     if not _docker_imported:
         print(
             "Docker Python API not installed, please run "
@@ -147,9 +328,34 @@ def register(parser):
 
     subparser.description = (
         "The `inductiva task-runner launch` command provides "
-        "a way to launch a Task-Runner on the platform.")
+        "a way to launch a Task-Runner on different providers.\n\n"
+        "Providers:\n"
+        "  local  - Launch locally using Docker (default)\n"
+        "  gcp    - Launch on Google Cloud Platform\n\n"
+        "Local Provider:\n"
+        "  - Pulls required Docker images\n"
+        "  - Creates necessary volumes and directories\n"
+        "  - Launches file-tracker and task-runner containers\n"
+        "  - Monitors containers (unless --detach is used)\n\n"
+        "GCP Provider:\n"
+        "  - Creates a GCP compute instance\n"
+        "  - Installs Docker and pulls required images\n"
+        "  - Launches file-tracker and task-runner containers\n"
+        "  - Monitors task-runner and auto-deletes VM when it stops\n\n"
+        "Prerequisites:\n"
+        "  Local: Docker installed and running\n"
+        "  GCP:   gcloud CLI installed and authenticated\n"
+        "  Both:  Valid Inductiva API key configured")
 
     _cli.utils.add_watch_argument(subparser)
+    
+    subparser.add_argument(
+        "--provider",
+        "-p",
+        choices=["local", "gcp"],
+        default="local",
+        help="Provider to use for launching the task-runner (default: local).")
+
     subparser.add_argument(
         "machine_group_name",
         type=str,
@@ -163,6 +369,39 @@ def register(parser):
     subparser.add_argument("--detach",
                            "-d",
                            action="store_true",
-                           help="Run the task-runner in the background.")
+                           help="Run the task-runner in the background (local only).")
+
+    # GCP-specific arguments
+    gcp_group = subparser.add_argument_group("GCP-specific options")
+    gcp_group.add_argument(
+        "--zone",
+        "-z",
+        type=str,
+        default="europe-west1-b",
+        help="GCP zone where the VM will be created (default: europe-west1-b).")
+
+    gcp_group.add_argument(
+        "--machine-type",
+        "-t",
+        type=str,
+        default="c2d-standard-8",
+        help="GCP machine type (default: c2d-standard-8).")
+
+    gcp_group.add_argument(
+        "--image-family",
+        type=str,
+        default="ubuntu-2204-lts",
+        help="GCP image family (default: ubuntu-2204-lts).")
+
+    gcp_group.add_argument(
+        "--image-project",
+        type=str,
+        default="ubuntu-os-cloud",
+        help="GCP image project (default: ubuntu-os-cloud).")
+
+    gcp_group.add_argument(
+        "--preemptible",
+        action="store_true",
+        help="Use preemptible instance (spot pricing) for cost savings.")
 
     subparser.set_defaults(func=launch_task_runner)
