@@ -6,6 +6,7 @@ designed to simulate the propagation and transformation of surface gravity waves
 in coastal and nearshore environments. Based on the fully nonlinear Boussinesq equations, 
 it employs a Total Variation Diminishing (TVD) shock-capturing scheme, enabling it to accurately 
 model highly nonlinear processes such as wave breaking, run-up, and inundation.
+
 Thanks to its ability to capture both dispersive and nonlinear effects over complex bathymetry, 
 FUNWAVE is widely used in the study of tsunamis, storm surges, and coastal wave dynamics.
 
