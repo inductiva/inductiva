@@ -16,7 +16,8 @@ import inductiva
 # Instantiate machine group
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2d-highcpu-4")
+    machine_type="c2d-highcpu-4",
+	spot=True)
 
 # Initialize the Simulator
 calculix = inductiva.simulators.CalculiX( \
@@ -70,7 +71,7 @@ Estimated computation cost (US$): 0.0023 US$
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 5 minutes and 53 seconds.
+the core computation time of this simulation was 353 seconds (approximately 5 minutes and 53 seconds).
 
 ```{banner_small}
 :origin: calculix_quick_start
