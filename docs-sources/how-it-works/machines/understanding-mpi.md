@@ -49,7 +49,10 @@ using a technique called *hyper-threading*. These threads are exposed as
 
 For example, a CPU with 2 physical cores can provide 4 vCPUs.
 
-![Machine Schema](./_static/machine.png)
+<p align="center">
+  <img src="./_static/machine.png" alt="Machine Schema">
+</p>
+
 
 So, in the machine `c2d-highcpu-4`:
 
