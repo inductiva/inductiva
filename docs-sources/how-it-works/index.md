@@ -120,6 +120,7 @@ machines/shared-dedicated-resources
 machines/manage_computational_resources
 machines/computational-infrastructure
 machines/spot-machines
+Understanding MPI <machines/understanding-mpi>
 ```
 
 ```{toctree}
