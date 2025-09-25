@@ -9,7 +9,14 @@ from inductiva import storage
 def listdir(args):
     """List the user's remote storage contents."""
     max_results = None if args.all else args.max_results
-    storage.listdir(args.path, max_results, args.order_by, args.sort_order)
+
+    storage.listdir(
+        path=args.path,
+        region=args.region,
+        max_results=max_results,
+        order_by=args.order_by,
+        sort_order=args.sort_order,
+    )
 
 
 def register(parser):
@@ -43,6 +50,11 @@ def register(parser):
     subparser.add_argument("--all",
                            action="store_true",
                            help="List all results, ignoring --max-results.")
+    subparser.add_argument("-r",
+                           "--region",
+                           default=None,
+                           type=str,
+                           help="Storage region.")
 
     subparser.epilog = textwrap.dedent("""\
         examples:

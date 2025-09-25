@@ -69,6 +69,7 @@ def get_space_used():
 
 def listdir(
     path="/",
+    region: Optional[str] = None,
     max_results: Optional[int] = 10,
     order_by: Literal["size", "creation_time"] = "creation_time",
     sort_order: Literal["asc", "desc"] = "desc",
@@ -77,6 +78,10 @@ def listdir(
     """List and display the contents of the user's storage.
     Args:
         path (str): Storage directory to list. Default is root.
+        region (str, optional): The storage region to query. If omitted, the
+            user's storage in the default region is return. Specify "all" to
+            include storage from every available region (applies only to users
+            with storage in multiple regions).
         max_results (int): The maximum number of results to return. If not set,
             all entries are returned.
         order_by (str): The field to sort the contents by.
@@ -105,19 +110,38 @@ def listdir(
     if len(path.split("/")) < 2:
         path += "/"
 
-    contents = api.list_storage_contents(path=path,
-                                         sort_by=order_by,
-                                         order=sort_order,
-                                         max_results=max_results)
     all_contents = []
-    for content_name, info in contents.items():
-        size = info.size_bytes
-        creation_time = info.creation_time
-        all_contents.append({
-            "content_name": content_name,
-            "size": round(float(size), 3),
-            "creation_time": creation_time
-        })
+    fetch_contents = True
+    page = 1
+
+    while fetch_contents:
+        page_size = min(100, max_results)
+
+        response = api.list_storage_contents(
+            path=path,
+            sort_by=order_by,
+            order=sort_order,
+            page=page,
+            per_page=page_size,
+            region=region,
+        )
+
+        for file_info in response.contents:
+            all_contents.append({
+                "name": file_info.name,
+                "size": round(float(file_info.size_bytes), 3),
+                "creation_time": file_info.creation_time,
+                "provider": file_info.provider_id,
+                "region": file_info.region,
+            })
+
+        page_count = len(response.contents)
+        page += 1
+        max_results -= page_count
+
+        if page_count < page_size or max_results < 1:
+            fetch_contents = False
+
     if print_results:
         print(_print_contents_table(all_contents))
 
@@ -126,16 +150,21 @@ def listdir(
         print(
             f"Listed {len(all_contents)} folder(s). Ordered by {order_by}.\n"
             "Use --max-results/-m to control the number of results displayed.")
+
+        print("\nYou have storage in the following regions: "
+              f"{", ".join(response.available_regions)}")
+
     return all_contents
 
 
 def _print_contents_table(contents):
-    columns = ["Name", "Size", "Creation Time"]
+    columns = ["Name", "Size", "Creation Time", "Provider", "Region"]
     rows = []
 
     for content in contents:
         row = [
-            content["content_name"], content["size"], content["creation_time"]
+            content["name"], content["size"], content["creation_time"],
+            content["provider"], content["region"]
         ]
         rows.append(row)
 
@@ -801,7 +830,7 @@ def _generate_complete_multipart_upload_signed_url(
 def _get_file_size(file_path):
     api = inductiva.client.StorageApi(inductiva.api.get_client())
 
-    contents = api.list_storage_contents(path=file_path, max_results=2)
+    contents = api.list_storage_contents(path=file_path, per_page=2)
     if len(contents) > 1:
         raise ValueError(f"Multiple files found at {file_path}. "
                          "Please specify a single file.")
