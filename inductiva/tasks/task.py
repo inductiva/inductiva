@@ -290,10 +290,15 @@ class TaskInfo:
         if self.estimated_computation_cost:
             estimated_cost = format_utils.currency_formatter(
                 self.estimated_computation_cost,)
+            estimated_cost_fee = format_utils.currency_formatter(
+                self.estimated_computation_cost+0.01,)
         else:
             estimated_cost = "N/A"
-        table_str += ("\nEstimated computation cost (US$): "
-                      f"{estimated_cost}\n\n")
+            estimated_cost_fee = "N/A"
+        table_str += ("\nEstimated computation cost: "
+                      f"{estimated_cost}\n")
+        table_str += ("Cost including Task Orchestration Fee: "
+                      f"{estimated_cost_fee}\n\n")
         table_str += ("Go to "
                       f"https://console.inductiva.ai/tasks/{self.task_id} "
                       "for more details.")
