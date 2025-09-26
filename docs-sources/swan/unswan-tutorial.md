@@ -9,7 +9,7 @@ We will cover the `Haringvliet field case` from the [official SWAN documentation
 ## Prerequisites
 Download the required files [here](https://swanmodel.sourceforge.io/download/zip/f32harin.tar.gz) and place them in a folder called `f32harin`. Then, you’ll be ready to send your simulation to the Cloud.
 
-## Running an UnSWAN Simulation
+## Running the Simulation
 Here is the code required to run a UnSWAN simulation using the Inductiva API:
 
 ```python
