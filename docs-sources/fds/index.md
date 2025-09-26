@@ -50,7 +50,7 @@ caption: 🚀 Benchmarks
 maxdepth: 1
 hidden: true
 ---
-mpi-strong-scaling-benchmark
+parallelization-benchmarks
 ```
 
 ```{toctree}
