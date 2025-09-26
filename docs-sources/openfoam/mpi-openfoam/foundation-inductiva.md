@@ -101,3 +101,16 @@ modeled using the **k–ε model**, and a stepped
 **first-order to second-order convection scheme** was employed to ensure better
 convergence.
 
+## Analyzing the Results
+
+
+| Machine Type   | Threads per Core | vCPUs Used | Execution Time | Cost (US$) |
+| -------------- | ---------------- | ---------- | -------------- | ---------- |
+| c4d-highcpu-96 | 2                | 48          | 9 hrs 20 min  | 15.48     |
+| c4d-highcpu-96 | 1                | 48          | 9 hrs 23 min  | 15.58      |
+| c4d-highcpu-96 | 2                | 96          | -   | -     |
+| c4d-highcpu-48 | 2                | 48         | -   | -     |
+
+From these results:
+
+* Switching from `threads_per_core=2` to `threads_per_core=1` has some negative impact on the performance.
