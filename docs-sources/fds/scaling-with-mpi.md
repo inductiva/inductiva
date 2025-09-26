@@ -1,5 +1,5 @@
 # Scale FDS with MPI
-The Fire Dynamics Simulator (FDS) supports parallelism using two methods:
+Fire Dynamics Simulator (FDS) supports parallelism using two methods:
 - **MPI (Message Passing Interface)**: Distributes the workload across multiple meshes by running separate MPI processes.
 - **OpenMP**: Enables multi-threading within each mesh.
 
