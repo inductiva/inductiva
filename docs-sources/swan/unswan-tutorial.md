@@ -1,5 +1,8 @@
-# Run your UnSWAN (UNstructured mesh SWAN) simulation
-This tutorial will show you how to run UnSWAN simulations using the Inductiva API. 
+# Run an UnSWAN Simulation
+This tutorial will guide you through running simulations with UnSWAN, the unstructured-grid version of 
+the SWAN model, using the Inductiva API. Unlike traditional structured-grid versions, UnSWAN employs 
+an unstructured mesh, offering greater flexibility for modeling wave dynamics in complex coastal 
+areas, tidal inlets, and regions with varying resolutions.
 
 We will cover the `Haringvliet field case` from the [official SWAN documentation](https://swanmodel.sourceforge.io/download/download.htm).
 
@@ -46,8 +49,8 @@ a machine with more virtual CPUs and increased memory capacity. You can explore 
 > **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-To adapt this script for other SWAN simulations, replace `input_dir` with the
-path to your SWAN input files and set the `sim_config_filename` accordingly.
+To adapt this script for other UnSWAN simulations, replace `input_dir` with the
+path to your UnSWAN input files and set the `sim_config_filename` accordingly.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
