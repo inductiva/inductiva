@@ -39,7 +39,7 @@ def damping(Ti, Tj, ksi):
 ## 2. Project and File Path Configuration
 To manage and organize simulation data, we group everything into a **Project**. We also define the input file paths required for the analyses.
 
-Update the `tutorial_folder` variable to point to the path of the downloaded IDA-at-scale folder.
+Don't forget to update the `tutorial_folder` variable to point to the path of the downloaded IDA-at-scale folder.
 
 ```python
 # Organize all data into a Project

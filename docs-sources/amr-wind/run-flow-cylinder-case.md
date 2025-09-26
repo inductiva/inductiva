@@ -22,12 +22,9 @@ Download the required files [here](https://storage.googleapis.com/inductiva-api-
 ### Case Modifications
 To support a more compute-intensive workload than the original configuration, we made the following changes to the input file (`ib_cylinder_Re_300.inp`):
 
-- **Increased `time.max_step` from 20 to 2000**
-This extension avoids the skew caused by the slower initial warm-up iterations and ensures a longer runtime, enabling a more accurate and meaningful performance comparison across machines.
-- **Increased `time.plot_interval` from 10 to 2000**
-Since intermediate results are not of interest in this case, we set the plotting frequency equal to the maximum number of time steps. This ensures that only the final result is written, reducing unnecessary output.
-- **Increased `amr.n_cell` from 64 64 16 to 256 256 64**
-The mesh resolution was increased by a factor of four in each dimension to fully utilize the GPU. The original case was too small to reflect representative performance. With refinement zones included, the final mesh contains nearly 16 million cells.
+* **Increased `time.max_step` from 20 to 2000** - This extension avoids the skew caused by the slower initial warm-up iterations and ensures a longer runtime, enabling a more accurate and meaningful performance comparison across machines.
+* **Increased `time.plot_interval` from 10 to 2000** - Since intermediate results are not of interest in this case, we set the plotting frequency equal to the maximum number of time steps. This ensures that only the final result is written, reducing unnecessary output.
+* **Increased `amr.n_cell` from 64 64 16 to 256 256 64** - The mesh resolution was increased by a factor of four in each dimension to fully utilize the GPU. The original case was too small to reflect representative performance. With refinement zones included, the final mesh contains nearly 16 million cells.
 
 ## Running the Simulation
 Below is the code required to run the simulation using the Inductiva API.
@@ -90,7 +87,7 @@ Estimated computation cost (US$): 1.03 US$
 
 As you can see in the "In Progress" line, the part of the timeline that
 represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 2 hour and 39 minutes (9560 seconds).
+the core computation time of this simulation was approximately 2 hours and 39 minutes (9560 seconds).
 
 ## Upgrading to Powerful Machines
 One of Inductiva’s key advantages is how easily you can scale your simulations to larger, more powerful machines with minimal code changes. Scaling up simply requires updating the `machine_type` parameter when allocating your cloud machine.
@@ -103,7 +100,7 @@ The results are summarized in the table below:
 |------------------|-------|-------------|-----------|----------------|--------------------- |
 | c2d-highcpu-16   | 16    | -           | -         | 6h, 55 min     | 0.59                 |
 | c2d-highcpu-112  | 112   | -           | -         | 1h, 30 min     | 0.86                 |
-| g2-standard-12   | 12    | NVIDIA L4   | 1         | 2h, 40 min     | 1.02                 |
+| g2-standard-12   | 12    | NVIDIA L4   | 1         | 2h, 39 min     | 1.02                 |
 | g2-standard-24   | 24    | NVIDIA L4   | 2         | 1h, 45 min     | 1.33                 |
 | a2-highgpu-1g    | 12    | NVIDIA A100 | 1         | 48 min, 4s     | 1.19                 |
 | a2-highgpu-2g    | 24    | NVIDIA A100 | 2         | 57 min, 40s    | 2.86                 |
