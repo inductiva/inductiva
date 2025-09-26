@@ -7,6 +7,7 @@ import logging
 import math
 import os
 import pathlib
+import sys
 import threading
 import time
 import urllib
@@ -111,10 +112,11 @@ def listdir(
         path += "/"
 
     all_contents = []
-    fetch_contents = True
+    max_results = max_results or sys.maxsize
     page = 1
 
-    while fetch_contents:
+    while max_results > 0:
+        print(max_results)
         page_size = min(100, max_results)
 
         response = api.list_storage_contents(
@@ -139,8 +141,8 @@ def listdir(
         page += 1
         max_results -= page_count
 
-        if page_count < page_size or max_results < 1:
-            fetch_contents = False
+        if page_count < page_size:
+            break
 
     if print_results:
         print(_print_contents_table(all_contents))
