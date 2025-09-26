@@ -46,6 +46,15 @@ visualizing-results
 
 ```{toctree}
 ---
+caption: 🚀 Benchmarks
+maxdepth: 1
+hidden: true
+---
+mpi-strong-scaling-benchmark
+```
+
+```{toctree}
+---
 caption: " "
 maxdepth: 1
 hidden: true
