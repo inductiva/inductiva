@@ -167,8 +167,6 @@ mpirun --use-hwthread-cpus -np 16 simpleFoam -parallel
 
 This explicitly instructs `mpirun` to include hyperthreaded (virtual) CPUs, allowing your simulation to run across all 16 vCPUs.
 
-> **Note**: Learn more about this [here](https://inductiva.ai/guides/how-it-works/machines/understanding-mpi)
-
 <br>
 <br>
 
