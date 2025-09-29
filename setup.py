@@ -10,3 +10,7 @@ base_install_requires = config["options"]["install_requires"]
 
 setup(install_requires=base_install_requires +
       ([] if os.getenv("NOAIORTC", False) else ["aiortc"]),)
+setup(
+    install_requires=base_install_requires
+    + ([] if os.getenv("NOAIORTC", False) else ["aiortc"]),
+)
