@@ -59,7 +59,7 @@ import inductiva
 # Allocate cloud machine
 cloud_machine = inductiva.resources.MachineGroup(
    provider="GCP",
-   machine_type="n2-highcpu-2",
+   machine_type="c2d-highcpu-2",
    spot=True
 )
 

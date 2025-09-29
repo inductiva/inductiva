@@ -19,3 +19,9 @@ Each version of OpenFAST in the Inductiva API has its own publicly available con
 so you can also use it to run simulations. These images are hosted in our Docker Hub repository, 
 [Kutu](https://hub.docker.com/r/inductiva/kutu/tags?name=openfast), and you can find the 
 Dockerfile details for each version [here](https://github.com/inductiva/kutu/tree/main/simulators/openfast).
+
+The three most commonly used DLLs have already been precompiled and are included in the OpenFAST Docker images. You can find them at the following paths inside the container:
+
+* `/DLLs/DISCON.dll`
+* `/DLLs/DISCON_ITIBarge.dll`
+* `/DLLs/DISCON_OC3Hywind.dll`
