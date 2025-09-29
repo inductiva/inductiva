@@ -52,7 +52,7 @@ The difference in how MPI is invoked leads to distinct behaviors between OpenFOA
 
 * Uses the `--oversubscribe` flag, which tells MPI to **ignore restrictions on process count**.
 * This allows you to run more processes than physical cores, giving you greater flexibility in dividing your simulation domain.
-* For example, on a `c2d-highcpu-4` machine, you could split your domain into **4 parts** and run all processes, one for each vCPU.
+* For example, by default a `c2d-highcpu-4` machine will have 4 vCPUs supported by 2 physical cores. However, OpenFOAM-Foundation will only use at most 2 MPI processes.
 * However, running more processes than available vCPUs is **not recommended**, as it can significantly degrade simulation performance.
 
 Keep reading to see how OpenFOAM-Foundation behaves with Inductiva.

@@ -13,7 +13,7 @@ cloud_machine = inductiva.resources.MachineGroup(
     spot=True)
 ```
 
-When you run this simulation, keep in mind that it is originally divided into **6 sub-domains**. Because of this, you will notice that CPU utilization is quite low:
+When you run this simulation, keep in mind that it is originally divided into **6 sub-domains**. Because of this, you will notice that CPU utilization peaks at around **37%**:
 
 ![CPU Usage](../_static/foundation_6_vcpus.png)
 
@@ -88,7 +88,7 @@ From these results:
 Next, we’ll explore the same test on a larger, more realistic simulation.
 
 
-# Steady-State CFD Simulation of Wind Flow in the Perdigão Region
+# Large-Scale Example: Steady-State CFD Simulation of Wind Flow in the Perdigão Region
 
 To better understand atmospheric flow over complex terrain, we conducted a
 steady-state CFD simulation of the [**Perdigão region in Portugal**](https://journals.ametsoc.org/view/journals/bams/100/5/bams-d-17-0227.1.xml). This site

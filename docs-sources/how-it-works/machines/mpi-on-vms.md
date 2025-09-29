@@ -45,10 +45,10 @@ On a VM with 2 physical cores (4 vCPUs):
 
 ### Disabling Hyper-Threading
 
-If your VM is configured with `threads_per_core=1`, only one vCPU per physical cores will be available, and hyper-threading is disabled. In this case:
+If your VM is configured with `threads_per_core=1`, hyper-threading will be disabled and so only one vCPU per physical cores will be available.
 
-* The MPI flag `--use-hwthread-cpus` has no effect.
-* You can only run as many processes as there are physical cores, which is the typical setting for HPC scenarios.
+* In that case, the MPI flag `--use-hwthread-cpus` has no effect.
+* Therefore, you can only run as many processes as there are physical cores, which is the typical setting for HPC scenarios.
 
 ---
 
