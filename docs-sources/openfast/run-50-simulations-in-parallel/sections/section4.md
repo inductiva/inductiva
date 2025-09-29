@@ -16,7 +16,7 @@ import inductiva
 # Note that we are using an ElasticMachineGroup
 cloud_machine = inductiva.resources.ElasticMachineGroup(
    provider="GCP",
-   machine_type="n2-highcpu-2",
+   machine_type="c2d-highcpu-2",
    spot=True,
    min_machines=1,
    max_machines=50)
@@ -71,7 +71,7 @@ reducing costs.
 # Allocate cloud machine
 cloud_machine = inductiva.resources.ElasticMachineGroup(
    provider="GCP",
-   machine_type="n2-highcpu-2",
+   machine_type="c2d-highcpu-2",
    spot=True,
    min_machines=1,
    max_machines=50)
@@ -142,13 +142,13 @@ your command line interface `inductiva tasks list -p Openfast_WavesWN -n 50`
 Showing tasks for project: Openfast_WavesWN.
 
  ID                          SIMULATOR     STATUS     SUBMITTED         STARTED           COMPUTATION TIME     RESOURCE TYPE
- 9ousr15npia4f9fphfjm1rmrn   openfast      Success    12/02, 15:25:00   12/02, 15:25:00   0:00:34              GCP n2-highcpu-2
- pt3i70i4hmzn740og3ber5yvs   openfast      Success    12/02, 15:24:54   12/02, 15:24:54   0:00:32              GCP n2-highcpu-2
- 60ygm64qsd56fmcjxgytq93pr   openfast      Success    12/02, 15:24:47   12/02, 15:24:47   0:00:35              GCP n2-highcpu-2
+ 9ousr15npia4f9fphfjm1rmrn   openfast      Success    12/02, 15:25:00   12/02, 15:25:00   0:00:34              GCP c2d-highcpu-2
+ pt3i70i4hmzn740og3ber5yvs   openfast      Success    12/02, 15:24:54   12/02, 15:24:54   0:00:32              GCP c2d-highcpu-2
+ 60ygm64qsd56fmcjxgytq93pr   openfast      Success    12/02, 15:24:47   12/02, 15:24:47   0:00:35              GCP c2d-highcpu-2
  ...
- 8gvt5i0x0qeaj2x7ftf7pwxyd   openfast      Success    12/02, 15:20:37   12/02, 15:20:37   0:00:31              GCP n2-highcpu-2
- gnq3smc96ht404hz4ucvoovw6   openfast      Success    12/02, 15:20:14   12/02, 15:20:19   0:00:33              GCP n2-highcpu-2
- iox5b1040tagfnwi9a3j26axr   openfast      Success    12/02, 15:20:07   12/02, 15:20:19   0:00:31              GCP n2-highcpu-2
+ 8gvt5i0x0qeaj2x7ftf7pwxyd   openfast      Success    12/02, 15:20:37   12/02, 15:20:37   0:00:31              GCP c2d-highcpu-2
+ gnq3smc96ht404hz4ucvoovw6   openfast      Success    12/02, 15:20:14   12/02, 15:20:19   0:00:33              GCP c2d-highcpu-2
+ iox5b1040tagfnwi9a3j26axr   openfast      Success    12/02, 15:20:07   12/02, 15:20:19   0:00:31              GCP c2d-highcpu-2
 
 To see more details about a task, use `inductiva tasks info <task_id>`.
 ```
