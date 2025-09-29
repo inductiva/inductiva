@@ -21,7 +21,7 @@ Example:
 
 ### How Hyper-Threading Works in Cloud Machines
 
-Cloud machines often expose **all available vCPUs** by default.  
+The cloud machines we make available at Inductiva often expose **all available vCPUs** by default.  
 Example machine types:
 
 | Machine Type       | Physical Cores | Threads per Core | vCPUs |
@@ -38,13 +38,9 @@ vCPUs = Physical Cores × Threads per Core
 
 ### Controlling Hyper-Threading
 
-You can disable hyper-threading with Inductiva by setting:
-
-```python
-threads_per_core=1
-```
-
-Example:
+You can disable hyper-threading with Inductiva at the moment you create a
+Machine Group. This is done by setting the parameter `threads_per_core=1` in the
+constructor:
 
 ```python
 cloud_machine = inductiva.resources.MachineGroup(
@@ -61,7 +57,10 @@ This forces the machine to expose only physical cores:
 | `c3d-highcpu-16` | 8              | 1                | 8     |
 
 
-> **Note**: In the cloud, you are charged based on the **total number of vCPUs defined by the machine type**, not on how many vCPUs you actually use. This means the cost is the same whether you set `threads_per_core=1` or `threads_per_core=2`.
+> **Note**:
+>
+> * In the cloud, you are charged based on the **total number of vCPUs defined by the machine type**, not on how many vCPUs you actually use. This means the cost is the same whether you set `threads_per_core=1` or `threads_per_core=2`.
+> * You can not change the number of threads per core at run time. This needs to be done when initializing the machine.
 
 ---
 

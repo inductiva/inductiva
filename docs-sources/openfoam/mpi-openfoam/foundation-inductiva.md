@@ -56,7 +56,7 @@ mpirun -np 16 --use-hwthread-cpus <command> -parallel
 
 This approach results in ~100% CPU usage while utilizing all 16 vCPUs.
 
-*(Insert image showing 100% CPU usage with 16 vCPUs here.)*
+[CPU Usage](../_static/foundation_16_vcpus.png)
 
 ---
 
@@ -64,17 +64,19 @@ This approach results in ~100% CPU usage while utilizing all 16 vCPUs.
 
 There are several possible configurations for running this simulation. Here’s a summary of the execution times and costs for each case:
 
-| Machine Type   | Threads per Core | vCPUs Used | Execution Time | Cost (US$) |
-| -------------- | ---------------- | ---------- | -------------- | ---------- |
-| c2d-highcpu-16 | 2                | 6          | 2 min 19 sec   | 0.0030     |
-| c2d-highcpu-16 | 1                | 8          | 1 min 58 sec   | 0.0026     |
-| c2d-highcpu-16 | 2                | 8          | 1 min 56 sec   | 0.0025     |
-| c2d-highcpu-16 | 2                | 16         | 1 min 53 sec   | 0.0025     |
+| Machine Type   | Threads per Core | vCPUs Available| MPI Procs |Execution Time | Cost (US$) |
+| -------------- | ---------------- | ---------------|---------- |-------------- | ---------- |
+| c2d-highcpu-16 | 2                | 16             |  6        | 2 min 19 sec   | 0.0030     |
+| c2d-highcpu-16 | 1                | 8              |  8        | 1 min 58 sec   | 0.0026     |
+| c2d-highcpu-16 | 2                | 16             |  8        | 1 min 56 sec   | 0.0025     |
+| c2d-highcpu-16 | 2                | 16             |  16       | 1 min 53 sec   | 0.0025     |
 
 From these results:
 
 * Switching from `threads_per_core=2` to `threads_per_core=1` has little impact (differences might be within the margin of normal variation).
-* Running this simulation with all 16 vCPUs seems to be the fastest way to do it, but the difference is minimal.
+* Running this simulation with all 16 vCPUs seems to be the fastest way to do it, but the difference is minimal. These results do not necessarily apply to cases where you run OpenFOAM with many more partitions because in those regimes **memory bandwidth limitations** may become more apparent.
+
+
 
 > **Note**:
 >
@@ -89,7 +91,7 @@ Next, we’ll explore the same test on a larger, more realistic simulation.
 # Steady-State CFD Simulation of Wind Flow in the Perdigão Region
 
 To better understand atmospheric flow over complex terrain, we conducted a
-steady-state CFD simulation of the **Perdigão region in Portugal**. This site
+steady-state CFD simulation of the [**Perdigão region in Portugal**](https://journals.ametsoc.org/view/journals/bams/100/5/bams-d-17-0227.1.xml). This site
 is notable for its two parallel ridges, which generate intricate wind flow
 patterns and make it a reference location for atmospheric research.
 
@@ -104,12 +106,12 @@ convergence.
 ## Analyzing the Results
 
 
-| Machine Type   | Threads per Core | vCPUs Used | Execution Time | Cost (US$) |
-| -------------- | ---------------- | ---------- | -------------- | ---------- |
-| c4d-highcpu-96 | 2                | 48          | 9 hrs 20 min  | 15.48     |
-| c4d-highcpu-96 | 1                | 48          | 9 hrs 23 min  | 15.58      |
-| c4d-highcpu-96 | 2                | 96          | -   | -     |
-| c4d-highcpu-48 | 2                | 48         | -   | -     |
+| Machine Type   | Threads per Core | vCPUs Available | MPI Procs | Execution Time | Cost (US$) |
+| -------------- | ---------------- | --------------- |---------- |-------------- | ---------- |
+| c4d-highcpu-96 | 2                | 96              | 48        | 9 hrs 20 min  | 15.48     |
+| c4d-highcpu-96 | 1                | 48              | 48        | 9 hrs 23 min  | 15.58      |
+| c4d-highcpu-96 | 2                | 96              | 96        | -   | -     |
+| c4d-highcpu-48 | 2                | 48              | 48        | -   | -     |
 
 From these results:
 

@@ -1,6 +1,6 @@
 # Understanding MPI in VMs
 
-MPI enables running parallel tasks across the vCPUs available in your VM. When executing a simulation or computation with MPI, you typically specify the number of processes (`-np`) corresponding to the number of workers you want.
+MPI enables running parallel tasks across the vCPUs available in your VM. When executing a simulation or computation with MPI, you typically specify the number of processes (`-np`) corresponding to the number of parallel processes you want.
 
 Example MPI command structure:
 
@@ -26,6 +26,8 @@ mpirun -np <number_of_processes> --use-hwthread-cpus <program>
 
 This tells MPI to include hyper-threaded CPUs as valid execution slots, enabling full use of all vCPUs.
 
+> **Note**: With Inductiva this is the default behaviour. If you don't specify otherwise, we will run your simulation using all available vCPUs with hyper-threading turned on.
+
 ---
 
 #### Important Behavior:
@@ -43,10 +45,10 @@ On a VM with 2 physical cores (4 vCPUs):
 
 ### Disabling Hyper-Threading
 
-If your VM is configured with `threads_per_core=1`, only physical cores are available, and hyper-threading is disabled. In this case:
+If your VM is configured with `threads_per_core=1`, only one vCPU per physical cores will be available, and hyper-threading is disabled. In this case:
 
 * The MPI flag `--use-hwthread-cpus` has no effect.
-* You can only run as many processes as there are physical cores.
+* You can only run as many processes as there are physical cores, which is the typical setting for HPC scenarios.
 
 ---
 

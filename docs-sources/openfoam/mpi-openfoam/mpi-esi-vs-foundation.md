@@ -1,10 +1,3 @@
-TODO: 
-E pq é que se ve 50% na metrica do CPU
-E se vale ou nao a pena fazer num_threads 1
-E se compensa usar uma maquina com metade dos vcpus mas fazer num_threads 2
-e como é que isso se faz
-
-
 # MPI Behavior in OpenFOAM-ESI vs OpenFOAM-Foundation
 
 Inductiva supports two OpenFOAM distributions: **ESI** and **Foundation**. While
@@ -63,3 +56,9 @@ The difference in how MPI is invoked leads to distinct behaviors between OpenFOA
 * However, running more processes than available vCPUs is **not recommended**, as it can significantly degrade simulation performance.
 
 Keep reading to see how OpenFOAM-Foundation behaves with Inductiva.
+
+```{toctree}
+:hidden:
+MPI ESI vs Foundation <mpi-esi-vs-foundation>
+OpenFOAM-Foundation on Inductiva <foundation-inductiva>
+```
