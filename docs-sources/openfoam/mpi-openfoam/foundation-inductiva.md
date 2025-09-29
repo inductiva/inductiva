@@ -19,29 +19,15 @@ When you run this simulation, keep in mind that it is originally divided into **
 
 This happens because the VM is configured with `threads_by_core=2`, which is the default behavior for virtual machines (see more [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading)). As a result, your simulation uses only **6 vCPUs out of 16**, which explains the ~37% CPU utilization.
 
-To fully utilize the machine, you have two options:
+To fully utilize the machine you have to use all available vCPUs. This can be done in two regimes:
+
+1) Default mode: hyper-threading turned on, 2 vCPUs per Physical Core
+
+2) Hyper-threading turned OFF, 1 vCPU per Physical Core
 
 ---
 
-## 1. Utilize All Physical Cores
-
-This approach is straightforward: divide your domain into the same number of **physical cores** and run the simulation.
-
-* The VM provides 16 vCPUs, but only 8 physical cores.
-* Running with 8 processes (one per core) results in ~50% CPU utilization:
-
-![CPU Usage](../_static/quick-start/system_metrics_50_2tpc.png)
-
-You can also configure your VM so that the number of available vCPUs matches the number of physical cores (using `threads_by_core=1`). More information is provided [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading).
-This change will make CPU utilization appear as **100%**, due to the fact that the VM will only have 8 vCPUs:
-
-![CPU Usage](../_static/quick-start/system_metrics_100.png)
-
-> **Note**: To clarify. The `c2d-highcpu-16` has 16 vCPUs with the default `threads_per_core=2`. Once we change to `threads_per_core=1` the VM will only have 8 vCPUs, one vCPU per phisical core. Meaning, that using 8 partitions will result in a CPU utilization of 100%.
-
----
-
-## 2. Utilize All Available vCPUs
+## 1. Utilize All Available vCPUs
 
 Alternatively, you can run the simulation on all 16 vCPUs. To do this, edit the `Allrun` script and replace every instance of `runParallel` with:
 
@@ -57,6 +43,25 @@ mpirun -np 16 --use-hwthread-cpus <command> -parallel
 This approach results in ~100% CPU usage while utilizing all 16 vCPUs.
 
 [CPU Usage](../_static/foundation_16_vcpus.png)
+
+---
+
+
+## 2. Utilize All Physical Cores
+
+This approach is straightforward: divide your domain into the same number of **physical cores** and run the simulation.
+
+* The VM provides 16 vCPUs, but only 8 physical cores.
+* Running with 8 processes (one per core) results in ~50% CPU utilization:
+
+![CPU Usage](../_static/quick-start/system_metrics_50_2tpc.png)
+
+You can also configure your VM so that the number of available vCPUs matches the number of physical cores (using `threads_by_core=1`). More information is provided [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading).
+This change will make CPU utilization appear as **100%**, due to the fact that the VM will only have 8 vCPUs:
+
+![CPU Usage](../_static/quick-start/system_metrics_100.png)
+
+> **Note**: To clarify. The `c2d-highcpu-16` has 16 vCPUs with the default `threads_per_core=2`. Once we change to `threads_per_core=1` the VM will only have 8 vCPUs, one vCPU per phisical core. Meaning, that using 8 partitions will result in a CPU utilization of 100%.
 
 ---
 
