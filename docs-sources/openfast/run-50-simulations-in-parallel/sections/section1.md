@@ -12,15 +12,12 @@ Download the required [`5MW_OC4Semi_WSt_WavesWN`](https://github.com/OpenFAST/r-
     - 5MW_OC4Semi_WSt_WavesWN
 
 ### Step 2: Specify the Correct DLL File
+This simulation requires the `DISCON_OC3Hywind.dll` file. Normally, this DLL must be compiled from 
+the source code provided in the `5MW_Baseline/ServoData` folder.
 
-This simulation requires the `DISCON_OC3Hywind.dll` file. Normally, this DLL
-must be compiled from the source code provided in the `5MW_Baseline/ServoData` folder.
-
-To simplify this process, we’ve pre-compiled all three commonly used DLLs and bundled them directly in the OpenFAST Docker images. You can find them at:
-
-* `/DLLs/DISCON.dll`
-* `/DLLs/DISCON_ITIBarge.dll`
-* `/DLLs/DISCON_OC3Hywind.dll`
+To simplify this process, we’ve already included the most commonly used pre-compiled DLLs, such 
+as `DISCON_OC3Hywind.dll`, directly in the OpenFAST Docker images. For more details, refer to 
+the [Container Images](https://inductiva.ai/guides/openfast/versions-and-containers#container-images) section.
 
 Once you know the location of the correct DLL, simply update your `NRELOffshrBsline5MW_OC4DeepCwindSemi_ServoDyn.dat` file to point to it:
 

@@ -3,7 +3,7 @@ First, we will run a single OpenFAST simulation using the `5MW_OC4Semi_WSt_Waves
 the necessary input files are already prepared.
 
 ## Code Overview
-The code required to run an OpenFAST simulation using the Inductiva API is always the same, we just need to adapt it for this use case, as shown below.
+The code required to run an OpenFAST simulation using the Inductiva API is always the same. We just need to adapt it for this use case, as shown below.
 
 ```python
 import inductiva
