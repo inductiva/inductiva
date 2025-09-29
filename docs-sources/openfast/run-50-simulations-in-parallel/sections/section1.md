@@ -11,19 +11,23 @@ Download the required [`5MW_OC4Semi_WSt_WavesWN`](https://github.com/OpenFAST/r-
     - 5MW_Baseline
     - 5MW_OC4Semi_WSt_WavesWN
 
-### Step 2: Build the DLL file
-Now we need to build the `DISCON_OC3Hywind.dll` file and place it in `5MW_Baseline/ServoData/`.
+### Step 2: Specify the Correct DLL File
 
-**Want to skip this step?** Download the DLL file [here](https://storage.googleapis.com/inductiva-simulators-sources/DISCON_OC3Hywind.dll). 
-Don't forget to place it in the `5MW_Baseline/ServoData` folder.
+This simulation requires the `DISCON_OC3Hywind.dll` file. Normally, this DLL
+must be compiled from the source code provided in the `5MW_Baseline/ServoData` folder.
 
-If you wish to build the file yourself, please follow the steps outlined in this [tutorial](../../build-dll-file).
+To simplify this process, we’ve pre-compiled all three commonly used DLLs and bundled them directly in the OpenFAST Docker images. You can find them at:
 
-Your input directory should look like this:
-- input_files
-    - 5MW_Baseline
-        - ServoData
-            - DISCON_OC3Hywind.dll
-    - 5MW_OC4Semi_WSt_WavesWN
+* `/DLLs/DISCON.dll`
+* `/DLLs/DISCON_ITIBarge.dll`
+* `/DLLs/DISCON_OC3Hywind.dll`
 
-You're ready to send your simulation to the Cloud!
+Once you know the location of the correct DLL, simply update your `NRELOffshrBsline5MW_OC4DeepCwindSemi_ServoDyn.dat` file to point to it:
+
+```diff
+---------------------- BLADED INTERFACE ---------------------------------------- [used only with Bladed Interface]
+-"../5MW_Baseline/ServoData/DISCON_OC3Hywind.dll"    DLL_FileName
++"/DLLs/DISCON_OC3Hywind.dll"    DLL_FileName
+```
+
+With this small adjustment, your simulation is ready to run in the cloud!

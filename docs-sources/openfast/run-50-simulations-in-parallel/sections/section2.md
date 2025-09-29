@@ -11,7 +11,7 @@ import inductiva
 # Allocate Cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup(
    provider="GCP",
-   machine_type="n2-highcpu-2",
+   machine_type="c2d-highcpu-2",
    spot=True)
 
 # Initialize OpenFAST simulator
@@ -65,7 +65,7 @@ Estimated computation cost (US$): 0.00013 US$
 ```
 
 ## Performance and Cost Analysis
-Given that OpenFAST does not benefit from multiple CPU cores, we chose the `n2-highcpu-2` virtual machine (VM) with 2 virtual CPUs (equivalent to 1 physical core). 
+Given that OpenFAST does not benefit from multiple CPU cores, we chose the `c2d-highcpu-2` virtual machine (VM) with 2 virtual CPUs (equivalent to 1 physical core). 
 This is one of the cheapest options on Google Cloud, costing just US$0.0081 per hour in spot mode.
 
 To demonstrate that OpenFAST does not scale with the number of cores, we also ran the same simulation on a number of better machines. For a detailed breakdown, check out our [Benchmarks](../../benchmarks) section.
@@ -73,15 +73,15 @@ To demonstrate that OpenFAST does not scale with the number of cores, we also ra
 Here are the results:
 | Machine       | vCPUs | Execution time | Estimated Cost (USD)|
 |---------------|-----------------|----------------|------|
-| n2-highcpu-2  | 2               |34.1s           |0.00013|
-| n2-highcpu-4  | 4               |35.0s           |0.00031|
-| n2-highcpu-8  | 8               |30.4s           |0.00034|
-| n2-highcpu-16 | 16              |30.9s           |0.00065|
-| n2-highcpu-32 | 32              |30.2s           |0.0012 | 
+| c2d-highcpu-2  | 2               |34.1s           |0.00013|
+| c2d-highcpu-4  | 4               |35.0s           |0.00031|
+| c2d-highcpu-8  | 8               |30.4s           |0.00034|
+| c2d-highcpu-16 | 16              |30.9s           |0.00065|
+| c2d-highcpu-32 | 32              |30.2s           |0.0012 | 
 
 The execution time remains almost the same on all machines, regardless of the number of virtual CPUs.
 
-Additionally, running the simulation on the `n2-highcpu-2` VM proves to be extremely cost-efficient, with a total cost of only 0.00013 US$.
+Additionally, running the simulation on the `c2d-highcpu-2` VM proves to be extremely cost-efficient, with a total cost of only 0.00013 US$.
 
 In the next part of this tutorial, we'll take things to the next level by running dozens of OpenFAST simulations in parallel on Inductiva, demonstrating the true power of cloud-based scalability. Stay tuned!
 
