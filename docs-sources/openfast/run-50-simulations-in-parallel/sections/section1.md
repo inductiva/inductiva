@@ -17,7 +17,7 @@ the source code provided in the `5MW_Baseline/ServoData` folder.
 
 To simplify this process, we’ve already included the most commonly used pre-compiled DLLs, such 
 as `DISCON_OC3Hywind.dll`, directly in the OpenFAST Docker images. For more details, refer to 
-the [Container Images](https://inductiva.ai/guides/openfast/versions-and-containers#container-images) section.
+the [Container Images](../../versions-and-containers) section.
 
 Once you know the location of the correct DLL, simply update your `NRELOffshrBsline5MW_OC4DeepCwindSemi_ServoDyn.dat` file to point to it:
 
