@@ -14,7 +14,5 @@ base_install_requires = config["options"]["install_requires"]
 # support this library, we introduce an environment variable to prevent its
 # unnecessary installation. All other features of the inductiva package will
 # still work.
-setup(
-    install_requires=base_install_requires
-    + ([] if os.getenv("NOAIORTC") else ["aiortc"]),
-)
+setup(install_requires=base_install_requires +
+      ([] if os.getenv("NOAIORTC") else ["aiortc"]),)
