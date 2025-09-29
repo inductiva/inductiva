@@ -55,3 +55,12 @@ hidden: true
 ---
 faq
 ```
+
+```{toctree}
+---
+caption: 🚀 Benchmarks
+maxdepth: 2
+hidden: true
+---
+C240 6-31G Benchmark <benchmark-c240_631gs/index>
+```

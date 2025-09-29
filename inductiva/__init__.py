@@ -44,7 +44,7 @@ _api_key = contextvars.ContextVar("INDUCTIVA_API_KEY",
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.17.10"
+__version__ = "0.18.0"
 
 
 def set_output_dir(new_output_dir):

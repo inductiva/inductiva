@@ -1,7 +1,7 @@
 # Run Your First Simulation
  A typical GROMACS simulation involves several key steps: preparing the molecular structure, performing energy minimization, running the simulation, and analyzing the results. You’ll need multiple input files to configure and run your simulation, and specific GROMACS commands will be used to carry out each step.
 
-This tutorial will show you how to run GROMACS simulations using the Inductiva API. 
+This tutorial will show you how to run GROMACS simulations using the Inductiva API.
 
 We will cover the `Bulk salt solution` use case from the [GROMACS tutorials page](https://gromacstutorials.github.io/sphinx/build/html/tutorials/tutorial1/bulk-solution.html) to help you get started with simulations.
 
@@ -13,10 +13,10 @@ After completing these steps, you should have the following files in your `Simul
 ```
 ├── ./conf.gro
 ├── ./ff
-│   ├── ./ff/forcefield.itp
-│   ├── ./ff/h2o.itp
-│   ├── ./ff/na.itp
-│   └── ./ff/so4.itp
+│   ├── ./ff/forcefield.itp
+│   ├── ./ff/h2o.itp
+│   ├── ./ff/na.itp
+│   └── ./ff/so4.itp
 ├── ./min.mdp
 └── ./topol.top
 ```
@@ -61,12 +61,12 @@ task.download_outputs()
 task.print_summary()
 ```
 
-In this basic example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs. 
-For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
-a machine with more virtual CPUs or one equipped with GPUs. You can explore the full range of available 
+In this basic example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs.
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select
+a machine with more virtual CPUs or one equipped with GPUs. You can explore the full range of available
 machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other GROMACS simulations, replace `input_dir` with the
@@ -86,7 +86,7 @@ Timeline:
         ├> 1.915 s         gmx grompp -f min.mdp -c conf.gro -p topol.top -o min -pp min -po min
         └> 0.983 s         gmx mdrun -v -deffnm min
     Finalizing                at 22/04, 09:28:54      0.485 s
-    Success                   at 22/04, 09:28:54      
+    Success                   at 22/04, 09:28:54
 
 Data:
     Size of zipped output:    1.75 MB

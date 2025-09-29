@@ -315,10 +315,11 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             }
             if resubmit_on_preemption is not None:
                 run_kwargs[resubmit_key] = resubmit_on_preemption
-            if sim_name in ("OpenFOAM", "Delft3D", "Octopus", "WaveWatch3"):
+            if sim_name in ("OpenFOAM", "Delft3D", "Octopus", "WaveWatch3",
+                            "Elmer", "FreeFEM"):
                 run_kwargs["commands"] = ["ls"]
                 run_kwargs["switch"] = ["this_is_for_ww3"]
-            if sim_name in ("CP2K", "OpenSees", "AmrWind", "Calculix"):
+            if sim_name in ("CP2K", "OpenSees", "AmrWind", "CalculiX"):
                 run_kwargs["sim_config_filename"] = "test_config_file"
 
             # pass remote_assets to coawst to avoid our internal checks

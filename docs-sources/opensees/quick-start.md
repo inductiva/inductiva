@@ -97,14 +97,6 @@ Still in the testing phase? No problem! Just skip this step for now and start
 with a machine with fewer vCPUs. Once you're satisfied with your results, you
 can seamlessly scale your OpenSees simulation.
 
-## Run OpeenSeesPy
-To run OpenSees scripts written in Python, all you need to do is change the `interface` parameter to `python` to match the
-file type of your OpenSeesPy use case. 
-
-## Run the EESD OpenSees distribution
-To run the EESD OpenSees distribution, all you need to do is change the `interface` parameter to `eesd` to match the
-file type of your OpenSees use case. 
-
 ```{banner_small}
 :origin: opensees
 ```

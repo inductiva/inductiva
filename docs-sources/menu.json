@@ -40,8 +40,20 @@
           "path": "dualsphysics/index"
         },
         {
+          "title": "Elmer",
+          "path": "elmer/index"
+        },
+        {
           "title": "FDS",
           "path": "fds/index"
+        },
+        {
+          "title": "FreeFEM",
+          "path": "freefem/index"
+        },
+        {
+          "title": "FUNWAVE",
+          "path": "funwave/index"
         },
         {
           "title": "FVCOM",
@@ -56,8 +68,8 @@
           "path": "gx/index"
         },
         {
-          "title": "HEC",
-          "path": "hec/index"
+          "title": "HEC-RAS",
+          "path": "hec-ras/index"
         },
         {
           "title": "NWChem",
