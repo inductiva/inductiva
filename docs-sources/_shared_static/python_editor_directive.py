@@ -30,7 +30,7 @@ class PythonEditorDirective(Directive):
                 <div style="font-size: 12px; margin-bottom: 6px;">{text}</div>
                 <a href="#" 
                    onclick="openInductivaEditor('{base_url}', '{origin}'); return false;"
-                   style="display: inline-block; width: 55%; padding: 16px 24px; font-size: 14px; font-weight: bold; background-color: var(--playground-button); color: black; text-decoration: none; text-align: center; border-radius: 8px;">
+                   style="display: inline-block; width: 50%; padding: 16px 24px; font-size: 14px; font-weight: bold; background-color: var(--playground-button); color: black; text-decoration: none; text-align: center; border-radius: 8px;">
                     {button_text}
                 </a>
             </div>
@@ -78,14 +78,14 @@ class PythonEditorDirective(Directive):
                 if (params) {{
                     const existingParams = new URLSearchParams(params);
                     existingParams.forEach((value, key) => {{
-                        // Don't override our UTM parameters
-                        if (!url.searchParams.has(key)) {{
+                        // Only preserve parameters that start with 'utm_'
+                        if (key.startsWith('utm_') && !url.searchParams.has(key)) {{
                             url.searchParams.set(key, value);
                         }}
                     }});
                 }}
 
-                console.log("[Call to Action] Opening URL:", url.toString());
+                console.log("[Python Client] Opening URL:", url.toString());
                 window.open(url.toString(), '_blank');
             }}
             </script>
