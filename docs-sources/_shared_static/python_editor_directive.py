@@ -3,7 +3,7 @@ from docutils import nodes
 from docutils.parsers.rst import Directive
 
 
-class CallToActionDirective(Directive):
+class PythonEditorDirective(Directive):
     """Python directive for sphinx call-to-action button"""
     required_arguments = 0
     option_spec = {
@@ -19,7 +19,6 @@ class CallToActionDirective(Directive):
         text = self.options.get(
             'text',
             'Try our online Python Editor – run simulations in your browser')
-        subtext = self.options.get('subtext', '')
         button_text = self.options.get('button_text', 'Start Simulating Now')
         base_url = self.options.get('url',
                                     'https://console.inductiva.ai/editor')
@@ -29,7 +28,6 @@ class CallToActionDirective(Directive):
         html = f'''
             <div style="text-align: center; margin: 20px 0;">
                 <div style="font-size: 12px; margin-bottom: 6px;">{text}</div>
-                {f'<div style="font-size: 11px; margin-bottom: 8px; color: #666;">{subtext}</div>' if subtext else ''}
                 <a href="#" 
                    onclick="openInductivaEditor('{base_url}', '{origin}'); return false;"
                    style="display: inline-block; width: 55%; padding: 16px 24px; font-size: 14px; font-weight: bold; background-color: var(--playground-button); color: black; text-decoration: none; text-align: center; border-radius: 8px;">
