@@ -4,6 +4,11 @@ Your resource hub for all things OpenFAST at Inductiva. Whether you're just star
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to explore ever larger design spaces and achieve better results, while keeping your costs in check!
 
+```{python_editor}
+:origin: openfast
+:url: https://console.inductiva.ai/editor?simulator_name=openfast
+```
+
 ## What You'll Find Here
 
 ### Tutorials
@@ -44,7 +49,6 @@ hidden: true
 setup-test
 quick-start
 Run 50 Simulations in Parallel <run-50-simulations-in-parallel/index>
-build-dll-file
 ```
 
 

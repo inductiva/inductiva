@@ -3,6 +3,11 @@ Your resource hub for all things WAVEWATCH III at Inductiva. Whether you're just
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check!
 
+```{python_editor}
+:origin: wavewatch3
+:url: https://console.inductiva.ai/editor?simulator_name=wavewatch3
+```
+
 ## What You'll Find Here
 
 ### Tutorials

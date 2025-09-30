@@ -1,7 +1,7 @@
 # Part 1: Case Setup
 
 ## 1. Defining the Damping Function
-We begin by defining a **damping function** that calculates the coefficients α (mass-proportional damping) and β (stiffness-proportional damping), which are essential for modeling energy dissipation in structural systems.
+We begin by defining a **damping function** that calculates the coefficients α (mass-proportional damping) and β (stiffness-proportional damping) according to the Rayleigh method, which are essential for modeling energy dissipation in structural systems.
 
 This function takes the periods of two vibration modes and a target damping ratio as input. It returns coefficients that ensure consistent damping behavior across a specified frequency range. These coefficients are fundamental in OpenSees simulations for realistic modeling of energy dissipation under dynamic loading.
 
@@ -68,7 +68,7 @@ records_duration = np.loadtxt(records_duration_file, delimiter=' ')
 ## 3. Defining Analysis Parameters
 We now set the parameters for the nonlinear dynamic analyses. The IDA will run 30 earthquake ground motion records, each scaled to 10 intensity levels using predefined EQfactor values.
 
-We also define numerical damping, required for non-linear dynamic analyses. Rayleigh damping is specified in OpenSees via the Rayleigh command, which needs two parameters, alpha and beta, based on two fundamental frequencies of the structure. In this example, the Rayleigh damping is calibrated based on the 1<sup>st</sup> and 6<sup>th</sup> frequencies of the building. A damping ratio of 5% is assumed, typical for this type of analysis.
+We also define numerical damping, required for non-linear dynamic analyses. Rayleigh damping is specified in OpenSees via the Rayleigh command, which needs two parameters, alpha and beta, based on two fundamental frequencies of the structure. In this example, the Rayleigh damping is calibrated based on the 1<sup>st</sup> and 6<sup>th</sup> frequencies of the building. A damping ratio of 5% is assumed.
 
 ```python
 # ---- Analysis variables ----
