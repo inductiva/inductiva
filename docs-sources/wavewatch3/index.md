@@ -3,14 +3,10 @@ Your resource hub for all things WAVEWATCH III at Inductiva. Whether you're just
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check!
 
-<div style="text-align: center; margin: 20px 0;">
-  <div style="font-size: 12px; margin-bottom: 6px;">Try our online Python Editor - run WAVEWATCH III simulations in your browser</div>
-  <a href="https://console.inductiva.ai/editor?simulator_name=wavewatch3" 
-     style="display: inline-block; width: 55%; padding: 16px 24px; font-size: 14px; font-weight: bold; background-color: var(--playground-button); color: black; text-decoration: none; text-align: center; border-radius: 8px;"
-     target="_blank">
-    Start Simulating Now
-  </a>
-</div>
+```{python_editor}
+:origin: wavewatch3
+:url: https://console.inductiva.ai/editor?simulator_name=wavewatch3
+```
 
 ## What You'll Find Here
 

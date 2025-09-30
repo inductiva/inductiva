@@ -8,7 +8,6 @@ Inductiva simplifies research by making high-performance computing more accessib
 :url: https://console.inductiva.ai/editor?simulator_name=amr-wind
 ```
 
-
 ## What You'll Find Here
 
 ### Tutorials

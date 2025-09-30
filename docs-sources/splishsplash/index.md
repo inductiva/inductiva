@@ -4,14 +4,10 @@ Your resource hub for all things SPlisHSPlasH at Inductiva. Whether you're just 
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check! 
 
-<div style="text-align: center; margin: 20px 0;">
-  <div style="font-size: 12px; margin-bottom: 6px;">Try our online Python Editor - run SPlisHSPlasH simulations in your browser</div>
-  <a href="https://console.inductiva.ai/editor?simulator_name=splishsplash" 
-     style="display: inline-block; width: 55%; padding: 16px 24px; font-size: 14px; font-weight: bold; background-color: var(--playground-button); color: black; text-decoration: none; text-align: center; border-radius: 8px;"
-     target="_blank">
-    Start Simulating Now
-  </a>
-</div>
+```{python_editor}
+:origin: splishsplash
+:url: https://console.inductiva.ai/editor?simulator_name=splishsplash
+```
 
 ## What You'll Find Here
 

@@ -7,14 +7,10 @@ Inductiva simplifies research by making high-performance computing more accessib
 Featuring a grid-based structure that handles complex topographies, SFINCS is particularly well-suited for large-scale, high-resolution inundation modeling
 where computational speed is crucial.
 
-<div style="text-align: center; margin: 20px 0;">
-  <div style="font-size: 12px; margin-bottom: 6px;">Try our online Python Editor - run SFINCS simulations in your browser</div>
-  <a href="https://console.inductiva.ai/editor?simulator_name=sfincs" 
-     style="display: inline-block; width: 55%; padding: 16px 24px; font-size: 14px; font-weight: bold; background-color: var(--playground-button); color: black; text-decoration: none; text-align: center; border-radius: 8px;"
-     target="_blank">
-    Start Simulating Now
-  </a>
-</div>
+```{python_editor}
+:origin: sfincs
+:url: https://console.inductiva.ai/editor?simulator_name=sfincs
+```
 
 ## What You'll Find Here
 
