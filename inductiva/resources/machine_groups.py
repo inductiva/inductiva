@@ -105,7 +105,7 @@ class BaseMachineGroup(ABC):
         self.provider = provider.value
 
         self._api = inductiva.client.ComputeApi(api.get_client())
-        
+
         if self.provider == "GCP" and self.byoc:
             byoc_gcp.register(self)
 
