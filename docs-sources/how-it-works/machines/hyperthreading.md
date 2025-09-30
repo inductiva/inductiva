@@ -1,4 +1,4 @@
-# Understanding Hyper-Threading in VMs
+# Understanding Hyper-Threading in Computational Resources
 
 Hyper-threading is a CPU technology that allows each physical core to handle **two threads** (tasks) simultaneously. This increases the total number of tasks your CPU can process at once and improves performance for certain workloads.
 
@@ -49,6 +49,8 @@ cloud_machine = inductiva.resources.MachineGroup(
     threads_per_core=1)
 ```
 
+>**Note**: You can find out more about the Machine Group constructor [here](https://inductiva.ai/guides/api-functions/api/inductiva.resources#inductiva.resources.machine_groups.MachineGroup).
+
 This forces the machine to expose only physical cores:
 
 | Machine Type     | Physical Cores | Threads per Core | vCPUs |
@@ -69,5 +71,6 @@ This forces the machine to expose only physical cores:
 * Hyper-threading increases parallel processing by exposing multiple threads per core.
 * vCPUs = physical cores × threads per core.
 * Cloud environments usually expose all vCPUs, but this can be controlled.
+* The cost is based on the machine type, not on the actual vCPU usage, meaning, using `threads_per_core=1` does not reduce costs.
 
 

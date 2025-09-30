@@ -46,7 +46,7 @@ The difference in how MPI is invoked leads to distinct behaviors between OpenFOA
 
 * Without extra flags, MPI enforces a strict rule: the number of processes requested must be **equal to or less than the number of physical CPU cores** available.
 * For example, on a `c2d-highcpu-4` machine (which has **2 physical cores** and **4 vCPUs**), MPI will allow **at most 2 processes**.
-* This means your simulation domain can only be split into a number of parts equal to or less than the number of physical cores on your VM.
+* This means your simulation domain can only be split into a number of parts equal to or less than the number of physical cores on your computational resource.
 
 ### **OpenFOAM-ESI**
 

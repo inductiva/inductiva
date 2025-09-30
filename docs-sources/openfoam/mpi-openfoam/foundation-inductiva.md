@@ -2,7 +2,7 @@
 
 To understand the default behavior of OpenFOAM-Foundation when running on Inductiva, let’s start by running the tutorial provided [here](../quick-start.md).
 
-We will run the exact same simulation but with one small change: we will use the default settings for the VM. Your code should look like this:
+We will run the exact same simulation but with one small change: we will use the default settings for the computational resources. Your code should look like this:
 
 ```python
 import inductiva
@@ -17,7 +17,7 @@ When you run this simulation, keep in mind that it is originally divided into **
 
 ![CPU Usage](../_static/foundation_6_vcpus.png)
 
-This happens because the VM is configured with `threads_by_core=2`, which is the default behavior for virtual machines (see more [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading)). As a result, your simulation uses only **6 vCPUs out of 16**, which explains the ~37% CPU utilization.
+This happens because the computational resources is configured with `threads_by_core=2`, which is the default behavior for virtual machines (see more [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading)). As a result, your simulation uses only **6 vCPUs out of 16**, which explains the ~37% CPU utilization.
 
 To fully utilize the machine you have to use all available vCPUs. This can be done in two regimes:
 
@@ -37,7 +37,7 @@ mpirun -np 16 --use-hwthread-cpus <command> -parallel
 
 >**Note**:
 >
-> * You can learn more about MPI on VMs [here](https://inductiva.ai/guides/how-it-works/machines/mpi-on-vms).
+> * You can learn more about MPI on computational resources [here](https://inductiva.ai/guides/how-it-works/machines/mpi-on-vms).
 > * Don't forget to add the `-parallel` flag after the OpenFOAM command.
 
 This approach results in ~100% CPU usage while utilizing all 16 vCPUs.
@@ -51,17 +51,17 @@ This approach results in ~100% CPU usage while utilizing all 16 vCPUs.
 
 This approach is straightforward: divide your domain into the same number of **physical cores** and run the simulation.
 
-* The VM provides 16 vCPUs, but only 8 physical cores.
+* The computational resource provides 16 vCPUs, but only 8 physical cores.
 * Running with 8 processes (one per core) results in ~50% CPU utilization:
 
 ![CPU Usage](../_static/quick-start/system_metrics_50_2tpc.png)
 
-You can also configure your VM so that the number of available vCPUs matches the number of physical cores (using `threads_by_core=1`). More information is provided [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading).
-This change will make CPU utilization appear as **100%**, due to the fact that the VM will only have 8 vCPUs:
+You can also configure your computational resource so that the number of available vCPUs matches the number of physical cores (using `threads_by_core=1`). More information is provided [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading).
+This change will make CPU utilization appear as **100%**, due to the fact that the computational resource will only have 8 vCPUs:
 
 ![CPU Usage](../_static/quick-start/system_metrics_100.png)
 
-> **Note**: To clarify. The `c2d-highcpu-16` has 16 vCPUs with the default `threads_per_core=2`. Once we change to `threads_per_core=1` the VM will only have 8 vCPUs, one vCPU per phisical core. Meaning, that using 8 partitions will result in a CPU utilization of 100%.
+> **Note**: To clarify. The `c2d-highcpu-16` has 16 vCPUs with the default `threads_per_core=2`. Once we change to `threads_per_core=1` the computational resource will only have 8 vCPUs, one vCPU per phisical core. Meaning, that using 8 partitions will result in a CPU utilization of 100%.
 
 ---
 
