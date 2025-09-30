@@ -16,10 +16,13 @@ class CallToActionDirective(Directive):
 
     def run(self):
         origin = self.options.get('origin', '')
-        text = self.options.get('text', 'Try our online Python Editor – run simulations in your browser')
+        text = self.options.get(
+            'text',
+            'Try our online Python Editor – run simulations in your browser')
         subtext = self.options.get('subtext', '')
         button_text = self.options.get('button_text', 'Start Simulating Now')
-        base_url = self.options.get('url', 'https://console.inductiva.ai/editor')
+        base_url = self.options.get('url',
+                                    'https://console.inductiva.ai/editor')
 
         # pylint: disable=line-too-long
         # pylint: disable=anomalous-backslash-in-string
