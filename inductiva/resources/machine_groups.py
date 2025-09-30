@@ -9,6 +9,7 @@ import enum
 import math
 
 import logging
+import uuid
 
 import inductiva
 import inductiva.client
@@ -107,7 +108,7 @@ class BaseMachineGroup(ABC):
         self._api = inductiva.client.ComputeApi(api.get_client())
 
         if self.provider == "GCP" and self.byoc:
-            byoc_gcp.register(self)
+            self._register_byoc_gcp()
 
         self._validate_inputs()
 
@@ -443,7 +444,7 @@ class BaseMachineGroup(ABC):
             return
 
         if self.provider == "GCP" and self.byoc:
-            return byoc_gcp.start(self, verbose)
+            return self._start_byoc_gcp(verbose)
 
         logging.info(
             "Starting %s. This may take a few minutes.\n"
@@ -476,7 +477,7 @@ class BaseMachineGroup(ABC):
             return
 
         if self.provider == "GCP" and self.byoc:
-            return byoc_gcp.terminate(self, verbose)
+            return self._terminate_byoc_gcp(verbose)
 
         try:
             self._api.delete_vm_group(machine_group_id=self.id)
@@ -601,6 +602,129 @@ class BaseMachineGroup(ABC):
             "%Y/%m/%d %H:%M:%S"
         ) if self.auto_terminate_ts is not None else "N/A"
         logging.info("\t· Auto terminate timestamp:   %s", value_str)
+
+    def _register_byoc_gcp(self):
+        """Register machine group for client-side GCP management."""
+        logging.info("■ Registering %s configurations (client-side):",
+                     self.short_name())
+
+        self._id = str(uuid.uuid4())
+        self._name = (f"client-mg-{self.machine_type}-"
+                      f"{self._id[:8]}")
+
+        client_vm_info = {
+            "vm_name": self._name,
+            "zone": self.zone,
+            "status": "registered",
+            "created_at": datetime.datetime.now()
+        }
+        self._client_vm_info = client_vm_info
+
+        self.create_time = datetime.datetime.now()
+        self.num_machines = getattr(self, "num_machines", 1)
+        self._active_machines = 0
+
+        if isinstance(self.max_idle_time, int):
+            self.max_idle_time = datetime.timedelta(minutes=self.max_idle_time)
+
+        self._register_machine_group_backend_byoc()
+
+        self._log_machine_group_info()
+
+    def _register_machine_group_backend_byoc(self):
+        """Register machine group for BYOC."""
+        instance_group_config = inductiva.client.models.RegisterVMGroupRequest(
+            machine_type=self.machine_type,
+            provider_id="LOCAL",  # Register as LOCAL for backend compatibility
+            threads_per_core=self.threads_per_core,
+            disk_size_gb=self.data_disk_gb,
+            max_idle_time=self._timedelta_to_seconds(self.max_idle_time),
+            auto_terminate_ts=self._convert_auto_terminate_ts(
+                self.auto_terminate_ts),
+            dynamic_disk_resize_config=self._dynamic_disk_resize_config(),
+            custom_vm_image=self._custom_vm_image,
+            zone=self.zone,
+            disk_auto_delete=self.auto_delete_disk,
+            num_vms=self.num_machines,
+            spot=self.spot,
+            is_elastic=False,
+        )
+
+        body = self._api.register_vm_group(
+            register_vm_group_request=instance_group_config,)
+
+        self._update_attributes_from_response(body)
+
+        # TODO: Remove this once the CPUInfo is implemented for local taskrunner
+        self._cpu_info = type(
+            "CPUInfo", (), {
+                "cpu_cores_logical":
+                    byoc_gcp.estimate_vcpus_from_machine_type(self.machine_type
+                                                             ),
+                "cpu_cores_physical":
+                    (byoc_gcp.estimate_vcpus_from_machine_type(
+                        self.machine_type) // 2)
+            })()
+
+    def _start_byoc_gcp(self, verbose: bool = True):
+        """Start GCP VMs using client-side management."""
+        # pylint: disable=import-outside-toplevel
+        from inductiva import _api_key, api_url
+
+        api_key = _api_key.get()
+        if not api_key:
+            print("Error: No API key found. Please set your API key first.")
+            return False
+
+        logging.info("Starting %s (client-side GCP)...", repr(self))
+        start_time = time.time()
+
+        success, error_message = byoc_gcp.create_gcp_vm(self._name, self.zone,
+                                                        self.machine_type,
+                                                        api_key, api_url,
+                                                        self.spot, verbose)
+
+        if success:
+            self._started = True
+            self._active_machines = self.num_machines
+            self._client_vm_info["status"] = "running"
+            self._client_vm_info["started_at"] = datetime.datetime.now()
+
+            creation_time = format_utils.seconds_formatter(time.time() -
+                                                           start_time)
+            logging.info("%s successfully started in %s.", self, creation_time)
+            return True
+        else:
+            print("Failed to create GCP VM:")
+            print(error_message)
+            return False
+
+    def _terminate_byoc_gcp(self, verbose: bool = True):
+        """Terminate GCP VMs using client-side management."""
+        logging.info("Terminating %s (client-side GCP)...", repr(self))
+
+        success, error_message = byoc_gcp.delete_gcp_vm(self._name, self.zone,
+                                                        verbose)
+
+        if success:
+            # Also notify backend that machine group is terminated
+            try:
+                self._api.delete_vm_group(machine_group_id=self.id)
+            except inductiva.client.ApiException as e:
+                logging.warning("Failed to notify backend of termination: %s",
+                                e)
+
+            self._started = False
+            self._active_machines = 0
+            self._client_vm_info["status"] = "terminated"
+            self._client_vm_info["terminated_at"] = datetime.datetime.now()
+
+            logging.info("%s terminated.", self)
+            return True
+        else:
+            print("Failed to terminate GCP VM:")
+            print(error_message)
+            return False
 
     def estimate_cloud_cost(self, verbose: bool = True):
         """Estimates a cost per hour of min and max machines in US dollars.
@@ -827,7 +951,7 @@ class ElasticMachineGroup(BaseMachineGroup):
 
     def __str__(self):
         return (f"Elastic Machine Group {self.name} with {self.machine_type} "
-            "machines")
+                "machines")
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
@@ -921,7 +1045,7 @@ class MPICluster(BaseMachineGroup):
 
     def __str__(self):
         return (f"MPI Cluster {self.name} with {self.machine_type} "
-            f"x{self.num_machines} machines")
+                f"x{self.num_machines} machines")
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()

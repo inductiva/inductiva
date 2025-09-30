@@ -96,8 +96,8 @@ def launch_task_runner_gcp(args, fout: TextIO = sys.stdout):
         cmd = [
             "gcloud", "compute", "instances", "create", args.machine_group_name,
             "--zone", args.zone, "--machine-type", args.machine_type,
-            "--image-family", args.image_family, "--image-project",
-            args.image_project, "--scopes",
+            "--image-family", "ubuntu-2204-lts", "--image-project",
+            "ubuntu-os-cloud", "--scopes",
             "https://www.googleapis.com/auth/cloud-platform", "--metadata",
             f"INDUCTIVA_API_KEY={api_key},"
             f"INDUCTIVA_API_URL={api_url},"
@@ -109,8 +109,7 @@ def launch_task_runner_gcp(args, fout: TextIO = sys.stdout):
             cmd.append("--preemptible")
 
         if args.hostname:
-            cmd.extend(["--metadata",
-                       f"TASK_RUNNER_HOSTNAME={args.hostname}"])
+            cmd.extend(["--metadata", f"TASK_RUNNER_HOSTNAME={args.hostname}"])
 
         print(
             f"Creating GCP VM '{args.machine_group_name}' "
@@ -120,8 +119,10 @@ def launch_task_runner_gcp(args, fout: TextIO = sys.stdout):
         if args.preemptible:
             print("Using preemptible instance (spot pricing)", file=fout)
 
-        result = subprocess.run(cmd, capture_output=True, text=True,
-                               check=False)
+        result = subprocess.run(cmd,
+                                capture_output=True,
+                                text=True,
+                                check=False)
 
         if result.returncode == 0:
             print("GCP VM created successfully!", file=fout)
@@ -322,16 +323,6 @@ def register(parser):
                            type=str,
                            default="c2d-standard-8",
                            help="GCP machine type (default: c2d-standard-8).")
-
-    gcp_group.add_argument("--image-family",
-                           type=str,
-                           default="ubuntu-2204-lts",
-                           help="GCP image family (default: ubuntu-2204-lts).")
-
-    gcp_group.add_argument("--image-project",
-                           type=str,
-                           default="ubuntu-os-cloud",
-                           help="GCP image project (default: ubuntu-os-cloud).")
 
     gcp_group.add_argument(
         "--preemptible",
