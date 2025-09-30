@@ -30,7 +30,7 @@ class PythonEditorDirective(Directive):
                 <div style="font-size: 12px; margin-bottom: 6px;">{text}</div>
                 <a href="#" 
                    onclick="openInductivaEditor('{base_url}', '{origin}'); return false;"
-                   style="display: inline-block; width: 50%; padding: 16px 24px; font-size: 14px; font-weight: bold; background-color: var(--playground-button); color: black; text-decoration: none; text-align: center; border-radius: 8px;">
+                   style="display: inline-block; width: 45%; padding: 16px 24px; font-size: 14px; font-weight: bold; background-color: var(--playground-button); color: black; text-decoration: none; text-align: center; border-radius: 8px;">
                     {button_text}
                 </a>
             </div>
