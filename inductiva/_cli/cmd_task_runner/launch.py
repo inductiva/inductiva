@@ -8,6 +8,7 @@ import platform
 import subprocess
 import tempfile
 from inductiva import _cli, constants, _api_key, api_url
+from inductiva.resources import byoc_gcp
 
 _docker_imported = True
 try:
@@ -37,87 +38,6 @@ def join_container_streams(*containers, fout: TextIO = sys.stdout):
         thread.join()
 
 
-def create_startup_script(api_key: str, api_url: str, machine_group_name: str) -> str:
-    """Create the startup script for GCP VM."""
-    script_content = f"""#!/bin/bash
-
-set -e
-
-# -------------------------------
-# 1. Install Docker
-# -------------------------------
-apt update
-apt install -y docker.io
-
-systemctl enable docker
-systemctl start docker
-
-# -------------------------------
-# 2. Prepare directories and volume
-# -------------------------------
-mkdir -p /home/runner/apptainer
-chmod 777 /home/runner/apptainer
-
-docker volume create workdir
-
-# -------------------------------
-# 3. Pull Docker images
-# -------------------------------
-docker pull inductiva/task-runner:latest
-docker pull inductiva/file-tracker:latest
-
-# -------------------------------
-# 4. Read metadata and export env variables
-# -------------------------------
-for var in INDUCTIVA_API_KEY INDUCTIVA_API_URL MACHINE_GROUP_NAME; do
-    export "$var"=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/attributes/$var" -H "Metadata-Flavor: Google")
-    echo "$var=${{!var}}"
-done
-
-# -------------------------------
-# 5. Launch file-tracker
-# -------------------------------
-docker run -d --name file-tracker \\
-  --network host \\
-  -v workdir:/workdir \\
-  -e API_URL="$INDUCTIVA_API_URL" \\
-  -e USER_API_KEY="$INDUCTIVA_API_KEY" \\
-  inductiva/file-tracker:latest
-
-# -------------------------------
-# 6. Launch task-runner
-# -------------------------------
-docker run -d --name task-runner \\
-  --network host \\
-  --privileged \\
-  --platform linux/amd64 \\
-  -v /home/runner/apptainer:/executer-images \\
-  -v workdir:/workdir \\
-  --add-host host.docker.internal:host-gateway \\
-  -e EXECUTER_IMAGES_DIR=/executer-images \\
-  -e API_URL="$INDUCTIVA_API_URL" \\
-  -e USER_API_KEY="$INDUCTIVA_API_KEY" \\
-  -e MACHINE_GROUP_NAME="$MACHINE_GROUP_NAME" \\
-  -e HOST_NAME="${{TASK_RUNNER_HOSTNAME:-$(hostname)}}" \\
-  inductiva/task-runner:latest
-
-# -------------------------------
-# 7. Monitor task-runner and shutdown VM if it stops
-# -------------------------------
-METADATA_URL="http://metadata.google.internal/computeMetadata/v1/instance"
-VM_NAME=$(curl -s -H "Metadata-Flavor: Google" "$METADATA_URL/name")
-ZONE=$(curl -s -H "Metadata-Flavor: Google" "$METADATA_URL/zone" | awk -F/ '{{print $4}}')
-
-while true; do
-    sleep 10
-    if [ -z "$(docker ps -q -f name=task-runner)" ]; then
-        echo "Task runner stopped, deleting VM..."
-        gcloud compute instances delete "$VM_NAME" --zone="$ZONE" --quiet
-        break
-    fi
-done
-"""
-    return script_content
 
 
 def check_gcloud_installed() -> bool:
@@ -159,7 +79,7 @@ def launch_task_runner_gcp(args, fout: TextIO = sys.stdout):
         print("Error: No API key found. Please set your API key first.", file=fout)
         return
     
-    startup_script = create_startup_script(api_key, api_url, args.machine_group_name)
+    startup_script = byoc_gcp.create_gcp_startup_script()
     
     with tempfile.NamedTemporaryFile(mode='w', suffix='.sh', delete=False) as f:
         f.write(startup_script)

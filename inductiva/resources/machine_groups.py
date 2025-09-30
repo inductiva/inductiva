@@ -17,6 +17,7 @@ from inductiva import api, users, logs
 from inductiva.commands.mpiconfig import MPIConfig
 from inductiva.resources.utils import ProviderType
 from inductiva.utils import format_utils
+from inductiva.resources import byoc_gcp
 
 VCPUCount = namedtuple("VCPUCount", ["total", "per_machine"])
 
@@ -59,6 +60,7 @@ class BaseMachineGroup(ABC):
     machine_type: str
     zone: Optional[str] = "europe-west1-b"
     provider: Union[ProviderType, str] = "GCP"
+    byoc: bool = False
     threads_per_core: int = 2
     data_disk_gb: int = 10
     auto_delete_disk: bool = True
@@ -102,9 +104,10 @@ class BaseMachineGroup(ABC):
         provider = ProviderType(self.provider)
         self.provider = provider.value
 
-        # Set the API configuration that carries the information from the client
-        # to the backend.
         self._api = inductiva.client.ComputeApi(api.get_client())
+        
+        if self.provider == "GCP" and self.byoc:
+            byoc_gcp.register(self)
 
         self._validate_inputs()
 
@@ -158,7 +161,7 @@ class BaseMachineGroup(ABC):
         """
         if self._gpu_info is None:
             return 0
-        return self._gpu_info.get("gpu_count", 0)
+        return getattr(self._gpu_info, 'gpu_count', 0)
 
     def set_mpi_config(self,
                        mpi_config: Optional[MPIConfig] = None,
@@ -439,6 +442,9 @@ class BaseMachineGroup(ABC):
                          "Make sure you have called the constructor.")
             return
 
+        if self.provider == "GCP" and self.byoc:
+            return byoc_gcp.start(self, verbose)
+
         logging.info(
             "Starting %s. This may take a few minutes.\n"
             "Note that stopping this local process will not interrupt "
@@ -468,6 +474,9 @@ class BaseMachineGroup(ABC):
             logging.warning(
                 "Attempting to terminate an unstarted machine group.")
             return
+
+        if self.provider == "GCP" and self.byoc:
+            return byoc_gcp.terminate(self, verbose)
 
         try:
             self._api.delete_vm_group(machine_group_id=self.id)
@@ -641,6 +650,7 @@ class MachineGroup(BaseMachineGroup):
           information about machine types.
         zone: The zone where the machines will be launched.
         provider: The cloud provider of the machine group.
+        byoc: Whether to use Bring Your Own Cloud mode (client-side GCP management).
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
         max_idle_time: Time without executing any task, after which the
@@ -678,9 +688,10 @@ class MachineGroup(BaseMachineGroup):
         dataclass initialization."""
         super().__post_init__()
 
-        self._register_machine_group(num_vms=self.num_machines,
-                                     spot=self.spot,
-                                     is_elastic=self._is_elastic)
+        if not self.byoc:
+            self._register_machine_group(num_vms=self.num_machines,
+                                         spot=self.spot,
+                                         is_elastic=self._is_elastic)
         self.np = self.np or self.available_vcpus
 
     def _validate_inputs(self):
