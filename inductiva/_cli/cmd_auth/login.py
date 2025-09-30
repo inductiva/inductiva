@@ -85,7 +85,7 @@ def login(args):
 
     user_name = user_info.name or ""
 
-    if first_log_in:
+    if first_log_in or args.no_examples:
         print(f"Welcome back {user_name}!")
     else:
         print("\n")
@@ -126,6 +126,10 @@ def register(parser):
     subparser.add_argument("--private",
                            action="store_true",
                            help="Hide API Key.")
+
+    subparser.add_argument("--no-examples",
+                           action="store_true",
+                           help="Does not download example scripts.")
 
     subparser.epilog = textwrap.dedent(r"""
         examples:
