@@ -105,7 +105,7 @@ def launch_task_runner_gcp(args, fout: TextIO = sys.stdout):
             "--metadata-from-file", f"startup-script={script_path}"
         ]
 
-        if args.preemptible:
+        if args.spot:
             cmd.append("--preemptible")
 
         if args.hostname:
@@ -116,8 +116,8 @@ def launch_task_runner_gcp(args, fout: TextIO = sys.stdout):
             f"in zone '{args.zone}'...",
             file=fout)
         print(f"Machine type: {args.machine_type}", file=fout)
-        if args.preemptible:
-            print("Using preemptible instance (spot pricing)", file=fout)
+        if args.spot:
+            print("Using spot instance for cost savings", file=fout)
 
         result = subprocess.run(cmd,
                                 capture_output=True,
@@ -324,9 +324,8 @@ def register(parser):
                            default="c2d-standard-8",
                            help="GCP machine type (default: c2d-standard-8).")
 
-    gcp_group.add_argument(
-        "--preemptible",
-        action="store_true",
-        help="Use preemptible instance (spot pricing) for cost savings.")
+    gcp_group.add_argument("--spot",
+                           action="store_true",
+                           help="Use spot instance for cost savings.")
 
     subparser.set_defaults(func=launch_task_runner)
