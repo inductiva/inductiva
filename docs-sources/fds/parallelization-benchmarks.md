@@ -1,9 +1,7 @@
 ## Parallelization Benchmarks
-Fire Dynamics Simulator (FDS) simulations benefit greatly from parallelization. FDS supports both MPI and OpenMP parallelization methods:
-- **MPI (Message Passing Interface)**: Used to divide the simulation domain into multiple meshes, with each mesh processed in parallel by a separate MPI process.
-- **OpenMP**: Enables shared-memory parallelism within each mesh, using multiple threads.
+Fire Dynamics Simulator (FDS) simulations benefit greatly from parallelization. FDS supports two parallel computing methods: **MPI (Message Passing Interface)** and **OpenMP**.
 
-This benchmarks page explores the **performance scaling of FDS simulations** using both MPI and OpenMP. All simulations were run via the **Inductiva API** on **Google Cloud Platform (GCP)** using `c4-standard` machines with **hyperthreading enabled**.
+These benchmarks explore the **performance scaling of FDS simulations** using both MPI and OpenMP. All simulations were run via the **Inductiva API** on **Google Cloud Platform (GCP)** using `c4-standard` machines with **hyperthreading enabled**.
 
 > The "Time to Beat" column in the MPI benchmark table shows reference runtimes obtained from the [official FDS repository](https://github.com/firemodels/out/tree/master/MPI_Scaling_Tests), serving as a baseline to compare against the Inductiva cloud-based simulations.
 

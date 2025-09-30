@@ -120,7 +120,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> ⚠️ **Note on vCPUs and Hyperthreading**: In most cloud environments (like Google Cloud), a vCPU corresponds to a hyperthread, not a full physical core. So a `c2d-standard-8` machine has 8 vCPUs, which typically means 4 physical cores with hyperthreading enabled. In this setup, each MPI process runs on a separate hyperthread by default.
+> ⚠️ **Note on vCPUs and Hyperthreading**: In most cloud environments (like Google Cloud), a vCPU corresponds to a thread, not a full physical core. So a `c2d-standard-8` machine has 8 vCPUs, which typically means 4 physical cores with hyperthreading enabled.
 
 ## Results
 The table below compares performance across different MPI configurations for the 1-, 8-, and 32-mesh cases. Speed-up is calculated relative to the 1-mesh baseline.
@@ -141,12 +141,12 @@ With Inductiva, you have full flexibility to choose the computational resources 
 
 > **Note**: The 1-process simulation appears more expensive because it used only 1 of the 2 available vCPUs. You’re billed for the full machine, regardless of how many cores are utilized.
 
-## Advanced Setup: Disabling Hyperthreading
+## Advanced Setup: Disabling Hyper-threading
 In the previous examples, we assigned one MPI process per virtual CPU (vCPU), which means the simulations ran on hyperthreads, not physical CPU cores. This approach is simpler to configure and often more cost-effective for light to moderate workloads.
 
-However, in traditional HPC environments, it's common practice to run one MPI process per physical core, with hyperthreading disabled. This avoids resource contention and can lead to more predictable and consistent performance.
+However, in traditional HPC environments, it's common practice to run one MPI process per physical core, with hyper-threading disabled. This avoids resource contention and can lead to more predictable and consistent performance.
 
-By default, Google Cloud VMs provide 2 vCPUs per physical core, so hyperthreading is enabled. To disable hyperthreading and use only physical cores, configure the machine group with `threads_per_core=1`:
+By default, Google Cloud VMs provide 2 vCPUs per physical core, so hyper-threading is enabled. To disable hyper-threading and use only physical cores, configure the machine group with `threads_per_core=1`:
 
 ```
 cloud_machine = inductiva.resources.MachineGroup( \
@@ -158,21 +158,21 @@ cloud_machine = inductiva.resources.MachineGroup( \
 
 Below is a comparison of two runs:
 * **1-mesh** case with 1 MPI process on a `c2d-standard-2` machine
-* **8-mesh** case with 8 MPI processes on a `c2d-standard-16` machine (with hyperthreading disabled)
+* **8-mesh** case with 8 MPI processes on a `c2d-standard-16` machine (with hyper-threading disabled)
 
-Here’s a comparison of running with and without hyperthreading the 1-mesh case with 1 MPI process on a `c2d-standard-2` machine and the 8-mesh case with 8 MPI processes on a `c2d-standard-16` machine:
+Here’s a comparison of running with and without hyper-threading the 1-mesh case with 1 MPI process on a `c2d-standard-2` machine and the 8-mesh case with 8 MPI processes on a `c2d-standard-16` machine:
 
 | MPI Processes | Machine Type     | Execution Time | Estimated Cost (USD) | Speed-up |
 |---------------|------------------|----------------|---------------------|----------|
 | 1             | c2d-standard-2   | 21 min, 35 s   | 0.0058              | 1.0x     |
 | 8             | c2d-standard-16  | 3 min, 19 s    | 0.0057              | 6.5x     |
 
-Compared to the earlier 8-mesh run on a `c2d-standard-8` machine (with hyperthreading enabled), this configuration achieved a higher speed-up, closer to the theoretical maximum of 8×. Despite using a more expensive machine type, the overall cost remained similar, making this setup more efficient in terms of time-to-solution.
+Compared to the earlier 8-mesh run on a `c2d-standard-8` machine (with hyper-threading enabled), this configuration achieved a higher speed-up, closer to the theoretical maximum of 8×. Despite using a more expensive machine type, the overall cost remained similar, making this setup more efficient in terms of time-to-solution.
 
 ## Key Takeaways
 
 - **FDS supports parallelization through MPI and OpenMP**: MPI distributes the workload across multiple meshes, while OpenMP accelerates computations within each mesh.
 - The number of MPI processes **must not exceed the number of meshes** defined in your simulation.
-- **Running one MPI process per vCPU** (i.e., with hyperthreading enabled) is simple to configure and cost-effective for light to moderate workloads.
-- **Disabling hyperthreading** allows MPI processes to run on physical cores, which is common in traditional HPC environments. This setup reduces resource contention and often improves performance consistency.
+- **Running one MPI process per vCPU** (i.e., with hyper-threading enabled) is simple to configure and cost-effective for light to moderate workloads.
+- **Disabling hyper-threading** allows MPI processes to run on physical cores, which is common in traditional HPC environments. This setup reduces resource contention and often improves performance consistency.
 - Inductiva gives you **full control over MPI and OpenMP settings**, allowing you to optimize for performance, cost, or a balance of both.
