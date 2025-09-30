@@ -187,21 +187,7 @@ def register(parser):
         "a way to launch a Task-Runner on different providers.\n\n"
         "Providers:\n"
         "  local  - Launch locally using Docker (default)\n"
-        "  gcp    - Launch on Google Cloud Platform\n\n"
-        "Local Provider:\n"
-        "  - Pulls required Docker images\n"
-        "  - Creates necessary volumes and directories\n"
-        "  - Launches file-tracker and task-runner containers\n"
-        "  - Monitors containers (unless --detach is used)\n\n"
-        "GCP Provider:\n"
-        "  - Creates a GCP compute instance\n"
-        "  - Installs Docker and pulls required images\n"
-        "  - Launches file-tracker and task-runner containers\n"
-        "  - Monitors task-runner and auto-deletes VM when it stops\n\n"
-        "Prerequisites:\n"
-        "  Local: Docker installed and running\n"
-        "  GCP:   gcloud CLI installed and authenticated\n"
-        "  Both:  Valid Inductiva API key configured")
+        "  gcp    - Launch on Google Cloud Platform")
 
     _cli.utils.add_watch_argument(subparser)
 
