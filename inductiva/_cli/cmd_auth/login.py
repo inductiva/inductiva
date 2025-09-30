@@ -126,7 +126,7 @@ def register(parser):
     subparser.add_argument("--private",
                            action="store_true",
                            help="Hide API Key.")
-    
+
     subparser.add_argument("--no-examples",
                            action="store_true",
                            help="Does not download example scripts.")
