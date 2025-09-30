@@ -139,8 +139,8 @@ class BaseMachineGroup(ABC):
             self._max_idle_time = datetime.timedelta(minutes=self.max_idle_time)
 
         if self.auto_terminate_ts is not None:
-            logging.warning("You are using `auto_terminate_ts`. This argument"
-                            "will be deprecated in the future. Please use"
+            logging.warning("You are using `auto_terminate_ts`. This argument "
+                            "will be deprecated in the future. Please use "
                             "`auto_terminate_minutes` instead.")
 
         if isinstance(self.auto_terminate_minutes, int):
@@ -161,7 +161,7 @@ class BaseMachineGroup(ABC):
         """
         if self._gpu_info is None:
             return 0
-        return getattr(self._gpu_info, 'gpu_count', 0)
+        return getattr(self._gpu_info, "gpu_count", 0)
 
     def set_mpi_config(self,
                        mpi_config: Optional[MPIConfig] = None,
@@ -650,7 +650,8 @@ class MachineGroup(BaseMachineGroup):
           information about machine types.
         zone: The zone where the machines will be launched.
         provider: The cloud provider of the machine group.
-        byoc: Whether to use Bring Your Own Cloud mode (client-side GCP management).
+        byoc: Whether to use Bring Your Own Cloud mode (client-side GCP
+            management).
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
         max_idle_time: Time without executing any task, after which the
@@ -825,8 +826,8 @@ class ElasticMachineGroup(BaseMachineGroup):
         return f"{self._active_machines}/{self.max_machines} (max)"
 
     def __str__(self):
-        return f"Elastic Machine Group {self.name} with {self.machine_type} " \
-             "machines"
+        return (f"Elastic Machine Group {self.name} with {self.machine_type} "
+            "machines")
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
@@ -919,8 +920,8 @@ class MPICluster(BaseMachineGroup):
         return machine_group
 
     def __str__(self):
-        return f"MPI Cluster {self.name} with {self.machine_type} " \
-               f"x{self.num_machines} machines"
+        return (f"MPI Cluster {self.name} with {self.machine_type} "
+            f"x{self.num_machines} machines")
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()

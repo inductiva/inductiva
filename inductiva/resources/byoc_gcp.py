@@ -10,6 +10,7 @@ import re
 
 import inductiva
 from inductiva.utils import format_utils
+from inductiva import _api_key, api_url
 
 
 def register(machine_group):
@@ -18,18 +19,19 @@ def register(machine_group):
                  machine_group.short_name())
 
     machine_group._id = str(uuid.uuid4())
-    machine_group._name = f"client-mg-{machine_group.machine_type}-{machine_group._id[:8]}"
+    machine_group._name = (f"client-mg-{machine_group.machine_type}-"
+                          f"{machine_group._id[:8]}")
 
-    _client_vm_info = {
-        'vm_name': machine_group._name,
-        'zone': machine_group.zone,
-        'status': 'registered',
-        'created_at': datetime.datetime.now()
+    client_vm_info = {
+        "vm_name": machine_group._name,
+        "zone": machine_group.zone,
+        "status": "registered",
+        "created_at": datetime.datetime.now()
     }
-    machine_group._client_vm_info = _client_vm_info
+    machine_group._client_vm_info = client_vm_info
 
     machine_group.create_time = datetime.datetime.now()
-    machine_group.num_machines = getattr(machine_group, 'num_machines', 1)
+    machine_group.num_machines = getattr(machine_group, "num_machines", 1)
     machine_group._active_machines = 0
 
     if isinstance(machine_group.max_idle_time, int):
@@ -37,25 +39,25 @@ def register(machine_group):
             minutes=machine_group.max_idle_time)
 
     machine_group._cpu_info = type(
-        'CPUInfo', (), {
-            'cpu_cores_logical':
+        "CPUInfo", (), {
+            "cpu_cores_logical":
                 _estimate_vcpus_from_machine_type(machine_group.machine_type),
-            'cpu_cores_physical':
+            "cpu_cores_physical":
                 _estimate_vcpus_from_machine_type(machine_group.machine_type) //
                 2
         })()
 
-    machine_group._gpu_info = type('GPUInfo', (), {
-        'gpu_count': 0,
-        'gpu_name': None
+    machine_group._gpu_info = type("GPUInfo", (), {
+        "gpu_count": 0,
+        "gpu_name": None
     })()
 
     machine_group._cost_per_hour = type(
-        'CostInfo', (), {
-            'min': 0.1,
-            'max': 0.1,
-            'min_reason': 'Client-side GCP',
-            'max_reason': 'Client-side GCP'
+        "CostInfo", (), {
+            "min": 0.1,
+            "max": 0.1,
+            "min_reason": "Client-side GCP",
+            "max_reason": "Client-side GCP"
         })()
 
     _register_machine_group_backend(machine_group)
@@ -91,32 +93,32 @@ def _register_machine_group_backend(machine_group):
     machine_group._update_attributes_from_response(body)
 
     machine_group._cpu_info = type(
-        'CPUInfo', (), {
-            'cpu_cores_logical':
+        "CPUInfo", (), {
+            "cpu_cores_logical":
                 _estimate_vcpus_from_machine_type(machine_group.machine_type),
-            'cpu_cores_physical':
+            "cpu_cores_physical":
                 _estimate_vcpus_from_machine_type(machine_group.machine_type) //
                 2
         })()
 
-    machine_group._gpu_info = type('GPUInfo', (), {
-        'gpu_count': 0,
-        'gpu_name': None
+    machine_group._gpu_info = type("GPUInfo", (), {
+        "gpu_count": 0,
+        "gpu_name": None
     })()
 
     machine_group._cost_per_hour = type(
-        'CostInfo', (), {
-            'min': 0.1,
-            'max': 0.1,
-            'min_reason': 'Client-side GCP',
-            'max_reason': 'Client-side GCP'
+        "CostInfo", (), {
+            "min": 0.1,
+            "max": 0.1,
+            "min_reason": "Client-side GCP",
+            "max_reason": "Client-side GCP"
         })()
 
 
 def _estimate_vcpus_from_machine_type(machine_type):
     """Estimate vCPUs from machine type string."""
     # Extract number from machine type (e.g., "c2d-standard-8" -> 8)
-    match = re.search(r'-(\d+)$', machine_type)
+    match = re.search(r"-(\d+)$", machine_type)
     if match:
         return int(match.group(1))
     raise ValueError(
@@ -125,7 +127,7 @@ def _estimate_vcpus_from_machine_type(machine_type):
 
 def create_gcp_startup_script() -> str:
     """Create the startup script for GCP VM."""
-    script_content = f"""#!/bin/bash
+    script_content = """#!/bin/bash
 
 set -e
 
@@ -156,7 +158,7 @@ docker pull inductiva/file-tracker:latest
 # 4. Read metadata and export env variables
 # -------------------------------
 for var in INDUCTIVA_API_KEY INDUCTIVA_API_URL MACHINE_GROUP_NAME; do
-    export "$var"=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/attributes/$var" -H "Metadata-Flavor: Google")                                                                                
+    export "$var"=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/attributes/$var" -H "Metadata-Flavor: Google")
     echo "$var=${{!var}}"
 done
 
@@ -209,7 +211,7 @@ done
 def check_gcloud_installed() -> bool:
     """Check if gcloud CLI is installed."""
     try:
-        subprocess.run(['gcloud', '--version'],
+        subprocess.run(["gcloud", "--version"],
                        capture_output=True,
                        text=True,
                        check=True)
@@ -222,11 +224,11 @@ def check_gcloud_auth() -> bool:
     """Check if gcloud is authenticated."""
     try:
         result = subprocess.run(
-            ['gcloud', 'auth', 'list', '--filter=status:ACTIVE'],
+            ["gcloud", "auth", "list", "--filter=status:ACTIVE"],
             capture_output=True,
             text=True,
             check=True)
-        return 'ACTIVE' in result.stdout
+        return "ACTIVE" in result.stdout
     except subprocess.CalledProcessError:
         return False
 
@@ -236,7 +238,8 @@ def start(machine_group, verbose: bool = True):
     if not check_gcloud_installed():
         print("Error: gcloud CLI is not installed or not in PATH.")
         print(
-            "Please install gcloud CLI: https://cloud.google.com/sdk/docs/install"
+            "Please install gcloud CLI: "
+            "https://cloud.google.com/sdk/docs/install"
         )
         print("Or install with: pip install 'inductiva[gcp]'")
         return False
@@ -246,7 +249,6 @@ def start(machine_group, verbose: bool = True):
         print("Please run 'gcloud auth login' to authenticate.")
         return False
 
-    from inductiva import _api_key, api_url
     api_key = _api_key.get()
     if not api_key:
         print("Error: No API key found. Please set your API key first.")
@@ -259,40 +261,44 @@ def start(machine_group, verbose: bool = True):
     startup_script = create_gcp_startup_script()
 
     # Write script to temporary file
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.sh', delete=False) as f:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".sh", delete=False) as f:
         f.write(startup_script)
         script_path = f.name
 
     try:
         cmd = [
-            'gcloud', 'compute', 'instances', 'create', machine_group._name,
-            '--zone', machine_group.zone, '--machine-type',
-            machine_group.machine_type, '--image-family', 'ubuntu-2204-lts',
-            '--image-project', 'ubuntu-os-cloud', '--scopes',
-            'https://www.googleapis.com/auth/cloud-platform', '--metadata',
-            f'INDUCTIVA_API_KEY={api_key},INDUCTIVA_API_URL={api_url},MACHINE_GROUP_NAME={machine_group._name}',
-            '--metadata-from-file', f'startup-script={script_path}'
+            "gcloud", "compute", "instances", "create", machine_group._name,
+            "--zone", machine_group.zone, "--machine-type",
+            machine_group.machine_type, "--image-family", "ubuntu-2204-lts",
+            "--image-project", "ubuntu-os-cloud", "--scopes",
+            "https://www.googleapis.com/auth/cloud-platform", "--metadata",
+            f"INDUCTIVA_API_KEY={api_key},"
+            f"INDUCTIVA_API_URL={api_url},"
+            f"MACHINE_GROUP_NAME={machine_group._name}",
+            "--metadata-from-file", f"startup-script={script_path}"
         ]
 
         if machine_group.spot:
-            cmd.append('--preemptible')
+            cmd.append("--preemptible")
 
         if verbose:
             print(
-                f"Creating GCP VM '{machine_group._name}' in zone '{machine_group.zone}'..."
+                f"Creating GCP VM '{machine_group._name}' "
+                f"in zone '{machine_group.zone}'..."
             )
             print(f"Machine type: {machine_group.machine_type}")
             if machine_group.spot:
                 print("Using preemptible instance (spot pricing)")
 
-        result = subprocess.run(cmd, capture_output=True, text=True)
+        result = subprocess.run(cmd, capture_output=True, text=True,
+                               check=False)
 
         if result.returncode == 0:
             machine_group._started = True
             machine_group._active_machines = machine_group.num_machines
-            machine_group._client_vm_info['status'] = 'running'
-            machine_group._client_vm_info['started_at'] = datetime.datetime.now(
-            )
+            machine_group._client_vm_info["status"] = "running"
+            machine_group._client_vm_info["started_at"] = (
+                datetime.datetime.now())
 
             creation_time = format_utils.seconds_formatter(time.time() -
                                                            start_time)
@@ -304,7 +310,8 @@ def start(machine_group, verbose: bool = True):
                 print(f"VM Name: {machine_group._name}")
                 print(f"Zone: {machine_group.zone}")
                 print(
-                    "The task-runner will start automatically once the VM is ready."
+                    "The task-runner will start automatically "
+                    "once the VM is ready."
                 )
 
             return True
@@ -313,7 +320,7 @@ def start(machine_group, verbose: bool = True):
             print(result.stderr)
             return False
 
-    except Exception as e:
+    except (subprocess.CalledProcessError, OSError) as e:
         print(f"Error creating GCP VM: {e}")
         return False
     finally:
@@ -333,25 +340,27 @@ def terminate(machine_group, verbose: bool = True):
 
     try:
         cmd = [
-            'gcloud', 'compute', 'instances', 'delete', machine_group._name,
-            '--zone', machine_group.zone, '--quiet'
+            "gcloud", "compute", "instances", "delete", machine_group._name,
+            "--zone", machine_group.zone, "--quiet"
         ]
 
-        result = subprocess.run(cmd, capture_output=True, text=True)
+        result = subprocess.run(cmd, capture_output=True, text=True,
+                               check=False)
 
         if result.returncode == 0:
             # Also notify backend that machine group is terminated
             try:
                 machine_group._api.delete_vm_group(
                     machine_group_id=machine_group.id)
-            except Exception as e:
-                logging.warning(f"Failed to notify backend of termination: {e}")
+            except inductiva.client.ApiException as e:
+                logging.warning(
+                    "Failed to notify backend of termination: %s", e)
 
             machine_group._started = False
             machine_group._active_machines = 0
-            machine_group._client_vm_info['status'] = 'terminated'
+            machine_group._client_vm_info["status"] = "terminated"
             machine_group._client_vm_info[
-                'terminated_at'] = datetime.datetime.now()
+                "terminated_at"] = datetime.datetime.now()
 
             logging.info("%s terminated.", machine_group)
 
@@ -367,17 +376,18 @@ def terminate(machine_group, verbose: bool = True):
                 try:
                     machine_group._api.delete_vm_group(
                         machine_group_id=machine_group.id)
-                except Exception as e:
+                except inductiva.client.ApiException as e:
                     logging.warning(
-                        f"Failed to notify backend of termination: {e}")
+                        "Failed to notify backend of termination: %s", e)
 
                 machine_group._started = False
                 machine_group._active_machines = 0
-                machine_group._client_vm_info['status'] = 'terminated'
+                machine_group._client_vm_info["status"] = "terminated"
                 logging.info("%s was already terminated.", machine_group)
                 if verbose:
                     print(
-                        f"GCP VM '{machine_group._name}' was already terminated."
+                        f"GCP VM '{machine_group._name}' "
+                        "was already terminated."
                     )
                 return True
             else:
@@ -385,6 +395,6 @@ def terminate(machine_group, verbose: bool = True):
                 print(result.stderr)
                 return False
 
-    except Exception as e:
+    except (subprocess.CalledProcessError, OSError) as e:
         print(f"Error terminating GCP VM: {e}")
         return False

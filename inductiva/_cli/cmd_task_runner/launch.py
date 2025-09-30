@@ -41,7 +41,7 @@ def join_container_streams(*containers, fout: TextIO = sys.stdout):
 def check_gcloud_installed() -> bool:
     """Check if gcloud CLI is installed and authenticated."""
     try:
-        subprocess.run(['gcloud', '--version'],
+        subprocess.run(["gcloud", "--version"],
                        capture_output=True,
                        text=True,
                        check=True)
@@ -54,11 +54,11 @@ def check_gcloud_auth() -> bool:
     """Check if gcloud is authenticated."""
     try:
         result = subprocess.run(
-            ['gcloud', 'auth', 'list', '--filter=status:ACTIVE'],
+            ["gcloud", "auth", "list", "--filter=status:ACTIVE"],
             capture_output=True,
             text=True,
             check=True)
-        return 'ACTIVE' in result.stdout
+        return "ACTIVE" in result.stdout
     except subprocess.CalledProcessError:
         return False
 
@@ -69,7 +69,8 @@ def launch_task_runner_gcp(args, fout: TextIO = sys.stdout):
     if not check_gcloud_installed():
         print("Error: gcloud CLI is not installed or not in PATH.", file=fout)
         print(
-            "Please install gcloud CLI: https://cloud.google.com/sdk/docs/install",
+            "Please install gcloud CLI: "
+            "https://cloud.google.com/sdk/docs/install",
             file=fout)
         print("Or install with: pip install 'inductiva[gcp]'", file=fout)
         return
@@ -87,48 +88,54 @@ def launch_task_runner_gcp(args, fout: TextIO = sys.stdout):
 
     startup_script = byoc_gcp.create_gcp_startup_script()
 
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.sh', delete=False) as f:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".sh", delete=False) as f:
         f.write(startup_script)
         script_path = f.name
 
     try:
         cmd = [
-            'gcloud', 'compute', 'instances', 'create', args.machine_group_name,
-            '--zone', args.zone, '--machine-type', args.machine_type,
-            '--image-family', args.image_family, '--image-project',
-            args.image_project, '--scopes',
-            'https://www.googleapis.com/auth/cloud-platform', '--metadata',
-            f'INDUCTIVA_API_KEY={api_key},INDUCTIVA_API_URL={api_url},MACHINE_GROUP_NAME={args.machine_group_name}',
-            '--metadata-from-file', f'startup-script={script_path}'
+            "gcloud", "compute", "instances", "create", args.machine_group_name,
+            "--zone", args.zone, "--machine-type", args.machine_type,
+            "--image-family", args.image_family, "--image-project",
+            args.image_project, "--scopes",
+            "https://www.googleapis.com/auth/cloud-platform", "--metadata",
+            f"INDUCTIVA_API_KEY={api_key},"
+            f"INDUCTIVA_API_URL={api_url},"
+            f"MACHINE_GROUP_NAME={args.machine_group_name}",
+            "--metadata-from-file", f"startup-script={script_path}"
         ]
 
         if args.preemptible:
-            cmd.append('--preemptible')
+            cmd.append("--preemptible")
 
         if args.hostname:
-            cmd.extend(['--metadata', f'TASK_RUNNER_HOSTNAME={args.hostname}'])
+            cmd.extend(["--metadata",
+                       f"TASK_RUNNER_HOSTNAME={args.hostname}"])
 
         print(
-            f"Creating GCP VM '{args.machine_group_name}' in zone '{args.zone}'...",
+            f"Creating GCP VM '{args.machine_group_name}' "
+            f"in zone '{args.zone}'...",
             file=fout)
         print(f"Machine type: {args.machine_type}", file=fout)
         if args.preemptible:
             print("Using preemptible instance (spot pricing)", file=fout)
 
-        result = subprocess.run(cmd, capture_output=True, text=True)
+        result = subprocess.run(cmd, capture_output=True, text=True,
+                               check=False)
 
         if result.returncode == 0:
             print("GCP VM created successfully!", file=fout)
             print(f"VM Name: {args.machine_group_name}", file=fout)
             print(f"Zone: {args.zone}", file=fout)
             print(
-                "The task-runner will start automatically once the VM is ready.",
+                "The task-runner will start automatically "
+                "once the VM is ready.",
                 file=fout)
         else:
             print("Failed to create GCP VM:", file=fout)
             print(result.stderr, file=fout)
 
-    except Exception as e:
+    except (subprocess.CalledProcessError, OSError) as e:
         print(f"Error creating GCP VM: {e}", file=fout)
     finally:
         try:
@@ -139,7 +146,7 @@ def launch_task_runner_gcp(args, fout: TextIO = sys.stdout):
 
 def launch_task_runner(args, fout: TextIO = sys.stdout):
     """Launches a Task-Runner."""
-    if args.provider == 'gcp':
+    if args.provider == "gcp":
         launch_task_runner_gcp(args, fout)
     else:  # local
         launch_task_runner_local(args, fout)
