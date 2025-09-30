@@ -5,8 +5,6 @@ import threading
 import sys
 import os
 import platform
-import subprocess
-import tempfile
 from inductiva import _cli, constants, _api_key, api_url
 from inductiva.resources import byoc_gcp
 
@@ -38,111 +36,32 @@ def join_container_streams(*containers, fout: TextIO = sys.stdout):
         thread.join()
 
 
-def check_gcloud_installed() -> bool:
-    """Check if gcloud CLI is installed and authenticated."""
-    try:
-        subprocess.run(["gcloud", "--version"],
-                       capture_output=True,
-                       text=True,
-                       check=True)
-        return True
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        return False
-
-
-def check_gcloud_auth() -> bool:
-    """Check if gcloud is authenticated."""
-    try:
-        result = subprocess.run(
-            ["gcloud", "auth", "list", "--filter=status:ACTIVE"],
-            capture_output=True,
-            text=True,
-            check=True)
-        return "ACTIVE" in result.stdout
-    except subprocess.CalledProcessError:
-        return False
-
-
 def launch_task_runner_gcp(args, fout: TextIO = sys.stdout):
     """Launches a Task-Runner on GCP."""
-
-    if not check_gcloud_installed():
-        print("Error: gcloud CLI is not installed or not in PATH.", file=fout)
-        print(
-            "Please install gcloud CLI: "
-            "https://cloud.google.com/sdk/docs/install",
-            file=fout)
-        print("Or install with: pip install 'inductiva[gcp]'", file=fout)
-        return
-
-    if not check_gcloud_auth():
-        print("Error: gcloud is not authenticated.", file=fout)
-        print("Please run 'gcloud auth login' to authenticate.", file=fout)
-        return
-
     api_key = _api_key.get()
     if not api_key:
-        print("Error: No API key found. Please set your API key first.",
-              file=fout)
+        print("Error: No API key found.", file=fout)
         return
 
-    startup_script = byoc_gcp.create_gcp_startup_script()
+    success, error_msg = byoc_gcp.create_gcp_vm(vm_name=args.machine_group_name,
+                                                zone=args.zone,
+                                                machine_type=args.machine_type,
+                                                api_key=api_key,
+                                                api_url=api_url,
+                                                spot=args.spot,
+                                                hostname=args.hostname,
+                                                verbose=True)
 
-    with tempfile.NamedTemporaryFile(mode="w", suffix=".sh", delete=False) as f:
-        f.write(startup_script)
-        script_path = f.name
-
-    try:
-        cmd = [
-            "gcloud", "compute", "instances", "create", args.machine_group_name,
-            "--zone", args.zone, "--machine-type", args.machine_type,
-            "--image-family", "ubuntu-2204-lts", "--image-project",
-            "ubuntu-os-cloud", "--scopes",
-            "https://www.googleapis.com/auth/cloud-platform", "--metadata",
-            f"INDUCTIVA_API_KEY={api_key},"
-            f"INDUCTIVA_API_URL={api_url},"
-            f"MACHINE_GROUP_NAME={args.machine_group_name}",
-            "--metadata-from-file", f"startup-script={script_path}"
-        ]
-
-        if args.spot:
-            cmd.append("--preemptible")
-
-        if args.hostname:
-            cmd.extend(["--metadata", f"TASK_RUNNER_HOSTNAME={args.hostname}"])
-
-        print(
-            f"Creating GCP VM '{args.machine_group_name}' "
-            f"in zone '{args.zone}'...",
-            file=fout)
-        print(f"Machine type: {args.machine_type}", file=fout)
-        if args.spot:
-            print("Using spot instance for cost savings", file=fout)
-
-        result = subprocess.run(cmd,
-                                capture_output=True,
-                                text=True,
-                                check=False)
-
-        if result.returncode == 0:
-            print("GCP VM created successfully!", file=fout)
-            print(f"VM Name: {args.machine_group_name}", file=fout)
-            print(f"Zone: {args.zone}", file=fout)
+    if not success:
+        print("Error:", error_msg, file=fout)
+        if "gcloud CLI is not installed" in error_msg:
             print(
-                "The task-runner will start automatically "
-                "once the VM is ready.",
+                "Please install gcloud CLI: "
+                "https://cloud.google.com/sdk/docs/install",
                 file=fout)
-        else:
-            print("Failed to create GCP VM:", file=fout)
-            print(result.stderr, file=fout)
-
-    except (subprocess.CalledProcessError, OSError) as e:
-        print(f"Error creating GCP VM: {e}", file=fout)
-    finally:
-        try:
-            os.unlink(script_path)
-        except OSError:
-            pass
+            print("Or install with: pip install 'inductiva[gcp]'", file=fout)
+        elif "gcloud is not authenticated" in error_msg:
+            print("Please run 'gcloud auth login' to authenticate.", file=fout)
 
 
 def launch_task_runner(args, fout: TextIO = sys.stdout):
@@ -326,6 +245,6 @@ def register(parser):
 
     gcp_group.add_argument("--spot",
                            action="store_true",
-                           help="Use spot instance for cost savings.")
+                           help="Use spot instance.")
 
     subparser.set_defaults(func=launch_task_runner)

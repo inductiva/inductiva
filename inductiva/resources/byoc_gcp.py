@@ -131,6 +131,7 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
         api_key: str,
         api_url: str,
         spot: bool = True,
+        hostname: Optional[str] = None,
         verbose: bool = True) -> Tuple[bool, Optional[str]]:
     """Create a GCP VM instance.
     
@@ -141,6 +142,7 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
         api_key: Inductiva API key
         api_url: Inductiva API URL
         spot: Whether to use preemptible (spot) instance
+        hostname: Optional hostname for the task runner
         verbose: Whether to print verbose output
         
     Returns:
@@ -161,14 +163,20 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
         script_path = f.name
 
     try:
+        metadata = [
+            f"INDUCTIVA_API_KEY={api_key}", f"INDUCTIVA_API_URL={api_url}",
+            f"MACHINE_GROUP_NAME={vm_name}"
+        ]
+
+        if hostname:
+            metadata.append(f"TASK_RUNNER_HOSTNAME={hostname}")
+
         cmd = [
             "gcloud", "compute", "instances", "create", vm_name, "--zone", zone,
             "--machine-type", machine_type, "--image-family", "ubuntu-2204-lts",
             "--image-project", "ubuntu-os-cloud", "--scopes",
             "https://www.googleapis.com/auth/cloud-platform", "--metadata",
-            f"INDUCTIVA_API_KEY={api_key},"
-            f"INDUCTIVA_API_URL={api_url},"
-            f"MACHINE_GROUP_NAME={vm_name}", "--metadata-from-file",
+            ",".join(metadata), "--metadata-from-file",
             f"startup-script={script_path}"
         ]
 
@@ -179,7 +187,7 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
             print(f"Creating GCP VM '{vm_name}' in zone '{zone}'...")
             print(f"Machine type: {machine_type}")
             if spot:
-                print("Using preemptible instance (spot pricing)")
+                print("Using spot instance")
 
         result = subprocess.run(cmd,
                                 capture_output=True,
