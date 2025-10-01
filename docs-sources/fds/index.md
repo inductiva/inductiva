@@ -51,6 +51,15 @@ visualizing-results
 
 ```{toctree}
 ---
+caption: 🚀 Benchmarks
+maxdepth: 1
+hidden: true
+---
+parallelization-benchmarks
+```
+
+```{toctree}
+---
 caption: " "
 maxdepth: 1
 hidden: true
