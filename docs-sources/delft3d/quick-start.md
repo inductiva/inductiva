@@ -48,7 +48,8 @@ For larger or more compute-intensive simulations, consider adjusting the `machin
 To adapt this script for your own simulations:
 - Replace the `input_dir` path with the location of your Delft3D input files.
 - Adjust the `commands` to match your specific configuration.
-- If you change the number of virtual CPUs in the machine, make sure to update the corresponding value in the `mpirun` command (e.g., `-np 16`).
+
+> ⚠️ **Important**: If you change the number of virtual CPUs in the machine, make sure to update the corresponding value in the `mpirun` command (e.g., `-np 16`).
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
