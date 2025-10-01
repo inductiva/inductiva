@@ -14,7 +14,7 @@ Additionally, the record duration file `records_duration.txt` will be read durin
 The full simulation script (`simulation-script.py`) is included to ensure reproducibility and easy adaptation for your own workflows.
 
 ## Simulation Overview
-For a primer on running a single OpenSees simulation, check out our introductory tutorial [here](quick-start.md).
+For a primer on running a single OpenSees simulation, check out our introductory tutorial [here](../../quick-start).
 
 In this tutorial, we take a significant step forward: executing **300 IDA simulations in a single run**, leveraging a high-throughput workflow using the [EESD OpenSees distribution](https://github.com/eesd-epfl/OpenSees).
 
