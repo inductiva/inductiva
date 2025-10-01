@@ -151,7 +151,7 @@ By default, Google Cloud VMs provide 2 vCPUs per physical core, so hyper-threadi
 ```
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2d-standard-8",
+    machine_type="c2d-standard-16",
     threads_per_core=1,
     spot=True)
 ```
