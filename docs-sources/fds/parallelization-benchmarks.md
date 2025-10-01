@@ -19,15 +19,15 @@ Each simulation was run three times, averaging both runtime and cost. The c4-sta
 
 Below are the results for each problem size. The rightmost column shows the corresponding machine cost.
 
-|    MPI Processes |    MPI Slots | Machine Type    |    Avg Time (s) | Avg Cost ($) |    Time to beat (s) |
-| ---------------: | -----------: | :-------------- | --------------: | -----------: | ------------------: |
-|                1 |            2 | c4-standard-2   |       1360.49   |        0.044 |             1399.00 |
-|                8 |            8 | c4-standard-8   |          332.64 |        0.043 |              192.10 |
-|               32 |           32 | c4-standard-32  |          116.80 |        0.063 |               62.64 |
-|               64 |           96 | c4-standard-96  |           67.04 |        0.117 |               41.54 |
-|               96 |           96 | c4-standard-96  |           57.75 |        0.104 |               24.63 |
-|              192 |          192 | c4-standard-192 |           37.41 |        0.160 |               14.42 |
-|              288 |          288 | c4-standard-288 |           26.39 |        0.167 |                9.80 |
+| Machine Type     | MPI Slots | MPI Processes  | Avg Time (s) | Avg Cost ($)  | Time to beat (s) |
+|------------------|-----------|----------------|--------------|---------------|------------------|
+| c4-standard-2    | 2         | 1              | 1360.49      | 0.044         | 1399.00          |
+| c4-standard-8    | 8         | 8              | 332.64       | 0.043         | 192.10           |
+| c4-standard-32   | 32        | 32             | 116.80       | 0.063         | 62.64            |
+| c4-standard-96   | 96        | 64             | 67.04        | 0.117         | 41.54            |
+| c4-standard-96   | 96        | 96             | 57.75        | 0.104         | 24.63            |
+| c4-standard-192  | 192       | 192            | 37.41        | 0.160         | 14.42            |
+| c4-standard-288  | 288       | 288            | 26.39        | 0.167         | 9.80             |
 
 As expected, simulation time decreases as the number of MPI processes increases, demonstrating **effective scaling performance**. Our results compare favorably against the FDS baseline in most configurations.
 

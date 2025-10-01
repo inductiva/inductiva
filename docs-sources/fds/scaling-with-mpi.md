@@ -125,11 +125,11 @@ task.print_summary()
 ## Results
 The table below compares performance across different MPI configurations for the 1-, 8-, and 32-mesh cases. Speed-up is calculated relative to the 1-mesh baseline.
 
-| MPI Processes | Machine Type     | Execution Time  | Estimated Cost (USD) | Speed-up |
-|---------------|------------------|-----------------|----------------------|----------|
-| 1             | c2d-standard-2   | 21 minutes, 15s | 0.0057               | 1.0×     |
-| 8             | c2d-standard-8   | 5 minutes, 22s  | 0.0047               | 4.0×     |
-| 32            | c2d-standard-32  | 1 minute, 49s   | 0.0062               | 11.7×    |
+| Machine Type     | MPI Processes | Execution Time  | Estimated Cost (USD) | Speed-up |
+|------------------|---------------|-----------------|----------------------|----------|
+| c2d-standard-2   | 1             | 21 minutes, 15s | 0.0057               | 1.0×     |
+| c2d-standard-8   | 8             | 5 minutes, 22s  | 0.0047               | 4.0×     |
+| c2d-standard-32  | 32            | 1 minute, 49s   | 0.0062               | 11.7×    |
 
 Increasing parallelism from 1 to 8 MPI processes results in a **4× speed-up**, reducing runtime from over 21 minutes to just over 5 minutes. This demonstrates a clear performance gain. However, due to typical overheads in parallel computing, such as communication and synchronization, the speed-up is not perfectly linear.
 
@@ -142,7 +142,7 @@ With Inductiva, you have full flexibility to choose the computational resources 
 > **Note**: The 1-process simulation appears more expensive because it used only 1 of the 2 available vCPUs. You’re billed for the full machine, regardless of how many cores are utilized.
 
 ## Advanced Setup: Disabling Hyper-threading
-In the previous examples, we assigned one MPI process per virtual CPU (vCPU), which means the simulations ran on hyperthreads, not physical CPU cores. This approach is simpler to configure and often more cost-effective for light to moderate workloads.
+In the previous examples, we assigned one MPI process per virtual CPU (vCPU), which means the simulations ran on hyperthreads, not physical CPU cores.
 
 However, in traditional HPC environments, it's common practice to run one MPI process per physical core, with hyper-threading disabled. This avoids resource contention and can lead to more predictable and consistent performance.
 
@@ -156,16 +156,12 @@ cloud_machine = inductiva.resources.MachineGroup( \
     spot=True)
 ```
 
-Below is a comparison of two runs:
-* **1-mesh** case with 1 MPI process on a `c2d-standard-2` machine
-* **8-mesh** case with 8 MPI processes on a `c2d-standard-16` machine (with hyper-threading disabled)
+Here are the results of running without hyper-threading the 1-mesh case with 1 MPI process on a `c2d-standard-2` machine and the 8-mesh case with 8 MPI processes on a `c2d-standard-16` machine:
 
-Here’s a comparison of running with and without hyper-threading the 1-mesh case with 1 MPI process on a `c2d-standard-2` machine and the 8-mesh case with 8 MPI processes on a `c2d-standard-16` machine:
-
-| MPI Processes | Machine Type     | Execution Time | Estimated Cost (USD) | Speed-up |
-|---------------|------------------|----------------|---------------------|----------|
-| 1             | c2d-standard-2   | 21 min, 35 s   | 0.0058              | 1.0x     |
-| 8             | c2d-standard-16  | 3 min, 19 s    | 0.0057              | 6.5x     |
+| Machine Type     | MPI Processes | Execution Time | Estimated Cost (USD) | Speed-up |
+|------------------|---------------|----------------|----------------------|----------|
+| c2d-standard-2   | 1             | 21 min, 35 s   | 0.0058               | 1.0x     |
+| c2d-standard-16  | 8             | 3 min, 19 s    | 0.0057               | 6.5x     |
 
 Compared to the earlier 8-mesh run on a `c2d-standard-8` machine (with hyper-threading enabled), this configuration achieved a higher speed-up, closer to the theoretical maximum of 8×. Despite using a more expensive machine type, the overall cost remained similar, making this setup more efficient in terms of time-to-solution.
 
