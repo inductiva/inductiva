@@ -50,10 +50,19 @@ hidden: true
 ---
 setup-test
 quick-start
-Run with MPI Clusters <mpi-tutorial/run-exafoam-microbenchmark>
-MPI Behavior in OpenFOAM <openfoam-mpi-setup/openfoam-behaviour>
+<convert-allrun-script-into-python-commands>
+Run ExaFOAM Case on an MPI Cluster <mpi-cluster-tutorial>
 Generate a Wind Tunnel Simulation Dataset <generate-wind-tunnel-dataset/index>
 Run occDrivAerStaticMesh from the OpenFOAM HPC Benchmark Suite <run-occdrivaerstaticmesh-case/index>
+```
+
+```{toctree}
+---
+caption: " "
+maxdepth: 1
+hidden: true
+---
+MPI Behavior in OpenFOAM <openfoam-mpi-setup/openfoam-behaviour>
 ```
 
 ```{toctree}
