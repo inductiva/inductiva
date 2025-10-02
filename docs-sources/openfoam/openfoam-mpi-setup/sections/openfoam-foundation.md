@@ -77,7 +77,13 @@ To explore how OpenFOAM scales in a more realistic scenario, we ran a steady-sta
 The simulation was carried out with OpenFOAM’s `simpleFoam` solver on a structured, terrain-following graded mesh containing **14 million cells**. The computational domain covered **30 × 30 × 3 km**, with idealized atmospheric boundary layer (ABL) conditions at the inlet. Turbulence was modeled using the **k–ε closure model**, and we applied a stepped **first- to second-order convection scheme** to improve solution accuracy and convergence.
 
 ### Performance Comparison
-We tested four configurations, varying machine size, hyper-threading, and number of MPI processes:
+We ran these tests to understand how hyperthreading and machine size affect OpenFOAM performance and cost. Specifically, we wanted to see whether it was better to:
+- (1st row) stick to physical cores on a large machine with hyperthreading enabled,
+- (2nd row) try to exploit all vCPUs (logical cores) on the same large machine,
+- (3rd row) disable hyperthreading and use only physical cores on the large machine, or
+- (4th row) use a smaller machine with fewer physical cores to reduce cost at the expense of runtime.
+
+Below are the results:
 
 | Machine Type   | Threads per Core | vCPUs Available | MPI Procs | Execution Time | Estimated Cost (USD) |
 | -------------- | ---------------- | --------------- | --------- | -------------- | ---------- |
@@ -86,14 +92,13 @@ We tested four configurations, varying machine size, hyper-threading, and number
 | c4d-highcpu-96 | 1                | 48              | 48        | 9h, 23 min   | 15.58      |
 | c4d-highcpu-48 | 2                | 48              | 48        | 19h, 8 min   | 15.93      |
 
-We ran these tests to understand how hyperthreading and machine size affect OpenFOAM performance and cost. Specifically, we wanted to see whether it was better to (1st row) stick to physical cores, (2nd row) try to exploit all vCPUs, or (3rd row) use a smaller instance to reduce cost at the expense of runtime.
+### Insights
+The first configuration (48 MPI ranks on 96 vCPUs with hyperthreading enabled) follows the standard OpenFOAM-Foundation practice of mapping one rank per physical core. This resulted in the fastest and most cost-effective runtime of 9h 20min and US$15.48.
 
-The first configuration (48 MPI ranks on 96 vCPUs with hyperthreading enabled) follows the standard OpenFOAM-Foundation practice of mapping one rank per physical core. This gave the fastest adn cheapest runtime at **9 hrs 20 min** and 15.48 US$.
+In the second run, we increased the number of MPI ranks to 96 to fully utilize all available vCPUs. The idea was to test whether fully loading the hyperthreaded machine would improve throughput. Instead, runtime increased to **10h, 58 min**, demonstrating that oversubscribing hyperthreaded cores adds contention and communication overhead, which reduces efficiency.
 
-In the second run, we increased the number of MPI ranks to 96 to match all available vCPUs. The idea was to test whether fully loading the hyperthreaded machine would improve throughput. Instead, runtime increased to **10 hrs 58 min**, demonstrating that oversubscribing hyperthreaded cores adds contention and communication overhead, reducing efficiency.
+For the third run, we disabled hyperthreading (`threads_per_core=1`), limiting the machine to 48 vCPUs corresponding exactly to the 48 physical cores. The runtime (**9h, 23 min**) was nearly identical to the first case, confirming that hyperthreading does not provide a performance benefit when already running one MPI rank per physical core.
 
-For the third run, we disabled hyperthreading (`threads_per_core=1`), leaving 48 vCPUs that correspond directly to the 48 physical cores. The runtime (**9 hrs 23 min**) was essentially the same as in the first case, confirming that hyperthreading does not provide a performance benefit when already running one MPI rank per physical core.
+Finally, we tested a smaller instance (`c4d-highcpu-48`) with 48 vCPUs, which map to only 24 physical cores. Running 48 MPI ranks on this machine oversubscribed the hardware. Although the hourly cost was lower, the runtime increased to 19h 8min, resulting in a slightly higher total cost compared to the larger instance, making this option both slower and more expensive.
 
-Finally, we tested a smaller instance (c4d-highcpu-48) with 48 vCPUs. Since these map to only 24 physical cores, running 48 MPI ranks oversubscribed the hardware. Our hypothesis was that even with a slower runtime, the lower hourly cost of the smaller machine might make the simulation cheaper overall. However, the result was a **19 hrs 8 min** runtime and a slightly higher cost compared to the larger instance, making this option both slower and more expensive.
-
-**In summary:** the best strategy seems to be to run one MPI rank per physical core. Hyperthreading offers no measurable benefit for this workload, while attempting to use all logical cores or relying on smaller hyperthreaded instances leads to worse performance and, in some cases, higher cost.
+**In summary**: the best strategy seems to be running one MPI rank per physical core. Hyperthreading does not provide a measurable benefit for this workload, while trying to use all logical cores or relying on smaller hyperthreaded instances leads to poorer performance and, in some cases, higher costs.
