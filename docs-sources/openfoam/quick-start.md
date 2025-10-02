@@ -140,6 +140,7 @@ hierarchicalCoeffs
     order           xyz;
 }
 ```
+
 This change configures the simulation to use **8 subdomains**, matching the number of **physical cores** on the `c2d-highcpu-16` machine. 
 
 Now rerun the simulation using the same script. This time, System Metrics should show near-100% CPU utilization, indicating full use of the machine’s resources:
