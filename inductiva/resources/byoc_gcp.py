@@ -111,7 +111,7 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
 
         if verbose:
             print(
-                f"Creating GCP VM '{vm_name}' ({machine_type}) in zone '{zone}'..."
+                f"Creating GCP VM '{vm_name}' {machine_type} in zone '{zone}'.."
             )
 
         result = subprocess.run(cmd,
