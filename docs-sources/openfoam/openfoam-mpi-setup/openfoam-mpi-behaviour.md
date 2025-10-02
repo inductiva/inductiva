@@ -33,6 +33,8 @@ Uses `mpirun` without additional flags, which means it relies on MPI’s default
 ## Impact of the Differences
 The variation in how MPI is invoked causes different behaviours between OpenFOAM-ESI and OpenFOAM-Foundation when running the same simulation. The following sections explore these differences in more detail.
 
+> Learn more about MPI on computational resources [here](https://inductiva.ai/guides/how-it-works/machines/mpi-on-vms).
+
 ```{banner_small}
 :origin: openfoam
 ```
