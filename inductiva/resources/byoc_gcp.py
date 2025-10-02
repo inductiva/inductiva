@@ -3,8 +3,7 @@ import subprocess
 import re
 import tempfile
 import os
-import sys
-from typing import Optional, Tuple, TextIO
+from typing import Optional, Tuple
 
 
 def estimate_vcpus_from_machine_type(machine_type):
@@ -184,54 +183,3 @@ def delete_gcp_vm(vm_name: str,
         return False, f"Error terminating GCP VM: {e}"
 
 
-def launch_task_runner_gcp(vm_name: str,
-                          zone: str,
-                          machine_type: str,
-                          api_key: str,
-                          api_url: str,
-                          spot: bool = True,
-                          hostname: Optional[str] = None,
-                          fout: TextIO = sys.stdout) -> bool:
-    """Launch a Task-Runner on GCP with comprehensive error handling.
-    
-    This is a high-level function that handles all GCP-specific error cases
-    and provides user-friendly error messages and guidance.
-    
-    Args:
-        vm_name: Name of the VM instance
-        zone: GCP zone where to create the VM
-        machine_type: GCP machine type (e.g., "e2-standard-4")
-        api_key: Inductiva API key
-        api_url: Inductiva API URL
-        spot: Whether to use preemptible (spot) instance
-        hostname: Optional hostname for the task runner
-        fout: Output stream for messages
-        
-    Returns:
-        bool: True if successful, False otherwise
-    """
-    success, error_msg = create_gcp_vm(
-        vm_name=vm_name,
-        zone=zone,
-        machine_type=machine_type,
-        api_key=api_key,
-        api_url=api_url,
-        spot=spot,
-        hostname=hostname,
-        verbose=True
-    )
-    
-    if not success:
-        print("Error:", error_msg, file=fout)
-        
-        # Provide specific guidance based on error type
-        if "gcloud CLI is not installed" in error_msg:
-            print(
-                "Please install gcloud CLI: "
-                "https://cloud.google.com/sdk/docs/install",
-                file=fout)
-            print("Or install with: pip install 'inductiva[gcp]'", file=fout)
-        elif "gcloud is not authenticated" in error_msg:
-            print("Please run 'gcloud auth login' to authenticate.", file=fout)
-    
-    return success

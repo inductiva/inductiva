@@ -608,10 +608,6 @@ class BaseMachineGroup(ABC):
         logging.info("■ Registering %s configurations (client-side):",
                      self.short_name())
 
-        self._id = str(uuid.uuid4())
-        self._name = (f"client-mg-{self.machine_type}-"
-                      f"{self._id[:8]}")
-
         client_vm_info = {
             "vm_name": self._name,
             "zone": self.zone,
@@ -827,6 +823,8 @@ class MachineGroup(BaseMachineGroup):
 
     @property
     def n_vcpus(self):
+        if self._cpu_info is None:
+            return VCPUCount(0, 0)
         return VCPUCount(self._cpu_info.cpu_cores_logical * self.num_machines,
                          self._cpu_info.cpu_cores_logical)
 
@@ -930,6 +928,8 @@ class ElasticMachineGroup(BaseMachineGroup):
 
     @property
     def n_vcpus(self):
+        if self._cpu_info is None:
+            return VCPUCount(0, 0)
         return VCPUCount(self._cpu_info.cpu_cores_logical * self.max_machines,
                          self._cpu_info.cpu_cores_logical)
 
@@ -1015,6 +1015,8 @@ class MPICluster(BaseMachineGroup):
 
     @property
     def n_vcpus(self):
+        if self._cpu_info is None:
+            return VCPUCount(0, 0)
         return VCPUCount(self._cpu_info.cpu_cores_logical * self.num_machines,
                          self._cpu_info.cpu_cores_logical)
 

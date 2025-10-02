@@ -6,7 +6,7 @@ import sys
 import os
 import platform
 from inductiva import _cli, constants, _api_key, api_url
-from inductiva.resources import byoc_gcp
+from inductiva.resources import machine_groups
 
 _docker_imported = True
 try:
@@ -36,29 +36,20 @@ def join_container_streams(*containers, fout: TextIO = sys.stdout):
         thread.join()
 
 
-def launch_task_runner_gcp(args, fout: TextIO = sys.stdout):
+def launch_task_runner_gcp(args):
     """Launches a Task-Runner on GCP."""
-    api_key = _api_key.get()
-    if not api_key:
-        print("Error: No API key found.", file=fout)
-        return
-
-    byoc_gcp.launch_task_runner_gcp(
-        vm_name=args.machine_group_name,
-        zone=args.zone,
+    machine_groups.MachineGroup(
         machine_type=args.machine_type,
-        api_key=api_key,
-        api_url=api_url,
+        zone=args.zone,
+        provider="GCP",
+        byoc=True,
         spot=args.spot,
-        hostname=args.hostname,
-        fout=fout
-    )
-
+    ).start()
 
 def launch_task_runner(args, fout: TextIO = sys.stdout):
     """Launches a Task-Runner."""
     if args.provider == "gcp":
-        launch_task_runner_gcp(args, fout)
+        launch_task_runner_gcp(args)
     else:  # local
         launch_task_runner_local(args, fout)
 
