@@ -44,6 +44,7 @@ def launch_task_runner_gcp(args):
         provider="GCP",
         byoc=True,
         spot=args.spot,
+        machine_group_name=args.machine_group_name,
     ).start()
 
 

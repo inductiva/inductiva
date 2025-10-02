@@ -9,7 +9,6 @@ import enum
 import math
 
 import logging
-import uuid
 
 import inductiva
 import inductiva.client
@@ -62,6 +61,7 @@ class BaseMachineGroup(ABC):
     zone: Optional[str] = "europe-west1-b"
     provider: Union[ProviderType, str] = "GCP"
     byoc: bool = False
+    machine_group_name: Optional[str] = None
     threads_per_core: int = 2
     data_disk_gb: int = 10
     auto_delete_disk: bool = True
@@ -114,6 +114,12 @@ class BaseMachineGroup(ABC):
 
     def _validate_inputs(self):
         """Validate initialization inputs."""
+        if self.machine_group_name and not self.byoc:
+            raise ValueError(
+                "`machine_group_name` parameter is only supported with BYOC. "
+                "For managed resources, names are automatically generated."
+            )
+        
         if not isinstance(self.data_disk_gb, int):
             raise ValueError("`data_disk_gb` must be an integer.")
 
@@ -630,6 +636,7 @@ class BaseMachineGroup(ABC):
     def _register_machine_group_backend_byoc(self):
         """Register machine group for BYOC."""
         instance_group_config = inductiva.client.models.RegisterVMGroupRequest(
+            name=self.machine_group_name,
             machine_type=self.machine_type,
             provider_id="LOCAL",  # Register as LOCAL for backend compatibility
             threads_per_core=self.threads_per_core,
@@ -675,7 +682,7 @@ class BaseMachineGroup(ABC):
         logging.info("Starting %s (client-side GCP)...", repr(self))
         start_time = time.time()
 
-        success, error_message = byoc_gcp.create_gcp_vm(self._name, self.zone,
+        success, error_message = byoc_gcp.create_gcp_vm(self.machine_group_name, self.zone,
                                                         self.machine_type,
                                                         api_key, api_url,
                                                         self.spot, verbose)
@@ -699,7 +706,7 @@ class BaseMachineGroup(ABC):
         """Terminate GCP VMs using client-side management."""
         logging.info("Terminating %s (client-side GCP)...", repr(self))
 
-        success, error_message = byoc_gcp.delete_gcp_vm(self._name, self.zone,
+        success, error_message = byoc_gcp.delete_gcp_vm(self.machine_group_name, self.zone,
                                                         verbose)
 
         if success:
