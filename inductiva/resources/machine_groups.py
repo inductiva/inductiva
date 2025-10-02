@@ -119,6 +119,10 @@ class BaseMachineGroup(ABC):
                 "`machine_group_name` parameter is only supported with BYOC. "
                 "For managed resources, names are automatically generated.")
 
+        if self.byoc and self.num_machines != 1:
+            raise ValueError(
+                "BYOC mode currently only supports `num_machines=1`. ")
+
         if not isinstance(self.data_disk_gb, int):
             raise ValueError("`data_disk_gb` must be an integer.")
 

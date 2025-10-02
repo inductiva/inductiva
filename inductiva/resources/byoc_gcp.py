@@ -110,10 +110,9 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
             cmd.append("--preemptible")
 
         if verbose:
-            print(f"Creating GCP VM '{vm_name}' in zone '{zone}'...")
-            print(f"Machine type: {machine_type}")
-            if spot:
-                print("Using spot instance")
+            print(
+                f"Creating GCP VM '{vm_name}' ({machine_type}) in zone '{zone}'..."
+            )
 
         result = subprocess.run(cmd,
                                 capture_output=True,
