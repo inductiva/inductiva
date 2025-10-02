@@ -43,25 +43,16 @@ def launch_task_runner_gcp(args, fout: TextIO = sys.stdout):
         print("Error: No API key found.", file=fout)
         return
 
-    success, error_msg = byoc_gcp.create_gcp_vm(vm_name=args.machine_group_name,
-                                                zone=args.zone,
-                                                machine_type=args.machine_type,
-                                                api_key=api_key,
-                                                api_url=api_url,
-                                                spot=args.spot,
-                                                hostname=args.hostname,
-                                                verbose=True)
-
-    if not success:
-        print("Error:", error_msg, file=fout)
-        if "gcloud CLI is not installed" in error_msg:
-            print(
-                "Please install gcloud CLI: "
-                "https://cloud.google.com/sdk/docs/install",
-                file=fout)
-            print("Or install with: pip install 'inductiva[gcp]'", file=fout)
-        elif "gcloud is not authenticated" in error_msg:
-            print("Please run 'gcloud auth login' to authenticate.", file=fout)
+    byoc_gcp.launch_task_runner_gcp(
+        vm_name=args.machine_group_name,
+        zone=args.zone,
+        machine_type=args.machine_type,
+        api_key=api_key,
+        api_url=api_url,
+        spot=args.spot,
+        hostname=args.hostname,
+        fout=fout
+    )
 
 
 def launch_task_runner(args, fout: TextIO = sys.stdout):
