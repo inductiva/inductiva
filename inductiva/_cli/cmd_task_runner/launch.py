@@ -46,6 +46,7 @@ def launch_task_runner_gcp(args):
         spot=args.spot,
     ).start()
 
+
 def launch_task_runner(args, fout: TextIO = sys.stdout):
     """Launches a Task-Runner."""
     if args.provider == "gcp":

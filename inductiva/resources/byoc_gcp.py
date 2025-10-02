@@ -18,8 +18,9 @@ def estimate_vcpus_from_machine_type(machine_type):
 
 def create_gcp_startup_script() -> str:
     """Create the startup script for GCP VM."""
-    script_path = os.path.join(os.path.dirname(__file__), "gcp_startup_script.txt")
-    
+    script_path = os.path.join(os.path.dirname(__file__),
+                               "gcp_startup_script.txt")
+
     with open(script_path, "r", encoding="utf-8") as f:
         return f.read()
 
@@ -181,5 +182,3 @@ def delete_gcp_vm(vm_name: str,
 
     except (subprocess.CalledProcessError, OSError) as e:
         return False, f"Error terminating GCP VM: {e}"
-
-
