@@ -16,19 +16,20 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr
-from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, ConfigDict, StrictBool, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class TaskRunnerAPIConnectionInfo(BaseModel):
+class BulkOperationResult(BaseModel):
     """
-    Information sent to the task-runner after registration.
+    Schema for individual operation result in bulk operations.
     """ # noqa: E501
-    task_runner_id: StrictStr
-    machine_group_id: StrictStr
-    __properties: ClassVar[List[str]] = ["task_runner_id", "machine_group_id"]
+    id: StrictStr
+    success: StrictBool
+    error_message: Optional[StrictStr] = None
+    __properties: ClassVar[List[str]] = ["id", "success", "error_message"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -47,7 +48,7 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of TaskRunnerAPIConnectionInfo from a JSON string"""
+        """Create an instance of BulkOperationResult from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -67,11 +68,16 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if error_message (nullable) is None
+        # and model_fields_set contains the field
+        if self.error_message is None and "error_message" in self.model_fields_set:
+            _dict['error_message'] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of TaskRunnerAPIConnectionInfo from a dict"""
+        """Create an instance of BulkOperationResult from a dict"""
         if obj is None:
             return None
 
@@ -79,7 +85,8 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "task_runner_id": obj.get("task_runner_id"),
-            "machine_group_id": obj.get("machine_group_id")
+            "id": obj.get("id"),
+            "success": obj.get("success"),
+            "error_message": obj.get("error_message")
         })
         return _obj

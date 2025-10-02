@@ -16,19 +16,27 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictInt
 from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class TaskRunnerAPIConnectionInfo(BaseModel):
+class TeamStats(BaseModel):
     """
-    Information sent to the task-runner after registration.
-    """ # noqa: E501
-    task_runner_id: StrictStr
-    machine_group_id: StrictStr
-    __properties: ClassVar[List[str]] = ["task_runner_id", "machine_group_id"]
+    Schema for team statistics.
+    """
+
+  # noqa: E501
+    total_members: StrictInt
+    active_members: StrictInt
+    pending_invitations: StrictInt
+    expired_invitations: StrictInt
+    role_distribution: Dict[str, StrictInt]
+    __properties: ClassVar[List[str]] = [
+        "total_members", "active_members", "pending_invitations",
+        "expired_invitations", "role_distribution"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -47,7 +55,7 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of TaskRunnerAPIConnectionInfo from a JSON string"""
+        """Create an instance of TeamStats from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -71,7 +79,7 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of TaskRunnerAPIConnectionInfo from a dict"""
+        """Create an instance of TeamStats from a dict"""
         if obj is None:
             return None
 
@@ -79,7 +87,10 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "task_runner_id": obj.get("task_runner_id"),
-            "machine_group_id": obj.get("machine_group_id")
+            "total_members": obj.get("total_members"),
+            "active_members": obj.get("active_members"),
+            "pending_invitations": obj.get("pending_invitations"),
+            "expired_invitations": obj.get("expired_invitations"),
+            "role_distribution": obj.get("role_distribution")
         })
         return _obj

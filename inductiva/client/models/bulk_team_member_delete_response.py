@@ -16,29 +16,25 @@ import pprint
 import re  # noqa: F401
 import json
 
-from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field
-from typing import Any, ClassVar, Dict, List, Optional
-from typing_extensions import Annotated
-from inductiva.client.models.notification_type import NotificationType
+from pydantic import BaseModel, ConfigDict, StrictInt
+from typing import Any, ClassVar, Dict, List
+from inductiva.client.models.bulk_operation_result import BulkOperationResult
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class UserNotificationCreate(BaseModel):
+class BulkTeamMemberDeleteResponse(BaseModel):
     """
-    Schema for creating a new user notification.
+    Schema for bulk team member deletion response.
     """
 
   # noqa: E501
-    notification_type: NotificationType
-    notification_message: Annotated[
-        str, Field(min_length=1, strict=True, max_length=1000)]
-    notification_metadata: Optional[Dict[str, Any]] = None
-    timestamp: Optional[datetime] = None
+    results: List[BulkOperationResult]
+    total_processed: StrictInt
+    successful_count: StrictInt
+    failed_count: StrictInt
     __properties: ClassVar[List[str]] = [
-        "notification_type", "notification_message", "notification_metadata",
-        "timestamp"
+        "results", "total_processed", "successful_count", "failed_count"
     ]
 
     model_config = ConfigDict(
@@ -58,7 +54,7 @@ class UserNotificationCreate(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of UserNotificationCreate from a JSON string"""
+        """Create an instance of BulkTeamMemberDeleteResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -78,21 +74,18 @@ class UserNotificationCreate(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if notification_metadata (nullable) is None
-        # and model_fields_set contains the field
-        if self.notification_metadata is None and "notification_metadata" in self.model_fields_set:
-            _dict['notification_metadata'] = None
-
-        # set to None if timestamp (nullable) is None
-        # and model_fields_set contains the field
-        if self.timestamp is None and "timestamp" in self.model_fields_set:
-            _dict['timestamp'] = None
-
+        # override the default output from pydantic by calling `to_dict()` of each item in results (list)
+        _items = []
+        if self.results:
+            for _item_results in self.results:
+                if _item_results:
+                    _items.append(_item_results.to_dict())
+            _dict['results'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of UserNotificationCreate from a dict"""
+        """Create an instance of BulkTeamMemberDeleteResponse from a dict"""
         if obj is None:
             return None
 
@@ -100,9 +93,14 @@ class UserNotificationCreate(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "notification_type": obj.get("notification_type"),
-            "notification_message": obj.get("notification_message"),
-            "notification_metadata": obj.get("notification_metadata"),
-            "timestamp": obj.get("timestamp")
+            "results": [
+                BulkOperationResult.from_dict(_item) for _item in obj["results"]
+            ] if obj.get("results") is not None else None,
+            "total_processed":
+                obj.get("total_processed"),
+            "successful_count":
+                obj.get("successful_count"),
+            "failed_count":
+                obj.get("failed_count")
         })
         return _obj
