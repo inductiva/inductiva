@@ -119,7 +119,7 @@ def listdir(
         print(max_results)
         page_size = min(100, max_results)
 
-        response = api.list_storage_contents(
+        response = api.list_paginated_storage_contents(
             path=path,
             sort_by=order_by,
             order=sort_order,
@@ -128,9 +128,9 @@ def listdir(
             region=region,
         )
 
-        for file_info in response.contents:
+        for name, file_info in response.contents.items():
             all_contents.append({
-                "name": file_info.name,
+                "name": name,
                 "size": round(float(file_info.size_bytes), 3),
                 "creation_time": file_info.creation_time,
                 "provider": file_info.provider_id,
