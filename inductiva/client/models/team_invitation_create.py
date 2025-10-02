@@ -16,18 +16,24 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictInt
-from typing import Any, ClassVar, Dict, List
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
+from inductiva.client.models.team_role import TeamRole
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class BulkNotificationResponse(BaseModel):
+class TeamInvitationCreate(BaseModel):
     """
-    Schema for bulk notification operation response.
-    """ # noqa: E501
-    marked_count: StrictInt
-    __properties: ClassVar[List[str]] = ["marked_count"]
+    Schema for creating a team invitation.
+    """
+
+  # noqa: E501
+    email: StrictStr = Field(
+        description="Email address of the person to invite")
+    role: Optional[TeamRole] = None
+    message: Optional[StrictStr] = None
+    __properties: ClassVar[List[str]] = ["email", "role", "message"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -46,7 +52,7 @@ class BulkNotificationResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of BulkNotificationResponse from a JSON string"""
+        """Create an instance of TeamInvitationCreate from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -66,16 +72,25 @@ class BulkNotificationResponse(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if message (nullable) is None
+        # and model_fields_set contains the field
+        if self.message is None and "message" in self.model_fields_set:
+            _dict['message'] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of BulkNotificationResponse from a dict"""
+        """Create an instance of TeamInvitationCreate from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"marked_count": obj.get("marked_count")})
+        _obj = cls.model_validate({
+            "email": obj.get("email"),
+            "role": obj.get("role"),
+            "message": obj.get("message")
+        })
         return _obj

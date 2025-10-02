@@ -17,17 +17,19 @@ from enum import Enum
 from typing_extensions import Self
 
 
-class NotificationType(str, Enum):
+class InvitationStatus(str, Enum):
     """
-    List of notification display types.     
+    Status of team invitations.
     """
     """
     allowed enum values
     """
-    ALERT = 'alert'
-    POPUP = 'popup'
+    PENDING = 'pending'
+    ACCEPTED = 'accepted'
+    REJECTED = 'rejected'
+    EXPIRED = 'expired'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of NotificationType from a JSON string"""
+        """Create an instance of InvitationStatus from a JSON string"""
         return cls(json.loads(json_str))

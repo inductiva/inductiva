@@ -22,13 +22,14 @@ from typing import Optional, Set
 from typing_extensions import Self
 
 
-class TaskRunnerAPIConnectionInfo(BaseModel):
+class TeamInvitationAccept(BaseModel):
     """
-    Information sent to the task-runner after registration.
-    """ # noqa: E501
-    task_runner_id: StrictStr
-    machine_group_id: StrictStr
-    __properties: ClassVar[List[str]] = ["task_runner_id", "machine_group_id"]
+    Schema for accepting a team invitation.
+    """
+
+  # noqa: E501
+    invitation_token: StrictStr
+    __properties: ClassVar[List[str]] = ["invitation_token"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -47,7 +48,7 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of TaskRunnerAPIConnectionInfo from a JSON string"""
+        """Create an instance of TeamInvitationAccept from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -71,15 +72,13 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of TaskRunnerAPIConnectionInfo from a dict"""
+        """Create an instance of TeamInvitationAccept from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "task_runner_id": obj.get("task_runner_id"),
-            "machine_group_id": obj.get("machine_group_id")
-        })
+        _obj = cls.model_validate(
+            {"invitation_token": obj.get("invitation_token")})
         return _obj

@@ -16,19 +16,26 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictInt
 from typing import Any, ClassVar, Dict, List
+from inductiva.client.models.bulk_operation_result import BulkOperationResult
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class TaskRunnerAPIConnectionInfo(BaseModel):
+class BulkTeamMemberUpdateResponse(BaseModel):
     """
-    Information sent to the task-runner after registration.
-    """ # noqa: E501
-    task_runner_id: StrictStr
-    machine_group_id: StrictStr
-    __properties: ClassVar[List[str]] = ["task_runner_id", "machine_group_id"]
+    Schema for bulk team member update response.
+    """
+
+  # noqa: E501
+    results: List[BulkOperationResult]
+    total_processed: StrictInt
+    successful_count: StrictInt
+    failed_count: StrictInt
+    __properties: ClassVar[List[str]] = [
+        "results", "total_processed", "successful_count", "failed_count"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -47,7 +54,7 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of TaskRunnerAPIConnectionInfo from a JSON string"""
+        """Create an instance of BulkTeamMemberUpdateResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -67,11 +74,18 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in results (list)
+        _items = []
+        if self.results:
+            for _item_results in self.results:
+                if _item_results:
+                    _items.append(_item_results.to_dict())
+            _dict['results'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of TaskRunnerAPIConnectionInfo from a dict"""
+        """Create an instance of BulkTeamMemberUpdateResponse from a dict"""
         if obj is None:
             return None
 
@@ -79,7 +93,14 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "task_runner_id": obj.get("task_runner_id"),
-            "machine_group_id": obj.get("machine_group_id")
+            "results": [
+                BulkOperationResult.from_dict(_item) for _item in obj["results"]
+            ] if obj.get("results") is not None else None,
+            "total_processed":
+                obj.get("total_processed"),
+            "successful_count":
+                obj.get("successful_count"),
+            "failed_count":
+                obj.get("failed_count")
         })
         return _obj

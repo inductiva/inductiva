@@ -17,32 +17,34 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from inductiva.client.models.notification_type import NotificationType
+from inductiva.client.models.team_role import TeamRole
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class UserNotificationResponse(BaseModel):
+class TeamMemberResponse(BaseModel):
     """
-    Schema for user notification responses.
+    Schema for team member response.
     """
 
   # noqa: E501
-    id: StrictInt
-    user_id: StrictInt
-    notification_type: NotificationType
-    timestamp: datetime
-    first_read_at: Optional[datetime] = None
-    notification_message: StrictStr
-    notification_metadata: Optional[Dict[str, Any]] = None
-    created_at: datetime
-    updated_at: datetime
+    role: TeamRole
+    id: StrictStr
+    organization_id: StrictStr
+    joined_at: datetime
+    last_activity_at: Optional[datetime] = None
+    is_active: StrictBool
+    user_email: StrictStr
+    user_name: Optional[StrictStr] = None
+    user_username: StrictStr
+    invited_by_email: Optional[StrictStr] = None
+    invited_by_name: Optional[StrictStr] = None
     __properties: ClassVar[List[str]] = [
-        "id", "user_id", "notification_type", "timestamp", "first_read_at",
-        "notification_message", "notification_metadata", "created_at",
-        "updated_at"
+        "role", "id", "organization_id", "joined_at", "last_activity_at",
+        "is_active", "user_email", "user_name", "user_username",
+        "invited_by_email", "invited_by_name"
     ]
 
     model_config = ConfigDict(
@@ -62,7 +64,7 @@ class UserNotificationResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of UserNotificationResponse from a JSON string"""
+        """Create an instance of TeamMemberResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -82,21 +84,31 @@ class UserNotificationResponse(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if first_read_at (nullable) is None
+        # set to None if last_activity_at (nullable) is None
         # and model_fields_set contains the field
-        if self.first_read_at is None and "first_read_at" in self.model_fields_set:
-            _dict['first_read_at'] = None
+        if self.last_activity_at is None and "last_activity_at" in self.model_fields_set:
+            _dict['last_activity_at'] = None
 
-        # set to None if notification_metadata (nullable) is None
+        # set to None if user_name (nullable) is None
         # and model_fields_set contains the field
-        if self.notification_metadata is None and "notification_metadata" in self.model_fields_set:
-            _dict['notification_metadata'] = None
+        if self.user_name is None and "user_name" in self.model_fields_set:
+            _dict['user_name'] = None
+
+        # set to None if invited_by_email (nullable) is None
+        # and model_fields_set contains the field
+        if self.invited_by_email is None and "invited_by_email" in self.model_fields_set:
+            _dict['invited_by_email'] = None
+
+        # set to None if invited_by_name (nullable) is None
+        # and model_fields_set contains the field
+        if self.invited_by_name is None and "invited_by_name" in self.model_fields_set:
+            _dict['invited_by_name'] = None
 
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of UserNotificationResponse from a dict"""
+        """Create an instance of TeamMemberResponse from a dict"""
         if obj is None:
             return None
 
@@ -104,14 +116,16 @@ class UserNotificationResponse(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
+            "role": obj.get("role"),
             "id": obj.get("id"),
-            "user_id": obj.get("user_id"),
-            "notification_type": obj.get("notification_type"),
-            "timestamp": obj.get("timestamp"),
-            "first_read_at": obj.get("first_read_at"),
-            "notification_message": obj.get("notification_message"),
-            "notification_metadata": obj.get("notification_metadata"),
-            "created_at": obj.get("created_at"),
-            "updated_at": obj.get("updated_at")
+            "organization_id": obj.get("organization_id"),
+            "joined_at": obj.get("joined_at"),
+            "last_activity_at": obj.get("last_activity_at"),
+            "is_active": obj.get("is_active"),
+            "user_email": obj.get("user_email"),
+            "user_name": obj.get("user_name"),
+            "user_username": obj.get("user_username"),
+            "invited_by_email": obj.get("invited_by_email"),
+            "invited_by_name": obj.get("invited_by_name")
         })
         return _obj
