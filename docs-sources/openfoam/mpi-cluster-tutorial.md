@@ -1,0 +1,149 @@
+# Run the MB9 Microbenchmark from ExaFOAM on an MPI Cluster
+In this tutorial, you’ll learn how to run a high-performance OpenFOAM simulation on a **multi-node MPI (Message Passing Interface) cluster** using the Inductiva API. This setup allows you to combine the CPU resources of several machines, significantly boosting the total number of virtual CPUs (vCPUs) available and reducing simulation runtime.
+
+We will cover the `MB9 Microbenchmark from ExaFOAM` use case from the CFD Tutorials, available in the [official ExaFOAM documentation](https://exafoam.eu/benchmarks/).
+
+## Prerequisites
+1. Download the required files [here](https://develop.openfoam.com/committees/hpc/-/tree/develop/compressible/rhoPimpleFoam/LES/highLiftConfiguration) and place them in a folder named `highLiftConfiguration`.
+
+The **directory structure** should look like this:
+```bash
+ls -lasgo highLiftConfiguration
+total 128
+ 0 drwxrwxr-x@ 13     416 Apr 10 11:13 .
+ 0 drwx------@  5     160 Apr 23 08:35 ..
+24 -rw-r--r--@  1   10244 Jun 12 15:58 .DS_Store
+ 0 drwxrwxr-x@ 11     352 Apr  8 11:27 0.orig
+ 8 -rwxr-xr-x@  1     626 Apr  8 11:27 Allclean
+16 -rwxr-xr-x@  1    7017 Jun 12 15:41 Allrun
+ 8 -rw-rw-r--@  1     991 Apr  8 11:27 COPYING
+48 -rw-rw-r--@  1   21547 Apr  8 11:27 README.md
+ 0 -rw-rw-r--@  1       0 Apr  8 11:27 case.foam
+ 0 drwxrwxr-x@  5     160 Apr  8 11:27 constant
+ 0 drwxrwxr-x@ 13     416 Apr  8 11:27 figures
+ 0 drwxrwxr-x@ 28     896 Apr 10 11:13 system
+24 -rw-rw-r--@  1   11399 Apr  8 11:27 thumbnail.png
+```
+
+2. Apply the following modifications to the `Allrun` and `caseDefinition` files.
+
+* Open the `Allrun` script and **replace**:
+
+```bash
+parEx="mpirun -np $nProcs"
+```
+
+with:
+
+```bash
+parEx="mpirun -use-hwthread-cpus -np $nProcs"
+```
+
+> The `-use-hwthread-cpus` flag enables all available virtual CPUs on the machine for optimal performance.
+
+* Edit `highLiftConfiguration/system/include/caseDefinition` and **update** the following parameters:
+- Set Time Step (`dt`) to 0.00002
+- Set Start Time (`initTime`) to 0.10
+- Set End Time (`finalTime`) to 0.30
+- Set Number of Cores (`nCores`) to 1080 - total number of vCPUs in your MPI cluster
+
+3. Convert the `Allrun` Script into Python Commands
+When running OpenFOAM on an MPI cluster via Inductiva, you **must** use the `commands` argument instead of `shell_script`. This allows fine-grained control over execution, with a mix of serial and parallel commands.
+
+Option A: Use the Provided Commands File
+
+Download the prepared commands.txt here
+ and place it inside the highLiftConfiguration directory.
+
+Option B: Create Your Own
+
+Want to generate your own? Follow our guide on how to convert Allrun scripts to Python commands
+.
+
+To fully leverage MPI clusters, you **cannot** use the `shell_script` argument as you might with OpenFOAM simulations. Instead, you must use the `commands` argument, which accepts a list of commands to be executed during the simulation. Some commands will run sequentially, while others may run in parallel.
+
+For this case, we’ve prepared a list of the required commands. You can download the `commands.txt` [here](https://storage.googleapis.com/inductiva-api-demo-files/commands.txt) and place it in your `highLiftConfiguration` directory. 
+
+Prefer to create it yourself? Check out our guide on [converting an Allrun script into Python commands](convert-allrun-script-into-python-commands).
+
+## Running the Simulation on an MPI Cluster
+With Inductiva, running simulations on a multi-node MPI cluster is just as simple as using a single-node setup.
+The only change required is to switch the resource allocation from `MachineGroup` to `MPICluster`, as shown below:
+
+```python
+"""Run OpenFOAM on an MPI Cluster"""
+import inductiva
+
+# Set up an MPI Cluster on Google Cloud
+cloud_machine = inductiva.resources.MPICluster(
+    machine_type="c3d-highcpu-360",
+    num_machines=3,
+    data_disk_gb=300,
+    spot=True
+)
+
+# Initialize the Simulator
+OpenFOAM = inductiva.simulators.OpenFOAM(
+    version="2412",
+    distribution="esi"
+)
+
+# Load command list
+with open("/path/to/highLiftConfiguration/commands.txt", "r") as file:
+    commands = [line.strip() for line in file]
+
+# Run simulation
+task = OpenFOAM.run(
+    input_dir="/path/to/highLiftConfiguration",
+    commands=commands,
+    on=cloud_machine
+)
+
+# Wait for the simulation to finish and download the results
+task.wait()
+cloud_machine.terminate()
+task.download_outputs()
+task.print_summary()
+```
+
+We run the simulation specifying the command list that handles the execution process.
+
+When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
+
+```
+Task status: Success
+
+Timeline:
+	Waiting for Input         at 23/04, 16:46:16      2.615 s
+	In Queue                  at 23/04, 16:46:19      89.779 s
+	Preparing to Compute      at 23/04, 16:47:48      2.87 s
+	In Progress               at 23/04, 16:47:51      61841.482 s
+        ...
+    Finalizing                at 24/04, 09:58:33      817.51 s
+	Success                   at 24/04, 10:12:10      
+
+Data:
+	Size of zipped output:    26.72 GB
+	Size of unzipped output:  34.41 GB
+	Number of output files:   151512
+
+Estimated computation cost (US$): 179.23 US$
+```
+
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, the core computation time of this simulation was around **17 hours and 11 minutes**.
+
+## Performance Comparison
+The table below compares the performance of the same simulation run across different MPI cluster configurations. The first row serves as the baseline, where the simulation was run on a single machine without distributed MPI.
+
+| Machine Type    | Nº of Machines | Total Cores | Execution Time           |
+| --------------- | -------------- | ----------- | ------------------------ |
+| c3d-highcpu-360 | 1              | 360         | 41h                      |
+| c3d-highcpu-360 | 3              | 1080        | 17h, 11 min              |
+| c2d-highcpu-112 | 8              | 896         | 14h, 59 min              |
+| c2d-highcpu-112 | 12             | 1344        | 12h, 5 min *(Preempted)* |
+
+As shown, scaling up significantly improves performance — but with diminishing returns at higher core counts. For instance, increasing from 896 to 1344 cores yielded only a modest improvement.
+
+
+
+
