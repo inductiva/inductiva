@@ -72,27 +72,19 @@ The table below summarizes the results:
 Next, we’ll apply the same approach to a larger, more realistic simulation.
 
 ## Large-Scale Example: Steady-State CFD Simulation of Wind Flow in the Perdigão Region
-To better understand atmospheric flow over complex terrain, we conducted a
-steady-state CFD simulation of the [**Perdigão region in Portugal**](https://journals.ametsoc.org/view/journals/bams/100/5/bams-d-17-0227.1.xml). This site
-is notable for its two parallel ridges, which generate intricate wind flow
-patterns and make it a reference location for atmospheric research.
+To explore how OpenFOAM scales in a more realistic scenario, we ran a steady-state CFD simulation of the [Perdigão region in Portugal](https://journals.ametsoc.org/view/journals/bams/100/5/bams-d-17-0227.1.xml). This area is known for its two parallel ridgelines, which create intricate wind flow patterns and have made it a reference location for atmospheric research.
 
-The simulation was carried out with OpenFOAM’s `simpleFoam` solver on a
-structured, terrain-following graded mesh containing **14 million cells**. The
-computational domain spanned **30 × 30 × 3 km**, with idealized atmospheric
-boundary layer (ABL) conditions applied at the inlet. Turbulence closure was
-modeled using the **k–ε model**, and a stepped
-**first-order to second-order convection scheme** was employed to ensure better
-convergence.
+The simulation was carried out with OpenFOAM’s `simpleFoam` solver on a structured, terrain-following graded mesh containing **14 million cells**. The computational domain covered **30 × 30 × 3 km**, with idealized atmospheric boundary layer (ABL) conditions at the inlet. Turbulence was modeled using the **k–ε closure model**, and we applied a stepped **first- to second-order convection scheme** to improve solution accuracy and convergence.
 
-## Analyzing the Results
+### Performance Comparison
+We tested four configurations, varying machine size, hyper-threading, and number of MPI processes:
 
-| Machine Type   | Threads per Core | vCPUs Available | MPI Procs | Execution Time | Cost (US$) |
+| Machine Type   | Threads per Core | vCPUs Available | MPI Procs | Execution Time | Estimated Cost (USD) |
 | -------------- | ---------------- | --------------- | --------- | -------------- | ---------- |
-| c4d-highcpu-96 | 2                | 96              | 48        | 9 hrs 20 min   | 15.48      |
-| c4d-highcpu-96 | 2                | 96              | 96        | 10 hrs 58 min  | 18.21      |
-| c4d-highcpu-96 | 1                | 48              | 48        | 9 hrs 23 min   | 15.58      |
-| c4d-highcpu-48 | 2                | 48              | 48        | 19 hrs 8 min   | 15.93      |
+| c4d-highcpu-96 | 2                | 96              | 48        | 9h, 20 min   | 15.48      |
+| c4d-highcpu-96 | 2                | 96              | 96        | 10h, 58 min  | 18.21      |
+| c4d-highcpu-96 | 1                | 48              | 48        | 9h, 23 min   | 15.58      |
+| c4d-highcpu-48 | 2                | 48              | 48        | 19h, 8 min   | 15.93      |
 
 We ran these tests to understand how hyperthreading and machine size affect OpenFOAM performance and cost. Specifically, we wanted to see whether it was better to (1st row) stick to physical cores, (2nd row) try to exploit all vCPUs, or (3rd row) use a smaller instance to reduce cost at the expense of runtime.
 
