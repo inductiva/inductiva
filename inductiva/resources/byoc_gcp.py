@@ -95,7 +95,7 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
         ]
 
         if hostname:
-            metadata.append(f"TASK_RUNNER_HOSTNAME={hostname}")
+            metadata.append(f"HOST_NAME={hostname}")
 
         cmd = [
             "gcloud", "compute", "instances", "create", vm_name, "--zone", zone,

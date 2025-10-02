@@ -117,9 +117,8 @@ class BaseMachineGroup(ABC):
         if self.machine_group_name and not self.byoc:
             raise ValueError(
                 "`machine_group_name` parameter is only supported with BYOC. "
-                "For managed resources, names are automatically generated."
-            )
-        
+                "For managed resources, names are automatically generated.")
+
         if not isinstance(self.data_disk_gb, int):
             raise ValueError("`data_disk_gb` must be an integer.")
 
@@ -682,7 +681,8 @@ class BaseMachineGroup(ABC):
         logging.info("Starting %s (client-side GCP)...", repr(self))
         start_time = time.time()
 
-        success, error_message = byoc_gcp.create_gcp_vm(self.machine_group_name, self.zone,
+        success, error_message = byoc_gcp.create_gcp_vm(self.machine_group_name,
+                                                        self.zone,
                                                         self.machine_type,
                                                         api_key, api_url,
                                                         self.spot, verbose)
@@ -706,8 +706,8 @@ class BaseMachineGroup(ABC):
         """Terminate GCP VMs using client-side management."""
         logging.info("Terminating %s (client-side GCP)...", repr(self))
 
-        success, error_message = byoc_gcp.delete_gcp_vm(self.machine_group_name, self.zone,
-                                                        verbose)
+        success, error_message = byoc_gcp.delete_gcp_vm(self.machine_group_name,
+                                                        self.zone, verbose)
 
         if success:
             # Also notify backend that machine group is terminated
