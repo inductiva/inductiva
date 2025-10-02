@@ -19,6 +19,8 @@ Step-by-step guides to help you learn how to run OpenFOAM through the Inductiva 
     - [Run Your First Simulation](quick-start)
 
 * **Advanced Tutorials**
+    - [Convert `Allrun` into Python Commands for Multi-Node Execution](convert-allrun-script-into-python-commands)
+    - [Run ExaFOAM Case on an MPI Cluster](mpi-cluster-tutorial)
     - [Generate a Wind Tunnel Simulation Dataset](generate-wind-tunnel-dataset/index)
     - [Run occDrivAerStaticMesh from the OpenFOAM HPC Benchmark Suite](run-occdrivaerstaticmesh-case/index)
 
