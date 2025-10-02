@@ -61,7 +61,6 @@ class BaseMachineGroup(ABC):
     provider: Union[ProviderType, str] = "GCP"
     threads_per_core: int = 2
     data_disk_gb: int = 10
-    auto_delete_disk: bool = True
     max_idle_time: Union[datetime.timedelta, int] = 3
     auto_terminate_ts: Optional[datetime.datetime] = None
     auto_terminate_minutes: Optional[int] = None
@@ -346,7 +345,6 @@ class BaseMachineGroup(ABC):
             dynamic_disk_resize_config=self._dynamic_disk_resize_config(),
             custom_vm_image=self._custom_vm_image,
             zone=self.zone,
-            disk_auto_delete=self.auto_delete_disk,
             **kwargs,
         )
 

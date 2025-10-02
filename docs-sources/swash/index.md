@@ -4,6 +4,11 @@ Your resource hub for all things SWASH at Inductiva. Whether you're just startin
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check!
 
+```{python_editor}
+:origin: swash
+:url: https://console.inductiva.ai/editor?simulator_name=swash
+```
+
 ## What You'll Find Here
 
 ### Tutorials

@@ -4,6 +4,11 @@ Your resource hub for all things OpenSees at Inductiva. Whether you're just star
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check!
 
+```{python_editor}
+:origin: opensees
+:url: https://console.inductiva.ai/editor?simulator_name=opensees
+```
+
 ## What You'll Find Here
 
 ### Tutorials
@@ -38,3 +43,11 @@ setup-test
 quick-start
 IDA at Scale: Seismic Assessment of URM Structures <ida-at-scale/index>
 ```
+
+```{toctree}
+---
+caption: " "
+maxdepth: 1
+hidden: true
+---
+faq

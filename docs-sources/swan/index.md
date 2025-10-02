@@ -4,6 +4,11 @@ Your resource hub for all things SWAN at Inductiva. Whether you're just starting
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check! 
 
+```{python_editor}
+:origin: swan
+:url: https://console.inductiva.ai/editor?simulator_name=swan
+```
+
 ## What You'll Find Here
 
 ### Tutorials
@@ -36,6 +41,7 @@ hidden: true
 --- 
 setup-test
 quick-start
+Run an UnSWAN simulation <unstructured-mesh>
 ```
 
 ```{toctree}
