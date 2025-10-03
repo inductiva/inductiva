@@ -108,11 +108,11 @@ class BaseMachineGroup(ABC):
         self.provider = provider.value
 
         self._api = inductiva.client.ComputeApi(api.get_client())
+        self._validate_inputs()
 
         if self.provider == "GCP" and self.byoc:
             self._register_byoc_gcp()
 
-        self._validate_inputs()
 
     def _validate_inputs(self):
         """Validate initialization inputs."""
@@ -699,7 +699,7 @@ class BaseMachineGroup(ABC):
 
         success, error_message = byoc_gcp.create_gcp_vm(
             self.mg_name, self._vm_name, self.zone, self.machine_type, api_key,
-            api_url, self.spot, verbose, self.max_idle_time)
+            api_url, self.spot, self.max_idle_time, verbose=verbose)
 
         if success:
             self._started = True

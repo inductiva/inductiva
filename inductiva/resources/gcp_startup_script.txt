@@ -28,7 +28,7 @@ docker pull inductiva/file-tracker:latest
 # -------------------------------
 # 4. Read metadata and export env variables
 # -------------------------------
-for var in INDUCTIVA_API_KEY INDUCTIVA_API_URL MACHINE_GROUP_NAME; do
+for var in INDUCTIVA_API_KEY INDUCTIVA_API_URL MACHINE_GROUP_NAME MAX_IDLE_TIMEOUT; do
     export "$var"=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/attributes/$var" -H "Metadata-Flavor: Google")
     echo "$var=${!var}"
 done
@@ -58,6 +58,7 @@ docker run -d --name task-runner \
   -e USER_API_KEY="$INDUCTIVA_API_KEY" \
   -e MACHINE_GROUP_NAME="$MACHINE_GROUP_NAME" \
   -e HOST_NAME="${TASK_RUNNER_HOSTNAME:-$(hostname)}" \
+  -e MAX_IDLE_TIMEOUT="$MAX_IDLE_TIMEOUT" \
   inductiva/task-runner:latest
 
 # -------------------------------

@@ -59,9 +59,9 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
     api_key: str,
     api_url: str,
     spot: bool = True,
+    max_idle_time: Optional[Union[int, datetime.timedelta]] = None,
     hostname: Optional[str] = None,
     verbose: bool = True,
-    max_idle_time: Optional[Union[int, datetime.timedelta]] = None
 ) -> Tuple[bool, Optional[str]]:
     """Create a GCP VM instance.
     
