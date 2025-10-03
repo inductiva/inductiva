@@ -7,6 +7,8 @@ import datetime
 import time
 import enum
 import math
+import random
+import string
 
 import logging
 
@@ -61,7 +63,7 @@ class BaseMachineGroup(ABC):
     zone: Optional[str] = "europe-west1-b"
     provider: Union[ProviderType, str] = "GCP"
     byoc: bool = False
-    machine_group_name: Optional[str] = None
+    mg_name: Optional[str] = None
     threads_per_core: int = 2
     data_disk_gb: int = 10
     auto_delete_disk: bool = True
@@ -114,9 +116,9 @@ class BaseMachineGroup(ABC):
 
     def _validate_inputs(self):
         """Validate initialization inputs."""
-        if self.machine_group_name and not self.byoc:
+        if self.mg_name and not self.byoc:
             raise ValueError(
-                "`machine_group_name` parameter is only supported with BYOC. "
+                "`mg_name` parameter is only supported with BYOC. "
                 "For managed resources, names are automatically generated.")
 
         if self.byoc and self.num_machines != 1:
@@ -319,6 +321,14 @@ class BaseMachineGroup(ABC):
                 raise ValueError("The datetime string must be timezone aware.")
             return dt
         return None
+
+    @staticmethod
+    def _generate_vm_name(base_name: str) -> str:
+        """Generate a VM name by appending random characters to base name."""
+        # GCP VM names must be lowercase and can contain only letters, numbers, and hyphens
+        random_suffix = ''.join(
+            random.choices(string.ascii_lowercase + string.digits, k=4))
+        return f"{base_name}-{random_suffix}".lower()
 
     def _update_attributes_from_response(
             self, resp: inductiva.client.models.VMGroupConfig):
@@ -617,8 +627,10 @@ class BaseMachineGroup(ABC):
         logging.info("■ Registering %s configurations (client-side):",
                      self.short_name())
 
+        self._vm_name = self._generate_vm_name(self.mg_name)
+
         client_vm_info = {
-            "vm_name": self._name,
+            "vm_name": self._vm_name,
             "zone": self.zone,
             "status": "registered",
             "created_at": datetime.datetime.now()
@@ -639,7 +651,7 @@ class BaseMachineGroup(ABC):
     def _register_machine_group_backend_byoc(self):
         """Register machine group for BYOC."""
         instance_group_config = inductiva.client.models.RegisterVMGroupRequest(
-            name=self.machine_group_name,
+            name=self.mg_name,
             machine_type=self.machine_type,
             provider_id="LOCAL",  # Register as LOCAL for backend compatibility
             threads_per_core=self.threads_per_core,
@@ -685,7 +697,7 @@ class BaseMachineGroup(ABC):
         logging.info("Starting %s (client-side GCP)...", repr(self))
         start_time = time.time()
 
-        success, error_message = byoc_gcp.create_gcp_vm(self.machine_group_name,
+        success, error_message = byoc_gcp.create_gcp_vm(self._vm_name,
                                                         self.zone,
                                                         self.machine_type,
                                                         api_key, api_url,
@@ -710,7 +722,7 @@ class BaseMachineGroup(ABC):
         """Terminate GCP VMs using client-side management."""
         logging.info("Terminating %s (client-side GCP)...", repr(self))
 
-        success, error_message = byoc_gcp.delete_gcp_vm(self.machine_group_name,
+        success, error_message = byoc_gcp.delete_gcp_vm(self._vm_name,
                                                         self.zone, verbose)
 
         if success:
@@ -781,8 +793,6 @@ class MachineGroup(BaseMachineGroup):
           information about machine types.
         zone: The zone where the machines will be launched.
         provider: The cloud provider of the machine group.
-        byoc: Whether to use Bring Your Own Cloud mode (client-side GCP
-            management).
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
         max_idle_time: Time without executing any task, after which the

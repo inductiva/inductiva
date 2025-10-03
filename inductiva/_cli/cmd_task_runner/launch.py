@@ -42,9 +42,9 @@ def launch_task_runner_gcp(args):
         machine_type=args.machine_type,
         zone=args.zone,
         provider="GCP",
-        byoc=True,
         spot=args.spot,
-        machine_group_name=args.machine_group_name,
+        mg_name=args.machine_group_name,
+        byoc=True,
     ).start()
 
 
