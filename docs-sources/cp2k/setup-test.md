@@ -78,7 +78,10 @@ Data:
 	Size of unzipped output:  37.39 KB
 	Number of output files:   2
 
-Estimated computation cost (US$): 0.00012 US$
+Estimated Task Compute Cost = 0.00012 US$
+Task Orchestration Fee = 0.01 US$
+Total Estimated Cost = 0.01012 US$
+Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 If the task status shows **Success**, congratulations! You've successfully run an CP2K simulation.
