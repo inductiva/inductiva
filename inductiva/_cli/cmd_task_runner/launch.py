@@ -37,7 +37,10 @@ def join_container_streams(*containers, fout: TextIO = sys.stdout):
 
 
 def launch_task_runner_gcp(args):
-    """Launches a Task-Runner on GCP."""
+    """Launches a Task-Runner on GCP.
+    
+    Note: BYOC (Bring Your Own Cloud) machine groups can only have a single VM.
+    """
     machine_groups.MachineGroup(
         machine_type=args.machine_type,
         zone=args.zone,

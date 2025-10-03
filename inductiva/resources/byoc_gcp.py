@@ -3,7 +3,8 @@ import subprocess
 import re
 import tempfile
 import os
-from typing import Optional, Tuple
+import datetime
+from typing import Optional, Tuple, Union
 
 
 def estimate_vcpus_from_machine_type(machine_type):
@@ -51,17 +52,21 @@ def check_gcloud_auth() -> bool:
 
 
 def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
-        vm_name: str,
-        zone: str,
-        machine_type: str,
-        api_key: str,
-        api_url: str,
-        spot: bool = True,
-        hostname: Optional[str] = None,
-        verbose: bool = True) -> Tuple[bool, Optional[str]]:
+    mg_name: str,
+    vm_name: str,
+    zone: str,
+    machine_type: str,
+    api_key: str,
+    api_url: str,
+    spot: bool = True,
+    hostname: Optional[str] = None,
+    verbose: bool = True,
+    max_idle_time: Optional[Union[int, datetime.timedelta]] = None
+) -> Tuple[bool, Optional[str]]:
     """Create a GCP VM instance.
     
     Args:
+        mg_name: Name of the machine group
         vm_name: Name of the VM instance
         zone: GCP zone where to create the VM
         machine_type: GCP machine type (e.g., "e2-standard-4")
@@ -70,6 +75,7 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
         spot: Whether to use preemptible (spot) instance
         hostname: Optional hostname for the task runner
         verbose: Whether to print verbose output
+        max_idle_time: Optional max idle time, defaults to 3 minutes
         
     Returns:
         Tuple of (success: bool, error_message: Optional[str])
@@ -89,9 +95,18 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
         script_path = f.name
 
     try:
+        if max_idle_time is not None:
+            if isinstance(max_idle_time, int):
+                max_idle_seconds = max_idle_time * 60
+            else:
+                max_idle_seconds = int(max_idle_time.total_seconds())
+        else:
+            max_idle_seconds = 180
+
         metadata = [
             f"INDUCTIVA_API_KEY={api_key}", f"INDUCTIVA_API_URL={api_url}",
-            f"MACHINE_GROUP_NAME={vm_name}"
+            f"MACHINE_GROUP_NAME={mg_name}",
+            f"MAX_IDLE_TIMEOUT={max_idle_seconds}"
         ]
 
         if hostname:

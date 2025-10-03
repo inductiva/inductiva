@@ -697,11 +697,9 @@ class BaseMachineGroup(ABC):
         logging.info("Starting %s (client-side GCP)...", repr(self))
         start_time = time.time()
 
-        success, error_message = byoc_gcp.create_gcp_vm(self._vm_name,
-                                                        self.zone,
-                                                        self.machine_type,
-                                                        api_key, api_url,
-                                                        self.spot, verbose)
+        success, error_message = byoc_gcp.create_gcp_vm(
+            self.mg_name, self._vm_name, self.zone, self.machine_type, api_key,
+            api_url, self.spot, verbose, self.max_idle_time)
 
         if success:
             self._started = True
