@@ -325,8 +325,8 @@ class BaseMachineGroup(ABC):
     @staticmethod
     def _generate_vm_name(base_name: str) -> str:
         """Generate a VM name by appending random characters to base name."""
-        # GCP VM names must be lowercase and can contain only letters, numbers, and hyphens
-        random_suffix = ''.join(
+        # GCP names must be lowercase contain only letters, numbers, and hyphens
+        random_suffix = "".join(
             random.choices(string.ascii_lowercase + string.digits, k=4))
         return f"{base_name}-{random_suffix}".lower()
 
