@@ -73,6 +73,7 @@ By explicitly allowing MPI to use all hardware threads, you achieve near 100% CP
 As shown below, the runtime and cost are similar to the previous configurations, showing that while more vCPUs are utilized, the overall performance gain may be modest depending on the workload.
 
 | Machine Type   | Threads per Core | vCPUs Available| MPI Procs |Execution Time | Estimated Cost (USD) |
+| -------------- | ---------------- | ---------------|---------- |-------------- | -------------------- |
 | c2d-highcpu-16 | 2                | 16             |  16       | 1 min, 53s    | 0.0025               |
 
 Next, we’ll apply the same approach to a larger, more realistic simulation.
