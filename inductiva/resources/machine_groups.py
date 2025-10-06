@@ -788,7 +788,6 @@ class MachineGroup(BaseMachineGroup):
             dynamic_disk_resize_config=self._dynamic_disk_resize_config(),
             custom_vm_image=self._custom_vm_image,
             zone=self.zone,
-            disk_auto_delete=self.auto_delete_disk,
             num_vms=self.num_machines,
             spot=self.spot,
             is_elastic=False,
