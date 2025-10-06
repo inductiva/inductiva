@@ -6,7 +6,8 @@ For example, on a `c2d-highcpu-16` machine, which has 8 physical cores and 16 vC
 ## Understanding the Default Behaviour
 Let’s revisit the `motorBike` case from this [tutorial](../../quick-start). This simulation is split into **8 sub-domains**, meaning it runs with **8 MPI processes**.
 
-Now, suppose we allocate this job to a cloud machine with 16 vCPUs, like the `c2d-highcpu-16` instance:
+Now, suppose we allocate this job to a cloud machine with 16 vCPUs, such as the `c2d-highcpu-16` instance, which 
+provides 8 physical cores:
 
 ```python
 cloud_machine = inductiva.resources.MachineGroup(
@@ -15,20 +16,20 @@ cloud_machine = inductiva.resources.MachineGroup(
     spot=True)
 ```
 
-The computational resources are configured with `threads_per_core=2` (hyper-threading enabled), which is the **default** setting for virtual machines (learn more [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading)). 
+The computational resources are configured with `threads_per_core=2` (hyper-threading enabled), which is the **default** setting for virtual machines on Inductiva (learn more [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading)). 
 
 However, OpenFOAM-Foundation runs MPI with default settings, which restricts the number of MPI processes to the number of physical cores (in this case, 8). It does not make use of the second thread (hyper-thread) per core, even though hyper-threading is enabled.
 
 As a result:
 * Only 8 of the 16 vCPUs are used
-* CPU usage reaches only ~50%
+* vCPU usage reaches only ~50%
 
 ![CPU Usage](../_static/quick-start/system_metrics_50_2tpc)
 
-> **Note**: In this default configuration, with hyper-threading enabled (`threads_per_core=2`) but OpenFOAM running only one MPI process per physical core, seeing ~50% CPU usage does not mean the processor is underutilized. It simply reflects that OpenFOAM is using one thread per core, leaving the second hyper-thread idle. The actual computational resource fully utilizes the physical cores available.
+> **Note**: In this default configuration, with hyper-threading enabled (`threads_per_core=2`) but OpenFOAM running only one MPI process per physical core, seeing ~50% CPU usage does not mean the processor is underutilized. It simply reflects that OpenFOAM is using one thread per core. The actual computational resource makes full use of the underlying physical cores.
 
 ## Utilize All Physical Cores
-Configure the cloud machine group so that the number of vCPUs matches the number of physical cores by setting `threads_per_core=1`, as shown below. Learn more about this setting here.
+To disable hyper-threading, and thus have only one thread (vCPU) per physical core, you need to set `threads_per_core=1` when starting a machine group, as shown below. Learn more about this setting [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading).
 
 ```python
 cloud_machine = inductiva.resources.MachineGroup(
@@ -40,11 +41,11 @@ cloud_machine = inductiva.resources.MachineGroup(
 )
 ```
 
-The `c2d-highcpu-16` machine has 16 vCPUs by default (`threads_per_core=2`). Setting `threads_per_core=1` reduces the machine to 8 vCPUs, matching the 8 physical cores — one vCPU per core. As a result, running with 8 MPI partitions will fully utilize all available compute resources, showing 100% CPU usage:
+The `c2d-highcpu-16` machine has 16 vCPUs by default (`threads_per_core=2`). Setting `threads_per_core=1` reduces the machine to 8 vCPUs, matching the 8 physical cores — one vCPU per core. As a result, running with 8 MPI partitions will fully utilize all available compute threads/vCPUs, showing 100% CPU usage:
 
 ![CPU Usage](../_static/quick-start/system_metrics_100.png)
 
-The performance is the **same** as when hyper-threading is enabled — only one thread per physical core is used in both cases. The difference in reported CPU usage (100% vs. ~50%) is just a **reporting artifact**:
+In this case, performance with hyper-threading is roughly the same because, in practice, only one thread per physical core is actively utilized in both scenarios. The difference in reported CPU usage (100% vs. ~50%) is just a **reporting artifact**:
 - With hyper-threading enabled (`threads_per_core=2`), each physical core appears as 2 vCPUs, so using only one thread per core shows ~50% usage.
 - With hyper-threading disabled (`threads_per_core=1`), each vCPU maps directly to a core, and usage appears as 100% — even though the workload hasn’t changed.
 
@@ -70,7 +71,7 @@ By explicitly allowing MPI to use all hardware threads, you achieve near 100% CP
 
 [CPU Usage](../_static/foundation_16_vcpus.png)
 
-As shown below, the runtime and cost are similar to the previous configurations, showing that while more vCPUs are utilized, the overall performance gain may be modest depending on the workload.
+As shown below, the runtime and cost are still similar to the previous configurations, showing that while more vCPUs are utilized, the overall performance gain may be modest depending on the workload.
 
 | Machine Type   | Threads per Core | vCPUs Available| MPI Procs |Execution Time | Estimated Cost (USD) |
 | -------------- | ---------------- | ---------------|---------- |-------------- | -------------------- |
@@ -100,12 +101,12 @@ Below are the results:
 | c4d-highcpu-48 | 2                | 48              | 48        | 19h, 8 min   | 15.93      |
 
 ### Insights
-The first configuration (48 MPI ranks on 96 vCPUs with hyperthreading enabled) follows the standard OpenFOAM-Foundation practice of mapping one rank per physical core. This resulted in the fastest and most cost-effective runtime of 9h 20min and US$15.48.
+The first configuration (48 MPI ranks on 96 vCPUs with hyper-threading enabled) follows the standard OpenFOAM-Foundation practice of mapping one rank per physical core. This resulted in the fastest and most cost-effective runtime of **9h, 20 min** and US$15.48.
 
 In the second run, we increased the number of MPI ranks to 96 to fully utilize all available vCPUs. The idea was to test whether fully loading the hyperthreaded machine would improve throughput. Instead, runtime increased to **10h, 58 min**, demonstrating that oversubscribing hyperthreaded cores adds contention and communication overhead, which reduces efficiency.
 
-For the third run, we disabled hyperthreading (`threads_per_core=1`), limiting the machine to 48 vCPUs corresponding exactly to the 48 physical cores. The runtime (**9h, 23 min**) was nearly identical to the first case, confirming that hyperthreading does not provide a performance benefit when already running one MPI rank per physical core.
+For the third run, we disabled hyper-threading (`threads_per_core=1`), limiting the machine to 48 vCPUs corresponding exactly to the 48 physical cores. The runtime (**9h, 23 min**) was nearly identical to the first case, confirming that explicitly turning off hyper-threading does not provide a performance benefit.
 
 Finally, we tested a smaller instance (`c4d-highcpu-48`) with 48 vCPUs, which map to only 24 physical cores. Running 48 MPI ranks on this machine oversubscribed the hardware. Although the hourly cost was lower, the runtime increased to 19h 8min, resulting in a slightly higher total cost compared to the larger instance, making this option both slower and more expensive.
 
-**In summary**: the best strategy seems to be running one MPI rank per physical core. Hyperthreading does not provide a measurable benefit for this workload, while trying to use all logical cores or relying on smaller hyperthreaded instances leads to poorer performance and, in some cases, higher costs.
+**In summary**: the best strategy seems to be running one MPI rank per physical core. Hyper-threading does not provide a measurable benefit for this workload, while trying to use all logical cores or relying on smaller hyperthreaded instances leads to poorer performance and, in some cases, higher costs.

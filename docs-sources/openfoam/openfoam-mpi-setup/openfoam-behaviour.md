@@ -19,7 +19,7 @@ esac
 ```
 
 ### **OpenFOAM-Foundation**
-Uses `mpirun` without additional flags, which means it relies on MPI’s default behaviour. Take a look at how this is handled in the `runParallel` script:
+Uses `mpirun` without additional flags, relying on MPI’s default behavior — launching one process per physical core (not per available thread) Take a look at how this is handled in the `runParallel` script:
 
 ```bash
 ( mpirun -np $nProcs $APP_RUN -parallel "$@" < /dev/null >> log.$LOG_SUFFIX 2>&1 )
