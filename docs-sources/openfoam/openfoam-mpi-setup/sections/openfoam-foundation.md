@@ -27,7 +27,7 @@ As a result:
 
 > **Note**: In this default configuration, with hyper-threading enabled (`threads_per_core=2`) but OpenFOAM running only one MPI process per physical core, seeing ~50% CPU usage does not mean the processor is underutilized. It simply reflects that OpenFOAM is using one thread per core, leaving the second hyper-thread idle. The actual computational resource fully utilizes the physical cores available.
 
-## 2. Utilize All Physical Cores
+## Utilize All Physical Cores
 Configure the cloud machine group so that the number of vCPUs matches the number of physical cores by setting `threads_per_core=1`, as shown below. Learn more about this setting here.
 
 ```python
@@ -55,7 +55,7 @@ This equivalence is confirmed by comparing the runtimes of both simulations, whi
 | c2d-highcpu-16 | 1                | 8              |  8        | 1 min, 58s    | 0.0026               |
 | c2d-highcpu-16 | 2                | 16             |  8        | 1 min, 56s    | 0.0025               |
 
-## 1. Utilize All Available vCPUs
+## Utilize All Available vCPUs
 You can override OpenFOAM-Foundation’s default MPI behaviour to run across **all available vCPUs**, which is 16 on the `c2d-highcpu-16` instance with hyper-threading enabled.
 
 To do this, update the `Allrun` script by replacing each `runParallel` call with:
