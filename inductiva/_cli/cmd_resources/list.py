@@ -186,11 +186,11 @@ def register(parser):
                            default=None,
                            type=str,
                            help="Filter the available types by CPU series.")
-    
+
     subparser.add_argument("-s",
                            "--spot",
                            action="store_true",
-                            default=False,
+                           default=False,
                            help="Shows spot instance price.")
 
     subparser.description = textwrap.dedent("""\
