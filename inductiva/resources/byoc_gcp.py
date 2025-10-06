@@ -4,7 +4,7 @@ import re
 import tempfile
 import os
 import datetime
-from typing import Optional, Tuple, Union
+from typing import Optional, Union
 
 
 def estimate_vcpus_from_machine_type(machine_type):
@@ -94,7 +94,7 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
         max_idle_time: Optional max idle time, defaults to 3 minutes
         
     Raises:
-        ValueError: If gcloud CLI is not installed, not authenticated, or VM creation fails
+        ValueError: If VM creation fails
     """
     validate_gcloud_setup()
 
@@ -154,7 +154,7 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
             raise ValueError(f"Failed to create GCP VM: {result.stderr}")
 
     except (subprocess.CalledProcessError, OSError) as e:
-        raise ValueError(f"Error creating GCP VM: {e}")
+        raise ValueError(f"Error creating GCP VM: {e}") from e
     finally:
         try:
             os.unlink(script_path)
@@ -171,7 +171,7 @@ def delete_gcp_vm(vm_name: str, zone: str, verbose: bool = True):
         verbose: Whether to print verbose output
         
     Raises:
-        ValueError: If gcloud CLI is not installed, not authenticated, or VM deletion fails
+        ValueError: If VM deletion fails
     """
     validate_gcloud_setup()
 
@@ -200,4 +200,4 @@ def delete_gcp_vm(vm_name: str, zone: str, verbose: bool = True):
                 raise ValueError(f"Failed to terminate GCP VM: {result.stderr}")
 
     except (subprocess.CalledProcessError, OSError) as e:
-        raise ValueError(f"Error terminating GCP VM: {e}")
+        raise ValueError(f"Error terminating GCP VM: {e}") from e
