@@ -1,73 +1,79 @@
 # OpenFOAM-Foundation
 OpenFOAM-Foundation runs MPI without extra flags, meaning MPI enforces a strict rule: **the number of processes requested must be less than or equal to the number of physical CPU cores available**.
 
-For example, on a `c2d-highcpu-4` machine, which has 2 physical cores and 4 vCPUs, MPI allows at most 2 processes. This restriction means your simulation domain can only be decomposed into a number of parts equal to or fewer than the physical cores on your computational resource.
+For example, on a `c2d-highcpu-16` machine, which has 8 physical cores and 16 vCPUs, MPI allows at most 8 processes. This restriction means your simulation domain can only be decomposed into a number of parts equal to or fewer than the physical cores on your computational resource.
 
 ## Understanding the Default Behaviour
-Let’s revisit the tutorial case from [here](../quick-start.md), running the exact same simulation but using default computational resource settings:
+Let’s revisit the `motorBike` case from this [tutorial](../../quick-start). This simulation is split into **8 sub-domains**, meaning it runs with **8 MPI processes**.
+
+Now, suppose we allocate this job to a cloud machine with 16 vCPUs, like the `c2d-highcpu-16` instance:
 
 ```python
-import inductiva
-
 cloud_machine = inductiva.resources.MachineGroup(
     provider="GCP",
     machine_type="c2d-highcpu-16",
     spot=True)
 ```
 
-The simulation is originally split into **6 sub-domains**, so CPU utilization peaks around **37%**:
+The computational resources are configured with `threads_per_core=2` (hyper-threading enabled), which is the **default** setting for virtual machines (learn more [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading)). 
 
-![CPU Usage](../_static/foundation_6_vcpus.png)
+However, OpenFOAM-Foundation runs MPI with default settings, which restricts the number of MPI processes to the number of physical cores (in this case, 8). It does not make use of the second thread (hyper-thread) per core, even though hyper-threading is enabled.
 
-This occurs because the computational resources are configured with `threads_per_core=2` (hyper-threading enabled), which is the default setting for virtual machines (learn more [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading)). Although the machine has 16 vCPUs, the simulation only uses 6 vCPUs, which explains the low CPU utilization.
+As a result:
+* Only 8 of the 16 vCPUs are used
+* CPU usage reaches only ~50%
 
-You can maximize CPU usage in two ways:
-1. Use all available vCPUs (default mode: hyper-threading enabled, with 2 vCPUs per physical core)
-2. Use all physical cores only (with hyper-threading disabled)
+![CPU Usage](../_static/quick-start/system_metrics_50_2tpc)
+
+> **Note**: In this default configuration, with hyper-threading enabled (`threads_per_core=2`) but OpenFOAM running only one MPI process per physical core, seeing ~50% CPU usage does not mean the processor is underutilized. It simply reflects that OpenFOAM is using one thread per core, leaving the second hyper-thread idle. The actual computational resource fully utilizes the physical cores available.
+
+## 2. Utilize All Physical Cores
+Configure the cloud machine group so that the number of vCPUs matches the number of physical cores by setting `threads_per_core=1`, as shown below. Learn more about this setting here.
+
+```python
+cloud_machine = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2d-highcpu-16",
+    # 1 thread per physical core
+	threads_per_core=1,
+    spot=True
+)
+```
+
+The `c2d-highcpu-16` machine has 16 vCPUs by default (`threads_per_core=2`). Setting `threads_per_core=1` reduces the machine to 8 vCPUs, matching the 8 physical cores — one vCPU per core. As a result, running with 8 MPI partitions will fully utilize all available compute resources, showing 100% CPU usage:
+
+![CPU Usage](../_static/quick-start/system_metrics_100.png)
+
+The performance is the **same** as when hyper-threading is enabled — only one thread per physical core is used in both cases. The difference in reported CPU usage (100% vs. ~50%) is just a **reporting artifact**:
+- With hyper-threading enabled (`threads_per_core=2`), each physical core appears as 2 vCPUs, so using only one thread per core shows ~50% usage.
+- With hyper-threading disabled (`threads_per_core=1`), each vCPU maps directly to a core, and usage appears as 100% — even though the workload hasn’t changed.
+
+This equivalence is confirmed by comparing the runtimes of both simulations, which are nearly identical:
+
+| Machine Type   | Threads per Core | vCPUs Available| MPI Procs |Execution Time | Estimated Cost (USD) |
+| -------------- | ---------------- | ---------------|---------- |-------------- | -------------------- |
+| c2d-highcpu-16 | 1                | 8              |  8        | 1 min, 58s    | 0.0026               |
+| c2d-highcpu-16 | 2                | 16             |  8        | 1 min, 56s    | 0.0025               |
 
 ## 1. Utilize All Available vCPUs
-To run across all 16 vCPUs, update the `Allrun` script by replacing each `runParallel` instance with:
+You can override OpenFOAM-Foundation’s default MPI behaviour to run across **all available vCPUs**, which is 16 on the `c2d-highcpu-16` instance with hyper-threading enabled.
+
+To do this, update the `Allrun` script by replacing each `runParallel` call with:
 
 ```bash
 mpirun -np 16 --use-hwthread-cpus <command> -parallel
 ```
 
-Don't forget to add the `-parallel` flag after the OpenFOAM command.
+Make sure to include the `-parallel` flag after the OpenFOAM command.
 
-This achieves near 100% CPU utilization:
+By explicitly allowing MPI to use all hardware threads, you achieve near 100% CPU utilization across all 16 vCPUs:
 
 [CPU Usage](../_static/foundation_16_vcpus.png)
 
-## 2. Utilize All Physical Cores
-Alternatively, divide your domain into the same number of physical cores and run the simulation.
-- The computational resource provides 16 vCPUs, but only 8 physical cores.
-- Running with 8 processes (one per core) results in approximately **50%** CPU utilization:
-
-![CPU Usage](../_static/quick-start/system_metrics_50_2tpc.png)
-
-To improve this, you can configure the computational resource so that the number of vCPUs matches the number of physical cores by setting `threads_per_core=1`. Learn more about this setting [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading). 
-
-The `c2d-highcpu-16` machine has 16 vCPUs by default (`threads_per_core=2`). Setting `threads_per_core=1` reduces the vCPUs to 8 — one per physical core. As a result, running with 8 partitions will fully utilize the CPU, showing **100%** utilization:
-
-![CPU Usage](../_static/quick-start/system_metrics_100.png)
-
-## Results
-To evaluate how different configurations impact simulation time and cost, we ran the same case under several machine setups, varying the number of MPI processes and the threading mode (`threads_per_core`). These tests help illustrate how factors like hyper-threading and domain decomposition affect performance.
-
-The table below summarizes the results:
+As shown below, the runtime and cost are similar to the previous configurations, showing that while more vCPUs are utilized, the overall performance gain may be modest depending on the workload.
 
 | Machine Type   | Threads per Core | vCPUs Available| MPI Procs |Execution Time | Estimated Cost (USD) |
-| -------------- | ---------------- | ---------------|---------- |-------------- | ---------- |
-| c2d-highcpu-16 | 2                | 16             |  6        | 2 min, 19s    | 0.0030     |
-| c2d-highcpu-16 | 1                | 8              |  8        | 1 min, 58s    | 0.0026     |
-| c2d-highcpu-16 | 2                | 16             |  8        | 1 min, 56s    | 0.0025     |
-| c2d-highcpu-16 | 2                | 16             |  16       | 1 min, 53s    | 0.0025     |
-
-**Observations**:
-- Changing `threads_per_core` from 2 to 1 (i.e., disabling hyper-threading) has minimal impact on performance.Differences are likely within the margin of variation.
-- Running with all 16 vCPUs gives the best execution time, though the gains are marginal. Keep in mind that these results reflect a small-scale test case. For larger simulations with more MPI partitions, memory bandwidth and communication overhead can become limiting factors.
-
-> **Note**: Simulation performance is case-dependent. The optimal setup here may not apply to more complex workloads.
+| c2d-highcpu-16 | 2                | 16             |  16       | 1 min, 53s    | 0.0025               |
 
 Next, we’ll apply the same approach to a larger, more realistic simulation.
 
