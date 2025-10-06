@@ -48,18 +48,6 @@ parEx="mpirun -use-hwthread-cpus -np $nProcs"
 - Set Number of Cores (`nCores`) to 1080 - total number of vCPUs in your MPI cluster
 
 3. Convert the `Allrun` Script into Python Commands
-When running OpenFOAM on an MPI cluster via Inductiva, you **must** use the `commands` argument instead of `shell_script`. This allows fine-grained control over execution, with a mix of serial and parallel commands.
-
-Option A: Use the Provided Commands File
-
-Download the prepared commands.txt here
- and place it inside the highLiftConfiguration directory.
-
-Option B: Create Your Own
-
-Want to generate your own? Follow our guide on how to convert Allrun scripts to Python commands
-.
-
 To fully leverage MPI clusters, you **cannot** use the `shell_script` argument as you might with OpenFOAM simulations. Instead, you must use the `commands` argument, which accepts a list of commands to be executed during the simulation. Some commands will run sequentially, while others may run in parallel.
 
 For this case, we’ve prepared a list of the required commands. You can download the `commands.txt` [here](https://storage.googleapis.com/inductiva-api-demo-files/commands.txt) and place it in your `highLiftConfiguration` directory. 
@@ -140,7 +128,6 @@ The table below compares the performance of the same simulation run across diffe
 | c3d-highcpu-360 | 1              | 360         | 41h                      |
 | c3d-highcpu-360 | 3              | 1080        | 17h, 11 min              |
 | c2d-highcpu-112 | 8              | 896         | 14h, 59 min              |
-| c2d-highcpu-112 | 12             | 1344        | 12h, 5 min *(Preempted)* |
 
 As shown, scaling up significantly improves performance — but with diminishing returns at higher core counts. For instance, increasing from 896 to 1344 cores yielded only a modest improvement.
 
