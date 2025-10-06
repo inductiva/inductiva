@@ -1,6 +1,7 @@
 """Base class for machine groups."""
 from collections import defaultdict, namedtuple
 from dataclasses import dataclass
+import re
 from typing import Optional, Union, List
 from abc import ABC, abstractmethod
 import datetime
@@ -119,6 +120,12 @@ class BaseMachineGroup(ABC):
             raise ValueError(
                 "`mg_name` parameter is only supported with BYOC. "
                 "For managed resources, names are automatically generated.")
+
+        if self.mg_name:
+            if not re.match(r'^[0-9a-zA-Z-]+$', self.mg_name):
+                raise ValueError(
+                    "`mg_name` must contain only letters, numbers, and hyphens."
+                )
 
         if self.byoc and self.num_machines != 1:
             raise ValueError(
@@ -626,16 +633,6 @@ class BaseMachineGroup(ABC):
         logging.info("■ Registering %s configurations (client-side):",
                      self.short_name())
 
-        self._vm_name = self._generate_vm_name(self.mg_name)
-
-        client_vm_info = {
-            "vm_name": self._vm_name,
-            "zone": self.zone,
-            "status": "registered",
-            "created_at": datetime.datetime.now()
-        }
-        self._client_vm_info = client_vm_info
-
         self.create_time = datetime.datetime.now()
         self.num_machines = getattr(self, "num_machines", 1)
         self._active_machines = 0
@@ -647,10 +644,22 @@ class BaseMachineGroup(ABC):
 
         self._log_machine_group_info()
 
+        if not self.mg_name:
+            self.mg_name = self.name
+
+        self._vm_name = self._generate_vm_name(self.mg_name)
+
+        client_vm_info = {
+            "vm_name": self._vm_name,
+            "zone": self.zone,
+            "status": "registered",
+            "created_at": datetime.datetime.now()
+        }
+        self._client_vm_info = client_vm_info
+
     def _register_machine_group_backend_byoc(self):
         """Register machine group for BYOC."""
         instance_group_config = inductiva.client.models.RegisterVMGroupRequest(
-            name=self.mg_name,
             machine_type=self.machine_type,
             provider_id="LOCAL",  # Register as LOCAL for backend compatibility
             threads_per_core=self.threads_per_core,
