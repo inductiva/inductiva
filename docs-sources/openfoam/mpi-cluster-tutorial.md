@@ -115,7 +115,10 @@ Data:
 	Size of unzipped output:  34.41 GB
 	Number of output files:   151512
 
-Estimated computation cost (US$): 179.23 US$
+Estimated Task Compute Cost = 179.23 US$
+Task Orchestration Fee = 0.01 US$
+Total Estimated Cost = 179.24 US$
+Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, the core computation time of this simulation was around **17 hours and 11 minutes**.
