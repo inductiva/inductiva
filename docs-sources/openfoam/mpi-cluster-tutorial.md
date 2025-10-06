@@ -47,8 +47,20 @@ parEx="mpirun -use-hwthread-cpus -np $nProcs"
 - Set End Time (`finalTime`) to 0.30
 - Set Number of Cores (`nCores`) to 1080 - total number of vCPUs in your MPI cluster
 
-3. Convert the `Allrun` Script into Python Commands
-To fully leverage MPI clusters, you **cannot** use the `shell_script` argument as you might with OpenFOAM simulations. Instead, you must use the `commands` argument, which accepts a list of commands to be executed during the simulation. Some commands will run sequentially, while others may run in parallel.
+
+3. Convert the `Allrun` Script into Python Commands.
+
+To fully leverage MPI clusters, you **cannot** use the `shell_script` argument
+as you might with OpenFOAM simulations. This is because if we use a shell script,
+Inductiva cannot see or analyze its contents, it just executes it as-is. For MPI
+runs on a cluster, we need to prepare commands (e.g., `mpirun`) with additional
+configurations so different machines can communicate, such as specifying a
+machinefile with all cluster nodes.
+
+Instead, you must use the `commands` argument, which accepts a list of commands
+to be executed during the simulation. This way, Inductiva can process each
+command and apply the necessary cluster-specific options. Some commands will
+run sequentially, while others may run in parallel.
 
 For this case, we’ve prepared a list of the required commands. You can download the `commands.txt` [here](https://storage.googleapis.com/inductiva-api-demo-files/commands.txt) and place it in your `highLiftConfiguration` directory. 
 
@@ -124,16 +136,21 @@ Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-m
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, the core computation time of this simulation was around **17 hours and 11 minutes**.
 
 ## Performance Comparison
-The table below compares the performance of the same simulation run across different MPI cluster configurations. The first row serves as the baseline, where the simulation was run on a single machine without distributed MPI.
+The table below compares the performance of the same simulation running on a single machine and on a three-machine MPI cluster configurations.
 
 | Machine Type    | Nº of Machines | Total Cores | Execution Time           |
 | --------------- | -------------- | ----------- | ------------------------ |
 | c3d-highcpu-360 | 1              | 360         | 41h                      |
 | c3d-highcpu-360 | 3              | 1080        | 17h, 11 min              |
-| c2d-highcpu-112 | 8              | 896         | 14h, 59 min              |
 
-As shown, scaling up significantly improves performance — but with diminishing returns at higher core counts. For instance, increasing from 896 to 1344 cores yielded only a modest improvement.
+As shown, using an MPI cluster with three machines reduced the execution time
+from 41 hours to just over 17 hours, demonstrating the significant performance
+benefits of leveraging multiple nodes for high-performance computing tasks.
 
+⚠️ Keep in mind that MPI clusters introduce communication overhead between
+machines. This means scaling is not perfectly linear, adding more machines
+doesn’t always lead to proportional speedups, and in some cases, performance
+may even degrade if the communication cost becomes too high.
 
 
 
