@@ -715,7 +715,7 @@ class MachineGroup(BaseMachineGroup):
                 "For managed resources, names are automatically generated.")
 
         if self.mg_name:
-            if not re.match(r'^[0-9a-zA-Z-]+$', self.mg_name):
+            if not re.match(r"^[0-9a-zA-Z-]+$", self.mg_name):
                 raise ValueError(
                     "`mg_name` must contain only letters, numbers, and hyphens."
                 )
@@ -845,10 +845,9 @@ class MachineGroup(BaseMachineGroup):
         """Terminate GCP VMs using client-side management."""
         logging.info("Terminating %s (client-side GCP)...", repr(self))
 
-        success, error_message = byoc_gcp.delete_gcp_vm(self._vm_name,
-                                                        self.zone, verbose)
+        try:
+            byoc_gcp.delete_gcp_vm(self._vm_name, self.zone, verbose)
 
-        if success:
             # Also notify backend that machine group is terminated
             try:
                 self._api.delete_vm_group(machine_group_id=self.id)
@@ -863,9 +862,9 @@ class MachineGroup(BaseMachineGroup):
 
             logging.info("%s terminated.", self)
             return True
-        else:
+        except ValueError as e:
             print("Failed to terminate GCP VM:")
-            print(error_message)
+            print(e)
             return False
 
     @logs.mute_logging()
