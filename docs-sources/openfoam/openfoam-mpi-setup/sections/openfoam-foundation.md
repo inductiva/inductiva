@@ -76,7 +76,7 @@ As shown below, the runtime and cost are similar to the previous configurations,
 | -------------- | ---------------- | ---------------|---------- |-------------- | -------------------- |
 | c2d-highcpu-16 | 2                | 16             |  16       | 1 min, 53s    | 0.0025               |
 
-Next, we’ll apply the same approach to a larger, more realistic simulation.
+Next, we’ll apply the same approaches to a larger, more realistic simulation.
 
 ## Large-Scale Example: Steady-State CFD Simulation of Wind Flow in the Perdigão Region
 To explore how OpenFOAM scales in a more realistic scenario, we ran a steady-state CFD simulation of the [Perdigão region in Portugal](https://journals.ametsoc.org/view/journals/bams/100/5/bams-d-17-0227.1.xml). This area is known for its two parallel ridgelines, which create intricate wind flow patterns and have made it a reference location for atmospheric research.
