@@ -1,12 +1,15 @@
 """Base class for machine groups."""
 from collections import defaultdict, namedtuple
 from dataclasses import dataclass
+import re
 from typing import Optional, Union, List
 from abc import ABC, abstractmethod
 import datetime
 import time
 import enum
 import math
+import random
+import string
 
 import logging
 
@@ -17,6 +20,7 @@ from inductiva import api, users, logs
 from inductiva.commands.mpiconfig import MPIConfig
 from inductiva.resources.utils import ProviderType
 from inductiva.utils import format_utils
+from inductiva.resources import byoc_gcp
 
 VCPUCount = namedtuple("VCPUCount", ["total", "per_machine"])
 
@@ -101,14 +105,12 @@ class BaseMachineGroup(ABC):
         provider = ProviderType(self.provider)
         self.provider = provider.value
 
-        # Set the API configuration that carries the information from the client
-        # to the backend.
         self._api = inductiva.client.ComputeApi(api.get_client())
-
         self._validate_inputs()
 
     def _validate_inputs(self):
         """Validate initialization inputs."""
+
         if not isinstance(self.data_disk_gb, int):
             raise ValueError("`data_disk_gb` must be an integer.")
 
@@ -135,8 +137,8 @@ class BaseMachineGroup(ABC):
             self._max_idle_time = datetime.timedelta(minutes=self.max_idle_time)
 
         if self.auto_terminate_ts is not None:
-            logging.warning("You are using `auto_terminate_ts`. This argument"
-                            "will be deprecated in the future. Please use"
+            logging.warning("You are using `auto_terminate_ts`. This argument "
+                            "will be deprecated in the future. Please use "
                             "`auto_terminate_minutes` instead.")
 
         if isinstance(self.auto_terminate_minutes, int):
@@ -157,7 +159,7 @@ class BaseMachineGroup(ABC):
         """
         if self._gpu_info is None:
             return 0
-        return self._gpu_info.get("gpu_count", 0)
+        return getattr(self._gpu_info, "gpu_count", 0)
 
     def set_mpi_config(self,
                        mpi_config: Optional[MPIConfig] = None,
@@ -305,6 +307,21 @@ class BaseMachineGroup(ABC):
                 raise ValueError("The datetime string must be timezone aware.")
             return dt
         return None
+
+    @staticmethod
+    def _generate_byoc_mg_name() -> str:
+        """Generate a random machine group name."""
+        random_base = "".join(
+            random.choices(string.ascii_lowercase + string.digits, k=8))
+        return f"byoc-{random_base}"
+
+    @staticmethod
+    def _generate_byoc_vm_name(base_name: str) -> str:
+        """Generate a VM name by appending random characters to base name."""
+        # GCP names must be lowercase contain only letters, numbers, and hyphens
+        random_suffix = "".join(
+            random.choices(string.ascii_lowercase + string.digits, k=4))
+        return f"{base_name}-{random_suffix}".lower()
 
     def _update_attributes_from_response(
             self, resp: inductiva.client.models.VMGroupConfig):
@@ -665,6 +682,8 @@ class MachineGroup(BaseMachineGroup):
         spot: Whether to use spot machines.
     """
     # Constructor arguments
+    byoc: bool = False
+    mg_name: Optional[str] = None
     auto_resize_disk_max_gb: Optional[int] = None
     num_machines: int = 1
 
@@ -676,19 +695,41 @@ class MachineGroup(BaseMachineGroup):
         dataclass initialization."""
         super().__post_init__()
 
-        self._register_machine_group(num_vms=self.num_machines,
-                                     spot=self.spot,
-                                     is_elastic=self._is_elastic)
+        if self.provider == "GCP" and self.byoc:
+            self._register_byoc_gcp()
+
+        if not self.byoc:
+            self._register_machine_group(num_vms=self.num_machines,
+                                         spot=self.spot,
+                                         is_elastic=self._is_elastic)
         self.np = self.np or self.available_vcpus
 
     def _validate_inputs(self):
         super()._validate_inputs()
+
+        if self.mg_name and not self.byoc:
+            raise ValueError(
+                "`mg_name` parameter is only supported with BYOC. "
+                "For managed resources, names are automatically generated.")
+
+        if self.mg_name:
+            if not re.match(r"^[0-9a-zA-Z-]+$", self.mg_name):
+                raise ValueError(
+                    "`mg_name` must contain only letters, numbers, and hyphens."
+                )
+
+        if self.byoc and self.num_machines != 1:
+            raise ValueError(
+                "BYOC mode currently only supports `num_machines=1`. ")
+
         if self.num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
 
     @property
     def n_vcpus(self):
+        if self._cpu_info is None:
+            return VCPUCount(0, 0)
         return VCPUCount(self._cpu_info.cpu_cores_logical * self.num_machines,
                          self._cpu_info.cpu_cores_logical)
 
@@ -703,6 +744,155 @@ class MachineGroup(BaseMachineGroup):
 
     def __str__(self):
         return f"Machine Group {self.name} with {self.machine_type} machines"
+
+    def _register_byoc_gcp(self):
+        """Register machine group for client-side GCP management."""
+        logging.info("■ Registering %s configurations (client-side):",
+                     self.short_name())
+
+        if not self.mg_name:
+            self.mg_name = self._generate_byoc_mg_name()
+
+        self._vm_name = self._generate_byoc_vm_name(self.mg_name)
+
+        client_vm_info = {
+            "vm_name": self._vm_name,
+            "zone": self.zone,
+            "status": "registered",
+            "created_at": datetime.datetime.now()
+        }
+        self._client_vm_info = client_vm_info
+
+        self.create_time = datetime.datetime.now()
+        self.num_machines = getattr(self, "num_machines", 1)
+        self._active_machines = 0
+
+        if isinstance(self.max_idle_time, int):
+            self.max_idle_time = datetime.timedelta(minutes=self.max_idle_time)
+
+        self._register_machine_group_backend_byoc()
+
+        self._log_machine_group_info()
+
+    def _register_machine_group_backend_byoc(self):
+        """Register machine group for BYOC."""
+        instance_group_config = inductiva.client.models.RegisterVMGroupRequest(
+            name=self.mg_name,
+            machine_type=self.machine_type,
+            provider_id="LOCAL",  # Register as LOCAL for backend compatibility
+            threads_per_core=self.threads_per_core,
+            disk_size_gb=self.data_disk_gb,
+            max_idle_time=self._timedelta_to_seconds(self.max_idle_time),
+            auto_terminate_ts=self._convert_auto_terminate_ts(
+                self.auto_terminate_ts),
+            dynamic_disk_resize_config=self._dynamic_disk_resize_config(),
+            custom_vm_image=self._custom_vm_image,
+            zone=self.zone,
+            disk_auto_delete=self.auto_delete_disk,
+            num_vms=self.num_machines,
+            spot=self.spot,
+            is_elastic=False,
+        )
+
+        body = self._api.register_vm_group(
+            register_vm_group_request=instance_group_config,)
+
+        self._update_attributes_from_response(body)
+
+        # TODO: Remove this once the CPUInfo is implemented for local taskrunner
+        self._cpu_info = type(
+            "CPUInfo", (), {
+                "cpu_cores_logical":
+                    byoc_gcp.estimate_vcpus_from_machine_type(self.machine_type
+                                                             ),
+                "cpu_cores_physical":
+                    (byoc_gcp.estimate_vcpus_from_machine_type(
+                        self.machine_type) // 2)
+            })()
+
+    def _start_byoc_gcp(self, verbose: bool = True):
+        """Start GCP VMs using client-side management."""
+        # pylint: disable=import-outside-toplevel
+        from inductiva import _api_key, api_url
+
+        api_key = _api_key.get()
+
+        logging.info("Starting %s (client-side GCP)...", repr(self))
+        start_time = time.time()
+
+        byoc_gcp.create_gcp_vm(self.mg_name,
+                               self._vm_name,
+                               self.zone,
+                               self.machine_type,
+                               api_key,
+                               api_url,
+                               self.spot,
+                               self.max_idle_time,
+                               verbose=verbose)
+
+        self._started = True
+        self._active_machines = self.num_machines
+        self._client_vm_info["status"] = "running"
+        self._client_vm_info["started_at"] = datetime.datetime.now()
+
+        creation_time = format_utils.seconds_formatter(time.time() - start_time)
+        logging.info("%s successfully started in %s.", self, creation_time)
+        return True
+
+    def _terminate_byoc_gcp(self, verbose: bool = True):
+        """Terminate GCP VMs using client-side management."""
+        logging.info("Terminating %s (client-side GCP)...", repr(self))
+
+        try:
+            byoc_gcp.delete_gcp_vm(self._vm_name, self.zone, verbose)
+
+            # Also notify backend that machine group is terminated
+            try:
+                self._api.delete_vm_group(machine_group_id=self.id)
+            except inductiva.client.ApiException as e:
+                logging.warning("Failed to notify backend of termination: %s",
+                                e)
+
+            self._started = False
+            self._active_machines = 0
+            self._client_vm_info["status"] = "terminated"
+            self._client_vm_info["terminated_at"] = datetime.datetime.now()
+
+            logging.info("%s terminated.", self)
+            return True
+        except ValueError as e:
+            print("Failed to terminate GCP VM:")
+            print(e)
+            return False
+
+    @logs.mute_logging()
+    def start(self, wait_for_quotas: bool = False, verbose: bool = True):
+        """Starts a machine group."""
+        if self._started:
+            logging.info("Attempting to start a machine group already started.")
+            return
+
+        if self.id is None or self.name is None:
+            logging.info("Attempting to start an unregistered machine group. "
+                         "Make sure you have called the constructor.")
+            return
+
+        if self.provider == "GCP" and self.byoc:
+            return self._start_byoc_gcp(verbose)
+
+        return super().start(wait_for_quotas, verbose)
+
+    def terminate(self, verbose: bool = True):
+        """Terminates a machine group."""
+        if not self._started or self.id is None or self.name is None:
+            logging.warning(
+                "Attempting to terminate an unstarted machine group.")
+            return
+
+        if self.provider == "GCP" and self.byoc:
+            return self._terminate_byoc_gcp(verbose)
+
+        return super().terminate(verbose)
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
@@ -792,6 +982,8 @@ class ElasticMachineGroup(BaseMachineGroup):
 
     @property
     def n_vcpus(self):
+        if self._cpu_info is None:
+            return VCPUCount(0, 0)
         return VCPUCount(self._cpu_info.cpu_cores_logical * self.max_machines,
                          self._cpu_info.cpu_cores_logical)
 
@@ -812,8 +1004,8 @@ class ElasticMachineGroup(BaseMachineGroup):
         return f"{self._active_machines}/{self.max_machines} (max)"
 
     def __str__(self):
-        return f"Elastic Machine Group {self.name} with {self.machine_type} " \
-             "machines"
+        return (f"Elastic Machine Group {self.name} with {self.machine_type} "
+                "machines")
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
@@ -877,6 +1069,8 @@ class MPICluster(BaseMachineGroup):
 
     @property
     def n_vcpus(self):
+        if self._cpu_info is None:
+            return VCPUCount(0, 0)
         return VCPUCount(self._cpu_info.cpu_cores_logical * self.num_machines,
                          self._cpu_info.cpu_cores_logical)
 
@@ -906,8 +1100,8 @@ class MPICluster(BaseMachineGroup):
         return machine_group
 
     def __str__(self):
-        return f"MPI Cluster {self.name} with {self.machine_type} " \
-               f"x{self.num_machines} machines"
+        return (f"MPI Cluster {self.name} with {self.machine_type} "
+                f"x{self.num_machines} machines")
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
