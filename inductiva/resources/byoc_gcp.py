@@ -51,6 +51,22 @@ def check_gcloud_auth() -> bool:
         return False
 
 
+def validate_gcloud_setup():
+    """Validate that gcloud CLI is installed and authenticated.
+    
+    Raises:
+        ValueError: If gcloud CLI is not installed or not authenticated
+    """
+    if not check_gcloud_installed():
+        raise ValueError(
+            "gcloud CLI is not installed or not in PATH. "
+            "Please install it from: https://cloud.google.com/sdk/docs/install")
+
+    if not check_gcloud_auth():
+        raise ValueError("gcloud is not authenticated. "
+                         "Please run: gcloud auth login")
+
+
 def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
     mg_name: str,
     vm_name: str,
@@ -62,7 +78,7 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
     max_idle_time: Optional[Union[int, datetime.timedelta]] = None,
     hostname: Optional[str] = None,
     verbose: bool = True,
-) -> Tuple[bool, Optional[str]]:
+):
     """Create a GCP VM instance.
     
     Args:
@@ -77,14 +93,10 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
         verbose: Whether to print verbose output
         max_idle_time: Optional max idle time, defaults to 3 minutes
         
-    Returns:
-        Tuple of (success: bool, error_message: Optional[str])
+    Raises:
+        ValueError: If gcloud CLI is not installed, not authenticated, or VM creation fails
     """
-    if not check_gcloud_installed():
-        return False, "gcloud CLI is not installed or not in PATH"
-
-    if not check_gcloud_auth():
-        return False, "gcloud is not authenticated"
+    validate_gcloud_setup()
 
     # Create startup script
     startup_script = create_gcp_startup_script()
@@ -136,17 +148,13 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
 
         if result.returncode == 0:
             if verbose:
-                print("GCP VM created successfully!")
-                print(f"VM Name: {vm_name}")
-                print(f"Zone: {zone}")
-                print("The task-runner will start automatically once the VM "
-                      "is ready.")
-            return True, None
+                print("GCP VM created successfully")
+            return
         else:
-            return False, result.stderr
+            raise ValueError(f"Failed to create GCP VM: {result.stderr}")
 
     except (subprocess.CalledProcessError, OSError) as e:
-        return False, f"Error creating GCP VM: {e}"
+        raise ValueError(f"Error creating GCP VM: {e}")
     finally:
         try:
             os.unlink(script_path)
@@ -154,9 +162,7 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
             pass
 
 
-def delete_gcp_vm(vm_name: str,
-                  zone: str,
-                  verbose: bool = True) -> Tuple[bool, Optional[str]]:
+def delete_gcp_vm(vm_name: str, zone: str, verbose: bool = True):
     """Delete a GCP VM instance.
     
     Args:
@@ -164,11 +170,10 @@ def delete_gcp_vm(vm_name: str,
         zone: GCP zone where the VM is located
         verbose: Whether to print verbose output
         
-    Returns:
-        Tuple of (success: bool, error_message: Optional[str])
+    Raises:
+        ValueError: If gcloud CLI is not installed, not authenticated, or VM deletion fails
     """
-    if not check_gcloud_installed():
-        return False, "gcloud CLI is not installed or not in PATH"
+    validate_gcloud_setup()
 
     try:
         cmd = [
@@ -184,15 +189,15 @@ def delete_gcp_vm(vm_name: str,
         if result.returncode == 0:
             if verbose:
                 print(f"GCP VM '{vm_name}' terminated successfully.")
-            return True, None
+            return
         else:
             # VM might already be terminated
             if "not found" in result.stderr.lower():
                 if verbose:
                     print(f"GCP VM '{vm_name}' was already terminated.")
-                return True, None
+                return
             else:
-                return False, result.stderr
+                raise ValueError(f"Failed to terminate GCP VM: {result.stderr}")
 
     except (subprocess.CalledProcessError, OSError) as e:
-        return False, f"Error terminating GCP VM: {e}"
+        raise ValueError(f"Error terminating GCP VM: {e}")
