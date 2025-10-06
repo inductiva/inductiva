@@ -94,8 +94,6 @@ Data:
 	Number of output files:   464
 
 Estimated computation cost (US$): 0.0031 US$
-
-Go to https://console.inductiva.ai/tasks/chik6nj1du2dufx1w9fao9ey8 for more details.
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
@@ -107,8 +105,7 @@ You can view more details about your simulation task in the Inductiva Console [I
 
 ### Monitoring System Metrics
 Since our machine has 8 physical cores but the simulation uses only 6, it’s expected that the system isn’t fully utilized. 
-This is confirmed by checking the **System Metrics** tab in the Console after the simulation completes, where CPU utilization 
-is around 70%, indicating suboptimal usage.
+This is confirmed by checking the **System Metrics** tab in the Console after the simulation completes, where CPU utilization is around 70%, indicating suboptimal usage.
 
 <div align="center">
    <img src="./_static/quick-start/system_metrics.png" alt="Inductiva Console - System Metrics tab">
