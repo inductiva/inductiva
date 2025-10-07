@@ -34,23 +34,27 @@ def _normalize_file(path: str) -> None:
     Args:
         path (str): Path to the file to normalize.
     """
-    _, ext = os.path.splitext(path)
-    if ext.lower() not in {".txt", ".sh"}:
-        return
+    try:
+        _, ext = os.path.splitext(path)
+        if ext.lower() not in {".txt", ".sh"}:
+            return
 
-    with open(path, "rb") as f:
-        first_line = f.readline()
-        if b"\r\n" not in first_line:
-            return  # nothing to do
+        with open(path, "rb") as f:
+            first_line = f.readline()
+            if b"\r\n" not in first_line:
+                return  # nothing to do
 
-    # Normalize file in place
-    tmp_path = path + ".tmp"
-    with open(path, "rb") as f_in, open(tmp_path, "wb") as f_out:
-        for line in f_in:
-            f_out.write(re.sub(rb"\r\n", b"\n", line))
+        # Normalize file in place
+        tmp_path = path + ".tmp"
+        with open(path, "rb") as f_in, open(tmp_path, "wb") as f_out:
+            for line in f_in:
+                f_out.write(re.sub(rb"\r\n", b"\n", line))
 
-    # Replace original file
-    os.replace(tmp_path, path)
+        # Replace original file
+        os.replace(tmp_path, path)
+    except Exception:  # pylint: disable=broad-except
+        # If normalization fails, just skip it
+        pass
 
 
 def pack_input(input_dir, zip_name) -> str:
