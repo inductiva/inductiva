@@ -80,7 +80,10 @@ Data:
 	Size of unzipped output:  6.25 MB
 	Number of output files:   11
 
-Estimated computation cost (US$): 0.00014 US$
+Estimated Task Compute Cost = 0.00014 US$
+Task Orchestration Fee = 0.01 US$
+Total Estimated Cost = 0.01014 US$
+Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 If the task status shows **Success**, congratulations! You've successfully run a Elmer simulation.

@@ -78,9 +78,10 @@ Data:
 	Size of unzipped output:  155.56 MB
 	Number of output files:   223
 
-Estimated computation cost (US$): 0.00048 US$
-
-Go to https://console.inductiva.ai/tasks/a30fb9b6zearwkrdpkz4g9qhr for more details.
+Estimated Task Compute Cost = 0.00048 US$
+Task Orchestration Fee = 0.01 US$
+Total Estimated Cost = 0.01048 US$
+Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 If the **Task status** is marked as **Success**, congratulations! You've successfully ran an OpenFOAM simulation.
