@@ -1,5 +1,7 @@
 # Command Line Usage
 
+> **⚠️ Important**: When using BYOC, you are responsible for all costs incurred by VMs running in your GCP account. Always monitor your GCP console and consider setting up billing alerts to track usage and costs.
+
 In addition to the Python client, you can also launch BYOC machine groups directly from the command line using the Inductiva CLI.
 
 ## View Available Options
@@ -35,43 +37,18 @@ mg = inductiva.resources.machine_groups.get_by_name('byoc-gcp-machine')
 task = simulator.run(input_dir=input_dir, on=mg)
 ```
 
-## Advanced Configuration Options
+## Advanced Configuration
 
-### Custom Machine Types
-
-You can specify different GCP machine types based on your computational needs:
+You can customize various aspects of your BYOC machine groups:
 
 ```bash
-# High-memory machine for memory-intensive simulations
-inductiva task-runner launch memory-intensive-job \
-    --provider gcp \
-    --machine-type n1-highmem-8 \
-    --spot
-
-# High-CPU machine for CPU-intensive tasks
-inductiva task-runner launch cpu-intensive-job \
+# Launch bigger machine
+inductiva task-runner launch byoc-gcp-machine \
     --provider gcp \
     --machine-type c2d-highcpu-32 \
     --spot
-```
 
-### Regional Configuration
-
-Specify a particular GCP region for your machine:
-
-```bash
-inductiva task-runner launch regional-machine \
-    --provider gcp \
-    --machine-type c2d-highcpu-8 \
-    --region us-central1 \
-    --spot
-```
-
-### Custom Auto-Termination
-
-Set custom idle time for cost control:
-
-```bash
+# Set custom auto-termination time (in minutes)
 inductiva task-runner launch short-lived-machine \
     --provider gcp \
     --machine-type c2d-highcpu-8 \

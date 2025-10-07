@@ -48,6 +48,7 @@ def launch_task_runner_gcp(args):
         spot=args.spot,
         mg_name=args.machine_group_name,
         byoc=True,
+        max_idle_time=args.max_idle_time,
     ).start()
 
 
@@ -219,5 +220,9 @@ def register(parser):
     gcp_group.add_argument("--spot",
                            action="store_true",
                            help="Use spot instance.")
+
+    gcp_group.add_argument("--max-idle-time",
+                           type=int,
+                           help="Maximum idle time in minutes before auto-termination (default: 3).")
 
     subparser.set_defaults(func=launch_task_runner)

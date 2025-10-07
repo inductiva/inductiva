@@ -1,43 +1,21 @@
-# Prerequisites and Setup
+# Installation and Setup
 
-## Overview
+## Required Permissions
 
-BYOC enables you to:
-- **Reduce costs** by using your own GCP credits and billing account
-- **Maintain control** over your compute infrastructure and security policies
-- **Scale seamlessly** while keeping compute resources within your organization
-- **Comply** with organizational policies that require compute to remain in your cloud account
-- **Run simulations seamlessly** with the same experience as Inductiva's managed infrastructure
+To minimize security risks, Inductiva requires only the following minimal GCP permissions:
 
-## How It Works
+- **Compute Instance Admin (v1)** role, or a custom role with these specific permissions:
+  - `compute.instances.create` - To create VMs in your account
+  - `compute.instances.delete` - To delete VMs (including auto-termination)
+  - `compute.instances.setMetadata` - To set startup script and configuration
 
-When you create a BYOC machine group, Inductiva creates a VM instance in your GCP account that runs a **task-runner container**. This container acts as a bridge between your GCP infrastructure and Inductiva's backend services.
-
-Here's the flow:
-
-1. **VM Creation**: Inductiva creates a VM in your GCP project with the specified machine type and configuration
-2. **Task-Runner Deployment**: The VM automatically launches a task-runner container that connects to Inductiva's backend
-3. **Seamless Integration**: The task-runner handles communication with Inductiva's API and manages simulation execution
-4. **Resource Management**: You maintain control over the VM lifecycle while Inductiva manages the simulation orchestration
-
-**Security Note**: Your GCP credentials never leave your local machine. All VM creation and management operations are performed locally using your authenticated gcloud CLI, ensuring your credentials remain secure and private.
-
-For more detailed information about the task-runner, see the [Task-Runner Guide](../../use-local-task-runner/index.md).
-
-## Prerequisites
-
-Before you begin, ensure you have:
-
-- **A Google Cloud Platform (GCP) account** with a valid billing account attached
-- **A GCP project** with the Compute Engine API enabled
-- **Sufficient permissions** in your GCP project (Compute Instance Admin role recommended)
-- **Adequate quotas** for the machine types you plan to use
+> **Security Note**: Your GCP credentials and API keys are **never sent to Inductiva** and Inductiva **never has access to them**. All GCP operations (VM creation, deletion, metadata management) are performed entirely on your local machine using your authenticated gcloud CLI. Inductiva cannot access your other GCP resources, billing information, or data stored in your account.
 
 ## Installing and Configuring Google Cloud CLI
 
-### Install Google Cloud CLI
+### Installation
 
-First, install the Google Cloud CLI on your system:
+Install the Google Cloud CLI on your system:
 
 **Linux/macOS:**
 ```bash
@@ -91,6 +69,24 @@ gcloud services enable compute.googleapis.com
 
 You can also enable this through the [GCP Console](https://console.cloud.google.com/apis/library).
 
+## Testing Your Setup
+
+After completing the GCP configuration, test that everything works together:
+
+```bash
+# Test GCP authentication
+gcloud auth list
+
+# Test project access
+gcloud config get-value project
+
+# Test Compute Engine API access
+gcloud compute instances list --limit=1
+```
+
+If all commands execute without errors, your setup is ready for BYOC.
+
+
 ```{banner_small}
-:origin: launch_machines_on_gcp_sec1
+:origin: launch_machines_on_gcp_sec1b
 ```
