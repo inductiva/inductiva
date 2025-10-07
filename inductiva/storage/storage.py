@@ -835,7 +835,7 @@ def _generate_complete_multipart_upload_signed_url(
 def _get_file_size(file_path):
     api = inductiva.client.StorageApi(inductiva.api.get_client())
 
-    contents = api.list_storage_contents(path=file_path, per_page=2)
+    contents = api.list_paginated_storage_contents(path=file_path, per_page=2)
     if len(contents) > 1:
         raise ValueError(f"Multiple files found at {file_path}. "
                          "Please specify a single file.")
