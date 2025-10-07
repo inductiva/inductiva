@@ -47,6 +47,9 @@ parEx="mpirun -use-hwthread-cpus -np $nProcs"
 - Set End Time (`finalTime`) to 0.30
 - Set Number of Cores (`nCores`) to 1080 - total number of vCPUs in your MPI cluster
 
+These modifications are made for testing purposes, in order to shorten the
+overall simulation time while still allowing you to validate the setup and
+performance.
 
 3. Convert the `Allrun` Script into Python Commands.
 
