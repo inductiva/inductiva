@@ -77,7 +77,10 @@ Data:
 	Size of unzipped output:  1.87 MB
 	Number of output files:   8
 
-Estimated computation cost (US$): 0.000046 US$
+Estimated Task Compute Cost = 0.000046 US$
+Task Orchestration Fee = 0.01 US$
+Total Estimated Cost = 0.010046 US$
+Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 If the task status shows **Success**, congratulations! You've successfully run a CalculiX simulation.
