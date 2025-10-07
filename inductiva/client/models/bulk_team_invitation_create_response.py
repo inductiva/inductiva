@@ -16,26 +16,23 @@ import pprint
 import re  # noqa: F401
 import json
 
-from datetime import datetime
-from pydantic import BaseModel, ConfigDict, StrictBool, StrictInt, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, StrictInt
+from typing import Any, ClassVar, Dict, List
+from inductiva.client.models.bulk_operation_result import BulkOperationResult
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class StorageFileInfo(BaseModel):
+class BulkTeamInvitationCreateResponse(BaseModel):
     """
-    StorageFileInfo
-    """
-
-  # noqa: E501
-    size_bytes: Optional[StrictInt] = None
-    creation_time: Optional[datetime] = None
-    is_directory: StrictBool
-    provider_id: StrictStr
-    region: StrictStr
+    Schema for bulk team invitation creation response.
+    """ # noqa: E501
+    results: List[BulkOperationResult]
+    total_processed: StrictInt
+    successful_count: StrictInt
+    failed_count: StrictInt
     __properties: ClassVar[List[str]] = [
-        "size_bytes", "creation_time", "is_directory", "provider_id", "region"
+        "results", "total_processed", "successful_count", "failed_count"
     ]
 
     model_config = ConfigDict(
@@ -55,7 +52,7 @@ class StorageFileInfo(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of StorageFileInfo from a JSON string"""
+        """Create an instance of BulkTeamInvitationCreateResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -75,21 +72,18 @@ class StorageFileInfo(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if size_bytes (nullable) is None
-        # and model_fields_set contains the field
-        if self.size_bytes is None and "size_bytes" in self.model_fields_set:
-            _dict['size_bytes'] = None
-
-        # set to None if creation_time (nullable) is None
-        # and model_fields_set contains the field
-        if self.creation_time is None and "creation_time" in self.model_fields_set:
-            _dict['creation_time'] = None
-
+        # override the default output from pydantic by calling `to_dict()` of each item in results (list)
+        _items = []
+        if self.results:
+            for _item_results in self.results:
+                if _item_results:
+                    _items.append(_item_results.to_dict())
+            _dict['results'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of StorageFileInfo from a dict"""
+        """Create an instance of BulkTeamInvitationCreateResponse from a dict"""
         if obj is None:
             return None
 
@@ -97,10 +91,14 @@ class StorageFileInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "size_bytes": obj.get("size_bytes"),
-            "creation_time": obj.get("creation_time"),
-            "is_directory": obj.get("is_directory"),
-            "provider_id": obj.get("provider_id"),
-            "region": obj.get("region")
+            "results": [
+                BulkOperationResult.from_dict(_item) for _item in obj["results"]
+            ] if obj.get("results") is not None else None,
+            "total_processed":
+                obj.get("total_processed"),
+            "successful_count":
+                obj.get("successful_count"),
+            "failed_count":
+                obj.get("failed_count")
         })
         return _obj

@@ -16,27 +16,21 @@ import pprint
 import re  # noqa: F401
 import json
 
-from datetime import datetime
-from pydantic import BaseModel, ConfigDict, StrictBool, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictBool, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from inductiva.client.models.team_role import TeamRole
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class StorageFileInfo(BaseModel):
+class TeamMemberBulkUpdate(BaseModel):
     """
-    StorageFileInfo
-    """
-
-  # noqa: E501
-    size_bytes: Optional[StrictInt] = None
-    creation_time: Optional[datetime] = None
-    is_directory: StrictBool
-    provider_id: StrictStr
-    region: StrictStr
-    __properties: ClassVar[List[str]] = [
-        "size_bytes", "creation_time", "is_directory", "provider_id", "region"
-    ]
+    Schema for updating a single team member in bulk operation.
+    """ # noqa: E501
+    member_id: StrictStr
+    role: Optional[TeamRole] = None
+    is_active: Optional[StrictBool] = None
+    __properties: ClassVar[List[str]] = ["member_id", "role", "is_active"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -55,7 +49,7 @@ class StorageFileInfo(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of StorageFileInfo from a JSON string"""
+        """Create an instance of TeamMemberBulkUpdate from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -75,21 +69,21 @@ class StorageFileInfo(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if size_bytes (nullable) is None
+        # set to None if role (nullable) is None
         # and model_fields_set contains the field
-        if self.size_bytes is None and "size_bytes" in self.model_fields_set:
-            _dict['size_bytes'] = None
+        if self.role is None and "role" in self.model_fields_set:
+            _dict['role'] = None
 
-        # set to None if creation_time (nullable) is None
+        # set to None if is_active (nullable) is None
         # and model_fields_set contains the field
-        if self.creation_time is None and "creation_time" in self.model_fields_set:
-            _dict['creation_time'] = None
+        if self.is_active is None and "is_active" in self.model_fields_set:
+            _dict['is_active'] = None
 
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of StorageFileInfo from a dict"""
+        """Create an instance of TeamMemberBulkUpdate from a dict"""
         if obj is None:
             return None
 
@@ -97,10 +91,8 @@ class StorageFileInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "size_bytes": obj.get("size_bytes"),
-            "creation_time": obj.get("creation_time"),
-            "is_directory": obj.get("is_directory"),
-            "provider_id": obj.get("provider_id"),
-            "region": obj.get("region")
+            "member_id": obj.get("member_id"),
+            "role": obj.get("role"),
+            "is_active": obj.get("is_active")
         })
         return _obj
