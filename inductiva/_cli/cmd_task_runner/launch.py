@@ -223,6 +223,7 @@ def register(parser):
 
     gcp_group.add_argument("--max-idle-time",
                            type=int,
-                           help="Maximum idle time in minutes before auto-termination (default: 3).")
+                           help="Idle time in minutes before "
+                                "auto-termination (default: 3).")
 
     subparser.set_defaults(func=launch_task_runner)
