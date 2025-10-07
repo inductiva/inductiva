@@ -132,8 +132,8 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
             "--image-project", "ubuntu-os-cloud", "--scopes",
             "https://www.googleapis.com/auth/cloud-platform", "--metadata",
             ",".join(metadata), "--metadata-from-file",
-            f"startup-script={script_path}", "--boot-disk-size", f"{disk_size}GB",
-            "--tags", "inductiva"
+            f"startup-script={script_path}", "--boot-disk-size",
+            f"{disk_size}GB", "--tags", "inductiva"
         ]
 
         if spot:
