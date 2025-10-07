@@ -6,6 +6,7 @@ import sys
 import os
 import platform
 from inductiva import _cli, constants, _api_key, api_url
+from inductiva.resources import machine_groups
 
 _docker_imported = True
 try:
@@ -35,8 +36,31 @@ def join_container_streams(*containers, fout: TextIO = sys.stdout):
         thread.join()
 
 
+def launch_task_runner_gcp(args):
+    """Launches a Task-Runner on GCP.
+    
+    Note: BYOC (Bring Your Own Cloud) machine groups can only have a single VM.
+    """
+    machine_groups.MachineGroup(
+        machine_type=args.machine_type,
+        zone=args.zone,
+        provider="GCP",
+        spot=args.spot,
+        mg_name=args.machine_group_name,
+        byoc=True,
+    ).start()
+
+
 def launch_task_runner(args, fout: TextIO = sys.stdout):
     """Launches a Task-Runner."""
+    if args.provider == "gcp":
+        launch_task_runner_gcp(args)
+    else:  # local
+        launch_task_runner_local(args, fout)
+
+
+def launch_task_runner_local(args, fout: TextIO = sys.stdout):
+    """Launches a Task-Runner locally using Docker."""
     if not _docker_imported:
         print(
             "Docker Python API not installed, please run "
@@ -147,9 +171,20 @@ def register(parser):
 
     subparser.description = (
         "The `inductiva task-runner launch` command provides "
-        "a way to launch a Task-Runner on the platform.")
+        "a way to launch a Task-Runner on different providers.\n\n"
+        "Providers:\n"
+        "  local  - Launch locally using Docker (default)\n"
+        "  gcp    - Launch on Google Cloud Platform")
 
     _cli.utils.add_watch_argument(subparser)
+
+    subparser.add_argument(
+        "--provider",
+        "-p",
+        choices=["local", "gcp"],
+        default="local",
+        help="Provider to use for launching the task-runner (default: local).")
+
     subparser.add_argument(
         "machine_group_name",
         type=str,
@@ -160,9 +195,29 @@ def register(parser):
                            type=str,
                            help="Hostname of the Task-Runner.")
 
-    subparser.add_argument("--detach",
-                           "-d",
+    subparser.add_argument(
+        "--detach",
+        "-d",
+        action="store_true",
+        help="Run the task-runner in the background (local only).")
+
+    # GCP-specific arguments
+    gcp_group = subparser.add_argument_group("GCP-specific options")
+    gcp_group.add_argument(
+        "--zone",
+        "-z",
+        type=str,
+        default="europe-west1-b",
+        help="GCP zone where the VM will be created (default: europe-west1-b).")
+
+    gcp_group.add_argument("--machine-type",
+                           "-t",
+                           type=str,
+                           default="c2d-standard-8",
+                           help="GCP machine type (default: c2d-standard-8).")
+
+    gcp_group.add_argument("--spot",
                            action="store_true",
-                           help="Run the task-runner in the background.")
+                           help="Use spot instance.")
 
     subparser.set_defaults(func=launch_task_runner)

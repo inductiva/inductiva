@@ -84,7 +84,10 @@ Data:
 	Size of unzipped output:  1.48 GB
 	Number of output files:   5274
 
-Estimated computation cost (US$): 0.00060 US$
+Estimated Task Compute Cost = 0.00060 US$
+Task Orchestration Fee = 0.01 US$
+Total Estimated Cost = 0.01060 US$
+Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 If the task status shows **Success**, congratulations! You've successfully run an WAVEWATCH III simulation.

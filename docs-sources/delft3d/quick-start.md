@@ -49,7 +49,7 @@ To adapt this script for your own simulations:
 - Replace the `input_dir` path with the location of your Delft3D input files.
 - Adjust the `commands` to match your specific configuration.
 
-> ⚠️ **Important**: If you change the number of virtual CPUs in the machine, make sure to update the corresponding value in the `mpirun` command (e.g., `-np 16`).
+⚠️ **Important**: If you change the number of virtual CPUs in the machine, make sure to update the corresponding value in the `mpirun` command (e.g., `-np 16`).
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
@@ -70,9 +70,10 @@ Data:
 	Size of unzipped output:  1.04 MB
 	Number of output files:   15
 
-Estimated computation cost (US$): 0.00017 US$
-
-Go to https://console.inductiva.ai/tasks/iidkjkpk77yb79cq4w5qpgdq8 for more details.
+Estimated Task Compute Cost = 0.00017 US$
+Task Orchestration Fee = 0.01 US$
+Total Estimated Cost = 0.01017 US$
+Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 

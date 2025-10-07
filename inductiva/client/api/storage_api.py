@@ -55,6 +55,8 @@ class StorageApi:
         self,
         source: StrictStr,
         target: StrictStr,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -73,6 +75,10 @@ class StorageApi:
         :type source: str
         :param target: (required)
         :type target: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -97,6 +103,8 @@ class StorageApi:
 
         _param = self._copy_serialize(source=source,
                                       target=target,
+                                      provider_id=provider_id,
+                                      region=region,
                                       _request_auth=_request_auth,
                                       _content_type=_content_type,
                                       _headers=_headers,
@@ -119,6 +127,8 @@ class StorageApi:
         self,
         source: StrictStr,
         target: StrictStr,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -137,6 +147,10 @@ class StorageApi:
         :type source: str
         :param target: (required)
         :type target: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -161,6 +175,8 @@ class StorageApi:
 
         _param = self._copy_serialize(source=source,
                                       target=target,
+                                      provider_id=provider_id,
+                                      region=region,
                                       _request_auth=_request_auth,
                                       _content_type=_content_type,
                                       _headers=_headers,
@@ -183,6 +199,8 @@ class StorageApi:
         self,
         source: StrictStr,
         target: StrictStr,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -201,6 +219,10 @@ class StorageApi:
         :type source: str
         :param target: (required)
         :type target: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -225,6 +247,8 @@ class StorageApi:
 
         _param = self._copy_serialize(source=source,
                                       target=target,
+                                      provider_id=provider_id,
+                                      region=region,
                                       _request_auth=_request_auth,
                                       _content_type=_content_type,
                                       _headers=_headers,
@@ -242,6 +266,8 @@ class StorageApi:
         self,
         source,
         target,
+        provider_id,
+        region,
         _request_auth,
         _content_type,
         _headers,
@@ -269,6 +295,14 @@ class StorageApi:
         if target is not None:
 
             _query_params.append(('target', target))
+
+        if provider_id is not None:
+
+            _query_params.append(('provider_id', provider_id.value))
+
+        if region is not None:
+
+            _query_params.append(('region', region))
 
         # process the header parameters
         # process the form parameters
@@ -300,6 +334,8 @@ class StorageApi:
     def delete_file(
         self,
         path: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -317,6 +353,10 @@ class StorageApi:
 
         :param path:
         :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -340,6 +380,8 @@ class StorageApi:
         """ # noqa: E501
 
         _param = self._delete_file_serialize(path=path,
+                                             provider_id=provider_id,
+                                             region=region,
                                              _request_auth=_request_auth,
                                              _content_type=_content_type,
                                              _headers=_headers,
@@ -361,6 +403,8 @@ class StorageApi:
     def delete_file_with_http_info(
         self,
         path: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -378,6 +422,10 @@ class StorageApi:
 
         :param path:
         :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -401,6 +449,8 @@ class StorageApi:
         """ # noqa: E501
 
         _param = self._delete_file_serialize(path=path,
+                                             provider_id=provider_id,
+                                             region=region,
                                              _request_auth=_request_auth,
                                              _content_type=_content_type,
                                              _headers=_headers,
@@ -422,6 +472,8 @@ class StorageApi:
     def delete_file_without_preload_content(
         self,
         path: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -439,6 +491,10 @@ class StorageApi:
 
         :param path:
         :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -462,6 +518,8 @@ class StorageApi:
         """ # noqa: E501
 
         _param = self._delete_file_serialize(path=path,
+                                             provider_id=provider_id,
+                                             region=region,
                                              _request_auth=_request_auth,
                                              _content_type=_content_type,
                                              _headers=_headers,
@@ -478,6 +536,8 @@ class StorageApi:
     def _delete_file_serialize(
         self,
         path,
+        provider_id,
+        region,
         _request_auth,
         _content_type,
         _headers,
@@ -501,6 +561,14 @@ class StorageApi:
         if path is not None:
 
             _query_params.append(('path', path))
+
+        if provider_id is not None:
+
+            _query_params.append(('provider_id', provider_id.value))
+
+        if region is not None:
+
+            _query_params.append(('region', region))
 
         # process the header parameters
         # process the form parameters
@@ -532,6 +600,8 @@ class StorageApi:
     def export_multipart_files(
         self,
         multi_part_export_operation: MultiPartExportOperation,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -549,6 +619,10 @@ class StorageApi:
 
         :param multi_part_export_operation: (required)
         :type multi_part_export_operation: MultiPartExportOperation
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -573,6 +647,8 @@ class StorageApi:
 
         _param = self._export_multipart_files_serialize(
             multi_part_export_operation=multi_part_export_operation,
+            provider_id=provider_id,
+            region=region,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -594,6 +670,8 @@ class StorageApi:
     def export_multipart_files_with_http_info(
         self,
         multi_part_export_operation: MultiPartExportOperation,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -611,6 +689,10 @@ class StorageApi:
 
         :param multi_part_export_operation: (required)
         :type multi_part_export_operation: MultiPartExportOperation
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -635,6 +717,8 @@ class StorageApi:
 
         _param = self._export_multipart_files_serialize(
             multi_part_export_operation=multi_part_export_operation,
+            provider_id=provider_id,
+            region=region,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -656,6 +740,8 @@ class StorageApi:
     def export_multipart_files_without_preload_content(
         self,
         multi_part_export_operation: MultiPartExportOperation,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -673,6 +759,10 @@ class StorageApi:
 
         :param multi_part_export_operation: (required)
         :type multi_part_export_operation: MultiPartExportOperation
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -697,6 +787,8 @@ class StorageApi:
 
         _param = self._export_multipart_files_serialize(
             multi_part_export_operation=multi_part_export_operation,
+            provider_id=provider_id,
+            region=region,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -713,6 +805,8 @@ class StorageApi:
     def _export_multipart_files_serialize(
         self,
         multi_part_export_operation,
+        provider_id,
+        region,
         _request_auth,
         _content_type,
         _headers,
@@ -733,6 +827,14 @@ class StorageApi:
 
         # process the path parameters
         # process the query parameters
+        if provider_id is not None:
+
+            _query_params.append(('provider_id', provider_id.value))
+
+        if region is not None:
+
+            _query_params.append(('region', region))
+
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -1470,6 +1572,7 @@ class StorageApi:
         operation: OperationType,
         paths: List[Optional[StrictStr]],
         provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -1491,6 +1594,8 @@ class StorageApi:
         :type paths: List[Optional[str]]
         :param provider_id:
         :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1516,6 +1621,7 @@ class StorageApi:
         _param = self._get_signed_urls_serialize(operation=operation,
                                                  paths=paths,
                                                  provider_id=provider_id,
+                                                 region=region,
                                                  _request_auth=_request_auth,
                                                  _content_type=_content_type,
                                                  _headers=_headers,
@@ -1539,6 +1645,7 @@ class StorageApi:
         operation: OperationType,
         paths: List[Optional[StrictStr]],
         provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -1560,6 +1667,8 @@ class StorageApi:
         :type paths: List[Optional[str]]
         :param provider_id:
         :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1585,6 +1694,7 @@ class StorageApi:
         _param = self._get_signed_urls_serialize(operation=operation,
                                                  paths=paths,
                                                  provider_id=provider_id,
+                                                 region=region,
                                                  _request_auth=_request_auth,
                                                  _content_type=_content_type,
                                                  _headers=_headers,
@@ -1608,6 +1718,7 @@ class StorageApi:
         operation: OperationType,
         paths: List[Optional[StrictStr]],
         provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -1629,6 +1740,8 @@ class StorageApi:
         :type paths: List[Optional[str]]
         :param provider_id:
         :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1654,6 +1767,7 @@ class StorageApi:
         _param = self._get_signed_urls_serialize(operation=operation,
                                                  paths=paths,
                                                  provider_id=provider_id,
+                                                 region=region,
                                                  _request_auth=_request_auth,
                                                  _content_type=_content_type,
                                                  _headers=_headers,
@@ -1672,6 +1786,7 @@ class StorageApi:
         operation,
         paths,
         provider_id,
+        region,
         _request_auth,
         _content_type,
         _headers,
@@ -1705,6 +1820,10 @@ class StorageApi:
         if provider_id is not None:
 
             _query_params.append(('provider_id', provider_id.value))
+
+        if region is not None:
+
+            _query_params.append(('region', region))
 
         # process the header parameters
         # process the form parameters
@@ -2165,6 +2284,8 @@ class StorageApi:
         zip_relative_path: Optional[StrictStr] = None,
         recursive: Optional[StrictStr] = None,
         path: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -2186,6 +2307,10 @@ class StorageApi:
         :type recursive: str
         :param path:
         :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2212,6 +2337,8 @@ class StorageApi:
             zip_relative_path=zip_relative_path,
             recursive=recursive,
             path=path,
+            provider_id=provider_id,
+            region=region,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2235,6 +2362,8 @@ class StorageApi:
         zip_relative_path: Optional[StrictStr] = None,
         recursive: Optional[StrictStr] = None,
         path: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -2256,6 +2385,10 @@ class StorageApi:
         :type recursive: str
         :param path:
         :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2282,6 +2415,8 @@ class StorageApi:
             zip_relative_path=zip_relative_path,
             recursive=recursive,
             path=path,
+            provider_id=provider_id,
+            region=region,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2305,6 +2440,8 @@ class StorageApi:
         zip_relative_path: Optional[StrictStr] = None,
         recursive: Optional[StrictStr] = None,
         path: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -2326,6 +2463,10 @@ class StorageApi:
         :type recursive: str
         :param path:
         :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2352,6 +2493,8 @@ class StorageApi:
             zip_relative_path=zip_relative_path,
             recursive=recursive,
             path=path,
+            provider_id=provider_id,
+            region=region,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2370,6 +2513,8 @@ class StorageApi:
         zip_relative_path,
         recursive,
         path,
+        provider_id,
+        region,
         _request_auth,
         _content_type,
         _headers,
@@ -2401,6 +2546,14 @@ class StorageApi:
         if path is not None:
 
             _query_params.append(('path', path))
+
+        if provider_id is not None:
+
+            _query_params.append(('provider_id', provider_id.value))
+
+        if region is not None:
+
+            _query_params.append(('region', region))
 
         # process the header parameters
         # process the form parameters
@@ -2434,6 +2587,8 @@ class StorageApi:
         filename: StrictStr,
         zip_relative_path: Optional[StrictStr] = None,
         path: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -2455,6 +2610,10 @@ class StorageApi:
         :type zip_relative_path: str
         :param path:
         :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2481,6 +2640,8 @@ class StorageApi:
             filename=filename,
             zip_relative_path=zip_relative_path,
             path=path,
+            provider_id=provider_id,
+            region=region,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2504,6 +2665,8 @@ class StorageApi:
         filename: StrictStr,
         zip_relative_path: Optional[StrictStr] = None,
         path: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -2525,6 +2688,10 @@ class StorageApi:
         :type zip_relative_path: str
         :param path:
         :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2551,6 +2718,8 @@ class StorageApi:
             filename=filename,
             zip_relative_path=zip_relative_path,
             path=path,
+            provider_id=provider_id,
+            region=region,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2574,6 +2743,8 @@ class StorageApi:
         filename: StrictStr,
         zip_relative_path: Optional[StrictStr] = None,
         path: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -2595,6 +2766,10 @@ class StorageApi:
         :type zip_relative_path: str
         :param path:
         :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2621,6 +2796,8 @@ class StorageApi:
             filename=filename,
             zip_relative_path=zip_relative_path,
             path=path,
+            provider_id=provider_id,
+            region=region,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2639,6 +2816,8 @@ class StorageApi:
         filename,
         zip_relative_path,
         path,
+        provider_id,
+        region,
         _request_auth,
         _content_type,
         _headers,
@@ -2670,6 +2849,14 @@ class StorageApi:
         if path is not None:
 
             _query_params.append(('path', path))
+
+        if provider_id is not None:
+
+            _query_params.append(('provider_id', provider_id.value))
+
+        if region is not None:
+
+            _query_params.append(('region', region))
 
         # process the header parameters
         # process the form parameters
@@ -2909,6 +3096,7 @@ class StorageApi:
     @validate_call
     def list_paginated_storage_contents(
         self,
+        path: Optional[StrictStr] = None,
         sort_by: Optional[StorageSortBy] = None,
         order: Optional[Order] = None,
         recursive: Optional[StrictStr] = None,
@@ -2916,7 +3104,8 @@ class StorageApi:
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
         path_filter: Optional[StrictStr] = None,
-        path: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -2932,6 +3121,8 @@ class StorageApi:
 
         List the contents of a directory within the user's storage.
 
+        :param path:
+        :type path: str
         :param sort_by:
         :type sort_by: StorageSortBy
         :param order:
@@ -2944,8 +3135,10 @@ class StorageApi:
         :type per_page: int
         :param path_filter:
         :type path_filter: str
-        :param path:
-        :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2969,13 +3162,15 @@ class StorageApi:
         """ # noqa: E501
 
         _param = self._list_paginated_storage_contents_serialize(
+            path=path,
             sort_by=sort_by,
             order=order,
             recursive=recursive,
             page=page,
             per_page=per_page,
             path_filter=path_filter,
-            path=path,
+            provider_id=provider_id,
+            region=region,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2996,6 +3191,7 @@ class StorageApi:
     @validate_call
     def list_paginated_storage_contents_with_http_info(
         self,
+        path: Optional[StrictStr] = None,
         sort_by: Optional[StorageSortBy] = None,
         order: Optional[Order] = None,
         recursive: Optional[StrictStr] = None,
@@ -3003,7 +3199,8 @@ class StorageApi:
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
         path_filter: Optional[StrictStr] = None,
-        path: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -3019,6 +3216,8 @@ class StorageApi:
 
         List the contents of a directory within the user's storage.
 
+        :param path:
+        :type path: str
         :param sort_by:
         :type sort_by: StorageSortBy
         :param order:
@@ -3031,8 +3230,10 @@ class StorageApi:
         :type per_page: int
         :param path_filter:
         :type path_filter: str
-        :param path:
-        :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -3056,13 +3257,15 @@ class StorageApi:
         """ # noqa: E501
 
         _param = self._list_paginated_storage_contents_serialize(
+            path=path,
             sort_by=sort_by,
             order=order,
             recursive=recursive,
             page=page,
             per_page=per_page,
             path_filter=path_filter,
-            path=path,
+            provider_id=provider_id,
+            region=region,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -3083,6 +3286,7 @@ class StorageApi:
     @validate_call
     def list_paginated_storage_contents_without_preload_content(
         self,
+        path: Optional[StrictStr] = None,
         sort_by: Optional[StorageSortBy] = None,
         order: Optional[Order] = None,
         recursive: Optional[StrictStr] = None,
@@ -3090,7 +3294,8 @@ class StorageApi:
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
         path_filter: Optional[StrictStr] = None,
-        path: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -3106,6 +3311,8 @@ class StorageApi:
 
         List the contents of a directory within the user's storage.
 
+        :param path:
+        :type path: str
         :param sort_by:
         :type sort_by: StorageSortBy
         :param order:
@@ -3118,8 +3325,10 @@ class StorageApi:
         :type per_page: int
         :param path_filter:
         :type path_filter: str
-        :param path:
-        :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -3143,13 +3352,15 @@ class StorageApi:
         """ # noqa: E501
 
         _param = self._list_paginated_storage_contents_serialize(
+            path=path,
             sort_by=sort_by,
             order=order,
             recursive=recursive,
             page=page,
             per_page=per_page,
             path_filter=path_filter,
-            path=path,
+            provider_id=provider_id,
+            region=region,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -3165,13 +3376,15 @@ class StorageApi:
 
     def _list_paginated_storage_contents_serialize(
         self,
+        path,
         sort_by,
         order,
         recursive,
         page,
         per_page,
         path_filter,
-        path,
+        provider_id,
+        region,
         _request_auth,
         _content_type,
         _headers,
@@ -3192,6 +3405,10 @@ class StorageApi:
 
         # process the path parameters
         # process the query parameters
+        if path is not None:
+
+            _query_params.append(('path', path))
+
         if sort_by is not None:
 
             _query_params.append(('sort_by', sort_by.value))
@@ -3216,9 +3433,13 @@ class StorageApi:
 
             _query_params.append(('path_filter', path_filter))
 
-        if path is not None:
+        if provider_id is not None:
 
-            _query_params.append(('path', path))
+            _query_params.append(('provider_id', provider_id.value))
+
+        if region is not None:
+
+            _query_params.append(('region', region))
 
         # process the header parameters
         # process the form parameters
@@ -3249,12 +3470,14 @@ class StorageApi:
     @validate_call
     def list_storage_contents(
         self,
+        path: Optional[StrictStr] = None,
         max_results: Optional[Annotated[
             int, Field(le=500, strict=True, ge=1)]] = None,
         sort_by: Optional[StorageSortBy] = None,
         order: Optional[Order] = None,
         recursive: Optional[StrictStr] = None,
-        path: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -3270,6 +3493,8 @@ class StorageApi:
 
         List the contents of a directory within the user's storage.
 
+        :param path:
+        :type path: str
         :param max_results:
         :type max_results: int
         :param sort_by:
@@ -3278,8 +3503,10 @@ class StorageApi:
         :type order: Order
         :param recursive:
         :type recursive: str
-        :param path:
-        :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -3303,11 +3530,13 @@ class StorageApi:
         """ # noqa: E501
 
         _param = self._list_storage_contents_serialize(
+            path=path,
             max_results=max_results,
             sort_by=sort_by,
             order=order,
             recursive=recursive,
-            path=path,
+            provider_id=provider_id,
+            region=region,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -3328,12 +3557,14 @@ class StorageApi:
     @validate_call
     def list_storage_contents_with_http_info(
         self,
+        path: Optional[StrictStr] = None,
         max_results: Optional[Annotated[
             int, Field(le=500, strict=True, ge=1)]] = None,
         sort_by: Optional[StorageSortBy] = None,
         order: Optional[Order] = None,
         recursive: Optional[StrictStr] = None,
-        path: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -3349,6 +3580,8 @@ class StorageApi:
 
         List the contents of a directory within the user's storage.
 
+        :param path:
+        :type path: str
         :param max_results:
         :type max_results: int
         :param sort_by:
@@ -3357,8 +3590,10 @@ class StorageApi:
         :type order: Order
         :param recursive:
         :type recursive: str
-        :param path:
-        :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -3382,11 +3617,13 @@ class StorageApi:
         """ # noqa: E501
 
         _param = self._list_storage_contents_serialize(
+            path=path,
             max_results=max_results,
             sort_by=sort_by,
             order=order,
             recursive=recursive,
-            path=path,
+            provider_id=provider_id,
+            region=region,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -3407,12 +3644,14 @@ class StorageApi:
     @validate_call
     def list_storage_contents_without_preload_content(
         self,
+        path: Optional[StrictStr] = None,
         max_results: Optional[Annotated[
             int, Field(le=500, strict=True, ge=1)]] = None,
         sort_by: Optional[StorageSortBy] = None,
         order: Optional[Order] = None,
         recursive: Optional[StrictStr] = None,
-        path: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -3428,6 +3667,8 @@ class StorageApi:
 
         List the contents of a directory within the user's storage.
 
+        :param path:
+        :type path: str
         :param max_results:
         :type max_results: int
         :param sort_by:
@@ -3436,8 +3677,10 @@ class StorageApi:
         :type order: Order
         :param recursive:
         :type recursive: str
-        :param path:
-        :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -3461,11 +3704,13 @@ class StorageApi:
         """ # noqa: E501
 
         _param = self._list_storage_contents_serialize(
+            path=path,
             max_results=max_results,
             sort_by=sort_by,
             order=order,
             recursive=recursive,
-            path=path,
+            provider_id=provider_id,
+            region=region,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -3481,11 +3726,13 @@ class StorageApi:
 
     def _list_storage_contents_serialize(
         self,
+        path,
         max_results,
         sort_by,
         order,
         recursive,
-        path,
+        provider_id,
+        region,
         _request_auth,
         _content_type,
         _headers,
@@ -3506,6 +3753,10 @@ class StorageApi:
 
         # process the path parameters
         # process the query parameters
+        if path is not None:
+
+            _query_params.append(('path', path))
+
         if max_results is not None:
 
             _query_params.append(('max_results', max_results))
@@ -3522,9 +3773,13 @@ class StorageApi:
 
             _query_params.append(('recursive', recursive))
 
-        if path is not None:
+        if provider_id is not None:
 
-            _query_params.append(('path', path))
+            _query_params.append(('provider_id', provider_id.value))
+
+        if region is not None:
+
+            _query_params.append(('region', region))
 
         # process the header parameters
         # process the form parameters
@@ -3799,6 +4054,8 @@ class StorageApi:
         self,
         url: Annotated[str, Field(min_length=1, strict=True)],
         path: StrictStr,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -3818,6 +4075,10 @@ class StorageApi:
         :type url: str
         :param path: (required)
         :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -3842,6 +4103,8 @@ class StorageApi:
 
         _param = self._upload_from_url_serialize(url=url,
                                                  path=path,
+                                                 provider_id=provider_id,
+                                                 region=region,
                                                  _request_auth=_request_auth,
                                                  _content_type=_content_type,
                                                  _headers=_headers,
@@ -3864,6 +4127,8 @@ class StorageApi:
         self,
         url: Annotated[str, Field(min_length=1, strict=True)],
         path: StrictStr,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -3883,6 +4148,10 @@ class StorageApi:
         :type url: str
         :param path: (required)
         :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -3907,6 +4176,8 @@ class StorageApi:
 
         _param = self._upload_from_url_serialize(url=url,
                                                  path=path,
+                                                 provider_id=provider_id,
+                                                 region=region,
                                                  _request_auth=_request_auth,
                                                  _content_type=_content_type,
                                                  _headers=_headers,
@@ -3929,6 +4200,8 @@ class StorageApi:
         self,
         url: Annotated[str, Field(min_length=1, strict=True)],
         path: StrictStr,
+        provider_id: Optional[Providers] = None,
+        region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -3948,6 +4221,10 @@ class StorageApi:
         :type url: str
         :param path: (required)
         :type path: str
+        :param provider_id:
+        :type provider_id: Providers
+        :param region:
+        :type region: str
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -3972,6 +4249,8 @@ class StorageApi:
 
         _param = self._upload_from_url_serialize(url=url,
                                                  path=path,
+                                                 provider_id=provider_id,
+                                                 region=region,
                                                  _request_auth=_request_auth,
                                                  _content_type=_content_type,
                                                  _headers=_headers,
@@ -3989,6 +4268,8 @@ class StorageApi:
         self,
         url,
         path,
+        provider_id,
+        region,
         _request_auth,
         _content_type,
         _headers,
@@ -4016,6 +4297,14 @@ class StorageApi:
         if path is not None:
 
             _query_params.append(('path', path))
+
+        if provider_id is not None:
+
+            _query_params.append(('provider_id', provider_id.value))
+
+        if region is not None:
+
+            _query_params.append(('region', region))
 
         # process the header parameters
         # process the form parameters

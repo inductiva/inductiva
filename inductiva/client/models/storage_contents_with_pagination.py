@@ -16,7 +16,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictInt
+from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List
 from inductiva.client.models.storage_file_info import StorageFileInfo
 from typing import Optional, Set
@@ -30,8 +30,11 @@ class StorageContentsWithPagination(BaseModel):
 
   # noqa: E501
     total_files: StrictInt
+    available_regions: List[StrictStr]
     contents: Dict[str, StorageFileInfo]
-    __properties: ClassVar[List[str]] = ["total_files", "contents"]
+    __properties: ClassVar[List[str]] = [
+        "total_files", "available_regions", "contents"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -92,6 +95,8 @@ class StorageContentsWithPagination(BaseModel):
         _obj = cls.model_validate({
             "total_files":
                 obj.get("total_files"),
+            "available_regions":
+                obj.get("available_regions"),
             "contents":
                 dict((_k, StorageFileInfo.from_dict(_v))
                      for _k, _v in obj["contents"].items())
