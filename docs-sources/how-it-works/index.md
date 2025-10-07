@@ -120,6 +120,8 @@ machines/shared-dedicated-resources
 machines/manage_computational_resources
 machines/computational-infrastructure
 machines/spot-machines
+Hyper-threading in Computational Resources <machines/hyperthreading>
+MPI in Computational Resources <machines/mpi-on-vms>
 ```
 
 ```{toctree}

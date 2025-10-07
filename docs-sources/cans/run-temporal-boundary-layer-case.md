@@ -161,7 +161,10 @@ Data:
 	Size of unzipped output:  22.20 GB
 	Number of output files:   2639
 
-Estimated computation cost (US$): 8.86 US$
+Estimated Task Compute Cost = 8.86 US$
+Task Orchestration Fee = 0.01 US$
+Total Estimated Cost = 8.87 US$
+Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that

@@ -48,6 +48,14 @@
           "path": "fds/index"
         },
         {
+          "title": "FreeFEM",
+          "path": "freefem/index"
+        },
+        {
+          "title": "FUNWAVE",
+          "path": "funwave/index"
+        },
+        {
           "title": "FVCOM",
           "path": "fvcom/index"
         },

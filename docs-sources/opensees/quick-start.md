@@ -70,7 +70,10 @@ Data:
 	Size of unzipped output:  49.79 MB
 	Number of output files:   120
 
-Estimated computation cost (US$): 0.00031 US$
+Estimated Task Compute Cost = 0.00031 US$
+Task Orchestration Fee = 0.01 US$
+Total Estimated Cost = 0.01031 US$
+Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
@@ -96,14 +99,6 @@ Here are the results of running the same simulation on a few machines:
 Still in the testing phase? No problem! Just skip this step for now and start
 with a machine with fewer vCPUs. Once you're satisfied with your results, you
 can seamlessly scale your OpenSees simulation.
-
-## Run OpeenSeesPy
-To run OpenSees scripts written in Python, all you need to do is change the `interface` parameter to `python` to match the
-file type of your OpenSeesPy use case. 
-
-## Run the EESD OpenSees distribution
-To run the EESD OpenSees distribution, all you need to do is change the `interface` parameter to `eesd` to match the
-file type of your OpenSees use case. 
 
 ```{banner_small}
 :origin: opensees

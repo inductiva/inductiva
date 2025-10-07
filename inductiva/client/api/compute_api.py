@@ -283,8 +283,8 @@ class ComputeApi:
     def get_instance_price(
         self,
         machine_type: StrictStr,
-        provider_id: Optional[Providers] = None,
         zone: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -302,10 +302,10 @@ class ComputeApi:
 
         :param machine_type: (required)
         :type machine_type: str
-        :param provider_id:
-        :type provider_id: Providers
         :param zone:
         :type zone: str
+        :param provider_id:
+        :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -329,8 +329,8 @@ class ComputeApi:
         """ # noqa: E501
 
         _param = self._get_instance_price_serialize(machine_type=machine_type,
-                                                    provider_id=provider_id,
                                                     zone=zone,
+                                                    provider_id=provider_id,
                                                     _request_auth=_request_auth,
                                                     _content_type=_content_type,
                                                     _headers=_headers,
@@ -352,8 +352,8 @@ class ComputeApi:
     def get_instance_price_with_http_info(
         self,
         machine_type: StrictStr,
-        provider_id: Optional[Providers] = None,
         zone: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -371,10 +371,10 @@ class ComputeApi:
 
         :param machine_type: (required)
         :type machine_type: str
-        :param provider_id:
-        :type provider_id: Providers
         :param zone:
         :type zone: str
+        :param provider_id:
+        :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -398,8 +398,8 @@ class ComputeApi:
         """ # noqa: E501
 
         _param = self._get_instance_price_serialize(machine_type=machine_type,
-                                                    provider_id=provider_id,
                                                     zone=zone,
+                                                    provider_id=provider_id,
                                                     _request_auth=_request_auth,
                                                     _content_type=_content_type,
                                                     _headers=_headers,
@@ -421,8 +421,8 @@ class ComputeApi:
     def get_instance_price_without_preload_content(
         self,
         machine_type: StrictStr,
-        provider_id: Optional[Providers] = None,
         zone: Optional[StrictStr] = None,
+        provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -440,10 +440,10 @@ class ComputeApi:
 
         :param machine_type: (required)
         :type machine_type: str
-        :param provider_id:
-        :type provider_id: Providers
         :param zone:
         :type zone: str
+        :param provider_id:
+        :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -467,8 +467,8 @@ class ComputeApi:
         """ # noqa: E501
 
         _param = self._get_instance_price_serialize(machine_type=machine_type,
-                                                    provider_id=provider_id,
                                                     zone=zone,
+                                                    provider_id=provider_id,
                                                     _request_auth=_request_auth,
                                                     _content_type=_content_type,
                                                     _headers=_headers,
@@ -485,8 +485,8 @@ class ComputeApi:
     def _get_instance_price_serialize(
         self,
         machine_type,
-        provider_id,
         zone,
+        provider_id,
         _request_auth,
         _content_type,
         _headers,
@@ -511,13 +511,13 @@ class ComputeApi:
 
             _query_params.append(('machine_type', machine_type))
 
-        if provider_id is not None:
-
-            _query_params.append(('provider_id', provider_id.value))
-
         if zone is not None:
 
             _query_params.append(('zone', zone))
+
+        if provider_id is not None:
+
+            _query_params.append(('provider_id', provider_id.value))
 
         # process the header parameters
         # process the form parameters

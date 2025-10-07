@@ -10,6 +10,11 @@ accessible and cost-effective. Use the power of the Cloud to
 **scale your simulations** and **finish your projects sooner**, while keeping
 your costs in check!
 
+```{python_editor}
+:origin: delft3d
+:url: https://console.inductiva.ai/editor?simulator_name=delft3d
+```
+
 ## What You'll Find Here
 
 ### Tutorials

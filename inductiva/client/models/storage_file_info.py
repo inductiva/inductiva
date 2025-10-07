@@ -17,7 +17,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, StrictBool, StrictInt
+from pydantic import BaseModel, ConfigDict, StrictBool, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
@@ -32,8 +32,10 @@ class StorageFileInfo(BaseModel):
     size_bytes: Optional[StrictInt] = None
     creation_time: Optional[datetime] = None
     is_directory: StrictBool
+    provider_id: StrictStr
+    region: StrictStr
     __properties: ClassVar[List[str]] = [
-        "size_bytes", "creation_time", "is_directory"
+        "size_bytes", "creation_time", "is_directory", "provider_id", "region"
     ]
 
     model_config = ConfigDict(
@@ -97,6 +99,8 @@ class StorageFileInfo(BaseModel):
         _obj = cls.model_validate({
             "size_bytes": obj.get("size_bytes"),
             "creation_time": obj.get("creation_time"),
-            "is_directory": obj.get("is_directory")
+            "is_directory": obj.get("is_directory"),
+            "provider_id": obj.get("provider_id"),
+            "region": obj.get("region")
         })
         return _obj

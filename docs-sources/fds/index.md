@@ -4,6 +4,11 @@ Your resource hub for all things FDS at Inductiva. Whether you're just starting 
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check!
 
+```{python_editor}
+:origin: fds
+:url: https://console.inductiva.ai/editor?simulator_name=fds
+```
+
 ## What You'll Find Here
 
 ### Tutorials
@@ -42,6 +47,15 @@ setup-test
 quick-start
 scaling-with-mpi
 visualizing-results
+```
+
+```{toctree}
+---
+caption: 🚀 Benchmarks
+maxdepth: 1
+hidden: true
+---
+parallelization-benchmarks
 ```
 
 ```{toctree}

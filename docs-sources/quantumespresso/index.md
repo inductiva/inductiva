@@ -3,6 +3,11 @@ Your resource hub for all things Quantum ESPRESSO at Inductiva. Whether you're j
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check! 
 
+```{python_editor}
+:origin: quantum_espresso
+:url: https://console.inductiva.ai/editor?simulator_name=quantum-espresso
+```
+
 ## What You'll Find Here
 
 ### Tutorials

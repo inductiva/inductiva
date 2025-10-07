@@ -4,7 +4,7 @@ This tutorial will show you how to run Elmer simulations using the Inductiva API
 We will cover the `Transcranial Magnetic Stimulation (TMS) benchmark` from the [Elmer-LinSys Github](https://github.com/ElmerCSC/elmer-linsys) to help you get started with simulations.
 
 ## Prerequisites
-Download the required files [here](https://github.com/ElmerCSC/elmer-linsys/tree/main/Magnetostatics/TMS) and place the simulation files inside a `TMS` folder. Then, you’ll be ready to send your simulation to the Cloud.
+Download the required files [here](https://github.com/ElmerCSC/elmer-linsys/tree/main/Magnetostatics/TMS) and place them in a folder named `TMS`. Then, you’ll be ready to send your simulation to the Cloud.
 
 ## Running a Elmer Simulation
 Here is the code required to run a Elmer simulation using the Inductiva API:
@@ -13,16 +13,17 @@ Here is the code required to run a Elmer simulation using the Inductiva API:
 """Elmer example"""
 import inductiva
 
-# Instantiate machine group
+# Allocate a machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c3d-highcpu-180")
+    machine_type="c3d-highcpu-180",
+	spot=True)
 
 # Initialize the Simulator
 elmer = inductiva.simulators.Elmer( \
     version="9.0")
 
-# Run simulation with config files in the input directory
+# Run simulation
 task = elmer.run( \
     input_dir="/Path/to/TMS",
     commands=[
@@ -40,13 +41,13 @@ task = elmer.run( \
     ],
     on=cloud_machine)
 
+# Wait for the simulation to finish and download the results
 task.wait()
 cloud_machine.terminate()
 
 task.download_outputs()
 
 task.print_summary()
-
 ```
 
 In this basic example, we're using a cloud machine (`c3d-highcpu-180`) equipped with 180 virtual CPUs. 
@@ -81,11 +82,15 @@ Data:
 	Size of unzipped output:  2.54 GB
 	Number of output files:   1165
 
-Estimated computation cost (US$): 0.50 US$
+Estimated Task Compute Cost = 0.50 US$
+Task Orchestration Fee = 0.01 US$
+Total Estimated Cost = 0.51 US$
+Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
-the core computation time of this simulation was approximately 17 minutes and 35 seconds.
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution 
+of the simulation, the core computation time of this simulation was 1055 seconds (approximately 17 
+minutes and 35 seconds).
 
 ```{banner_small}
 :origin: elmer_quick_start

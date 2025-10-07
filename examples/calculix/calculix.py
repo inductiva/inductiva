@@ -14,8 +14,7 @@ calculix = inductiva.simulators.CalculiX( \
 task = calculix.run( \
     input_dir="path/to/my/calculix/files",
     sim_config_filename="my_config_file.inp",
-    on=cloud_machine,
-    n_vcpus=4)
+    on=cloud_machine)
 
 task.wait()
 cloud_machine.terminate()

@@ -1,16 +1,14 @@
 # Run Your First Simulation
-
 This tutorial will show you how to run FDS simulations using the Inductiva API.
 
 We will cover the `box_burn_away6` from the FDS GitHub repository to help you get started with simulations.
 
 ## Prerequisites
-
 Before running the simulation, you’ll need to download the required input files. You can either:
 
 - **Manually download** them from the [FDS GitHub repository](https://github.com/firemodels/fds/tree/FDS-6.9.1/Verification/Fires) and place them in a folder named `Fires`,
 **or**
-- **Download automatically** using the link provided [here](https://storage.googleapis.com/inductiva-api-demo-files/fds-tutorials/Fires.zip).
+- **Download automatically** [here](https://storage.googleapis.com/inductiva-api-demo-files/fds-tutorials/Fires.zip).
 
 Once downloaded, you’ll be ready to submit your simulation to the Cloud.
 
@@ -49,7 +47,6 @@ task.print_summary()
 > **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-
 To adapt this script for other FDS simulations, replace `input_dir` with the
 path to your FDS input files and set the `sim_config_filename` accordingly.
 
@@ -72,7 +69,10 @@ Data:
 	Size of unzipped output:  39.30 MB
 	Number of output files:   25
 
-Estimated computation cost (US$): 0.00021 US$
+Estimated Task Compute Cost = 0.00021 US$
+Task Orchestration Fee = 0.01 US$
+Total Estimated Cost = 0.01021 US$
+Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation,

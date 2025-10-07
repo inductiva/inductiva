@@ -16,6 +16,7 @@ from .octopus import Octopus
 from .delft3d import Delft3D
 from .gromacs import GROMACS
 from .funwave import FUNWAVE
+from .freefem import FreeFEM
 from .hec_ras import HecRas
 from .reef3d import REEF3D
 from .xbeach import XBeach
