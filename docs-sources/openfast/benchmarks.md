@@ -1,9 +1,25 @@
-# The curious case of OpenFAST
-OpenFAST is a software that operates on a single thread, limiting its ability to utilize the full processing capacity of modern CPUs, which often support multiple threads in parallel. As a result, the performance of OpenFAST simulations is primarily influenced by the CPU clock frequency.
+# Choosing the Right Virtual Machine
 
-Interestingly, consumer desktop computers typically have higher clock frequencies compared to high-performance machines used in cloud centers. For example, desktop CPUs commonly operate between 4 and 5 GHz (with potential overclocking beyond 5.5 GHz), while cloud machines generally run at clock speeds around 3 GHz or lower.
+## The curious case of OpenFAST
+While OpenFAST comprises several modular components, the simulation of a **single wind turbine** operates on a **single thread**. While frameworks like FAST.Farm or MPI allow multiple turbines to run in parallel, the simulation of each turbine remains serial.
 
-For a single OpenFAST simulation, a desktop machine is typically faster due to its higher clock speeds, making it the more efficient choice for this specific use case.
+As a result, increasing the number of virtual CPUs (vCPUs) assigned to a virtual machine does not improve the runtime of a single-turbine simulation. What matters most is the performance of a single physical core (including clock speed, architecture efficiency, and memory bandwidth). 
+
+Interestingly, consumer desktop CPUs often operate at higher clock frequencies than their cloud-based counterparts. Many desktop processors run at 4–5 GHz, with overclocking pushing speeds beyond 5.5 GHz. In contrast, most cloud machines,including those in Inductiva’s infrastructure, deliver sustained clock speeds around 3 GHz or lower.
+
+Because of this, a single OpenFAST simulation frequently runs faster on a high-end desktop than on a cloud instance. However, if you need to run hundreds or thousands of simulations, deploying large numbers of low-cost cloud machines to run them in parallel becomes far more time-efficient than running them sequentially on a desktop. This is where **Inductiva** offers greater flexibility and the challenge shifts to selecting the most suitable cloud machine type for this highly clock-sensitive, single-threaded workload.
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Benchmarking OpenFAST
 The following benchmarks highlight how the execution speed of OpenFAST simulations is primarily determined by CPU clock speed, rather than the number of cores available.
