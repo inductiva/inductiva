@@ -77,6 +77,7 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
     spot: bool = True,
     max_idle_time: Optional[Union[int, datetime.timedelta]] = None,
     hostname: Optional[str] = None,
+    disk_size: int = 10,
     verbose: bool = True,
 ):
     """Create a GCP VM instance.
@@ -90,6 +91,7 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
         api_url: Inductiva API URL
         spot: Whether to use preemptible (spot) instance
         hostname: Optional hostname for the task runner
+        disk_size: Boot disk size in GB, defaults to 10
         verbose: Whether to print verbose output
         max_idle_time: Optional max idle time, defaults to 3 minutes
         
@@ -130,7 +132,8 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
             "--image-project", "ubuntu-os-cloud", "--scopes",
             "https://www.googleapis.com/auth/cloud-platform", "--metadata",
             ",".join(metadata), "--metadata-from-file",
-            f"startup-script={script_path}"
+            f"startup-script={script_path}", "--boot-disk-size", f"{disk_size}GB",
+            "--tags", "inductiva"
         ]
 
         if spot:
