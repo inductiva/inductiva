@@ -9,19 +9,6 @@ BYOC enables you to:
 - **Comply** with organizational policies that require compute to remain in your cloud account
 - **Run simulations seamlessly** with the same experience as Inductiva's managed infrastructure
 
-## How It Works
-
-When you create a BYOC machine group, Inductiva creates a VM instance in your GCP account that runs a **task-runner container**. This container acts as a bridge between your GCP infrastructure and Inductiva's backend services. 
-Here's the flow:
-
-1. **VM Creation**: Inductiva creates a VM in your GCP project with the specified machine type and configuration
-2. **Task-Runner Deployment**: The VM automatically launches a task-runner container that connects to Inductiva's backend
-3. **Seamless Integration**: The task-runner handles communication with Inductiva's API and manages simulation execution
-4. **Resource Management**: You maintain control over the VM lifecycle while Inductiva manages the simulation orchestration
-
-**Security Note**: Your GCP credentials and API keys are **never sent to Inductiva** and Inductiva **never has access to them**. All GCP operations (VM creation, deletion, metadata management) are performed entirely on your local machine using your authenticated gcloud CLI, ensuring your credentials remain secure and private.
-
-For more detailed information about the task-runner, see the [Task-Runner Guide](../use-local-task-runner/index.md).
 
 ## Prerequisites
 
@@ -32,7 +19,9 @@ Before you begin, ensure you have:
 
 ## Get Started
 
-**[Installation and Setup](sections/section1b.md):** Installation steps, permissions, GCP CLI configuration, testing, and disclaimers.
+**[How It Works](sections/section1b.md):** Detailed explanation of the BYOC architecture and security model.
+
+**[Installation and Setup](sections/section1.md):** Installation steps, permissions, GCP CLI configuration, testing, and disclaimers.
 
 **[Python Client Usage](sections/section2.md):** Create and manage BYOC machine groups using the Inductiva Python client.
 
@@ -58,9 +47,12 @@ When using BYOC, you are responsible for:
 
 **Recommendation:** Always monitor your GCP console and set up billing alerts to track usage and costs.
 
+**Note:** You may incur additional Google Cloud egress costs for data transfer between your GCP VM and Inductiva's storage.
+
 ```{toctree}
 :hidden:
 sections/section1b.md
+sections/section1.md
 sections/section2.md
 sections/section3.md
 sections/section4.md

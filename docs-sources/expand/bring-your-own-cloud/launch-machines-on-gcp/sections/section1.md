@@ -9,9 +9,6 @@ To minimize security risks, Inductiva requires only the following minimal GCP pe
   - `compute.instances.delete` - To delete VMs (including auto-termination)
   - `compute.instances.setMetadata` - To set startup script and configuration
 
-> **Security Note**: Your GCP credentials and API keys are **never sent to Inductiva** and Inductiva **never has access to them**. All GCP operations (VM creation, deletion, metadata management) are performed entirely on your local machine using your authenticated gcloud CLI. Inductiva cannot access your other GCP resources, billing information, or data stored in your account.
-
-> **What Inductiva Can See**: Even though we don't have access to your GCP credentials, the task-runner running on your VM acts as a manager and reports machine information to Inductiva for pricing and monitoring purposes. This includes machine specifications (vCPUs, RAM, disk size), usage metrics (CPU usage, RAM usage, disk usage), runtime information (start time, last seen), live logs, and live file tracking for running simulations. This data helps Inductiva provide cost estimates and monitor machine health, but does not require access to your GCP credentials.
 
 ## Installing and Configuring Google Cloud CLI
 

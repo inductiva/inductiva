@@ -23,7 +23,7 @@ mg = inductiva.resources.MachineGroup(
 
 **Note**: BYOC machine groups work just like regular machine groups - they will automatically start when you run a simulation if they're not already started. This will create a VM in your GCP account. You can optionally call `mg.start()` explicitly if you want to start the machine before running simulations.
 
-## Configuring Auto-Termination
+### Configuring Auto-Termination
 
 By default, GCP VMs in BYOC machine groups will automatically terminate after **3 minutes of idle time** to help control costs and reduce the risk of accidentally leaving expensive machines running. This is a critical safety feature that helps prevent unexpected charges from forgotten VMs.
 
