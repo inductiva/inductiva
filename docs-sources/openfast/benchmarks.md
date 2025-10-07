@@ -1,4 +1,4 @@
-# Choosing the Right Virtual Machine
+# Choosing the Right Machine for OpenFAST
 
 ## The curious case of OpenFAST
 While OpenFAST comprises several modular components, the simulation of a **single wind turbine** operates on a **single thread**. While frameworks like FAST.Farm or MPI allow multiple turbines to run in parallel, the simulation of each turbine remains serial.
@@ -9,48 +9,38 @@ Interestingly, consumer desktop CPUs often operate at higher clock frequencies t
 
 Because of this, a single OpenFAST simulation frequently runs faster on a high-end desktop than on a cloud instance. However, if you need to run hundreds or thousands of simulations, deploying large numbers of low-cost cloud machines to run them in parallel becomes far more time-efficient than running them sequentially on a desktop. This is where **Inductiva** offers greater flexibility and the challenge shifts to selecting the most suitable cloud machine type for this highly clock-sensitive, single-threaded workload.
 
+## Choosing the Right VM: Small and Fast Wins
+On Inductiva, the most cost-efficient option for single-turbine simulations is to use lightweight virtual machines with 2 vCPUs backed by a single physical core. 
 
+To determine which VM series offers the best runtime for OpenFAST, we evaluated the following compute-optimized machine families (powered by Google Cloud): c2, c2d, c4, and c4d. These represent a progression of Intel and AMD CPU generations and are known for strong per-core performance.
 
+For this purpose, all performance measurements were conducted using the `5MW_OC4Semi_WSt_WavesWN` example, an extension of the reference case from the “Definition of a 5-MW Reference Wind Turbine for Offshore System Development". 
 
-
-
-
-
-
-
-
-
-
-## Benchmarking OpenFAST
-The following benchmarks highlight how the execution speed of OpenFAST simulations is primarily determined by CPU clock speed, rather than the number of cores available.
-
-For this purpose, we used the `5MW_OC4Semi_WSt_WavesWN` example, an extension of the reference case from the “Definition of a 5-MW Reference Wind Turbine for Offshore System Development",
-which can be found on the OpenFAST GitHub repository and is also referenced in the [Run 50 Simulations in Parallel](run-50-simulations-in-parallel/index) tutorial.
+> **The original input files can be found [here](https://github.com/OpenFAST/r-test/tree/v4.1.0/glue-codes/openfast/5MW_OC4Semi_WSt_WavesWN).**
 
 ### Software Versions
-The software versions used for this benchmark are as follows:
+The software versions used for this test are as follows:
 
 | Component              | Version                               |
 |------------------------|---------------------------------------|
 | OpenMP                 | 201511                                |
-| OpenFAST               | v4.0.2                                |
+| OpenFAST               | v4.1.0                                |
 | gcc, g++, gfortran     | 11.4.0 (Ubuntu 11.4.0-1ubuntu1~22.04) |
 | kernel                 | 6.6.12-linuxkit                       |
 
-
 ### Performance and Cost Analysis
-To demonstrate that OpenFAST’s performance doesn’t scale with the number of cores, we ran the same use case on a local machine and on an n2-highcpu virtual machine with different vCPUs.
 
-Here are the results:
-| Machine Type  | vCPUs | Execution Time | Estimated Cost (USD) |
-|---------------|-----------------|----------------|-----------|
-| n2-highcpu-2  | 2               |34.1 s          |0.00013|
-| n2-highcpu-4  | 4               |35.0 s          |0.00031|
-| n2-highcpu-8  | 8               |30.4 s          |0.00034|
-| n2-highcpu-16 | 16              |30.9 s          |0.00065|
-| n2-highcpu-32 | 32              |30.2 s          |0.0012 |
 
-The execution time remained almost identical across all machines, regardless of the number of virtual CPUs.
+| Machine Type  | Execution Time | Estimated Cost (USD) |
+|---------------|-----------------|---------------------|
+| c2d-highcpu-2 |                 |                     |
+| c2d-standard-2|                 |                     |
+| c4d-highcpu-2 |                 |                     |
+| c4-highcpu-2  |                 |                     |          
+
+The computational resources are configured with `threads_per_core=2` (hyper-threading enabled), which is the **default** setting for virtual machines on Inductiva (learn more [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading)). 
+
+## Should We Disable Hyperthreading for OpenFAST?
 
 ```{banner_small}
 :origin: openfast
