@@ -27,7 +27,9 @@ def _get_subparser(
     name: str,
 ) -> argparse.ArgumentParser:
     subparsers = _get_subparsers(parser)
-    return subparsers.choices[name]
+    if subparsers is None:
+        return {}
+    return subparsers.choices.get(name)
 
 
 def get_parser(command: str) -> argparse.ArgumentParser:
