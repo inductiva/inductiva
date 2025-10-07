@@ -234,6 +234,19 @@
           "path": "api-functions/api/index"
         }
       ]
+    },
+    {
+      "title": "Release Notes",
+      "children": [
+        {
+          "title": "Version History",
+          "path": "release-notes/version-history/index"
+        },
+        {
+          "title": "Changelog",
+          "path": "release-notes/changelog/index"
+        }
+      ]
     }
   ]
 }
