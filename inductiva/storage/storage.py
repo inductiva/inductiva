@@ -154,7 +154,7 @@ def listdir(
             "Use --max-results/-m to control the number of results displayed.")
 
         print("\nYou have storage in the following regions: "
-              f"{", ".join(response.available_regions)}")
+              f"{', '.join(response.available_regions)}")
 
     return all_contents
 
