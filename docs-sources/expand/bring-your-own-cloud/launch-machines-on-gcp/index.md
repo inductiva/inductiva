@@ -48,7 +48,7 @@ When using BYOC, you are responsible for:
 - **Ensuring compliance** with your organization's policies
 - **Properly terminating** machines to avoid unexpected charges
 
-**Note:** Inductiva provides auto-termination (default: 3 minutes of idle time) as a safety feature to help prevent forgotten VMs.
+**Note:** Inductiva provides auto-termination (default: 3 minutes of idle time) as a safety feature to help prevent forgotten VMs. Inductiva provides support on a best-effort basis and cannot guarantee resolution of all issues.
 
 **Inductiva is not responsible for:**
 - Unexpected charges from VMs left running in your account

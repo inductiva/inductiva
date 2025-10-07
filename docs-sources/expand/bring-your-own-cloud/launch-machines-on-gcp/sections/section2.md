@@ -72,6 +72,8 @@ mg.terminate()
 
 **Note**: Once you call `simulator.run()`, the simulation will continue running on your GCP VM even if you close your local computer. The machine group will start automatically if it's not already running.
 
+**Machine Visibility**: After creating a BYOC machine group, you can view it in the [Inductiva Console](https://console.inductiva.ai/machine-groups) machines page or using the CLI command `inductiva resources list`. Inductiva will display information about your machine including machine type, start time, status, and usage metrics. This information is reported by the task-runner and helps you monitor your BYOC machines alongside your regular Inductiva resources.
+
 ### Retrieving an Existing Machine Group
 
 If you need to access a machine group from a different script or session, you can retrieve it by name:
