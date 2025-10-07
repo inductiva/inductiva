@@ -142,11 +142,7 @@
       ]
     }
   ],
-  "Resources": {
-    "layout": {
-      "columns": 4
-    },
-    "entries": [
+  "Resources": [
       {
         "title": "How it works",
         "children": [
@@ -243,15 +239,15 @@
         "title": "Release Notes",
         "children": [
           {
-            "title": "Version History",
-            "path": "release-notes/version-history/index"
+            "title": "dummy 1",
+            "path": "release-notes/"
           },
           {
-            "title": "Changelog",
-            "path": "release-notes/changelog/index"
+            "title": "dummy 2",
+            "path": "release-notes/"
           }
-        ]
+        ],
+        "groupWith": "API Functions"
       }
-    ]
-  }
+  ]
 }
