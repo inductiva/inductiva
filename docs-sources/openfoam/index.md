@@ -64,7 +64,7 @@ caption: " "
 maxdepth: 1
 hidden: true
 ---
-MPI Behavior in OpenFOAM <openfoam-mpi-setup/openfoam-behaviour>
+MPI Behaviour in OpenFOAM <openfoam-mpi-setup/openfoam-behaviour>
 ```
 
 ```{toctree}
