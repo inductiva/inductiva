@@ -27,7 +27,9 @@ def _get_subparser(
     name: str,
 ) -> argparse.ArgumentParser:
     subparsers = _get_subparsers(parser)
-    return subparsers.choices[name]
+    if subparsers is None:
+        return None
+    return subparsers.choices.get(name)
 
 
 def get_parser(command: str) -> argparse.ArgumentParser:
@@ -131,7 +133,7 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
             command = title.removeprefix("inductiva ").removesuffix(" options")
 
             parser = get_parser(command)
-            if not parser.epilog:
+            if not parser or not parser.epilog:
                 continue
 
             new_section = SphinxArgParseCliExt.create_section(parser)
