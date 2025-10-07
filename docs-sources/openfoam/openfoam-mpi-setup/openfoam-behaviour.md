@@ -4,7 +4,7 @@ Inductiva supports two OpenFOAM distributions: **ESI** and **Foundation**. Both 
 ## Behaviour by Distribution
 
 ### OpenFOAM-ESI
-Uses `mpirun` with the `--oversubscribe` flag (OpenMPI is used). Take a look at how this is handled in the `runParallel` script:
+MPI attaches one process per available thread. So, if a physical core runs two threads (with hyper-threading enabled), OpenFOAM-ESI will launch two processes per physical core. This is done using `mpirun` with the `--oversubscribe` flag (OpenMPI). See how this is handled in the `runParallel` script:
 
 ```bash
 local mpirun="mpirun"
@@ -19,7 +19,7 @@ esac
 ```
 
 ### **OpenFOAM-Foundation**
-Uses `mpirun` without additional flags, relying on MPI’s default behavior — launching one process per physical core (not per available thread) Take a look at how this is handled in the `runParallel` script:
+Uses `mpirun` without additional flags, relying on MPI’s default behavior — launching one process per physical core (not per available thread). See how this is handled in the `runParallel` script:
 
 ```bash
 ( mpirun -np $nProcs $APP_RUN -parallel "$@" < /dev/null >> log.$LOG_SUFFIX 2>&1 )

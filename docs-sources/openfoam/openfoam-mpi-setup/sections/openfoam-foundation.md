@@ -56,7 +56,7 @@ This equivalence is confirmed by comparing the runtimes of both simulations, whi
 | c2d-highcpu-16 | 1                | 8              |  8        | 1 min, 58s    | 0.0026               |
 | c2d-highcpu-16 | 2                | 16             |  8        | 1 min, 56s    | 0.0025               |
 
-## Utilize All Available vCPUs
+## Enable Full vCPU Usage with Hyper-Threading
 You can override OpenFOAM-Foundation’s default MPI behaviour to run across **all available vCPUs**, which is 16 on the `c2d-highcpu-16` instance with hyper-threading enabled.
 
 To do this, update the `Allrun` script by replacing each `runParallel` call with:
