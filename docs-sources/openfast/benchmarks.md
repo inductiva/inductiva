@@ -54,11 +54,11 @@ On Inductiva, the most cost-efficient option for single-turbine simulations is t
 
 To determine which VM series offers the best runtime for OpenFAST, we evaluated the following compute-optimized machine series (powered by Google Cloud): `c2d`, `c4`, and `c4d`
 
-| Machine Type  | CPU Type                            | Clock Speed       | Execution Time | Estimated Cost (USD)|
-|---------------|-------------------------------------|-------------------|----------------|---------------------|
-| c2d-highcpu-2 | AMD EPYC (Rome)                     | Up to 3.5 GHz | 2 min, 47s     | 0.00062             |
-| c4d-highcpu-2 | AMD EPYC (Turin)                    | Up to 3.5 GHz | 1 min, 52s     | 0.0012              |
-| c4-highcpu-2  | Intel Xeon Scalable (Granite Rapids)| 2.8 GHz - 4.2 GHz | 2 min, 46s     | 0.0020              |
+| Machine Type   | CPU Type                                      | Clock Speed (GHz) | Execution Time | Estimated Cost (USD) | Relative Speedup   |
+|----------------|-----------------------------------------------|-------------------|----------------|----------------------|--------------------|
+| c2d-highcpu-2  | AMD EPYC Milan – 2021                         | Up to 3.5         | 2 min, 47 s    | 0.00062              | Baseline           |
+| c4-highcpu-2   | Intel Xeon Scalable (Granite Rapids) – 2024   | Up to 4.2         | 2 min, 46 s    | 0.0020               | ~0.6%              |
+| c4d-highcpu-2  | AMD EPYC Turin – 2025                         | Up to 4.1         | 1 min, 52 s    | 0.0012               | ~32.9%             |
 
 The computational resources are configured with `threads_per_core=2` (**hyper-threading enabled**), which is the **default** setting for virtual machines on Inductiva (learn more [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading)).
 
@@ -71,11 +71,12 @@ In many traditional HPC environments, hyper-threading is often disabled to avoid
 
 Here are the performance results for the same machine types with **hyper-threading disabled**:
 
-| Machine Type  | CPU Type                            | Clock Speed       | Execution Time | Estimated Cost (USD)|
-|---------------|-------------------------------------|-------------------|----------------|---------------------|
-| c2d-highcpu-2 | AMD EPYC (Rome)                     | 2.7 GHz - 4.1 GHz | 2 min, 46s     | 0.00062             |
-| c4d-highcpu-2 | AMD EPYC (Turin)                    | 2.7 GHz - 4.1 GHz | 1 min, 43s     | 0.0011              |
-| c4-highcpu-2  | Intel Xeon Scalable (Granite Rapids)| 2.8 GHz - 4.2 GHz | 2 min, 44s     | 0.0020              |
+| Machine Type   | CPU Type                                      | Clock Speed (GHz) | Execution Time | Estimated Cost (USD) | Relative Speedup   |
+|----------------|-----------------------------------------------|-------------------|----------------|----------------------|--------------------|
+| c2d-highcpu-2  | AMD EPYC Milan – 2021                         | Up to 3.5         | 2 min, 46 s    | 0.00062              | Baseline           |
+| c4-highcpu-2   | Intel Xeon Scalable (Granite Rapids) – 2024   | Up to 4.2         | 2 min, 44 s    | 0.0020               | ~1.2%              |
+| c4d-highcpu-2  | AMD EPYC Turin – 2025                         | Up to 4.1         | 1 min, 43 s    | 0.0011               | ~38%               |
+
 
 Performance tests show **negligible differences** in runtime when hyper-threading is disabled compared to when it is enabled.
 
