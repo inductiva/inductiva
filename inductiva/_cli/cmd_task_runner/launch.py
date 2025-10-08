@@ -226,7 +226,7 @@ def register(parser):
                            type=int,
                            help="Idle time in minutes before "
                            "auto-termination (default: 3).")
-                           
+                       
     gcp_group.add_argument("--disk-size",
                            "-ds",
                            type=int,
