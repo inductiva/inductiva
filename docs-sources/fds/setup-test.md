@@ -40,13 +40,6 @@ task.download_outputs()
 task.print_summary()
 ```
 
-<a href="https://console.inductiva.ai/editor?simulator_name=fds" class="try-playground-button" target="_blank">
-  <svg class="icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M8 5v14l11-7z"/>
-  </svg>
-  Try it on our Python Editor, on any device
-</a>
-
 2. Open your command line, then navigate to the Desktop by running:
 
 ```
@@ -83,7 +76,10 @@ Data:
 	Size of unzipped output:  10.59 MB
 	Number of output files:   20
 
-Estimated computation cost (US$): 0.00017 US$
+Estimated Task Compute Cost = 0.00017 US$
+Task Orchestration Fee = 0.01 US$
+Total Estimated Cost = 0.01017 US$
+Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 If the **Task status** is marked as **Success**, congratulations! You've successfully ran an FDS simulation.

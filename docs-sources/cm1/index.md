@@ -4,6 +4,11 @@ Your resource hub for all things CM1 at Inductiva. Whether you're just starting 
 
 Inductiva simplifies research by making high-performance computing more accessible and cost-effective. Use the power of the Cloud to **scale your simulations** and **finish your projects sooner**, while keeping your costs in check!
 
+```{python_editor}
+:origin: cm1
+:url: https://console.inductiva.ai/editor?simulator_name=cm1
+```
+
 ## What You'll Find Here
 
 ### Tutorials

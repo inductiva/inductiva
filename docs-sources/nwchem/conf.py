@@ -130,3 +130,5 @@ def setup(app):
     app.add_directive("banner", BannerDirective)
     from banner_small_directive import BannerSmallDirective
     app.add_directive("banner_small", BannerSmallDirective)
+    from python_editor_directive import PythonEditorDirective
+    app.add_directive("python_editor", PythonEditorDirective)

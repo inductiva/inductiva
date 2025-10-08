@@ -68,8 +68,7 @@ def list_machine_types_available(args):
     machines_dict = {}
 
     for machine in resources_available:
-        # Avoid the duplication of adding machine types with spot instances.
-        if machine["spot"]:
+        if args.spot != machine["spot"]:
             continue
 
         machine_type = machine["machine_type"]
@@ -187,6 +186,12 @@ def register(parser):
                            default=None,
                            type=str,
                            help="Filter the available types by CPU series.")
+
+    subparser.add_argument("-s",
+                           "--spot",
+                           action="store_true",
+                           default=False,
+                           help="Shows spot instance price.")
 
     subparser.description = textwrap.dedent("""\
         The `inductiva resources available` command provides a utility for

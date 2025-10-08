@@ -4,6 +4,7 @@ import textwrap
 
 import inductiva
 from ...localization import translator as __
+from inductiva.client import exceptions
 from inductiva.utils.input_functions import user_confirmation_prompt
 
 
@@ -25,7 +26,10 @@ def remove(args):
         args.paths = [directory["content_name"] for directory in root_dir]
 
     for path in args.paths:
-        inductiva.storage.remove(remote_path=path)
+        try:
+            inductiva.storage.remove(remote_path=path)
+        except exceptions.ApiException as e:
+            print("\nError:", str(e))
 
 
 def register(parser):

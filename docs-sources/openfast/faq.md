@@ -84,6 +84,28 @@ Here is a list of the commands available to run OpenFAST v4.0.2 and its modules,
   focusing on time-varying airflow around turbine blades
 
 <br>
+
+
+
+## 6. My simulation needs the common a `dll` file. Do I need to compile it and send it with my input files?
+
+No. We have already pre-compiled the three most common DLLs and included them in the OpenFAST Docker images. You can find them at:
+
+* `/DLLs/DISCON.dll`
+* `/DLLs/DISCON_ITIBarge.dll`
+* `/DLLs/DISCON_OC3Hywind.dll`
+
+Simply update your input `.dat` file to point to the correct DLL location. For example:
+
+```diff
+---------------------- BLADED INTERFACE ----------------------------------------
+-"../5MW_Baseline/ServoData/DISCON_OC3Hywind.dll"    DLL_FileName
++"/DLLs/DISCON_OC3Hywind.dll"    DLL_FileName
+```
+
+This way, you don’t need to compile or send the DLL yourself. It’s already included in the simulation environment.
+
+<br>
 <br>
 
 Still can't find what you're looking for? [Contact Us](mailto:support@inductiva.ai)

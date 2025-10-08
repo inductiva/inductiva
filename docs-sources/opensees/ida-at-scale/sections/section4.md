@@ -8,9 +8,10 @@ In this tutorial, results are analyzed in terms of:
 Capacity curves are presented based on the 50th, 16th, and 84th percentiles of the IDA response, using the maximum global drift 
 ratio as the engineering demand parameter (EDP). The 50th fractile represents the median capacity of the structure.
 
-Next, the damage states of Immediate Occupancy (IO), Collapse Prevention (CP), and Near Collapse (NC) are identified. The IO limit 
-is defined approximately at the end of the elastic branch. CP is identified when the slope of the capacity curve decreases to 20% of 
-the initial elastic slope. Finally, NC is indicated by the appearance of the flatline.
+Next, the damage states, defined from EN 1998-1-1:2024 provisions, of Immediate Occupancy (IO), Collapse Prevention (CP), 
+and Near Collapse (NC) are identified. The IO limit is defined approximately at the end of the elastic branch. CP is 
+identified when the slope of the capacity curve decreases to 20% of the initial elastic slope. Finally, NC is indicated by 
+the appearance of the flatline.
 
 <div align="center">
    <img src="../../_static/graph1.png" alt="Capacity curves with limit state observations">

@@ -18,7 +18,7 @@ The second, and often more limiting, challenge lies not only in running a large 
 
 Running simulations on cloud-based HPC is not required to perform IDA, but it offers clear advantages. It removes the need to 
 manage physical infrastructure, provides dedicated compute resources, and enables parallel execution at scale. This reduces overall 
-runtime and makes large-scale studies more efficient and accessible.
+runtime and makes large-scale studies more accessible.
 
 This is where **Inductiva** steps in, allowing you to focus on developing accurate structural models and analysing results, without 
 being constrained by **hardware limitations** or **sequential processing**.

@@ -40,14 +40,16 @@ task.print_summary()
 ```
 
 In this basic example, we're using a cloud machine (`c2-standard-4`) equipped with 4 virtual CPUs. 
-For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
-a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
 > **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-To adapt this script for other Delft3D simulations, replace `input_dir` with the
-path to your Delft3D input files and set the the `commands` accordingly.
+To adapt this script for your own simulations:
+- Replace the `input_dir` path with the location of your Delft3D input files.
+- Adjust the `commands` to match your specific configuration.
+
+⚠️ **Important**: If you change the number of virtual CPUs in the machine, make sure to update the corresponding value in the `mpirun` command (e.g., `-np 16`).
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
@@ -68,9 +70,10 @@ Data:
 	Size of unzipped output:  1.04 MB
 	Number of output files:   15
 
-Estimated computation cost (US$): 0.00017 US$
-
-Go to https://console.inductiva.ai/tasks/iidkjkpk77yb79cq4w5qpgdq8 for more details.
+Estimated Task Compute Cost = 0.00017 US$
+Task Orchestration Fee = 0.01 US$
+Total Estimated Cost = 0.01017 US$
+Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 

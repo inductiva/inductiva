@@ -65,7 +65,6 @@ class BaseMachineGroup(ABC):
     provider: Union[ProviderType, str] = "GCP"
     threads_per_core: int = 2
     data_disk_gb: int = 10
-    auto_delete_disk: bool = True
     max_idle_time: Union[datetime.timedelta, int] = 3
     auto_terminate_ts: Optional[datetime.datetime] = None
     auto_terminate_minutes: Optional[int] = None
@@ -363,7 +362,6 @@ class BaseMachineGroup(ABC):
             dynamic_disk_resize_config=self._dynamic_disk_resize_config(),
             custom_vm_image=self._custom_vm_image,
             zone=self.zone,
-            disk_auto_delete=self.auto_delete_disk,
             **kwargs,
         )
 
@@ -724,6 +722,11 @@ class MachineGroup(BaseMachineGroup):
             raise ValueError(
                 "BYOC mode currently only supports `num_machines=1`. ")
 
+        if self.byoc and self.auto_resize_disk_max_gb is not None:
+            raise ValueError(
+                "Auto disk resize (`auto_resize_disk_max_gb`) is not supported "
+                "with BYOC mode.")
+
         if self.num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
@@ -790,7 +793,6 @@ class MachineGroup(BaseMachineGroup):
             dynamic_disk_resize_config=self._dynamic_disk_resize_config(),
             custom_vm_image=self._custom_vm_image,
             zone=self.zone,
-            disk_auto_delete=self.auto_delete_disk,
             num_vms=self.num_machines,
             spot=self.spot,
             is_elastic=False,
@@ -830,6 +832,7 @@ class MachineGroup(BaseMachineGroup):
                                api_url,
                                self.spot,
                                self.max_idle_time,
+                               disk_size=self.data_disk_gb,
                                verbose=verbose)
 
         self._started = True

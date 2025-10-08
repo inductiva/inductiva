@@ -27,14 +27,8 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
     Information sent to the task-runner after registration.
     """ # noqa: E501
     task_runner_id: StrictStr
-    redis_stream: StrictStr
-    redis_consumer_name: StrictStr
-    redis_consumer_group: StrictStr
     machine_group_id: StrictStr
-    __properties: ClassVar[List[str]] = [
-        "task_runner_id", "redis_stream", "redis_consumer_name",
-        "redis_consumer_group", "machine_group_id"
-    ]
+    __properties: ClassVar[List[str]] = ["task_runner_id", "machine_group_id"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -86,9 +80,6 @@ class TaskRunnerAPIConnectionInfo(BaseModel):
 
         _obj = cls.model_validate({
             "task_runner_id": obj.get("task_runner_id"),
-            "redis_stream": obj.get("redis_stream"),
-            "redis_consumer_name": obj.get("redis_consumer_name"),
-            "redis_consumer_group": obj.get("redis_consumer_group"),
             "machine_group_id": obj.get("machine_group_id")
         })
         return _obj

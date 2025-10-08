@@ -47,7 +47,6 @@ class VMGroupConfig(BaseModel):
     name: Optional[StrictStr] = None
     machine_type: Optional[StrictStr] = None
     disk_size_gb: Optional[StrictInt] = None
-    disk_auto_delete: Optional[StrictBool] = True
     total_ram_gb: Optional[StrictInt] = None
     threads_per_core: Optional[StrictInt] = None
     num_vms: Optional[StrictInt] = None
@@ -77,13 +76,13 @@ class VMGroupConfig(BaseModel):
     cpu_info: Optional[CPUInfo] = None
     __properties: ClassVar[List[str]] = [
         "max_idle_time", "auto_terminate_ts", "id", "name", "machine_type",
-        "disk_size_gb", "disk_auto_delete", "total_ram_gb", "threads_per_core",
-        "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp",
-        "type", "provider_id", "started", "quota_usage", "status", "spot",
-        "is_elastic", "min_vms", "max_vms", "autoscale_policy",
-        "dynamic_disk_resize_config", "custom_vm_image", "machines",
-        "provider_description", "costs", "cost_per_hour", "statistics",
-        "sharing_level", "zone", "gpu_info", "cpu_info"
+        "disk_size_gb", "total_ram_gb", "threads_per_core", "num_vms",
+        "idle_seconds", "creation_timestamp", "deletion_timestamp", "type",
+        "provider_id", "started", "quota_usage", "status", "spot", "is_elastic",
+        "min_vms", "max_vms", "autoscale_policy", "dynamic_disk_resize_config",
+        "custom_vm_image", "machines", "provider_description", "costs",
+        "cost_per_hour", "statistics", "sharing_level", "zone", "gpu_info",
+        "cpu_info"
     ]
 
     model_config = ConfigDict(
@@ -299,9 +298,6 @@ class VMGroupConfig(BaseModel):
                 obj.get("machine_type"),
             "disk_size_gb":
                 obj.get("disk_size_gb"),
-            "disk_auto_delete":
-                obj.get("disk_auto_delete")
-                if obj.get("disk_auto_delete") is not None else True,
             "total_ram_gb":
                 obj.get("total_ram_gb"),
             "threads_per_core":

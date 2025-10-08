@@ -1,28 +1,23 @@
-
 # Scale FDS with MPI
-
 Fire Dynamics Simulator (FDS) supports parallelism using two methods:
-- MPI (Message Passing Interface): Distributes work across multiple meshes by running separate MPI processes.
-- OpenMP: Multithreads computations within each mesh.
+- **MPI (Message Passing Interface)**: Distributes the workload across multiple meshes by running separate MPI processes.
+- **OpenMP**: Enables multi-threading within each mesh.
 
-This tutorial walks you through controlling MPI and OpenMP settings when running FDS simulations on Inductiva, using a small MPI scaling benchmark from the FDS GitHub repository.
-
+In this tutorial, you'll learn how to configure configure MPI settings for running FDS simulations on Inductiva, using a benchmark case from the official FDS GitHub repository designed to test MPI scaling.
 
 ## Prerequisites
+Before proceeding, make sure you've successfully run your [first FDS simulation](quick-start.md).
 
-Before running the simulation, make sure you were able to [run your first FDS simulation](setup-test.md).
-You’ll also need to download the input files. You can either:
-- **Manually download** them from the [FDS GitHub repository](https://github.com/firemodels/fds/tree/FDS-6.10.1/Validation/MPI_Scaling_Tests/FDS_Input_Files) and place them in a folder named `MpiStrongScalingTest`.
-The files starting with `strong_scaling_test` are the ones needed.
+Next, download the required input files. You can do this in one of two ways:
+- **Manually download** the files from the [FDS GitHub repository](https://github.com/firemodels/fds/tree/FDS-6.10.1/Validation/MPI_Scaling_Tests/FDS_Input_Files) and place them in a folder named `MpiStrongScalingTest`. Only the files that start with `strong_scaling_test` are needed.
 **or**
 - **Download automatically** [here](https://storage.googleapis.com/inductiva-api-demo-files/fds-tutorials/MpiStrongScalingTest.zip).
 
 ## Running a Single-Mesh Simulation
-
-The input folder contains a set of FDS input files representing the same simulation case split into varying number of meshes.
+The `MpiStrongScalingTest` folder contains a set of FDS input files representing the same simulation case split into varying number of meshes.
 For instance, the `strong_scaling_test_001.fds` has a single mesh, while the `strong_scaling_test_008.fds` is the same case split into 8 meshes, and so forth.
 
-Here’s a script to run the 1-mesh case with one MPI process and one OpenMP thread:
+Let’s start by running the **1-mesh** case using **1 MPI process** and **1 OpenMP thread**.
 
 ```python
 import inductiva
@@ -54,17 +49,16 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: The `input_dir` parameter in the `fds.run` method should be set to the path
-> to your input files folder.
+> **Note**: Make sure the `input_dir` parameter is set to the path of your `MpiStrongScalingTest` folder.
 
-You can verify the MPI/OpenMP setup by inspecting the stderr logs in the [Inductiva web console](http://console.inductiva.ai) in the task page under Task Logs → stderr, which should show:
+To verify the MPI/OpenMP setup, check the stderr logs in the [Inductiva Console](http://console.inductiva.ai) under the task details (**Task Logs → stderr.txt**), which should show:
 
 ```
 Number of MPI Processes:  1
 Number of OpenMP Threads: 1
 ```
 
-The task summary looks like this:
+When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
 ```
 Task status: Success
@@ -83,20 +77,21 @@ Data:
         Size of unzipped output:  1.48 MB
         Number of output files:   19
 
-Estimated computation cost (US$): 0.0057 US$
+Estimated Task Compute Cost = 0.0057 US$
+Task Orchestration Fee = 0.01 US$
+Total Estimated Cost = 0.0157 US$
+Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-The simulation took approximately 21 minutes. Let's see how to make it faster using MPI.
+The simulation took approximately 21 minutes. Let's use MPI to make it faster.
 
 ## Running with Multiple MPI Processes
+To run in parallel using MPI:
+- Use an input file with multiple meshes (e.g., `strong_scaling_test_008.fds`)
+- Select a machine with at least as many virtual CPUs (vCPUs) as the number of MPI processes (for the 8-mesh case, `c2d-standard-8` is a good fit)
+- Set `n_mpi_processes` parameter to match the number of meshes
 
-To parallelize the simulation using MPI, we'll need:
-- A simulation case with multiple meshes (*e.g.*, `strong_scaling_test_008.fds`);
-- A machine with at least as many vCPUs as MPI processes. For the 8 mesh case,
-we can use the `c2d-standard-8`. You can find more about available machines in the (web console)[https://console.inductiva.ai/machine-groups/instance-types];
-- Configure `n_mpi_processes` accordingly.
-
-Here’s an updated script running the 8-mesh case on a machine with 8 vCPUs:
+Below is an example running the 8-mesh case on an 8-vCPU machine:
 
 ```python
 import inductiva
@@ -128,72 +123,55 @@ task.download_outputs()
 task.print_summary()
 ```
 
-The summary for this run:
-
-```
-Task status: Success
-
-Timeline:
-        Waiting for Input         at 23/07, 17:03:39      0.803 s
-        In Queue                  at 23/07, 17:03:39      51.276 s
-        Preparing to Compute      at 23/07, 17:04:31      4.398 s
-        In Progress               at 23/07, 17:04:35      321.586 s
-                └> 321.427 s       /opt/openmpi/4.1.6/bin/mpirun --np 8 --use-hwthread-cpus /opt/fds/Build/ompi_gnu_linux/fds_ompi_gnu_linux strong_scaling_test_008.fds
-        Finalizing                at 23/07, 17:09:57      0.429 s
-        Success                   at 23/07, 17:09:57
-
-Data:
-        Size of zipped output:    66.40 KB
-        Size of unzipped output:  1.57 MB
-        Number of output files:   75
-
-Estimated computation cost (US$): 0.0047 US$
-```
-
-This run took about 6 minutes and 20 seconds — roughly a 4× speedup.
-Note that even though we increased parallelism by 8 times, real-world inefficiencies in parallel computing — such as communication and synchronization overhead — limit the actual speed-up.
+> ⚠️ **Note on vCPUs and Hyperthreading**: In most cloud environments (like Google Cloud), a vCPU corresponds to a thread, not a full physical core. So a `c2d-standard-8` machine has 8 vCPUs, which typically means 4 physical cores with hyperthreading enabled.
 
 ## Results
+The table below compares performance across different MPI configurations for the 1-, 8-, and 32-mesh cases. Speed-up is calculated relative to the 1-mesh baseline.
 
-Below is a summary of simulation time, cost, and speed-up for the 1-, 8-, and 32-mesh cases. The speed-up is relative to the 1-mesh case.
+| Machine Type     | MPI Processes | Execution Time  | Estimated Cost (USD) | Speed-up |
+|------------------|---------------|-----------------|----------------------|----------|
+| c2d-standard-2   | 1             | 21 minutes, 15s | 0.0057               | 1.0×     |
+| c2d-standard-8   | 8             | 5 minutes, 22s  | 0.0047               | 4.0×     |
+| c2d-standard-32  | 32            | 1 minute, 49s   | 0.0062               | 11.7×    |
 
-| MPI Processes | Machine Type     | Time (s) | Cost (USD) | Speed-up   |
-|---------------|------------------|----------|------------|------------|
-| 1             | c2d-standard-2   | 1275.29  | 0.0057*    | 1.0x       |
-| 8             | c2d-standard-8   | 321.59   | 0.0047     | 4.0x       |
-| 32            | c2d-standard-32  | 109.35   | 0.0062     | 11.7x      |
+Increasing parallelism from 1 to 8 MPI processes results in a **4× speed-up**, reducing runtime from over 21 minutes to just over 5 minutes. This demonstrates a clear performance gain. However, due to typical overheads in parallel computing, such as communication and synchronization, the speed-up is not perfectly linear.
 
-By increasing the number of meshes from 8 to 32, we observe a further **2.9× speed-up**.
-While the simulation cost does increase slightly, the benefit is you'll **get the results much faster**.
+Scaling further from 8 to 32 processes yields an additional 2.9× speed-up, cutting total runtime to under 2 minutes — **over 11× faster** than the baseline.
 
-With Inductiva, you have full flexibility to choose the **resources that best match your time and budget constraints.**
+While the simulation cost increases slightly with more resources, the main benefit is that you’ll get results much faster.
 
-> *Note:* The 1-process simulation appears more expensive because it only used 1 of the 2 available vCPUs. You're still billed for the whole machine, even if only one core is active.
+With Inductiva, you have full flexibility to choose the computational resources that best match your time and budget constraints.
 
-## Advanced Configuration
+> **Note**: The 1-process simulation appears more expensive because it used only 1 of the 2 available vCPUs. You’re billed for the full machine, regardless of how many cores are utilized.
 
-In the previous example, we leveraged hyperthreading by running as many MPI processes as there were virtual CPUs (vCPUs). By default, Google Cloud VMs provide 2 vCPUs per physical CPU core.
+## Advanced Setup: Disabling Hyper-threading
+In the previous examples, we assigned one MPI process per virtual CPU (vCPU), which means the simulations ran on hyperthreads, not physical CPU cores.
+
+However, in traditional HPC environments, it's common practice to run one MPI process per physical core, with hyper-threading disabled. This avoids resource contention and can lead to more predictable and consistent performance.
+
+By default, Google Cloud VMs provide 2 vCPUs per physical core, so hyper-threading is enabled. To disable hyper-threading and use only physical cores, configure the machine group with `threads_per_core=1`:
 
 ```
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2d-standard-8",
+    machine_type="c2d-standard-16",
     threads_per_core=1,
     spot=True)
 ```
 
-Below are the results of running the 1-mesh case with 1 MPI process on a `c2d-standard-2` machine and the 8-mesh case with 8 MPI processes on a `c2d-standard-16` machine:
+Here are the results of running without hyper-threading the 1-mesh case with 1 MPI process on a `c2d-standard-2` machine and the 8-mesh case with 8 MPI processes on a `c2d-standard-16` machine:
 
-| MPI Processes | Machine Type     | Execution Time | Speed-up | Estimated Cost (USD) |
-|---------------|------------------|----------------|----------|-----------------------|
-| 1             | c2d-standard-2   | 21 min, 35 s   | 1.0x     | 0.0058                |
-| 8             | c2d-standard-16  | 3 min, 19 s    | 6.5x     | 0.0057                |
+| Machine Type     | MPI Processes | Execution Time | Estimated Cost (USD) | Speed-up |
+|------------------|---------------|----------------|----------------------|----------|
+| c2d-standard-2   | 1             | 21 min, 35 s   | 0.0058               | 1.0x     |
+| c2d-standard-16  | 8             | 3 min, 19 s    | 0.0057               | 6.5x     |
 
-Compared to the earlier 8-mesh run on a `c2d-standard-8` machine, this configuration achieved a higher speed-up, closer to the theoretical maximum of 8×.
-However, due to the use of a more expensive machine, the overall cost of the simulation also increased.
+Compared to the earlier 8-mesh run on a `c2d-standard-8` machine (with hyper-threading enabled), this configuration achieved a higher speed-up, closer to the theoretical maximum of 8×. Despite using a more expensive machine type, the overall cost remained similar, making this setup more efficient in terms of time-to-solution.
 
 ## Key Takeaways
 
-- **FDS uses MPI and OpenMP** to parallelize computations. MPI distributes work across meshes; OpenMP accelerates work within each mesh.
-- The number of **MPI processes must not exceed the number of meshes** in the simulation.
-- Inductiva gives you **full control** over the number of MPI processes and OpenMP threads — so you can balance performance and cost for your needs.
+- **FDS supports parallelization through MPI and OpenMP**: MPI distributes the workload across multiple meshes, while OpenMP accelerates computations within each mesh.
+- The number of MPI processes **must not exceed the number of meshes** defined in your simulation.
+- **Running one MPI process per vCPU** (i.e., with hyper-threading enabled) is simple to configure and cost-effective for light to moderate workloads.
+- **Disabling hyper-threading** allows MPI processes to run on physical cores, which is common in traditional HPC environments. This setup reduces resource contention and often improves performance consistency.
+- Inductiva gives you **full control over MPI and OpenMP settings**, allowing you to optimize for performance, cost, or a balance of both.
