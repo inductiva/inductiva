@@ -2,7 +2,7 @@
 
 ## Understanding OpenFAST’s Single-Threaded Nature
 While OpenFAST comprises several modular components, the simulation of a **single wind turbine** operates on 
-a **single thread**. While frameworks like FAST.Farm or MPI allow multiple turbines to run in parallel, the simulation 
+a **single thread**. While frameworks like FAST.Farm allow multiple turbines to run in parallel, the simulation 
 of each turbine remains serial.
 
 As a result, increasing the number of virtual CPUs (vCPUs) assigned to a virtual machine does not improve the 
@@ -50,13 +50,15 @@ To demonstrate that OpenFAST’s performance is not influenced by the number of 
 As shown, the **execution time remains effectively constant** regardless of the number of vCPUs. This confirms that OpenFAST only utilizes a single thread, and additional virtual cores simply remain idle. Meanwhile, costs increase linearly with vCPU count, making higher-core machines inefficient for single-turbine runs.
 
 ## When Less is More: Selecting the Right Machine
-To identify the most effective virtual machines for single-turbine OpenFAST simulations, we evaluated four compute-optimized VM families (powered by Google Cloud): `c2`, `c2d`, `c4`, and `c4d`. All tests used machines with 2 vCPUs, isolating the effect of underlying hardware generation.
+To identify the most effective virtual machines for single-turbine OpenFAST simulations, we evaluated four compute-optimized VM families (powered by Google Cloud): `c2`, `c2d`, `c4`, and `c4d`. All tests used machines 
+with 2 vCPUs to isolate the effect of the underlying hardware, with all CPUs belonging to the latest generation 
+available on Google Cloud as of 2025.
 
-| Machine Type    | CPU Type             | Execution Time | Estimated Cost (USD) |
-|-----------------|----------------------|----------------|---------------------|
-| c2d-highcpu-2   | AMD EPYC             | 2 min, 46 sec  | 0.00062             |
-| c4d-highcpu-2   | AMD EPYC             | 1 min, 43 sec  | 0.0011              |
-| c4-highcpu-2    | Intel Xeon Scalable  | 2 min, 44 sec  | 0.0020              |
+| Machine Type  | CPU Type                            | Clock Speed       | Execution Time | Estimated Cost (USD)|
+|---------------|-------------------------------------|-------------------|----------------|---------------------|
+| c2d-highcpu-2 | AMD EPYC (Turin)                    | 2.7 GHz - 4.1 GHz | 2 min, 47s     | 0.00062             |
+| c4d-highcpu-2 | AMD EPYC (Turin)                    | 2.7 GHz - 4.1 GHz | 1 min, 52s     | 0.0012              |
+| c4-highcpu-2  | Intel Xeon Scalable (Granite Rapids)| 2.8 GHz - 4.2 GHz | 2 min, 46s     | 0.0020              |
 
 The computational resources are configured with `threads_per_core=2` (hyper-threading enabled), which is the **default** setting for virtual machines on Inductiva (learn more [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading)).
 
@@ -69,11 +71,11 @@ In many traditional HPC environments, hyper-threading is often disabled to avoid
 
 Here are the performance results for the same machine types with hyper-threading disabled:
 
-| Machine Type    | CPU Type | Execution Time | Estimated Cost (USD) |
-|-----------------|----------|----------------|---------------------|
-| c2d-highcpu-2   | AMD EPYC      | 2 min, 46 sec  | 0.00062             |
-| c4d-highcpu-2   | AMD EPYC     | 1 min, 43 sec  | 0.0011              |
-| c4-highcpu-2    | Intel Xeon Scalable     | 2 min, 44 sec  | 0.0020              |
+| Machine Type  | CPU Type                            | Clock Speed       | Execution Time | Estimated Cost (USD)|
+|---------------|-------------------------------------|-------------------|----------------|---------------------|
+| c2d-highcpu-2 | AMD EPYC (Turin)                    | 2.7 GHz - 4.1 GHz | 2 min, 46s     | 0.00062             |
+| c4d-highcpu-2 | AMD EPYC (Turin)                    | 2.7 GHz - 4.1 GHz | 1 min, 43s     | 0.0011              |
+| c4-highcpu-2  | Intel Xeon Scalable (Granite Rapids)| 2.8 GHz - 4.2 GHz | 2 min, 44s     | 0.0020              |
 
 Performance tests show **negligible differences** in runtime when hyper-threading is disabled compared to when it is enabled.
 
