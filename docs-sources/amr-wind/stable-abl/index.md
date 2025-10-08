@@ -50,7 +50,7 @@ The benchmark was conducted on the following machine series:
 
 ### AMD-based
 - **C2D**  
-  AMD EPYC (Rome)
+  AMD EPYC (Milan)
 
 - **C3D**  
   AMD EPYC (Genoa)
