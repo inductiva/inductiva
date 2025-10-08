@@ -52,7 +52,7 @@ As shown, the **execution time remains practically constant** regardless of the 
 ## When Less is More: Selecting the Right Machine
 On Inductiva, the most cost-efficient option for single-turbine simulations is to use lightweight virtual machines with 2 vCPUs backed by a single physical core. 
 
-To determine which VM series offers the best runtime for OpenFAST, we evaluated the following compute-optimized machine series (powered by Google Cloud): `c2d`, `c4`, and `c4d`
+To determine which VM series offers the best runtime for OpenFAST, we evaluated the following compute-optimized machine series (powered by Google Cloud): `c2d`, `c4`, and `c4d`.
 
 | Machine Type   | CPU Type                                      | Clock Speed (GHz) | Execution Time | Estimated Cost (USD) | Relative Speedup   |
 |----------------|-----------------------------------------------|-------------------|----------------|----------------------|--------------------|
