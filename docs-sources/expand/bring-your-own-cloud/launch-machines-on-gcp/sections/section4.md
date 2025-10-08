@@ -1,58 +1,79 @@
-# Troubleshooting and Limitations
+# Command Line Usage
 
-## Current Limitations (Alpha Version)
+> **⚠️ Important**: When using BYOC, you are responsible for all costs incurred by VMs running in your GCP account. Always monitor your GCP console and consider setting up billing alerts to track usage and costs.
 
-Please be aware of the following limitations in the current alpha release:
+In addition to the Python client, you can also launch BYOC machine groups directly from the command line using the Inductiva CLI.
 
-### Machine Scaling
-- **Single machine per group**: BYOC machine groups only support one VM per group (unlike regular machine groups where you can specify `num_machines`)
-- **Workaround**: Create multiple machine groups in a loop to scale up (see [Python Client Usage](section2.md#machine-scaling-workaround))
+## View Available Options
 
-### Cost Calculation
-- **Cost reporting**: Currently always reports 0 in cost calculations
+You can view all available flags for the task-runner launch command:
 
-### Storage
-- **Storage support**: Only Inductiva storage is currently supported
-- **GCP storage integration**: Coming soon in future releases
+```bash
+inductiva task-runner launch -h
+```
 
-## Troubleshooting
+## Launch a Machine on Your GCP Account
 
-### Common Issues and Solutions
+Launch a machine on your own GCP account using the CLI:
 
-**Authentication Errors**
-- Run `gcloud init` to set up authentication and project configuration
-- Verify with `gcloud auth list` that you're authenticated
-- Check your default project with `gcloud config get-value project`
+```bash
+inductiva task-runner launch byoc-gcp-machine \
+    --provider gcp \
+    --machine-type c2d-highcpu-8 \
+    --spot
+```
 
-**Permission Denied Errors**
-- Ensure your Google account has the required permissions:
-  - `compute.instances.create`
-  - `compute.instances.delete` 
-  - `compute.instances.setMetadata`
-- Check your project's IAM settings in the [GCP Console](https://console.cloud.google.com/iam-admin/iam)
+## Access the Machine Group in Python
 
-**Quota Exceeded Errors**
-- Check your GCP project quotas in the [Quotas page](https://console.cloud.google.com/iam-admin/quotas)
-- Request quota increases for the specific machine types you need
-- Consider using different machine types or regions with available capacity
+After launching via CLI, you can access the machine group in Python:
 
-**Billing Issues**
-- Ensure your GCP project has a valid billing account attached
+```python
+import inductiva
 
-**API Not Enabled**
-- Enable the Compute Engine API: `gcloud services enable compute.googleapis.com`
+# Get the machine group by name
+mg = inductiva.resources.machine_groups.get_by_name('byoc-gcp-machine')
 
-**Machine Not Starting**
-- Check the GCP Console for VM instance status
-- Verify that the task-runner container is running
-- Check VM logs in the GCP Console for any startup errors
+# Use it for simulations
+task = simulator.run(input_dir=input_dir, on=mg)
+```
 
-**Network Connectivity Issues**
-- Ensure your GCP project allows outbound HTTPS traffic (port 443)
-- Check if your organization has firewall rules blocking external connections
-- Verify that the VM has internet access
+> **Note**: The task may be pending for up to two minutes while the machine group starts up.
 
+## Disk Size Configuration
+
+The `data_disk_gb` parameter is very important for BYOC machine groups. Unlike Inductiva's managed infrastructure, BYOC does not support automatic disk resizing. If your simulation runs out of disk space, it will crash and fail.
+
+When launching a BYOC machine group, you can specify the disk size using the `--data-disk-gb` parameter:
+
+```bash
+inductiva task-runner launch byoc-gcp-machine \
+    --provider gcp \
+    --machine-type c2d-highcpu-8 \
+    --data-disk-gb 100 \
+    --spot
+```
+
+Always estimate your simulation's storage requirements and add a safety margin. Monitor your disk usage during simulations to avoid crashes.
+
+## Advanced Configuration
+
+You can customize various aspects of your BYOC machine groups:
+
+```bash
+# Launch bigger machine
+inductiva task-runner launch byoc-gcp-machine \
+    --provider gcp \
+    --machine-type c2d-highcpu-32 \
+    --spot
+
+# Set custom auto-termination time (in minutes)
+inductiva task-runner launch short-lived-machine \
+    --provider gcp \
+    --machine-type c2d-highcpu-8 \
+    --max-idle-time 5 \
+    --spot
+```
 
 ```{banner_small}
-:origin: launch_machines_on_gcp_sec4
+:origin: launch_machines_on_gcp_sec3
 ```

@@ -19,15 +19,15 @@ Before you begin, ensure you have:
 
 ## Get Started
 
-**[How It Works](sections/section1b.md):** Detailed explanation of the BYOC architecture and security model.
+**[How It Works](sections/section1.md):** Detailed explanation of the BYOC architecture and security model.
 
-**[Installation and Setup](sections/section1.md):** Installation steps, permissions, GCP CLI configuration, testing, and disclaimers.
+**[Installation and Setup](sections/section2.md):** Installation steps, permissions, GCP CLI configuration, testing, and disclaimers.
 
-**[Python Client Usage](sections/section2.md):** Create and manage BYOC machine groups using the Inductiva Python client.
+**[Python Client Usage](sections/section3.md):** Create and manage BYOC machine groups using the Inductiva Python client.
 
-**[Command Line Usage](sections/section3.md):** Launch and manage BYOC machine groups using the Inductiva CLI.
+**[Command Line Usage](sections/section4.md):** Launch and manage BYOC machine groups using the Inductiva CLI.
 
-**[Troubleshooting and Limitations](sections/section4.md):** Common issues, solutions, and current limitations of the alpha release.
+**[Frequently Asked Questions](sections/section5.md):** Comprehensive FAQ covering setup, usage, troubleshooting, limitations, and common questions about BYOC on GCP.
 
 ## Disclaimer
 
@@ -37,7 +37,7 @@ When using BYOC, you are responsible for:
 - **Ensuring compliance** with your organization's policies
 - **Properly terminating** machines to avoid unexpected charges
 
-**Note:** Inductiva provides auto-termination (default: 3 minutes of idle time) as a safety feature to help prevent forgotten VMs. Inductiva provides support on a best-effort basis and cannot guarantee resolution of all issues.
+**Note:** Inductiva provides auto-termination (default: 3 minutes of idle time) as a best-effort safety feature to help prevent forgotten VMs.
 
 **Inductiva is not responsible for:**
 - Unexpected charges from VMs left running in your account
@@ -47,15 +47,13 @@ When using BYOC, you are responsible for:
 
 **Recommendation:** Always monitor your GCP console and set up billing alerts to track usage and costs.
 
-**Note:** You may incur additional Google Cloud egress costs for data transfer between your GCP VM and Inductiva's storage.
-
 ```{toctree}
 :hidden:
-sections/section1b.md
 sections/section1.md
 sections/section2.md
 sections/section3.md
 sections/section4.md
+sections/section5.md
 ```
 
 ```{banner}

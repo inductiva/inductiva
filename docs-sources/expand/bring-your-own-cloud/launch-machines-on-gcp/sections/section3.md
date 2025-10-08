@@ -1,61 +1,130 @@
-# Command Line Usage
+# Python Client Usage
 
 > **⚠️ Important**: When using BYOC, you are responsible for all costs incurred by VMs running in your GCP account. Always monitor your GCP console and consider setting up billing alerts to track usage and costs.
 
-In addition to the Python client, you can also launch BYOC machine groups directly from the command line using the Inductiva CLI.
+## Machine Group Creation
 
-## View Available Options
+Creating a BYOC machine group is nearly identical to creating a regular Inductiva machine group, with just one key difference: the `byoc=True` parameter. This tells Inductiva to launch the machine in your own GCP account instead of Inductiva's infrastructure.
 
-You can view all available flags for the task-runner launch command:
-
-```bash
-inductiva task-runner launch -h
-```
-
-## Launch a Machine on Your GCP Account
-
-Launch a machine on your own GCP account using the CLI:
-
-```bash
-inductiva task-runner launch byoc-gcp-machine \
-    --provider gcp \
-    --machine-type c2d-highcpu-8 \
-    --spot
-```
-
-## Access the Machine Group in Python
-
-After launching via CLI, you can access the machine group in Python:
+Create a machine group on your own GCP account:
 
 ```python
 import inductiva
 
-# Get the machine group by name
-mg = inductiva.resources.machine_groups.get_by_name('byoc-gcp-machine')
+# Create a BYOC machine group
+mg = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2d-highcpu-8",  # GCP machine type to use
+    spot=True,                     # Use spot instances for cost savings
+    byoc=True,                     # Enable Bring Your Own Cloud
+)
+```
+
+**Note**: BYOC machine groups work just like regular machine groups - they will automatically start when you run a simulation if they're not already started. This will create a VM in your GCP account. You can optionally call `mg.start()` explicitly if you want to start the machine before running simulations.
+
+### Configuring Auto-Termination
+
+By default, GCP VMs in BYOC machine groups will automatically terminate after **3 minutes of idle time** to help control costs and reduce the risk of accidentally leaving expensive machines running. This is a critical safety feature that helps prevent unexpected charges from forgotten VMs.
+
+**How it differs from regular machine groups**: Regular Inductiva machine groups are managed entirely by Inductiva and automatically terminate when simulations complete. BYOC machine groups run in your account and require this additional safety mechanism to prevent cost overruns.
+
+You can configure this behavior using the `max_idle_time` parameter:
+
+```python
+import inductiva
+
+# Set custom idle time (in minutes)
+mg = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2d-highcpu-8",
+    spot=True,
+    byoc=True,
+    max_idle_time=10  # Terminate after 10 minutes of idle time
+)
+
+# Or disable auto-termination entirely
+mg = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2d-highcpu-8",
+    spot=True,
+    byoc=True,
+    max_idle_time=None  # No auto-termination
+)
+```
+
+> **⚠️ Warning**: Disabling auto-termination (`max_idle_time=None`) removes the safety mechanism that prevents unexpected charges. You are fully responsible for manually terminating machines. Consider setting up GCP billing alerts and monitoring to track costs if you disable this feature.
+
+### Configuring Disk Size
+
+The `data_disk_gb` parameter is very important for BYOC machine groups. Unlike Inductiva's managed infrastructure, BYOC does not support automatic disk resizing. If your simulation runs out of disk space, it will crash and fail.
+
+When creating a BYOC machine group, you can specify the disk size using the `data_disk_gb` parameter:
+
+```python
+import inductiva
+
+# Create a BYOC machine group with custom disk size
+mg = inductiva.resources.MachineGroup(
+    provider="GCP",
+    machine_type="c2d-highcpu-8",
+    spot=True,
+    byoc=True,
+    data_disk_gb=100  # Specify disk size in GB
+)
+```
+
+Always estimate your simulation's storage requirements and add a safety margin. Monitor your disk usage during simulations to avoid crashes.
+
+## Using the Machine Group
+
+The machine group can be used like any other Inductiva machine group:
+
+```python
+# Run a simulation on your BYOC machine group
+# The machine will start automatically when you run the simulation
+task = simulator.run(input_dir=input_dir, on=mg)
+task.wait()
+task.download_outputs()
+mg.terminate()
+```
+
+**Note**: Once you call `simulator.run()`, the simulation will continue running on your GCP VM even if you close your local computer. The machine group will start automatically if it's not already running.
+
+**Machine Visibility**: After creating a BYOC machine group and starting a simulation, you can view it in the [Inductiva Console](https://console.inductiva.ai/machine-groups) machines page or using the CLI command `inductiva resources list`. Note that it may take up to two minutes for the machine to start and become visible. Inductiva will display information about your machine including machine type, start time, status, and usage metrics. This information is reported by the task-runner and helps you monitor your BYOC machines alongside your regular Inductiva resources.
+
+### Retrieving an Existing Machine Group
+
+If you need to access a machine group from a different script or session, you can retrieve it by name:
+
+```python
+import inductiva
+
+# Get an existing machine group by name
+mg = inductiva.resources.machine_groups.get_by_name("<name>")
 
 # Use it for simulations
 task = simulator.run(input_dir=input_dir, on=mg)
 ```
 
-## Advanced Configuration
+## Machine Scaling Workaround
 
-You can customize various aspects of your BYOC machine groups:
+Since BYOC machine groups only support one VM per group (unlike regular machine groups where you can specify `num_machines`), you can create multiple machine groups in a loop to scale up:
 
-```bash
-# Launch bigger machine
-inductiva task-runner launch byoc-gcp-machine \
-    --provider gcp \
-    --machine-type c2d-highcpu-32 \
-    --spot
+```python
+import inductiva
 
-# Set custom auto-termination time (in minutes)
-inductiva task-runner launch short-lived-machine \
-    --provider gcp \
-    --machine-type c2d-highcpu-8 \
-    --max-idle-time 5 \
-    --spot
+# Create multiple BYOC machine groups for scaling
+for i in range(3):
+    mg = inductiva.resources.MachineGroup(
+        provider="GCP",
+        machine_type="c2d-highcpu-8",
+        spot=True,
+        byoc=True,
+    )
+    # Use each machine group for simulations
+    task = simulator.run(input_dir=input_dir, on=mg)
 ```
 
 ```{banner_small}
-:origin: launch_machines_on_gcp_sec3
+:origin: launch_machines_on_gcp_sec2
 ```
