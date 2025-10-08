@@ -125,7 +125,7 @@ this simulation was approximately 11 minutes and 25 seconds.
 ## Testing Different Machines
 This simulation is relatively small, using a one-dimensional setup with a single atom. Consequently, increasing the number of 
 vCPUs has little to no impact on performance. To investigate potential speedups, we tested configurations with 4 and 8 vCPUs 
-across several machine families, comparing performance across hardware generations.
+across several machine series, comparing performance across hardware generations.
 
 | Machine Type  | Execution Time         | Estimated Cost (USD) |
 | ------------- | ---------------------- | -------------------- |
@@ -137,7 +137,7 @@ across several machine families, comparing performance across hardware generatio
 | c4-highcpu-8  | 7 min, 14s             | 0.0190               |
 
 These results confirm that increasing the number of vCPUs has minimal effect on performance for this small simulation, with 
-runtimes nearly identical between 4 and 8 vCPUs. The newer `c4-highcpu` machines complete the task significantly faster than the `c2d` and `c3d` families, though at a higher cost. Among the options tested, `c2d-highcpu-4` is the most cost-effective, while `c4-highcpu-4` delivers the best performance. This highlights the limited benefit of scaling CPU count for this particular simulation.
+runtimes nearly identical between 4 and 8 vCPUs. The newer `c4-highcpu` machines complete the task significantly faster than the `c2d` and `c3d` series, though at a higher cost. Among the options tested, `c2d-highcpu-4` is the most cost-effective, while `c4-highcpu-4` delivers the best performance. This highlights the limited benefit of scaling CPU count for this particular simulation.
 
 ```{banner_small}
 :origin: octopus

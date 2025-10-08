@@ -40,7 +40,7 @@ The software versions used in this benchmark were the following:
 
 ## Computational Resources Tested
 
-The benchmark was conducted on the following machine families:
+The benchmark was conducted on the following machine series:
 
 ### Intel-based
 - **C2**  
@@ -68,7 +68,7 @@ The benchmark was conducted on the following machine families:
   - `c2d-highcpu-16`  
   - local test machines
   - Other setups with low memory
-- For the **C2 family**, only the `standard` configuration was tested, as `highcpu` variants are not available.
+- For the **C2 series**, only the `standard` configuration was tested, as `highcpu` variants are not available.
 
 See the results of the benchmark on the following pages:
 - [Execution Times Comparison](exec-time)

@@ -83,7 +83,7 @@ To speed up the dataset generation process, we aim to avoid relying on high-perf
 Instead, our primary acceleration strategy is to leverage the ability to run a large number of machines in parallel.
 
 For this reason, we focus on using instances that offer a strong cost-performance balance — such as the **c2d** cloud machine 
-family.
+series.
 
 To get started, the code below runs a single simulation of this base case using the Inductiva API. In this example, we're using 
 a `c2d-highcpu-16` cloud machine, which is equipped with 16 virtual CPUs (vCPUs).

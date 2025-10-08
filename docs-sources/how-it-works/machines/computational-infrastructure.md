@@ -22,7 +22,7 @@ returns the results back to you.
 
 By default, Inductiva executes computational workloads on Google Cloud Platform (GCP). This means that the simulations initiated through our API are executed on one or more virtual machines (VMs) hosted on GCP.
 
-Each VM family offers multiple machine types with different specifications to match your simulation requirements and budget. For detailed information about specific machine types available within each family through Inductiva, including pricing and performance characteristics, explore our [complete machine catalog](https://inductiva.ai/machines).
+Each VM series offers multiple machine types with different specifications to match your simulation requirements and budget. For detailed information about specific machine types available within each series through Inductiva, including pricing and performance characteristics, explore our [complete machine catalog](https://inductiva.ai/machines).
 
 These machine types allow for the customization of
 [MachineGroups](computational_resources/machinegroup_class.md),
