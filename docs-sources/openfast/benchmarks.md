@@ -30,10 +30,9 @@ The software environment used for this test:
 
 | Component              | Version                               |
 |------------------------|---------------------------------------|
-| OpenMP                 |                                       |
 | OpenFAST               | v4.1.0                                |
-| gcc, g++, gfortran     |                                       |
-| kernel                 |                                       |
+| gcc, gfortran          |(Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0|
+| kernel                 |         6.8.0-85-generic              |
 
 Note that this is a relatively lightweight test case. On heavier workloads, performance differences between machine types become even more pronounced.
 
