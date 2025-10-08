@@ -40,13 +40,13 @@ Note that this is a relatively lightweight test case. On heavier workloads, perf
 ## OpenFAST Performance vs. vCPU Count
 To demonstrate that OpenFAST’s performance is not influenced by the number of allocated vCPUs, we ran the same simulation across multiple c2d-highcpu cloud machines on Inductiva, each with a different number of vCPUs.
 
-| Machine Type    | CPU Type             | Execution Time | Estimated Cost (USD) |
-|-----------------|----------------------|----------------|---------------------|
-| c2d-highcpu-2   | AMD EPYC             | 2 min, 47 sec  | 0.00062             |
-| c2d-standard-2  | AMD EPYC             | 2 min, 41 sec  | 0.00069             |
-| c4d-highcpu-2   | AMD EPYC             | 1 min, 52 sec  | 0.0012              |
-| c4-highcpu-2    | Intel Xeon Scalable  | 2 min, 46 sec  | 0.0020              |
-
+| Machine Type   | vCPUs | Execution Time | Estimated Cost (USD) |
+|----------------|-------|----------------|----------------------|
+| c2d-highcpu-2  | 2     | 2 min, 47s     | 0.00062              |
+| c2d-highcpu-4  | 4     | 2 min, 36s     | 0.00099              |
+| c2d-highcpu-8  | 8     | 2 min, 37s     | 0.0018               |
+| c2d-highcpu-16 | 16    | 2 min, 33s     | 0.0033               |
+| c2d-highcpu-32 | 32    | 2 min, 33s     | 0.0065               |
 
 As shown, the **execution time remains effectively constant** regardless of the number of vCPUs. This confirms that OpenFAST only utilizes a single thread, and additional virtual cores simply remain idle. Meanwhile, costs increase linearly with vCPU count, making higher-core machines inefficient for single-turbine runs.
 
