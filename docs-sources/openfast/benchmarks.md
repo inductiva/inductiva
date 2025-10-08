@@ -47,17 +47,17 @@ To demonstrate that OpenFAST’s performance is not influenced by the number of 
 | c2d-highcpu-16 | 16    | 2 min, 33s     | 0.0033               |
 | c2d-highcpu-32 | 32    | 2 min, 33s     | 0.0065               |
 
-As shown, the **execution time remains effectively constant** regardless of the number of vCPUs. This confirms that OpenFAST only utilizes a single thread, and additional virtual cores simply remain idle. Meanwhile, costs increase linearly with vCPU count, making higher-core machines inefficient for single-turbine runs.
+As shown, the **execution time remains practically constant** regardless of the number of vCPUs. This confirms that OpenFAST only utilizes a single thread, and additional virtual cores simply remain idle. Meanwhile, costs increase linearly with vCPU count, making higher-core machines inefficient for single-turbine runs.
 
 ## When Less is More: Selecting the Right Machine
-To identify the most effective virtual machines for single-turbine OpenFAST simulations, we evaluated four compute-optimized VM families (powered by Google Cloud): `c2`, `c2d`, `c4`, and `c4d`. All tests used machines 
-with 2 vCPUs to isolate the effect of the underlying hardware, with all CPUs belonging to the latest generation 
-available on Google Cloud as of 2025.
+On Inductiva, the most cost-efficient option for single-turbine simulations is to use lightweight virtual machines with 2 vCPUs backed by a single physical core. 
+
+To determine which VM series offers the best runtime for OpenFAST, we evaluated the following compute-optimized machine series (powered by Google Cloud): `c2d`, `c4`, and `c4d`
 
 | Machine Type  | CPU Type                            | Clock Speed       | Execution Time | Estimated Cost (USD)|
 |---------------|-------------------------------------|-------------------|----------------|---------------------|
-| c2d-highcpu-2 | AMD EPYC (Turin)                    | 2.7 GHz - 4.1 GHz | 2 min, 47s     | 0.00062             |
-| c4d-highcpu-2 | AMD EPYC (Turin)                    | 2.7 GHz - 4.1 GHz | 1 min, 52s     | 0.0012              |
+| c2d-highcpu-2 | AMD EPYC (Rome)                     | Up to 3.5 GHz | 2 min, 47s     | 0.00062             |
+| c4d-highcpu-2 | AMD EPYC (Turin)                    | Up to 3.5 GHz | 1 min, 52s     | 0.0012              |
 | c4-highcpu-2  | Intel Xeon Scalable (Granite Rapids)| 2.8 GHz - 4.2 GHz | 2 min, 46s     | 0.0020              |
 
 The computational resources are configured with `threads_per_core=2` (**hyper-threading enabled**), which is the **default** setting for virtual machines on Inductiva (learn more [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading)).
@@ -73,7 +73,7 @@ Here are the performance results for the same machine types with **hyper-threadi
 
 | Machine Type  | CPU Type                            | Clock Speed       | Execution Time | Estimated Cost (USD)|
 |---------------|-------------------------------------|-------------------|----------------|---------------------|
-| c2d-highcpu-2 | AMD EPYC (Turin)                    | 2.7 GHz - 4.1 GHz | 2 min, 46s     | 0.00062             |
+| c2d-highcpu-2 | AMD EPYC (Rome)                     | 2.7 GHz - 4.1 GHz | 2 min, 46s     | 0.00062             |
 | c4d-highcpu-2 | AMD EPYC (Turin)                    | 2.7 GHz - 4.1 GHz | 1 min, 43s     | 0.0011              |
 | c4-highcpu-2  | Intel Xeon Scalable (Granite Rapids)| 2.8 GHz - 4.2 GHz | 2 min, 44s     | 0.0020              |
 
