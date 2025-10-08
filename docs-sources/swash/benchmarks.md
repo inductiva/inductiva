@@ -27,7 +27,7 @@ Faster execution times are better. Units in seconds.
 ```
 
 ### Cost vs Time
-The following plot shows how the execution times and costs vary with the number of cores for each machine family.
+The following plot shows how the execution times and costs vary with the number of cores for each machine series.
 
 ```{raw} html
 :file: ./_static/cost_time_graph.html
