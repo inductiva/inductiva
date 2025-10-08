@@ -28,11 +28,11 @@ The simulation runs for 60 seconds of turbine operation using a time step of 0.0
 
 The software environment used for this test:
 
-| Component              | Version                               |
-|------------------------|---------------------------------------|
-| OpenFAST               | v4.1.0                                |
-| gcc, gfortran          |(Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0|
-| kernel                 |         6.8.0-85-generic              |
+| Component              | Version                                |
+|------------------------|----------------------------------------|
+| OpenFAST               | v4.1.0                                 |
+| gcc, gfortran          | (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0|
+| kernel                 | 6.8.0-85-generic                       |
 
 Note that this is a relatively lightweight test case. On heavier workloads, performance differences between machine types become even more pronounced.
 
@@ -55,7 +55,6 @@ To identify the most effective virtual machines for single-turbine OpenFAST simu
 | Machine Type    | CPU Type             | Execution Time | Estimated Cost (USD) |
 |-----------------|----------------------|----------------|---------------------|
 | c2d-highcpu-2   | AMD EPYC             | 2 min, 46 sec  | 0.00062             |
-| c2d-standard-2  | AMD EPYC             | 2 min, 42 sec  | 0.00069             |
 | c4d-highcpu-2   | AMD EPYC             | 1 min, 43 sec  | 0.0011              |
 | c4-highcpu-2    | Intel Xeon Scalable  | 2 min, 44 sec  | 0.0020              |
 
@@ -73,7 +72,6 @@ Here are the performance results for the same machine types with hyper-threading
 | Machine Type    | CPU Type | Execution Time | Estimated Cost (USD) |
 |-----------------|----------|----------------|---------------------|
 | c2d-highcpu-2   | AMD EPYC      | 2 min, 46 sec  | 0.00062             |
-| c2d-standard-2  | AMD EPYC   | 2 min, 42 sec  | 0.00069             |
 | c4d-highcpu-2   | AMD EPYC     | 1 min, 43 sec  | 0.0011              |
 | c4-highcpu-2    | Intel Xeon Scalable     | 2 min, 44 sec  | 0.0020              |
 
