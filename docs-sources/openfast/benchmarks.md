@@ -24,7 +24,7 @@ The physics modules used in this case are: ElastoDyn, InflowWind, AeroDyn15, Ser
 
 The simulation runs for 60 seconds of turbine operation using a time step of 0.01 seconds.
 
-> 🔗 **Input files for this test case are available [here](https://github.com/OpenFAST/r-test/tree/v4.1.0/glue-codes/openfast/MW_OC4Jckt_DLL_WTurb_WavesIrr_MGrowth).**
+> 🔗 **Input files for this test case are available [here](https://github.com/OpenFAST/r-test/tree/v4.1.0/glue-codes/openfast/5MW_OC4Jckt_DLL_WTurb_WavesIrr_MGrowth).**
 
 The software environment used for this test:
 
