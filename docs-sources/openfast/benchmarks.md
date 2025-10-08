@@ -60,7 +60,7 @@ available on Google Cloud as of 2025.
 | c4d-highcpu-2 | AMD EPYC (Turin)                    | 2.7 GHz - 4.1 GHz | 1 min, 52s     | 0.0012              |
 | c4-highcpu-2  | Intel Xeon Scalable (Granite Rapids)| 2.8 GHz - 4.2 GHz | 2 min, 46s     | 0.0020              |
 
-The computational resources are configured with `threads_per_core=2` (hyper-threading enabled), which is the **default** setting for virtual machines on Inductiva (learn more [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading)).
+The computational resources are configured with `threads_per_core=2` (**hyper-threading enabled**), which is the **default** setting for virtual machines on Inductiva (learn more [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading)).
 
 The best performer in terms of raw speed is the `c4d-highcpu-2`. This speedup is achieved without increasing the vCPU count, demonstrating that newer-generation CPUs can significantly accelerate single-threaded workloads like OpenFAST, purely due to architectural improvements and higher per-core performance.
 
@@ -69,7 +69,7 @@ That said, the `c4d-highcpu-2` also comes with a higher cost. If your goal is to
 ## Disabling Hyper-Threading: Does It Matter?
 In many traditional HPC environments, hyper-threading is often disabled to avoid resource contention and to ensure predictable performance for highly parallel, compute-intensive workloads.
 
-Here are the performance results for the same machine types with hyper-threading disabled:
+Here are the performance results for the same machine types with **hyper-threading disabled**:
 
 | Machine Type  | CPU Type                            | Clock Speed       | Execution Time | Estimated Cost (USD)|
 |---------------|-------------------------------------|-------------------|----------------|---------------------|
