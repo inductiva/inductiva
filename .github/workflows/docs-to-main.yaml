@@ -1,40 +1,43 @@
 name: Update Docs PR
 
 on:
-  workflow_dispatch: # Manual trigger
+  workflow_dispatch: # manual trigger
 
 jobs:
-  create-docs-pr:
+  update-docs:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # important for checking other branches
+          fetch-depth: 0 # important to have full history
 
-      - name: Configure Git
+      - name: Set up git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Checkout main branch
-        run: git checkout main
-
-      - name: Create branch for PR
-        id: create_branch
+      - name: Create new branch from main
         run: |
-          branch_name="update-docs-$(date +%Y%m%d%H%M%S)"
-          git checkout -b $branch_name
-          echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
+          git fetch origin main
+          git checkout origin/main
+          BRANCH_NAME="update-docs-$(date +%Y%m%d%H%M%S)"
+          git checkout -b $BRANCH_NAME
+          echo $BRANCH_NAME > branch_name.txt
 
-      - name: Get docs from development
-        run: git checkout development -- docs-sources/
+      - name: Checkout docs-sources from development
+        run: |
+          git fetch origin development
+          git checkout origin/development -- docs-sources/
 
       - name: Commit changes
         run: |
-          git add docs-sources/
-          git diff --cached --quiet || git commit -m "Update docs-sources from development"
+          git add docs-sources branch_name.txt
+          git commit -m "Update docs-sources from development"
+
+      - name: Push branch
+        run: |
           git push origin HEAD
 
       - name: Create Pull Request
@@ -42,6 +45,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: main
-          branch: ${{ steps.create_branch.outputs.branch_name }}
+          branch: $BRANCH_NAME
           title: "Update docs-sources from development"
-          body: "This PR updates docs-sources from development branch."
+          body: "Automated PR: sync docs-sources from development into main"
