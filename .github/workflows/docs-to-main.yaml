@@ -19,21 +19,21 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Create new branch from main
+        id: create_branch
         run: |
           git fetch origin main
           git checkout origin/main
           BRANCH_NAME="update-docs-$(date +%Y%m%d%H%M%S)"
           git checkout -b $BRANCH_NAME
-          echo $BRANCH_NAME > branch_name.txt
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
       - name: Checkout docs-sources from development
         run: |
-          git fetch origin development
           git checkout origin/development -- docs-sources/
 
       - name: Commit changes
         run: |
-          git add docs-sources branch_name.txt
+          git add *
           git commit -m "Update docs-sources from development"
 
       - name: Push branch
@@ -45,6 +45,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: main
-          branch: $BRANCH_NAME
+          branch: ${{ steps.create_branch.outputs.branch_name }}
           title: "Update docs-sources from development"
           body: "Automated PR: sync docs-sources from development into main"
