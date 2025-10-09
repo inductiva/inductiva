@@ -21,20 +21,20 @@ jobs:
       - name: Create new branch from main
         id: create_branch
         run: |
-          git fetch origin main
-          git checkout origin/main
-          BRANCH_NAME="update-docs-$(date +%Y%m%d%H%M%S)"
-          git checkout -b $BRANCH_NAME
-          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+            git fetch origin main
+            git checkout -b "update-docs-$(date +%Y%m%d%H%M%S)" origin/main
+            echo "branch_name=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
 
       - name: Checkout docs-sources from development
         run: |
-          git checkout origin/development -- docs-sources/
+            git fetch origin development
+            git checkout origin/development -- docs-sources/
 
       - name: Commit changes
         run: |
-          git add *
-          git commit -m "Update docs-sources from development"
+            git add docs-sources/
+            git diff --cached --name-status
+            git commit -m "Update docs-sources from development" || echo "No changes to commit"
 
       - name: Push branch
         run: |
