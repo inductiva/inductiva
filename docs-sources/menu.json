@@ -234,20 +234,6 @@
           "path": "api-functions/api/index"
         }
       ]
-    },
-    {
-      "title": "Release Notes",
-      "children": [
-        {
-          "title": "dummy 1",
-          "path": "release-notes/index"
-        },
-        {
-          "title": "dummy 2",
-          "path": "release-notes/index"
-        }
-      ],
-      "groupWith": "API Functions"
     }
   ]
 }
