@@ -61,10 +61,10 @@ Run occDrivAerStaticMesh from the OpenFOAM HPC Benchmark Suite <run-occdrivaerst
 ```{toctree}
 ---
 caption: " "
-maxdepth: 1
+maxdepth: 3
 hidden: true
 ---
-MPI Behavior in OpenFOAM <openfoam-mpi-setup/openfoam-behaviour>
+MPI Behaviour in OpenFOAM <openfoam-mpi-setup/openfoam-behaviour>
 ```
 
 ```{toctree}
