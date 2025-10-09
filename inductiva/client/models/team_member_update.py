@@ -16,8 +16,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictBool
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict
+from typing import Any, ClassVar, Dict, List
 from inductiva.client.models.team_role import TeamRole
 from typing import Optional, Set
 from typing_extensions import Self
@@ -29,9 +29,8 @@ class TeamMemberUpdate(BaseModel):
     """
 
   # noqa: E501
-    role: Optional[TeamRole] = None
-    is_active: Optional[StrictBool] = None
-    __properties: ClassVar[List[str]] = ["role", "is_active"]
+    role: TeamRole
+    __properties: ClassVar[List[str]] = ["role"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -70,16 +69,6 @@ class TeamMemberUpdate(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if role (nullable) is None
-        # and model_fields_set contains the field
-        if self.role is None and "role" in self.model_fields_set:
-            _dict['role'] = None
-
-        # set to None if is_active (nullable) is None
-        # and model_fields_set contains the field
-        if self.is_active is None and "is_active" in self.model_fields_set:
-            _dict['is_active'] = None
-
         return _dict
 
     @classmethod
@@ -91,8 +80,5 @@ class TeamMemberUpdate(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "role": obj.get("role"),
-            "is_active": obj.get("is_active")
-        })
+        _obj = cls.model_validate({"role": obj.get("role")})
         return _obj

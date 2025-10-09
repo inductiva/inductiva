@@ -21,6 +21,7 @@ from pydantic import BaseModel, ConfigDict, StrictBool, StrictFloat, StrictInt, 
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from inductiva.client.models.dynamic_disk_resize_config import DynamicDiskResizeConfig
 from inductiva.client.models.machine_group_type import MachineGroupType
+from inductiva.client.models.providers import Providers
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -33,7 +34,7 @@ class RegisterVMGroupRequest(BaseModel):
   # noqa: E501
     machine_type: Optional[StrictStr] = None
     name: Optional[StrictStr] = None
-    provider_id: Optional[StrictStr] = 'GCP'
+    provider_id: Optional[Providers] = None
     threads_per_core: Optional[StrictInt] = 2
     disk_size_gb: Optional[StrictInt] = 10
     max_idle_time: Optional[Union[StrictFloat, StrictInt]] = None
@@ -188,8 +189,7 @@ class RegisterVMGroupRequest(BaseModel):
             "name":
                 obj.get("name"),
             "provider_id":
-                obj.get("provider_id")
-                if obj.get("provider_id") is not None else 'GCP',
+                obj.get("provider_id"),
             "threads_per_core":
                 obj.get("threads_per_core")
                 if obj.get("threads_per_core") is not None else 2,

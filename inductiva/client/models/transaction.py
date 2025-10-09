@@ -17,7 +17,7 @@ import re  # noqa: F401
 import json
 
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt
+from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from inductiva.client.models.currency_code import CurrencyCode
 from inductiva.client.models.top_up_type import TopUpType
@@ -38,9 +38,11 @@ class Transaction(BaseModel):
     fee_percentage: Optional[Union[StrictFloat, StrictInt]] = None
     total: Optional[Union[StrictFloat, StrictInt]] = None
     top_up_type: TopUpType
+    top_up_type_alias: StrictStr
+    metadata: Optional[Dict[str, StrictStr]]
     __properties: ClassVar[List[str]] = [
         "amount", "time", "currency", "fee", "fee_percentage", "total",
-        "top_up_type"
+        "top_up_type", "top_up_type_alias", "metadata"
     ]
 
     model_config = ConfigDict(
@@ -95,6 +97,11 @@ class Transaction(BaseModel):
         if self.total is None and "total" in self.model_fields_set:
             _dict['total'] = None
 
+        # set to None if metadata (nullable) is None
+        # and model_fields_set contains the field
+        if self.metadata is None and "metadata" in self.model_fields_set:
+            _dict['metadata'] = None
+
         return _dict
 
     @classmethod
@@ -113,6 +120,8 @@ class Transaction(BaseModel):
             "fee": obj.get("fee"),
             "fee_percentage": obj.get("fee_percentage"),
             "total": obj.get("total"),
-            "top_up_type": obj.get("top_up_type")
+            "top_up_type": obj.get("top_up_type"),
+            "top_up_type_alias": obj.get("top_up_type_alias"),
+            "metadata": obj.get("metadata")
         })
         return _obj
