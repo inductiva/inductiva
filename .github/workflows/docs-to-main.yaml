@@ -11,7 +11,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Needed to access full history and branches
+          fetch-depth: 0 # important for checking other branches
 
       - name: Configure Git
         run: |
@@ -21,19 +21,20 @@ jobs:
       - name: Checkout main branch
         run: git checkout main
 
-      - name: Get docs from development
-        run: git checkout development -- docs-sources/
-
       - name: Create branch for PR
+        id: create_branch
         run: |
           branch_name="update-docs-$(date +%Y%m%d%H%M%S)"
           git checkout -b $branch_name
-          echo $branch_name > branch_name.txt
+          echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
+
+      - name: Get docs from development
+        run: git checkout development -- docs-sources/
 
       - name: Commit changes
         run: |
           git add docs-sources/
-          git commit -m "Update docs-sources from development"
+          git diff --cached --quiet || git commit -m "Update docs-sources from development"
           git push origin HEAD
 
       - name: Create Pull Request
