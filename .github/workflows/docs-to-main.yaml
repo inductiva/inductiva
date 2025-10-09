@@ -1,0 +1,47 @@
+name: Update Docs PR
+
+on:
+  workflow_dispatch: # Manual trigger
+
+jobs:
+  create-docs-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # important for checking other branches
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Checkout main branch
+        run: git checkout main
+
+      - name: Create branch for PR
+        id: create_branch
+        run: |
+          branch_name="update-docs-$(date +%Y%m%d%H%M%S)"
+          git checkout -b $branch_name
+          echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
+
+      - name: Get docs from development
+        run: git checkout development -- docs-sources/
+
+      - name: Commit changes
+        run: |
+          git add docs-sources/
+          git diff --cached --quiet || git commit -m "Update docs-sources from development"
+          git push origin HEAD
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: main
+          head: ${{ steps.create_branch.outputs.branch_name }}
+          title: "Update docs-sources from development"
+          body: "This PR updates docs-sources from development branch."

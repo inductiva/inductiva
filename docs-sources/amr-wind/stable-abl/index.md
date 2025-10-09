@@ -36,7 +36,7 @@ The software versions used in this benchmark were the following:
 
 ## Computational Resources Tested
 
-The benchmark was conducted on the following machine families:
+The benchmark was conducted on the following machine series:
 
 ### Intel-based
 - **C2**  
@@ -50,7 +50,7 @@ The benchmark was conducted on the following machine families:
 
 ### AMD-based
 - **C2D**  
-  AMD EPYC (Rome)
+  AMD EPYC (Milan)
 
 - **C3D**  
   AMD EPYC (Genoa)
@@ -67,7 +67,7 @@ The benchmark was conducted on the following machine families:
   - Local test machines  
   - Other similar or lower end setups
 
-- Within the **C2 family**, only the `standard` configuration was evaluated, since `highcpu` variants are not available.
+- Within the **C2 series**, only the `standard` configuration was evaluated, since `highcpu` variants are not available.
 
 
 See the results of the benchmark on the following pages:

@@ -47,7 +47,9 @@ def launch_task_runner_gcp(args):
         provider="GCP",
         spot=args.spot,
         mg_name=args.machine_group_name,
+        data_disk_gb=args.disk_size,
         byoc=True,
+        max_idle_time=args.max_idle_time,
     ).start()
 
 
@@ -219,5 +221,16 @@ def register(parser):
     gcp_group.add_argument("--spot",
                            action="store_true",
                            help="Use spot instance.")
+
+    gcp_group.add_argument("--max-idle-time",
+                           type=int,
+                           help="Idle time in minutes before "
+                           "auto-termination (default: 3).")
+
+    gcp_group.add_argument("--disk-size",
+                           "-ds",
+                           type=int,
+                           default=10,
+                           help="Disk size in GB (default: 10).")
 
     subparser.set_defaults(func=launch_task_runner)
