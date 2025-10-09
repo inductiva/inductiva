@@ -119,7 +119,7 @@ def listdir(
         print(max_results)
         page_size = min(100, max_results)
 
-        response = api.list_paginated_storage_contents(
+        response = api.list_storage_contents(
             path=path,
             sort_by=order_by,
             order=sort_order,
@@ -128,9 +128,9 @@ def listdir(
             region=region,
         )
 
-        for name, file_info in response.contents.items():
+        for file_info in response.contents:
             all_contents.append({
-                "name": name,
+                "name": file_info.name,
                 "size": round(float(file_info.size_bytes), 3),
                 "creation_time": file_info.creation_time,
                 "provider": file_info.provider_id,
@@ -835,7 +835,7 @@ def _generate_complete_multipart_upload_signed_url(
 def _get_file_size(file_path):
     api = inductiva.client.StorageApi(inductiva.api.get_client())
 
-    contents = api.list_paginated_storage_contents(path=file_path, per_page=2)
+    contents = api.list_storage_contents(path=file_path, per_page=2)
     if len(contents) > 1:
         raise ValueError(f"Multiple files found at {file_path}. "
                          "Please specify a single file.")
