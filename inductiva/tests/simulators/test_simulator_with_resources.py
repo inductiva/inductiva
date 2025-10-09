@@ -250,7 +250,8 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
                 "position_in_queue": {
                     "tasks_ahead": 0
                 },
-                "is_terminated": True
+                "is_terminated": True,
+                "storage_region": "test-region",
             })
 
         def get_task(self, *_args, **_kwargs):
@@ -295,7 +296,11 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             list_mock.return_value = {"production": DefaultDictMock()}
 
             submit_mock.return_value = models.TaskSubmittedInfo(
-                id="123", status="submitted", is_terminated=False)
+                id="123",
+                status="submitted",
+                is_terminated=False,
+                storage_region="test-region",
+            )
             if sim_name == "OpenTelemac":
                 sim_obj = simcls(version="1.0.0")
             elif sim_name == "CustomImage":

@@ -10,13 +10,13 @@ Choosing the right machine to run your simulations can make the difference betwe
 
 - **Optimize costs:** Use [spot machines](../machines/spot-machines.md) for up to 60% savings.
 
-## Machine Families
+## Machine series
 
-Inductiva provides access to Google Cloud Platform machine families, each optimized for specific computational patterns:
+Inductiva provides access to Google Cloud Platform machine series, each optimized for specific computational patterns:
 
 ### Compute-Optimized Machines
 **Best for:** CPU-intensive simulations, mathematical modeling, fluid dynamics
-- **Families:** C2, C2D, H3
+- **series:** C2, C2D, H3
 - **Key strength:** Highest performance per core with premium processors
 - **Memory ratio:** Optimized compute-to-memory ratios (typically 2-4GB RAM per vCPU)
 
@@ -24,7 +24,7 @@ Inductiva provides access to Google Cloud Platform machine families, each optimi
 
 ### Memory-Optimized Machines
 **Best for:** Large-scale simulations requiring extensive data in memory
-- **Families:** M3
+- **series:** M3
 - **Key strength:** High memory-to-vCPU ratios (8GB+ per vCPU)
 - **When to choose:** Your simulation loads large datasets or requires extensive intermediate storage
 
@@ -32,7 +32,7 @@ Inductiva provides access to Google Cloud Platform machine families, each optimi
 
 ### General-Purpose Machines
 **Best for:** Balanced workloads, development, small to medium simulations
-- **Families:** C3, C3D, C4,
+- **series:** C3, C3D, C4,
 - **Key strength:** Versatile balance of compute, memory, and networking
 - **Typical use cases:** Prototyping, mixed workloads, cost-sensitive applications
 - **Cost advantage:** Best price-performance ratio for varied workloads
@@ -41,7 +41,7 @@ Inductiva provides access to Google Cloud Platform machine families, each optimi
 
 ### Accelerator-Optimized Machines
 **Best for:** GPU-accelerated simulations, machine learning, parallel computing
-- **Families:** A2, A3, G2
+- **series:** A2, A3, G2
 - **Key strength:** High-performance GPUs (NVIDIA Tesla, A100, H100)
 - **Performance boost:** 10-100x speedup for compatible workloads
 
@@ -49,9 +49,9 @@ Inductiva provides access to Google Cloud Platform machine families, each optimi
 
 ## Machine Naming Convention
 
-Machine names follow a consistent pattern: `family-profile-vcpus`
+Machine names follow a consistent pattern: `series-profile-vcpus`
 
-### Family Identifiers
+### Series Identifiers
 - **Generation:** C**4** (2024), C**3** (2023) A**2**(2020)
 - **Architecture:**
   - **D suffix** → AMD processors (C2D, N2D)
@@ -66,7 +66,7 @@ Machine names follow a consistent pattern: `family-profile-vcpus`
 - **megamem:** 14-19GB RAM per vCP
 - **ultramem:** 24-31GB RAM per vCPU
 
-**Example** `c3d-standard-96` = C3 family, AMD processors, standard memory, 96 vCPUs
+**Example** `c3d-standard-96` = C3 series, AMD processors, standard memory, 96 vCPUs
 
 ## Workload Matching
 
@@ -74,7 +74,7 @@ Machine names follow a consistent pattern: `family-profile-vcpus`
 Mathematical computations, iterative algorithms, single-threaded bottlenecks.
 
 **Examples:** Finite element analysis, ray tracing, numerical modeling  
-**Recommended:** Compute-optimized families (C2, H3)  
+**Recommended:** Compute-optimized series (C2, H3)  
 **Memory profile:** `highcpu` or `standard`
 
 ### Memory-Intensive Workloads
@@ -82,7 +82,7 @@ Large datasets, extensive meshes, in-memory processing requirements.
 
 **Examples:** Large CFD simulations, molecular dynamics, structural analysis  
 **Indicator:** >8GB RAM per CPU core requirement  
-**Recommended:** Memory-optimized families or `highmem` variants
+**Recommended:** Memory-optimized series or `highmem` variants
 
 ### Parallel Workloads
 MPI-based applications, embarrassingly parallel problems, multi-threaded code.
@@ -95,7 +95,7 @@ MPI-based applications, embarrassingly parallel problems, multi-threaded code.
 CUDA, OpenCL, or specialized parallel processing frameworks.
 
 **Examples:** Machine learning simulations, GROMACS, custom CUDA applications  
-**Recommended:** A2, A3, or G2 families  
+**Recommended:** A2, A3, or G2 series  
 **Key factor:** GPU memory capacity matching problem size
 
 ## Performance Comparison

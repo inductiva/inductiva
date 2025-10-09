@@ -1,7 +1,7 @@
 # Run the MB9 Microbenchmark from ExaFOAM on an MPI Cluster
-In this tutorial, you’ll learn how to run a high-performance OpenFOAM simulation on a **multi-node MPI (Message Passing Interface) cluster** using the Inductiva API. This setup allows you to combine the CPU resources of several machines, significantly boosting the total number of virtual CPUs (vCPUs) available and reducing simulation runtime.
+In this tutorial, you’ll learn how to run a high-performance OpenFOAM simulation on a **multi-node MPI (Message Passing Interface) cluster** using the Inductiva API. This setup lets you combine the CPU resources of multiple machines, significantly increasing the total number of virtual CPUs (vCPUs) and reducing simulation runtime.
 
-We will cover the `MB9 Microbenchmark from ExaFOAM` use case from the CFD Tutorials, available in the [official ExaFOAM documentation](https://exafoam.eu/benchmarks/).
+As a practical example, we’ll run the `MB9 Microbenchmark from ExaFOAM`, available in the official [official ExaFOAM documentation](https://exafoam.eu/benchmarks/), using three machines within the cluster. This configuration **cuts the simulation time in half** compared to using a single machine.
 
 ## Prerequisites
 1. Download the required files [here](https://develop.openfoam.com/committees/hpc/-/tree/develop/compressible/rhoPimpleFoam/LES/highLiftConfiguration) and place them in a folder named `highLiftConfiguration`.

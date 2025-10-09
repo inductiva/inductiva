@@ -15,17 +15,7 @@ in a single-threaded mode and cannot take advantage of parallel computing capabi
 
 <br>
 
-## 2. What is the best machine for running OpenFAST?
-The ideal machine for running OpenFAST depends on how you plan to run it. If
-you're using OpenFAST with parallel processing (through OLAF or FAST.Farm),
-a machine with a higher number of cores will provide better performance. However,
-if you’re running OpenFAST in serial mode (without parallel support), a more
-affordable machine with fewer cores will suffice, as OpenFAST won't utilize
-additional cores in this mode.
-
-<br>
-
-## 3. Can I run multiple OpenFAST simulations in parallel?
+## 2. Can I run multiple OpenFAST simulations in parallel?
 Absolutely! Running multiple simulations in parallel is the best way to fully
 utilize your available cloud resources. While OpenFAST can have limitations in
 terms of parallelism for individual simulations, executing several simulations
@@ -35,7 +25,7 @@ to see how you can do it.
 
 <br>
 
-## 4. How to load the `libdiscon.so` library?
+## 3. How to load the `libdiscon.so` library?
 
 Some simulations require the `libdiscon.so` library. To simplify the process,
 we've included this library in our simulation image. You can use it by
@@ -47,7 +37,7 @@ referencing the following path in your simulation files:
 
 <br>
 
-## 5. What commands are used to run OpenFAST and its modules?
+## 4. What commands are used to run OpenFAST and its modules?
 Here is a list of the commands available to run OpenFAST v4.0.2 and its modules, in alphabetical order:
 
 - `aerodisk_driver`: Performs **aerodynamic analysis** for wind turbine rotors, using an actuator disk approach
@@ -85,9 +75,7 @@ Here is a list of the commands available to run OpenFAST v4.0.2 and its modules,
 
 <br>
 
-
-
-## 6. My simulation needs the common a `dll` file. Do I need to compile it and send it with my input files?
+## 5. My simulation needs the common a `dll` file. Do I need to compile it and send it with my input files?
 
 No. We have already pre-compiled the three most common DLLs and included them in the OpenFAST Docker images. You can find them at:
 

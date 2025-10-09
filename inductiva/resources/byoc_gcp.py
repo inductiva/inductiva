@@ -6,6 +6,8 @@ import os
 import datetime
 from typing import Optional, Union
 
+from inductiva import users
+
 
 def estimate_vcpus_from_machine_type(machine_type):
     """Estimate vCPUs from machine type string."""
@@ -77,6 +79,7 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
     spot: bool = True,
     max_idle_time: Optional[Union[int, datetime.timedelta]] = None,
     hostname: Optional[str] = None,
+    disk_size: int = 10,
     verbose: bool = True,
 ):
     """Create a GCP VM instance.
@@ -90,6 +93,7 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
         api_url: Inductiva API URL
         spot: Whether to use preemptible (spot) instance
         hostname: Optional hostname for the task runner
+        disk_size: Boot disk size in GB, defaults to 10
         verbose: Whether to print verbose output
         max_idle_time: Optional max idle time, defaults to 3 minutes
         
@@ -124,13 +128,17 @@ def create_gcp_vm(  # pylint: disable=too-many-positional-arguments
         if hostname:
             metadata.append(f"HOST_NAME={hostname}")
 
+        username = users.get_info().username
+
         cmd = [
             "gcloud", "compute", "instances", "create", vm_name, "--zone", zone,
             "--machine-type", machine_type, "--image-family", "ubuntu-2204-lts",
             "--image-project", "ubuntu-os-cloud", "--scopes",
             "https://www.googleapis.com/auth/cloud-platform", "--metadata",
             ",".join(metadata), "--metadata-from-file",
-            f"startup-script={script_path}"
+            f"startup-script={script_path}", "--boot-disk-size",
+            f"{disk_size}GB", "--labels",
+            f"managed-by=inductiva,user={username}"
         ]
 
         if spot:

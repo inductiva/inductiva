@@ -68,7 +68,7 @@ caption: 🚀 Benchmarks
 maxdepth: 1
 hidden: true
 ---
-The curious case of OpenFAST <benchmarks>
+Selecting the Right Machine for OpenFAST Simulations <benchmarks>
 ```
 
 ```{toctree}

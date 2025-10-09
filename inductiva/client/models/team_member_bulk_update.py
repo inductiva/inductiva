@@ -16,8 +16,8 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictBool, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional
+from pydantic import BaseModel, ConfigDict, StrictStr
+from typing import Any, ClassVar, Dict, List
 from inductiva.client.models.team_role import TeamRole
 from typing import Optional, Set
 from typing_extensions import Self
@@ -28,9 +28,8 @@ class TeamMemberBulkUpdate(BaseModel):
     Schema for updating a single team member in bulk operation.
     """ # noqa: E501
     member_id: StrictStr
-    role: Optional[TeamRole] = None
-    is_active: Optional[StrictBool] = None
-    __properties: ClassVar[List[str]] = ["member_id", "role", "is_active"]
+    role: TeamRole
+    __properties: ClassVar[List[str]] = ["member_id", "role"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -69,16 +68,6 @@ class TeamMemberBulkUpdate(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if role (nullable) is None
-        # and model_fields_set contains the field
-        if self.role is None and "role" in self.model_fields_set:
-            _dict['role'] = None
-
-        # set to None if is_active (nullable) is None
-        # and model_fields_set contains the field
-        if self.is_active is None and "is_active" in self.model_fields_set:
-            _dict['is_active'] = None
-
         return _dict
 
     @classmethod
@@ -92,7 +81,6 @@ class TeamMemberBulkUpdate(BaseModel):
 
         _obj = cls.model_validate({
             "member_id": obj.get("member_id"),
-            "role": obj.get("role"),
-            "is_active": obj.get("is_active")
+            "role": obj.get("role")
         })
         return _obj

@@ -35,10 +35,11 @@ class TaskSubmittedInfo(BaseModel):
     status: TaskStatusCode
     position_in_queue: Optional[TaskPositionInQueue] = None
     is_terminated: StrictBool
+    storage_region: StrictStr
     time_to_live_seconds: Optional[Union[StrictFloat, StrictInt]] = None
     orchestration_cost: Optional[OrchestrationCostInfo] = None
     __properties: ClassVar[List[str]] = [
-        "id", "status", "position_in_queue", "is_terminated",
+        "id", "status", "position_in_queue", "is_terminated", "storage_region",
         "time_to_live_seconds", "orchestration_cost"
     ]
 
@@ -121,6 +122,8 @@ class TaskSubmittedInfo(BaseModel):
                 if obj.get("position_in_queue") is not None else None,
             "is_terminated":
                 obj.get("is_terminated"),
+            "storage_region":
+                obj.get("storage_region"),
             "time_to_live_seconds":
                 obj.get("time_to_live_seconds"),
             "orchestration_cost":

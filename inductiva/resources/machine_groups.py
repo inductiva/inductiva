@@ -722,6 +722,11 @@ class MachineGroup(BaseMachineGroup):
             raise ValueError(
                 "BYOC mode currently only supports `num_machines=1`. ")
 
+        if self.byoc and self.auto_resize_disk_max_gb is not None:
+            raise ValueError(
+                "Auto disk resize (`auto_resize_disk_max_gb`) is not supported "
+                "with BYOC mode.")
+
         if self.num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
@@ -827,6 +832,7 @@ class MachineGroup(BaseMachineGroup):
                                api_url,
                                self.spot,
                                self.max_idle_time,
+                               disk_size=self.data_disk_gb,
                                verbose=verbose)
 
         self._started = True
