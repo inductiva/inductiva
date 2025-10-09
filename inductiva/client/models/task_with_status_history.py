@@ -44,6 +44,7 @@ class TaskWithStatusHistory(BaseModel):
     storage_path: Optional[StrictStr] = None
     storage_input_path: Optional[StrictStr] = None
     storage_output_path: Optional[StrictStr] = None
+    storage_region: Optional[StrictStr] = None
     container_image: Optional[StrictStr] = None
     project: StrictStr
     is_terminated: StrictBool
@@ -73,15 +74,15 @@ class TaskWithStatusHistory(BaseModel):
     steps: Optional[List[TaskStep]] = None
     __properties: ClassVar[List[str]] = [
         "task_id", "status", "status_alias", "simulator", "storage_path",
-        "storage_input_path", "storage_output_path", "container_image",
-        "project", "is_terminated", "create_time", "input_submit_time",
-        "start_time", "computation_start_time", "computation_end_time",
-        "end_time", "estimated_computation_cost", "metrics", "executer",
-        "machine_group_name", "machine_group_id", "error_detail",
-        "input_resources", "stream_zip", "num_retries", "compress_with",
-        "task_metadata", "extra_params", "resubmit_on_preemption",
-        "duration_seconds", "orchestration_cost", "status_history",
-        "machine_operations", "steps"
+        "storage_input_path", "storage_output_path", "storage_region",
+        "container_image", "project", "is_terminated", "create_time",
+        "input_submit_time", "start_time", "computation_start_time",
+        "computation_end_time", "end_time", "estimated_computation_cost",
+        "metrics", "executer", "machine_group_name", "machine_group_id",
+        "error_detail", "input_resources", "stream_zip", "num_retries",
+        "compress_with", "task_metadata", "extra_params",
+        "resubmit_on_preemption", "duration_seconds", "orchestration_cost",
+        "status_history", "machine_operations", "steps"
     ]
 
     model_config = ConfigDict(
@@ -165,6 +166,11 @@ class TaskWithStatusHistory(BaseModel):
         # and model_fields_set contains the field
         if self.storage_output_path is None and "storage_output_path" in self.model_fields_set:
             _dict['storage_output_path'] = None
+
+        # set to None if storage_region (nullable) is None
+        # and model_fields_set contains the field
+        if self.storage_region is None and "storage_region" in self.model_fields_set:
+            _dict['storage_region'] = None
 
         # set to None if container_image (nullable) is None
         # and model_fields_set contains the field
@@ -277,6 +283,8 @@ class TaskWithStatusHistory(BaseModel):
                 obj.get("storage_input_path"),
             "storage_output_path":
                 obj.get("storage_output_path"),
+            "storage_region":
+                obj.get("storage_region"),
             "container_image":
                 obj.get("container_image"),
             "project":

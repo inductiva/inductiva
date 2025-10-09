@@ -29,6 +29,8 @@ class TopUpType(str, Enum):
     INITIAL_CREDITS = 'initial_credits'
     OFFER = 'offer'
     STRIPE_PAYMENT = 'stripe_payment'
+    REFERRAL_BONUS_REFERRER = 'referral_bonus_referrer'
+    REFERRAL_BONUS_REFEREE = 'referral_bonus_referee'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
