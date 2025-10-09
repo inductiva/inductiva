@@ -23,8 +23,7 @@ From modeling coastal erosion to predicting storm impacts, see how researchers a
 
 ## 📢 Stay Connected
 Subscribe to our [YouTube channel](https://www.youtube.com/@inductivaresearchlabs4204) to stay updated with our 
-latest content, expert insights, and hands-on content — designed to help you master 
-cloud-powered HPC simulation.
+latest content, expert insights, and hands-on content — designed to help you master cloud-powered HPC simulation.
 
 <br>
 
