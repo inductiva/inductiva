@@ -22,10 +22,8 @@ how researchers and engineers are transforming simulation workflows with cloud-b
 </div>
 
 ## 📢 Stay Connected
-Subscribe to our [YouTube channel](https://www.youtube.com/@inductivaresearchlabs4204) and sign up 
-for [upcoming events](https://lu.ma/calendar/cal-xwViWU64Q39XkHQ) to stay updated with our 
-latest content, expert insights, and hands-on tutorials — designed to help you master 
-cloud-powered HPC simulation.
+Subscribe to our [YouTube channel](https://www.youtube.com/@inductivaresearchlabs4204) to stay updated with our 
+latest content, expert insights, and hands-on content — designed to help you master cloud-powered HPC simulation.
 
 <br>
 
