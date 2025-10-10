@@ -17,16 +17,6 @@ Each release note highlights new features, enhancements, and fixes designed to i
 
 
 ```{banner}
-:origin: releasenotes_index
+:origin: releases_index
 ```
 
-
-```{toctree}
----
-caption: Releases
-maxdepth: 3
-hidden: true
----
-Overview <releases/index>
-v0.18 <releases/v0-18/v0-18-0.md>
-```
