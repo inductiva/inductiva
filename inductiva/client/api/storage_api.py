@@ -3096,7 +3096,6 @@ class StorageApi:
     @validate_call
     def list_paginated_storage_contents(
         self,
-        path: Optional[StrictStr] = None,
         sort_by: Optional[StorageSortBy] = None,
         order: Optional[Order] = None,
         recursive: Optional[StrictStr] = None,
@@ -3104,6 +3103,7 @@ class StorageApi:
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
         path_filter: Optional[StrictStr] = None,
+        path: Optional[StrictStr] = None,
         provider_id: Optional[Providers] = None,
         region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
@@ -3121,8 +3121,6 @@ class StorageApi:
 
         List the contents of a directory within the user's storage.
 
-        :param path:
-        :type path: str
         :param sort_by:
         :type sort_by: StorageSortBy
         :param order:
@@ -3135,6 +3133,8 @@ class StorageApi:
         :type per_page: int
         :param path_filter:
         :type path_filter: str
+        :param path:
+        :type path: str
         :param provider_id:
         :type provider_id: Providers
         :param region:
@@ -3162,13 +3162,13 @@ class StorageApi:
         """ # noqa: E501
 
         _param = self._list_paginated_storage_contents_serialize(
-            path=path,
             sort_by=sort_by,
             order=order,
             recursive=recursive,
             page=page,
             per_page=per_page,
             path_filter=path_filter,
+            path=path,
             provider_id=provider_id,
             region=region,
             _request_auth=_request_auth,
@@ -3191,7 +3191,6 @@ class StorageApi:
     @validate_call
     def list_paginated_storage_contents_with_http_info(
         self,
-        path: Optional[StrictStr] = None,
         sort_by: Optional[StorageSortBy] = None,
         order: Optional[Order] = None,
         recursive: Optional[StrictStr] = None,
@@ -3199,6 +3198,7 @@ class StorageApi:
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
         path_filter: Optional[StrictStr] = None,
+        path: Optional[StrictStr] = None,
         provider_id: Optional[Providers] = None,
         region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
@@ -3216,8 +3216,6 @@ class StorageApi:
 
         List the contents of a directory within the user's storage.
 
-        :param path:
-        :type path: str
         :param sort_by:
         :type sort_by: StorageSortBy
         :param order:
@@ -3230,6 +3228,8 @@ class StorageApi:
         :type per_page: int
         :param path_filter:
         :type path_filter: str
+        :param path:
+        :type path: str
         :param provider_id:
         :type provider_id: Providers
         :param region:
@@ -3257,13 +3257,13 @@ class StorageApi:
         """ # noqa: E501
 
         _param = self._list_paginated_storage_contents_serialize(
-            path=path,
             sort_by=sort_by,
             order=order,
             recursive=recursive,
             page=page,
             per_page=per_page,
             path_filter=path_filter,
+            path=path,
             provider_id=provider_id,
             region=region,
             _request_auth=_request_auth,
@@ -3286,7 +3286,6 @@ class StorageApi:
     @validate_call
     def list_paginated_storage_contents_without_preload_content(
         self,
-        path: Optional[StrictStr] = None,
         sort_by: Optional[StorageSortBy] = None,
         order: Optional[Order] = None,
         recursive: Optional[StrictStr] = None,
@@ -3294,6 +3293,7 @@ class StorageApi:
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
         path_filter: Optional[StrictStr] = None,
+        path: Optional[StrictStr] = None,
         provider_id: Optional[Providers] = None,
         region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
@@ -3311,8 +3311,6 @@ class StorageApi:
 
         List the contents of a directory within the user's storage.
 
-        :param path:
-        :type path: str
         :param sort_by:
         :type sort_by: StorageSortBy
         :param order:
@@ -3325,6 +3323,8 @@ class StorageApi:
         :type per_page: int
         :param path_filter:
         :type path_filter: str
+        :param path:
+        :type path: str
         :param provider_id:
         :type provider_id: Providers
         :param region:
@@ -3352,13 +3352,13 @@ class StorageApi:
         """ # noqa: E501
 
         _param = self._list_paginated_storage_contents_serialize(
-            path=path,
             sort_by=sort_by,
             order=order,
             recursive=recursive,
             page=page,
             per_page=per_page,
             path_filter=path_filter,
+            path=path,
             provider_id=provider_id,
             region=region,
             _request_auth=_request_auth,
@@ -3376,13 +3376,13 @@ class StorageApi:
 
     def _list_paginated_storage_contents_serialize(
         self,
-        path,
         sort_by,
         order,
         recursive,
         page,
         per_page,
         path_filter,
+        path,
         provider_id,
         region,
         _request_auth,
@@ -3405,10 +3405,6 @@ class StorageApi:
 
         # process the path parameters
         # process the query parameters
-        if path is not None:
-
-            _query_params.append(('path', path))
-
         if sort_by is not None:
 
             _query_params.append(('sort_by', sort_by.value))
@@ -3432,6 +3428,10 @@ class StorageApi:
         if path_filter is not None:
 
             _query_params.append(('path_filter', path_filter))
+
+        if path is not None:
+
+            _query_params.append(('path', path))
 
         if provider_id is not None:
 
@@ -3470,7 +3470,6 @@ class StorageApi:
     @validate_call
     def list_storage_contents(
         self,
-        path: Optional[StrictStr] = None,
         sort_by: Optional[StorageSortBy] = None,
         order: Optional[Order] = None,
         recursive: Optional[StrictStr] = None,
@@ -3478,6 +3477,7 @@ class StorageApi:
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
         path_filter: Optional[StrictStr] = None,
+        path: Optional[StrictStr] = None,
         provider_id: Optional[Providers] = None,
         region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
@@ -3495,8 +3495,6 @@ class StorageApi:
 
         List the contents of a directory within the user's storage.
 
-        :param path:
-        :type path: str
         :param sort_by:
         :type sort_by: StorageSortBy
         :param order:
@@ -3509,6 +3507,8 @@ class StorageApi:
         :type per_page: int
         :param path_filter:
         :type path_filter: str
+        :param path:
+        :type path: str
         :param provider_id:
         :type provider_id: Providers
         :param region:
@@ -3536,13 +3536,13 @@ class StorageApi:
         """ # noqa: E501
 
         _param = self._list_storage_contents_serialize(
-            path=path,
             sort_by=sort_by,
             order=order,
             recursive=recursive,
             page=page,
             per_page=per_page,
             path_filter=path_filter,
+            path=path,
             provider_id=provider_id,
             region=region,
             _request_auth=_request_auth,
@@ -3565,7 +3565,6 @@ class StorageApi:
     @validate_call
     def list_storage_contents_with_http_info(
         self,
-        path: Optional[StrictStr] = None,
         sort_by: Optional[StorageSortBy] = None,
         order: Optional[Order] = None,
         recursive: Optional[StrictStr] = None,
@@ -3573,6 +3572,7 @@ class StorageApi:
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
         path_filter: Optional[StrictStr] = None,
+        path: Optional[StrictStr] = None,
         provider_id: Optional[Providers] = None,
         region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
@@ -3590,8 +3590,6 @@ class StorageApi:
 
         List the contents of a directory within the user's storage.
 
-        :param path:
-        :type path: str
         :param sort_by:
         :type sort_by: StorageSortBy
         :param order:
@@ -3604,6 +3602,8 @@ class StorageApi:
         :type per_page: int
         :param path_filter:
         :type path_filter: str
+        :param path:
+        :type path: str
         :param provider_id:
         :type provider_id: Providers
         :param region:
@@ -3631,13 +3631,13 @@ class StorageApi:
         """ # noqa: E501
 
         _param = self._list_storage_contents_serialize(
-            path=path,
             sort_by=sort_by,
             order=order,
             recursive=recursive,
             page=page,
             per_page=per_page,
             path_filter=path_filter,
+            path=path,
             provider_id=provider_id,
             region=region,
             _request_auth=_request_auth,
@@ -3660,7 +3660,6 @@ class StorageApi:
     @validate_call
     def list_storage_contents_without_preload_content(
         self,
-        path: Optional[StrictStr] = None,
         sort_by: Optional[StorageSortBy] = None,
         order: Optional[Order] = None,
         recursive: Optional[StrictStr] = None,
@@ -3668,6 +3667,7 @@ class StorageApi:
         per_page: Optional[Annotated[int,
                                      Field(le=100, strict=True, ge=1)]] = None,
         path_filter: Optional[StrictStr] = None,
+        path: Optional[StrictStr] = None,
         provider_id: Optional[Providers] = None,
         region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
@@ -3685,8 +3685,6 @@ class StorageApi:
 
         List the contents of a directory within the user's storage.
 
-        :param path:
-        :type path: str
         :param sort_by:
         :type sort_by: StorageSortBy
         :param order:
@@ -3699,6 +3697,8 @@ class StorageApi:
         :type per_page: int
         :param path_filter:
         :type path_filter: str
+        :param path:
+        :type path: str
         :param provider_id:
         :type provider_id: Providers
         :param region:
@@ -3726,13 +3726,13 @@ class StorageApi:
         """ # noqa: E501
 
         _param = self._list_storage_contents_serialize(
-            path=path,
             sort_by=sort_by,
             order=order,
             recursive=recursive,
             page=page,
             per_page=per_page,
             path_filter=path_filter,
+            path=path,
             provider_id=provider_id,
             region=region,
             _request_auth=_request_auth,
@@ -3750,13 +3750,13 @@ class StorageApi:
 
     def _list_storage_contents_serialize(
         self,
-        path,
         sort_by,
         order,
         recursive,
         page,
         per_page,
         path_filter,
+        path,
         provider_id,
         region,
         _request_auth,
@@ -3779,10 +3779,6 @@ class StorageApi:
 
         # process the path parameters
         # process the query parameters
-        if path is not None:
-
-            _query_params.append(('path', path))
-
         if sort_by is not None:
 
             _query_params.append(('sort_by', sort_by.value))
@@ -3806,6 +3802,10 @@ class StorageApi:
         if path_filter is not None:
 
             _query_params.append(('path_filter', path_filter))
+
+        if path is not None:
+
+            _query_params.append(('path', path))
 
         if provider_id is not None:
 
