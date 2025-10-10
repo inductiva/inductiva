@@ -235,5 +235,10 @@
         }
       ]
     }
+    {
+      "title": "Release Notes",
+      "path": "release-notes/releases/index"
+      "groupWith": "API Functions"
+  }
   ]
 }
