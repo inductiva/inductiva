@@ -10,6 +10,7 @@ Inductiva simplifies research by making high-performance computing more accessib
 
 ## What You'll Find Here
 
+
 ### Tutorials
 Step-by-step guides to help you learn how to run AMR-Wind through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 

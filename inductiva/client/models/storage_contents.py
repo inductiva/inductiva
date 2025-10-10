@@ -16,21 +16,25 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List
-from inductiva.client.models.team_role import TeamRole
+from inductiva.client.models.storage_file import StorageFile
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class TeamMemberUpdate(BaseModel):
+class StorageContents(BaseModel):
     """
-    Schema for updating a team member.
+    StorageContents
     """
 
   # noqa: E501
-    role: TeamRole
-    __properties: ClassVar[List[str]] = ["role"]
+    total_files: StrictInt
+    available_regions: List[StrictStr]
+    contents: List[StorageFile]
+    __properties: ClassVar[List[str]] = [
+        "total_files", "available_regions", "contents"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -49,7 +53,7 @@ class TeamMemberUpdate(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of TeamMemberUpdate from a JSON string"""
+        """Create an instance of StorageContents from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,16 +73,31 @@ class TeamMemberUpdate(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in contents (list)
+        _items = []
+        if self.contents:
+            for _item_contents in self.contents:
+                if _item_contents:
+                    _items.append(_item_contents.to_dict())
+            _dict['contents'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of TeamMemberUpdate from a dict"""
+        """Create an instance of StorageContents from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"role": obj.get("role")})
+        _obj = cls.model_validate({
+            "total_files":
+                obj.get("total_files"),
+            "available_regions":
+                obj.get("available_regions"),
+            "contents": [
+                StorageFile.from_dict(_item) for _item in obj["contents"]
+            ] if obj.get("contents") is not None else None
+        })
         return _obj

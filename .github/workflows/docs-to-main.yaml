@@ -1,47 +1,50 @@
 name: Update Docs PR
 
 on:
-  workflow_dispatch: # Manual trigger
+  workflow_dispatch: # manual trigger
 
 jobs:
-  create-docs-pr:
+  update-docs:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # important for checking other branches
+          fetch-depth: 0 # important to have full history
 
-      - name: Configure Git
+      - name: Set up git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Checkout main branch
-        run: git checkout main
-
-      - name: Create branch for PR
+      - name: Create new branch from main
         id: create_branch
         run: |
-          branch_name="update-docs-$(date +%Y%m%d%H%M%S)"
-          git checkout -b $branch_name
-          echo "branch_name=$branch_name" >> $GITHUB_OUTPUT
+            git fetch origin main
+            git checkout -b "update-docs-$(date +%Y%m%d%H%M%S)" origin/main
+            echo "branch_name=$(git rev-parse --abbrev-ref HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Get docs from development
-        run: git checkout development -- docs-sources/
+      - name: Checkout docs-sources from development
+        run: |
+            git fetch origin development
+            git checkout origin/development -- docs-sources/
 
       - name: Commit changes
         run: |
-          git add docs-sources/
-          git diff --cached --quiet || git commit -m "Update docs-sources from development"
-          git push origin HEAD
+            git add docs-sources/
+            git diff --cached --name-status
+            git commit -m "Update docs-sources from development" || echo "No changes to commit"
+
+      - name: Push branch
+        run: |
+          git push origin ${{ steps.create_branch.outputs.branch_name }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           base: main
-          head: ${{ steps.create_branch.outputs.branch_name }}
+          branch: ${{ steps.create_branch.outputs.branch_name }}
           title: "Update docs-sources from development"
-          body: "This PR updates docs-sources from development branch."
+          body: "Automated PR: sync docs-sources from development into main"

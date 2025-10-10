@@ -16,21 +16,29 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
-from typing import Any, ClassVar, Dict, List
-from inductiva.client.models.team_role import TeamRole
+from datetime import datetime
+from pydantic import BaseModel, ConfigDict, StrictBool, StrictInt, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class TeamMemberUpdate(BaseModel):
+class StorageFile(BaseModel):
     """
-    Schema for updating a team member.
+    StorageFile
     """
 
   # noqa: E501
-    role: TeamRole
-    __properties: ClassVar[List[str]] = ["role"]
+    name: StrictStr
+    size_bytes: Optional[StrictInt] = None
+    creation_time: Optional[datetime] = None
+    is_directory: StrictBool
+    provider_id: StrictStr
+    region: StrictStr
+    __properties: ClassVar[List[str]] = [
+        "name", "size_bytes", "creation_time", "is_directory", "provider_id",
+        "region"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -49,7 +57,7 @@ class TeamMemberUpdate(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of TeamMemberUpdate from a JSON string"""
+        """Create an instance of StorageFile from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,16 +77,33 @@ class TeamMemberUpdate(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if size_bytes (nullable) is None
+        # and model_fields_set contains the field
+        if self.size_bytes is None and "size_bytes" in self.model_fields_set:
+            _dict['size_bytes'] = None
+
+        # set to None if creation_time (nullable) is None
+        # and model_fields_set contains the field
+        if self.creation_time is None and "creation_time" in self.model_fields_set:
+            _dict['creation_time'] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of TeamMemberUpdate from a dict"""
+        """Create an instance of StorageFile from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({"role": obj.get("role")})
+        _obj = cls.model_validate({
+            "name": obj.get("name"),
+            "size_bytes": obj.get("size_bytes"),
+            "creation_time": obj.get("creation_time"),
+            "is_directory": obj.get("is_directory"),
+            "provider_id": obj.get("provider_id"),
+            "region": obj.get("region")
+        })
         return _obj

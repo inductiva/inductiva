@@ -35,10 +35,11 @@ class TaskSubmittedInfo(BaseModel):
     status: TaskStatusCode
     position_in_queue: Optional[TaskPositionInQueue] = None
     is_terminated: StrictBool
+    storage_region: Optional[StrictStr] = None
     time_to_live_seconds: Optional[Union[StrictFloat, StrictInt]] = None
     orchestration_cost: Optional[OrchestrationCostInfo] = None
     __properties: ClassVar[List[str]] = [
-        "id", "status", "position_in_queue", "is_terminated",
+        "id", "status", "position_in_queue", "is_terminated", "storage_region",
         "time_to_live_seconds", "orchestration_cost"
     ]
 
@@ -90,6 +91,11 @@ class TaskSubmittedInfo(BaseModel):
         if self.position_in_queue is None and "position_in_queue" in self.model_fields_set:
             _dict['position_in_queue'] = None
 
+        # set to None if storage_region (nullable) is None
+        # and model_fields_set contains the field
+        if self.storage_region is None and "storage_region" in self.model_fields_set:
+            _dict['storage_region'] = None
+
         # set to None if time_to_live_seconds (nullable) is None
         # and model_fields_set contains the field
         if self.time_to_live_seconds is None and "time_to_live_seconds" in self.model_fields_set:
@@ -121,6 +127,8 @@ class TaskSubmittedInfo(BaseModel):
                 if obj.get("position_in_queue") is not None else None,
             "is_terminated":
                 obj.get("is_terminated"),
+            "storage_region":
+                obj.get("storage_region"),
             "time_to_live_seconds":
                 obj.get("time_to_live_seconds"),
             "orchestration_cost":

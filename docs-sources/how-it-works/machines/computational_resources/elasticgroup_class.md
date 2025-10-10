@@ -52,8 +52,6 @@ elastic_machine_group = inductiva.resources.ElasticMachineGroup(
     max_machines=10,
     data_disk_gb=100,
     spot=False)
-
-elastic_machine_group.start()  # start the ElasticMachineGroup
 ```
 
 Creating an instance of `ElasticMachineGroup` does not start the machines. This only 
