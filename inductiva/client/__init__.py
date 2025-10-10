@@ -116,8 +116,10 @@ from inductiva.client.models.simulator_update import SimulatorUpdate
 from inductiva.client.models.simulator_version import SimulatorVersion
 from inductiva.client.models.simulator_with_machine_types_paginated import SimulatorWithMachineTypesPaginated
 from inductiva.client.models.spot import Spot
+from inductiva.client.models.storage_contents import StorageContents
 from inductiva.client.models.storage_contents_with_pagination import StorageContentsWithPagination
 from inductiva.client.models.storage_cost import StorageCost
+from inductiva.client.models.storage_file import StorageFile
 from inductiva.client.models.storage_file_info import StorageFileInfo
 from inductiva.client.models.storage_operation import StorageOperation
 from inductiva.client.models.storage_operation_name import StorageOperationName

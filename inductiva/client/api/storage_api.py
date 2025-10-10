@@ -17,16 +17,16 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
 from pydantic import Field, StrictInt, StrictStr, field_validator
-from typing import Any, Dict, List, Optional
+from typing import Any, List, Optional
 from typing_extensions import Annotated
 from inductiva.client.models.bucket import Bucket
 from inductiva.client.models.multi_part_export_operation import MultiPartExportOperation
 from inductiva.client.models.operation_type import OperationType
 from inductiva.client.models.order import Order
 from inductiva.client.models.providers import Providers
+from inductiva.client.models.storage_contents import StorageContents
 from inductiva.client.models.storage_contents_with_pagination import StorageContentsWithPagination
 from inductiva.client.models.storage_cost import StorageCost
-from inductiva.client.models.storage_file_info import StorageFileInfo
 from inductiva.client.models.storage_operation import StorageOperation
 from inductiva.client.models.storage_sort_by import StorageSortBy
 from inductiva.client.models.update_operation_status import UpdateOperationStatus
@@ -3471,11 +3471,13 @@ class StorageApi:
     def list_storage_contents(
         self,
         path: Optional[StrictStr] = None,
-        max_results: Optional[Annotated[
-            int, Field(le=500, strict=True, ge=1)]] = None,
         sort_by: Optional[StorageSortBy] = None,
         order: Optional[Order] = None,
         recursive: Optional[StrictStr] = None,
+        page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int,
+                                     Field(le=100, strict=True, ge=1)]] = None,
+        path_filter: Optional[StrictStr] = None,
         provider_id: Optional[Providers] = None,
         region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
@@ -3488,21 +3490,25 @@ class StorageApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> Dict[str, StorageFileInfo]:
+    ) -> StorageContents:
         """List Storage Contents
 
         List the contents of a directory within the user's storage.
 
         :param path:
         :type path: str
-        :param max_results:
-        :type max_results: int
         :param sort_by:
         :type sort_by: StorageSortBy
         :param order:
         :type order: Order
         :param recursive:
         :type recursive: str
+        :param page:
+        :type page: int
+        :param per_page:
+        :type per_page: int
+        :param path_filter:
+        :type path_filter: str
         :param provider_id:
         :type provider_id: Providers
         :param region:
@@ -3531,10 +3537,12 @@ class StorageApi:
 
         _param = self._list_storage_contents_serialize(
             path=path,
-            max_results=max_results,
             sort_by=sort_by,
             order=order,
             recursive=recursive,
+            page=page,
+            per_page=per_page,
+            path_filter=path_filter,
             provider_id=provider_id,
             region=region,
             _request_auth=_request_auth,
@@ -3543,7 +3551,7 @@ class StorageApi:
             _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Dict[str, StorageFileInfo]",
+            '200': "StorageContents",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
@@ -3558,11 +3566,13 @@ class StorageApi:
     def list_storage_contents_with_http_info(
         self,
         path: Optional[StrictStr] = None,
-        max_results: Optional[Annotated[
-            int, Field(le=500, strict=True, ge=1)]] = None,
         sort_by: Optional[StorageSortBy] = None,
         order: Optional[Order] = None,
         recursive: Optional[StrictStr] = None,
+        page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int,
+                                     Field(le=100, strict=True, ge=1)]] = None,
+        path_filter: Optional[StrictStr] = None,
         provider_id: Optional[Providers] = None,
         region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
@@ -3575,21 +3585,25 @@ class StorageApi:
         _content_type: Optional[StrictStr] = None,
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> ApiResponse[Dict[str, StorageFileInfo]]:
+    ) -> ApiResponse[StorageContents]:
         """List Storage Contents
 
         List the contents of a directory within the user's storage.
 
         :param path:
         :type path: str
-        :param max_results:
-        :type max_results: int
         :param sort_by:
         :type sort_by: StorageSortBy
         :param order:
         :type order: Order
         :param recursive:
         :type recursive: str
+        :param page:
+        :type page: int
+        :param per_page:
+        :type per_page: int
+        :param path_filter:
+        :type path_filter: str
         :param provider_id:
         :type provider_id: Providers
         :param region:
@@ -3618,10 +3632,12 @@ class StorageApi:
 
         _param = self._list_storage_contents_serialize(
             path=path,
-            max_results=max_results,
             sort_by=sort_by,
             order=order,
             recursive=recursive,
+            page=page,
+            per_page=per_page,
+            path_filter=path_filter,
             provider_id=provider_id,
             region=region,
             _request_auth=_request_auth,
@@ -3630,7 +3646,7 @@ class StorageApi:
             _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Dict[str, StorageFileInfo]",
+            '200': "StorageContents",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
@@ -3645,11 +3661,13 @@ class StorageApi:
     def list_storage_contents_without_preload_content(
         self,
         path: Optional[StrictStr] = None,
-        max_results: Optional[Annotated[
-            int, Field(le=500, strict=True, ge=1)]] = None,
         sort_by: Optional[StorageSortBy] = None,
         order: Optional[Order] = None,
         recursive: Optional[StrictStr] = None,
+        page: Optional[Annotated[int, Field(strict=True, ge=1)]] = None,
+        per_page: Optional[Annotated[int,
+                                     Field(le=100, strict=True, ge=1)]] = None,
+        path_filter: Optional[StrictStr] = None,
         provider_id: Optional[Providers] = None,
         region: Optional[StrictStr] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
@@ -3669,14 +3687,18 @@ class StorageApi:
 
         :param path:
         :type path: str
-        :param max_results:
-        :type max_results: int
         :param sort_by:
         :type sort_by: StorageSortBy
         :param order:
         :type order: Order
         :param recursive:
         :type recursive: str
+        :param page:
+        :type page: int
+        :param per_page:
+        :type per_page: int
+        :param path_filter:
+        :type path_filter: str
         :param provider_id:
         :type provider_id: Providers
         :param region:
@@ -3705,10 +3727,12 @@ class StorageApi:
 
         _param = self._list_storage_contents_serialize(
             path=path,
-            max_results=max_results,
             sort_by=sort_by,
             order=order,
             recursive=recursive,
+            page=page,
+            per_page=per_page,
+            path_filter=path_filter,
             provider_id=provider_id,
             region=region,
             _request_auth=_request_auth,
@@ -3717,7 +3741,7 @@ class StorageApi:
             _host_index=_host_index)
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Dict[str, StorageFileInfo]",
+            '200': "StorageContents",
             '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
@@ -3727,10 +3751,12 @@ class StorageApi:
     def _list_storage_contents_serialize(
         self,
         path,
-        max_results,
         sort_by,
         order,
         recursive,
+        page,
+        per_page,
+        path_filter,
         provider_id,
         region,
         _request_auth,
@@ -3757,10 +3783,6 @@ class StorageApi:
 
             _query_params.append(('path', path))
 
-        if max_results is not None:
-
-            _query_params.append(('max_results', max_results))
-
         if sort_by is not None:
 
             _query_params.append(('sort_by', sort_by.value))
@@ -3772,6 +3794,18 @@ class StorageApi:
         if recursive is not None:
 
             _query_params.append(('recursive', recursive))
+
+        if page is not None:
+
+            _query_params.append(('page', page))
+
+        if per_page is not None:
+
+            _query_params.append(('per_page', per_page))
+
+        if path_filter is not None:
+
+            _query_params.append(('path_filter', path_filter))
 
         if provider_id is not None:
 
