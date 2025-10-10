@@ -35,7 +35,7 @@ class TaskSubmittedInfo(BaseModel):
     status: TaskStatusCode
     position_in_queue: Optional[TaskPositionInQueue] = None
     is_terminated: StrictBool
-    storage_region: StrictStr
+    storage_region: Optional[StrictStr] = None
     time_to_live_seconds: Optional[Union[StrictFloat, StrictInt]] = None
     orchestration_cost: Optional[OrchestrationCostInfo] = None
     __properties: ClassVar[List[str]] = [
@@ -90,6 +90,11 @@ class TaskSubmittedInfo(BaseModel):
         # and model_fields_set contains the field
         if self.position_in_queue is None and "position_in_queue" in self.model_fields_set:
             _dict['position_in_queue'] = None
+
+        # set to None if storage_region (nullable) is None
+        # and model_fields_set contains the field
+        if self.storage_region is None and "storage_region" in self.model_fields_set:
+            _dict['storage_region'] = None
 
         # set to None if time_to_live_seconds (nullable) is None
         # and model_fields_set contains the field
