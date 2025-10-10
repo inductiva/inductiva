@@ -116,7 +116,6 @@ def listdir(
     page = 1
 
     while max_results > 0:
-        print(max_results)
         page_size = min(100, max_results)
 
         response = api.list_storage_contents(
