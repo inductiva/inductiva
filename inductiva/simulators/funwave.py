@@ -55,6 +55,7 @@ class FUNWAVE(simulators.Simulator):
             SEDIMENT: Optional[bool] = False,
             CHECK_MASS_CONSERVATION: Optional[bool] = False,
             TRACKING: Optional[bool] = False,
+            SPHERICAL: Optional[bool] = False,
             on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
@@ -90,6 +91,8 @@ class FUNWAVE(simulators.Simulator):
                 Correct mass conservation problem caused by wetting/drying.
             TRACKING : bool, optional
                 Include Lagrangian tracking module.
+            SPHERICAL : bool, optional
+                Compile with spherical coordinates.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
                 (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
@@ -144,11 +147,17 @@ class FUNWAVE(simulators.Simulator):
         commands = ["cp /FUNWAVE-TVD-Version_3.6/Makefile ."]
 
         # Add sed commands for flags set to True
+        # Just removes comment from line
         for flag, line in self.FLAG_TO_LINE_MAP.items():
             if locals().get(flag, False):
                 # If the flag is true it will remove the comment from the
                 # Makefile according to the line in FLAG_TO_LINE_MAP
                 commands.append(f"sed -i '{line}s/^# *//' Makefile")
+
+        # Set spherical to true if specified
+        if SPHERICAL:
+            commands.append(
+                "sed -i 's/SPHERICAL   = false/SPHERICAL   = true/' Makefile")
 
         commands += [
             "make",
