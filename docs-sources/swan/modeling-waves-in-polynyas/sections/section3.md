@@ -6,10 +6,10 @@ In traditional HPC environments, however, it's common practice to run one thread
 
 To disable hyper-threading and ensure only physical cores are used, simply configure your `MachineGroup` with `threads_per_core=1`:
 
-```
+```python
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2d-standard-16",
+    machine_type="c4d-highcpu-32",
     threads_per_core=1,
     spot=True)
 ```
