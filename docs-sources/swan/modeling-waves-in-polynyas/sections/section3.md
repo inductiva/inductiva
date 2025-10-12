@@ -17,7 +17,7 @@ cloud_machine = inductiva.resources.MachineGroup( \
 
 The number of available vCPUs will be halved, but the underlying number of physical cores remain the same. 
 
-## Performance Hyper-threading Disabled
+## Performance with Hyper-threading Disabled
 We repeated the **S2_f5** scenario tests on the same machine types used before, but this time with hyper-threading disabled. Here are the execution times and associated costs:
 
 | Machine Type      | Hyper-threading | vCPUs | Physical Cores | Execution Time | Estimated Cost (US$) |
