@@ -8,10 +8,11 @@ To disable hyper-threading and ensure only physical cores are used, simply confi
 
 ```python
 cloud_machine = inductiva.resources.MachineGroup( \
-    provider="GCP",
-    machine_type="c4d-highcpu-32",
-    threads_per_core=1,
-    spot=True)
+	provider="GCP",
+	machine_type="c4d-highcpu-32",
+	threads_per_core=1,
+	data_disk_gb=20,
+	spot=True)
 ```
 
 The number of available vCPUs will be halved, but the underlying number of physical cores remain the same. 

@@ -11,7 +11,6 @@ import inductiva
 cloud_machine = inductiva.resources.MachineGroup( \
 	provider="GCP",
 	machine_type="c4d-highcpu-32",
-	threads_per_core=1,
 	data_disk_gb=20,
 	spot=True)
 
