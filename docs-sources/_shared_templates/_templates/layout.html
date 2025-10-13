@@ -1,5 +1,7 @@
-<!DOCTYPE html>
-<div class="sphinx-embedded">
+{# This file overrides the default layout from sphinxawesome_theme #}
+{% block doctype %}{% endblock %}
+{% block html %}
+<div id="sphinx-content">
   {{ body }}
 </div>
-
+{% endblock %}
