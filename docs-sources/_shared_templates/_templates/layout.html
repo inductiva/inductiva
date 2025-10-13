@@ -1,35 +1,5 @@
-{% extends "!layout.html" %}
-
-{# Override the entire page wrapper #}
-{% block html_doc %}
+<!DOCTYPE html>
 <div class="sphinx-embedded">
-    {# Optional: Include your meta tags if you want them inside the div #}
-    {% block extrahead %}
-    <!-- Viewport for responsive design -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- SEO meta tags -->
-    <meta name="description" content="{{ project_description }}">
-    <meta name="keywords" content="{{keywords | default('documentation, Inductiva.AI')}}">
-
-    <!-- OpenGraph tags -->
-    <meta property="og:title" content="{{ title }}">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ project_url }}{{ pathto('', 1) }}">
-    <meta property="og:description" content="{{ project_description }}">
-    <meta property="og:image" content="{{ ogp_image }}">
-
-    <!-- Twitter Card meta tags (optional but recommended) -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ title }}">
-    <meta name="twitter:description" content="{{ project_description }}">
-    <meta name="twitter:image" content="{{ ogp_image }}">
-    <!-- Add other meta tags here if needed -->
-    {% endblock %}
-
-    {# This is the actual Sphinx content #}
-    {% block body %}
-    {{ body }}
-    {% endblock %}
+  {{ body }}
 </div>
-{% endblock %}
+
