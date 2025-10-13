@@ -236,17 +236,14 @@
       ]
     },
     {
-      "title": "API Functions",
+      "title": "Release Notes",
       "children": [
         {
-          "title": "Command Line Interface",
-          "path": "api-functions/cli/index"
-        },
-        {
-          "title": "Python Client",
-          "path": "api-functions/api/index"
+          "title": "Releases",
+          "path": "release-notes/index"
         }
-      ]
-    }
+      ],
+      "groupWith": "API Functions"
+  }
   ]
 }
