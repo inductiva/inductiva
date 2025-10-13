@@ -18,7 +18,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictBool, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
-from inductiva.client.models.orchestration_cost_info import OrchestrationCostInfo
+from inductiva.client.models.orchestration_fee import OrchestrationFee
 from inductiva.client.models.task_position_in_queue import TaskPositionInQueue
 from inductiva.client.models.task_status_code import TaskStatusCode
 from typing import Optional, Set
@@ -37,10 +37,10 @@ class TaskSubmittedInfo(BaseModel):
     is_terminated: StrictBool
     storage_region: Optional[StrictStr] = None
     time_to_live_seconds: Optional[Union[StrictFloat, StrictInt]] = None
-    orchestration_cost: Optional[OrchestrationCostInfo] = None
+    orchestration_fee: Optional[OrchestrationFee] = None
     __properties: ClassVar[List[str]] = [
         "id", "status", "position_in_queue", "is_terminated", "storage_region",
-        "time_to_live_seconds", "orchestration_cost"
+        "time_to_live_seconds", "orchestration_fee"
     ]
 
     model_config = ConfigDict(
@@ -83,9 +83,9 @@ class TaskSubmittedInfo(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of position_in_queue
         if self.position_in_queue:
             _dict['position_in_queue'] = self.position_in_queue.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of orchestration_cost
-        if self.orchestration_cost:
-            _dict['orchestration_cost'] = self.orchestration_cost.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of orchestration_fee
+        if self.orchestration_fee:
+            _dict['orchestration_fee'] = self.orchestration_fee.to_dict()
         # set to None if position_in_queue (nullable) is None
         # and model_fields_set contains the field
         if self.position_in_queue is None and "position_in_queue" in self.model_fields_set:
@@ -101,10 +101,10 @@ class TaskSubmittedInfo(BaseModel):
         if self.time_to_live_seconds is None and "time_to_live_seconds" in self.model_fields_set:
             _dict['time_to_live_seconds'] = None
 
-        # set to None if orchestration_cost (nullable) is None
+        # set to None if orchestration_fee (nullable) is None
         # and model_fields_set contains the field
-        if self.orchestration_cost is None and "orchestration_cost" in self.model_fields_set:
-            _dict['orchestration_cost'] = None
+        if self.orchestration_fee is None and "orchestration_fee" in self.model_fields_set:
+            _dict['orchestration_fee'] = None
 
         return _dict
 
@@ -131,8 +131,8 @@ class TaskSubmittedInfo(BaseModel):
                 obj.get("storage_region"),
             "time_to_live_seconds":
                 obj.get("time_to_live_seconds"),
-            "orchestration_cost":
-                OrchestrationCostInfo.from_dict(obj["orchestration_cost"])
-                if obj.get("orchestration_cost") is not None else None
+            "orchestration_fee":
+                OrchestrationFee.from_dict(obj["orchestration_fee"])
+                if obj.get("orchestration_fee") is not None else None
         })
         return _obj

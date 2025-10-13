@@ -21,7 +21,7 @@ from pydantic import BaseModel, ConfigDict, StrictBool, StrictFloat, StrictInt, 
 from typing import Any, ClassVar, Dict, List, Optional, Union
 from inductiva.client.models.compression_method import CompressionMethod
 from inductiva.client.models.executer import Executer
-from inductiva.client.models.orchestration_cost_info import OrchestrationCostInfo
+from inductiva.client.models.orchestration_fee import OrchestrationFee
 from inductiva.client.models.task_machine_operation import TaskMachineOperation
 from inductiva.client.models.task_metrics import TaskMetrics
 from inductiva.client.models.task_status_code import TaskStatusCode
@@ -68,7 +68,7 @@ class TaskWithStatusHistory(BaseModel):
     extra_params: Optional[Dict[str, Any]] = None
     resubmit_on_preemption: Optional[StrictBool] = False
     duration_seconds: Optional[Union[StrictFloat, StrictInt]]
-    orchestration_cost: Optional[OrchestrationCostInfo] = None
+    orchestration_fee: Optional[OrchestrationFee] = None
     status_history: List[TaskStatusInfo]
     machine_operations: List[TaskMachineOperation]
     steps: Optional[List[TaskStep]] = None
@@ -81,7 +81,7 @@ class TaskWithStatusHistory(BaseModel):
         "metrics", "executer", "machine_group_name", "machine_group_id",
         "error_detail", "input_resources", "stream_zip", "num_retries",
         "compress_with", "task_metadata", "extra_params",
-        "resubmit_on_preemption", "duration_seconds", "orchestration_cost",
+        "resubmit_on_preemption", "duration_seconds", "orchestration_fee",
         "status_history", "machine_operations", "steps"
     ]
 
@@ -128,9 +128,9 @@ class TaskWithStatusHistory(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of executer
         if self.executer:
             _dict['executer'] = self.executer.to_dict()
-        # override the default output from pydantic by calling `to_dict()` of orchestration_cost
-        if self.orchestration_cost:
-            _dict['orchestration_cost'] = self.orchestration_cost.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of orchestration_fee
+        if self.orchestration_fee:
+            _dict['orchestration_fee'] = self.orchestration_fee.to_dict()
         # override the default output from pydantic by calling `to_dict()` of each item in status_history (list)
         _items = []
         if self.status_history:
@@ -252,10 +252,10 @@ class TaskWithStatusHistory(BaseModel):
         if self.duration_seconds is None and "duration_seconds" in self.model_fields_set:
             _dict['duration_seconds'] = None
 
-        # set to None if orchestration_cost (nullable) is None
+        # set to None if orchestration_fee (nullable) is None
         # and model_fields_set contains the field
-        if self.orchestration_cost is None and "orchestration_cost" in self.model_fields_set:
-            _dict['orchestration_cost'] = None
+        if self.orchestration_fee is None and "orchestration_fee" in self.model_fields_set:
+            _dict['orchestration_fee'] = None
 
         return _dict
 
@@ -335,9 +335,9 @@ class TaskWithStatusHistory(BaseModel):
                 if obj.get("resubmit_on_preemption") is not None else False,
             "duration_seconds":
                 obj.get("duration_seconds"),
-            "orchestration_cost":
-                OrchestrationCostInfo.from_dict(obj["orchestration_cost"])
-                if obj.get("orchestration_cost") is not None else None,
+            "orchestration_fee":
+                OrchestrationFee.from_dict(obj["orchestration_fee"])
+                if obj.get("orchestration_fee") is not None else None,
             "status_history": [
                 TaskStatusInfo.from_dict(_item)
                 for _item in obj["status_history"]

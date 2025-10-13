@@ -16,22 +16,24 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictFloat, StrictInt, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional, Union
+from pydantic import BaseModel, ConfigDict
+from typing import Any, ClassVar, Dict, List
+from inductiva.client.models.fee import Fee
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class OrchestrationCostInfo(BaseModel):
+class UserFees(BaseModel):
     """
-    OrchestrationCostInfo
+    UserFees
     """
 
   # noqa: E501
-    charged: Union[StrictFloat, StrictInt]
-    undiscounted: Union[StrictFloat, StrictInt]
-    currency: Optional[StrictStr] = 'USD'
-    __properties: ClassVar[List[str]] = ["charged", "undiscounted", "currency"]
+    costs_fee_percentage: Fee
+    task_orchestration_fee: Fee
+    __properties: ClassVar[List[str]] = [
+        "costs_fee_percentage", "task_orchestration_fee"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -50,7 +52,7 @@ class OrchestrationCostInfo(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of OrchestrationCostInfo from a JSON string"""
+        """Create an instance of UserFees from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -70,11 +72,19 @@ class OrchestrationCostInfo(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of costs_fee_percentage
+        if self.costs_fee_percentage:
+            _dict['costs_fee_percentage'] = self.costs_fee_percentage.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of task_orchestration_fee
+        if self.task_orchestration_fee:
+            _dict[
+                'task_orchestration_fee'] = self.task_orchestration_fee.to_dict(
+                )
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of OrchestrationCostInfo from a dict"""
+        """Create an instance of UserFees from a dict"""
         if obj is None:
             return None
 
@@ -82,12 +92,11 @@ class OrchestrationCostInfo(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "charged":
-                obj.get("charged"),
-            "undiscounted":
-                obj.get("undiscounted"),
-            "currency":
-                obj.get("currency")
-                if obj.get("currency") is not None else 'USD'
+            "costs_fee_percentage":
+                Fee.from_dict(obj["costs_fee_percentage"])
+                if obj.get("costs_fee_percentage") is not None else None,
+            "task_orchestration_fee":
+                Fee.from_dict(obj["task_orchestration_fee"])
+                if obj.get("task_orchestration_fee") is not None else None
         })
         return _obj
