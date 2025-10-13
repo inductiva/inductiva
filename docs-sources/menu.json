@@ -239,8 +239,8 @@
       "title": "Release Notes",
       "children": [
         {
-          "title": "v0.18.3",
-          "path": "release-notes/releases/v0-18/v0-18-3"
+          "title": "Releases",
+          "path": "release-notes/releases/index"
         }
       ],
       "groupWith": "API Functions"
