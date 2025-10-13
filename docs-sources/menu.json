@@ -242,8 +242,7 @@
           "title": "Releases",
           "path": "release-notes/releases/index"
         }
-      ],
-      "groupWith": "API Functions"
+      ]
   }
   ]
 }
