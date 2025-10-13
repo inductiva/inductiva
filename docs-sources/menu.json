@@ -237,7 +237,12 @@
     },
     {
       "title": "Release Notes",
-      "path": "release-notes/releases/index"
+      "children": [
+        {
+          "title": "v0.18.3",
+          "path": "release-notes/releases/v0-18/v0-18-3"
+        }
+      ],
       "groupWith": "API Functions"
   }
   ]
