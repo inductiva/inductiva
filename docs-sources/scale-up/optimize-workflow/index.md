@@ -6,7 +6,7 @@ This section gathers guides that help you monitor progress, stay informed of key
 
 This section is an ever-growing collection of useful tips and hacks, so here's a few top highlights:
 
-| **[Alerts & Events →](alerts-events/sections/alerts.md)** | 
+| **[Alerts & Events →](alerts-events/index.md)** | 
 |---|
 | Learn how Inductiva keeps you informed. Explore the difference between Inductiva Alerts (system-defined) and Simulation Observer Events (user-defined), understand how they work together, and customize how and when you’re notified. |
 
