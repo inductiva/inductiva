@@ -68,6 +68,7 @@ from inductiva.client.models.dynamic_disk_resize_config import DynamicDiskResize
 from inductiva.client.models.event_create import EventCreate
 from inductiva.client.models.event_info import EventInfo
 from inductiva.client.models.executer import Executer
+from inductiva.client.models.fee import Fee
 from inductiva.client.models.file_info import FileInfo
 from inductiva.client.models.gpu_info import GPUInfo
 from inductiva.client.models.http_validation_error import HTTPValidationError
@@ -92,7 +93,7 @@ from inductiva.client.models.operation_end import OperationEnd
 from inductiva.client.models.operation_start import OperationStart
 from inductiva.client.models.operation_status import OperationStatus
 from inductiva.client.models.operation_type import OperationType
-from inductiva.client.models.orchestration_cost_info import OrchestrationCostInfo
+from inductiva.client.models.orchestration_fee import OrchestrationFee
 from inductiva.client.models.order import Order
 from inductiva.client.models.organization_cost_components import OrganizationCostComponents
 from inductiva.client.models.organization_costs import OrganizationCosts
@@ -182,6 +183,7 @@ from inductiva.client.models.user_computation_trend import UserComputationTrend
 from inductiva.client.models.user_costs import UserCosts
 from inductiva.client.models.user_costs_details import UserCostsDetails
 from inductiva.client.models.user_costs_over_time import UserCostsOverTime
+from inductiva.client.models.user_fees import UserFees
 from inductiva.client.models.user_most_used_machine_types_overview import UserMostUsedMachineTypesOverview
 from inductiva.client.models.user_most_used_simulators_overview import UserMostUsedSimulatorsOverview
 from inductiva.client.models.user_task_status_overview import UserTaskStatusOverview
