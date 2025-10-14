@@ -23,13 +23,13 @@ We repeated the **S2_f5** scenario tests on the same machine types used before, 
 | Machine Type      | Hyper-threading | vCPUs | Physical Cores | Execution Time | Estimated Cost (US$) |
 |-------------------|------------------|--------|------------------|----------------|----------------------|
 | c4d-highcpu-32    | Enabled          | 32     | 16               | 2h, 37 min       | 1.45                 |
-| c4d-highcpu-32    | Disabled         | 32     | 32               | 2h, 36 min       | 1.45                 |
+| c4d-highcpu-32    | Disabled         | 16     | 16               | 2h, 36 min       | 1.45                 |
 | c4d-highcpu-48    | Enabled          | 48     | 24               | 1h, 58 min       | 1.64                 |
-| c4d-highcpu-48    | Disabled         | 48     | 48               | 1h, 56 min       | 1.61                 |
+| c4d-highcpu-48    | Disabled         | 24     | 24               | 1h, 56 min       | 1.61                 |
 | c4d-highcpu-64    | Enabled          | 64     | 32               | 1h, 42 min       | 1.89                 |
-| c4d-highcpu-64    | Disabled         | 64     | 64               | 1h, 35 min       | 1.74                 |
+| c4d-highcpu-64    | Disabled         | 32     | 32               | 1h, 35 min       | 1.74                 |
 | c4d-highcpu-96    | Enabled          | 96     | 48               | 1h, 34 min       | 2.60                 |
-| c4d-highcpu-96    | Disabled         | 96     | 96               | 1h, 15 min       | 2.07                 |
+| c4d-highcpu-96    | Disabled         | 48     | 48               | 1h, 15 min       | 2.07                 |
 
 ## Comparing Results: With vs. Without Hyperthreading
 From these results, we observe:

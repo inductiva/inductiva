@@ -15,10 +15,11 @@ cloud_machine = inductiva.resources.MachineGroup( \
 	spot=True)
 
 # Initialize the Simulator
-swan = inductiva.simulators.SWAN()
+swan = inductiva.simulators.SWAN(\
+    version="41.45")
 
 # Run simulation
-task = swan.run(input_dir="/Path/to/polynya",
+task = swan.run(input_dir="polynya",
 	sim_config_filename="S0/polynya2D_20211007.swn",
 	on=cloud_machine)
 
@@ -76,7 +77,7 @@ Scaling up is straightforward — just increase the `machine_type` to a machine 
 |          | c4d-highcpu-64    | 64    | 1h 42m         | 1.89                |
 |          | c4d-highcpu-96    | 96    | 1h 34m         | 2.60                |
 
-We observe a significant, though not strictly linear, improvement in execution time as the number of virtual CPUs increases, accompanied by a corresponding rise in cost. For larger simulations or tight deadlines, opting for more powerful machines can yield substantial time savings.
+We observe a significant, though not linear, improvement in execution time as the number of virtual CPUs increases, accompanied by a corresponding rise in cost. For larger simulations or tight deadlines, opting for more powerful machines can yield substantial time savings.
 
 ```{banner_small}
 :origin: swan

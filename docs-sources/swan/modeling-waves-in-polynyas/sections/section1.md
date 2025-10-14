@@ -19,7 +19,7 @@ For this tutorial, you only need the following:
 - The `input/` folder (wind, ice concentration, and grid data)
 - `.swn` input files from `S0/` and `S2_f5/` (one per polynya event)
 
-The `S0/` and `S2_f5/` folders also contain large output files (`.mat`, `.dat`, `.sp1`, `.sp2`). **Do not copy these**. Only the `.swn` files are required for each polynya event.
+The `S0/` and `S2_f5/` folders also contain large output files (`.mat`, `.dat`, `.sp1`, `.sp2`). **Do not copy these**. Only the `.swn` files are required for each simulation.
 
 The `Tp_from_satellite_swangrid` folder contains satellite-derived peak periods and directions, interpolated onto the SWAN grid. These were used in the original study to validate and calibrate the model (bias, RMSD, spectral tail comparisons), but are **not required** for this tutorial.
 
