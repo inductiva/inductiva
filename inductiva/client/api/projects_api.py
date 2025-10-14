@@ -1506,7 +1506,7 @@ class ProjectsApi:
     ) -> List[Project]:
         """Get User Projects
 
-        Retrieve information about the user's projects or benchmarks.   The results are paginated and sorted by most recently created first.
+        Retrieve information about the user's projects or benchmarks.  The results are paginated and sorted by most recently created first.
 
         :param page:
         :type page: int
@@ -1576,7 +1576,7 @@ class ProjectsApi:
     ) -> ApiResponse[List[Project]]:
         """Get User Projects
 
-        Retrieve information about the user's projects or benchmarks.   The results are paginated and sorted by most recently created first.
+        Retrieve information about the user's projects or benchmarks.  The results are paginated and sorted by most recently created first.
 
         :param page:
         :type page: int
@@ -1646,7 +1646,7 @@ class ProjectsApi:
     ) -> RESTResponseType:
         """Get User Projects
 
-        Retrieve information about the user's projects or benchmarks.   The results are paginated and sorted by most recently created first.
+        Retrieve information about the user's projects or benchmarks.  The results are paginated and sorted by most recently created first.
 
         :param page:
         :type page: int
