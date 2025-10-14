@@ -240,7 +240,7 @@
       "children": [
         {
           "title": "Releases",
-          "path": "release-notes/releases/index"
+          "path": "release-notes/index"
         }
       ],
       "groupWith": "API Functions"
