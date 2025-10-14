@@ -19,7 +19,7 @@ from typing_extensions import Self
 
 class SelectMode(str, Enum):
     """
-    Enumeration of supported data selection modes, specifying which data  should be included in the project's tasks info.
+    Enumeration of supported data selection modes, specifying which data should be included in the project's tasks info.
     """
     """
     allowed enum values
