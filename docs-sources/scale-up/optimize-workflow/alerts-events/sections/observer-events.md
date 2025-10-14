@@ -139,3 +139,8 @@ Email received:
 ![Regex email](static/regex-email.png)
 
 Observers are an easy-to-use and flexible mechanism for monitoring simulation progress and automatically responding to important events.
+
+
+```{banner_small}
+:origin: recipes_delete_failed
+```

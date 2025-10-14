@@ -1,13 +1,7 @@
-# 🔔 Alerts & Events
+# Inductiva Alerts
 
-Inductiva provides a flexible alert system to keep users informed about important events in their simulations and account activity. Alerts can notify of issues that require attention, or confirm that expected events have occurred.
-There are two types of alerts:
-- Inductiva Alerts – predefined by Inductiva to warn users about events that could disrupt your work.
-- Simulation Observer Events – user-defined alerts that notify users of specific events in their simulations.
+Inductiva Alerts are predefined by Inductiva to warn users about events that could disrupt their work.
 
-Depending on the alert type, notifications may be sent by email, shown in the web Console, or both. The table below lists all Inductiva alerts, their purpose, and the communication channels through which they can be received.
-
-## Inductiva Alerts
 
 **Subject** | **Alert** | **Description** | **Communication channel** |
 |---|---|---|---|
@@ -25,3 +19,11 @@ Credits | Credits below threshold | Current balance reaches 15% of the last top-
 Credits | Credits below storage cost | Insufficient balance for monthly storage cost | Email + Console notification |
 Credits | Top-up offer or referral | Credits added as a result of a campaign, referral, or other | Email |
 System | Achievement unlocked | You unlocked new achievements | Console notification |
+
+
+Are we missing an important event that you'd like to be alerted of? Contact us on [Inductiva’s Discord](https://discord.com/invite/p9tjqBhuZ5)
+
+
+```{banner_small}
+:origin: recipes_delete_failed
+```

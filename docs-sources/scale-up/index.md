@@ -99,7 +99,7 @@ maxdepth: 2
 hidden: true
 ---
 Overview <optimize-workflow/index>
-Alerts & Events <optimize-workflow/alerts-events/alerts>
+Alerts & Events <optimize-workflow/alerts-events/sections/alerts>
 
 ```
  
