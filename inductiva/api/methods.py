@@ -122,16 +122,24 @@ def upload_file(api_instance: ApiClient, input_path: str, method: str, url: str,
             raise ApiException(status=resp.status, reason=resp.reason)
 
 
-def upload_input(api_instance: inductiva.client.TasksApi, input_dir, task_id,
-                 storage_path_prefix, verbose):
+def upload_input(
+    api_instance: inductiva.client.TasksApi,
+    task_id: str,
+    input_dir: str,
+    storage_path_prefix: str,
+    storage_region: str,
+    verbose: bool,
+):
     """Uploads the inputs of a given task to the API.
 
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task.
         input_dir: Directory containing the input files to be uploaded.
-        storage_path_prefix: Path to the storage bucket.
-        """
+        storage_path_prefix: Path to the remote storage.
+        storage_region: Region of the remote storage.
+        verbose: Whether to display a progress bar.
+    """
     input_zip_path = None
 
     try:
@@ -141,6 +149,7 @@ def upload_input(api_instance: inductiva.client.TasksApi, input_dir, task_id,
         url = storage.get_signed_urls(
             paths=[remote_input_zip_path],
             operation="upload",
+            region=storage_region,
         )[0]
 
         with tqdm.tqdm(total=zip_file_size,
@@ -411,9 +420,10 @@ def submit_task(simulator,
         with blocking_task_context(task_api_instance, task_id, "input upload"):
             upload_input(
                 api_instance=task_api_instance,
-                input_dir=input_dir,
                 task_id=task_id,
+                input_dir=input_dir,
                 storage_path_prefix=storage_path_prefix,
+                storage_region=task_submitted_info.storage_region,
                 verbose=verbose,
             )
 
