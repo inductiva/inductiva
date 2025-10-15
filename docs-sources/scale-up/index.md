@@ -95,7 +95,7 @@ Overview <recipes/index>
 ```{toctree}
 ---
 caption: Optimize Workflow
-maxdepth: 2
+maxdepth: 3
 hidden: true
 ---
 Overview <optimize-workflow/index>
