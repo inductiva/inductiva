@@ -15,7 +15,7 @@ def list_containers(args):
         output_path = default_folder
 
     try:
-        storage.listdir(output_path, args.max_results)
+        storage.listdir(output_path, max_results=args.max_results)
     except client.exceptions.ApiException as e:
         if e.status == 404:
             error_msg = f"Folder '{output_path}' not found on remote storage."
