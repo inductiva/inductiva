@@ -34,8 +34,7 @@ def register(parser):
         " of your data on Inductiva remote storage.\n"
         "It lists all files and folders in a specified path, allowing you to "
         "control the maximum number of results,\n"
-        "the ordering criteria, and the sorting order.\n"
-    )
+        "the ordering criteria, and the sorting order.\n")
     subparser.add_argument("path", default="/", type=str, nargs="?")
     subparser.add_argument("-m", "--max-results", default=10, type=int)
     subparser.add_argument(
@@ -55,22 +54,21 @@ def register(parser):
         help="Sorting order (desc or asc).",
     )
     subparser.add_argument(
-        "--all", action="store_true", help="List all results, ignoring --max-results."
+        "--all",
+        action="store_true",
+        help="List all results, ignoring --max-results.",
     )
     subparser.add_argument(
         "-r",
         "--region",
         default=None,
         type=str,
-        help=(
-            "Filter by region. Specify 'all' to list "
-            "all regions. If not specified, the contents "
-            "of the user's default region are returned."
-        ),
+        help=("Filter by region. Specify 'all' to list all regions. If not "
+              "specified, the contents of the user's default region are "
+              "returned."),
     )
 
-    subparser.epilog = textwrap.dedent(
-        """\
+    subparser.epilog = textwrap.dedent("""\
         examples:
             # List the 10 largest folders sorted by size
             $ inductiva storage list --max-results 10 --order-by size --sort-order desc
@@ -95,7 +93,6 @@ def register(parser):
             Use --max-results/-m to control the number of results displayed.
 
             You have storage in the following regions: europe-west1
-    """
-    )
+    """)
 
     subparser.set_defaults(func=listdir)

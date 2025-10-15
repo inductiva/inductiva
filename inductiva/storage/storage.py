@@ -52,10 +52,9 @@ def _print_storage_size_and_cost() -> int:
         estimated_storage_cost)
     storage_total_size = format_utils.bytes_formatter(storage_total_size_bytes)
 
-    print("Total storage size used:")
+    print("\nTotal storage size used across all regions:")
     print(f"\tVolume: {storage_total_size}")
-    print(f"\tCost: {estimated_storage_cost}/month")
-    print("")
+    print(f"\tCost: {estimated_storage_cost}/month\n")
 
     return storage_total_size_bytes
 
@@ -146,14 +145,17 @@ def listdir(
     if print_results:
         print(_print_contents_table(all_contents))
 
-        _print_storage_size_and_cost()
-
         print(
             f"Listed {len(all_contents)} folder(s). Ordered by {order_by}.\n"
             "Use --max-results/-m to control the number of results displayed.")
 
+        current_region = region or file_info.region
+        print("\nCurrent region(s):", current_region)
+
         print("\nYou have storage in the following regions: "
               f"{', '.join(response.available_regions)}")
+
+        _print_storage_size_and_cost()
 
     return all_contents
 
