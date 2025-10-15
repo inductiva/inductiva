@@ -11,12 +11,16 @@ Depending on the alert type, notifications may be sent by email, shown in the we
 * [Simulation Observer Events](sections/observer-events.md)
 
 
-```{toctree}
-:hidden:
-sections/alerts
-sections/observer-events
-```
-
 ```{banner}
 :origin: optimize_workflow_alerts_events
+```
+
+```{toctree}
+---
+caption: Alerts & Events
+maxdepth: 2
+hidden: true
+---
+sections/alerts
+sections/observer-events
 ```
