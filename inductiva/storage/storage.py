@@ -113,6 +113,7 @@ def listdir(
     all_contents = []
     max_results = max_results or sys.maxsize
     page = 1
+    current_region = region
 
     while max_results > 0:
         page_size = min(100, max_results)
@@ -134,6 +135,8 @@ def listdir(
                 "provider": file_info.provider_id,
                 "region": file_info.region,
             })
+            if current_region is None:
+                current_region = file_info.region
 
         page_count = len(response.contents)
         page += 1
@@ -149,7 +152,6 @@ def listdir(
             f"Listed {len(all_contents)} folder(s). Ordered by {order_by}.\n"
             "Use --max-results/-m to control the number of results displayed.")
 
-        current_region = region or file_info.region
         print("\nCurrent region(s):", current_region)
 
         print("\nYou have storage in the following regions: "
@@ -234,6 +236,7 @@ def get_zip_contents(
     path: str,
     zip_relative_path: str = "",
     recursive: bool = False,
+    region: Optional[str] = None,
 ) -> ZipArchiveInfo:
     """
     Retrieve the contents of a ZIP archive from a given path.
@@ -247,6 +250,8 @@ def get_zip_contents(
             the specified `zip_relative_path`. If False, list only top-level
             files and directories within the specified `zip_relative_path`.
             Defaults to False.
+        region (str, optional): The region of the remote storage. If not
+            specified, the user's default region is assumed.
 
     Returns:
         ZipArchiveInfo: An object containing the total size of the ZIP archive
@@ -257,7 +262,9 @@ def get_zip_contents(
     archive_info = api_instance.get_zip_contents(
         path=path,
         zip_relative_path=zip_relative_path,
-        recursive=str(recursive).lower())
+        recursive=str(recursive).lower(),
+        region=region,
+    )
     files = [
         ZipFileInfo(
             name=file.name,
@@ -275,6 +282,7 @@ def get_file_range(
     path: str,
     zip_relative_path: str = "",
     filename: str = "",
+    region: Optional[str] = None,
 ) -> ZipFileRange:
     """
     Retrieve the byte range (start and end) of the compressed data for a
@@ -284,6 +292,8 @@ def get_file_range(
         path (str): The full path to the ZIP archive.
         zip_relative_path (str, optional): The relative path inside the ZIP.
         filename (str): The name of the file inside the ZIP to get the range.
+        region (str, optional): The region of the remote storage. If not
+            specified, the user's default region is assumed.
 
     Returns:
         ZipFileRange: The start and end byte offsets of the file
@@ -293,6 +303,7 @@ def get_file_range(
         filename=filename,
         zip_relative_path=zip_relative_path,
         path=path,
+        region=region,
     )
     return ZipFileRange(
         range_start=response.range_start,
@@ -304,6 +315,7 @@ def upload_from_url(
     url: str,
     remote_dir: str,
     file_name: Optional[str] = None,
+    region: Optional[str] = None,
 ):
     """
     Upload a file from a given URL to a specified remote directory.
@@ -316,6 +328,8 @@ def upload_from_url(
             be stored.
         file_name (str, optional): The name to save the uploaded file as.
             If not specified, the name will be extracted from the URL.
+        region (str, optional): The region of the remote storage. If not
+            specified, the user's default region is assumed.
     """
     api_instance = inductiva.client.StorageApi(inductiva.api.get_client())
 
@@ -326,7 +340,7 @@ def upload_from_url(
 
     remote_path = os.path.join(remote_dir, file_name)
 
-    api_instance.upload_from_url(url=url, path=remote_path)
+    api_instance.upload_from_url(url=url, path=remote_path, region=region)
     logging.info("File is being uploaded...")
     logging.info("You can use 'inductiva storage ls' to check the status.")
 
@@ -383,8 +397,8 @@ def upload(
             uploaded.
         remote_dir (str): The remote directory where the file will
             be uploaded.
-        region (str): The region of the remote storage. If not specified,
-            the user's default region will be assumed.
+        region (str, optional): The region of the remote storage. If not
+            specified, the user's default region is assumed.
 
     Example:
         Upload a file to a remote directory:
@@ -634,8 +648,8 @@ def download(
             will be saved. Defaults to the current working directory.
         decompress (bool, optional): Whether to decompress the downloaded file
             or folder if it is compressed. Defaults to True.
-        region (str): The region of the remote storage. If not specified,
-            the user's default region will be assumed.
+        region (str, optional): The region of the remote storage. If not
+            specified, the user's default region is assumed.
 
     Examples:
         Download a folder from a remote server to the current directory:
@@ -704,7 +718,7 @@ def _list_files(root_path: str) -> Tuple[List[str], int]:
     return file_paths, total_size
 
 
-def remove(remote_path: str):
+def remove(remote_path: str, region: Optional[str] = None):
     """
     Removes a file or directory from the remote location.
 
@@ -719,12 +733,16 @@ def remove(remote_path: str):
         remote_path += "/"
 
     api = inductiva.client.StorageApi(inductiva.api.get_client())
-    api.delete_file(path=remote_path)
+    api.delete_file(path=remote_path, region=region)
 
     logging.info("Successfully removed '%s' from remote storage.", remote_path)
 
 
-def copy(source: str, target: str):
+def copy(
+    source: str,
+    target: str,
+    region: Optional[str] = None,
+):
     """
     Copies a file or folder from a source path in storage to a target path.
 
@@ -732,9 +750,11 @@ def copy(source: str, target: str):
         source (str): The source path of the file or directory to copy.
         target (str): The destination path where the file or directory
                       should be copied to.
+        region (str, optional): The region of the remote storage. If not
+            specified, the user's default region is assumed.
     """
     api = inductiva.client.StorageApi(inductiva.api.get_client())
-    api.copy(source=source, target=target)
+    api.copy(source=source, target=target, region=region)
     logging.info("Copied %s to %s successfully.", source, target)
 
 
@@ -875,8 +895,10 @@ def _get_file_size(file_path):
     return list(contents.values())[0].size_bytes
 
 
-def _get_multipart_parts(size: int,
-                         part_size: int = 128 * MB) -> Tuple[int, int]:
+def _get_multipart_parts(
+    size: int,
+    part_size: int = 128 * MB,
+) -> Tuple[int, int]:
     """
     Calculate the size of each part and the total number of parts
 

@@ -31,11 +31,13 @@ def register(parser):
         "path structure, to your local machine.\n"
         "Specify the remote path, the local destination (optional), and whether"
         " to decompress the content after downloading (default: enabled).\n")
+
     subparser.add_argument(
         "remote_path",
         type=str,
         help="The path to the file or folder in remote storage to download.",
     )
+
     subparser.add_argument(
         "local_dir",
         type=str,
@@ -44,11 +46,13 @@ def register(parser):
         help=("The local directory where the downloaded content will be saved. "
               "Defaults to the current working directory if not specified."),
     )
+
     subparser.add_argument(
         "--decompress",
         action="store_true",
         help="Decompress the downloaded file or folder if it is compressed.",
     )
+
     subparser.add_argument(
         "-r",
         "--region",

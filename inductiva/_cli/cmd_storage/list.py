@@ -35,8 +35,11 @@ def register(parser):
         "It lists all files and folders in a specified path, allowing you to "
         "control the maximum number of results,\n"
         "the ordering criteria, and the sorting order.\n")
+
     subparser.add_argument("path", default="/", type=str, nargs="?")
+
     subparser.add_argument("-m", "--max-results", default=10, type=int)
+
     subparser.add_argument(
         "-o",
         "--order-by",
@@ -45,6 +48,7 @@ def register(parser):
         choices=["creation_time", "size"],
         help="Order by creation_time or size.",
     )
+
     subparser.add_argument(
         "-s",
         "--sort-order",
@@ -53,11 +57,13 @@ def register(parser):
         choices=["desc", "asc"],
         help="Sorting order (desc or asc).",
     )
+
     subparser.add_argument(
         "--all",
         action="store_true",
         help="List all results, ignoring --max-results.",
     )
+
     subparser.add_argument(
         "-r",
         "--region",

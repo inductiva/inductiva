@@ -6,7 +6,7 @@ from inductiva import storage
 
 def upload(args):
     """Upload a file or folder to remote storage."""
-    storage.upload(args.local_path, args.remote_dir)
+    storage.upload(args.local_path, args.remote_dir, args.region)
 
 
 def register(parser):
@@ -31,11 +31,21 @@ def register(parser):
         type=str,
         help="The local path to the file or folder to upload.",
     )
+
     subparser.add_argument(
         "remote_dir",
         type=str,
         help=(
             "The remote directory where the uploaded content will be stored."),
+    )
+
+    subparser.add_argument(
+        "-r",
+        "--region",
+        default=None,
+        type=str,
+        help=("Storage region of remote files. If not specified, the user's "
+              "default region is assumed."),
     )
 
     subparser.set_defaults(func=upload)
