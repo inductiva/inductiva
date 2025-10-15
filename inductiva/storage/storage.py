@@ -919,6 +919,7 @@ def multipart_upload(
     parts_size,
     upload_parts,
     complete_multipart_url,
+    region: Optional[str] = None,
 ):
     """
     Perform the multipart upload using the server.
@@ -931,10 +932,18 @@ def multipart_upload(
             parts_size=parts_size,
             upload_parts=upload_parts,
             complete_multipart_url=complete_multipart_url,
-        ))
+        ),
+        region=region,
+    )
 
 
-def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):
+def export_to_aws_s3(
+    path_to_export,
+    part_size,
+    filename,
+    bucket_name,
+    region: Optional[str] = None,
+):
     if not _boto3_imported:
         print("boto3 is not installed. Please run "
               "'pip install inductiva[aws]' to install it.")
@@ -993,6 +1002,7 @@ def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):
         parts_size,
         upload_parts,
         complete_multipart_url,
+        region,
     )
     print(
         "Export is being done by inductiva server. You can close the terminal.")
@@ -1004,6 +1014,7 @@ def export(
     bucket_name: str,
     file_name: Optional[str] = None,
     part_size: int = 128,
+    region: Optional[str] = None,
 ):
     file_name = file_name or pathlib.Path(path_to_export).name
     if export_to == ExportDestination.AWS_S3:
@@ -1013,6 +1024,7 @@ def export(
             part_size,
             file_name,
             bucket_name,
+            region,
         )
     else:
         raise ValueError(f"Unsupported export destination: {export_to}")

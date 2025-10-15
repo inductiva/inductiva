@@ -54,9 +54,8 @@ def register(parser):
         "--region",
         default=None,
         type=str,
-        help=("Storage region of remote files. If not"
-              "specified, the user's default region is"
-              "assumed."),
+        help=("Storage region of remote files. If not specified, the user's "
+              "default region is assumed."),
     )
 
     subparser.epilog = textwrap.dedent("""\
