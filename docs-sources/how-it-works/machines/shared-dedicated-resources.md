@@ -86,14 +86,3 @@ machine_group.terminate()
 ```{banner_small}
 :origin: resources
 ```
-
-```{toctree}
----
-caption: Resources
-maxdepth: 2
-hidden: true
----
-computational_resources/machinegroup_class
-computational_resources/elasticgroup_class
-computational_resources/mpicluster_class
-```
