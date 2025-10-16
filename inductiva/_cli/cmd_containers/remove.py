@@ -24,8 +24,7 @@ def rm_container(args):
         print(f"Error accessing remote folder '{folder}': {e}", file=sys.stderr)
         return 1
 
-    if not any(
-            content["content_name"] == container_name for content in contents):
+    if not any(content["name"] == container_name for content in contents):
         print(f"Error: '{container_name}' not found in folder '{folder}'.",
               file=sys.stderr)
         return 1
