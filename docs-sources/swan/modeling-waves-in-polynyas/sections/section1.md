@@ -64,7 +64,7 @@ tutorial
 ## 4. Modify Each `.swn` File
 Before running any scripts, you need to edit each `.swn` input file in both the `S0/` and `S2_f5/` folders to prevent a known Fortran runtime issue.
 
-In every `.swn` file, locate the following line:
+In each `.swn` file, look for a line that starts with:
 
 ```
 SPECOUT 'COMPGRID' SPEC1D ABS '20211007.sp1'
