@@ -1,4 +1,4 @@
-# Running the Scenarios on Inductiva
+# Run the Scenarios on Inductiva
 
 ## Running the Baseline S0 Scenario
 The following Python script runs the simulation for the configuration `S0/polynya2D_20211007`.swn. Save the following code as a `.py` file inside the `tutorial` directory before running it.
