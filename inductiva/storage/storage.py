@@ -336,9 +336,9 @@ def _convert_path_unix(path):
     drive, path = os.path.splitdrive(path)
     if "\\" in path:
         path = str(pathlib.PureWindowsPath(path).as_posix())
-    # preserve the drive if it exists
+    # preserve the drive if it exists (e.g., drive = "D:")
     if drive:
-        path = f"{drive}:{path}"
+        path = f"{drive}{path}"
     return path
 
 
