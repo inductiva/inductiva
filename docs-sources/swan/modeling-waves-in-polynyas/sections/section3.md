@@ -17,7 +17,7 @@ cloud_machine = inductiva.resources.MachineGroup( \
 The number of available vCPUs will be halved, but the underlying number of physical cores remain the same. 
 
 ## Performance with Hyper-threading Disabled
-We repeated the **S2_f5** scenario tests on the same machine types used before, but this time with hyper-threading disabled. Here are the execution times and associated costs:
+We repeated the `S2_f5/polynya2D_20211007` scenario tests on the same machine types used before, but this time with hyper-threading disabled. Here are the execution times and associated costs:
 
 | Machine Type      | Hyper-threading | vCPUs | Physical Cores | Execution Time | Estimated Cost (US$) |
 |-------------------|------------------|--------|------------------|----------------|----------------------|
@@ -36,20 +36,3 @@ From these results, we observe:
 - At higher vCPU counts, however, disabling hyper-threading leads to better performance and lower cost per hour.
 
 This trend suggests that contention for RAM access becomes a limiting factor when too many threads compete for shared hardware resources. 
-
----
-**Notas do Luís para o Paulo**:
-
-c4d-highcpu-192; sem hyper-threading:
-https://console.inductiva.ai/tasks/8g06xf56d8yxqci2zj34ucvh1
-Reference time / cost:  1h05 /  3.50 US$
-
-c4d-highcpu-192; com hyper-threading:
-https://console.inductiva.ai/tasks/6mkvk4ftgwtpvv0z4w91ckyw1
-Não foi possivel correr. O SWAN encrava no início, quando está a fazer a partição do problema.
-Suponho que haja um limite as file handles que seja muito baixo e possivelmente isso tb esta a rebentar 
-o SWAN quando ele tenta escrever.
-
-Nota: as simulações do SWAN são estocásticas e por vezes convergem de uma forma
-diferente, podendo demorar mais tempo numas runs que noutras mesmo para o mesmo
-número de vCPUs. Para um benchmark a sério vai ser mesmo preciso correr 3 vezes.
