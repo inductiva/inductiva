@@ -2,7 +2,7 @@
 
 > **Note:** This tutorial demonstrates **passive tracking**, where observer triggers run **on the background**
 > and automatically send notifications when events occur.
-> For **active tracking**, refer to the [Real-Time Monitoring & Auto Termination tutorial](https://inductiva.ai/guides/scale-up/recipes/real-time-simulation-monitoring){:target="_blank"}, where monitoring runs
+> For **active tracking**, refer to the <a href="https://inductiva.ai/guides/scale-up/recipes/real-time-simulation-monitoring" target="_blank">Real-Time Monitoring & Auto Termination tutorial</a>, where monitoring runs
 > on your local machine.
 
 ## Challenge
