@@ -9,7 +9,7 @@ import sys
 from inductiva import users, _cli
 import inductiva.client.models
 from inductiva.client.exceptions import ApiException
-from inductiva.users.methods import get_costs
+from inductiva.users.methods import get_costs, get_fees
 from inductiva.utils import format_utils
 
 
@@ -73,10 +73,13 @@ def _print_estimated_costs(fout: TextIO = sys.stdout):
     """Prints the user's estimated costs for the current month."""
     current_month = datetime.now().month
     current_year = datetime.now().year
+
     # This endpoint is not available for external users for now.
     # This try will be removed in the future.
     try:
         costs = get_costs(start_year=current_year, start_month=current_month)
+        fees = get_fees()
+
         total_estimated_costs = format_utils.currency_formatter(costs[0].total)
         computation_estimated_costs = format_utils.currency_formatter(
             costs[0].components.compute)
@@ -84,8 +87,10 @@ def _print_estimated_costs(fout: TextIO = sys.stdout):
             costs[0].components.storage)
         data_transfer_estimated_costs = format_utils.currency_formatter(
             costs[0].components.data_transfer)
+        orchestration_fee_estimated_costs = format_utils.currency_formatter(
+            costs[0].components.task_orchestration)
 
-        label_width = 12
+        label_width = 25
         cost_width = 10
 
         print("■ Estimated Costs (current month):", file=fout)
@@ -102,9 +107,23 @@ def _print_estimated_costs(fout: TextIO = sys.stdout):
             f"{data_transfer_estimated_costs:<{cost_width}}",
             file=fout)
         print(
+            f"\t{'Task orchestration fee:':<{label_width}} "
+            f"{orchestration_fee_estimated_costs:<{cost_width}}",
+            file=fout)
+        print(
             f"\t{'Total:':<{label_width}} "
             f"{total_estimated_costs:<{cost_width}}",
             file=fout)
+
+        task_orchestration_fee = format_utils.currency_formatter(
+            fees.task_orchestration_fee.amount)
+
+        if not fees.task_orchestration_fee.active:
+            print("Note: A per-run orchestration fee "
+                  f"({task_orchestration_fee}) will soon apply to each task,"
+                  " in addition to compute costs. This is not yet being "
+                  "charged.")
+
     except ApiException as _:
         return
 

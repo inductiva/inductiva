@@ -1,5 +1,6 @@
 """Manage running/completed tasks on the Inductiva API."""
 import io
+import re
 import sys
 import time
 import json
@@ -293,9 +294,46 @@ class TaskInfo:
                 self.estimated_computation_cost,)
         else:
             estimated_cost = "N/A"
-        table_str += ("\nEstimated computation cost (US$): "
-                      f"{estimated_cost}\n\n")
-        table_str += ("Go to "
+
+        if orchestration_fee := self._kwargs.get("orchestration_fee"):
+            orchestration_fee_amount = orchestration_fee.get("amount")
+            orchestration_fee_charged = orchestration_fee.get("charged", False)
+
+            total_estimated_cost = self.estimated_computation_cost or 0
+            if orchestration_fee_charged:
+                total_estimated_cost += orchestration_fee_amount
+
+            min_decimal_places = None
+            if self.estimated_computation_cost is not None:
+                match = re.search(r"(\d+\.\d+)", estimated_cost)
+                if match:
+                    number_str = match.group(1)
+                    min_decimal_places = len(number_str.split('.')[1])
+
+            total_estimated_cost_str = format_utils.currency_formatter(
+                total_estimated_cost, min_decimal_places=min_decimal_places)
+
+            table_str += (f"\nTotal estimated cost (US$): "
+                          f"{total_estimated_cost_str}\n")
+
+            table_str += ("\tEstimated computation cost (US$): "
+                          f"{estimated_cost}\n")
+
+            orchestration_fee_amount_str = format_utils.currency_formatter(
+                orchestration_fee_amount)
+            table_str += (f"\tOrchestration fee (US$): "
+                          f"{orchestration_fee_amount_str}\n")
+
+            if not orchestration_fee_charged:
+                table_str += (
+                    "\t\tNote: a per-run orchestration fee will be "
+                    "applied to each task in addition to compute costs. "
+                    "It has not been applied to this task yet.\n")
+        else:
+            table_str += (f"\nEstimated computation cost (US$): "
+                          f"{estimated_cost}\n")
+
+        table_str += ("\nGo to "
                       f"https://console.inductiva.ai/tasks/{self.task_id} "
                       "for more details.")
 

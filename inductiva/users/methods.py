@@ -44,6 +44,14 @@ def get_info() -> inductiva.client.models.User:
     return user
 
 
+def get_fees() -> inductiva.client.models.UserFees:
+    """Get information about the user's fees."""
+    with api.get_client() as client:
+        api_instance = inductiva.client.UsersApi(client)
+        fees = api_instance.get_user_fees()
+    return fees
+
+
 def get_costs(
     start_year: int,
     start_month: int,
