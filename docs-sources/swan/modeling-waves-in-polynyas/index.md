@@ -9,6 +9,12 @@ In this tutorial, we’ll focus on two key simulation scenarios:
 - **S0** — Open-water baseline (no ice effects). This is used to generate reference spectra for comparison with ice-affected simulations.
 - **S2_f5** — Full ice scenario, where frazil and grease ice are included, and an ice-related dissipation term is activated with a specific parameter setting (power-law exponent = 5).
 
+The tutorial is organized into the following parts:
+- [Set up the example files](sections/section1)
+- [Run the Scenarios on Inductiva](sections/section2)
+- [Evaluate the Impact of Hyper-threading](sections/section3)
+- [Run All Simulations from Scenario S2_f5 in Parallel](sections/section4)
+
 Let's get started!
 
 ```{banner_small}

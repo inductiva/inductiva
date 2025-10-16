@@ -14,8 +14,12 @@ Inductiva simplifies research by making high-performance computing more accessib
 ### Tutorials
 Step-by-step guides to help you learn how to run SWAN through the Inductiva API. From getting started to advanced tutorials, we have you covered.
 
-- [Test Your Inductiva Setup](setup-test)
-- [Run Your First Simulation](quick-start)
+* **Getting Started**
+    - [Test Your Inductiva Setup](setup-test)
+    - [Run Your First Simulation](quick-start)
+
+* **Advanced Tutorials**
+    - [Modeling Waves in Antarctic Polynyas](modeling-waves-in-polynyas/index)
 
 ### Benchmarks
 A trusted guide to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how SWAN performs on different hardware configurations.
