@@ -1,7 +1,7 @@
 # Running the Scenarios on Inductiva
 
 ## Running the Baseline S0 Scenario
-The following Python script runs the simulation for the configuration `S0/polynya2D_20211007`.swn. Save this code into a `.py` file and place it inside the `tutorial` directory before running it.
+The following Python script runs the simulation for the configuration `S0/polynya2D_20211007`.swn. Save the following code as a `.py` file inside the `tutorial` directory before running it.
 
 ```python
 """SWAN example"""
@@ -63,7 +63,7 @@ Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-m
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, the core computation time of this simulation was approximately **3.6 hours**.
 
-To run the `S2_f5` or other scenarios, simply update the `sim_config_filename` parameter accordingly.
+To run the `S2_f5/polynya2D_20211007`, simply update the `sim_config_filename` parameter accordingly.
 
 ## Scaling Up Your Simulation  
 Scaling up is straightforward — just increase the `machine_type` to a machine with more virtual CPUs. For example, doubling the vCPUs from `c4d-highcpu-32` to `c4d-highcpu-64` can significantly reduce runtime.

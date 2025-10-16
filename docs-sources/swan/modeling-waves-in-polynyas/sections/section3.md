@@ -1,7 +1,6 @@
 # Evaluating the Impact of Hyper-threading
 All the simulation runs discussed so far were executed with **hyper-threading enabled**, meaning computational resources were configured with `threads_per_core=2`. This is the **default** setting for virtual machines on Inductiva (learn more [here](https://inductiva.ai/guides/how-it-works/machines/hyperthreading)). 
 
-
 In traditional HPC environments, however, it's common practice to run one thread per physical core, with **hyper-threading disabled**. This approach helps avoid resource contention and can lead to more predictable and consistent performance.
 
 To disable hyper-threading and ensure only physical cores are used, simply configure your `MachineGroup` with `threads_per_core=1`:
@@ -37,10 +36,6 @@ From these results, we observe:
 - At higher vCPU counts, however, disabling hyper-threading leads to better performance and lower cost per hour.
 
 This trend suggests that contention for RAM access becomes a limiting factor when too many threads compete for shared hardware resources. 
-
-(I think we should elaborate more on this) - Eunice
-
-
 
 ---
 **Notas do Luís para o Paulo**:

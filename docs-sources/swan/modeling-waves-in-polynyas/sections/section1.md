@@ -61,6 +61,23 @@ tutorial
          + wnd_20211007_10m.dat
 ```
 
+## 4. Modify Each `.swn` File
+Before running any scripts, you need to edit each `.swn` input file in both the `S0/` and `S2_f5/` folders to prevent a known Fortran runtime issue.
+
+In every `.swn` file, locate the following line:
+
+```
+SPECOUT 'COMPGRID' SPEC1D ABS '20211007.sp1'
+```
+
+and **comment it out** by adding an exclamation mark (!) at the beginning:
+
+```
+!SPECOUT 'COMPGRID' SPEC1D ABS '20211007.sp1'
+```
+
+This modification avoids a common Fortran runtime error that can occur when SWAN attempts to output large spectral files over the full computational grid.
+
 ## Folder Overview
 Here's what each subfolder in `tutorial/polynya` contains:
 - `swan/input`: Grid definitions, wind fields, and ice concentration maps for 10 polynya events. These are the raw fields for your SWAN simulations.
@@ -68,7 +85,6 @@ Here's what each subfolder in `tutorial/polynya` contains:
 - `swan/S2_f5`: Input files for the full ice-influenced scenario (S2_f5), which included frazil/grease effects and applies ice and a power-law exponent of 5 are applied.
 
 All required data is now in place. Next, let's prepare the Python script to run the baseline S0 scenario.
-
 
 ---
 **Notas para o Paulo**:
