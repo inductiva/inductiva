@@ -66,12 +66,12 @@ cloud_machines.terminate()
 
 We're going to break down each portion of the code for better understanding.
 
-### 1. Create an Inductiva Project
+## 1. Create an Inductiva Project
 Each task in this example represents a polynya event. To keep things organized, all tasks are grouped under a single **Project**.
 
 > Learn more about `Projects` [here](https://inductiva.ai/guides/scale-up/projects/index).
 
-### 2. Configure and Run Each Polynya Event
+## 2. Configure and Run Each Polynya Event
 To run tasks in parallel, we use an **ElasticMachineGroup**. Unlike the default MachineGroup, this class automatically scales between a defined minimum and maximum number of machines based on workload.
 
 In this case, the maximum number of machines equals the number of polynya events in the S2_f5 scenario.
@@ -85,7 +85,7 @@ Since we’re using spot machines, simulations might occasionally be interrupted
 
 Within the loop, each simulation is submitted, and metadata (such as event date and filename) is stored for easy reference later.
 
-### 3. Wait for All Simulations to Finish
+## 3. Wait for All Simulations to Finish
 Once all simulations have finished, the machine group is terminated and results are retrieved.
 
 You can monitor your project and all tasks in your [Inductiva Console](https://console.inductiva.ai/projects).
