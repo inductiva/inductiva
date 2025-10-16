@@ -28,5 +28,5 @@ maxdepth: 3
 hidden: true
 ---
 Overview <releases/index>
-v0.18 <releases/v0-18/v0-18-0.md>
+Sep 2025 v0.18 <releases/v0-18/v0-18-0.md>
 ```
