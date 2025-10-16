@@ -38,12 +38,16 @@ class Project(BaseModel):
     created_at: datetime
     num_tasks: StrictInt
     estimated_computation_cost: Optional[Union[StrictFloat, StrictInt]] = 0.0
+    total_orchestration_fee: Optional[Union[StrictFloat, StrictInt]] = 0.0
+    total_orchestration_fee_undiscounted: Optional[Union[StrictFloat,
+                                                         StrictInt]] = 0.0
     task_status_overview: Optional[Dict[str, Optional[StrictInt]]] = None
     project_metadata: Optional[Dict[str, StrictStr]] = None
     statistics: Optional[ProjectStatistics] = None
     __properties: ClassVar[List[str]] = [
         "name", "project_type", "id", "created_at", "num_tasks",
-        "estimated_computation_cost", "task_status_overview",
+        "estimated_computation_cost", "total_orchestration_fee",
+        "total_orchestration_fee_undiscounted", "task_status_overview",
         "project_metadata", "statistics"
     ]
 
@@ -122,6 +126,13 @@ class Project(BaseModel):
             "estimated_computation_cost":
                 obj.get("estimated_computation_cost")
                 if obj.get("estimated_computation_cost") is not None else 0.0,
+            "total_orchestration_fee":
+                obj.get("total_orchestration_fee")
+                if obj.get("total_orchestration_fee") is not None else 0.0,
+            "total_orchestration_fee_undiscounted":
+                obj.get("total_orchestration_fee_undiscounted")
+                if obj.get("total_orchestration_fee_undiscounted") is not None
+                else 0.0,
             "task_status_overview":
                 obj.get("task_status_overview"),
             "project_metadata":

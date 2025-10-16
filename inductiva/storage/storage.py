@@ -116,10 +116,9 @@ def listdir(
     page = 1
 
     while max_results > 0:
-        print(max_results)
         page_size = min(100, max_results)
 
-        response = api.list_paginated_storage_contents(
+        response = api.list_storage_contents(
             path=path,
             sort_by=order_by,
             order=sort_order,
@@ -128,9 +127,9 @@ def listdir(
             region=region,
         )
 
-        for name, file_info in response.contents.items():
+        for file_info in response.contents:
             all_contents.append({
-                "name": name,
+                "name": file_info.name,
                 "size": round(float(file_info.size_bytes), 3),
                 "creation_time": file_info.creation_time,
                 "provider": file_info.provider_id,
@@ -192,11 +191,13 @@ def _print_contents_table(contents):
 def get_signed_urls(
     paths: List[str],
     operation: Literal["upload", "download"],
+    region: Optional[str] = None,
 ) -> List[str]:
     api_instance = inductiva.client.StorageApi(inductiva.api.get_client())
     resp = api_instance.get_signed_urls_without_preload_content(
         paths=paths,
         operation=models.OperationType(operation),
+        region=region,
     )
 
     return json.loads(resp.data)
@@ -370,6 +371,7 @@ def _construct_remote_paths(local_path, remote_dir):
 def upload(
     local_path: str,
     remote_dir: str,
+    region: Optional[str] = None,
 ):
     """
     Upload a local file or directory to a specified remote directory.
@@ -379,6 +381,8 @@ def upload(
             uploaded.
         remote_dir (str): The remote directory where the file will
             be uploaded.
+        region (str): The region of the remote storage. If not specified,
+            the user's default region will be assumed.
 
     Example:
         Upload a file to a remote directory:
@@ -407,7 +411,11 @@ def upload(
 
     api_instance = inductiva.client.StorageApi(inductiva.api.get_client())
 
-    urls = get_signed_urls(paths=remote_file_paths, operation="upload")
+    urls = get_signed_urls(
+        paths=remote_file_paths,
+        operation="upload",
+        region=region,
+    )
 
     with tqdm.tqdm(total=total_size,
                    unit="B",
@@ -501,13 +509,18 @@ def _get_progress_bar(desc, total_bytes):
     )
 
 
-def _download_file_from_inside_zip(remote_path, local_dir, pool_manager):
+def _download_file_from_inside_zip(
+    remote_path,
+    local_dir,
+    pool_manager,
+    region: Optional[str] = None,
+):
     before, after = remote_path.split(".zip" + os.sep, 1)
     path = before + ".zip"
     zip_relative_path = os.path.dirname(after)
     zip_filename = os.path.basename(after)
 
-    url = get_signed_urls(paths=[path], operation="download")[0]
+    url = get_signed_urls(paths=[path], operation="download", region=region)[0]
 
     if constants.TASK_OUTPUT_ZIP in path:
         prefix = data.ARTIFACTS_DIRNAME
@@ -545,8 +558,18 @@ def _download_file_from_inside_zip(remote_path, local_dir, pool_manager):
         )
 
 
-def _download_path(remote_path, local_dir, pool_manager):
-    urls = get_signed_urls(paths=[remote_path], operation="download")
+def _download_path(
+    remote_path,
+    local_dir,
+    pool_manager,
+    region: Optional[str] = None,
+):
+    urls = get_signed_urls(
+        paths=[remote_path],
+        operation="download",
+        region=region,
+    )
+
     with concurrent.futures.ThreadPoolExecutor() as executor:
         total_bytes = sum(
             executor.map(_get_size, urls, itertools.repeat(pool_manager)))
@@ -592,7 +615,12 @@ def _decompress_file_inside_zip(path):
     return decompress_path
 
 
-def download(remote_path: str, local_dir: str = "", decompress: bool = True):
+def download(
+    remote_path: str,
+    local_dir: str = "",
+    decompress: bool = True,
+    region: Optional[str] = None,
+):
     """
     Downloads a file or folder from storage to a local directory, optionally
     decompressing the contents.
@@ -604,6 +632,8 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
             will be saved. Defaults to the current working directory.
         decompress (bool, optional): Whether to decompress the downloaded file
             or folder if it is compressed. Defaults to True.
+        region (str): The region of the remote storage. If not specified,
+            the user's default region will be assumed.
 
     Examples:
         Download a folder from a remote server to the current directory:
@@ -636,10 +666,10 @@ def download(remote_path: str, local_dir: str = "", decompress: bool = True):
 
     if _is_file_inside_zip(remote_path):
         download_path = _download_file_from_inside_zip(remote_path, local_dir,
-                                                       pool_manager)
+                                                       pool_manager, region)
         paths = [_decompress_file_inside_zip(download_path)]
     else:
-        paths = _download_path(remote_path, local_dir, pool_manager)
+        paths = _download_path(remote_path, local_dir, pool_manager, region)
 
     if decompress:
         _decompress(paths)
@@ -835,7 +865,7 @@ def _generate_complete_multipart_upload_signed_url(
 def _get_file_size(file_path):
     api = inductiva.client.StorageApi(inductiva.api.get_client())
 
-    contents = api.list_paginated_storage_contents(path=file_path, per_page=2)
+    contents = api.list_storage_contents(path=file_path, per_page=2)
     if len(contents) > 1:
         raise ValueError(f"Multiple files found at {file_path}. "
                          "Please specify a single file.")
