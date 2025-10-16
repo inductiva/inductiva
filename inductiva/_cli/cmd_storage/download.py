@@ -7,7 +7,12 @@ from inductiva import storage
 
 def download(args):
     """Download a file or folder from remote storage."""
-    storage.download(args.remote_path, args.local_dir, args.decompress)
+    storage.download(
+        remote_path=args.remote_path,
+        local_dir=args.local_dir,
+        decompress=args.decompress,
+        region=args.region,
+    )
 
 
 def register(parser):
@@ -17,7 +22,8 @@ def register(parser):
         "download",
         aliases=["dl"],
         help="Download a file or folder from remote storage.",
-        formatter_class=argparse.RawTextHelpFormatter)
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
 
     subparser.description = (
         "The `inductiva storage download` command allows you to download a file"
@@ -25,11 +31,13 @@ def register(parser):
         "path structure, to your local machine.\n"
         "Specify the remote path, the local destination (optional), and whether"
         " to decompress the content after downloading (default: enabled).\n")
+
     subparser.add_argument(
         "remote_path",
         type=str,
         help="The path to the file or folder in remote storage to download.",
     )
+
     subparser.add_argument(
         "local_dir",
         type=str,
@@ -38,10 +46,20 @@ def register(parser):
         help=("The local directory where the downloaded content will be saved. "
               "Defaults to the current working directory if not specified."),
     )
+
     subparser.add_argument(
         "--decompress",
         action="store_true",
         help="Decompress the downloaded file or folder if it is compressed.",
+    )
+
+    subparser.add_argument(
+        "-r",
+        "--region",
+        default=None,
+        type=str,
+        help=("Storage region of remote files. If not specified, the user's "
+              "default region is assumed."),
     )
 
     subparser.epilog = textwrap.dedent("""\
