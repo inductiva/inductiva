@@ -67,7 +67,7 @@ def upload_container(args):
                   file=sys.stderr)
             return
 
-    already_there = any(c["content_name"] == filename for c in contents)
+    already_there = any(c["name"] == filename for c in contents)
     if already_there:
         if args.overwrite:
             print(f"'{output_path}' exists - will overwrite it "
