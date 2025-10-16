@@ -2,7 +2,7 @@
 
 > **Note:** This tutorial demonstrates **passive tracking**, where observer triggers run **on the background**
 > and automatically send notifications when events occur.
-> For **active tracking**, refer to the [Real-Time Monitoring & Auto Termination tutorial](https://inductiva.ai/guides/scale-up/recipes/real-time-simulation-monitoring), where monitoring runs
+> For **active tracking**, refer to the [Real-Time Monitoring & Auto Termination tutorial](https://inductiva.ai/guides/scale-up/recipes/real-time-simulation-monitoring){:target="_blank"}, where monitoring runs
 > on your local machine.
 
 ## Challenge
@@ -105,7 +105,7 @@ events.register(
 **Result:** You'll receive an email when the `done.flag` file is created.
 
 Email received:
-![File email](static/file-email.png)
+![File email](../static/file-email.png)
 
 ### Log-Based Observer Registration
 
@@ -136,7 +136,7 @@ events.register(
 - `(.+)` captures `Overflow in calculation`
 
 Email received:
-![Regex email](static/regex-email.png)
+![Regex email](../static/regex-email.png)
 
 Observers are an easy-to-use and flexible mechanism for monitoring simulation progress and automatically responding to important events.
 

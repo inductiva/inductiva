@@ -11,7 +11,7 @@ Tasks | Task output stalled | Task output stops updating | Console notification 
 Tasks | Task preempted | Spot instances are preempted | Email + Console notification |
 Machine Groups | Task runner error | Error in the component running a task | Console notification |
 Machine Groups | Machine Group terminated: Low credits | Machine Group is terminated due to insufficient credits | Console notification |
-Machine Groups | Quota exceeded | One of the [Inductiva Quotas](https://inductiva.ai/guides/how-it-works/basics/quotas) was exceeded | Console notification |
+Machine Groups | Quota exceeded | One of the [Inductiva Quotas](https://inductiva.ai/guides/how-it-works/basics/quotas){:target="_blank"} was exceeded | Console notification |
 Machine Groups | VM preempted | Spot VM is reclaimed by the cloud provider | Email |
 Machine Groups | Machine group pending start | Cloud provider has not allocated the requested resources. Pending request for over one hour | Email |
 Credits | Credits exhausted | Credit balance reaches zero | Email + Console notification |
