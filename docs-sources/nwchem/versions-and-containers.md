@@ -9,6 +9,13 @@ Inductiva stays up to date with the latest versions of NWChem. Below is a list o
 - **7.2.3** (Aug., 2024) 
 - **7.2.2** (Nov., 2023) 
 
+To use a specific NWChem version, simply specify it when initializing the simulator:
+
+```python
+nwchem = inductiva.simulators.NWChem(\
+    version="7.2.3")
+```
+
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!
 

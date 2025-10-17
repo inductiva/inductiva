@@ -10,6 +10,13 @@ Inductiva stays up to date with the latest versions of FDS. Below is a list of t
 - **6.9.1** (Apr., 2024)
 - **6.8** (Apr., 2023) 
 
+To use a specific FDS version, simply specify it when initializing the simulator:
+
+```python
+fds = inductiva.simulators.FDS( \
+    version="6.10.1")
+```
+
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!
 

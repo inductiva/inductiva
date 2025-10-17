@@ -52,8 +52,8 @@ a machine with more virtual CPUs and increased memory capacity. You can explore 
 
 The number of virtual CPUs (`n_vcpus`) is the parameter used to configure the simulation parallelism. This value must be consistently set to the same parameter `M 10` in both the `control.txt` and `ctrl.txt` configuration files.
 
-To adapt this script for other REEF3D simulations, replace `input_dir` with the
-path to your REEF3D input files.
+To adapt this script for other REEF3D simulations, replace `input_dir` with the path to your REEF3D input files. 
+Be sure to specify the REEF3D version compatible with your input files.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 

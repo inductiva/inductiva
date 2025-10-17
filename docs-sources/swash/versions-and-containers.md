@@ -12,6 +12,13 @@ Inductiva stays up to date with the latest versions of SWASH. Below is a list of
 - **10.01** (Apr., 2024)
 - **9.01** (Apr., 2023)
 
+To use a specific SWASH version, simply specify it when initializing the simulator:
+
+```python
+swash = inductiva.simulators.SWASH(\
+    version="11.01")
+```
+
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!
 

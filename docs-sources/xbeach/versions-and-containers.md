@@ -9,6 +9,13 @@ Inductiva stays up to date with the latest versions of XBeach. Below is a list o
 - **1.24** 
 - **1.23** 
 
+To use a specific XBeach version, simply specify it when initializing the simulator:
+
+```python
+xbeach = inductiva.simulators.XBeach( \
+    version="1.24")
+```
+
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!
 

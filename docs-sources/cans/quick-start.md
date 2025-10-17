@@ -48,7 +48,7 @@ a machine with more virtual CPUs and increased memory capacity. You can explore 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt the code for this or any other use case, simply replace `input_dir` with the path to your CaNS input files and 
-set the `sim_config_filename` accordingly.
+set the `sim_config_filename` accordingly. Be sure to specify the CaNS version compatible with your input files.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 

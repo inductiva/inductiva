@@ -91,9 +91,8 @@ task.print_summary()
 > **Note**: `spot` machines are a lot cheaper but may be terminated by the
 provider if necessary.
 
-To adapt the code for this or any other use case, simply replace `input_dir`
-with the path to your CM1 input files and set the `sim_config_filename`
-accordingly.
+To adapt the code for this or any other use case, simply replace `input_dir` with the path to your CM1 input files 
+and set the `sim_config_filename` accordingly. Be sure to specify the CM1 version compatible with your input files.
 
 When the simulation is complete, we terminate the machine, download the results
 and print a summary of the simulation as shown below.

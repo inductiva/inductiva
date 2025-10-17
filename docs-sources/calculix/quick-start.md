@@ -45,8 +45,8 @@ a machine with more virtual CPUs and increased memory capacity. You can explore 
 > **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-To adapt this script for other CalculiX simulations, replace `input_dir` with the
-path to your CalculiX input files and set the `sim_config_filename` accordingly.
+To adapt this script for other CalculiX simulations, replace `input_dir` with the path to your CalculiX input files 
+and set the `sim_config_filename` accordingly.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 

@@ -43,11 +43,3 @@ setup-test
 quick-start
 IDA at Scale: Seismic Assessment of URM Structures <ida-at-scale/index>
 ```
-
-```{toctree}
----
-caption: " "
-maxdepth: 1
-hidden: true
----
-faq

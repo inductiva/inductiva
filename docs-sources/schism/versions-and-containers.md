@@ -9,6 +9,13 @@ Inductiva stays up to date with the latest versions of SCHISM. Below is a list o
 - **5.13.0** (Feb., 2025)
 - **5.11.0** (Aug., 2023)
 
+To use a specific SCHISM version, simply specify it when initializing the simulator:
+
+```python
+schism = inductiva.simulators.SCHISM(\
+    version="5.13.0")
+```
+
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!
 
