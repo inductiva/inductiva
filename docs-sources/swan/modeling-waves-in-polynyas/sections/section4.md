@@ -88,7 +88,9 @@ Within the loop, each simulation is submitted, and metadata (such as event date 
 ## 3. Wait for All Simulations to Finish
 Once all simulations have finished, the machine group is terminated and results are retrieved.
 
-You can monitor your project and all tasks in your [Inductiva Console](https://console.inductiva.ai/projects).
+You can monitor your project and all associated tasks in the [Inductiva Console](https://console.inductiva.ai/projects), as illustrated below:
+
+<p align="center"><img src="../../_static/polynya2d_runs_project.png" alt="polynya2D_runs Project" width="700"></p>
 
 ## Summary
 By leveraging Inductiva’s platform, you can:
