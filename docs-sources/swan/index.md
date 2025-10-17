@@ -46,6 +46,7 @@ hidden: true
 setup-test
 quick-start
 Run an UnSWAN simulation <unswan-tutorial>
+<modeling-waves-in-polynyas/index>
 ```
 
 ```{toctree}
