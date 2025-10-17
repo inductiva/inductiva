@@ -2,7 +2,6 @@
 
 Inductiva Alerts are predefined by Inductiva to warn users about events that could disrupt their work.
 
-
 **Subject** | **Alert** | **Description** | **Communication channel** |
 |---|---|---|---|
 Tasks | Task success | Task completes successfully | Console notification |
@@ -20,6 +19,8 @@ Credits | Credits below storage cost | Insufficient balance for monthly storage 
 Credits | Top-up offer or referral | Credits added as a result of a campaign, referral, or other | Email |
 System | Achievement unlocked | You unlocked new achievements | Console notification |
 
+
+NOTE: These allerts are only triggered for the integrated simulators within [Inductiva's portfolio](https://inductiva.ai/simulators), not for custom images uploaded by the user under the [Bring Your Own Software](https://inductiva.ai/guides/expand/bring-your-own-software/index) feature. 
 
 Are we missing an important event that you'd like to be alerted of? Contact us on [Inductiva’s Discord](https://discord.com/invite/p9tjqBhuZ5)
 
