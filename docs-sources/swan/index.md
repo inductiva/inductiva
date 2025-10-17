@@ -46,7 +46,7 @@ hidden: true
 setup-test
 quick-start
 Run an UnSWAN simulation <unswan-tutorial>
-modeling-waves-in-polynyas/index
+Modeling Waves in Antarctic Polynyas <modeling-waves-in-polynyas/index>
 ```
 
 ```{toctree}
