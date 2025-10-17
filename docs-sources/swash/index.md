@@ -16,6 +16,7 @@ Step-by-step guides to help you learn how to run SWASH through the Inductiva API
 
 - [Test Your Inductiva Setup](setup-test)
 - [Run Your First Simulation](quick-start)
+- [Track Errfile for Error Monitoring](track-errfile)
 
 ### Benchmarks
 A trusted [guide](benchmarks) to selecting the right simulation hardware for your needs. These benchmarks, conducted using the Inductiva platform, provide insight into how SWASH performs on different hardware configurations.
@@ -41,6 +42,7 @@ hidden: true
 ---
 setup-test
 quick-start
+track-errfile
 ```
 
 ```{toctree}
