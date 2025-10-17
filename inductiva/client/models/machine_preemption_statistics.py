@@ -33,10 +33,15 @@ class MachinePreemptionStatistics(BaseModel):
     machines_count: StrictInt
     preemption_count: StrictInt
     preemption_rate_percentage: Optional[Union[StrictFloat, StrictInt]] = None
+    vcpus_count: StrictInt
+    vcpus_preemption_count: StrictInt
+    vcpus_preemption_rate_percentage: Optional[Union[StrictFloat,
+                                                     StrictInt]] = None
     last_preemption: LastPreemption
     __properties: ClassVar[List[str]] = [
         "machine_series", "machines_count", "preemption_count",
-        "preemption_rate_percentage", "last_preemption"
+        "preemption_rate_percentage", "vcpus_count", "vcpus_preemption_count",
+        "vcpus_preemption_rate_percentage", "last_preemption"
     ]
 
     model_config = ConfigDict(
@@ -84,6 +89,11 @@ class MachinePreemptionStatistics(BaseModel):
         if self.preemption_rate_percentage is None and "preemption_rate_percentage" in self.model_fields_set:
             _dict['preemption_rate_percentage'] = None
 
+        # set to None if vcpus_preemption_rate_percentage (nullable) is None
+        # and model_fields_set contains the field
+        if self.vcpus_preemption_rate_percentage is None and "vcpus_preemption_rate_percentage" in self.model_fields_set:
+            _dict['vcpus_preemption_rate_percentage'] = None
+
         return _dict
 
     @classmethod
@@ -104,6 +114,12 @@ class MachinePreemptionStatistics(BaseModel):
                 obj.get("preemption_count"),
             "preemption_rate_percentage":
                 obj.get("preemption_rate_percentage"),
+            "vcpus_count":
+                obj.get("vcpus_count"),
+            "vcpus_preemption_count":
+                obj.get("vcpus_preemption_count"),
+            "vcpus_preemption_rate_percentage":
+                obj.get("vcpus_preemption_rate_percentage"),
             "last_preemption":
                 LastPreemption.from_dict(obj["last_preemption"])
                 if obj.get("last_preemption") is not None else None
