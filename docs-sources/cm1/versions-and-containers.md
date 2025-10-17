@@ -6,8 +6,15 @@
 ## Supported Versions
 Inductiva stays up to date with the latest versions of CM1. Below is a list of the supported versions, along with their respective release dates:
 
-- **18** (Oct., 2015)
 - **21.1** (Mar., 2024)
+- **18** (Oct., 2015)
+
+To use a specific CM1 version, simply specify it when initializing the simulator:
+
+```python
+cm1 = inductiva.simulators.CM1(
+    version="21.1")
+```
 
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!

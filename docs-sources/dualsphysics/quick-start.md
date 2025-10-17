@@ -85,8 +85,9 @@ machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 > **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-To adapt this script for other DualSPHysics simulations, replace `input_dir` with the
-path to your DualSPHysics input files and set the `shell_script` accordingly.
+To adapt this script for other DualSPHysics simulations, replace `input_dir` with the path to your DualSPHysics 
+input files and set the `shell_script` accordingly. Be sure to specify the DualSPHysics version compatible with 
+your input files.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
