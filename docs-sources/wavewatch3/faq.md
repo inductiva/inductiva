@@ -21,6 +21,29 @@ You can also provide your custom switch in your input files by pointing to it us
 > **Note**: You can only use either the switch argument or the custom_switch argument — not both.
 
 <br>
+
+## 2. I keep getting the error `PDLIB requires METIS or SCOTCH library for domain decomposition`. How can I fix it?
+
+This error usually occurs because the **switch file** used to compile the simulator is missing the required domain decomposition library.
+
+For example, your switch file might contain something like:
+
+```
+PDLIB O2b
+```
+
+In this configuration, **PDLIB** is enabled without **METIS** or **SCOTCH**, which are required libraries for domain decomposition.
+
+To fix the issue, simply update your switch file to include one of these libraries, for example:
+
+```
+PDLIB METIS O2b
+```
+
+This tells the compiler to build **PDLIB** with **METIS** support, resolving the error.
+
+
+<br>
 <br>
 
 Still can't find what you're looking for? [Contact Us](mailto:support@inductiva.ai)
