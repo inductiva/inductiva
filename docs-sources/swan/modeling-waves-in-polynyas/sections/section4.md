@@ -90,7 +90,7 @@ Once all simulations have finished, the machine group is terminated and results 
 
 You can monitor your project and all associated tasks in the [Inductiva Console](https://console.inductiva.ai/projects), as illustrated below:
 
-<p align="center"><img src="../../_static/polynya2d_runs_project.png" alt="polynya2D_runs Project" width="700"></p>
+<p align="center"><img src="../../_static/polynya2D_runs_project.png" alt="polynya2D_runs Project" width="700"></p>
 
 ## Summary
 By leveraging Inductiva’s platform, you can:
