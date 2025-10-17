@@ -40,13 +40,13 @@ versions-and-containers
 ```{toctree}
 ---
 caption: 🛠️ Tutorials
-maxdepth: 2
+maxdepth: 4
 hidden: true
 --- 
 setup-test
 quick-start
 Run an UnSWAN simulation <unswan-tutorial>
-<modeling-waves-in-polynyas/index>
+modeling-waves-in-polynyas/index
 ```
 
 ```{toctree}
