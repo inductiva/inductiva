@@ -48,4 +48,5 @@ perform-ml-inference/index
 run-large-integer-factorization
 run-R-stochastic-models
 python-based-simulations
+run-blender-simulation
 ```
