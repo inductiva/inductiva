@@ -21,13 +21,20 @@ def remove(args):
         if not confirm:
             return
 
-    if args.all:
-        root_dir = inductiva.storage.listdir(max_results=None)
-        args.paths = [directory["content_name"] for directory in root_dir]
+    deletion_list = []
 
-    for path in args.paths:
+    if args.all:
+        root_dir = inductiva.storage.listdir(max_results=None, region="all")
+        deletion_list = [
+            (directory["name"], directory["region"]) for directory in root_dir
+        ]
+    else:
+        for path in args.paths:
+            deletion_list.append((path, args.region))
+
+    for path, region in deletion_list:
         try:
-            inductiva.storage.remove(remote_path=path)
+            inductiva.storage.remove(remote_path=path, region=region)
         except exceptions.ApiException as e:
             print("\nError:", str(e))
 
@@ -44,24 +51,41 @@ def register(parser):
         "Use it with caution. This action is irreversible and will permanently "
         "remove the selected files or directories from your remote storage.\n")
 
-    subparser.add_argument("paths",
-                           type=str,
-                           nargs="*",
-                           help="Remote path(s) to remove from storage.")
+    subparser.add_argument(
+        "paths",
+        type=str,
+        nargs="*",
+        help="Remote path(s) to remove from storage.",
+    )
+
     subparser.add_argument(
         "-y",
         "--yes",
         action="store_true",
         dest="confirm",
         default=False,
-        help="Sets any confirmation values to \"yes\" "
-        "automatically. Users will not be asked for "
-        "confirmation to remove path(s) from remote storage.")
-    subparser.add_argument("-a",
-                           "--all",
-                           action="store_true",
-                           default=False,
-                           help="Remove all data from remote storage.")
+        help=("Sets any confirmation values to \"yes\" automatically. Users "
+              "will not be asked for confirmation to remove path(s) from "
+              "remote storage."),
+    )
+
+    subparser.add_argument(
+        "-a",
+        "--all",
+        action="store_true",
+        default=False,
+        help="Remove all data from all remote storage regions.",
+    )
+
+    subparser.add_argument(
+        "-r",
+        "--region",
+        default=None,
+        type=str,
+        help=("Storage region of Inductiva remote files. If not specified, "
+              "the user's default region is assumed. If --all flag is "
+              "also specified this value will be ignored."),
+    )
 
     subparser.epilog = textwrap.dedent("""\
         examples:

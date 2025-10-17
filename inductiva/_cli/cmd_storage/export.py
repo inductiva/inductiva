@@ -13,6 +13,7 @@ def export(args):
         bucket_name=args.bucket_name,
         file_name=args.file_name,
         part_size=args.part_size,
+        region=args.region,
     )
 
 
@@ -43,6 +44,16 @@ def register(parser):
         type=str,
         help="File or folder path in Inductiva remote storage to export.",
     )
+
+    subparser.add_argument(
+        "-r",
+        "--region",
+        default=None,
+        type=str,
+        help=("Storage region of Inductiva remote files. If not specified, "
+              "the user's default region is assumed."),
+    )
+
     subparser.add_argument(
         "--export-to",
         default=storage.ExportDestination.AWS_S3,
