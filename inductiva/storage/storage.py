@@ -125,12 +125,15 @@ def listdir(
             page=page,
             per_page=page_size,
             region=region,
+            # Disable recursion to avoid calculating directory sizes
+            recursive="false",
         )
 
         for file_info in response.contents:
             all_contents.append({
                 "name": file_info.name,
-                "size": round(float(file_info.size_bytes), 3),
+                "size": (round(float(file_info.size_bytes), 3)
+                         if file_info.size_bytes else None),
                 "creation_time": file_info.creation_time,
                 "provider": file_info.provider_id,
                 "region": file_info.region,
