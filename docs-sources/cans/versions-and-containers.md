@@ -11,6 +11,13 @@ Inductiva stays up to date with the latest versions of CaNS. Below is a list of 
 - **2.4.0** (Jan., 2025) - with GPU support
 - **2.3.4** (Apr., 2024) for CPU
 
+To use a specific CaNS version, simply specify it when initializing the simulator:
+
+```python
+cans = inductiva.simulators.CaNS(\
+    version="3.1.0")
+```
+
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!
 

@@ -51,3 +51,12 @@ hidden: true
 ---
 Results & Analysis <benchmarks>
 ```
+
+```{toctree}
+---
+caption: " "
+maxdepth: 1
+hidden: true
+---
+faq
+```
