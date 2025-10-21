@@ -9,6 +9,13 @@ Inductiva stays up to date with the latest versions of DualSPHysics. Below is a 
 - **5.4.1** (Apr., 2025) - with GPU support
 - **5.2.1** (Apr., 2024) - with GPU support
 
+To use a specific DualSPHysics version, simply specify it when initializing the simulator:
+
+```python
+dualsphysics = inductiva.simulators.DualSPHysics( \
+    version="5.4.1")
+```
+
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!
 

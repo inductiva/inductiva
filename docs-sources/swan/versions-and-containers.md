@@ -13,6 +13,13 @@ Inductiva stays up to date with the latest versions of SWAN. Below is a list of 
 - **41.45**
 - **41.31**
 
+To use a specific SWAN version, simply specify it when initializing the simulator:
+
+```python
+swan = inductiva.simulators.SWAN(\
+    version="41.51")
+```
+
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!
 

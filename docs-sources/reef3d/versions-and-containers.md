@@ -12,9 +12,21 @@ The modular programming approach allows the framework to incorporate a range of 
 ## Supported Versions
 Inductiva stays up to date with the latest versions of REEF3D. Below is a list of the supported versions, along with their respective release dates:
 
+- **25.07** (Jul., 2025)
+- **25.05** (Jun., 2025)
 - **25.02** (Feb., 2025)
 - **24.12** (Dec., 2024)
+- **24.08** (Sep., 2024)
+- **24.05** (Jun., 2024)
+- **24.03** (Mar., 2024)
 - **24.02** (Mar., 2024)
+
+To use a specific REEF3D version, simply specify it when initializing the simulator:
+
+```python
+reef3d = inductiva.simulators.REEF3D( \
+    version="25.07")
+```
 
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!
