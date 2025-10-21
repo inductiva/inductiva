@@ -17,6 +17,7 @@ def register(parser):
     subparser.description = (
         "The `inductiva storage size` command calculates "
         "the total size of your data on the platform.\n"
-        "It returns the total size in GB of all items in your storage.\n")
+        "It returns the total size in GB of all items in your storage across "
+        "all storage regions.\n")
 
     subparser.set_defaults(func=storage_used)

@@ -14,10 +14,12 @@ once using cloud resources, accelerating large experiments or parameter sweeps w
 📁 [Projects](projects/index) – Organize your work into projects to group related simulations, 
 streamline task tracking, and manage resource usage efficiently.
 
+⏩ [Recipes](recipes/index) – Ready-to-use code snippets to streamline your workflows.
+
+⏩ [Optimize Workflow](optimize-workflow/index) – Tips and hacks to streamline your workflows.
+
 💰 [Save Costs](save-costs/index) – Tips and strategies to reduce credit usage, from managing 
 storage and quotas to selecting efficient machines and cleaning up resources.
-
-⏩ [Recipes](recipes/index) – Ready-to-use code snippets to streamline your workflows.
 
 🧪 [Generate Dataset](generate-dataset/generate-dataset) – Use simulations to generate custom 
 datasets at scale, ideal for machine learning or research requiring labeled physical data.
@@ -78,17 +80,6 @@ projects/visualize-projects
 
 ```{toctree}
 ---
-caption: Save Costs
-maxdepth: 2
-hidden: true
----
-Overview <save-costs/index>
-Minimize simulation data <save-costs/save_storage>
-
-```
- 
-```{toctree}
----
 caption: Recipes
 maxdepth: 3
 hidden: true
@@ -99,9 +90,30 @@ Overview <recipes/index>
 🗑️ Clean Up Storage by Condition <recipes/storage-related/index>
 👀 Real-Time Monitoring & Conditional Auto Termination <recipes/real-time-simulation-monitoring>
 ⏰ Setting a Time-to-Live on Your Simulations <recipes/set-task-ttl/set-task-ttl>
-📨 Simulation Notifications via Observer Events <recipes/observer-events>
 ```
 
+```{toctree}
+---
+caption: Optimize Workflow
+maxdepth: 3
+hidden: true
+---
+Overview <optimize-workflow/index>
+Alerts & Events <optimize-workflow/alerts-events/index>
+
+```
+ 
+```{toctree}
+---
+caption: Save Costs
+maxdepth: 2
+hidden: true
+---
+Overview <save-costs/index>
+Minimize simulation data <save-costs/save_storage>
+
+```
+ 
 ```{toctree}
 ---
 caption: Generate Dataset

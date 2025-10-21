@@ -188,12 +188,16 @@
           "path": "scale-up/projects/index"
         },
         {
-          "title": "Save Costs",
-          "path": "scale-up/save-costs/index"
-        },
-        {
           "title": "Recipes",
           "path": "scale-up/recipes/index"
+        },
+        {
+          "title": "Optimize Workflow",
+          "path": "scale-up/optimize-workflow/index"
+        },
+        {
+          "title": "Save Costs",
+          "path": "scale-up/save-costs/index"
         },
         {
           "title": "Generate Dataset",
@@ -234,6 +238,16 @@
           "path": "api-functions/api/index"
         }
       ]
-    }
+    },
+    {
+      "title": "Release Notes",
+      "children": [
+        {
+          "title": "Releases",
+          "path": "release-notes/releases/index"
+        }
+      ],
+      "groupWith": "API Functions"
+  }
   ]
 }

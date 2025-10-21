@@ -56,8 +56,11 @@ def no_formatter(x, *_):
     return x
 
 
-def bytes_formatter(n_bytes: int) -> str:
+def bytes_formatter(n_bytes: Optional[int]) -> str:
     """Convert bytes to human readable string."""
+    if n_bytes is None:
+        return None
+
     res = float(n_bytes)
 
     for unit in ["B", "KB", "MB", "GB", "TB"]:
@@ -99,7 +102,7 @@ def get_ansi_formatter():
     return emphasis_formatter
 
 
-def datetime_formatter(dt: Union[datetime.datetime, str]) -> str:
+def datetime_formatter(dt: Optional[Union[datetime.datetime, str]]) -> str:
     # get time in local timezone
     if dt is None:
         return None
