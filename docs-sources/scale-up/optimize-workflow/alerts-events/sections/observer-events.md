@@ -9,9 +9,10 @@
 
 Simulations often produce subtle signals instead of outright failures:
 
-- Files may appear (e.g., `error.log` or `done.flag`) indicating success, warning, or failure.
+- Files may appear (e.g., `error.log`, `done.flag`, or `Errfile-001`) indicating success, warning, or failure.
 - Log files may contain important information buried inside thousands of lines
   (e.g., `ERROR`, `WARNING`, convergence stats).
+- Some simulators create multiple error files for parallel execution (e.g., `Errfile-001`, `Errfile-002`, etc., where the number corresponds to the process or thread that encountered the error).
 
 Manually monitoring these events is tedious and error-prone,
 especially for long-running or multiple parallel tasks.
@@ -25,6 +26,7 @@ such as sending an email.
 Key features:
 
 - Detect when a file **has been created**, such as an error file, or when its contents **match a regular expression**.
+- Supports **wildcard file matching** using Linux-style `*` patterns (e.g., `Errfile-*` to match `Errfile-001`, `Errfile-002`, etc.).
 - Supports **capturing groups** in matched regular expressions to extract relevant information.
 - Works with **any simulator** that writes logs or intermediate files to disk.
 
@@ -58,9 +60,9 @@ Detects when a specific file appears in your task's working directory.
 
 **Parameters:**
 - `task_id` (str): The ID of the task to monitor
-- `file_path` (str): The path of the file to watch for (relative to task directory)
+- `file_path` (str): The path of the file to watch for (relative to task directory). Supports wildcard patterns like `Errfile-*` to match multiple files.
 
-**Use cases:** Completion flags, error files, or other milestone files.
+**Use cases:** Completion flags, error files, or other milestone files. Wildcard patterns are useful for monitoring multiple files from parallel simulations.
 
 ### 2. ObserverFileRegex
 
@@ -68,10 +70,10 @@ Detects patterns inside log files using regular expressions.
 
 **Parameters:**
 - `task_id` (str): The ID of the task to monitor  
-- `file_path` (str): The path of the log file to monitor
+- `file_path` (str): The path of the log file to monitor. Supports wildcard patterns like `Errfile-*` to monitor multiple files.
 - `regex` (str): Regular expression pattern to match against file contents
 
-**Use cases:** Error detection, progress tracking, value monitoring with captured groups.
+**Use cases:** Error detection, progress tracking, value monitoring with captured groups. Wildcard patterns are useful for monitoring files from multiple processes in parallel simulations.
 
 > 💡 If you are new to regex, see the official Python regex guide:
 > [https://docs.python.org/3/library/re.html](https://docs.python.org/3/library/re.html)
@@ -106,6 +108,24 @@ events.register(
 
 Email received:
 ![File email](../static/file-email.png)
+
+### Wildcard File Observer Registration
+
+```python
+from inductiva import events
+
+# Register an observer that triggers when any error file appears
+# Useful for parallel simulations where errors can occur on any process
+events.register(
+    trigger=events.triggers.ObserverFileExists(
+        task_id=task.id,
+        file_path="Errfile-*"),  # Matches Errfile-001, Errfile-002, etc.
+    action=events.actions.EmailNotification(
+        email_address="your@email.com")
+)
+```
+
+**Result:** You'll receive an email when any error file is created, regardless of which process encountered the error.
 
 ### Log-Based Observer Registration
 

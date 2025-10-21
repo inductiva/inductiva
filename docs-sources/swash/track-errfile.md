@@ -6,7 +6,7 @@
 
 ## The Problem
 
-When running SWASH simulations, errors can occur that might not immediately stop the simulation but indicate problems that need attention. SWASH often writes error information to files like `Errfile-001`, but manually checking these files is tedious, especially for long-running simulations.
+When running SWASH simulations, errors can occur that might not immediately stop the simulation but indicate problems that need attention. SWASH writes error information to files like `Errfile-001`, `Errfile-002`, etc., where the number corresponds to the vCPU that encountered the error. Manually checking these files is tedious, especially for long-running simulations.
 
 ## The Solution
 
@@ -19,11 +19,11 @@ Here's how to set up automatic error monitoring for your SWASH simulation:
 ```python
 from inductiva import events
 
-# Register an observer to monitor Errfile-001 for severe errors
+# Register an observer to monitor any Errfile for severe errors
 events.register(
     trigger=events.triggers.ObserverFileRegex(
         task_id=task.id,
-        file_path="Errfile-001",
+        file_path="Errfile-*",  # Wildcard matches Errfile-001, Errfile-002, etc.
         regex=r"Severe error (.+)"),  # Captures text after "Severe error "
     action=events.actions.EmailNotification(
         email_address="your@email.com")
@@ -32,10 +32,21 @@ events.register(
 
 ## How It Works
 
-1. **ObserverFileRegex** monitors the `Errfile-001` file in your task's working directory
-2. **Regular expression** `r"Severe error (.+)"` detects lines containing "Severe error " and captures the error message that follows
-3. **Email notification** is sent immediately when a match is found, including the captured error message
-4. The observer runs in the background, so you don't need to actively monitor the simulation
+1. **ObserverFileRegex** monitors any file matching the pattern `Errfile-*` in your task's working directory (e.g., `Errfile-001`, `Errfile-002`, etc.)
+2. **Wildcard matching** uses Linux-style `*` wildcards to match multiple error files, ensuring you catch errors from any vCPU that encounters problems
+3. **Regular expression** `r"Severe error (.+)"` detects lines containing "Severe error " and captures the error message that follows
+4. **Email notification** is sent immediately when a match is found, including the captured error message
+5. The observer runs in the background, so you don't need to actively monitor the simulation
+
+## Wildcard File Matching
+
+The `Errfile-*` pattern uses Linux-style wildcard matching to monitor multiple error files:
+
+- `Errfile-*` matches any file starting with "Errfile-" followed by any characters
+- This includes `Errfile-001`, `Errfile-002`, `Errfile-003`, etc.
+- The number in the filename corresponds to the vCPU number that encountered the error
+- SWASH creates separate error files for each vCPU to avoid conflicts during parallel execution
+- Using wildcards ensures you don't miss errors from any vCPU, regardless of which one encounters the problem
 
 ## Customizing the Error Detection
 
@@ -73,7 +84,7 @@ task = swash.run(...)
 events.register(
     trigger=events.triggers.ObserverFileRegex(
         task_id=task.id,
-        file_path="Errfile-001",
+        file_path="Errfile-*",  # Wildcard matches any Errfile
         regex=r"Severe error (.+)"),
     action=events.actions.EmailNotification(
         email_address="your@email.com")
