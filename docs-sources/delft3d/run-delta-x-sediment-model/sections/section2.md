@@ -57,8 +57,15 @@ Scaling up is simple — either increase the number of vCPUs by choosing a large
 
 ⚠️ **Important**: If you change the number of vCPUs, be sure to update the `mpirun` command accordingly (e.g., `-np 56`) to match your machine configuration.
 
-| Scenario | Machine Type      | vCPUs | Execution Time | Estimated Cost (US$) |
-|----------|-------------------|-------|----------------|---------------------|
+Below are the results of running the **2021 Spring deployment** across different computational setups:
+
+| Machine Type      | vCPUs | Execution Time | Estimated Cost (USD)|
+|-------------------|-------|----------------|---------------------|
+| c2d-highcpu-32    | 32    |                |                     |
+| c2d-highcpu-56    | 56    | 13h, 14 min    | 3.52                |
+| c2d-highcpu-112   | 112   | 10h, 33 min    | 5.52                |
+| c4d-highcpu-48    | 64    | 9h, 30 min     | 7.93                |
+| c4d-highcpu-96    | 64    | 6h, 49 min     | 11.32               |
 
 <Conclusion>
 

@@ -68,14 +68,16 @@ To run the `S2_f5/polynya2D_20211007`, simply update the `sim_config_filename` p
 ## Scaling Up Your Simulation  
 Scaling up is straightforward — just increase the `machine_type` to a machine with more virtual CPUs. For example, doubling the vCPUs from `c4d-highcpu-32` to `c4d-highcpu-64` can significantly reduce runtime.
 
-| Scenario | Machine Type      | vCPUs | Execution Time | Estimated Cost (USD) |
+Below are the results of running the `S0/polynya2D_20211007` and `S2_f5/polynya2D_20211007` configurations on different computational setups:
+
+| Scenario | Machine Type      | vCPUs | Execution Time | Estimated Cost (USD)|
 |----------|-------------------|-------|----------------|---------------------|
-| **S0**   | c4d-highcpu-32    | 32    | 3h 36m         | 2.00                |
-|          | c4d-highcpu-64    | 64    | 2h 26m         | 2.70                |
-| **S2_f5**| c4d-highcpu-32    | 32    | 2h 37m         | 1.45                |
-|          | c4d-highcpu-48    | 48    | 1h 58m         | 1.64                |
-|          | c4d-highcpu-64    | 64    | 1h 42m         | 1.89                |
-|          | c4d-highcpu-96    | 96    | 1h 34m         | 2.60                |
+| **S0**   | c4d-highcpu-32    | 32    | 3h, 36 min     | 2.00                |
+|          | c4d-highcpu-64    | 64    | 2h, 26 min     | 2.70                |
+| **S2_f5**| c4d-highcpu-32    | 32    | 2h, 37 min     | 1.45                |
+|          | c4d-highcpu-48    | 48    | 1h, 58 min     | 1.64                |
+|          | c4d-highcpu-64    | 64    | 1h, 42 min     | 1.89                |
+|          | c4d-highcpu-96    | 96    | 1h, 34 min     | 2.60                |
 
 We observe a significant, though not linear, improvement in execution time as the number of virtual CPUs increases, accompanied by a corresponding rise in cost. For larger simulations or tight deadlines, opting for more powerful machines can yield substantial time savings.
 

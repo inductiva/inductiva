@@ -18,9 +18,19 @@ The number of available vCPUs will be halved, but the underlying number of physi
 ## Performance with Hyper-threading Disabled
 We repeated the **2021 Spring deployment** simulation on the same machine types used before, but this time with hyper-threading disabled. Here are the execution times and associated costs:
 
-| Machine Type      | Hyper-threading | vCPUs | Physical Cores | Execution Time | Estimated Cost (USD) |
 |-------------------|------------------|--------|------------------|----------------|----------------------|
-
+| Machine Type      | Hyper-threading  | vCPUs  | Physical Cores   | Execution Time | Estimated Cost (USD) |
+|-------------------|------------------|--------|------------------|----------------|----------------------|
+| c2d-highcpu-32    | Enabled          | 32     | 16               |                |                      |
+| c4d-highcpu-32    | Disabled         | 16     | 16               |                |                      |
+| c2d-highcpu-56    | Enabled          | 56     | 28               | 13h, 14 min    | 3.52                 |
+| c2d-highcpu-56    | Disabled         | 28     | 28               | 12h, 5 min     | 3.21                 |
+| c2d-highcpu-112   | Enabled          | 112    | 56               | 10h, 33 min    | 5.52                 |
+| c2d-highcpu-112   | Disabled         | 56     | 56               | 8h, 20 min     | 4.36                 |
+| c4d-highcpu-48    | Enabled          | 48     | 24               | 9h, 30 min     | 7.93                 |
+| c4d-highcpu-48    | Disabled         | 24     | 24               | 8h, 26 min     | 7.04                 |
+| c4d-highcpu-96    | Enabled          | 96     | 48               | 6h, 49 min     | 11.32                |
+| c4d-highcpu-96    | Disabled         | 48     | 48               | 5h, 9 min      | 8.55                 |
 
 ## Comparing Results: With vs. Without Hyperthreading
 <Conclusion>
