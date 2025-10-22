@@ -16,8 +16,9 @@ import pprint
 import re  # noqa: F401
 import json
 
+from datetime import datetime
 from pydantic import BaseModel, ConfigDict, StrictBool, StrictFloat, StrictInt, StrictStr
-from typing import Any, ClassVar, Dict, List, Union
+from typing import Any, ClassVar, Dict, List, Optional, Union
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -30,8 +31,11 @@ class Fee(BaseModel):
   # noqa: E501
     amount: Union[StrictFloat, StrictInt]
     active: StrictBool
+    active_since: Optional[datetime] = None
     unit: StrictStr
-    __properties: ClassVar[List[str]] = ["amount", "active", "unit"]
+    __properties: ClassVar[List[str]] = [
+        "amount", "active", "active_since", "unit"
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -70,6 +74,11 @@ class Fee(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if active_since (nullable) is None
+        # and model_fields_set contains the field
+        if self.active_since is None and "active_since" in self.model_fields_set:
+            _dict['active_since'] = None
+
         return _dict
 
     @classmethod
@@ -84,6 +93,7 @@ class Fee(BaseModel):
         _obj = cls.model_validate({
             "amount": obj.get("amount"),
             "active": obj.get("active"),
+            "active_since": obj.get("active_since"),
             "unit": obj.get("unit")
         })
         return _obj
