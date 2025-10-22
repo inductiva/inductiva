@@ -11,7 +11,32 @@ Inductiva stays up to date with the latest versions of OpenSees. Below is a list
 - **3.7.1** - Supports Python and Tcl scripting
 - **2.5.0** - Supports Tcl scripting only
 
-Additionally, version **3.0.2** of the EESD OpenSees fork is supported, which includes enhanced masonry modeling capabilities.
+Additionally, version **3.0.2** of the **EESD OpenSees fork** is supported, which includes enhanced masonry modeling capabilities.
+
+To use a specific OpenSees version, specify the interface and version when initializing the simulator. 
+For example, using the Tcl interface:
+
+```python
+opensees = inductiva.simulators.OpenSees( \
+    interface="tcl",
+    version="3.7.1")
+```
+
+Using OpenSeesPy (Python interface):
+
+```python
+opensees = inductiva.simulators.OpenSees( \
+    interface="python",
+    version="3.7.1")
+```
+
+Or for the EESD OpenSees fork:
+
+```python
+opensees = inductiva.simulators.OpenSees( \
+    interface="eesd",
+    version="3.0.2")
+```
 
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!

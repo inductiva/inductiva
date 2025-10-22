@@ -22,10 +22,12 @@ def listdir(args):
 def register(parser):
     """Register the list user's remote storage command."""
 
-    subparser = parser.add_parser("list",
-                                  aliases=["ls"],
-                                  help="List remote storage contents.",
-                                  formatter_class=argparse.RawTextHelpFormatter)
+    subparser = parser.add_parser(
+        "list",
+        aliases=["ls"],
+        help="List remote storage contents.",
+        formatter_class=argparse.RawTextHelpFormatter,
+    )
 
     subparser.description = (
         "The `inductiva storage list` command provides an overview"
@@ -33,30 +35,44 @@ def register(parser):
         "It lists all files and folders in a specified path, allowing you to "
         "control the maximum number of results,\n"
         "the ordering criteria, and the sorting order.\n")
+
     subparser.add_argument("path", default="/", type=str, nargs="?")
+
     subparser.add_argument("-m", "--max-results", default=10, type=int)
-    subparser.add_argument("-o",
-                           "--order-by",
-                           default="creation_time",
-                           type=str,
-                           choices=["creation_time", "size"],
-                           help="Order by creation_time or size.")
-    subparser.add_argument("-s",
-                           "--sort-order",
-                           default="desc",
-                           type=str,
-                           choices=["desc", "asc"],
-                           help="Sorting order (desc or asc).")
-    subparser.add_argument("--all",
-                           action="store_true",
-                           help="List all results, ignoring --max-results.")
-    subparser.add_argument("-r",
-                           "--region",
-                           default=None,
-                           type=str,
-                           help=("Filters by region. Specify 'all' to list "
-                                 "all regions. If not specified the contents "
-                                 "of the user default region are returned."))
+
+    subparser.add_argument(
+        "-o",
+        "--order-by",
+        default="creation_time",
+        type=str,
+        choices=["creation_time", "size"],
+        help="Order by creation_time or size.",
+    )
+
+    subparser.add_argument(
+        "-s",
+        "--sort-order",
+        default="desc",
+        type=str,
+        choices=["desc", "asc"],
+        help="Sorting order (desc or asc).",
+    )
+
+    subparser.add_argument(
+        "--all",
+        action="store_true",
+        help="List all results, ignoring --max-results.",
+    )
+
+    subparser.add_argument(
+        "-r",
+        "--region",
+        default=None,
+        type=str,
+        help=("Filter by region. Specify 'all' to list all regions. If not "
+              "specified, the contents of the user's default region are "
+              "returned."),
+    )
 
     subparser.epilog = textwrap.dedent("""\
         examples:

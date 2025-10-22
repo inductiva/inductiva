@@ -11,6 +11,13 @@ Inductiva stays up to date with the latest versions of OpenFAST. Below is a list
 - **4.0.2** (Feb., 2025)
 - **3.5.2** (Jan., 2024)
 
+To use a specific OpenFAST version, simply specify it when initializing the simulator:
+
+```python
+openfast = inductiva.simulators.OpenFAST( \
+    version="4.1.0")
+```
+
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!
 

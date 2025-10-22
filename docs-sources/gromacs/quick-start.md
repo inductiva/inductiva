@@ -69,8 +69,8 @@ machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 > **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-To adapt this script for other GROMACS simulations, replace `input_dir` with the
-path to your GROMACS input files and set the `commands` accordingly.
+To adapt this script for other GROMACS simulations, replace `input_dir` with the path to your GROMACS input files 
+and set the `commands` accordingly. Be sure to specify the GROMACS version compatible with your input files.
 
 When the simulation is complete, we terminate the machine, download the results
 and print a summary of the simulation as shown below.

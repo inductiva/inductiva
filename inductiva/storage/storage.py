@@ -52,10 +52,9 @@ def _print_storage_size_and_cost() -> int:
         estimated_storage_cost)
     storage_total_size = format_utils.bytes_formatter(storage_total_size_bytes)
 
-    print("Total storage size used:")
+    print("\nTotal storage size used across all regions:")
     print(f"\tVolume: {storage_total_size}")
-    print(f"\tCost: {estimated_storage_cost}/month")
-    print("")
+    print(f"\tCost: {estimated_storage_cost}/month\n")
 
     return storage_total_size_bytes
 
@@ -114,6 +113,7 @@ def listdir(
     all_contents = []
     max_results = max_results or sys.maxsize
     page = 1
+    current_region = region
 
     while max_results > 0:
         page_size = min(100, max_results)
@@ -125,16 +125,21 @@ def listdir(
             page=page,
             per_page=page_size,
             region=region,
+            # Disable recursion to avoid calculating directory sizes
+            recursive="false",
         )
 
         for file_info in response.contents:
             all_contents.append({
                 "name": file_info.name,
-                "size": round(float(file_info.size_bytes), 3),
+                "size": (round(float(file_info.size_bytes), 3)
+                         if file_info.size_bytes else None),
                 "creation_time": file_info.creation_time,
                 "provider": file_info.provider_id,
                 "region": file_info.region,
             })
+            if current_region is None:
+                current_region = file_info.region
 
         page_count = len(response.contents)
         page += 1
@@ -146,14 +151,16 @@ def listdir(
     if print_results:
         print(_print_contents_table(all_contents))
 
-        _print_storage_size_and_cost()
-
         print(
             f"Listed {len(all_contents)} folder(s). Ordered by {order_by}.\n"
             "Use --max-results/-m to control the number of results displayed.")
 
+        print("\nCurrent region(s):", current_region)
+
         print("\nYou have storage in the following regions: "
               f"{', '.join(response.available_regions)}")
+
+        _print_storage_size_and_cost()
 
     return all_contents
 
@@ -232,6 +239,7 @@ def get_zip_contents(
     path: str,
     zip_relative_path: str = "",
     recursive: bool = False,
+    region: Optional[str] = None,
 ) -> ZipArchiveInfo:
     """
     Retrieve the contents of a ZIP archive from a given path.
@@ -245,6 +253,8 @@ def get_zip_contents(
             the specified `zip_relative_path`. If False, list only top-level
             files and directories within the specified `zip_relative_path`.
             Defaults to False.
+        region (str, optional): The region of the remote storage. If not
+            specified, the user's default region is assumed.
 
     Returns:
         ZipArchiveInfo: An object containing the total size of the ZIP archive
@@ -255,7 +265,9 @@ def get_zip_contents(
     archive_info = api_instance.get_zip_contents(
         path=path,
         zip_relative_path=zip_relative_path,
-        recursive=str(recursive).lower())
+        recursive=str(recursive).lower(),
+        region=region,
+    )
     files = [
         ZipFileInfo(
             name=file.name,
@@ -273,6 +285,7 @@ def get_file_range(
     path: str,
     zip_relative_path: str = "",
     filename: str = "",
+    region: Optional[str] = None,
 ) -> ZipFileRange:
     """
     Retrieve the byte range (start and end) of the compressed data for a
@@ -282,6 +295,8 @@ def get_file_range(
         path (str): The full path to the ZIP archive.
         zip_relative_path (str, optional): The relative path inside the ZIP.
         filename (str): The name of the file inside the ZIP to get the range.
+        region (str, optional): The region of the remote storage. If not
+            specified, the user's default region is assumed.
 
     Returns:
         ZipFileRange: The start and end byte offsets of the file
@@ -291,6 +306,7 @@ def get_file_range(
         filename=filename,
         zip_relative_path=zip_relative_path,
         path=path,
+        region=region,
     )
     return ZipFileRange(
         range_start=response.range_start,
@@ -302,6 +318,7 @@ def upload_from_url(
     url: str,
     remote_dir: str,
     file_name: Optional[str] = None,
+    region: Optional[str] = None,
 ):
     """
     Upload a file from a given URL to a specified remote directory.
@@ -314,6 +331,8 @@ def upload_from_url(
             be stored.
         file_name (str, optional): The name to save the uploaded file as.
             If not specified, the name will be extracted from the URL.
+        region (str, optional): The region of the remote storage. If not
+            specified, the user's default region is assumed.
     """
     api_instance = inductiva.client.StorageApi(inductiva.api.get_client())
 
@@ -324,7 +343,7 @@ def upload_from_url(
 
     remote_path = os.path.join(remote_dir, file_name)
 
-    api_instance.upload_from_url(url=url, path=remote_path)
+    api_instance.upload_from_url(url=url, path=remote_path, region=region)
     logging.info("File is being uploaded...")
     logging.info("You can use 'inductiva storage ls' to check the status.")
 
@@ -336,9 +355,9 @@ def _convert_path_unix(path):
     drive, path = os.path.splitdrive(path)
     if "\\" in path:
         path = str(pathlib.PureWindowsPath(path).as_posix())
-    # preserve the drive if it exists
+    # preserve the drive if it exists (e.g., drive = "D:")
     if drive:
-        path = f"{drive}:{path}"
+        path = f"{drive}{path}"
     return path
 
 
@@ -381,8 +400,8 @@ def upload(
             uploaded.
         remote_dir (str): The remote directory where the file will
             be uploaded.
-        region (str): The region of the remote storage. If not specified,
-            the user's default region will be assumed.
+        region (str, optional): The region of the remote storage. If not
+            specified, the user's default region is assumed.
 
     Example:
         Upload a file to a remote directory:
@@ -632,8 +651,8 @@ def download(
             will be saved. Defaults to the current working directory.
         decompress (bool, optional): Whether to decompress the downloaded file
             or folder if it is compressed. Defaults to True.
-        region (str): The region of the remote storage. If not specified,
-            the user's default region will be assumed.
+        region (str, optional): The region of the remote storage. If not
+            specified, the user's default region is assumed.
 
     Examples:
         Download a folder from a remote server to the current directory:
@@ -702,7 +721,7 @@ def _list_files(root_path: str) -> Tuple[List[str], int]:
     return file_paths, total_size
 
 
-def remove(remote_path: str):
+def remove(remote_path: str, region: Optional[str] = None):
     """
     Removes a file or directory from the remote location.
 
@@ -717,12 +736,16 @@ def remove(remote_path: str):
         remote_path += "/"
 
     api = inductiva.client.StorageApi(inductiva.api.get_client())
-    api.delete_file(path=remote_path)
+    api.delete_file(path=remote_path, region=region)
 
     logging.info("Successfully removed '%s' from remote storage.", remote_path)
 
 
-def copy(source: str, target: str):
+def copy(
+    source: str,
+    target: str,
+    region: Optional[str] = None,
+):
     """
     Copies a file or folder from a source path in storage to a target path.
 
@@ -730,9 +753,11 @@ def copy(source: str, target: str):
         source (str): The source path of the file or directory to copy.
         target (str): The destination path where the file or directory
                       should be copied to.
+        region (str, optional): The region of the remote storage. If not
+            specified, the user's default region is assumed.
     """
     api = inductiva.client.StorageApi(inductiva.api.get_client())
-    api.copy(source=source, target=target)
+    api.copy(source=source, target=target, region=region)
     logging.info("Copied %s to %s successfully.", source, target)
 
 
@@ -873,8 +898,10 @@ def _get_file_size(file_path):
     return list(contents.values())[0].size_bytes
 
 
-def _get_multipart_parts(size: int,
-                         part_size: int = 128 * MB) -> Tuple[int, int]:
+def _get_multipart_parts(
+    size: int,
+    part_size: int = 128 * MB,
+) -> Tuple[int, int]:
     """
     Calculate the size of each part and the total number of parts
 
@@ -917,6 +944,7 @@ def multipart_upload(
     parts_size,
     upload_parts,
     complete_multipart_url,
+    region: Optional[str] = None,
 ):
     """
     Perform the multipart upload using the server.
@@ -929,10 +957,18 @@ def multipart_upload(
             parts_size=parts_size,
             upload_parts=upload_parts,
             complete_multipart_url=complete_multipart_url,
-        ))
+        ),
+        region=region,
+    )
 
 
-def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):
+def export_to_aws_s3(
+    path_to_export,
+    part_size,
+    filename,
+    bucket_name,
+    region: Optional[str] = None,
+):
     if not _boto3_imported:
         print("boto3 is not installed. Please run "
               "'pip install inductiva[aws]' to install it.")
@@ -991,6 +1027,7 @@ def export_to_aws_s3(path_to_export, part_size, filename, bucket_name):
         parts_size,
         upload_parts,
         complete_multipart_url,
+        region,
     )
     print(
         "Export is being done by inductiva server. You can close the terminal.")
@@ -1002,6 +1039,7 @@ def export(
     bucket_name: str,
     file_name: Optional[str] = None,
     part_size: int = 128,
+    region: Optional[str] = None,
 ):
     file_name = file_name or pathlib.Path(path_to_export).name
     if export_to == ExportDestination.AWS_S3:
@@ -1011,6 +1049,7 @@ def export(
             part_size,
             file_name,
             bucket_name,
+            region,
         )
     else:
         raise ValueError(f"Unsupported export destination: {export_to}")

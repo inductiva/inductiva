@@ -11,6 +11,13 @@ Inductiva stays up to date with the latest versions of WRF. Below is a list of t
 - **4.7.1** (Jun., 2025)
 - **4.6.1** (Oct., 2024)
 
+To use a specific WRF version, simply specify it when initializing the simulator:
+
+```python
+wrf = inductiva.simulators.WRF( \
+    version="4.6.1")
+```
+
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!
 

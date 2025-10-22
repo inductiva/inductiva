@@ -6,9 +6,18 @@
 ## Supported Versions
 Inductiva stays up to date with the latest versions of GROMACS. Below is a list of the supported versions, along with their respective release dates:
 
-- **2025.1** (Mar., 2025) - with GPU support
-- **2025.0** (Feb., 2025) - with GPU support
-- **2022.2** (Jun., 2022) - with GPU support
+- **2025.1** (Mar., 2025)
+- **2025.0** (Feb., 2025)
+- **2022.2** (Jun., 2022) 
+
+> 📌 All versions above include GPU support.
+
+To use a specific GROMACS version, simply specify it when initializing the simulator:
+
+```python
+gromacs = inductiva.simulators.GROMACS( \
+    version="2025.1")
+```
 
 If you need to use a version not listed here, please feel free to [Contact Us](mailto:support@inductiva.ai).
 We’ll be happy to accommodate your request!

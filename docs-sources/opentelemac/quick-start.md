@@ -58,8 +58,9 @@ a machine with more virtual CPUs and increased memory capacity. You can explore 
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 ### Adapting the Script
-To adapt this script for other OpenTelemac simulations, replace `input_dir` with the
-path to your OpenTelemac input files and set the the `commands` accordingly.
+To adapt this script for other OpenTelemac simulations, replace `input_dir` with the path to your OpenTelemac 
+input files and set the the `commands` accordingly. Be sure to specify the OpenTelemac version compatible with 
+your input files.
 
 Since this example is a 2D simulation, we use the `telemac2d.py` command-line script, which is specifically designed for TELEMAC-2D models. It acts as the solver's frontend, reading the `.cas` steering file and managing the simulation execution.
 
