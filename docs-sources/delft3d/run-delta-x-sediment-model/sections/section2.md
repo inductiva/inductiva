@@ -19,8 +19,7 @@ delft3d = inductiva.simulators.Delft3D(\
 
 # Run simulation
 task = delft3d.run( \
-    input_dir="my_project",
-    #input_dir="Fall2021_Delft3D_setup",
+    input_dir="Spring2021_Delft3D_setup",
     commands = ["mpirun -np 32 d_hydro.exe config_d_hydro.xml"],
     on=cloud_machine)
 
