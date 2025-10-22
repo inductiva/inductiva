@@ -9,7 +9,7 @@ import sys
 from inductiva import users, _cli
 import inductiva.client.models
 from inductiva.client.exceptions import ApiException
-from inductiva.users.methods import get_costs, get_fees
+from inductiva.users.methods import get_costs, get_task_orchestration_fee_warning
 from inductiva.utils import format_utils
 
 
@@ -78,7 +78,6 @@ def _print_estimated_costs(fout: TextIO = sys.stdout):
     # This try will be removed in the future.
     try:
         costs = get_costs(start_year=current_year, start_month=current_month)
-        fees = get_fees()
 
         total_estimated_costs = format_utils.currency_formatter(costs[0].total)
         computation_estimated_costs = format_utils.currency_formatter(
@@ -115,14 +114,8 @@ def _print_estimated_costs(fout: TextIO = sys.stdout):
             f"{total_estimated_costs:<{cost_width}}",
             file=fout)
 
-        task_orchestration_fee = format_utils.currency_formatter(
-            fees.task_orchestration_fee.amount)
-
-        if not fees.task_orchestration_fee.active:
-            print("Note: A per-run orchestration fee "
-                  f"({task_orchestration_fee}) will soon apply to each task,"
-                  " in addition to compute costs. This is not yet being "
-                  "charged.")
+        warning = get_task_orchestration_fee_warning()
+        print(warning)
 
     except ApiException as _:
         return

@@ -1,5 +1,6 @@
 """Methods to interact with the user info on the API."""
 from typing import Dict, Optional, List
+from inductiva.utils import format_utils
 
 from inductiva import api
 
@@ -83,3 +84,21 @@ def get_costs(
         )
 
     return response.costs
+
+
+def get_task_orchestration_fee_warning():
+    fees = get_fees()
+    task_orchestration_fee = format_utils.currency_formatter(
+        fees.task_orchestration_fee.amount)
+
+    active_since_msg = ""
+    if fees.task_orchestration_fee.active_since:
+        task_orchestration_active_since = (
+            format_utils.datetime_formatter_month_text(
+                fees.task_orchestration_fee.active_since))
+
+        active_since_msg = f" run from {task_orchestration_active_since}"
+
+    return (f"Note: A per-run orchestration fee ({task_orchestration_fee}) "
+            f"applies to tasks{active_since_msg}, in addition to the compute "
+            "costs.")

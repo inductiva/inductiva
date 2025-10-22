@@ -28,6 +28,7 @@ from inductiva import api
 from inductiva.utils import files, format_utils, data
 from inductiva.tasks import output_info
 from inductiva.tasks.file_tracker import Operations, FileTracker
+from inductiva.users.methods import get_task_orchestration_fee_warning
 
 import warnings
 
@@ -300,8 +301,12 @@ class TaskInfo:
             orchestration_fee_charged = orchestration_fee.get("charged", False)
 
             total_estimated_cost = self.estimated_computation_cost or 0
+
+            orchestration_fee_amount_charged = 0
             if orchestration_fee_charged:
-                total_estimated_cost += orchestration_fee_amount
+                orchestration_fee_amount_charged = orchestration_fee_amount
+
+            total_estimated_cost += orchestration_fee_amount_charged
 
             min_decimal_places = None
             if self.estimated_computation_cost is not None:
@@ -319,16 +324,14 @@ class TaskInfo:
             table_str += ("\tEstimated computation cost (US$): "
                           f"{estimated_cost}\n")
 
-            orchestration_fee_amount_str = format_utils.currency_formatter(
-                orchestration_fee_amount)
+            orchestration_fee_amount_charged_str = format_utils.currency_formatter(
+                orchestration_fee_amount_charged)
             table_str += (f"\tOrchestration fee (US$): "
-                          f"{orchestration_fee_amount_str}\n")
+                          f"{orchestration_fee_amount_charged_str}\n")
 
             if not orchestration_fee_charged:
-                table_str += (
-                    "\t\tNote: a per-run orchestration fee will be "
-                    "applied to each task in addition to compute costs. "
-                    "It has not been applied to this task yet.\n")
+                warning = get_task_orchestration_fee_warning()
+                table_str += f"\n{warning}\n"
         else:
             table_str += (f"\nEstimated computation cost (US$): "
                           f"{estimated_cost}\n")

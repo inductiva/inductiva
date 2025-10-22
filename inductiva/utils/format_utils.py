@@ -115,6 +115,10 @@ def datetime_formatter(dt: Optional[Union[datetime.datetime, str]]) -> str:
     return local_dt.strftime("%d/%m, %H:%M:%S")
 
 
+def datetime_formatter_month_text(dt: datetime.datetime) -> str:
+    return dt.strftime("%d %b, %Y")
+
+
 def datetime_formatter_ymd_hm(dt: str) -> str:
     # get time in local timezone
     if dt is None:
