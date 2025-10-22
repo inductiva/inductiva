@@ -68,7 +68,7 @@ To run the `S2_f5/polynya2D_20211007`, simply update the `sim_config_filename` p
 ## Scaling Up Your Simulation  
 Scaling up is straightforward — just increase the `machine_type` to a machine with more virtual CPUs. For example, doubling the vCPUs from `c4d-highcpu-32` to `c4d-highcpu-64` can significantly reduce runtime.
 
-| Scenario | Machine Type      | vCPUs | Execution Time | Estimated Cost (US$) |
+| Scenario | Machine Type      | vCPUs | Execution Time | Estimated Cost (USD) |
 |----------|-------------------|-------|----------------|---------------------|
 | **S0**   | c4d-highcpu-32    | 32    | 3h 36m         | 2.00                |
 |          | c4d-highcpu-64    | 64    | 2h 26m         | 2.70                |
