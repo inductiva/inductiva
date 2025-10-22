@@ -1,88 +1,78 @@
 # Prerequisites
 
 ## 1. Download the Simulation Data
-Download the simulation data [here]() or from [NASA's collection bundle URL](https://data.ornldaac.earthdata.nasa.gov/protected/bundle/DeltaX_Delft3D_294_Terrebonne_2303.zip) (make sure to register first).
+Download the simulation from [our link]() or from [NASA's collection bundle](https://data.ornldaac.earthdata.nasa.gov/protected/bundle/DeltaX_Delft3D_294_Terrebonne_2303.zip) (registration required).
 
 After unzipping, the folder structure should look like this:
 
 ```
 DeltaX_Delft3D_294_Terrebonne_2303
-   |
-   - comp
-   |
-   - data
-   | 
-   - guide
+   ├─ comp
+   ├─ data
+   └─ guide
 ```
 
 ## 2. Select the Required Files
-For this tutorial, you only need the following:
-- The `input/` folder (wind, ice concentration, and grid data)
-- `.swn` input files from `S0/` and `S2_f5/` (one per polynya event)
-
-The `S0/` and `S2_f5/` folders also contain large output files (`.mat`, `.dat`, `.sp1`, `.sp2`). **Do not copy these**. Only the `.swn` files are required for each simulation.
-
-The `Tp_from_satellite_swangrid` folder contains satellite-derived peak periods and directions, interpolated onto the SWAN grid. These were used in the original study to validate and calibrate the model (bias, RMSD, spectral tail comparisons), but are **not required** for this tutorial.
-
-## 3. Organize the `tutorial/` Folder
-Create a new directory named `tutorial/` and copy only the required files into it. Your structure should look like this:
+The configuration files are located in the `data/` directory. Several NetCDF output files (`.nc4`) are included but **not needed** for this tutorial:
 
 ```
-tutorial
-   |
-   + polynya
-      |
-      + S0
-      |  |
-      |  + polynya2D_20161005.swn
-      |  |	
-      |  + polynya2D_20161024.swn
-      |  |
-      |  ...
-      |  |
-      |  + polynya2D_20201019.swn
-      |
-      |
-      + S2_f5
-      |  |
-      |  + polynya2D_20161005.swn
-      |  |	
-      |  + polynya2D_20161024.swn
-      |  |
-      |  ...
-      |  |
-      |  + polynya2D_20201019.swn
-      |
-      + input
-         |
-         + Aice0_20161005_dx200.dat 
-         |
-         ...
-         |
-         + wnd_20211007_10m.dat
+data
+  ├─ Fall2021_Delft3D_setup_294.zip
+  ├─ Spring2021_Delft3D_setup_294.zip
+  ├─ site294_IMAR.nc4
+  ├─ site294_d3d_output_ssc_mud_Fall2021.nc4
+  └─ site294_d3d_output_wl_Spring2021.nc4
 ```
 
-## 4. Modify Each `.swn` File
-Before running any scripts, you need to edit each `.swn` input file in both the `S0/` and `S2_f5/` folders to prevent a known Fortran runtime issue.
+Each zip archive contains a complete Delft3D model setup, one for the Spring and one for the Fall deployment.
 
-In each `.swn` file, look for a line that starts with:
-
-```
-SPECOUT 'COMPGRID' SPEC1D ABS '20211007.sp1'
-```
-
-and **comment it out** by adding an exclamation mark (!) at the beginning:
+Unzip both archives and organize them into a new folder named `my_project`, placed inside the main `DeltaX_Delft3D_294_Terrebonne_2303/` directory:
 
 ```
-!SPECOUT 'COMPGRID' SPEC1D ABS '20211007.sp1'
+DeltaX_Delft3D_294_Terrebonne_2303
+   ├─ comp
+   ├─ data
+   ├─ guide
+   └─ my_project
+        ├─ Fall2021_Delft3D_setup
+        └─ Spring2021_Delft3D_setup
+
 ```
 
-This modification avoids a common Fortran runtime error that can occur when SWAN attempts to output large spectral files over the full computational grid.
+## 4. Add the `config_d_hydro.xml`
+Delft3D requires an XML configuration file to trigger the simulation. This file is **not included** in the dataset, so you will need to add one. You can use the following template:
+
+```
+<?xml version="1.0" encoding="iso-8859-1"?>
+<deltaresHydro xmlns="http://schemas.deltares.nl/deltaresHydro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.deltares.nl/deltaresHydro http://content.oss.deltares.nl/schemas/d_hydro-1.00.xsd">
+    <flow2D3D name="inductiva_flow">
+        <library>flow2d3d</library>
+        <mdfFile>site_294.mdf</mdfFile>
+    </flow2D3D>
+    <delftOnline>
+        <enabled>false</enabled>
+    </delftOnline>
+</deltaresHydro>
+```
+
+Save this file as `config_d_hydro.xml` and copy it into both the `Fall2021_Delft3D_setup` and `Spring2021_Delft3D_setup` folders inside your `my_project/`. This ensures that both simulations can be executed.
 
 ## Folder Overview
-Here's what each subfolder in `tutorial/polynya` contains:
-- `swan/input`: Grid definitions, wind fields, and ice concentration maps for 10 polynya events. These are the raw fields for your SWAN simulations.
-- `swan/S0`: Input files for the open water baseline scenario (S0). These runs include only wind-forced waves, with no ice effects.
-- `swan/S2_f5`: Input files for the full ice-influenced scenario (S2_f5), which included frazil/grease effects and applies ice and a power-law exponent of 5 are applied.
+After adding the configuration files, your directory structure should look like this:
 
-All required data is now in place. Next, let's prepare the Python script to run the baseline S0 scenario.
+```
+DeltaX_Delft3D_294_Terrebonne_2303
+   ├─ comp
+   ├─ data
+   ├─ guide
+   └─ my_project
+        ├─ Fall2021_Delft3D_setup
+        │    ├─ Delft3D input files...
+        │    └─ config_d_hydro.xml
+        │
+        └─ Spring2021_Delft3D_setup
+             ├─ Delft3D input files...
+             └─ config_d_hydro.xml
+```
+
+All required data and configuration files are now in place. Next, we’ll prepare the Python script to run the 2021 Spring deployment.
