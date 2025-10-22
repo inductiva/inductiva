@@ -1,7 +1,7 @@
 # Run the Case on Inductiva
 
 ## Running the Baseline S0 Scenario
-The following Python script runs the simulation for the **2021 Spring deployment**. Save the following code as a `.py` file inside the `my_project` directory before running it.
+The following Python script runs the simulation for the **2021 Spring deployment**. Save the following code as a `.py` file before running it.
 
 ```python
 """Delft3D Simulation."""
@@ -19,7 +19,7 @@ delft3d = inductiva.simulators.Delft3D(\
 
 # Run simulation
 task = delft3d.run( \
-    input_dir="Spring2021_Delft3D_setup",
+    input_dir="/Path/to/Spring2021_Delft3D_setup",
     commands = ["mpirun -np 32 d_hydro.exe config_d_hydro.xml"],
     on=cloud_machine)
 
@@ -50,7 +50,7 @@ Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-m
 
 As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, the core computation time of this simulation was approximately **hours**.
 
-To run the 2021 Fall deployment, simply update the `sim_config_filename` parameter accordingly.
+To run the 2021 Fall deployment, simply update the `input_dir` parameter accordingly.
 
 ## Scaling Up Your Simulation  
 Scaling up is simple — either increase the number of vCPUs by choosing a larger `machine_type` (e.g., from `c2d-highcpu-32` to `c2d-highcpu-56`) or switch to a machine from the latest-generation **c4d series**. Both approaches can significantly reduce runtime.
