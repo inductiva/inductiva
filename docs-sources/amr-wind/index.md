@@ -75,5 +75,5 @@ caption: 🚀 Benchmarks
 maxdepth: 2
 hidden: true
 ---
-Stable-ABL Benchmark <stable-abl/index>
+Stable-ABL Benchmark <benchmarks/index>
 ```
