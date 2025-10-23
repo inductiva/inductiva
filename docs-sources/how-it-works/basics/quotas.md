@@ -5,17 +5,20 @@ Quotas help ensure fair access to powerful computing and storage for all users, 
 You're free to use the Inductiva API as an individual user (individual plan) or join an
 organization (enterprise or academia) - visit the [Pricing webpage](https://inductiva.ai/pricing) for more information.
 
-| Quota | unit | scope* | Description | Individual | Enterprise | Academia |
+| **Quota** | **Unit** | __Scope(*)__ | **Description** | **Individual** | **Enterprise** | **Academia** |
 |-------|------|-------|-------------|----------|------------|------------|
 | Maximum number of VCPUs | vcpu | global | Total number of VCPUs across all running machine instances plus the number of VCPUs of the instance to be requested must not exceed the quota limit | 720 | 10000 | 10000 |
-| Maximum price per hour across all instances | USD | global | Accumulated price per hour of all active machine instances, plus the price of the instance to be requested, must not exceed the quota | 10 | 1000 | 1000 |
+| Maximum price per hour across all instances(**) | USD | global | Accumulated price per hour of all active machine instances, plus the price of the instance to be requested, must not exceed the quota | 10 | 1000 | 1000 |
 | Maximum simultaneous instances | instance | global | Maximum number of machine instances running simultaneously at any moment | 10 | 100 | 100 |
 | Maximum disk size | GB | instance | Maximum size of the disk that can be assigned to each individual machine in a machine group | 1000 | 5000 | 5000 |
 
-***NOTE:** _global_ quotas are applied to the user account and will encompass all
+**(*)NOTE:** _global_ quotas are applied to the user account and will encompass all
 machines and tasks submitted by the user.
 _Instance_ quotas are applied to each machine and task and, therefore,
 are only applicable to each item individually.
+
+__(**)NOTE:__  The Maximum price per hour for the active machine instances is not affected by the [Task Orchestration Fee](https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost#inductiva-s-task-orchestration-fee). I.e. this fee applied per simulation does not count for this quota's calculation.
+
 
 ## How to check quotas
 
