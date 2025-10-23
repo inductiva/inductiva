@@ -47,7 +47,6 @@ Here's the level of granularity with which the costs are presented throughout In
 + Monthly Accumulated Costs - split into Compute, Storage and Data Transfer.
 
 
-
 ```{banner_small}
 :origin: how_it_works_how_much_does_it_cost
 ```
