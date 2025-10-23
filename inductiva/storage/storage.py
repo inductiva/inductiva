@@ -1,5 +1,4 @@
 """Methods to interact with the user storage resources."""
-import tenacity
 import json
 import datetime
 import itertools
@@ -73,6 +72,7 @@ def listdir(
     max_results: Optional[int] = 10,
     order_by: Literal["size", "creation_time"] = "creation_time",
     sort_order: Literal["asc", "desc"] = "desc",
+    recursive: bool = False,
     print_results: bool = True,
 ):
     """List and display the contents of the user's storage.
@@ -87,6 +87,9 @@ def listdir(
         order_by (str): The field to sort the contents by.
         sort_order (str): Whether to sort the contents in ascending or
         descending order.
+        recursive (bool): Flag to get the size and creation time of
+            subdirectories.
+        print_results (bool): Flag to print storage table.
     Returns:
         list of dict: A list of dictionaries containing information about
         the size, the name and the creation time of each content that can
@@ -125,8 +128,7 @@ def listdir(
             page=page,
             per_page=page_size,
             region=region,
-            # Disable recursion to avoid calculating directory sizes
-            recursive="false",
+            recursive=str(recursive).lower(),
         )
 
         for file_info in response.contents:
@@ -194,7 +196,6 @@ def _print_contents_table(contents):
     )
 
 
-@tenacity.retry(wait=tenacity.wait_exponential(multiplier=1, min=4, max=30))
 def get_signed_urls(
     paths: List[str],
     operation: Literal["upload", "download"],
@@ -206,6 +207,9 @@ def get_signed_urls(
         operation=models.OperationType(operation),
         region=region,
     )
+
+    if resp.status != 200:
+        raise exceptions.ApiException(status=resp.status, reason=resp.data)
 
     return json.loads(resp.data)
 
