@@ -40,11 +40,25 @@ In this example, we use a `c2d-highcpu-32` machine with 32 virtual CPUs. Its per
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
 
 ```
-<Add>
+Task status: Success
 
-Estimated Task Compute Cost =  US$
+Timeline:
+	Waiting for Input         at 22/10, 09:15:47      1.742 s
+	In Queue                  at 22/10, 09:15:49      41.202 s
+	Preparing to Compute      at 22/10, 09:16:30      3.284 s
+	In Progress               at 22/10, 09:16:33      64214.631 s
+		└> 64214.365 s     mpirun -np 32 d_hydro.exe config_d_hydro.xml
+	Finalizing                at 23/10, 03:06:48      214.477 s
+	Success                   at 23/10, 03:10:22      
+
+Data:
+	Size of zipped output:    5.68 GB
+	Size of unzipped output:  18.34 GB
+	Number of output files:   64
+
+Estimated Task Compute Cost = 2.78 US$
 Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = US$
+Total Estimated Cost = 2.79 US$
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
@@ -64,8 +78,8 @@ Below are the results of running the **2021 Spring deployment** across different
 | c2d-highcpu-32    | 32    | 17h, 54 min    | 2.78                |
 | c2d-highcpu-56    | 56    | 13h, 14 min    | 3.52                |
 | c2d-highcpu-112   | 112   | 10h, 33 min    | 5.52                |
-| c4d-highcpu-48    | 64    | 9h, 30 min     | 7.93                |
-| c4d-highcpu-96    | 64    | 6h, 49 min     | 11.32               |
+| c4d-highcpu-48    | 48    | 9h, 30 min     | 7.93                |
+| c4d-highcpu-96    | 96    | 6h, 49 min     | 11.32               |
 
 As shown above, increasing the number of vCPUs or switching to newer-generation machines leads to a clear reduction in runtime, though at a higher computational cost. The optimal setup depends on your priorities, whether minimizing time-to-results or optimizing cost-efficiency. The **Inductiva** platform makes it easy to explore this trade-off, enabling you to scale Delft3D simulations seamlessly across different compute configurations.
 
