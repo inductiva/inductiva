@@ -50,7 +50,7 @@ hidden: true
 setup-test
 quick-start
 flow-wave-coupling
-run-delta-x-sediment-model
+Run the Delta-X Sediment Model <run-delta-x-sediment-model/index>
 ```
 
 ```{toctree}
