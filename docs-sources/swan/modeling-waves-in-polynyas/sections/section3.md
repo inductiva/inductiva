@@ -19,7 +19,7 @@ The number of available vCPUs will be halved, but the underlying number of physi
 ## Performance with Hyper-threading Disabled
 We repeated the `S2_f5/polynya2D_20211007` scenario tests on the same machine types used before, but this time with hyper-threading disabled. Here are the execution times and associated costs:
 
-| Machine Type      | Hyper-threading | vCPUs | Physical Cores | Execution Time | Estimated Cost (US$) |
+| Machine Type      | Hyper-threading | vCPUs | Physical Cores | Execution Time | Estimated Cost (USD) |
 |-------------------|------------------|--------|------------------|----------------|----------------------|
 | c4d-highcpu-32    | Enabled          | 32     | 16               | 2h, 37 min       | 1.45                 |
 | c4d-highcpu-32    | Disabled         | 16     | 16               | 2h, 36 min       | 1.45                 |

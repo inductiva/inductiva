@@ -13,13 +13,20 @@ Inductiva acts as an intermediary between the user and the cloud provider, so th
 
 (**) **Spot** instances are a type of virtual machine offering at significantly reduced costs compared to regular instances, with the downside that they can be terminated at any time. This characteristic makes spot ideal for budget-conscious users when cost savings outweigh the risk of unexpected termination, namely if the task is expected to finish in a short timeframe.
 
-## Inductiva's fee 
+
+## Inductiva's Platform Fee 
 Inductiva's fee comes solely from the percentage applied when purchasing credits.
 1. Users purchase credits whenever they want via Stripe;
 2. We deduct a Platform fee (%) from each top-up, so your available credits will be the top-up amount minus the fee;
 3. The Compute, Storage and Data Transfer costs are subtracted from the credits only while they are being used.
 
 Check out the <a href="https://inductiva.ai/pricing">Pricing page</a> for more information about our price model.
+
+
+## Inductiva's Task Orchestration Fee
+This small fee is applied to each simulation run to ensure fairness across users by aligning infrastructure costs with actual usage. Running hundreds of vCPUs carries higher shared costs than smaller numbers of runs, and this adjustment helps balance usage so everyone pays more in line with the resources they consume.
+
+This per-run orchestration fee applies to tasks run from 1 Dec, 2025, in addition to the compute costs.
 
 
 ## How much can you accomplish with 5\$US
@@ -38,6 +45,7 @@ Here's the level of granularity with which the costs are presented throughout In
 + Tasks - Estimated cost based on its duration and the cost of the machine where it was run;
 + Storage - Cost of keeping the files in the user's cloud bucket;
 + Monthly Accumulated Costs - split into Compute, Storage and Data Transfer.
+
 
 ```{banner_small}
 :origin: how_it_works_how_much_does_it_cost
