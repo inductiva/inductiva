@@ -53,7 +53,7 @@ As you can see in the "In Progress" line, the part of the timeline that represen
 To run the 2021 Fall deployment, simply update the `input_dir` parameter accordingly.
 
 ## Scaling Up Your Simulation  
-Scaling up is simple — either increase the number of vCPUs by choosing a larger `machine_type` (e.g., from `c2d-highcpu-32` to `c2d-highcpu-56`) or switch to a machine from the latest-generation **c4d series**. Both approaches can significantly reduce runtime.
+Scaling up is simple: either increase the number of vCPUs by choosing a larger `machine_type` (e.g., from `c2d-highcpu-32` to `c2d-highcpu-56`) or switch to a machine from the latest-generation **c4d series**. Both approaches can significantly reduce runtime.
 
 ⚠️ **Important**: If you change the number of vCPUs, be sure to update the `mpirun` command accordingly (e.g., `-np 56`) to match your machine configuration.
 
@@ -61,13 +61,13 @@ Below are the results of running the **2021 Spring deployment** across different
 
 | Machine Type      | vCPUs | Execution Time | Estimated Cost (USD)|
 |-------------------|-------|----------------|---------------------|
-| c2d-highcpu-32    | 32    |                |                     |
+| c2d-highcpu-32    | 32    | 17h, 54 min    | 2.78                |
 | c2d-highcpu-56    | 56    | 13h, 14 min    | 3.52                |
 | c2d-highcpu-112   | 112   | 10h, 33 min    | 5.52                |
 | c4d-highcpu-48    | 64    | 9h, 30 min     | 7.93                |
 | c4d-highcpu-96    | 64    | 6h, 49 min     | 11.32               |
 
-<Conclusion>
+As shown above, increasing the number of vCPUs or switching to newer-generation machines leads to a clear reduction in runtime, though at a higher computational cost. The optimal setup depends on your priorities, whether minimizing time-to-results or optimizing cost-efficiency. The **Inductiva** platform makes it easy to explore this trade-off, enabling you to scale Delft3D simulations seamlessly across different compute configurations.
 
 ```{banner_small}
 :origin: swan
