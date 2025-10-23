@@ -313,7 +313,7 @@ class TaskInfo:
                 match = re.search(r"(\d+\.\d+)", estimated_cost)
                 if match:
                     number_str = match.group(1)
-                    min_decimal_places = len(number_str.split('.')[1])
+                    min_decimal_places = len(number_str.split(".")[1])
 
             total_estimated_cost_str = format_utils.currency_formatter(
                 total_estimated_cost, min_decimal_places=min_decimal_places)
@@ -324,8 +324,9 @@ class TaskInfo:
             table_str += ("\tEstimated computation cost (US$): "
                           f"{estimated_cost}\n")
 
-            orchestration_fee_amount_charged_str = format_utils.currency_formatter(
-                orchestration_fee_amount_charged)
+            orchestration_fee_amount_charged_str = (
+                format_utils.currency_formatter(
+                    orchestration_fee_amount_charged))
             table_str += (f"\tOrchestration fee (US$): "
                           f"{orchestration_fee_amount_charged_str}\n")
 
