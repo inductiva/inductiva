@@ -1,6 +1,6 @@
 # Run the Case on Inductiva
 
-## Running the Baseline S0 Scenario
+## Running the Simulation
 The following Python script runs the simulation for the **2021 Spring deployment**. Save the following code as a `.py` file before running it.
 
 ```python

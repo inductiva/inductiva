@@ -18,7 +18,6 @@ The number of available vCPUs will be halved, but the underlying number of physi
 ## Performance with Hyper-threading Disabled
 We repeated the **2021 Spring deployment** simulation on the same machine types used before, but this time with hyper-threading disabled. Here are the execution times and associated costs:
 
-|-------------------|------------------|--------|------------------|----------------|----------------------|
 | Machine Type      | Hyper-threading  | vCPUs  | Physical Cores   | Execution Time | Estimated Cost (USD) |
 |-------------------|------------------|--------|------------------|----------------|----------------------|
 | c2d-highcpu-32    | Enabled          | 32     | 16               | 17h, 54 min    | 2.78                 |
