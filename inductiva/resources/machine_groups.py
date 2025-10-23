@@ -61,7 +61,7 @@ class BaseMachineGroup(ABC):
     """
     # Constructor arguments
     machine_type: str
-    zone: Optional[str] = "europe-west1-b"
+    zone: Optional[str] = None
     provider: Union[ProviderType, str] = "GCP"
     threads_per_core: int = 2
     data_disk_gb: int = 10
@@ -587,6 +587,7 @@ class BaseMachineGroup(ABC):
         """Logs the machine group info."""
 
         logging.info("\t· Name:                       %s", self.name)
+        logging.info("\t· Zone:                       %s", self.zone)
         logging.info("\t· Provider:                   %s", self.provider)
         logging.info("\t· Machine Type:               %s", self.machine_type)
         logging.info("\t· Data disk size:             %s GB", self.data_disk_gb)
