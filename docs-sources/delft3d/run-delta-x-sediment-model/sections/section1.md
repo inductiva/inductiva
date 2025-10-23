@@ -1,7 +1,7 @@
 # Prerequisites
 
 ## 1. Download the Simulation Data
-Download the simulation from [NASA's collection bundle](https://data.ornldaac.earthdata.nasa.gov/protected/bundle/DeltaX_Delft3D_294_Terrebonne_2303.zip) (registration required).
+Download the simulation from [NASA's collection bundle](https://data.ornldaac.earthdata.nasa.gov/protected/bundle/DeltaX_Delft3D_294_Terrebonne_2303.zip) *(registration required)*.
 
 After unzipping, the folder structure should look like this:
 

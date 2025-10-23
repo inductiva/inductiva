@@ -3,7 +3,7 @@ In this tutorial, we demonstrate how to use the Inductiva API to run a series of
 
 The study includes the Delft3D model for **Site 294** in the **Terrebonne Basin along the Mississippi River Delta (MRD)** in coastal Louisiana. This model is part of the **NASA Delta-X mission**, a five-year Earth Venture Suborbital-3 project investigating the Mississippi River Delta, which is simultaneously expanding and subsiding in different areas. The study covers the **Delta-X Spring and Fall 2021 deployments**, simulating water levels, flow velocities, and suspended sediment concentrations.
 
-<p align="center"><img src="../../_static/DeltaX_Delft3D_294_Terrebonne.jpg" alt="Satellite image of Terrebonne Bay, Louisiana, USA with location of Site 294. Inset shows bathymetry of this intensive site." width="700"></p>
+<p align="center"><img src="../_static/DeltaX_Delft3D_294_Terrebonne.jpg" alt="Satellite image of Terrebonne Bay, Louisiana, USA with location of Site 294. Inset shows bathymetry of this intensive site." width="700"></p>
 
 This case is large-scale, realistic, and scientifically validated. Unlike many research examples, the full case is publicly available via **NASA’s ORNL DAAC**, including forcing data, boundary conditions, bathymetry, sediment parameters, and ready-to-run Delft3D input files. The model couples hydrodynamics, sediment transport, and morphodynamics, making it an ideal example for demonstrating how **Inductiva** can **accelerate scientific workflows**, from launching simulations to efficiently generating results.
 
