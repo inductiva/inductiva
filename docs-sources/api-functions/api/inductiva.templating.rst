@@ -6,5 +6,7 @@ templating
    :show-inheritance:
    :undoc-members:
 
-.. banner_small::
-   :origin: pyclient-templating
+.. raw:: text
+
+   ::docsbannersmall
+   ::
