@@ -48,6 +48,7 @@ import time
 from typing import List, Optional
 
 from inductiva import tasks
+from inductiva.users.methods import get_task_orchestration_fee_warning
 from inductiva import api as inductiva_api
 import inductiva.client
 from inductiva.client.models import TaskStatusCode, ProjectCreate, ProjectType
@@ -102,6 +103,7 @@ class Project:
         self._api = inductiva.client.ProjectsApi(inductiva_api.get_client())
         # If the project already exists, we will load it from the backend.
         self._proj_data = self._get_project(name)
+        print(self._proj_data)
         # Else, we will create a new project.
         if not self._proj_data:
             self._proj_data = self._create_project(name)
@@ -168,6 +170,10 @@ class Project:
         }
 
     @property
+    def total_task_orchestration_fee(self) -> float:
+        return self._proj_data.total_orchestration_fee
+
+    @property
     def estimated_computation_cost(self) -> float:
         """
         Returns the estimated project cost.
@@ -176,19 +182,33 @@ class Project:
         """
         return self._proj_data.estimated_computation_cost
 
+    @property
+    def total_estimated_cost(self) -> float:
+        return self.estimated_computation_cost + self.total_task_orchestration_fee
+
     def __str__(self) -> str:
-        formatted_cost = format_utils.currency_formatter(
+        formatted_total_cost = format_utils.currency_formatter(
+            self.total_estimated_cost)
+        formatted_computation_cost = format_utils.currency_formatter(
             self.estimated_computation_cost)
+        formatted_orchestration_fee = format_utils.currency_formatter(
+            self.total_task_orchestration_fee)
         formatted_created_at = format_utils.datetime_formatter_ymd_hm(
             self.created_at)
         status_report = "\n".join(
             f"  {k}: {v}" for k, v in self.task_by_status.items())
 
-        return (f"Project '{self.name}' created at {formatted_created_at}.\n"
-                f"\nTotal number of tasks: {self.num_tasks}\n"
-                "\nTasks by status:\n"
-                f"{status_report}\n"
-                f"\nEstimated total computation cost: {formatted_cost}\n")
+        task_orchestration_fee_warning = get_task_orchestration_fee_warning()
+
+        return (
+            f"Project '{self.name}' created at {formatted_created_at}.\n"
+            f"\nTotal number of tasks: {self.num_tasks}\n"
+            "\nTasks by status:\n"
+            f"{status_report}\n"
+            f"\nTotal estimated cost (US$): {formatted_total_cost}\n"
+            f"\tEstimated computation cost (US$): {formatted_computation_cost}\n"
+            f"\tTask orchestration fee (US$): {formatted_orchestration_fee}\n\n"
+            f"{task_orchestration_fee_warning}\n")
 
     def add_task(self, task: tasks.Task):
         """
@@ -254,7 +274,7 @@ class Project:
 
     def delete(self):
         """Delete a project on the backend.
-        
+
         This method does not delete the project tasks, only the project itself.
         The tasks will be moved to the "default" project.
         """
