@@ -115,6 +115,10 @@ def datetime_formatter(dt: Optional[Union[datetime.datetime, str]]) -> str:
     return local_dt.strftime("%d/%m, %H:%M:%S")
 
 
+def datetime_formatter_month_text(dt: datetime.datetime) -> str:
+    return dt.strftime("%d %b, %Y")
+
+
 def datetime_formatter_ymd_hm(dt: str) -> str:
     # get time in local timezone
     if dt is None:
@@ -279,7 +283,10 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     return f"\n{table}\n"
 
 
-def currency_formatter(amount: float) -> str:
+def currency_formatter(
+    amount: float,
+    min_decimal_places: Optional[int] = None,
+) -> str:
     """Format a currency amount into a human-readable string.
 
     Convert the amount to a string with a maximum of 10 decimal places.
@@ -306,6 +313,8 @@ def currency_formatter(amount: float) -> str:
 
     # Determine the number of decimal places to show
     decimal_places = max(2, first_non_zero_decimal + 2)
+    if min_decimal_places is not None:
+        decimal_places = max(decimal_places, min_decimal_places)
 
     if amount < 0.1:
         # If the amount is less than 0.1, show all decimal places until the
