@@ -12,7 +12,7 @@ At Inductiva, you pay only for what you use, when you use it. In short:
 
 | Usage Costs  | What is it? | When is it applied? | How is it calculated? | How much is it? (Approximately) |
 | --------------- | ------------- | ------------- | ------------- | ------------- |
-| Inductiva Platform Fee | One-time fee charged whenever you buy credits | Each time you add credits to your account | Fixed percentage of the top-up amount | Depends on the [Price Plan](https://inductiva.ai/pricing) |
+| Inductiva Platform Fee | One-time fee charged whenever you buy credits | Each time you add credits to your account | Fixed percentage of the top-up amount | Depends on the [Platform Plan](https://inductiva.ai/pricing) |
 | Compute |  Cloud provider's cost of the cloud machine where the simulation is run | While the cloud machine is active, regardless if it's running a simulation or not | Price per hour (*) x Machine's Uptime | A core-hour costs approx. 0.01 US\$ in Spot mode (**); and between 0.04 US\$ and 0.07 US\$ in regular mode |
 | Inductiva Task Orchestration Fee | Fee that covers the orchestration of each simulation run | Every time a new simulation task is run | Fixed amount per simulation run, regardless of runtime or machine type | Depends on the Price Plan (***) |
 | Storage | Cloud provider's cost of keeping files in the user's cloud bucket | While there are files stored in the cloud bucket | Price per GB per month x How long it's been stored | Around 0.02 US\$ per GB per month |
