@@ -6,5 +6,7 @@ benchmarks
    :show-inheritance:
    :undoc-members:
 
-.. banner_small::
-   :origin: pyclient-benchmarks
+.. raw:: text
+
+   ::docsbannersmall
+   ::

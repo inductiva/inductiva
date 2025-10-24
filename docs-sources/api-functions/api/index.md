@@ -26,6 +26,5 @@ For a more comprehensive understanding on when to use each interface and how the
 
 To get started, follow our [Installation Guide](https://inductiva.ai/guides/how-it-works/get-started/install-guide) to install the [Inductiva Python package](https://pypi.org/project/inductiva/) and set up your environment.
 
-```{banner}
-:origin: api
-```
+::docsbanner
+::

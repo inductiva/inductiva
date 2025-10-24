@@ -53,6 +53,7 @@ extensions = [
     'sphinx_reredirects',
     'sphinx_argparse_cli',
     'sphinx_argparse_cli_ext',
+    'sphinx_markdown_builder',
 ]
 
 # Enable automatic docstring discovery

@@ -20,5 +20,7 @@ Tasks class
    :show-inheritance:
    :undoc-members:
 
-.. banner_small::
-   :origin: pyclient-tasks
+.. raw:: text
+
+   ::docsbannersmall
+   ::

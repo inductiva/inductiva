@@ -13,5 +13,7 @@ resources
    :undoc-members:
    :exclude-members: ProviderType, MachineTypeInfo
 
-.. banner_small::
-   :origin: pyclient-resources
+.. raw:: text
+
+   ::docsbannersmall
+   ::
