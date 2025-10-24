@@ -99,6 +99,7 @@ def get_task_orchestration_fee_warning():
 
         active_since_msg = f" run from {task_orchestration_active_since}"
 
-    return (f"Note: A per-run orchestration fee ({task_orchestration_fee}) "
-            f"applies to tasks{active_since_msg}, in addition to the compute "
-            "costs.")
+    return (
+        f"Note: A per-run orchestration fee ({task_orchestration_fee}) "
+        f"applies to tasks{active_since_msg}, in addition to the computation "
+        "costs.")
