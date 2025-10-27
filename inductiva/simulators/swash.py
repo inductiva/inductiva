@@ -39,6 +39,7 @@ class SWASH(simulators.Simulator):
             project: Optional[str] = None,
             time_to_live: Optional[str] = None,
             on_finish_cleanup: Optional[Union[str, list[str]]] = None,
+            gfortran_unbuffered_all: bool = True,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -87,6 +88,9 @@ class SWASH(simulators.Simulator):
                         "rm -rf temp_dir",
                         "rm -f logs/debug.log"
                     ]
+            gfortran_unbuffered_all: If True, enables immediate flushing of
+                output, potentially degrading performance. However, disabling
+                this might lead to error files not being written.
         """
 
         if command not in ("swashrun", "swash.exe"):
@@ -99,6 +103,12 @@ class SWASH(simulators.Simulator):
                              "sim_config_filename.")
 
         commands = []
+
+        # Set environment variable based on gfortran_unbuffered_all argument
+        env = {
+            "GFORTRAN_UNBUFFERED_ALL":
+                "YES" if gfortran_unbuffered_all else "NO"
+        }
 
         path_config_filename = Path(sim_config_filename)
 
@@ -127,7 +137,7 @@ class SWASH(simulators.Simulator):
             mpi_flag = f"-mpi {n_vcpus or on.available_vcpus}"
 
             swashrun_command = Command(
-                f"swashrun -input {config_file_only} {mpi_flag}")
+                f"swashrun -input {config_file_only} {mpi_flag}", env=env)
             commands.append(swashrun_command)
 
         # we call mpirun ... apptainer ... swash.exe
@@ -142,7 +152,8 @@ class SWASH(simulators.Simulator):
 
             mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
             swash_exe_command = Command(f"swash.exe {sim_config_filename}",
-                                        mpi_config=mpi_config)
+                                        mpi_config=mpi_config,
+                                        env=env)
             commands.append(swash_exe_command)
 
         return super().run(input_dir,
