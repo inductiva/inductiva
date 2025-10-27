@@ -39,6 +39,7 @@ class SWASH(simulators.Simulator):
             project: Optional[str] = None,
             time_to_live: Optional[str] = None,
             on_finish_cleanup: Optional[Union[str, list[str]]] = None,
+            flush_output: bool = False,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -87,6 +88,9 @@ class SWASH(simulators.Simulator):
                         "rm -rf temp_dir",
                         "rm -f logs/debug.log"
                     ]
+            flush_output: If True, enables immediate flushing of output which 
+                may affect performance. Disabling this might cause error files
+                to not appear properly.
         """
 
         if command not in ("swashrun", "swash.exe"):
@@ -99,7 +103,10 @@ class SWASH(simulators.Simulator):
                              "sim_config_filename.")
 
         commands = []
-
+        
+        # Set environment variable based on flush_output argument
+        env = {"GFORTRAN_UNBUFFERED_ALL": "YES" if flush_output else "NO"}
+        
         path_config_filename = Path(sim_config_filename)
 
         if path_config_filename.is_absolute():
@@ -127,7 +134,8 @@ class SWASH(simulators.Simulator):
             mpi_flag = f"-mpi {n_vcpus or on.available_vcpus}"
 
             swashrun_command = Command(
-                f"swashrun -input {config_file_only} {mpi_flag}")
+                f"swashrun -input {config_file_only} {mpi_flag}",
+                env=env)
             commands.append(swashrun_command)
 
         # we call mpirun ... apptainer ... swash.exe
@@ -141,8 +149,11 @@ class SWASH(simulators.Simulator):
             mpi_kwargs["use_hwthread_cpus"] = use_hwthread
 
             mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
-            swash_exe_command = Command(f"swash.exe {sim_config_filename}",
-                                        mpi_config=mpi_config)
+            swash_exe_command = Command(
+                f"swash.exe {sim_config_filename}",
+                mpi_config=mpi_config,
+                env=env
+            )
             commands.append(swash_exe_command)
 
         return super().run(input_dir,
