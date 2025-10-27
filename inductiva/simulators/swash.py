@@ -39,7 +39,7 @@ class SWASH(simulators.Simulator):
             project: Optional[str] = None,
             time_to_live: Optional[str] = None,
             on_finish_cleanup: Optional[Union[str, list[str]]] = None,
-            flush_output: bool = False,
+            gfortran_unbuffered_all: bool = False,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -88,9 +88,9 @@ class SWASH(simulators.Simulator):
                         "rm -rf temp_dir",
                         "rm -f logs/debug.log"
                     ]
-            flush_output: If True, enables immediate flushing of output which 
-                may affect performance. Disabling this might cause error files
-                to not appear properly.
+            gfortran_unbuffered_all: If True, enables immediate flushing of
+                output which may affect performance. Disabling this might cause
+                error files to not appear properly.
         """
 
         if command not in ("swashrun", "swash.exe"):
@@ -104,8 +104,8 @@ class SWASH(simulators.Simulator):
 
         commands = []
 
-        # Set environment variable based on flush_output argument
-        env = {"GFORTRAN_UNBUFFERED_ALL": "YES" if flush_output else "NO"}
+        # Set environment variable based on gfortran_unbuffered_all argument
+        env = {"GFORTRAN_UNBUFFERED_ALL": "YES" if gfortran_unbuffered_all else "NO"}
 
         path_config_filename = Path(sim_config_filename)
 
