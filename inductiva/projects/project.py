@@ -184,7 +184,8 @@ class Project:
 
     @property
     def total_estimated_cost(self) -> float:
-        return self.estimated_computation_cost + self.total_task_orchestration_fee
+        return (self.estimated_computation_cost +
+                self.total_task_orchestration_fee)
 
     def __str__(self) -> str:
         formatted_total_cost = format_utils.currency_formatter(
@@ -200,15 +201,16 @@ class Project:
 
         task_orchestration_fee_warning = get_task_orchestration_fee_warning()
 
-        return (
-            f"Project '{self.name}' created at {formatted_created_at}.\n"
-            f"\nTotal number of tasks: {self.num_tasks}\n"
-            "\nTasks by status:\n"
-            f"{status_report}\n"
-            f"\nTotal estimated cost (US$): {formatted_total_cost}\n"
-            f"\tEstimated computation cost (US$): {formatted_computation_cost}\n"
-            f"\tTask orchestration fee (US$): {formatted_orchestration_fee}\n\n"
-            f"{task_orchestration_fee_warning}\n")
+        return (f"Project '{self.name}' created at {formatted_created_at}.\n"
+                f"\nTotal number of tasks: {self.num_tasks}\n"
+                "\nTasks by status:\n"
+                f"{status_report}\n"
+                f"\nTotal estimated cost (US$): {formatted_total_cost}\n"
+                "\tEstimated computation cost (US$): "
+                f"{formatted_computation_cost}\n"
+                "\tTask orchestration fee (US$): "
+                f"{formatted_orchestration_fee}\n\n"
+                f"{task_orchestration_fee_warning}\n")
 
     def add_task(self, task: tasks.Task):
         """
