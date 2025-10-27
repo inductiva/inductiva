@@ -89,8 +89,8 @@ class SWASH(simulators.Simulator):
                         "rm -f logs/debug.log"
                     ]
             gfortran_unbuffered_all: If True, enables immediate flushing of
-                output, potentially degrading performance. Disabling this might
-                cause error files to not appear properly.
+                output, potentially degrading performance. However, disabling
+                this might lead to error files not being written.
         """
 
         if command not in ("swashrun", "swash.exe"):
@@ -105,7 +105,10 @@ class SWASH(simulators.Simulator):
         commands = []
 
         # Set environment variable based on gfortran_unbuffered_all argument
-        env = {"GFORTRAN_UNBUFFERED_ALL": "YES" if gfortran_unbuffered_all else "NO"}
+        env = {
+            "GFORTRAN_UNBUFFERED_ALL":
+                "YES" if gfortran_unbuffered_all else "NO"
+        }
 
         path_config_filename = Path(sim_config_filename)
 
