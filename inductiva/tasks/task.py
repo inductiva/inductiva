@@ -327,7 +327,7 @@ class TaskInfo:
             orchestration_fee_amount_charged_str = (
                 format_utils.currency_formatter(
                     orchestration_fee_amount_charged))
-            table_str += (f"\tOrchestration fee (US$): "
+            table_str += (f"\tTask orchestration fee (US$): "
                           f"{orchestration_fee_amount_charged_str}\n")
 
             if not orchestration_fee_charged:
