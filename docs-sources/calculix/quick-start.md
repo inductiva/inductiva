@@ -1,5 +1,5 @@
 # Run Your First Simulation
-This tutorial will show you how to run CalculiX simulations using the Inductiva API. 
+This tutorial will show you how to run CalculiX simulations using the Inductiva API.
 
 We will cover the `large stuctural test example` from the [official CalculiX website](https://www.dhondt.de/) to help you get started with simulations.
 
@@ -38,14 +38,14 @@ task.print_summary()
 
 ```
 
-In this basic example, we're using a cloud machine (`c2d-highcpu-4`) equipped with 4 virtual CPUs. 
-For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
+In this basic example, we're using a cloud machine (`c2d-highcpu-4`) equipped with 4 virtual CPUs.
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select
 a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-To adapt this script for other CalculiX simulations, replace `input_dir` with the path to your CalculiX input files 
+To adapt this script for other CalculiX simulations, replace `input_dir` with the path to your CalculiX input files
 and set the `sim_config_filename` accordingly.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
@@ -60,20 +60,22 @@ Timeline:
 	In Progress               at 12/08, 11:30:16      353.357 s
 		└> 353.201 s       ccx -i contact2e
 	Finalizing                at 12/08, 11:36:09      0.514 s
-	Success                   at 12/08, 11:36:10      
+	Success                   at 12/08, 11:36:10
 
 Data:
 	Size of zipped output:    1.41 MB
 	Size of unzipped output:  4.77 MB
 	Number of output files:   9
 
-Estimated Task Compute Cost = 0.0023 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.0123 US$
+Total estimated cost (US$): 0.0123 US$
+	Estimated computation cost (US$): 0.0023 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation,
 the core computation time of this simulation was 353 seconds (approximately 5 minutes and 53 seconds).
 
 ```{banner_small}

@@ -44,7 +44,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other FDS simulations, replace `input_dir` with the path to your FDS input files and set the `sim_config_filename` accordingly. Be sure to specify the FDS version compatible with your input files.
@@ -68,9 +68,11 @@ Data:
 	Size of unzipped output:  39.30 MB
 	Number of output files:   25
 
-Estimated Task Compute Cost = 0.00021 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.01021 US$
+Total estimated cost (US$): 0.01021 US$
+	Estimated computation cost (US$): 0.00021 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 

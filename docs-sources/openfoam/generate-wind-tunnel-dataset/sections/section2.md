@@ -1,6 +1,6 @@
 # Run a Single Simulation
-First, we will run a single OpenFOAM simulation using the `motorBike` 
-case. This should be straightforward as all the necessary input files are 
+First, we will run a single OpenFOAM simulation using the `motorBike`
+case. This should be straightforward as all the necessary input files are
 already prepared, as described in the previous section.
 
 ## Code Overview
@@ -50,20 +50,22 @@ Timeline:
         In Progress               at 03/06, 10:32:38      156.559 s
                 └> 156.233 s       bash ./Allrun
         Finalizing                at 03/06, 10:35:14      1.23 s
-        Success                   at 03/06, 10:35:15      
+        Success                   at 03/06, 10:35:15
 
 Data:
         Size of zipped output:    115.53 MB
         Size of unzipped output:  184.12 MB
         Number of output files:   110
 
-Estimated Task Compute Cost = 0.0080 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.0180 US$
+Total estimated cost (US$): 0.0180 US$
+	Estimated computation cost (US$): 0.0080 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-You can also visit the [Inductiva Web Console](https://console.inductiva.ai/) to view task details, navigate 
+You can also visit the [Inductiva Web Console](https://console.inductiva.ai/) to view task details, navigate
 the task the filesystem, and monitor logs in real time.
 
 ![console timeline](../../_static/console_timeline.png)

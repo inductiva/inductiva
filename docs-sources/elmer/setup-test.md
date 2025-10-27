@@ -60,7 +60,7 @@ python example.py
 All the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. The Elmer simulation will then be sent to a cloud machine for execution.
 
 ## Step 2: Verify the Task Status
-After the simulation completes, a task summary will be displayed in your terminal, as shown below. 
+After the simulation completes, a task summary will be displayed in your terminal, as shown below.
 
 ```
 Task status: Success
@@ -73,16 +73,18 @@ Timeline:
 		├> 1.073 s         ElmerGrid 1 2 winkel.grd
 		└> 13.081 s        ElmerSolver case.sif -ipar 2 1 1
 	Finalizing                at 19/09, 11:38:57      0.534 s
-	Success                   at 19/09, 11:38:58      
+	Success                   at 19/09, 11:38:58
 
 Data:
 	Size of zipped output:    2.71 MB
 	Size of unzipped output:  6.25 MB
 	Number of output files:   11
 
-Estimated Task Compute Cost = 0.00014 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.01014 US$
+Total estimated cost (US$): 0.01014 US$
+	Estimated computation cost (US$): 0.00014 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 

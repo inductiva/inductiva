@@ -76,14 +76,14 @@ cloud_machine.terminate()
 task.print_summary()
 ```
 
-This simulation runs in spot mode on a `g2-standard-16` machine, featuring 16 virtual CPUs, 1 NVIDIA L4 GPU, 
+This simulation runs in spot mode on a `g2-standard-16` machine, featuring 16 virtual CPUs, 1 NVIDIA L4 GPU,
 and a 200 GB data disk.
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-For visualization purposes, this script also optionally converts the simulation’s raw particle data 
-(stored as .vtk files) into mesh format (.obj), making it compatible with common visualization tools. 
+For visualization purposes, this script also optionally converts the simulation’s raw particle data
+(stored as .vtk files) into mesh format (.obj), making it compatible with common visualization tools.
 Check out this [tutorial](convert-to-obj) for more details.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
@@ -99,21 +99,23 @@ Timeline:
 		├> 5862.434 s      bash xCaseDambreak3D_FSI_linux64_GPU.sh
 		└> 999.117 s       splashsurf reconstruct CaseDambreak3D_FSI_out/particles//PartFluid_{}.vtk -r=0.002 -l=2 -c=1 -t=0.6 --subdomain-grid=on --mesh-cleanup=on --mesh-smoothing-weights=on --mesh-smoothing-iters=25 --normals=on --normals-smoothing-iters=10 -o CaseDambreak3D_FSI_out/particles//PartFluid__surface{}.obj
 	Finalizing                at 26/05, 18:49:03      95.911 s
-	Success                   at 26/05, 18:50:39      
+	Success                   at 26/05, 18:50:39
 
 Data:
 	Size of zipped output:    15.88 GB
 	Size of unzipped output:  34.95 GB
 	Number of output files:   1230
 
-Estimated Task Compute Cost = 0.82 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.83 US$
+Total estimated cost (US$): 0.83 US$
+	Estimated computation cost (US$): 0.82 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that 
-represents the actual execution of the simulation, the core computation time 
+As you can see in the "In Progress" line, the part of the timeline that
+represents the actual execution of the simulation, the core computation time
 of this simulation was approximately 1 hour and 37 minutes (5862 seconds).
 
 ## Testing Across Different GPUs

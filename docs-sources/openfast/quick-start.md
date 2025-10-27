@@ -1,9 +1,9 @@
 # Run Your First OpenFAST Simulation
-This tutorial will show you how to run OpenFAST simulations using the Inductiva API. 
+This tutorial will show you how to run OpenFAST simulations using the Inductiva API.
 
 We will cover a quick start use case available in the [OpenFAST GitHub repository](https://github.com/openfast) to help you get started with simulations.
 
-This use case uses the NREL 5-MW wind turbine, a hypothetical yet representative multi-MW wind turbine with a rated power of 5 MW, a rated rotor speed of 12.1 rpm, 
+This use case uses the NREL 5-MW wind turbine, a hypothetical yet representative multi-MW wind turbine with a rated power of 5 MW, a rated rotor speed of 12.1 rpm,
 a hub height of 90 m, and a rotor diameter of 126 m. It focuses on an “onshore” version of the turbine, considering only the structure (no aerodynamics), where the top of the tower is initially displaced horizontally by 3 m from its equilibrium position.
 
 ## Prerequisites
@@ -44,12 +44,12 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other OpenFAST simulations, replace `input_dir` with the path to your OpenFAST input files and set the `sim_config_filename` accordingly. Be sure to specify the OpenFAST version compatible with your input files.
 
-When the simulation is complete, we terminate the machine, download the results and print a summary 
+When the simulation is complete, we terminate the machine, download the results and print a summary
 of the simulation as shown below.
 
 ```
@@ -62,20 +62,22 @@ Timeline:
 	In Progress               at 05/06, 15:04:32      3.466 s
 		└> 3.344 s         openfast Main.fst
 	Finalizing                at 05/06, 15:04:35      7.559 s
-	Success                   at 05/06, 15:04:43      
+	Success                   at 05/06, 15:04:43
 
 Data:
 	Size of zipped output:    40.54 KB
 	Size of unzipped output:  141.94 KB
 	Number of output files:   3
 
-Estimated Task Compute Cost = 0.000058 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.010058 US$
+Total estimated cost (US$): 0.010058 US$
+	Estimated computation cost (US$): 0.000058 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation,
 the core computation time of this simulation was approximately 3.5 seconds.
 
 ```{banner_small}

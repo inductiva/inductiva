@@ -56,7 +56,7 @@ python example.py
 All the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. The XBeach simulation will then be sent to a cloud machine for execution.
 
 ## Step 2: Verify the Task Status
-After the simulation completes, a task summary will be displayed in your terminal, as shown below. 
+After the simulation completes, a task summary will be displayed in your terminal, as shown below.
 
 ```
 Task status: Success
@@ -68,16 +68,18 @@ Timeline:
 	In Progress               at 27/06, 18:45:47      47.247 s
 		└> 47.114 s        /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus xbeach params.txt
 	Finalizing                at 27/06, 18:46:34      2.599 s
-	Success                   at 27/06, 18:46:37      
+	Success                   at 27/06, 18:46:37
 
 Data:
 	Size of zipped output:    74.60 MB
 	Size of unzipped output:  82.73 MB
 	Number of output files:   12
 
-Estimated Task Compute Cost = 0.00039 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.01039 US$
+Total estimated cost (US$): 0.01039 US$
+	Estimated computation cost (US$): 0.00039 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 

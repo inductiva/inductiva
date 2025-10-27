@@ -1,5 +1,5 @@
 # Run Your First Simulation
-This tutorial will show you how to run GX simulations using the Inductiva API. 
+This tutorial will show you how to run GX simulations using the Inductiva API.
 
 This tutorial will cover a non-linear use case, available in the [GX documentation](https://gx.readthedocs.io/en/latest/Nonlinear.html), to help you get started with simulations.
 
@@ -38,12 +38,12 @@ task.download_outputs()
 task.print_summary()
 ```
 
-In this basic example, we're using a cloud machine (`g2-standard-4`) equipped with 4 virtual CPUs and an NVIDIA L4 GPU. 
-For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
-a more powerful GPU machine. You can explore the full range of available 
+In this basic example, we're using a cloud machine (`g2-standard-4`) equipped with 4 virtual CPUs and an NVIDIA L4 GPU.
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select
+a more powerful GPU machine. You can explore the full range of available
 machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other GX simulations, replace `input_dir` with the
@@ -61,20 +61,22 @@ Timeline:
 	In Progress               at 28/03, 14:27:14      4.36 s
 		└> 4.064 s         gx cyclone_miller_adiabatic_electrons.in
 	Finalizing                at 28/03, 14:27:18      0.432 s
-	Success                   at 28/03, 14:27:18      
+	Success                   at 28/03, 14:27:18
 
 Data:
 	Size of zipped output:    1.63 KB
 	Size of unzipped output:  9.05 KB
 	Number of output files:   4
 
-Estimated Task Compute Cost = 0.0022 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.0122 US$
+Total estimated cost (US$): 0.0122 US$
+	Estimated computation cost (US$): 0.0022 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation,
 the core computation time of this simulation was approximately 4 seconds.
 
 ```{banner_small}

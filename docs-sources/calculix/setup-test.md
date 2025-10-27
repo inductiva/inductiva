@@ -58,7 +58,7 @@ python example.py
 All the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. The CalculiX simulation will then be sent to a cloud machine for execution.
 
 ## Step 2: Verify the Task Status
-After the simulation completes, a task summary will be displayed in your terminal, as shown below. 
+After the simulation completes, a task summary will be displayed in your terminal, as shown below.
 
 ```
 Task status: Success
@@ -70,16 +70,18 @@ Timeline:
 	In Progress               at 12/08, 09:10:29      3.056 s
 		└> 2.864 s         ccx -i hueeber3
 	Finalizing                at 12/08, 09:10:32      0.547 s
-	Success                   at 12/08, 09:10:32      
+	Success                   at 12/08, 09:10:32
 
 Data:
 	Size of zipped output:    216.18 KB
 	Size of unzipped output:  1.87 MB
 	Number of output files:   8
 
-Estimated Task Compute Cost = 0.000046 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.010046 US$
+Total estimated cost (US$): 0.010046 US$
+    Estimated computation cost (US$): 0.000046 US$
+    Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 

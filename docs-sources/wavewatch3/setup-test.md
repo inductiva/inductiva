@@ -58,11 +58,11 @@ python example.py
 
 > **Note**: On some systems, you might need to use `python3` instead of `python`.
 
-All the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. 
+All the necessary simulation artifacts and configuration files will be automatically downloaded to your computer.
 The WAVEWATCH III simulation will then be sent to a cloud machine for execution.
 
 ## Step 2: Verify the Task Status
-After the simulation completes, a task summary will be displayed in your terminal, as shown below. 
+After the simulation completes, a task summary will be displayed in your terminal, as shown below.
 
 ```
 Task status: Success
@@ -77,16 +77,18 @@ Timeline:
 		├> 1.075 s         ww3_prep
 		└> 4.087 s         ww3_shel
 	Finalizing                at 05/08, 09:09:21      13.692 s
-	Success                   at 05/08, 09:09:35      
+	Success                   at 05/08, 09:09:35
 
 Data:
 	Size of zipped output:    636.81 MB
 	Size of unzipped output:  1.48 GB
 	Number of output files:   5274
 
-Estimated Task Compute Cost = 0.00060 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.01060 US$
+Total estimated cost (US$): 0.01060 US$
+	Estimated computation cost (US$): 0.00060 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 

@@ -1,5 +1,5 @@
 # Run Your First Simulation
-This tutorial will show you how to run Octopus simulations using the Inductiva API. 
+This tutorial will show you how to run Octopus simulations using the Inductiva API.
 
 We will cover the `01-propagators.03-etrs_taylor` use case from the Octopus Gitlab repository, to help you get started with simulations.
 
@@ -59,7 +59,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of spot machines, which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 This example consists of two main steps:
@@ -68,8 +68,8 @@ This example consists of two main steps:
 2. **Time-Dependent Simulation:**
    Next, we run `octopus` with the input file `td.inp`. This launches a real-time, time-dependent simulation based on **Time-Dependent Density Functional Theory (TDDFT)**, using the results obtained from the previous ground-state step.
 
-When you run the Python script above, the simulation is executed on a cloud machine of type `c2d-highcpu-16`, which provides 
-16 virtual CPUs. For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to 
+When you run the Python script above, the simulation is executed on a cloud machine of type `c2d-highcpu-16`, which provides
+16 virtual CPUs. For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to
 select a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
 To adapt this script for other Octopus simulations, replace `input_dir` with the
@@ -92,20 +92,22 @@ Timeline:
 		├> 2.083 s         octopus
 		└> 1.075 s         mv inp td.inp
 	Finalizing                at 14/07, 15:30:51      0.529 s
-	Success                   at 14/07, 15:30:51      
+	Success                   at 14/07, 15:30:51
 
 Data:
 	Size of zipped output:    557.60 KB
 	Size of unzipped output:  1.49 MB
 	Number of output files:   51
 
-Estimated Task Compute Cost = 0.00039 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.01039 US$
+Total estimated cost (US$): 0.01039 US$
+	Estimated computation cost (US$): 0.00039 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation,
 the core computation time of this simulation was approximately 9 seconds.
 
 ```{banner_small}

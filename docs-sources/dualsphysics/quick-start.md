@@ -1,14 +1,14 @@
 # Run Your First Simulation
 
 ## Technical Details
-Running your DualSPHysics simulation workflows on Inductiva is similar to running them locally, 
-with a few key differences. Instead of executing your DualSPHysics shell script directly, 
-you'll need to pass it to the Inductiva API using the run() method. This will allow your simulation to be 
-executed on a remote resource. If you already have a functioning shell script that orchestrates your DualSPHysics 
+Running your DualSPHysics simulation workflows on Inductiva is similar to running them locally,
+with a few key differences. Instead of executing your DualSPHysics shell script directly,
+you'll need to pass it to the Inductiva API using the run() method. This will allow your simulation to be
+executed on a remote resource. If you already have a functioning shell script that orchestrates your DualSPHysics
 simulation locally, you're almost ready to run it on Inductiva.
 
 ### Key Adaptations for Inductiva
-While the overall process is similar, there are a few minor adjustments that might be needed to accommodate 
+While the overall process is similar, there are a few minor adjustments that might be needed to accommodate
 the different environment:
 
 - **Path-related changes**: The location of the DualSPHysics binaries in the Inductiva infrastructure may differ from your local setup. You may need to modify path variables in your orchestration script.
@@ -29,7 +29,7 @@ This renaming allows you to use either the full binary name (e.g.,
 which abstracts away the architecture and simulator version.
 
 ## Objective
-This tutorial will show you how to run DualSPHysics simulations using the Inductiva API. 
+This tutorial will show you how to run DualSPHysics simulations using the Inductiva API.
 
 We will cover a classical CFD case of a flow over a cylinder from the [DualSPHysics offical download page](https://dual.sphysics.org/downloads/) to help you get started with simulations.
 
@@ -77,16 +77,16 @@ task.download_outputs()
 task.print_summary()
 ```
 
-In this basic example, we're using a cloud machine (`g2-standard-32`) equipped with 32 virtual CPUs and an NVIDIA L4 GPU. 
-For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
-a more powerful GPU machine. You can explore the full range of available 
+In this basic example, we're using a cloud machine (`g2-standard-32`) equipped with 32 virtual CPUs and an NVIDIA L4 GPU.
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select
+a more powerful GPU machine. You can explore the full range of available
 machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-To adapt this script for other DualSPHysics simulations, replace `input_dir` with the path to your DualSPHysics 
-input files and set the `shell_script` accordingly. Be sure to specify the DualSPHysics version compatible with 
+To adapt this script for other DualSPHysics simulations, replace `input_dir` with the path to your DualSPHysics
+input files and set the `shell_script` accordingly. Be sure to specify the DualSPHysics version compatible with
 your input files.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
@@ -101,21 +101,23 @@ Timeline:
 	In Progress               at 09/04, 10:30:44      99.348 s
 		└> 99.186 s        bash xCaseFlowCylinder_Re020_linux64_GPU.sh
 	Finalizing                at 09/04, 10:32:23      64.657 s
-	Success                   at 09/04, 10:33:28      
+	Success                   at 09/04, 10:33:28
 
 Data:
 	Size of zipped output:    1.25 GB
 	Size of unzipped output:  2.41 GB
 	Number of output files:   2032
 
-Estimated Task Compute Cost = 0.034 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.044 US$
+Total estimated cost (US$): 0.044 US$
+	Estimated computation cost (US$): 0.034 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that
-represents the actual execution of the simulation, 
+represents the actual execution of the simulation,
 the core computation time of this simulation was 99.3 seconds (around 1 minute
 and 39 seconds).
 

@@ -71,16 +71,18 @@ Timeline:
 	In Progress               at 17/06, 12:33:48      6.089 s
 		└> 5.941 s         mpirun -np 4 d_hydro.exe config_d_hydro.xml
 	Finalizing                at 17/06, 12:33:54      0.455 s
-	Success                   at 17/06, 12:33:55      
+	Success                   at 17/06, 12:33:55
 
 Data:
 	Size of zipped output:    424.79 KB
 	Size of unzipped output:  1.04 MB
 	Number of output files:   15
 
-Estimated Task Compute Cost = 0.000079 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.010079 US$
+Total estimated cost (US$): 0.010079 US$
+	Estimated computation cost (US$): 0.000079 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
