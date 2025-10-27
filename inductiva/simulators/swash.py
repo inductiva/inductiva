@@ -89,8 +89,8 @@ class SWASH(simulators.Simulator):
                         "rm -f logs/debug.log"
                     ]
             gfortran_unbuffered_all: If True, enables immediate flushing of
-                output which may affect performance. Disabling this might cause
-                error files to not appear properly.
+                output, potentially degrading performance. Disabling this might
+                cause error files to not appear properly.
         """
 
         if command not in ("swashrun", "swash.exe"):
