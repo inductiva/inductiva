@@ -1,22 +1,22 @@
 # Run Your First Simulation
-This tutorial will show you how to run NWChem simulations using the Inductiva API. 
+This tutorial will show you how to run NWChem simulations using the Inductiva API.
 
 We will cover the `Single point Water SCF energy` use case from the examples of the [official NWChem documentation](https://nwchemgit.github.io/Sample.html) to help you get started with simulations.
 
 ## Prerequisites
 1. Copy the following input file exactly as shown:
 ```
- start h2o 
- title "Water in 6-31g basis set" 
+ start h2o
+ title "Water in 6-31g basis set"
 
- geometry units au  
-   O      0.00000000    0.00000000    0.00000000  
-   H      0.00000000    1.43042809   -1.10715266  
-   H      0.00000000   -1.43042809   -1.10715266 
- end  
- basis  
-   H library 6-31g  
-   O library 6-31g  
+ geometry units au
+   O      0.00000000    0.00000000    0.00000000
+   H      0.00000000    1.43042809   -1.10715266
+   H      0.00000000   -1.43042809   -1.10715266
+ end
+ basis
+   H library 6-31g
+   O library 6-31g
  end
  task scf
  ```
@@ -58,14 +58,14 @@ task.download_outputs()
 task.print_summary()
 ```
 
-In this basic example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs. 
-For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
+In this basic example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs.
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select
 a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-To adapt this script for other NWChem simulations, replace `input_dir` with the path to your NWChem input files 
+To adapt this script for other NWChem simulations, replace `input_dir` with the path to your NWChem input files
 and set the `sim_config_filename` accordingly. Be sure to specify the NWChem version compatible with your input files.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
@@ -80,20 +80,22 @@ Timeline:
 	In Progress               at 21/04, 15:24:27      2.355 s
 		└> 2.253 s         /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus --np 8 nwchem water_scf.nw
 	Finalizing                at 21/04, 15:24:29      0.39 s
-	Success                   at 21/04, 15:24:29      
+	Success                   at 21/04, 15:24:29
 
 Data:
 	Size of zipped output:    19.64 KB
 	Size of unzipped output:  824.11 KB
 	Number of output files:   10
 
-Estimated Task Compute Cost = 0.00020 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.01020 US$
+Total estimated cost (US$): 0.01020 US$
+	Estimated computation cost (US$): 0.00020 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of 
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of
 the simulation, the core computation time of this simulation was approximately 2 seconds.
 
 ```{banner_small}

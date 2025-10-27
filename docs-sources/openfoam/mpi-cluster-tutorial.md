@@ -65,7 +65,7 @@ to be executed during the simulation. This way, Inductiva can process each
 command and apply the necessary cluster-specific options. Some commands will
 run sequentially, while others may run in parallel.
 
-For this case, we’ve prepared a list of the required commands. You can download the `commands.txt` [here](https://storage.googleapis.com/inductiva-api-demo-files/commands.txt) and place it in your `highLiftConfiguration` directory. 
+For this case, we’ve prepared a list of the required commands. You can download the `commands.txt` [here](https://storage.googleapis.com/inductiva-api-demo-files/commands.txt) and place it in your `highLiftConfiguration` directory.
 
 Prefer to create it yourself? Check out our guide on [converting an Allrun script into Python commands](convert-allrun-script-into-python-commands).
 
@@ -123,16 +123,18 @@ Timeline:
 	In Progress               at 23/04, 16:47:51      61841.482 s
         ...
     Finalizing                at 24/04, 09:58:33      817.51 s
-	Success                   at 24/04, 10:12:10      
+	Success                   at 24/04, 10:12:10
 
 Data:
 	Size of zipped output:    26.72 GB
 	Size of unzipped output:  34.41 GB
 	Number of output files:   151512
 
-Estimated Task Compute Cost = 179.23 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 179.24 US$
+Total estimated cost (US$): 179.24 US$
+	Estimated computation cost (US$): 179.23 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 

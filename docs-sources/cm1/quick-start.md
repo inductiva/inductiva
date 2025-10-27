@@ -1,5 +1,5 @@
 # Run Your First Simulation
-This tutorial will show you how to run CM1 simulations using the Inductiva API. 
+This tutorial will show you how to run CM1 simulations using the Inductiva API.
 
 We will cover an example simulation available in the
 [official CM1 v18 release](https://www2.mmm.ucar.edu/people/bryan/cm1/cm1r18.tar.gz),
@@ -15,7 +15,7 @@ Download the files [here](https://www2.mmm.ucar.edu/people/bryan/cm1/cm1r18.tar.
 Inside the `cm1r18` folder, create a new subfolder named `input_files`.
 
 3. **Copy the Required Files**
-Now, copy the following files into the `input_files` directory. For more information about these input files, refer to **Step 2** 
+Now, copy the following files into the `input_files` directory. For more information about these input files, refer to **Step 2**
 of the [CM1 official guide](https://www2.mmm.ucar.edu/people/bryan/cm1/user_guide_brief.html).
 
 | File Path                    | Description                                                                |
@@ -91,7 +91,7 @@ task.print_summary()
 > **Note**: `spot` machines are a lot cheaper but may be terminated by the
 provider if necessary.
 
-To adapt the code for this or any other use case, simply replace `input_dir` with the path to your CM1 input files 
+To adapt the code for this or any other use case, simply replace `input_dir` with the path to your CM1 input files
 and set the `sim_config_filename` accordingly. Be sure to specify the CM1 version compatible with your input files.
 
 When the simulation is complete, we terminate the machine, download the results
@@ -116,16 +116,18 @@ Timeline:
 		├> 298.356 s       /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus --np 1 /workdir/output/artifacts/__cm1/run/cm1.exe namelist.input
 		└> 1.065 s         rm -r /workdir/output/artifacts/__cm1
 	Finalizing                at 13/03, 15:06:46      2.026 s
-	Success                   at 13/03, 15:06:48      
+	Success                   at 13/03, 15:06:48
 
 Data:
 	Size of zipped output:    39.11 MB
 	Size of unzipped output:  128.26 MB
 	Number of output files:   13
 
-Estimated Task Compute Cost = 0.0043 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.0143 US$
+Total estimated cost (US$): 0.0143 US$
+	Estimated computation cost (US$): 0.0043 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
@@ -136,7 +138,7 @@ this simulation was approximately 364.6 seconds (around 6 minutes).
 It's that simple!
 
 ## Scaling Up Your Simulation
-To run your simulation on a larger machine, you’ll need to make a few small changes to both your `namelist.input` file 
+To run your simulation on a larger machine, you’ll need to make a few small changes to both your `namelist.input` file
 and your Python script.
 
 ### Required Changes

@@ -1,5 +1,5 @@
 # Run Your First Simulation
-This tutorial will show you how to run FVCOM simulations using the Inductiva API. 
+This tutorial will show you how to run FVCOM simulations using the Inductiva API.
 
 We will cover the `Estuary` use case from the test files folder of the [FVCOM GitHub repository](https://github.com/FVCOM-GitHub/FVCOM) to help you get started with simulations.
 
@@ -39,7 +39,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other FVCOM simulations, replace `input_dir` with the
@@ -57,20 +57,22 @@ Timeline:
 	In Progress               at 17/04, 15:40:01      2.029 s
 		└> 1.904 s         /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus fvcom --CASENAME=tst --dbg=0
 	Finalizing                at 17/04, 15:40:03      0.42 s
-	Success                   at 17/04, 15:40:03      
+	Success                   at 17/04, 15:40:03
 
 Data:
 	Size of zipped output:    72.36 KB
 	Size of unzipped output:  1.72 MB
 	Number of output files:   5
 
-Estimated Task Compute Cost = 0.000045 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.010045 US$
+Total estimated cost (US$): 0.010045 US$
+	Estimated computation cost (US$): 0.000045 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation,
 the core computation time of this simulation was approximately 2 seconds.
 
 ```{banner_small}

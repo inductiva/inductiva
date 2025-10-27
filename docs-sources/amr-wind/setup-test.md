@@ -56,7 +56,7 @@ python example.py
 All the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. The AMR-Wind simulation will then be sent to a cloud machine for execution.
 
 ## Step 2: Verify the Task Status
-After the simulation completes, a task summary will be displayed in your terminal, as shown below. 
+After the simulation completes, a task summary will be displayed in your terminal, as shown below.
 
 ```
 Task status: Success
@@ -68,16 +68,18 @@ Timeline:
 	In Progress               at 13/06, 13:26:48      4.213 s
 		└> 4.074 s         /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus amr_wind abl_amd_wenoz.inp
 	Finalizing                at 13/06, 13:26:52      0.663 s
-	Success                   at 13/06, 13:26:53      
+	Success                   at 13/06, 13:26:53
 
 Data:
 	Size of zipped output:    13.54 MB
 	Size of unzipped output:  52.27 MB
 	Number of output files:   91
 
-Estimated Task Compute Cost = 0.000065 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.010065 US$
+Total estimated cost (US$): 0.010065 US$
+    Estimated computation cost (US$): 0.000065 US$
+    Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 

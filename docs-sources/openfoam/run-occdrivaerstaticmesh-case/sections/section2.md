@@ -35,7 +35,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation 
+When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation
 as shown.
 
 ```
@@ -49,23 +49,25 @@ Timeline:
 	In Progress               at 09/07, 09:58:26      51074.226 s
 		└> 51074.226 s        bash Allrun
 	Finalizing                at 10/07, 00:09:40      23.903 s
-	Success                   at 10/07, 00:10:04      
+	Success                   at 10/07, 00:10:04
 
 Data:
 	Size of zipped output:    5.51 GB
 	Size of unzipped output:  10.72 GB
 	Number of output files:   3276
 
-Estimated Task Compute Cost = 24.31 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 24.32 US$
+Total estimated cost (US$): 24.32 US$
+	Estimated computation cost (US$): 24.31 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the “In Progress” line, the part of the timeline that represents the actual execution of the simulation, 
+As you can see in the “In Progress” line, the part of the timeline that represents the actual execution of the simulation,
 the core computation time of this simulation was approximately 14 hours and 13 minutes.
 
-Next, we’ll show you how to scale this same simulation across multiple machines and significantly 
+Next, we’ll show you how to scale this same simulation across multiple machines and significantly
 reduce simulation time - by up to **1.8x**!
 
 Stay tuned!

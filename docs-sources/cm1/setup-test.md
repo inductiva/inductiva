@@ -56,7 +56,7 @@ python example.py
 All the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. The CM1 simulation will then be sent to a cloud machine for execution.
 
 ## Step 2: Verify the Task Status
-After the simulation completes, a task summary will be displayed in your terminal, as shown below. 
+After the simulation completes, a task summary will be displayed in your terminal, as shown below.
 
 ```
 Task status: Success
@@ -68,16 +68,18 @@ Timeline:
 	In Progress               at 09/07, 11:36:36      10.312 s
 		└> 10.106 s        /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus cm1.exe
 	Finalizing                at 09/07, 11:36:47      0.526 s
-	Success                   at 09/07, 11:36:47      
+	Success                   at 09/07, 11:36:47
 
 Data:
 	Size of zipped output:    51.18 KB
 	Size of unzipped output:  14.35 MB
 	Number of output files:   16
 
-Estimated Task Compute Cost = 0.00011 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.01011 US$
+Total estimated cost (US$): 0.01011 US$
+	Estimated computation cost (US$): 0.00011 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 

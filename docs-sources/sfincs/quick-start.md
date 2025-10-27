@@ -1,10 +1,10 @@
 # Run Your First Simulation
-This tutorial will show you how to run SFINCS simulations using the Inductiva API. 
+This tutorial will show you how to run SFINCS simulations using the Inductiva API.
 
 The use case covered in this tutorial is featured in the following publication: *[Camila Gaido Lasserre, Kees Nederhoff, Curt D. Storlazzi, Borja G. Reguero, Michael W. Beck (2024). "Improved efficient physics-based computational modeling of regional wave-driven coastal flooding for reef-lined coastlines." Ocean Modelling.](https://www.sciencedirect.com/science/article/pii/S1463500324000453#refdata001)*
 
 ## Prerequisites
-Download the use case [here](https://zenodo.org/records/10805615) and copy 
+Download the use case [here](https://zenodo.org/records/10805615) and copy
 the `sfincs_netbndbzsbzifile.nc` file from `Models/HighReliefArea/SFINCS/BoundaryConditions/rp_000_SLR000` to the `Models/HighReliefArea/SFINCS/InputFiles` folder.
 
 The `InputFiles` folder should contain the following files:
@@ -48,11 +48,11 @@ task.download_outputs()
 task.print_summary()
 ```
 
-In this basic example, we're using a cloud machine (`c2d-highcpu-8`) equipped with 8 virtual CPUs. 
-For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
+In this basic example, we're using a cloud machine (`c2d-highcpu-8`) equipped with 8 virtual CPUs.
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select
 a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other SFINCS simulations, replace `input_dir` with the
@@ -70,16 +70,18 @@ Timeline:
 	In Progress               at 04/06, 14:54:18      1823.975 s
 		└> 1823.822 s      sfincs
 	Finalizing                at 04/06, 15:24:42      2.335 s
-	Success                   at 04/06, 15:24:44      
+	Success                   at 04/06, 15:24:44
 
 Data:
 	Size of zipped output:    74.44 MB
 	Size of unzipped output:  88.29 MB
 	Number of output files:   7
 
-Estimated Task Compute Cost = 0.024 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.034 US$
+Total estimated cost (US$): 0.034 US$
+	Estimated computation cost (US$): 0.024 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 

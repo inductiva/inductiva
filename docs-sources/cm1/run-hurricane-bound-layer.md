@@ -85,16 +85,18 @@ Timeline:
 	In Progress               at 09/07, 14:09:49      5772.233 s
 		└> 5771.837 s      /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus cm1.exe namelist.input
 	Finalizing                at 09/07, 15:46:02      6.8 s
-	Success                   at 09/07, 15:46:08      
+	Success                   at 09/07, 15:46:08
 
 Data:
 	Size of zipped output:    617.07 MB
 	Size of unzipped output:  1.21 GB
 	Number of output files:   776
 
-Estimated Task Compute Cost = 0.15 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.16 US$
+Total estimated cost (US$): 0.16 US$
+	Estimated computation cost (US$): 0.15 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 

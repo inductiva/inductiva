@@ -1,5 +1,5 @@
 # Run Your First Simulation
-This tutorial will show you how to run CaNS simulations using the Inductiva API. 
+This tutorial will show you how to run CaNS simulations using the Inductiva API.
 
 We will cover the `closed_box` use case from the examples available in the [official CaNS documentation](https://github.com/CaNS-World/CaNS), to help you get started with simulations.
 
@@ -40,14 +40,14 @@ task.download_outputs()
 task.print_summary()
 ```
 
-In this basic example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs. 
-For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
+In this basic example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs.
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select
 a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-To adapt the code for this or any other use case, simply replace `input_dir` with the path to your CaNS input files and 
+To adapt the code for this or any other use case, simply replace `input_dir` with the path to your CaNS input files and
 set the `sim_config_filename` accordingly. Be sure to specify the CaNS version compatible with your input files.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
@@ -62,20 +62,21 @@ Timeline:
 	In Progress               at 17/04, 15:27:07      126.298 s
 		└> 126.177 s       /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus cans input.nml
 	Finalizing                at 17/04, 15:29:13      1.236 s
-	Success                   at 17/04, 15:29:15      
+	Success                   at 17/04, 15:29:15
 
 Data:
 	Size of zipped output:    3.50 MB
 	Size of unzipped output:  203.68 MB
 	Number of output files:   3260
+Total estimated cost (US$): 0.0142 US$
+	Estimated computation cost (US$): 0.0042 US$
+	Task orchestration fee (US$): 0.010 US$
 
-Estimated Task Compute Cost = 0.0042 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.0142 US$
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation,
 the core computation time of this simulation was approximately 126.3 seconds (around 2 minutes).
 
 ```{banner_small}

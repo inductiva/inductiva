@@ -1,5 +1,5 @@
 # Run Your First Simulation
-This tutorial will show you how to run TELEMAC-2D simulations using the Inductiva API. 
+This tutorial will show you how to run TELEMAC-2D simulations using the Inductiva API.
 
 We will cover the `Malpasset Dam Break` use case from the [OpenTelemac GitLab repository](https://gitlab.pam-retd.fr/otm/telemac-mascaret/-/tree/main/examples/telemac2d/malpasset?ref_type=heads) to help you get started with simulations. This setup models the flood wave resulting from the dam failure, propagating through a valley with realistic topography and open-channel hydraulics using TELEMAC-2D.
 
@@ -8,7 +8,7 @@ Download the required files [here](https://storage.googleapis.com/inductiva-api-
 
 The folder should include the following:
 - `t2d_malpasset-fine.cas`
-- Mesh and geometry files, such as`geo_malpasset.slf`, etc. 
+- Mesh and geometry files, such as`geo_malpasset.slf`, etc.
 - (*Optional*) Boundary condition and results configuration files
 
 Then, you’ll be ready to send your simulation to the Cloud.
@@ -50,16 +50,16 @@ task.download_outputs()
 task.print_summary()
 ```
 
-In this basic example, we're using a cloud machine (`c2d-highcpu-32`) equipped with 32 virtual CPUs. 
-For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
+In this basic example, we're using a cloud machine (`c2d-highcpu-32`) equipped with 32 virtual CPUs.
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select
 a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 ### Adapting the Script
-To adapt this script for other OpenTelemac simulations, replace `input_dir` with the path to your OpenTelemac 
-input files and set the the `commands` accordingly. Be sure to specify the OpenTelemac version compatible with 
+To adapt this script for other OpenTelemac simulations, replace `input_dir` with the path to your OpenTelemac
+input files and set the the `commands` accordingly. Be sure to specify the OpenTelemac version compatible with
 your input files.
 
 Since this example is a 2D simulation, we use the `telemac2d.py` command-line script, which is specifically designed for TELEMAC-2D models. It acts as the solver's frontend, reading the `.cas` steering file and managing the simulation execution.
@@ -91,20 +91,22 @@ Timeline:
                 ├> 177.258 s       telemac2d.py t2d_malpasset-fine.cas --ncsize=32
                 └> 10.063 s        converter.py srf2vtk r2d_malpasset-fine.slf t2d_malpasset.vtk
         Finalizing                at 29/04, 12:14:51      3.982 s
-        Success                   at 29/04, 12:14:55      
+        Success                   at 29/04, 12:14:55
 
 Data:
         Size of zipped output:    104.14 MB
         Size of unzipped output:  378.01 MB
         Number of output files:   28
 
-Estimated Task Compute Cost = 0.011 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.021 US$
+Total estimated cost (US$): 0.021 US$
+	Estimated computation cost (US$): 0.011 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation,
 the core computation time of this simulation was approximately 187.5 seconds (3 minutes and 8 seconds).
 
 ```{banner_small}

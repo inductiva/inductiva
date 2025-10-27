@@ -1,7 +1,7 @@
 # Run an UnSWAN Simulation
-This tutorial will guide you through running simulations with UnSWAN, the unstructured-grid version of 
-the SWAN model, using the Inductiva API. Unlike traditional structured-grid versions, UnSWAN employs 
-an unstructured mesh, offering greater flexibility for modeling wave dynamics in complex coastal 
+This tutorial will guide you through running simulations with UnSWAN, the unstructured-grid version of
+the SWAN model, using the Inductiva API. Unlike traditional structured-grid versions, UnSWAN employs
+an unstructured mesh, offering greater flexibility for modeling wave dynamics in complex coastal
 areas, tidal inlets, and regions with varying resolutions.
 
 We will cover the `Haringvliet field case` from the [official SWAN documentation](https://swanmodel.sourceforge.io/download/download.htm).
@@ -42,11 +42,11 @@ task.download_outputs()
 task.print_summary()
 ```
 
-In this basic example, we're using a cloud machine (`c2d-highcpu-4`) equipped with 4 virtual CPUs. 
-For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
+In this basic example, we're using a cloud machine (`c2d-highcpu-4`) equipped with 4 virtual CPUs.
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select
 a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other UnSWAN simulations, replace `input_dir` with the
@@ -64,20 +64,22 @@ Timeline:
 	In Progress               at 17/09, 14:37:48      28.266 s
 		└> 28.093 s        unswanrun -input f32har01.swn -omp 4
 	Finalizing                at 17/09, 14:38:16      0.504 s
-	Success                   at 17/09, 14:38:17      
+	Success                   at 17/09, 14:38:17
 
 Data:
 	Size of zipped output:    345.55 KB
 	Size of unzipped output:  536.86 KB
 	Number of output files:   10
 
-Estimated Task Compute Cost = 0.00024 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.01024 US$
+Total estimated cost (US$): 0.01024 US$
+	Estimated computation cost (US$): 0.00024 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation,
 the core computation time of this simulation was 28.3 seconds.
 
 ```{banner_small}

@@ -25,7 +25,7 @@ input_dir = inductiva.utils.download_from_url(
 dualsphysics = inductiva.simulators.DualSPHysics( \
     version="5.2.1")
 
-# Run simulation 
+# Run simulation
 task = dualsphysics.run( \
     input_dir=input_dir,
     shell_script="run.sh",
@@ -69,16 +69,18 @@ Timeline:
 	In Progress               at 17/06, 10:39:53      227.585 s
 		└> 227.43 s        bash run.sh
 	Finalizing                at 17/06, 10:43:41      1.508 s
-	Success                   at 17/06, 10:43:43      
+	Success                   at 17/06, 10:43:43
 
 Data:
 	Size of zipped output:    64.81 MB
 	Size of unzipped output:  117.44 MB
 	Number of output files:   265
 
-Estimated Task Compute Cost = 0.0017 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.0117 US$
+Total estimated cost (US$): 0.0117 US$
+	Estimated computation cost (US$): 0.0017 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
