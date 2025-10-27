@@ -28,26 +28,14 @@ At Inductiva, you pay only for what you use, when you use it. In short:
 - Enterprise: 0.01 US\$ per run
 - Academia: 0.005 US\$ per run
 
-## Inductiva's Platform Fee
-Inductiva's fee comes solely from the percentage applied when purchasing credits.
-1. Users purchase credits whenever they want via Stripe;
-2. We deduct a Platform fee (%) from each top-up, so your available credits will be the top-up amount minus the fee;
-3. The Compute, Storage and Data Transfer costs are subtracted from the credits only while they are being used.
-
-Check out the <a href="https://inductiva.ai/pricing">Pricing page</a> for more information about our price model.
-
-
-## Inductiva's Task Orchestration Fee
-This small fee is applied to each simulation run to ensure fairness across users by aligning infrastructure costs with actual usage. Running hundreds of vCPUs carries higher shared costs than smaller numbers of runs, and this adjustment helps balance usage so everyone pays more in line with the resources they consume.
-
-This per-run orchestration fee applies to tasks run from 1 Dec, 2025, in addition to the computation costs.
+This per-run fee applies only to tasks run from 1 Dec 2025.
 
 
 ## How much can you accomplish with 5\$US
-How much compute time will 5\$ get you at Inductiva? Well, 5\$ can actually get you quite a lot compute time!
+How much compute time will 5 US\$ get you at Inductiva? Well, 5 US\$ can actually get you quite a lot compute time!
 
 💡Consider for example **Inductiva’s top pick machine**, the c2d-highcpu-112.
-This 112-core machine with 224GM of RAM can cost you as little as 0.68\$US per hour in spot mode. So, 5\$US will let you use this machine for more than 6 hours, which is equivalent to about 700 core-hours.
+This 112-core machine with 224GM of RAM can cost you as little as 0.68 US\$ per hour in spot mode. So, 5 US\$ will let you use this machine for more than 6 hours, which is equivalent to about 700 core-hours.
 
 
 ## How do you control your costs
