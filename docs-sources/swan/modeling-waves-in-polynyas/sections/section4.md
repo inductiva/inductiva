@@ -42,8 +42,9 @@ for date in dates_to_run:
     print(f"Processing {filename}")
 
     # Initialize the Simulator
-    swan = inductiva.simulators.SWAN()
-
+    swan = inductiva.simulators.SWAN(\
+    version="41.45")
+    
     # Submit a simulation task
     task = swan.run(input_dir="polynya",
         sim_config_filename=filename,

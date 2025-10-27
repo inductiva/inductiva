@@ -21,7 +21,7 @@ We repeated the **2021 Spring deployment** simulation on the same machine types 
 | Machine Type      | Hyper-threading  | vCPUs  | Physical Cores   | Execution Time | Estimated Cost (USD) |
 |-------------------|------------------|--------|------------------|----------------|----------------------|
 | c2d-highcpu-32    | Enabled          | 32     | 16               | 17h, 54 min    | 2.78                 |
-| c4d-highcpu-32    | Disabled         | 16     | 16               | 23h, 31 min    | 3.65                 |
+| c2d-highcpu-32    | Disabled         | 16     | 16               | 23h, 31 min    | 3.65                 |
 | c2d-highcpu-56    | Enabled          | 56     | 28               | 13h, 14 min    | 3.52                 |
 | c2d-highcpu-56    | Disabled         | 28     | 28               | 12h, 5 min     | 3.21                 |
 | c2d-highcpu-112   | Enabled          | 112    | 56               | 10h, 33 min    | 5.52                 |
