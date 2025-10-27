@@ -34,7 +34,7 @@ task.print_summary()
 
 In this example, we use a `c2d-highcpu-32` machine with 32 virtual CPUs. Its performance is slightly better than a high-end desktop. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
@@ -49,16 +49,18 @@ Timeline:
 	In Progress               at 22/10, 09:16:33      64214.631 s
 		└> 64214.365 s     mpirun -np 32 d_hydro.exe config_d_hydro.xml
 	Finalizing                at 23/10, 03:06:48      214.477 s
-	Success                   at 23/10, 03:10:22      
+	Success                   at 23/10, 03:10:22
 
 Data:
 	Size of zipped output:    5.68 GB
 	Size of unzipped output:  18.34 GB
 	Number of output files:   64
 
-Estimated Task Compute Cost = 2.78 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 2.79 US$
+Total estimated cost (US$): 2.79 US$
+	Estimated computation cost (US$): 2.78 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
@@ -66,7 +68,7 @@ As you can see in the "In Progress" line, the part of the timeline that represen
 
 To run the 2021 Fall deployment, simply update the `input_dir` parameter accordingly.
 
-## Scaling Up Your Simulation  
+## Scaling Up Your Simulation
 Scaling up is simple: either increase the number of vCPUs by choosing a larger `machine_type` (e.g., from `c2d-highcpu-32` to `c2d-highcpu-56`) or switch to a machine from the latest-generation **c4d series**. Both approaches can significantly reduce runtime.
 
 ⚠️ **Important**: If you change the number of vCPUs, be sure to update the `mpirun` command accordingly (e.g., `-np 56`) to match your machine configuration.

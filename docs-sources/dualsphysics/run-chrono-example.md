@@ -9,7 +9,7 @@ The goal of this tutorial is to demonstrate how to run the `09_Turbine` use case
 ## Prerequisites
 
 ### Download the DualSPHysics package
-Download the required files from `DualSPHysics_v5.4.2.zip` [here](https://dual.sphysics.org/downloads/). You will be working within this directory and 
+Download the required files from `DualSPHysics_v5.4.2.zip` [here](https://dual.sphysics.org/downloads/). You will be working within this directory and
 writing the Inductiva Python script there.
 
 ### Update the simulation script of the `09_Turbine` example
@@ -29,7 +29,7 @@ Make the following adjustments:
    ```
 
 These modifications will prepare the script for seamless automated execution.
- 
+
 ## Running Your Simulation
 Here is the code required to run a DualSPHysics simulation using the Inductiva API:
 
@@ -65,7 +65,7 @@ task.print_summary()
 
 This simulation runs in spot mode on a `g2-standard-32` machine, featuring 32 virtual CPUs, 1 NVIDIA L4 GPU, and a 200 GB data disk.
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
@@ -80,21 +80,23 @@ Timeline:
 	In Progress               at 08/05, 16:24:49      64.281 s
 		└> 64.128 s        bash xCaseTurbine_linux64_GPU.sh
 	Finalizing                at 08/05, 16:25:54      16.345 s
-	Success                   at 08/05, 16:26:10      
+	Success                   at 08/05, 16:26:10
 
 Data:
 	Size of zipped output:    3.52 GB
 	Size of unzipped output:  4.92 GB
 	Number of output files:   2033
 
-Estimated Task Compute Cost = 0.018 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.028 US$
+Total estimated cost (US$): 0.028 US$
+	Estimated computation cost (US$): 0.018 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that 
-represents the actual execution of the simulation, the core computation time 
+As you can see in the "In Progress" line, the part of the timeline that
+represents the actual execution of the simulation, the core computation time
 of this simulation was approximately 64.2 seconds.
 
 ## Download the Results to Your Local Machine

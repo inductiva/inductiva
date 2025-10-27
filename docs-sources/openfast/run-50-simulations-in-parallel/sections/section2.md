@@ -1,5 +1,5 @@
 # Run a Single Simulation
-First, we will run a single OpenFAST simulation using the `5MW_OC4Semi_WSt_WavesWN` case. This should be straightforward as all 
+First, we will run a single OpenFAST simulation using the `5MW_OC4Semi_WSt_WavesWN` case. This should be straightforward as all
 the necessary input files are already prepared.
 
 ## Code Overview
@@ -51,7 +51,7 @@ Timeline:
    In Progress               at 20/02, 14:24:56      34.265 s
        └> 34.123 s        openfast 5MW_OC4Semi_WSt_WavesWN/5MW_OC4Semi_WSt_WavesWN.fst
    Finalizing                at 20/02, 14:25:30      1.085 s
-   Success                   at 20/02, 14:25:31     
+   Success                   at 20/02, 14:25:31
 
 
 Data:
@@ -59,14 +59,16 @@ Data:
    Size of unzipped output:  32.71 MB
    Number of output files:   83
 
-Estimated Task Compute Cost = 0.00013 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.01013 US$
+Total estimated cost (US$): 0.01013 US$
+	Estimated computation cost (US$): 0.00013 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 ## Performance and Cost Analysis
-Given that OpenFAST does not benefit from multiple CPU cores, we chose the `c2d-highcpu-2` virtual machine (VM) with 2 virtual CPUs (equivalent to 1 physical core). 
+Given that OpenFAST does not benefit from multiple CPU cores, we chose the `c2d-highcpu-2` virtual machine (VM) with 2 virtual CPUs (equivalent to 1 physical core).
 This is one of the cheapest options on Google Cloud, costing just US$0.0081 per hour in spot mode.
 
 To demonstrate that OpenFAST does not scale with the number of cores, we also ran the same simulation on a number of better machines. For a detailed breakdown, check out our [Benchmarks](../../benchmarks) section.
@@ -78,7 +80,7 @@ Here are the results:
 | c2d-highcpu-4  | 4               |35.0s           |0.00031|
 | c2d-highcpu-8  | 8               |30.4s           |0.00034|
 | c2d-highcpu-16 | 16              |30.9s           |0.00065|
-| c2d-highcpu-32 | 32              |30.2s           |0.0012 | 
+| c2d-highcpu-32 | 32              |30.2s           |0.0012 |
 
 The execution time remains almost the same on all machines, regardless of the number of virtual CPUs.
 

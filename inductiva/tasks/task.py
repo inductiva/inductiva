@@ -330,9 +330,8 @@ class TaskInfo:
             table_str += (f"\tTask orchestration fee (US$): "
                           f"{orchestration_fee_amount_charged_str}\n")
 
-            if not orchestration_fee_charged:
-                warning = get_task_orchestration_fee_warning()
-                table_str += f"\n{warning}\n"
+            warning = get_task_orchestration_fee_warning()
+            table_str += f"\n{warning}\n"
         else:
             table_str += (f"\nEstimated computation cost (US$): "
                           f"{estimated_cost}\n")

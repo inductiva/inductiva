@@ -40,9 +40,9 @@ Set the parameters for each file, as follows:
 
 	M 10 56    ---- defines the nr. of processors for parallel computations (56)
    ```
- 
+
  - `ctrl.txt`
-   	
+
   	```
 	D 10 4
 	D 20 2
@@ -65,7 +65,7 @@ Set the parameters for each file, as follows:
 These settings will limit the simulation to a maximum of 25 seconds, allowing for faster results.
 
 Then, you’ll be ready to send your simulation to the Cloud.
- 
+
 ## Running Your Simulation
 Here is the code required to run a REEF3D simulation using the Inductiva API:
 
@@ -118,19 +118,21 @@ Timeline:
 		├> 1.151 s         /DIVEMesh/bin/DiveMESH
 		└> 715.815 s       /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus /REEF3D/bin/REEF3D
 	Finalizing                at 08/05, 14:46:15      70.855 s
-	Success                   at 08/05, 14:47:25      
+	Success                   at 08/05, 14:47:25
 
 Data:
 	Size of zipped output:    11.69 GB
 	Size of unzipped output:  29.95 GB
 	Number of output files:   142625
 
-Estimated Task Compute Cost = 0.081 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.091 US$
+Total estimated cost (US$): 0.091 US$
+	Estimated computation cost (US$): 0.081 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, the core computation time 
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, the core computation time
 of this simulation was approximately 718.6 seconds (approximately 12 minutes).
 
 It's that simple! 🚀

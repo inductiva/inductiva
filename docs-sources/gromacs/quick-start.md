@@ -69,7 +69,7 @@ machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 > **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-To adapt this script for other GROMACS simulations, replace `input_dir` with the path to your GROMACS input files 
+To adapt this script for other GROMACS simulations, replace `input_dir` with the path to your GROMACS input files
 and set the `commands` accordingly. Be sure to specify the GROMACS version compatible with your input files.
 
 When the simulation is complete, we terminate the machine, download the results
@@ -93,9 +93,11 @@ Data:
     Size of unzipped output:  2.29 MB
     Number of output files:   9
 
-Estimated Task Compute Cost = 0.00020 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.01020 US$
+Total estimated cost (US$): 0.01020 US$
+	Estimated computation cost (US$): 0.00020 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 

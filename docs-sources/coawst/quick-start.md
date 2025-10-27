@@ -1,8 +1,8 @@
 # Run Your First Simulation
-This tutorial will show you how to run COAWST simulations using the Inductiva API. 
+This tutorial will show you how to run COAWST simulations using the Inductiva API.
 
 ## Compilation Requirements
-Unlike many simulators, COAWST must be compiled for each specific configuration. This means that you cannot use a single pre-compiled version across simulations - COAWST must be compiled using the appropriate settings 
+Unlike many simulators, COAWST must be compiled for each specific configuration. This means that you cannot use a single pre-compiled version across simulations - COAWST must be compiled using the appropriate settings
 tailored to your use case.
 
 To simplify this process, you'll need to include a few extra files in your simulation inputs, alongside your standard configuration and data files:
@@ -10,12 +10,12 @@ To simplify this process, you'll need to include a few extra files in your simul
 - The **header files** necessary for compilation
 - Any additional files specific to your setup (e.g., custom switch files)
 
-If you are using files already provided in the COAWST repository, you don’t need to upload them along with your input files. 
-Instead, simply configure your build script to reference the path where Inductiva exposes those files. Alternatively, you can copy the 
+If you are using files already provided in the COAWST repository, you don’t need to upload them along with your input files.
+Instead, simply configure your build script to reference the path where Inductiva exposes those files. Alternatively, you can copy the
 necessary files from the exposed COAWST directory into your input files (more on this in the following section).
 
-For each simulation, the COAWST directory will be available at: 
-📂 `/workdir/output/artifacts/__COAWST`  
+For each simulation, the COAWST directory will be available at:
+📂 `/workdir/output/artifacts/__COAWST`
 
 You are free to access and use any files within this directory.
 
@@ -24,10 +24,10 @@ Additionally, all input files will be located at:
 
 Please keep this in mind when working with absolute paths.
 
-### Initialization Commands  
+### Initialization Commands
 When running COAWST, you can specify `init_commands` - a set of commands executed
 before compilation. These are useful for copying the necessary files from the COAWST
-directory to your working directory.  
+directory to your working directory.
 
 For example:
 ```python
@@ -58,14 +58,14 @@ We will cover the `JOE_TC/DiffGrid` use case from the [COAWST GitHub repository]
 
 This configuration illustrates how to set up and execute models using different grid resolutions within COAWST.
 
-### Prerequisites  
+### Prerequisites
 1. Download the **JOE_TC/DiffGrid** project from [this link](https://github.com/DOI-USGS/COAWST/tree/f1a4250bc64bf0c4f9d521effb47d85837c92e8a/Projects/JOE_TC/DiffGrid)
 2. Download the standard **`build_coawst.sh`** script from [this link](https://github.com/DOI-USGS/COAWST/blob/f1a4250bc64bf0c4f9d521effb47d85837c92e8a)
 3. Download the following files from the [JOE_TC folder](https://github.com/DOI-USGS/COAWST/tree/main/Projects/JOE_TC)
    - `namelist.input`
    - `wrfbdy_d01`
    - `wrfinput_d01`
- 
+
 Create a folder named `JOE_TC_DiffGrid` and place all files inside. Your folder structure should look like this:
 
 ```
@@ -86,43 +86,43 @@ Create a folder named `JOE_TC_DiffGrid` and place all files inside. Your folder 
 
 ---
 
-### Update Your Input Files  
+### Update Your Input Files
 In this section, you will update the input files (`build_coawst.sh` and `.in` files) to ensure they reference the correct paths.
 
 #### Update `build_coawst.sh`
 Make the following changes:
 
-1. **Set the correct application name:**  
+1. **Set the correct application name:**
    - Update `COAWST_APPLICATION` to match your header file (`joe_tc.h`),
-   capitalized and without the file extension:  
+   capitalized and without the file extension:
      ```bash
      export   COAWST_APPLICATION=JOE_TC
-     ```  
+     ```
 
-2. **Set the root directory:**  
-   - Update `MY_ROOT_DIR` to:  
+2. **Set the root directory:**
+   - Update `MY_ROOT_DIR` to:
      ```bash
      export   MY_ROOT_DIR=/workdir/output/artifacts/__COAWST
-     ```  
+     ```
 
-3. **Specify the MPI implementation:**  
-   - Change `which_MPI` to `openmpi`:  
+3. **Specify the MPI implementation:**
+   - Change `which_MPI` to `openmpi`:
      ```bash
      export   which_MPI=openmpi
-     ```  
+     ```
 
-4. **Update header and analytical directories:**  
+4. **Update header and analytical directories:**
    - Ensure `MY_HEADER_DIR` and `MY_ANALYTICAL_DIR` point to the correct location
-   where `joe_tc.h` is stored:  
+   where `joe_tc.h` is stored:
      ```bash
      export   MY_HEADER_DIR=/workdir/output/artifacts
      export   MY_ANALYTICAL_DIR=/workdir/output/artifacts
-     ```  
-These are all the necessary modifications to the script. Once updated, your `build_coawst.sh` will be properly 
+     ```
+These are all the necessary modifications to the script. Once updated, your `build_coawst.sh` will be properly
 configured for the compilation process.
 
 #### Update the `.in` Files
-Next, you need to update your simulation files to reflect the correct paths used in the COAWST repository. 
+Next, you need to update your simulation files to reflect the correct paths used in the COAWST repository.
 Typically, this involves modifying references from `Projects/JOE_TC/DiffGrid/file.txt` to just `file.txt`.
 
 Start by updating the **coupling_joe_tc.in** file:
@@ -147,7 +147,7 @@ Lastly, update the ocean model file `ocean_joe_tc_coarse.in`:
 2. Change `GRDNAME`to `GRDNAME == joe_tc_coarse_grd.nc`
 3. Change `ININAME` to `ININAME == joe_tc_coarse_ocean_init.nc`
 
-### Run Your Simulation  
+### Run Your Simulation
 You're now ready to send your simulation to the Cloud!
 
 Here is the code required to run a COAWST simulation using the Inductiva API:
@@ -184,11 +184,11 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
-In this example, we're using a relatively small cloud machine (`c2-standard-4`), which is equipped with 4 virtual CPUs. 
-COAWST requires a precise core allocation for its simulations, meaning the number of CPUs must exactly match the simulation's configuration. 
+In this example, we're using a relatively small cloud machine (`c2-standard-4`), which is equipped with 4 virtual CPUs.
+COAWST requires a precise core allocation for its simulations, meaning the number of CPUs must exactly match the simulation's configuration.
 In this case, the input files indicate that the simulation should run on **3 cores** (`n_vcpus=3`) - no more, no less.
 
 This configuration is defined in the `coupling_joe_tc.in` file:
@@ -203,7 +203,7 @@ This configuration is defined in the `coupling_joe_tc.in` file:
    NnodesHYD =  0                    ! hydrology model
 ```
 
-Each component of the simulation is assigned a specific number of cores. 
+Each component of the simulation is assigned a specific number of cores.
 While we can increase this number later, we'll keep it as is for now.
 
 Once the simulation is complete, we terminate the machine, download the results
@@ -225,44 +225,46 @@ Timeline:
 		├> 1.234 s         rm -r __COAWST
     └> 1.065 s         clean_all_sim_links
 	Finalizing                at 28/02, 05:43:05      132.651 s
-	Success                   at 28/02, 05:45:18      
+	Success                   at 28/02, 05:45:18
 
 Data:
 	Size of zipped output:    4.45 GB
 	Size of unzipped output:  4.79 GB
 	Number of output files:   43
 
-Estimated Task Compute Cost = 0.71 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.72 US$
+Total estimated cost (US$): 0.72 US$
+	Estimated computation cost (US$): 0.71 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-The simulation details might seem complex initially, but let's focus on the `In Progress` stage, as this is the part specific to your simulation. 
+The simulation details might seem complex initially, but let's focus on the `In Progress` stage, as this is the part specific to your simulation.
 All other steps are common to every simulation run on Inductiva.
 
 ### Understanding the `In Progress` steps
 The "In Progress" section outlines the commands executed during your simulation, along with their durations. Below is a breakdown of the key steps:
 
-- **`cp -r /opt/COAWST /workdir/output/artifacts/__COAWST`**  
+- **`cp -r /opt/COAWST /workdir/output/artifacts/__COAWST`**
   - Copies the COAWST directory into the input files directory, allowing you to compile and access all files related to COAWST.
 
-- **`create_all_sim_links`**  
+- **`create_all_sim_links`**
   - Creates symbolic links (shortcuts) in the working directory for all COAWST files. This is necessary because some simulations require specific files
-  (e.g., `CAMtr_volume_mixing_ratio`, `LANDUSE.TBL`) to be available 
+  (e.g., `CAMtr_volume_mixing_ratio`, `LANDUSE.TBL`) to be available
   in the working directory. By creating these symbolic links, we avoid the need to send all those files with the input.
   - If a file with the same name already exists, the link is skipped, allowing you to provide your own version. For example, if you include your own
   `LANDUSE.TBL` file in the input directory, it will be used for the simulation instead of the default version from the COAWST folder.
 
-- **`bash build_coawst.sh`**  
-  - Runs your provided script to build COAWST.  
+- **`bash build_coawst.sh`**
+  - Runs your provided script to build COAWST.
   - This script is executed inside `/workdir/output/artifacts`, and COAWST is
-  located at `/workdir/output/artifacts/__COAWST`.  
+  located at `/workdir/output/artifacts/__COAWST`.
 
-- **`coawstM coupling_joe_tc.in`**  
+- **`coawstM coupling_joe_tc.in`**
   - Runs the simulation in parallel.
 
-- **`rm -r __COAWST`**  
+- **`rm -r __COAWST`**
   - Cleans up the simulation directory by removing the COAWST folder, reducing the overall output size.
 
 - **`clean_all_sim_links`**
@@ -273,18 +275,18 @@ These steps ensure that your COAWST simulation runs efficiently and is well-mana
 ### Scale Up Your Simulation
 Based on the execution times, the compilation took
 **1,335 seconds** (around **22 minutes**), while the simulation itself ran for
-**35,278 seconds** (approximately **9 hours and 47 minutes**).  
+**35,278 seconds** (approximately **9 hours and 47 minutes**).
 
 It's important to note that compilation time varies depending on the
 **COAWST configuration** chosen. However, the simulation runtime is
 primarily influenced by the **computational resources allocated**—including the
-number of virtual CPUs.  
+number of virtual CPUs.
 
 In this section, we'll explore strategies to **scale up your simulation**,
 in order to reduce the simulation time.
 
 #### Update Your Input Files
-As mentioned earlier, the number of virtual CPUs used for your simulation must exactly match the configuration specified in the input files. 
+As mentioned earlier, the number of virtual CPUs used for your simulation must exactly match the configuration specified in the input files.
 Therefore, to scale up the simulation, you'll need to modify the following three files:
 
 - `coupling_joe_tc.in`

@@ -1,5 +1,5 @@
 # Run Your First Simulation
-This tutorial will show you how to run OpenFOAM simulations using the Inductiva API. 
+This tutorial will show you how to run OpenFOAM simulations using the Inductiva API.
 
 We will cover the `motorBike` use case from the OpenFOAM Foundation GitHub repository, to help you get started with simulations.
 
@@ -16,7 +16,7 @@ Before running the simulation, you’ll need to download the required input file
 Once downloaded, you’ll be ready to submit your simulation to the Cloud.
 
 ## Running an OpenFOAM Simulation
-This section guides you through launching a simulation using the Inductiva API. You’ll configure a cloud machine, 
+This section guides you through launching a simulation using the Inductiva API. You’ll configure a cloud machine,
 run the task and monitor its performance.
 
 ### Simulation Script
@@ -55,15 +55,15 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 We run the simulation using the `run` method, specifying the `shell_script` that handles the execution process (in this case, `./Allrun`).
 
 ### Understanding Resource Configuration
-In this basic example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 8 physical cores and 16 virtual CPUs. 
+In this basic example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 8 physical cores and 16 virtual CPUs.
 
-For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select
 a machine with more virtual CPUs and increased memory capacity.
 
 > 👉 Explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
@@ -86,20 +86,22 @@ Timeline:
 	In Progress               at 21/07, 14:16:29      130.341 s
 		└> 130.186 s       bash ./Allrun
 	Finalizing                at 21/07, 14:18:39      1.751 s
-	Success                   at 21/07, 14:18:41      
+	Success                   at 21/07, 14:18:41
 
 Data:
 	Size of zipped output:    251.85 MB
 	Size of unzipped output:  344.54 MB
 	Number of output files:   464
 
-Estimated Task Compute Cost = 0.0031 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.0131 US$
+Total estimated cost (US$): 0.0131 US$
+	Estimated computation cost (US$): 0.0031 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation,
 the core computation time of this simulation was approximately 2 minutes and 10 seconds (130.3 seconds).
 
 You can view more details about your simulation task in the Inductiva Console [Inductiva Console](https://console.inductiva.ai/tasks), including the task timeline, logs, output storage, and system metrics.
@@ -107,7 +109,7 @@ You can view more details about your simulation task in the Inductiva Console [I
 <p align="center"><img src="./_static/quick-start/console_details.png" alt="Task details panel in the Inductiva Console, showing runtime information, machine configuration, and cost estimate." width="700"></p>
 
 ### Monitoring System Metrics
-Since our machine has 8 physical cores but the simulation uses only 6, it’s expected that the system isn’t fully utilized. 
+Since our machine has 8 physical cores but the simulation uses only 6, it’s expected that the system isn’t fully utilized.
 This is confirmed by checking the **System Metrics** tab in the Console after the simulation completes, where CPU utilization is around 70%, indicating suboptimal usage.
 
 <div align="center">
@@ -141,7 +143,7 @@ hierarchicalCoeffs
 }
 ```
 
-This change configures the simulation to use **8 subdomains**, matching the number of **physical cores** on the `c2d-highcpu-16` machine. 
+This change configures the simulation to use **8 subdomains**, matching the number of **physical cores** on the `c2d-highcpu-16` machine.
 
 Now rerun the simulation using the same script. This time, System Metrics should show near-100% CPU utilization, indicating full use of the machine’s resources:
 
@@ -203,7 +205,7 @@ Here’s a comparison of the different subdomain counts and machine sizes:
 | c2d-highcpu-16     | 8           | 1 min, 56s       | 0.0030      |
 | c2d-highcpu-32     | 16          | 1 min, 8s        | 0.0037      |
 
-Compared to 6 subdomains on 8 cores, running 16 subdomains on 16 physical cores **nearly halved the simulation runtime** — 
+Compared to 6 subdomains on 8 cores, running 16 subdomains on 16 physical cores **nearly halved the simulation runtime** —
 reducing it from 2 minutes 10 seconds to just 1 minute 8 seconds — with only a 19% increase in estimated cost.
 
 ```{banner_small}

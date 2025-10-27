@@ -102,4 +102,5 @@ def get_task_orchestration_fee_warning():
     return (
         f"Note: A per-run orchestration fee ({task_orchestration_fee}) "
         f"applies to tasks{active_since_msg}, in addition to the computation "
-        "costs.")
+        "costs.\nLearn more about costs at: https://inductiva.ai/guides"
+        "/how-it-works/basics/how-much-does-it-cost")

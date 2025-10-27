@@ -1,5 +1,5 @@
 # Test Your Inductiva Setup
-Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. 
+Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up.
 To confirm everything is working as expected, simply run a quick Octopus simulation — it only takes a minute!
 
 ## Step 1: Copy and Run the Code
@@ -54,7 +54,7 @@ python example.py
 All the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. The Octopus simulation will then be sent to a cloud machine for execution.
 
 ## Step 2: Verify the Task Status
-After the simulation completes, a task summary will be displayed in your terminal, as shown below. 
+After the simulation completes, a task summary will be displayed in your terminal, as shown below.
 
 ```
 Task status: Success
@@ -66,22 +66,24 @@ Timeline:
 	In Progress               at 14/07, 15:00:27      20.262 s
 		└> 20.096 s        octopus
 	Finalizing                at 14/07, 15:00:48      0.55 s
-	Success                   at 14/07, 15:00:48      
+	Success                   at 14/07, 15:00:48
 
 Data:
 	Size of zipped output:    13.57 MB
 	Size of unzipped output:  21.64 MB
 	Number of output files:   32
 
-Estimated Task Compute Cost = 0.00019 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.01019 US$
+Total estimated cost (US$): 0.01019 US$
+	Estimated computation cost (US$): 0.00019 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 If the task status shows **Success**, congratulations! You've successfully run an Octopus simulation.
 
-This simple example tested your installation on a small machine with just 4 virtual CPUs. Inductiva offers far more powerful 
+This simple example tested your installation on a small machine with just 4 virtual CPUs. Inductiva offers far more powerful
 options to supercharge your simulations.
 
 ```{banner_small}

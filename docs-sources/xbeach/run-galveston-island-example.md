@@ -1,9 +1,9 @@
 # Run the Galveston Island Beach and Dune Simulation
-This tutorial walks you through running a high-fidelity XBeach simulation using the Inductiva API, based on a real-world dataset 
+This tutorial walks you through running a high-fidelity XBeach simulation using the Inductiva API, based on a real-world dataset
 that requires significant computational resources.
 
-> 📺 **Prefer video?**  
-> This guide is also available as a [webinar replay](webinars/xbeach-video-tutorial) where we walk through running **XBeach on Inductiva** step by step.  
+> 📺 **Prefer video?**
+> This guide is also available as a [webinar replay](webinars/xbeach-video-tutorial) where we walk through running **XBeach on Inductiva** step by step.
 > [Watch it to see the process in action!](webinars/xbeach-video-tutorial)
 
 
@@ -16,7 +16,7 @@ The goal is to demonstrate how to run the `Galveston Island` use case from the [
 3. Save the downloaded files in a local folder named `Beach_Nourish_Only`, maintaining this directory structure:
 
 ```
-	ls -las Beach_Nourish_Only 
+	ls -las Beach_Nourish_Only
 	total 130976
     0 drwxr-xr-x   12 paulobarbosa  staff       384 Nov  6 10:15 .
     0 drwx------@ 124 paulobarbosa  staff      3968 Nov  6 10:14 ..
@@ -56,7 +56,7 @@ cloud_machine = inductiva.resources.MachineGroup(
 xbeach = inductiva.simulators.XBeach( \
     version="1.24")
 
-# Run simulation 
+# Run simulation
 task = xbeach.run(
     input_dir="Beach_Nourish_Only",
     on=cloud_machine)
@@ -70,7 +70,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
@@ -85,20 +85,22 @@ Timeline:
 	In Progress               at 29/06, 18:20:06      4598.671 s
 		└> 4598.451 s      /opt/openmpi/4.1.6/bin/mpirun --use-hwthread-cpus xbeach params.txt
 	Finalizing                at 29/06, 19:36:45      6.671 s
-	Success                   at 29/06, 19:36:52      
+	Success                   at 29/06, 19:36:52
 
 Data:
 	Size of zipped output:    398.16 MB
 	Size of unzipped output:  668.30 MB
 	Number of output files:   29
 
-Estimated Task Compute Cost = 0.40 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.41 US$
+Total estimated cost (US$): 0.41 US$
+	Estimated computation cost (US$): 0.40 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation, 
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of the simulation,
 the core computation time of this simulation was approximately 1 hour and 17 minutes.
 
 ## Upgrading to Powerful Machines

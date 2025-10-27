@@ -85,11 +85,11 @@ task.download_outputs()
 task.print_summary()
 ```
 
-In this basic example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs. 
-For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select 
+In this basic example, we're using a cloud machine (`c2d-highcpu-16`) equipped with 16 virtual CPUs.
+For larger or more compute-intensive simulations, consider adjusting the `machine_type` parameter to select
 a machine with more virtual CPUs and increased memory capacity. You can explore the full range of available machines [here](https://console.inductiva.ai/machine-groups/instance-types).
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 To adapt this script for other Delft3D simulations, replace `input_dir` with the
@@ -107,20 +107,22 @@ Timeline:
 	In Progress               at 03/07, 11:46:19      85.204 s
 		└> 85.022 s        bash run_sim.sh
 	Finalizing                at 03/07, 11:47:44      0.504 s
-	Success                   at 03/07, 11:47:45      
+	Success                   at 03/07, 11:47:45
 
 Data:
 	Size of zipped output:    5.52 MB
 	Size of unzipped output:  18.39 MB
 	Number of output files:   76
 
-Estimated Task Compute Cost = 0.0023 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.0123 US$
+Total estimated cost (US$): 0.0123 US$
+	Estimated computation cost (US$): 0.0023 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
-As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of 
+As you can see in the "In Progress" line, the part of the timeline that represents the actual execution of
 the simulation, the core computation time of this simulation was approximately 85.2 seconds.
 
 And that’s it! You’re now ready to run coupled FLOW-WAVE simulations using Delft3D on the cloud with Inductiva!

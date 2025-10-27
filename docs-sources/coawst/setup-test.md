@@ -77,16 +77,18 @@ Timeline:
 		├> 1.072 s         rm -r __COAWST
 		└> 1.075 s         clean_all_sim_links
 	Finalizing                at 17/06, 10:36:06      0.89 s
-	Success                   at 17/06, 10:36:07      
+	Success                   at 17/06, 10:36:07
 
 Data:
 	Size of zipped output:    12.23 MB
 	Size of unzipped output:  133.15 MB
 	Number of output files:   8
 
-Estimated Task Compute Cost = 0.0023 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.0123 US$
+Total estimated cost (US$): 0.0123 US$
+	Estimated computation cost (US$): 0.0023 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 

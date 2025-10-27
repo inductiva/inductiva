@@ -71,16 +71,18 @@ Timeline:
 	In Progress               at 17/06, 11:35:21      5.224 s
 		└> 5.072 s         /opt/openmpi/5.0.6/bin/mpirun --np 4 --use-hwthread-cpus cp2k.psmp Ac.inp
 	Finalizing                at 17/06, 11:35:26      0.369 s
-	Success                   at 17/06, 11:35:27      
+	Success                   at 17/06, 11:35:27
 
 Data:
 	Size of zipped output:    7.05 KB
 	Size of unzipped output:  37.39 KB
 	Number of output files:   2
 
-Estimated Task Compute Cost = 0.00012 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.01012 US$
+Total estimated cost (US$): 0.01012 US$
+	Estimated computation cost (US$): 0.00012 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 

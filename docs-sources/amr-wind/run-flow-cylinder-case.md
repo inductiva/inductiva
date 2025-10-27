@@ -8,7 +8,7 @@ To demonstrate Inductiva's scalability, we will run the same simulation on cloud
 <img src="_static/Re100.gif" alt="Demo Animation" width="400"/>  <img src="_static/Re10000.gif" alt="Demo Animation" width="400"/>
 
 ## Case Description
-The flow around a circular cylinder has been extensively studied because it captures fundamental fluid dynamics phenomena. At very low Reynolds numbers (Re < 5), the flow remains steady and symmetric. As Re increases, the flow begins to separate and forms steady recirculation zones. 
+The flow around a circular cylinder has been extensively studied because it captures fundamental fluid dynamics phenomena. At very low Reynolds numbers (Re < 5), the flow remains steady and symmetric. As Re increases, the flow begins to separate and forms steady recirculation zones.
 
 When the Reynolds number surpasses approximately 47, the flow transitions to an unsteady regime. Here, periodic vortex shedding develops, creating the characteristic von Kármán vortex street.
 
@@ -60,7 +60,7 @@ task.download_outputs()
 task.print_summary()
 ```
 
-> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts. 
+> **Note**: Setting `spot=True` enables the use of [spot machines](../how-it-works/machines/spot-machines.md), which are available at substantial discounts.
 > However, your simulation may be interrupted if the cloud provider reclaims the machine.
 
 When the simulation is complete, we terminate the machine, download the results and print a summary of the simulation as shown below.
@@ -75,21 +75,23 @@ Timeline:
 	In Progress               at 17/09, 14:14:35      9560.343 s
 		└> 9560.17 s       /opt/openmpi/4.1.6/bin/mpirun --np 1 --use-hwthread-cpus amr_wind ib_cylinder_Re_300.inp
 	Finalizing                at 17/09, 16:53:55      7.382 s
-	Success                   at 17/09, 16:54:03      
+	Success                   at 17/09, 16:54:03
 
 Data:
 	Size of zipped output:    463.29 MB
 	Size of unzipped output:  1.49 GB
 	Number of output files:   20
 
-Estimated Task Compute Cost = 1.03 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 1.04 US$
+Total estimated cost (US$): 1.04 US$
+	Estimated computation cost (US$): 1.03 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
 As you can see in the "In Progress" line, the part of the timeline that
-represents the actual execution of the simulation, 
+represents the actual execution of the simulation,
 the core computation time of this simulation was approximately 2 hours and 39 minutes (9560 seconds).
 
 ## Upgrading to Powerful Machines
@@ -116,8 +118,8 @@ For more demanding workloads, the benefits of scaling become even more pronounce
 
 With Inductiva's flexible cloud infrastructure, you can choose from a wide range of cutting-edge machines to match your specific need — whether optimizing for cost, runtime, or both.
 
-> To analyze the simulation data programmatically, Python-based tools like **yt** can be used, enabling 
-custom visualizations and data extraction. For step-by-step guidance on creating slice plots and animations, 
+> To analyze the simulation data programmatically, Python-based tools like **yt** can be used, enabling
+custom visualizations and data extraction. For step-by-step guidance on creating slice plots and animations,
 be sure to check out our [post-processing yt tutorial](using-yt).
 
 ```{banner_small}

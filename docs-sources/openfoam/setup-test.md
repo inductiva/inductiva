@@ -1,5 +1,5 @@
 # Test Your Inductiva Setup
-Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up. 
+Before diving into tutorials and benchmarks, let's ensure that your Inductiva Python package is properly set up.
 To confirm everything is working as expected, simply run a quick OpenFOAM simulation — it only takes a minute!
 
 ## Step 1: Copy and Run the Code
@@ -27,7 +27,7 @@ openfoam = inductiva.simulators.OpenFOAM( \
     distribution="esi",
     version="2406")
 
-# Run simulation 
+# Run simulation
 task = openfoam.run( \
     input_dir=input_dir,
     shell_script="./Allrun",
@@ -59,7 +59,7 @@ python example.py
 All the necessary simulation artifacts and configuration files will be automatically downloaded to your computer. The OpenFOAM simulation will then be sent to a cloud machine for execution.
 
 ## Step 2: Verify the Task Status
-After the simulation completes, a task summary will be displayed in your terminal, as shown below. 
+After the simulation completes, a task summary will be displayed in your terminal, as shown below.
 
 ```
 Task status: Success
@@ -71,16 +71,18 @@ Timeline:
 	In Progress               at 21/07, 14:02:51      65.304 s
 		└> 65.134 s        bash ./Allrun
 	Finalizing                at 21/07, 14:03:57      1.85 s
-	Success                   at 21/07, 14:03:59      
+	Success                   at 21/07, 14:03:59
 
 Data:
 	Size of zipped output:    99.56 MB
 	Size of unzipped output:  155.56 MB
 	Number of output files:   223
 
-Estimated Task Compute Cost = 0.00048 US$
-Task Orchestration Fee = 0.01 US$
-Total Estimated Cost = 0.01048 US$
+Total estimated cost (US$): 0.01048 US$
+	Estimated computation cost (US$): 0.00048 US$
+	Task orchestration fee (US$): 0.010 US$
+
+Note: A per-run orchestration fee (0.010 US$) applies to tasks run from 01 Dec 2025, in addition to the computation costs.
 Learn more about costs at: https://inductiva.ai/guides/how-it-works/basics/how-much-does-it-cost
 ```
 
@@ -90,7 +92,7 @@ You can view more details and track the full simulation progress in the [Inducti
 
 <p align="center"><img src="./_static/setup-test/console_timeline.png" alt="Task summary displayed in the Inductiva Console" width="700"></p>
 
-This simple example tested your installation on a small machine with just 4 virtual CPUs. Inductiva offers far more powerful 
+This simple example tested your installation on a small machine with just 4 virtual CPUs. Inductiva offers far more powerful
 options to supercharge your simulations.
 
 ```{banner_small}
