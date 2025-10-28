@@ -92,16 +92,38 @@ That’s it! You have just run benchPEP-h on Inductiva!
 
 The magic of Inductiva lies in its flexibility — you can easily scale your simulations to much larger machines with just a few minor changes to your Python script.
 
-Let’s explore what happens when we use more powerful machines to run the same simulation.
+Let’s explore what happens when we use more powerful machines to run the same simulation. 
 
-| Machine Type     | Execution Time | Estimated Cost (USD) |
-|------------------|----------------|----------------------|
-| c2d-standard-16  | 21 min, 5s     | 0.040               |
-| c2d-standard-32  | 12 min, 23s    | 0.044               |
-| c2d-standard-56  | 8 min, 57s     | 0.055               |
-| c2d-standard-112 | 5 min, 37s     | 0.070               |
 
-As we can see, increasing the number of vCPUs (and RAM) of the machine let's us run the simulation faster, while only slightly increasing the cost. This demonstrates Inductiva’s efficient scaling capabilities, allowing you to balance performance and budget according to your needs. Whether you prioritize speed or cost-effectiveness, Inductiva makes it easy to optimize your simulations seamlessly.
+| Machine Type | Execution Time (mm:ss) | Estimated Cost (USD) | GPU            |
+|--------------|----------------|---------------------|----------------|
+| a3-highgpu-1g | **1:28** | 0.119 | NVIDIA H100 |
+| a2-highgpu-1g | 2:23 | 0.095 | NVIDIA A100 |
+| c4d-highcpu-96 | 4:07 | 0.128 | - |
+| g2-standard-4 | 4:48 | **0.030** | NVIDIA L4 |
+| c2d-standard-112 | 5:12 | 0.061 | - |
+| c4d-highcpu-64 | 5:15 | 0.106 | - |
+| c3d-highcpu-90 | 5:41 | 0.089 | - |
+| c3d-highcpu-60 | 7:23 | 0.076 | - |
+| c2d-standard-56 | 8:18 | 0.047 | - |
+| c2d-standard-32 | 11:52 | 0.038 | - |
+| c2d-standard-16 | 21:14 | 0.034 | - |
+
+Note: Execution times and costs were averaged over 3 independent runs per machine type. CPU machines were launched in GCP zone "europe-west1-b" and GPU machines were launched in GCP zone "us-central1-a". All prices are based on **spot instances** (date: 28 Oct 2025).
+
+![Benchmark plot sorted by execution time](image.png)
+
+
+![Benchmark plot sorted by estimated cost](image-1.png)
+
+![Cost vs Time plot](image-2.png)
+
+As we can see, on the CPU-based machines, increasing the number of vCPUs (and RAM) of the machine let's us run the simulation faster, while only slightly increasing the cost. We also note that this particular molecular dynamics simulation with 12M atoms, can be greatly accelerated by using powerful GPUs, the fastest being the NVIDIA H100. Perhaps even more interestingly, the NVIDIA L4 GPU turns out to be the absolute cheapest way to run this simulation, even compared to the CPU machines, while being the 4th fastest overall.
+
+
+This GROMACS benchmark clearly demonstrates Inductiva’s efficient scaling capabilities, allowing you to balance performance and budget according to your needs. Whether you prioritize speed or cost-effectiveness, Inductiva makes it easy to optimize your simulations seamlessly.
+
+
 
 ```{banner_small}
 :origin: gromacs
