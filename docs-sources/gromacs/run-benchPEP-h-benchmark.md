@@ -109,14 +109,14 @@ Let’s explore what happens when we use more powerful machines to run the same 
 | c2d-standard-32 | 11:52 | 0.038 | - |
 | c2d-standard-16 | 21:14 | 0.034 | - |
 
-Note: Execution times and costs were averaged over 3 independent runs per machine type. CPU machines were launched in GCP zone "europe-west1-b" and GPU machines were launched in GCP zone "us-central1-a". All prices are based on **spot instances** (date: 28 Oct 2025).
+**Notes**: Execution times and costs were averaged over 3 independent runs per machine type. CPU machines were launched in GCP zone "europe-west1-b" and GPU machines were launched in GCP zone "us-central1-a". All prices are based on *spot instances* (date: 28 Oct 2025).
 
-![Benchmark plot sorted by execution time](image.png)
+![Benchmark plot sorted by execution time](benchPEP-h_duration.png)
 
 
-![Benchmark plot sorted by estimated cost](image-1.png)
+![Benchmark plot sorted by estimated cost](benchPEP-h_cost.png)
 
-![Cost vs Time plot](image-2.png)
+![Cost vs Time plot](benchPEP-h_cost_vs_duration.png)
 
 As we can see, on the CPU-based machines, increasing the number of vCPUs (and RAM) of the machine let's us run the simulation faster, while only slightly increasing the cost. We also note that this particular molecular dynamics simulation with 12M atoms, can be greatly accelerated by using powerful GPUs, the fastest being the NVIDIA H100. Perhaps even more interestingly, the NVIDIA L4 GPU turns out to be the absolute cheapest way to run this simulation, even compared to the CPU machines, while being the 4th fastest overall.
 
