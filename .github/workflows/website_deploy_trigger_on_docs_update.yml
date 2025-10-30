@@ -62,7 +62,7 @@ jobs:
           repository: inductiva/docs
           head: inductiva/docs:${{ env.PR_BRANCH }}
           base: development
-          title: "Update Markdown Docs"
+          title: "Update Python Client / CLI Docs"
           body: "Automatically generated PR from docs-sources changes."
 
   send-webhook:
