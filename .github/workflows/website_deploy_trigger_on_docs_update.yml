@@ -53,12 +53,12 @@ jobs:
           git add .
           git commit -m "Update docs-sources from development" || echo "No changes to commit"
 
-          git push https://x-access-token:${{ secrets.HP_TEST_DOCS_TOKEN }}@github.com/inductiva/docs.git $PR_BRANCH
+          git push https://x-access-token:${{ secrets.DOCS_GITHUB_TOKEN }}@github.com/inductiva/docs.git $PR_BRANCH
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.HP_TEST_DOCS_TOKEN }}
+          token: ${{ secrets.DOCS_GITHUB_TOKEN }}
           repository: inductiva/docs
           head: ${{ env.PR_BRANCH }}
           base: development
