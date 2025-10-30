@@ -68,7 +68,7 @@ jobs:
           cd target-repo
           echo "$DOCS_GITHUB_TOKEN" | gh auth login --with-token
           gh pr create \
-            --repo inductiva/docs
+            --repo inductiva/docs \
             --title "Update Python Client / CLI Docs" \
             --body "Automatically generated PR from docs-sources changes." \
             --base development \
