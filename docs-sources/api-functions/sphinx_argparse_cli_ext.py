@@ -167,7 +167,6 @@ class SphinxArgParseCliExt(SphinxArgparseCli):
         parts = SphinxArgParseCliExt.RE_INLINE_CODE.split(text)
         if len(parts) == 1:
             return
-
         new_children = [
             nodes.Text(part) if i % 2 == 0 else nodes.literal(text=part)
             for i, part in enumerate(parts)
