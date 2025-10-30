@@ -124,7 +124,7 @@ This GROMACS benchmark clearly demonstrates Inductiva’s efficient scaling capa
 
 # Running this benchmark with Inductiva
 
-If you are interested in reproducing the results above you can use the following code.
+If you are interested in reproducing the results above you can use the following code. Note that the exact costs might vary, depending on the prices of GCP spot instances at the time of execution.
 
 ```python
 import datetime
