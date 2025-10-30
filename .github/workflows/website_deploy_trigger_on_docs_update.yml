@@ -51,19 +51,28 @@ jobs:
           rsync -av --delete ../_build/markdown/ ./docs/api-functions/
 
           git add .
-          git commit -m "Update docs-sources from development" || echo "No changes to commit"
+          git commit -m "Auto-update: regenerate API Markdown documentation" || echo "No changes to commit"
 
           git push https://x-access-token:${{ secrets.DOCS_GITHUB_TOKEN }}@github.com/inductiva/docs.git $PR_BRANCH
 
+      - name: Ensure GitHub CLI is installed
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y gh
+
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.DOCS_GITHUB_TOKEN }}
-          repository: inductiva/docs
-          head: inductiva/docs:${{ env.PR_BRANCH }}
-          base: development
-          title: "Update Python Client / CLI Docs"
-          body: "Automatically generated PR from docs-sources changes."
+        env:
+          PR_BRANCH: docs-update-${{ github.sha }}
+          DOCS_GITHUB_TOKEN: ${{ secrets.DOCS_GITHUB_TOKEN }}
+        run: |
+          cd target-repo
+          echo "$DOCS_GITHUB_TOKEN" | gh auth login --with-token
+          gh pr create \
+            --repo inductiva/docs
+            --title "Update Python Client / CLI Docs" \
+            --body "Automatically generated PR from docs-sources changes." \
+            --base development \
+            --head $PR_BRANCH
 
   send-webhook:
     runs-on: ubuntu-latest  # The job will run on the latest Ubuntu environment
