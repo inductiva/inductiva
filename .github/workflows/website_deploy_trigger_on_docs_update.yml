@@ -39,11 +39,12 @@ jobs:
           TARGET_REPO: https://github.com/inductiva/docs.git
           PR_BRANCH: docs-update-${{ github.sha }}
         run: |
+          git clone --branch development $TARGET_REPO target-repo
+          cd target-repo
+          
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git clone --branch development $TARGET_REPO target-repo
-          cd target-repo
           git checkout -B $PR_BRANCH
 
           rsync -av --delete ../_build/markdown/ ./docs/api-functions/
@@ -51,7 +52,7 @@ jobs:
           git add .
           git commit -m "Update docs-sources from development" || echo "No changes to commit"
 
-          git push origin $PR_BRANCH
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/inductiva/docs.git $PR_BRANCH
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
