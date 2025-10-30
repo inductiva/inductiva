@@ -60,7 +60,7 @@ jobs:
         with:
           token: ${{ secrets.DOCS_GITHUB_TOKEN }}
           repository: inductiva/docs
-          head: ${{ env.PR_BRANCH }}
+          head: inductiva/docs:${{ env.PR_BRANCH }}
           base: development
           title: "Update Markdown Docs"
           body: "Automatically generated PR from docs-sources changes."
