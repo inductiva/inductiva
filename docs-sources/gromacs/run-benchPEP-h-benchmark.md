@@ -37,7 +37,7 @@ machine_group = inductiva.resources.MachineGroup("c2d-standard-16", spot=True)
 gromacs = inductiva.simulators.GROMACS()
 
 # Run simulation
-task = gromacs.run(input_dir="input_files/",
+task = gromacs.run(input_dir="inputs/",
  commands=commands,
  on=machine_group)
 
@@ -113,7 +113,6 @@ Let’s explore what happens when we use more powerful machines to run the same 
 
 ![Benchmark plot sorted by execution time](benchPEP-h_duration.png)
 
-
 ![Benchmark plot sorted by estimated cost](benchPEP-h_cost.png)
 
 ![Cost vs Time plot](benchPEP-h_cost_vs_duration.png)
@@ -122,6 +121,76 @@ As we can see, on the CPU-based machines, increasing the number of vCPUs (and RA
 
 
 This GROMACS benchmark clearly demonstrates Inductiva’s efficient scaling capabilities, allowing you to balance performance and budget according to your needs. Whether you prioritize speed or cost-effectiveness, Inductiva makes it easy to optimize your simulations seamlessly.
+
+# Running this benchmark with Inductiva
+
+If you are interested in reproducing the results above you can use the following code.
+
+```python
+import datetime
+import itertools
+from inductiva import benchmarks, simulators, resources
+
+NUM_REPEATS = 3
+SPOT = True
+
+
+def get_gpu_runs():
+    simulator = simulators.GROMACS(version="2025.1", device="gpu")
+    commands_gpu = [
+        "gmx mdrun -s benchPEP-h.tpr -gpu_id 0 -pme gpu -bonded gpu -nb gpu -nsteps 1000"
+    ]
+    gpu_zone = "us-central1-a"
+    gpu_machine_types = ["a3-highgpu-1g", "a2-highgpu-1g", "g2-standard-4"]
+
+    for machine_type in gpu_machine_types:
+        yield (machine_type, gpu_zone, simulator, commands_gpu)
+
+
+def get_cpu_runs():
+
+    simulator = simulators.GROMACS(version="2025.1", device="cpu")
+    commands_cpu = [
+        "gmx mdrun -s benchPEP-h.tpr -pme cpu -bonded cpu -nb cpu -nsteps 1000"
+    ]
+    cpu_zone = "europe-west1-b"
+    cpu_machine_types = [
+        "c2d-standard-16",
+        "c2d-standard-32",
+        "c2d-standard-56",
+        "c2d-standard-112",
+        "c3d-highcpu-60",
+        "c3d-highcpu-90",
+        "c4d-highcpu-64",
+        "c4d-highcpu-96",
+    ]
+
+    for machine_type in cpu_machine_types:
+        yield (machine_type, cpu_zone, simulator, commands_cpu)
+
+
+benchmark = benchmarks.Benchmark(name="gromacs_benchPEP-h-dedicated") \
+    .set_default(input_dir="inputs")
+
+max_idle_time = datetime.timedelta(seconds=30)
+
+all_runs = itertools.chain(get_cpu_runs(), get_gpu_runs())
+for machine_type, zone, simulator, commands in all_runs:
+    benchmark.add_run(
+        simulator=simulator,
+        commands=commands,
+        on=resources.MachineGroup(machine_type=machine_type,
+                                  num_machines=NUM_REPEATS,
+                                  max_idle_time=max_idle_time,
+                                  provider="GCP",
+                                  zone=zone,
+                                  spot=SPOT),
+    )
+
+benchmark.run(num_repeats=NUM_REPEATS, wait_for_quotas=True)
+
+benchmark.wait()
+```
 
 
 
