@@ -6,8 +6,9 @@ on:
     paths:
       - 'docs-sources/**'  # Trigger only when files in the 'docs-sources' folder are modified
     branches:
-      - development 
-      - main       
+      - development
+      - main
+  workflow_dispatch:
 
 jobs:
   generate-markdown-pr:
