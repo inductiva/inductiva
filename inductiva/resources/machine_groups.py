@@ -761,9 +761,6 @@ class MachineGroup(BaseMachineGroup):
             for _ in range(self.num_machines)
         ]
 
-        # For backward compatibility, keep _vm_name pointing to the first VM
-        self._vm_name = self._vm_names[0] if self._vm_names else None
-
         client_vm_info = {
             "vm_name": self._vm_names,  # List of VM names
             "zone": self.zone,
