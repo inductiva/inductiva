@@ -719,9 +719,6 @@ class MachineGroup(BaseMachineGroup):
                     "`mg_name` must contain only letters, numbers, and hyphens."
                 )
 
-        if self.byoc and self.num_machines != 1:
-            raise ValueError(
-                "BYOC mode currently only supports `num_machines=1`. ")
 
         if self.byoc and self.auto_resize_disk_max_gb is not None:
             raise ValueError(
@@ -759,10 +756,17 @@ class MachineGroup(BaseMachineGroup):
         if not self.mg_name:
             self.mg_name = self._generate_byoc_mg_name()
 
-        self._vm_name = self._generate_byoc_vm_name(self.mg_name)
+        # Generate VM names for all machines
+        self._vm_names = [
+            self._generate_byoc_vm_name(self.mg_name)
+            for _ in range(self.num_machines)
+        ]
+
+        # For backward compatibility, keep _vm_name pointing to the first VM
+        self._vm_name = self._vm_names[0] if self._vm_names else None
 
         client_vm_info = {
-            "vm_name": self._vm_name,
+            "vm_name": self._vm_names,  # List of VM names
             "zone": self.zone,
             "status": "registered",
             "created_at": datetime.datetime.now()
@@ -785,7 +789,7 @@ class MachineGroup(BaseMachineGroup):
         instance_group_config = inductiva.client.models.RegisterVMGroupRequest(
             name=self.mg_name,
             machine_type=self.machine_type,
-            provider_id="LOCAL",  # Register as LOCAL for backend compatibility
+            provider_id="BYOC_GCP",
             threads_per_core=self.threads_per_core,
             disk_size_gb=self.data_disk_gb,
             max_idle_time=self._timedelta_to_seconds(self.max_idle_time),
@@ -825,16 +829,18 @@ class MachineGroup(BaseMachineGroup):
         logging.info("Starting %s (client-side GCP)...", repr(self))
         start_time = time.time()
 
-        byoc_gcp.create_gcp_vm(self.mg_name,
-                               self._vm_name,
-                               self.zone,
-                               self.machine_type,
-                               api_key,
-                               api_url,
-                               self.spot,
-                               self.max_idle_time,
-                               disk_size=self.data_disk_gb,
-                               verbose=verbose)
+        # Create all VMs
+        for vm_name in self._vm_names:
+            byoc_gcp.create_gcp_vm(self.mg_name,
+                                   vm_name,
+                                   self.zone,
+                                   self.machine_type,
+                                   api_key,
+                                   api_url,
+                                   self.spot,
+                                   self.max_idle_time,
+                                   disk_size=self.data_disk_gb,
+                                   verbose=verbose)
 
         self._started = True
         self._active_machines = self.num_machines
@@ -850,7 +856,9 @@ class MachineGroup(BaseMachineGroup):
         logging.info("Terminating %s (client-side GCP)...", repr(self))
 
         try:
-            byoc_gcp.delete_gcp_vm(self._vm_name, self.zone, verbose)
+            # Delete all VMs
+            for vm_name in self._vm_names:
+                byoc_gcp.delete_gcp_vm(vm_name, self.zone, verbose)
 
             # Also notify backend that machine group is terminated
             try:
