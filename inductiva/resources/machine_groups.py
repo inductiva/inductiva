@@ -719,7 +719,6 @@ class MachineGroup(BaseMachineGroup):
                     "`mg_name` must contain only letters, numbers, and hyphens."
                 )
 
-
         if self.byoc and self.auto_resize_disk_max_gb is not None:
             raise ValueError(
                 "Auto disk resize (`auto_resize_disk_max_gb`) is not supported "
