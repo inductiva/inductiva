@@ -4,19 +4,18 @@ import inductiva
 # Allocate cloud machine on Google Cloud Platform
 cloud_machine = inductiva.resources.MachineGroup( \
     provider="GCP",
-    machine_type="c2d-highcpu-16")
+    machine_type="c3d-highcpu-180")
 
 # Initialize the Simulator
-telemac2d = inductiva.simulators.gprmax( \
-    version="v3.1.7", use_dev=True)
+gprmax = inductiva.simulators.GprMax(version="3.1.7")
 
 #  List of commands to run
 commands = [
-    "python -m gprmax input_file.in",
+    "python -m gprMax input_file.in",
 ]
 
 # Run simulation
-task = telemac2d.run(\
+task = gprmax.run(\
     input_dir="/Path/to/gprmax-input-example",
     commands=commands,
     on=cloud_machine)
