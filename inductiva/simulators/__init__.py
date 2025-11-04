@@ -35,3 +35,4 @@ from .wrf import WRF
 from .fds import FDS
 from .cm1 import CM1
 from .gx import GX
+from .gprmax import GprMax
