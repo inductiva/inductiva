@@ -17,7 +17,7 @@ commands = [
 
 # Run simulation
 task = telemac2d.run(\
-    input_dir="/Path/to/opentelemac-input-example",
+    input_dir="/Path/to/gprmax-input-example",
     commands=commands,
     on=cloud_machine)
 
