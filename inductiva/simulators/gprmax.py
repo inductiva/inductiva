@@ -4,7 +4,7 @@ from typing import Optional, Union
 from inductiva import simulators, types
 
 
-class gprmax(simulators.Simulator):
+class GprMax(simulators.Simulator):
     """Class to invoke a generic gprmax simulation on the API."""
 
     _default_gprmax_device = "cpu"
@@ -17,7 +17,7 @@ class gprmax(simulators.Simulator):
     ):
         super().__init__(version, use_dev, self._default_gprmax_device)
         self.simulator = "arbitrary_commands"
-        self.simulator_name_alias = "gprmax"
+        self.simulator_name_alias = "GprMax"
 
     def run(self,
             input_dir: Optional[str],
