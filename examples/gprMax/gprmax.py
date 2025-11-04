@@ -7,7 +7,7 @@ cloud_machine = inductiva.resources.MachineGroup( \
     machine_type="c2d-highcpu-16")
 
 # Initialize the Simulator
-telemac2d = inductiva.simulators.gprMax( \
+telemac2d = inductiva.simulators.gprmax( \
     version="v3.1.7", use_dev=True)
 
 #  List of commands to run
