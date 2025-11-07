@@ -39,11 +39,11 @@ jobs:
     - name: Check formatting with yapf
       if: ${{ always() }}
       run: # We exclude the auto-generated Python client folder from yapf validation
-        yapf . --diff --recursive --parallel --exclude=inductiva/client 
+        yapf . --diff --recursive --parallel --exclude=inductiva/client --exclude=inductiva/machines_catalogue_client
     - name: Lint with pylint
       if: ${{ always() }}
       run: # We exclude the auto-generated Python client folder from pylint validation
-        find . -type f -not -path "./inductiva/client/*" -name '*.py' | xargs pylint
+        find . -type f -name '*.py' -not -path "./inductiva/client/*" -not -path "./inductiva/machines_catalogue_client/*" | xargs pylint
     - name: Set env variables
       if: ${{ always() }}
       run: |
