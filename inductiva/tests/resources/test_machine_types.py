@@ -1,7 +1,6 @@
 """Tests for machine_types functions"""
 from unittest import mock
 import inductiva
-import json
 from inductiva.machines_catalogue_client.models import MachineType
 
 RESPONSE = [
