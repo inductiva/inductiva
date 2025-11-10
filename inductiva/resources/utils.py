@@ -1,11 +1,10 @@
 """Functions to manage or retrieve user resources."""
 from dataclasses import dataclass
-import json
 from typing import List, Optional, Tuple, Union
 
 import inductiva
 import inductiva.client
-from inductiva.client import ApiException
+import inductiva.machines_catalogue_client
 from inductiva.utils import format_utils
 
 
@@ -32,6 +31,7 @@ class MachineTypeInfo:
     zone: str
     num_gpus: Optional[int]
     gpu_name: Optional[str]
+    gpu_id: Optional[str]
 
     def __getitem__(self, item):
         return getattr(self, item)
@@ -45,6 +45,9 @@ def get_available_machine_types(
     memory_range: Optional[Tuple[int, int]] = None,
     price_range: Optional[Tuple[float, float]] = None,
     spot: Optional[bool] = None,
+    gpus_range: Optional[Tuple[int, int]] = None,
+    gpu_names: Optional[List[str]] = None,
+    zones: Optional[List[str]] = None,
 ) -> List[MachineTypeInfo]:
     """Get all available machine types from a specified provider,
     allowing for multiple filtering parameters.
@@ -71,34 +74,39 @@ def get_available_machine_types(
         spot (Optional[bool]):
             If set to True, filters for spot instances; if False, filters for
             on-demand instances.
+        gpus_range (Optional[Tuple[int, int]]):
+            A tuple defining the range of GPUs to filter the machine types.
+        gpu_names (Optional[List[str]]):
+            A list of GPU model names to filter the machine types
+            (e.g., "NVIDIA H100", "NVIDIA_A100").
+        zones (Optional[List[str]]):
+            A list of availability zones to filter the machine types (e.g., 
+            "us-central1-a", "europe-west1-b").
 
     Returns:
         List[MachineTypeInfo]:
             A list of available machine types that match the specified criteria.
     """
+    client = inductiva.api.get_machines_catalogue_client()
+    api = inductiva.machines_catalogue_client.PricingApi(client)
 
     provider = ProviderType(provider)
-    api_client = inductiva.client.ComputeApi(inductiva.api.get_client())
-
     if spot is not None:
         spot = str(spot).lower()
 
-    try:
-        resp = api_client.list_available_machine_types_without_preload_content(
-            provider_id=provider.value,
-            machine_families=machine_families,
-            machine_configs=machine_configs,
-            vcpus_range=vcpus_range,
-            memory_range=memory_range,
-            price_range=price_range,
-            spot=spot)
-
-        response_body = json.loads(resp.data.decode("utf-8"))
-        return [
-            MachineTypeInfo(**machine_type) for machine_type in response_body
-        ]
-    except ApiException as e:
-        raise e
+    machine_types = api.list_available_machine_types_pricing_machine_types_get(
+        provider_id=provider,
+        machine_families=machine_families,
+        machine_configs=machine_configs,
+        vcpus_range=vcpus_range,
+        memory_range=memory_range,
+        price_range=price_range,
+        spot=spot,
+        gpus_range=gpus_range,
+        gpu_names=gpu_names,
+        zones=zones,
+    )
+    return [MachineTypeInfo(**mt.to_dict()) for mt in machine_types]
 
 
 def estimate_machine_cost(machine_type: str,
