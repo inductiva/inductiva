@@ -62,11 +62,10 @@ def get_client(api_config: Optional[Configuration] = None) -> ApiClient:
 
 def get_machines_catalogue_client(
 ) -> inductiva.machines_catalogue_client.ApiClient:
-    env_key = "INDUCTIVA_MACHINES_CATALOGUE_API_URL"
-    default_val = "https://inductiva-machines-catalogue-api-icaqwyrk3q-ew.a.run.app"
-    url = os.environ.get(env_key, default_val)
+    url = inductiva.machines_catalogue_api_url
     config = inductiva.machines_catalogue_client.Configuration(url)
-    return inductiva.machines_catalogue_client.ApiClient(config)
+    client = inductiva.machines_catalogue_client.ApiClient(config)
+    return client
 
 
 def submit_request(task_api_instance: inductiva.client.TasksApi,
