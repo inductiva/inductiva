@@ -25,6 +25,7 @@ from inductiva.client.models import (TaskRequest, TaskStatus, TaskSubmittedInfo,
                                      CompressionMethod)
 from inductiva import constants, storage
 from inductiva.utils import format_utils, files
+import inductiva.machines_catalogue_client
 
 try:
     import truststore
@@ -57,6 +58,15 @@ def get_client(api_config: Optional[Configuration] = None) -> ApiClient:
         client.rest_client.pool_manager.connection_pool_kw["ssl_context"] = ctx
 
     return client
+
+
+def get_machines_catalogue_client(
+) -> inductiva.machines_catalogue_client.ApiClient:
+    env_key = "INDUCTIVA_MACHINES_CATALOGUE_API_URL"
+    default_val = "https://inductiva-machines-catalogue-api-icaqwyrk3q-ew.a.run.app"
+    url = os.environ.get(env_key, default_val)
+    config = inductiva.machines_catalogue_client.Configuration(url)
+    return inductiva.machines_catalogue_client.ApiClient(config)
 
 
 def submit_request(task_api_instance: inductiva.client.TasksApi,
