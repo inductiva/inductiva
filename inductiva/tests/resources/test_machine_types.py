@@ -31,8 +31,7 @@ RESPONSE = [{
 
 
 def test_get_available_machine_types():
-    mock_compute_api_path =\
-        "inductiva.client.ComputeApi"
+    mock_compute_api_path = "inductiva.machines_catalogue_client.PricingApi"
     with mock.patch(mock_compute_api_path) as mock_compute_api:
         mock_response = mock.MagicMock()
         mock_response.data = mock.MagicMock()
