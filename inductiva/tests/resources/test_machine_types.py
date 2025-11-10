@@ -39,7 +39,7 @@ def test_get_available_machine_types():
         mock_list_available_machine_types = mock.MagicMock(
             return_value=mock_response)
         (mock_compute_api.return_value.
-         list_available_machine_types_without_preload_content
+         list_available_machine_types_pricing_machine_types_get
         ) = mock_list_available_machine_types
         result = inductiva.resources.get_available_machine_types(provider="GCP")
         assert result[0]["machine_type"] == "c2-standard-4"
