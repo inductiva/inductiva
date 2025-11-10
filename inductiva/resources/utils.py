@@ -74,6 +74,14 @@ def get_available_machine_types(
         spot (Optional[bool]):
             If set to True, filters for spot instances; if False, filters for
             on-demand instances.
+        gpus_range (Optional[Tuple[int, int]]):
+            A tuple defining the range of GPUs to filter the machine types.
+        gpu_names (Optional[List[str]]):
+            A list of GPU model names to filter the machine types
+            (e.g., "NVIDIA H100", "NVIDIA_A100").
+        zones (Optional[List[str]]):
+            A list of availability zones to filter the machine types (e.g., 
+            "us-central1-a", "europe-west1-b").
 
     Returns:
         List[MachineTypeInfo]:
