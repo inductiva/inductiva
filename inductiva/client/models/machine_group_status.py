@@ -26,6 +26,7 @@ class MachineGroupStatus(str, Enum):
     """
     REGISTERED = 'registered'
     STARTING = 'starting'
+    START_FAILED = 'start_failed'
     STARTED = 'started'
     SHUTTING_DOWN = 'shutting_down'
     SHUTDOWN_FAILED = 'shutdown_failed'
