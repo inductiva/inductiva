@@ -6,11 +6,8 @@ from typing import Literal, Optional, Sequence, Union
 from inductiva import simulators, types
 
 
-@simulators.simulator.mpi_enabled
 class Blender(simulators.Simulator):
-    """Run Blender renders on the Inductiva platform."""
-
-    DEFAULT_VERSION = "4.5.4"
+    """Class to invoke any blender command on the API."""
 
     def __init__(
         self,
