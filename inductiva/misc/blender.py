@@ -1,7 +1,7 @@
 """Blender helper that follows the standard simulator pattern."""
 from __future__ import annotations
 
-from typing import Literal, Optional, Sequence, Union
+from typing import Optional, Sequence, Union
 
 from inductiva import simulators, types
 
