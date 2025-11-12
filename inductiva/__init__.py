@@ -30,7 +30,16 @@ from .templating import TemplateManager
 
 logs.setup(getattr(logging, os.environ.get("INDUCTIVA_LOG_LEVEL", "INFO")))
 
-api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
+api_url = os.environ.get(
+    "INDUCTIVA_API_URL",
+    "https://api.inductiva.ai",
+)
+
+machines_catalogue_api_url = os.environ.get(
+    "INDUCTIVA_MACHINES_CATALOGUE_API_URL",
+    "https://inductiva-machines-catalogue-api-icaqwyrk3q-ew.a.run.app",
+)
+
 _output_dir = contextvars.ContextVar("INDUCTIVA_OUTPUT_DIR",
                                      default=os.environ.get(
                                          "INDUCTIVA_OUTPUT_DIR",
@@ -44,7 +53,7 @@ _api_key = contextvars.ContextVar("INDUCTIVA_API_KEY",
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.18.8"
+__version__ = "0.18.9"
 
 
 def set_output_dir(new_output_dir):

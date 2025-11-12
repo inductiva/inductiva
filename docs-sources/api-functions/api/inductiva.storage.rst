@@ -6,5 +6,7 @@ storage
    :show-inheritance:
    :undoc-members:
 
-.. banner_small::
-   :origin: pyclient-storage
+.. raw:: text
+
+   ::docsbannersmall
+   ::

@@ -6,5 +6,7 @@ projects
    :show-inheritance:
    :undoc-members:
 
-.. banner_small::
-   :origin: pyclient-projects
+.. raw:: text
+
+   ::docsbannersmall
+   ::

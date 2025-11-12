@@ -25,6 +25,7 @@ from inductiva.client.models import (TaskRequest, TaskStatus, TaskSubmittedInfo,
                                      CompressionMethod)
 from inductiva import constants, storage
 from inductiva.utils import format_utils, files
+import inductiva.machines_catalogue_client
 
 try:
     import truststore
@@ -56,6 +57,14 @@ def get_client(api_config: Optional[Configuration] = None) -> ApiClient:
         ctx = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
         client.rest_client.pool_manager.connection_pool_kw["ssl_context"] = ctx
 
+    return client
+
+
+def get_machines_catalogue_client(
+) -> inductiva.machines_catalogue_client.ApiClient:
+    url = inductiva.machines_catalogue_api_url
+    config = inductiva.machines_catalogue_client.Configuration(url)
+    client = inductiva.machines_catalogue_client.ApiClient(config)
     return client
 
 

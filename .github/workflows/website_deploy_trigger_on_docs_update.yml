@@ -6,21 +6,70 @@ on:
     paths:
       - 'docs-sources/**'  # Trigger only when files in the 'docs-sources' folder are modified
     branches:
-      - development 
-      - main       
+      - development
+      - main
+  workflow_dispatch:
 
 jobs:
-  trigger-build:
+  generate-markdown-pr:
     runs-on: ubuntu-latest  # The job will run on the latest Ubuntu environment
 
     steps:
-      - name: Send webhook to Cloud Build
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # important to have full history
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+ 
+      - name: Install dependencies
         run: |
-          if [[ "${{ github.ref_name }}" == "main" ]]; then
-            WEBHOOK_URL="${{ secrets.GCP_UPDATE_WEBSITE_DOCS_WEBHOOK_URL }}"
-          else
-            WEBHOOK_URL="${{ secrets.GCP_UPDATE_WEBSITE_DOCS_WEBHOOK_URL_DEV }}"
-          fi
+            python -m pip install --upgrade pip
+            pip install inductiva
+            pip install -r docs-sources/requirements.txt
 
-          curl -X POST -H "Content-Type: application/json" "$WEBHOOK_URL" -d '{}'
-        shell: bash
+      - name: Build Markdown docs
+        run: |
+          sphinx-build -b markdown docs-sources/api-functions/ _build/markdown
+        
+      - name: Push Markdown to target repo
+        env:
+          TARGET_REPO: https://github.com/inductiva/docs.git
+          PR_BRANCH: docs-update-${{ github.sha }}
+        run: |
+          git clone --branch development $TARGET_REPO target-repo
+          cd target-repo
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git checkout -B $PR_BRANCH
+
+          rsync -av --delete ../_build/markdown/ ./docs/api-functions/
+
+          git add .
+          git commit -m "Auto-update: regenerate API Markdown documentation" || echo "No changes to commit"
+
+          git push https://x-access-token:${{ secrets.DOCS_GITHUB_TOKEN }}@github.com/inductiva/docs.git $PR_BRANCH
+
+      - name: Ensure GitHub CLI is installed
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y gh
+
+      - name: Create Pull Request
+        env:
+          PR_BRANCH: docs-update-${{ github.sha }}
+          DOCS_GITHUB_TOKEN: ${{ secrets.DOCS_GITHUB_TOKEN }}
+        run: |
+          cd target-repo
+          echo "$DOCS_GITHUB_TOKEN" | gh auth login --with-token
+          gh pr create \
+            --repo inductiva/docs \
+            --title "Update Python Client / CLI Docs" \
+            --body "Automatically generated PR from docs-sources changes." \
+            --base development \
+            --head $PR_BRANCH
