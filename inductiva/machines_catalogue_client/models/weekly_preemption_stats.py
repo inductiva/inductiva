@@ -28,8 +28,6 @@ class WeeklyPreemptionStats(BaseModel):
     """
 
   # noqa: E501
-    machine_series: StrictStr
-    zone: StrictStr
     machine_total: StrictInt
     machine_preempted: StrictInt
     vcpu_total: StrictInt
@@ -40,9 +38,9 @@ class WeeklyPreemptionStats(BaseModel):
     machine_preempted_rate: Optional[Union[StrictFloat, StrictInt]]
     vcpu_preempted_rate: Optional[Union[StrictFloat, StrictInt]]
     __properties: ClassVar[List[str]] = [
-        "machine_series", "zone", "machine_total", "machine_preempted",
-        "vcpu_total", "vcpu_preempted", "weekday", "weekday_name", "hour",
-        "machine_preempted_rate", "vcpu_preempted_rate"
+        "machine_total", "machine_preempted", "vcpu_total", "vcpu_preempted",
+        "weekday", "weekday_name", "hour", "machine_preempted_rate",
+        "vcpu_preempted_rate"
     ]
 
     model_config = ConfigDict(
@@ -104,8 +102,6 @@ class WeeklyPreemptionStats(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "machine_series": obj.get("machine_series"),
-            "zone": obj.get("zone"),
             "machine_total": obj.get("machine_total"),
             "machine_preempted": obj.get("machine_preempted"),
             "vcpu_total": obj.get("vcpu_total"),

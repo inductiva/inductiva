@@ -29,16 +29,16 @@ class PreemptionStats(BaseModel):
     """
 
   # noqa: E501
-    machine_series: StrictStr
-    zone: StrictStr
     machine_total: StrictInt
     machine_preempted: StrictInt
     vcpu_total: StrictInt
     vcpu_preempted: StrictInt
     hour_timestamp: datetime
+    machine_series: StrictStr
+    zone: StrictStr
     __properties: ClassVar[List[str]] = [
-        "machine_series", "zone", "machine_total", "machine_preempted",
-        "vcpu_total", "vcpu_preempted", "hour_timestamp"
+        "machine_total", "machine_preempted", "vcpu_total", "vcpu_preempted",
+        "hour_timestamp", "machine_series", "zone"
     ]
 
     model_config = ConfigDict(
@@ -90,12 +90,12 @@ class PreemptionStats(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "machine_series": obj.get("machine_series"),
-            "zone": obj.get("zone"),
             "machine_total": obj.get("machine_total"),
             "machine_preempted": obj.get("machine_preempted"),
             "vcpu_total": obj.get("vcpu_total"),
             "vcpu_preempted": obj.get("vcpu_preempted"),
-            "hour_timestamp": obj.get("hour_timestamp")
+            "hour_timestamp": obj.get("hour_timestamp"),
+            "machine_series": obj.get("machine_series"),
+            "zone": obj.get("zone")
         })
         return _obj
