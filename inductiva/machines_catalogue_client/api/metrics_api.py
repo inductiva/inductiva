@@ -17,8 +17,8 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
 from datetime import datetime
-from typing import Any, List, Optional
-from inductiva.machines_catalogue_client.models.body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get import BodyGetWeeklyPreemptionStatsMetricsPreemptionStatsWeeklyGet
+from pydantic import StrictFloat, StrictInt, StrictStr
+from typing import Any, List, Optional, Union
 from inductiva.machines_catalogue_client.models.preemption_stats import PreemptionStats
 from inductiva.machines_catalogue_client.models.weekly_preemption_stats import WeeklyPreemptionStats
 
@@ -44,9 +44,8 @@ class MetricsApi:
         self,
         start_date: datetime,
         end_date: datetime,
-        body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get:
-        Optional[
-            BodyGetWeeklyPreemptionStatsMetricsPreemptionStatsWeeklyGet] = None,
+        machine_series: Optional[List[Union[StrictFloat, StrictInt]]] = None,
+        zones: Optional[List[StrictStr]] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -66,8 +65,10 @@ class MetricsApi:
         :type start_date: datetime
         :param end_date: (required)
         :type end_date: datetime
-        :param body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get:
-        :type body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get: BodyGetWeeklyPreemptionStatsMetricsPreemptionStatsWeeklyGet
+        :param machine_series:
+        :type machine_series: List[float]
+        :param zones:
+        :type zones: List[str]
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -93,8 +94,8 @@ class MetricsApi:
         _param = self._get_weekly_preemption_stats_metrics_preemption_stats_weekly_get_serialize(
             start_date=start_date,
             end_date=end_date,
-            body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get=
-            body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get,
+            machine_series=machine_series,
+            zones=zones,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -117,9 +118,8 @@ class MetricsApi:
         self,
         start_date: datetime,
         end_date: datetime,
-        body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get:
-        Optional[
-            BodyGetWeeklyPreemptionStatsMetricsPreemptionStatsWeeklyGet] = None,
+        machine_series: Optional[List[Union[StrictFloat, StrictInt]]] = None,
+        zones: Optional[List[StrictStr]] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -139,8 +139,10 @@ class MetricsApi:
         :type start_date: datetime
         :param end_date: (required)
         :type end_date: datetime
-        :param body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get:
-        :type body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get: BodyGetWeeklyPreemptionStatsMetricsPreemptionStatsWeeklyGet
+        :param machine_series:
+        :type machine_series: List[float]
+        :param zones:
+        :type zones: List[str]
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -166,8 +168,8 @@ class MetricsApi:
         _param = self._get_weekly_preemption_stats_metrics_preemption_stats_weekly_get_serialize(
             start_date=start_date,
             end_date=end_date,
-            body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get=
-            body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get,
+            machine_series=machine_series,
+            zones=zones,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -190,9 +192,8 @@ class MetricsApi:
         self,
         start_date: datetime,
         end_date: datetime,
-        body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get:
-        Optional[
-            BodyGetWeeklyPreemptionStatsMetricsPreemptionStatsWeeklyGet] = None,
+        machine_series: Optional[List[Union[StrictFloat, StrictInt]]] = None,
+        zones: Optional[List[StrictStr]] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -212,8 +213,10 @@ class MetricsApi:
         :type start_date: datetime
         :param end_date: (required)
         :type end_date: datetime
-        :param body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get:
-        :type body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get: BodyGetWeeklyPreemptionStatsMetricsPreemptionStatsWeeklyGet
+        :param machine_series:
+        :type machine_series: List[float]
+        :param zones:
+        :type zones: List[str]
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -239,8 +242,8 @@ class MetricsApi:
         _param = self._get_weekly_preemption_stats_metrics_preemption_stats_weekly_get_serialize(
             start_date=start_date,
             end_date=end_date,
-            body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get=
-            body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get,
+            machine_series=machine_series,
+            zones=zones,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -258,7 +261,8 @@ class MetricsApi:
         self,
         start_date,
         end_date,
-        body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get,
+        machine_series,
+        zones,
         _request_auth,
         _content_type,
         _headers,
@@ -267,7 +271,10 @@ class MetricsApi:
 
         _host = None
 
-        _collection_formats: Dict[str, str] = {}
+        _collection_formats: Dict[str, str] = {
+            'machine_series': 'multi',
+            'zones': 'multi',
+        }
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
@@ -297,25 +304,22 @@ class MetricsApi:
             else:
                 _query_params.append(('end_date', end_date))
 
+        if machine_series is not None:
+
+            _query_params.append(('machine_series', machine_series))
+
+        if zones is not None:
+
+            _query_params.append(('zones', zones))
+
         # process the header parameters
         # process the form parameters
         # process the body parameter
-        if body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get is not None:
-            _body_params = body_get_weekly_preemption_stats_metrics_preemption_stats_weekly_get
 
         # set the HTTP header `Accept`
         if 'Accept' not in _header_params:
             _header_params['Accept'] = self.api_client.select_header_accept(
                 ['application/json'])
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (self.api_client.select_header_content_type(
-                ['application/json']))
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
 
         # authentication setting
         _auth_settings: List[str] = []
