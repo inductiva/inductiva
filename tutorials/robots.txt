@@ -1,3 +1,0 @@
-User-agent: *
-
-Sitemap: https://tutorials.inductiva.ai/en/latest/sitemap.xml
