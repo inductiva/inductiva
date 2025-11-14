@@ -1,7 +1,7 @@
 """Blender helper that follows the standard simulator pattern."""
 from __future__ import annotations
 
-from typing import Optional, Sequence, Union
+from typing import Literal, Optional, Sequence, Union
 
 from inductiva import simulators, types
 
@@ -14,6 +14,7 @@ class Blender(simulators.Simulator):
         /,
         version: Optional[str] = None,
         use_dev: bool = False,
+        device: Literal["auto", "cpu", "gpu"] = "auto",
     ):
         """Initialize the Blender simulator.
 
@@ -23,8 +24,11 @@ class Blender(simulators.Simulator):
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
+            device (str): Select between CPU or GPU for running the simulation.
+                Default is "auto", which will auto-detect if the machine has a
+                GPU and use if it available, otherwise use the CPU.
         """
-        super().__init__(version=version, use_dev=use_dev)
+        super().__init__(version=version, use_dev=use_dev, device=device)
         self.simulator = "arbitrary_commands"
         self.simulator_name_alias = "blender"
 
