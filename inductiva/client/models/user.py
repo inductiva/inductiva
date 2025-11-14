@@ -44,12 +44,16 @@ class User(BaseModel):
     registration_ts: datetime
     costs_fee_percentage: Union[StrictFloat, StrictInt]
     terminate_resources_credits_threshold: Union[StrictFloat, StrictInt]
+    country: Optional[StrictStr] = None
+    region: Optional[StrictStr] = None
+    discord_handle: Optional[StrictStr] = None
     __properties: ClassVar[List[str]] = [
         "email", "username", "name", "organization", "tier",
         "total_available_credits", "credits_currency",
         "terms_and_conditions_decision", "terms_and_conditions_decision_ts",
         "extra_metadata", "registration_ts", "costs_fee_percentage",
-        "terminate_resources_credits_threshold"
+        "terminate_resources_credits_threshold", "country", "region",
+        "discord_handle"
     ]
 
     model_config = ConfigDict(
@@ -109,6 +113,21 @@ class User(BaseModel):
         if self.extra_metadata is None and "extra_metadata" in self.model_fields_set:
             _dict['extra_metadata'] = None
 
+        # set to None if country (nullable) is None
+        # and model_fields_set contains the field
+        if self.country is None and "country" in self.model_fields_set:
+            _dict['country'] = None
+
+        # set to None if region (nullable) is None
+        # and model_fields_set contains the field
+        if self.region is None and "region" in self.model_fields_set:
+            _dict['region'] = None
+
+        # set to None if discord_handle (nullable) is None
+        # and model_fields_set contains the field
+        if self.discord_handle is None and "discord_handle" in self.model_fields_set:
+            _dict['discord_handle'] = None
+
         return _dict
 
     @classmethod
@@ -146,6 +165,12 @@ class User(BaseModel):
             "costs_fee_percentage":
                 obj.get("costs_fee_percentage"),
             "terminate_resources_credits_threshold":
-                obj.get("terminate_resources_credits_threshold")
+                obj.get("terminate_resources_credits_threshold"),
+            "country":
+                obj.get("country"),
+            "region":
+                obj.get("region"),
+            "discord_handle":
+                obj.get("discord_handle")
         })
         return _obj
