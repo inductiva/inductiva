@@ -39,7 +39,7 @@ class SWASH(simulators.Simulator):
             project: Optional[str] = None,
             time_to_live: Optional[str] = None,
             on_finish_cleanup: Optional[Union[str, list[str]]] = None,
-            gfortran_unbuffered_all: bool = True,
+            gfortran_unbuffered_all: bool = False,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
