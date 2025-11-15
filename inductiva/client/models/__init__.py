@@ -162,6 +162,7 @@ from inductiva.client.models.user_costs_over_time import UserCostsOverTime
 from inductiva.client.models.user_fees import UserFees
 from inductiva.client.models.user_most_used_machine_types_overview import UserMostUsedMachineTypesOverview
 from inductiva.client.models.user_most_used_simulators_overview import UserMostUsedSimulatorsOverview
+from inductiva.client.models.user_profile_update_request import UserProfileUpdateRequest
 from inductiva.client.models.user_task_status_overview import UserTaskStatusOverview
 from inductiva.client.models.user_tasks_overview import UserTasksOverview
 from inductiva.client.models.vm_group_config import VMGroupConfig
