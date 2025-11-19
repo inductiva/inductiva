@@ -16,30 +16,18 @@ import pprint
 import re  # noqa: F401
 import json
 
-from datetime import datetime
-from pydantic import BaseModel, ConfigDict, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictBool
 from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class PreemptionStats(BaseModel):
+class SimulatorProdUpdate(BaseModel):
     """
-    PreemptionStats
-    """
-
-  # noqa: E501
-    machine_total: StrictInt
-    machine_preempted: StrictInt
-    vcpu_total: StrictInt
-    vcpu_preempted: StrictInt
-    hour_timestamp: datetime
-    machine_series: StrictStr
-    zone: StrictStr
-    __properties: ClassVar[List[str]] = [
-        "machine_total", "machine_preempted", "vcpu_total", "vcpu_preempted",
-        "hour_timestamp", "machine_series", "zone"
-    ]
+    Schema for updating simulator prod flag (admin only).
+    """ # noqa: E501
+    prod: StrictBool
+    __properties: ClassVar[List[str]] = ["prod"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -58,7 +46,7 @@ class PreemptionStats(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of PreemptionStats from a JSON string"""
+        """Create an instance of SimulatorProdUpdate from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -82,20 +70,12 @@ class PreemptionStats(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of PreemptionStats from a dict"""
+        """Create an instance of SimulatorProdUpdate from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "machine_total": obj.get("machine_total"),
-            "machine_preempted": obj.get("machine_preempted"),
-            "vcpu_total": obj.get("vcpu_total"),
-            "vcpu_preempted": obj.get("vcpu_preempted"),
-            "hour_timestamp": obj.get("hour_timestamp"),
-            "machine_series": obj.get("machine_series"),
-            "zone": obj.get("zone")
-        })
+        _obj = cls.model_validate({"prod": obj.get("prod")})
         return _obj

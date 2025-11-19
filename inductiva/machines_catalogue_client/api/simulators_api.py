@@ -23,6 +23,7 @@ from inductiva.machines_catalogue_client.models.available_simulator_versions imp
 from inductiva.machines_catalogue_client.models.machine_filter_options import MachineFilterOptions
 from inductiva.machines_catalogue_client.models.product_price import ProductPrice
 from inductiva.machines_catalogue_client.models.providers import Providers
+from inductiva.machines_catalogue_client.models.simulator_prod_update import SimulatorProdUpdate
 from inductiva.machines_catalogue_client.models.simulator_response import SimulatorResponse
 from inductiva.machines_catalogue_client.models.simulator_with_machine_types_paginated import SimulatorWithMachineTypesPaginated
 
@@ -1987,6 +1988,7 @@ class SimulatorsApi:
         self,
         name: Optional[StrictStr] = None,
         include_archived: Optional[StrictBool] = None,
+        prod_only: Optional[StrictBool] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -2006,6 +2008,8 @@ class SimulatorsApi:
         :type name: str
         :param include_archived:
         :type include_archived: bool
+        :param prod_only:
+        :type prod_only: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2031,6 +2035,7 @@ class SimulatorsApi:
         _param = self._list_simulators_simulators_get_serialize(
             name=name,
             include_archived=include_archived,
+            prod_only=prod_only,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2053,6 +2058,7 @@ class SimulatorsApi:
         self,
         name: Optional[StrictStr] = None,
         include_archived: Optional[StrictBool] = None,
+        prod_only: Optional[StrictBool] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -2072,6 +2078,8 @@ class SimulatorsApi:
         :type name: str
         :param include_archived:
         :type include_archived: bool
+        :param prod_only:
+        :type prod_only: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2097,6 +2105,7 @@ class SimulatorsApi:
         _param = self._list_simulators_simulators_get_serialize(
             name=name,
             include_archived=include_archived,
+            prod_only=prod_only,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2119,6 +2128,7 @@ class SimulatorsApi:
         self,
         name: Optional[StrictStr] = None,
         include_archived: Optional[StrictBool] = None,
+        prod_only: Optional[StrictBool] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -2138,6 +2148,8 @@ class SimulatorsApi:
         :type name: str
         :param include_archived:
         :type include_archived: bool
+        :param prod_only:
+        :type prod_only: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2163,6 +2175,7 @@ class SimulatorsApi:
         _param = self._list_simulators_simulators_get_serialize(
             name=name,
             include_archived=include_archived,
+            prod_only=prod_only,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2180,6 +2193,7 @@ class SimulatorsApi:
         self,
         name,
         include_archived,
+        prod_only,
         _request_auth,
         _content_type,
         _headers,
@@ -2208,6 +2222,10 @@ class SimulatorsApi:
 
             _query_params.append(('include_archived', include_archived))
 
+        if prod_only is not None:
+
+            _query_params.append(('prod_only', prod_only))
+
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -2223,6 +2241,263 @@ class SimulatorsApi:
         return self.api_client.param_serialize(
             method='GET',
             resource_path='/simulators/',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth)
+
+    @validate_call
+    def update_simulator_prod_flag_simulators_admin_simulators_simulator_name_patch(
+        self,
+        simulator_name: StrictStr,
+        simulator_prod_update: SimulatorProdUpdate,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> SimulatorResponse:
+        """Update Simulator Prod Flag
+
+        Update the prod flag for a simulator (admin only).  This endpoint allows Inductiva internal users to promote or demote simulators between development and production status.  Args:     simulator_name: Name of the simulator to update     update_data: Object containing the new prod flag value  Returns:     Updated simulator object
+
+        :param simulator_name: (required)
+        :type simulator_name: str
+        :param simulator_prod_update: (required)
+        :type simulator_prod_update: SimulatorProdUpdate
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._update_simulator_prod_flag_simulators_admin_simulators_simulator_name_patch_serialize(
+            simulator_name=simulator_name,
+            simulator_prod_update=simulator_prod_update,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index)
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "SimulatorResponse",
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout)
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+    @validate_call
+    def update_simulator_prod_flag_simulators_admin_simulators_simulator_name_patch_with_http_info(
+        self,
+        simulator_name: StrictStr,
+        simulator_prod_update: SimulatorProdUpdate,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[SimulatorResponse]:
+        """Update Simulator Prod Flag
+
+        Update the prod flag for a simulator (admin only).  This endpoint allows Inductiva internal users to promote or demote simulators between development and production status.  Args:     simulator_name: Name of the simulator to update     update_data: Object containing the new prod flag value  Returns:     Updated simulator object
+
+        :param simulator_name: (required)
+        :type simulator_name: str
+        :param simulator_prod_update: (required)
+        :type simulator_prod_update: SimulatorProdUpdate
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._update_simulator_prod_flag_simulators_admin_simulators_simulator_name_patch_serialize(
+            simulator_name=simulator_name,
+            simulator_prod_update=simulator_prod_update,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index)
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "SimulatorResponse",
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout)
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+    @validate_call
+    def update_simulator_prod_flag_simulators_admin_simulators_simulator_name_patch_without_preload_content(
+        self,
+        simulator_name: StrictStr,
+        simulator_prod_update: SimulatorProdUpdate,
+        _request_timeout: Union[None, Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                Tuple[Annotated[StrictFloat,
+                                                Field(gt=0)],
+                                      Annotated[StrictFloat,
+                                                Field(gt=0)]]] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Update Simulator Prod Flag
+
+        Update the prod flag for a simulator (admin only).  This endpoint allows Inductiva internal users to promote or demote simulators between development and production status.  Args:     simulator_name: Name of the simulator to update     update_data: Object containing the new prod flag value  Returns:     Updated simulator object
+
+        :param simulator_name: (required)
+        :type simulator_name: str
+        :param simulator_prod_update: (required)
+        :type simulator_prod_update: SimulatorProdUpdate
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._update_simulator_prod_flag_simulators_admin_simulators_simulator_name_patch_serialize(
+            simulator_name=simulator_name,
+            simulator_prod_update=simulator_prod_update,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index)
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "SimulatorResponse",
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param, _request_timeout=_request_timeout)
+        return response_data.response
+
+    def _update_simulator_prod_flag_simulators_admin_simulators_simulator_name_patch_serialize(
+        self,
+        simulator_name,
+        simulator_prod_update,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {}
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[str, Union[str, bytes, List[str], List[bytes],
+                                List[Tuple[str, bytes]]]] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if simulator_name is not None:
+            _path_params['simulator_name'] = simulator_name
+        # process the query parameters
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if simulator_prod_update is not None:
+            _body_params = simulator_prod_update
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                ['application/json'])
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (self.api_client.select_header_content_type(
+                ['application/json']))
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = []
+
+        return self.api_client.param_serialize(
+            method='PATCH',
+            resource_path='/simulators/admin/simulators/{simulator_name}',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
