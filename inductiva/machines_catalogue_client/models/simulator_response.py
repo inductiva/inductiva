@@ -39,11 +39,13 @@ class SimulatorResponse(BaseModel):
     versions: Optional[List[SimulatorVersion]] = None
     id: StrictStr
     archived: StrictBool
+    prod: StrictBool
     created_at: datetime
     updated_at: datetime
     __properties: ClassVar[List[str]] = [
         "name", "display_name", "recommended_machine_type", "processor_type",
-        "description", "versions", "id", "archived", "created_at", "updated_at"
+        "description", "versions", "id", "archived", "prod", "created_at",
+        "updated_at"
     ]
 
     model_config = ConfigDict(
@@ -139,6 +141,8 @@ class SimulatorResponse(BaseModel):
                 obj.get("id"),
             "archived":
                 obj.get("archived"),
+            "prod":
+                obj.get("prod"),
             "created_at":
                 obj.get("created_at"),
             "updated_at":
