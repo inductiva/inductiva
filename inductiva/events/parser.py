@@ -31,6 +31,20 @@ class ActionWebhookInfo:
     __repr__ = __str__
 
 
+class ActionKillTaskInfo:
+    """Model for the kill task action."""
+
+    def __init__(self, action_type: str, task_id: str):
+        self.action_type = action_type
+        self.task_id = task_id
+
+    def __str__(self):
+        return (f"ActionKillTaskInfo(type={self.action_type}, "
+                f"task_id={self.task_id})")
+
+    __repr__ = __str__
+
+
 class TriggerTaskInfo:
     """ Model for the task trigger."""
 
@@ -113,7 +127,7 @@ class TriggerRegexObserverInfo:
     __repr__ = __str__
 
 
-ActionInfoUnion = Union[ActionEmailInfo, ActionWebhookInfo]
+ActionInfoUnion = Union[ActionEmailInfo, ActionWebhookInfo, ActionKillTaskInfo]
 TriggerInfoUnion = Union[TriggerTaskInfo, TriggerMachineGroupInfo,
                          TriggerCreditsInfo, TriggerFileExistsObserverInfo,
                          TriggerRegexObserverInfo]
@@ -168,6 +182,8 @@ def parse_event_info(data: dict[str, Any]) -> EventInfo:
         action = ActionEmailInfo(**action_data)
     elif action_type == "webhook":
         action = ActionWebhookInfo(**action_data)
+    elif action_type == "kill_task":
+        action = ActionKillTaskInfo(**action_data)
     else:
         raise ValueError(f"Unknown action_type: {action_type}")
 
