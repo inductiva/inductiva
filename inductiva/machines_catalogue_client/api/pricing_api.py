@@ -375,7 +375,7 @@ class PricingApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> object:
-        """Hello World
+        """Get Machine Type
 
 
         :param machine_type: (required)
@@ -448,7 +448,7 @@ class PricingApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> ApiResponse[object]:
-        """Hello World
+        """Get Machine Type
 
 
         :param machine_type: (required)
@@ -521,7 +521,7 @@ class PricingApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> RESTResponseType:
-        """Hello World
+        """Get Machine Type
 
 
         :param machine_type: (required)
