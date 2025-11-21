@@ -62,4 +62,3 @@ class SWMM(simulators.Simulator):
             on_finish_cleanup=on_finish_cleanup,
             **kwargs,
         )
-
