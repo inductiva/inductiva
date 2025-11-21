@@ -36,3 +36,4 @@ from .fds import FDS
 from .cm1 import CM1
 from .gx import GX
 from .gprmax import GprMax
+from .swmm import SWMM
