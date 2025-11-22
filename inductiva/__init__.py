@@ -15,6 +15,7 @@ from inductiva.api.methods import get_client
 from . import constants
 from . import benchmarks
 from . import simulators
+from . import misc
 from . import resources
 from . import projects
 from . import commands
