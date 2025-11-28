@@ -104,6 +104,13 @@ class SWASH(simulators.Simulator):
 
         commands = []
 
+        if not gfortran_unbuffered_all:
+            print(
+                "Output is buffered by default, so failed tasks may leave logs "
+                "empty. Set gfortran_unbuffered_all=True in the run method to "
+                "ensure logs are written. See the FAQ for details: "
+                "https://inductiva.ai/guides/swash/faq/faq")
+
         # Set environment variable based on gfortran_unbuffered_all argument
         env = {
             "GFORTRAN_UNBUFFERED_ALL":
