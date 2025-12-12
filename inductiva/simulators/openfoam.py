@@ -20,7 +20,8 @@ class OpenFOAM(simulators.Simulator):
                  /,
                  distribution: str = "foundation",
                  version: Optional[str] = None,
-                 use_dev: bool = False):
+                 use_dev: bool = False,
+                 include_cfmesh: bool = False):
         """Initialize the OpenFOAM simulator.
 
         Args:
@@ -32,6 +33,8 @@ class OpenFOAM(simulators.Simulator):
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
+            include_cfmesh (bool): Include cfMesh meshing library. Only
+                supported on ESI distribution version v2412. Default is False.
         """
         if distribution not in AVAILABLE_OPENFOAM_DISTRIBUTIONS:
             raise ValueError(
@@ -39,11 +42,21 @@ class OpenFOAM(simulators.Simulator):
                 f"Available distributions are: "
                 f"{AVAILABLE_OPENFOAM_DISTRIBUTIONS}")
 
+        if include_cfmesh:
+            if distribution != "esi" or version != "v2412":
+                raise ValueError(
+                    "cfMesh is only supported on ESI distribution version "
+                    "v2412. Please use distribution='esi' and version='v2412'.")
+
         self._distribution = distribution
 
         super().__init__(version=version, use_dev=use_dev)
         self.simulator = "arbitrary_commands"
-        self.simulator_name_alias = f"openfoam_{distribution}"
+
+        if include_cfmesh:
+            self.simulator_name_alias = "openfoam_cfmesh_v2412_dev"
+        else:
+            self.simulator_name_alias = f"openfoam_{distribution}"
 
     @property
     def name(self):
