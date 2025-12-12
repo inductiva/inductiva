@@ -16,7 +16,7 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
-from pydantic import Field, StrictFloat, StrictInt, StrictStr
+from pydantic import Field, StrictBool, StrictFloat, StrictInt, StrictStr
 from typing import Any, List, Optional, Union
 from typing_extensions import Annotated
 from inductiva.machines_catalogue_client.models.machine_type import MachineType
@@ -364,6 +364,10 @@ class PricingApi:
         zone: StrictStr,
         spot: StrictStr,
         provider_id: Providers,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -377,6 +381,7 @@ class PricingApi:
     ) -> object:
         """Get Machine Type
 
+        Get machine type pricing with optional hardware specifications.
 
         :param machine_type: (required)
         :type machine_type: str
@@ -386,6 +391,8 @@ class PricingApi:
         :type spot: str
         :param provider_id: (required)
         :type provider_id: Providers
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -413,6 +420,7 @@ class PricingApi:
             zone=zone,
             spot=spot,
             provider_id=provider_id,
+            include_hardware_specs=include_hardware_specs,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -437,6 +445,10 @@ class PricingApi:
         zone: StrictStr,
         spot: StrictStr,
         provider_id: Providers,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -450,6 +462,7 @@ class PricingApi:
     ) -> ApiResponse[object]:
         """Get Machine Type
 
+        Get machine type pricing with optional hardware specifications.
 
         :param machine_type: (required)
         :type machine_type: str
@@ -459,6 +472,8 @@ class PricingApi:
         :type spot: str
         :param provider_id: (required)
         :type provider_id: Providers
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -486,6 +501,7 @@ class PricingApi:
             zone=zone,
             spot=spot,
             provider_id=provider_id,
+            include_hardware_specs=include_hardware_specs,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -510,6 +526,10 @@ class PricingApi:
         zone: StrictStr,
         spot: StrictStr,
         provider_id: Providers,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -523,6 +543,7 @@ class PricingApi:
     ) -> RESTResponseType:
         """Get Machine Type
 
+        Get machine type pricing with optional hardware specifications.
 
         :param machine_type: (required)
         :type machine_type: str
@@ -532,6 +553,8 @@ class PricingApi:
         :type spot: str
         :param provider_id: (required)
         :type provider_id: Providers
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -559,6 +582,7 @@ class PricingApi:
             zone=zone,
             spot=spot,
             provider_id=provider_id,
+            include_hardware_specs=include_hardware_specs,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -578,6 +602,7 @@ class PricingApi:
         zone,
         spot,
         provider_id,
+        include_hardware_specs,
         _request_auth,
         _content_type,
         _headers,
@@ -607,6 +632,11 @@ class PricingApi:
         if spot is not None:
 
             _query_params.append(('spot', spot))
+
+        if include_hardware_specs is not None:
+
+            _query_params.append(
+                ('include_hardware_specs', include_hardware_specs))
 
         if provider_id is not None:
 
@@ -905,6 +935,10 @@ class PricingApi:
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
         zones: Optional[List[StrictStr]] = None,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -918,7 +952,7 @@ class PricingApi:
     ) -> List[MachineType]:
         """List Available Machine Types
 
-        List available machine types for the given provider and zone.
+        List available machine types with optional hardware specifications.
 
         :param provider_id: (required)
         :type provider_id: Providers
@@ -940,6 +974,8 @@ class PricingApi:
         :type gpu_names: List[str]
         :param zones:
         :type zones: List[str]
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -973,6 +1009,7 @@ class PricingApi:
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
+            include_hardware_specs=include_hardware_specs,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1008,6 +1045,10 @@ class PricingApi:
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
         zones: Optional[List[StrictStr]] = None,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -1021,7 +1062,7 @@ class PricingApi:
     ) -> ApiResponse[List[MachineType]]:
         """List Available Machine Types
 
-        List available machine types for the given provider and zone.
+        List available machine types with optional hardware specifications.
 
         :param provider_id: (required)
         :type provider_id: Providers
@@ -1043,6 +1084,8 @@ class PricingApi:
         :type gpu_names: List[str]
         :param zones:
         :type zones: List[str]
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1076,6 +1119,7 @@ class PricingApi:
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
+            include_hardware_specs=include_hardware_specs,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1111,6 +1155,10 @@ class PricingApi:
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
         zones: Optional[List[StrictStr]] = None,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
                                 Tuple[Annotated[StrictFloat,
@@ -1124,7 +1172,7 @@ class PricingApi:
     ) -> RESTResponseType:
         """List Available Machine Types
 
-        List available machine types for the given provider and zone.
+        List available machine types with optional hardware specifications.
 
         :param provider_id: (required)
         :type provider_id: Providers
@@ -1146,6 +1194,8 @@ class PricingApi:
         :type gpu_names: List[str]
         :param zones:
         :type zones: List[str]
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1179,6 +1229,7 @@ class PricingApi:
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
+            include_hardware_specs=include_hardware_specs,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1204,6 +1255,7 @@ class PricingApi:
         gpus_range,
         gpu_names,
         zones,
+        include_hardware_specs,
         _request_auth,
         _content_type,
         _headers,
@@ -1268,6 +1320,11 @@ class PricingApi:
         if zones is not None:
 
             _query_params.append(('zones', zones))
+
+        if include_hardware_specs is not None:
+
+            _query_params.append(
+                ('include_hardware_specs', include_hardware_specs))
 
         if provider_id is not None:
 

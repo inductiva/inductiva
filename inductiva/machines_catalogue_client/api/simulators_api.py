@@ -806,6 +806,10 @@ class SimulatorsApi:
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
         machine_class: Optional[List[StrictStr]] = None,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -820,7 +824,7 @@ class SimulatorsApi:
     ) -> SimulatorWithMachineTypesPaginated:
         """Get Simulator With Machine Types
 
-        Get an available machine type for a particular simulator.
+        Get available machine types for a simulator.  Args:     simulator_name: Name of the simulator     include_hardware_specs: If true, includes detailed CPU and GPU         specifications including architecture, memory,          compute performance, etc.  Returns:     Paginated list of machine types with optional hardware specifications
 
         :param simulator_name: (required)
         :type simulator_name: str
@@ -850,6 +854,8 @@ class SimulatorsApi:
         :type cpu_only: bool
         :param machine_class:
         :type machine_class: List[str]
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -889,6 +895,7 @@ class SimulatorsApi:
             gpu_only=gpu_only,
             cpu_only=cpu_only,
             machine_class=machine_class,
+            include_hardware_specs=include_hardware_specs,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -931,6 +938,10 @@ class SimulatorsApi:
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
         machine_class: Optional[List[StrictStr]] = None,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -945,7 +956,7 @@ class SimulatorsApi:
     ) -> ApiResponse[SimulatorWithMachineTypesPaginated]:
         """Get Simulator With Machine Types
 
-        Get an available machine type for a particular simulator.
+        Get available machine types for a simulator.  Args:     simulator_name: Name of the simulator     include_hardware_specs: If true, includes detailed CPU and GPU         specifications including architecture, memory,          compute performance, etc.  Returns:     Paginated list of machine types with optional hardware specifications
 
         :param simulator_name: (required)
         :type simulator_name: str
@@ -975,6 +986,8 @@ class SimulatorsApi:
         :type cpu_only: bool
         :param machine_class:
         :type machine_class: List[str]
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1014,6 +1027,7 @@ class SimulatorsApi:
             gpu_only=gpu_only,
             cpu_only=cpu_only,
             machine_class=machine_class,
+            include_hardware_specs=include_hardware_specs,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1056,6 +1070,10 @@ class SimulatorsApi:
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
         machine_class: Optional[List[StrictStr]] = None,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1070,7 +1088,7 @@ class SimulatorsApi:
     ) -> RESTResponseType:
         """Get Simulator With Machine Types
 
-        Get an available machine type for a particular simulator.
+        Get available machine types for a simulator.  Args:     simulator_name: Name of the simulator     include_hardware_specs: If true, includes detailed CPU and GPU         specifications including architecture, memory,          compute performance, etc.  Returns:     Paginated list of machine types with optional hardware specifications
 
         :param simulator_name: (required)
         :type simulator_name: str
@@ -1100,6 +1118,8 @@ class SimulatorsApi:
         :type cpu_only: bool
         :param machine_class:
         :type machine_class: List[str]
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1139,6 +1159,7 @@ class SimulatorsApi:
             gpu_only=gpu_only,
             cpu_only=cpu_only,
             machine_class=machine_class,
+            include_hardware_specs=include_hardware_specs,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1169,6 +1190,7 @@ class SimulatorsApi:
         gpu_only,
         cpu_only,
         machine_class,
+        include_hardware_specs,
         provider_id,
         _request_auth,
         _content_type,
@@ -1254,6 +1276,11 @@ class SimulatorsApi:
 
             _query_params.append(('machine_class', machine_class))
 
+        if include_hardware_specs is not None:
+
+            _query_params.append(
+                ('include_hardware_specs', include_hardware_specs))
+
         if provider_id is not None:
 
             _query_params.append(('provider_id', provider_id.value))
@@ -1306,6 +1333,10 @@ class SimulatorsApi:
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
         machine_class: Optional[List[StrictStr]] = None,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1320,7 +1351,7 @@ class SimulatorsApi:
     ) -> SimulatorWithMachineTypesPaginated:
         """List All Machine Types
 
-        List available machine types for the given provider and zone.
+        List all available machine types with optional hardware specifications.
 
         :param machine_families:
         :type machine_families: List[str]
@@ -1348,6 +1379,8 @@ class SimulatorsApi:
         :type cpu_only: bool
         :param machine_class:
         :type machine_class: List[str]
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1386,6 +1419,7 @@ class SimulatorsApi:
             gpu_only=gpu_only,
             cpu_only=cpu_only,
             machine_class=machine_class,
+            include_hardware_specs=include_hardware_specs,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1426,6 +1460,10 @@ class SimulatorsApi:
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
         machine_class: Optional[List[StrictStr]] = None,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1440,7 +1478,7 @@ class SimulatorsApi:
     ) -> ApiResponse[SimulatorWithMachineTypesPaginated]:
         """List All Machine Types
 
-        List available machine types for the given provider and zone.
+        List all available machine types with optional hardware specifications.
 
         :param machine_families:
         :type machine_families: List[str]
@@ -1468,6 +1506,8 @@ class SimulatorsApi:
         :type cpu_only: bool
         :param machine_class:
         :type machine_class: List[str]
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1506,6 +1546,7 @@ class SimulatorsApi:
             gpu_only=gpu_only,
             cpu_only=cpu_only,
             machine_class=machine_class,
+            include_hardware_specs=include_hardware_specs,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1546,6 +1587,10 @@ class SimulatorsApi:
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
         machine_class: Optional[List[StrictStr]] = None,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1560,7 +1605,7 @@ class SimulatorsApi:
     ) -> RESTResponseType:
         """List All Machine Types
 
-        List available machine types for the given provider and zone.
+        List all available machine types with optional hardware specifications.
 
         :param machine_families:
         :type machine_families: List[str]
@@ -1588,6 +1633,8 @@ class SimulatorsApi:
         :type cpu_only: bool
         :param machine_class:
         :type machine_class: List[str]
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1626,6 +1673,7 @@ class SimulatorsApi:
             gpu_only=gpu_only,
             cpu_only=cpu_only,
             machine_class=machine_class,
+            include_hardware_specs=include_hardware_specs,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1655,6 +1703,7 @@ class SimulatorsApi:
         gpu_only,
         cpu_only,
         machine_class,
+        include_hardware_specs,
         provider_id,
         _request_auth,
         _content_type,
@@ -1737,6 +1786,11 @@ class SimulatorsApi:
         if machine_class is not None:
 
             _query_params.append(('machine_class', machine_class))
+
+        if include_hardware_specs is not None:
+
+            _query_params.append(
+                ('include_hardware_specs', include_hardware_specs))
 
         if provider_id is not None:
 
