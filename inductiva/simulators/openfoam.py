@@ -43,7 +43,7 @@ class OpenFOAM(simulators.Simulator):
                 f"{AVAILABLE_OPENFOAM_DISTRIBUTIONS}")
 
         if include_cfmesh:
-            if distribution != "esi" or version != "v2412":
+            if distribution != "esi" or version != "2412":
                 raise ValueError(
                     "cfMesh is only supported on ESI distribution version "
                     "v2412. Please use distribution='esi' and version='v2412'.")
