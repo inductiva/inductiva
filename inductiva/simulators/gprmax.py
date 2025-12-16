@@ -4,6 +4,7 @@ from typing import Optional, Union
 from inductiva import simulators, types
 
 
+@simulators.simulator.mpi_enabled
 class GprMax(simulators.Simulator):
     """Class to invoke a generic gprmax simulation on the API."""
 
@@ -36,6 +37,9 @@ class GprMax(simulators.Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             on: The computational resource to launch the simulation on.
+            commands: List of commands to run the simulation.
+                - No MPI: "python -m gprMax input.in -n 60"
+                - GprMax built-in MPI: "python -m gprMax input.in -n 60 -mpi 61"
             storage_dir: Directory for storing results.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
@@ -52,8 +56,6 @@ class GprMax(simulators.Simulator):
                 "10m", "2 hours", "1h30m", or "90s". The task will be
                 automatically terminated if it exceeds this duration after
                 starting.
-            commands: List of commands to run the simulation. Cannot be used
-                with `shell_script`.
             on_finish_cleanup :
                 Optional cleanup script or list of shell commands to remove
                 temporary or unwanted files generated during the simulation.
@@ -74,6 +76,10 @@ class GprMax(simulators.Simulator):
                     ]
             other arguments: See the documentation of the base class.
         """
+
+        self._input_files_exist(input_dir=input_dir,
+                                remote_assets=remote_assets)
+
         return super().run(input_dir,
                            on=on,
                            commands=commands,
