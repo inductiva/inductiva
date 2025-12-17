@@ -18,6 +18,8 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictBool, StrictFloat, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional, Union
+from inductiva.machines_catalogue_client.models.cpu_specification_info import CPUSpecificationInfo
+from inductiva.machines_catalogue_client.models.gpu_specification_info import GPUSpecificationInfo
 from inductiva.machines_catalogue_client.models.providers import Providers
 from typing import Optional, Set
 from typing_extensions import Self
@@ -25,10 +27,8 @@ from typing_extensions import Self
 
 class MachineTypeWithSpotPrice(BaseModel):
     """
-    MachineTypeWithSpotPrice
-    """
-
-  # noqa: E501
+    Machine type with spot pricing and optional hardware specifications.
+    """ # noqa: E501
     machine_type: StrictStr
     num_vcpus: StrictInt
     ram_gb: Union[StrictFloat, StrictInt]
@@ -42,10 +42,12 @@ class MachineTypeWithSpotPrice(BaseModel):
     gpu_id: Optional[StrictStr] = None
     gpu_name: Optional[StrictStr] = None
     spot_price: Optional[Union[StrictFloat, StrictInt]] = None
+    cpu_specs: Optional[CPUSpecificationInfo] = None
+    gpu_specs: Optional[GPUSpecificationInfo] = None
     __properties: ClassVar[List[str]] = [
         "machine_type", "num_vcpus", "ram_gb", "price", "provider_id",
         "threads_per_core", "spot", "region", "zone", "num_gpus", "gpu_id",
-        "gpu_name", "spot_price"
+        "gpu_name", "spot_price", "cpu_specs", "gpu_specs"
     ]
 
     model_config = ConfigDict(
@@ -85,6 +87,12 @@ class MachineTypeWithSpotPrice(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of cpu_specs
+        if self.cpu_specs:
+            _dict['cpu_specs'] = self.cpu_specs.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of gpu_specs
+        if self.gpu_specs:
+            _dict['gpu_specs'] = self.gpu_specs.to_dict()
         # set to None if threads_per_core (nullable) is None
         # and model_fields_set contains the field
         if self.threads_per_core is None and "threads_per_core" in self.model_fields_set:
@@ -125,6 +133,16 @@ class MachineTypeWithSpotPrice(BaseModel):
         if self.spot_price is None and "spot_price" in self.model_fields_set:
             _dict['spot_price'] = None
 
+        # set to None if cpu_specs (nullable) is None
+        # and model_fields_set contains the field
+        if self.cpu_specs is None and "cpu_specs" in self.model_fields_set:
+            _dict['cpu_specs'] = None
+
+        # set to None if gpu_specs (nullable) is None
+        # and model_fields_set contains the field
+        if self.gpu_specs is None and "gpu_specs" in self.model_fields_set:
+            _dict['gpu_specs'] = None
+
         return _dict
 
     @classmethod
@@ -137,18 +155,37 @@ class MachineTypeWithSpotPrice(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "machine_type": obj.get("machine_type"),
-            "num_vcpus": obj.get("num_vcpus"),
-            "ram_gb": obj.get("ram_gb"),
-            "price": obj.get("price"),
-            "provider_id": obj.get("provider_id"),
-            "threads_per_core": obj.get("threads_per_core"),
-            "spot": obj.get("spot"),
-            "region": obj.get("region"),
-            "zone": obj.get("zone"),
-            "num_gpus": obj.get("num_gpus"),
-            "gpu_id": obj.get("gpu_id"),
-            "gpu_name": obj.get("gpu_name"),
-            "spot_price": obj.get("spot_price")
+            "machine_type":
+                obj.get("machine_type"),
+            "num_vcpus":
+                obj.get("num_vcpus"),
+            "ram_gb":
+                obj.get("ram_gb"),
+            "price":
+                obj.get("price"),
+            "provider_id":
+                obj.get("provider_id"),
+            "threads_per_core":
+                obj.get("threads_per_core"),
+            "spot":
+                obj.get("spot"),
+            "region":
+                obj.get("region"),
+            "zone":
+                obj.get("zone"),
+            "num_gpus":
+                obj.get("num_gpus"),
+            "gpu_id":
+                obj.get("gpu_id"),
+            "gpu_name":
+                obj.get("gpu_name"),
+            "spot_price":
+                obj.get("spot_price"),
+            "cpu_specs":
+                CPUSpecificationInfo.from_dict(obj["cpu_specs"])
+                if obj.get("cpu_specs") is not None else None,
+            "gpu_specs":
+                GPUSpecificationInfo.from_dict(obj["gpu_specs"])
+                if obj.get("gpu_specs") is not None else None
         })
         return _obj

@@ -26,6 +26,7 @@ class Providers(str, Enum):
     """
     GCP = 'GCP'
     LOCAL = 'LOCAL'
+    LYCEUM = 'LYCEUM'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
