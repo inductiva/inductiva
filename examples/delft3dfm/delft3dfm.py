@@ -1,4 +1,4 @@
-"""SWMM example."""
+"""Delft3DFM example."""
 import inductiva
 
 # Allocate cloud machine on Google Cloud Platform
@@ -7,16 +7,17 @@ cloud_machine = inductiva.resources.MachineGroup( \
     machine_type="c3d-highcpu-180")
 
 # Initialize the Simulator
-swmm = inductiva.simulators.SWMM(version="5.2.4")
+delft3dfm = inductiva.simulators.Delft3DFM( \
+    version="2024.03")
 
-#  List of commands to run
+# List of commands to run
 commands = [
-    "runswmm model.inp model.rpt",
+    "dflowfm --autostartstop f34.mdu",
 ]
 
 # Run simulation
-task = swmm.run(\
-    input_dir="/Path/to/swmm-input-example",
+task = delft3dfm.run( \
+    input_dir="path/to/my/delft3dfm/files",
     commands=commands,
     on=cloud_machine)
 
@@ -25,4 +26,3 @@ task.wait()
 cloud_machine.terminate()
 
 task.download_outputs()
-task.print_summary()

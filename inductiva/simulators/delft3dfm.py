@@ -1,14 +1,13 @@
-"""gprmax module of the API."""
+"""Delft3DFM module of the API."""
 from typing import Optional, Union
 
 from inductiva import simulators, types
 
 
-@simulators.simulator.mpi_enabled
-class GprMax(simulators.Simulator):
-    """Class to invoke a generic gprmax simulation on the API."""
+class Delft3DFM(simulators.Simulator):
+    """Class to invoke a generic Delft3DFM simulation on the API."""
 
-    _default_gprmax_device = "cpu"
+    _default_delft3d_device = "cpu"
 
     def __init__(
         self,
@@ -16,14 +15,15 @@ class GprMax(simulators.Simulator):
         version: Optional[str] = None,
         use_dev: bool = False,
     ):
-        super().__init__(version, use_dev, self._default_gprmax_device)
+        super().__init__(version, use_dev, self._default_delft3d_device)
         self.simulator = "arbitrary_commands"
-        self.simulator_name_alias = "GprMax"
+        self.simulator_name_alias = "delft3dfm"
 
     def run(self,
             input_dir: Optional[str],
-            commands: types.Commands,
             *,
+            commands: Optional[types.Commands] = None,
+            shell_script: Optional[str] = None,
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
@@ -37,9 +37,6 @@ class GprMax(simulators.Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             on: The computational resource to launch the simulation on.
-            commands: List of commands to run the simulation.
-                - No MPI: "python -m gprMax input.in -n 60"
-                - GprMax built-in MPI: "python -m gprMax input.in -n 60 -mpi 61"
             storage_dir: Directory for storing results.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
@@ -56,6 +53,10 @@ class GprMax(simulators.Simulator):
                 "10m", "2 hours", "1h30m", or "90s". The task will be
                 automatically terminated if it exceeds this duration after
                 starting.
+            commands: List of commands to run the simulation. Cannot be used
+                with `shell_script`.
+            shell_script: Name of the shell script to run the simulation.
+                Cannot be used with `commands`.
             on_finish_cleanup :
                 Optional cleanup script or list of shell commands to remove
                 temporary or unwanted files generated during the simulation.
@@ -76,9 +77,17 @@ class GprMax(simulators.Simulator):
                     ]
             other arguments: See the documentation of the base class.
         """
+        if (commands is None) == (shell_script is None):
+            raise ValueError("You must provide exactly one of 'commands' or "
+                             "'shell_script'.")
 
-        self._input_files_exist(input_dir=input_dir,
-                                remote_assets=remote_assets)
+        if shell_script is not None:
+            #Check if the shell script exists
+
+            self._input_files_exist(input_dir=input_dir,
+                                    remote_assets=remote_assets,
+                                    shell_script=shell_script)
+            commands = [f"bash {shell_script}"]
 
         return super().run(input_dir,
                            on=on,

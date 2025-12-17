@@ -47,6 +47,10 @@ class SimulatorsApi:
     @validate_call
     def get_machine_filter_options_simulators_machine_types_filter_options_get(
         self,
+        include_lyceum: Annotated[
+            Optional[StrictBool],
+            Field(description="Include Lyceum provider machines in response"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -63,6 +67,8 @@ class SimulatorsApi:
 
         Get available filter options for machine types.  This endpoint returns all available filter options calculated from the complete dataset of machine types for the given provider.
 
+        :param include_lyceum: Include Lyceum provider machines in response
+        :type include_lyceum: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -88,6 +94,7 @@ class SimulatorsApi:
         """ # noqa: E501
 
         _param = self._get_machine_filter_options_simulators_machine_types_filter_options_get_serialize(
+            include_lyceum=include_lyceum,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -109,6 +116,10 @@ class SimulatorsApi:
     @validate_call
     def get_machine_filter_options_simulators_machine_types_filter_options_get_with_http_info(
         self,
+        include_lyceum: Annotated[
+            Optional[StrictBool],
+            Field(description="Include Lyceum provider machines in response"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -125,6 +136,8 @@ class SimulatorsApi:
 
         Get available filter options for machine types.  This endpoint returns all available filter options calculated from the complete dataset of machine types for the given provider.
 
+        :param include_lyceum: Include Lyceum provider machines in response
+        :type include_lyceum: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -150,6 +163,7 @@ class SimulatorsApi:
         """ # noqa: E501
 
         _param = self._get_machine_filter_options_simulators_machine_types_filter_options_get_serialize(
+            include_lyceum=include_lyceum,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -171,6 +185,10 @@ class SimulatorsApi:
     @validate_call
     def get_machine_filter_options_simulators_machine_types_filter_options_get_without_preload_content(
         self,
+        include_lyceum: Annotated[
+            Optional[StrictBool],
+            Field(description="Include Lyceum provider machines in response"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -187,6 +205,8 @@ class SimulatorsApi:
 
         Get available filter options for machine types.  This endpoint returns all available filter options calculated from the complete dataset of machine types for the given provider.
 
+        :param include_lyceum: Include Lyceum provider machines in response
+        :type include_lyceum: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -212,6 +232,7 @@ class SimulatorsApi:
         """ # noqa: E501
 
         _param = self._get_machine_filter_options_simulators_machine_types_filter_options_get_serialize(
+            include_lyceum=include_lyceum,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -228,6 +249,7 @@ class SimulatorsApi:
 
     def _get_machine_filter_options_simulators_machine_types_filter_options_get_serialize(
         self,
+        include_lyceum,
         provider_id,
         _request_auth,
         _content_type,
@@ -249,6 +271,10 @@ class SimulatorsApi:
 
         # process the path parameters
         # process the query parameters
+        if include_lyceum is not None:
+
+            _query_params.append(('include_lyceum', include_lyceum))
+
         if provider_id is not None:
 
             _query_params.append(('provider_id', provider_id.value))
@@ -535,6 +561,10 @@ class SimulatorsApi:
     def get_simulator_specific_filter_options_simulators_simulator_name_machine_types_filter_options_get(
         self,
         simulator_name: StrictStr,
+        include_lyceum: Annotated[
+            Optional[StrictBool],
+            Field(description="Include Lyceum provider machines in response"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -553,6 +583,8 @@ class SimulatorsApi:
 
         :param simulator_name: (required)
         :type simulator_name: str
+        :param include_lyceum: Include Lyceum provider machines in response
+        :type include_lyceum: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -579,6 +611,7 @@ class SimulatorsApi:
 
         _param = self._get_simulator_specific_filter_options_simulators_simulator_name_machine_types_filter_options_get_serialize(
             simulator_name=simulator_name,
+            include_lyceum=include_lyceum,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -601,6 +634,10 @@ class SimulatorsApi:
     def get_simulator_specific_filter_options_simulators_simulator_name_machine_types_filter_options_get_with_http_info(
         self,
         simulator_name: StrictStr,
+        include_lyceum: Annotated[
+            Optional[StrictBool],
+            Field(description="Include Lyceum provider machines in response"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -619,6 +656,8 @@ class SimulatorsApi:
 
         :param simulator_name: (required)
         :type simulator_name: str
+        :param include_lyceum: Include Lyceum provider machines in response
+        :type include_lyceum: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -645,6 +684,7 @@ class SimulatorsApi:
 
         _param = self._get_simulator_specific_filter_options_simulators_simulator_name_machine_types_filter_options_get_serialize(
             simulator_name=simulator_name,
+            include_lyceum=include_lyceum,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -667,6 +707,10 @@ class SimulatorsApi:
     def get_simulator_specific_filter_options_simulators_simulator_name_machine_types_filter_options_get_without_preload_content(
         self,
         simulator_name: StrictStr,
+        include_lyceum: Annotated[
+            Optional[StrictBool],
+            Field(description="Include Lyceum provider machines in response"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -685,6 +729,8 @@ class SimulatorsApi:
 
         :param simulator_name: (required)
         :type simulator_name: str
+        :param include_lyceum: Include Lyceum provider machines in response
+        :type include_lyceum: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -711,6 +757,7 @@ class SimulatorsApi:
 
         _param = self._get_simulator_specific_filter_options_simulators_simulator_name_machine_types_filter_options_get_serialize(
             simulator_name=simulator_name,
+            include_lyceum=include_lyceum,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -728,6 +775,7 @@ class SimulatorsApi:
     def _get_simulator_specific_filter_options_simulators_simulator_name_machine_types_filter_options_get_serialize(
         self,
         simulator_name,
+        include_lyceum,
         provider_id,
         _request_auth,
         _content_type,
@@ -751,6 +799,10 @@ class SimulatorsApi:
         if simulator_name is not None:
             _path_params['simulator_name'] = simulator_name
         # process the query parameters
+        if include_lyceum is not None:
+
+            _query_params.append(('include_lyceum', include_lyceum))
+
         if provider_id is not None:
 
             _query_params.append(('provider_id', provider_id.value))
@@ -806,6 +858,14 @@ class SimulatorsApi:
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
         machine_class: Optional[List[StrictStr]] = None,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
+        include_lyceum: Annotated[
+            Optional[StrictBool],
+            Field(description="Include Lyceum provider machines in response"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -820,7 +880,7 @@ class SimulatorsApi:
     ) -> SimulatorWithMachineTypesPaginated:
         """Get Simulator With Machine Types
 
-        Get an available machine type for a particular simulator.
+        Get available machine types for a simulator.  Args:     simulator_name: Name of the simulator     include_hardware_specs: If true, includes detailed CPU and GPU         specifications including architecture, memory,         compute performance, etc.  Returns:     Paginated list of machine types with optional hardware specifications
 
         :param simulator_name: (required)
         :type simulator_name: str
@@ -850,6 +910,10 @@ class SimulatorsApi:
         :type cpu_only: bool
         :param machine_class:
         :type machine_class: List[str]
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
+        :param include_lyceum: Include Lyceum provider machines in response
+        :type include_lyceum: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -889,6 +953,8 @@ class SimulatorsApi:
             gpu_only=gpu_only,
             cpu_only=cpu_only,
             machine_class=machine_class,
+            include_hardware_specs=include_hardware_specs,
+            include_lyceum=include_lyceum,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -931,6 +997,14 @@ class SimulatorsApi:
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
         machine_class: Optional[List[StrictStr]] = None,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
+        include_lyceum: Annotated[
+            Optional[StrictBool],
+            Field(description="Include Lyceum provider machines in response"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -945,7 +1019,7 @@ class SimulatorsApi:
     ) -> ApiResponse[SimulatorWithMachineTypesPaginated]:
         """Get Simulator With Machine Types
 
-        Get an available machine type for a particular simulator.
+        Get available machine types for a simulator.  Args:     simulator_name: Name of the simulator     include_hardware_specs: If true, includes detailed CPU and GPU         specifications including architecture, memory,         compute performance, etc.  Returns:     Paginated list of machine types with optional hardware specifications
 
         :param simulator_name: (required)
         :type simulator_name: str
@@ -975,6 +1049,10 @@ class SimulatorsApi:
         :type cpu_only: bool
         :param machine_class:
         :type machine_class: List[str]
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
+        :param include_lyceum: Include Lyceum provider machines in response
+        :type include_lyceum: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1014,6 +1092,8 @@ class SimulatorsApi:
             gpu_only=gpu_only,
             cpu_only=cpu_only,
             machine_class=machine_class,
+            include_hardware_specs=include_hardware_specs,
+            include_lyceum=include_lyceum,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1056,6 +1136,14 @@ class SimulatorsApi:
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
         machine_class: Optional[List[StrictStr]] = None,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
+        include_lyceum: Annotated[
+            Optional[StrictBool],
+            Field(description="Include Lyceum provider machines in response"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1070,7 +1158,7 @@ class SimulatorsApi:
     ) -> RESTResponseType:
         """Get Simulator With Machine Types
 
-        Get an available machine type for a particular simulator.
+        Get available machine types for a simulator.  Args:     simulator_name: Name of the simulator     include_hardware_specs: If true, includes detailed CPU and GPU         specifications including architecture, memory,         compute performance, etc.  Returns:     Paginated list of machine types with optional hardware specifications
 
         :param simulator_name: (required)
         :type simulator_name: str
@@ -1100,6 +1188,10 @@ class SimulatorsApi:
         :type cpu_only: bool
         :param machine_class:
         :type machine_class: List[str]
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
+        :param include_lyceum: Include Lyceum provider machines in response
+        :type include_lyceum: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1139,6 +1231,8 @@ class SimulatorsApi:
             gpu_only=gpu_only,
             cpu_only=cpu_only,
             machine_class=machine_class,
+            include_hardware_specs=include_hardware_specs,
+            include_lyceum=include_lyceum,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1169,6 +1263,8 @@ class SimulatorsApi:
         gpu_only,
         cpu_only,
         machine_class,
+        include_hardware_specs,
+        include_lyceum,
         provider_id,
         _request_auth,
         _content_type,
@@ -1254,6 +1350,15 @@ class SimulatorsApi:
 
             _query_params.append(('machine_class', machine_class))
 
+        if include_hardware_specs is not None:
+
+            _query_params.append(
+                ('include_hardware_specs', include_hardware_specs))
+
+        if include_lyceum is not None:
+
+            _query_params.append(('include_lyceum', include_lyceum))
+
         if provider_id is not None:
 
             _query_params.append(('provider_id', provider_id.value))
@@ -1306,6 +1411,14 @@ class SimulatorsApi:
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
         machine_class: Optional[List[StrictStr]] = None,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
+        include_lyceum: Annotated[
+            Optional[StrictBool],
+            Field(description="Include Lyceum provider machines in response"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1320,7 +1433,7 @@ class SimulatorsApi:
     ) -> SimulatorWithMachineTypesPaginated:
         """List All Machine Types
 
-        List available machine types for the given provider and zone.
+        List all available machine types with optional hardware specifications.
 
         :param machine_families:
         :type machine_families: List[str]
@@ -1348,6 +1461,10 @@ class SimulatorsApi:
         :type cpu_only: bool
         :param machine_class:
         :type machine_class: List[str]
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
+        :param include_lyceum: Include Lyceum provider machines in response
+        :type include_lyceum: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1386,6 +1503,8 @@ class SimulatorsApi:
             gpu_only=gpu_only,
             cpu_only=cpu_only,
             machine_class=machine_class,
+            include_hardware_specs=include_hardware_specs,
+            include_lyceum=include_lyceum,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1426,6 +1545,14 @@ class SimulatorsApi:
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
         machine_class: Optional[List[StrictStr]] = None,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
+        include_lyceum: Annotated[
+            Optional[StrictBool],
+            Field(description="Include Lyceum provider machines in response"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1440,7 +1567,7 @@ class SimulatorsApi:
     ) -> ApiResponse[SimulatorWithMachineTypesPaginated]:
         """List All Machine Types
 
-        List available machine types for the given provider and zone.
+        List all available machine types with optional hardware specifications.
 
         :param machine_families:
         :type machine_families: List[str]
@@ -1468,6 +1595,10 @@ class SimulatorsApi:
         :type cpu_only: bool
         :param machine_class:
         :type machine_class: List[str]
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
+        :param include_lyceum: Include Lyceum provider machines in response
+        :type include_lyceum: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1506,6 +1637,8 @@ class SimulatorsApi:
             gpu_only=gpu_only,
             cpu_only=cpu_only,
             machine_class=machine_class,
+            include_hardware_specs=include_hardware_specs,
+            include_lyceum=include_lyceum,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1546,6 +1679,14 @@ class SimulatorsApi:
         gpu_only: Optional[StrictBool] = None,
         cpu_only: Optional[StrictBool] = None,
         machine_class: Optional[List[StrictStr]] = None,
+        include_hardware_specs: Annotated[
+            Optional[StrictBool],
+            Field(description="Include detailed CPU/GPU hardware specifications"
+                 )] = None,
+        include_lyceum: Annotated[
+            Optional[StrictBool],
+            Field(description="Include Lyceum provider machines in response"
+                 )] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1560,7 +1701,7 @@ class SimulatorsApi:
     ) -> RESTResponseType:
         """List All Machine Types
 
-        List available machine types for the given provider and zone.
+        List all available machine types with optional hardware specifications.
 
         :param machine_families:
         :type machine_families: List[str]
@@ -1588,6 +1729,10 @@ class SimulatorsApi:
         :type cpu_only: bool
         :param machine_class:
         :type machine_class: List[str]
+        :param include_hardware_specs: Include detailed CPU/GPU hardware specifications
+        :type include_hardware_specs: bool
+        :param include_lyceum: Include Lyceum provider machines in response
+        :type include_lyceum: bool
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1626,6 +1771,8 @@ class SimulatorsApi:
             gpu_only=gpu_only,
             cpu_only=cpu_only,
             machine_class=machine_class,
+            include_hardware_specs=include_hardware_specs,
+            include_lyceum=include_lyceum,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1655,6 +1802,8 @@ class SimulatorsApi:
         gpu_only,
         cpu_only,
         machine_class,
+        include_hardware_specs,
+        include_lyceum,
         provider_id,
         _request_auth,
         _content_type,
@@ -1737,6 +1886,15 @@ class SimulatorsApi:
         if machine_class is not None:
 
             _query_params.append(('machine_class', machine_class))
+
+        if include_hardware_specs is not None:
+
+            _query_params.append(
+                ('include_hardware_specs', include_hardware_specs))
+
+        if include_lyceum is not None:
+
+            _query_params.append(('include_lyceum', include_lyceum))
 
         if provider_id is not None:
 

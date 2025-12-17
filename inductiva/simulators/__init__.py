@@ -14,6 +14,7 @@ from .snl_swan import SNLSWAN
 from .amr_wind import AmrWind
 from .octopus import Octopus
 from .delft3d import Delft3D
+from .delft3dfm import Delft3DFM
 from .gromacs import GROMACS
 from .funwave import FUNWAVE
 from .freefem import FreeFEM

@@ -1,4 +1,4 @@
-"""GprMax example."""
+"""Delft3DFM example."""
 import inductiva
 
 # Instantiate machine group
@@ -7,20 +7,17 @@ cloud_machine = inductiva.resources.MachineGroup( \
     machine_type="c2d-highcpu-4")
 
 input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "gprmax-input-example.zip",
+    "https://storage.googleapis.com/"
+    "inductiva-api-demo-files/"
+    "delft3dfm-input-example.zip",
     unzip=True)
 
-# Initialize the Simulator
-gprmax = inductiva.simulators.GprMax(version="3.1.7")
+delft3dfm = inductiva.simulators.Delft3DFM(version="2024.03")
 
-#  List of commands to run
-commands = [
-    "python -m gprMax antenna_like_MALA_1200_fs.in",
-]
+# List of commands to run
+commands = ["dflowfm --autostartstop f34.mdu"]
 
-# Run simulation
-task = gprmax.run(\
+task = delft3dfm.run( \
     input_dir=input_dir,
     commands=commands,
     on=cloud_machine)
