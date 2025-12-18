@@ -5,7 +5,7 @@ from inductiva.utils import download_from_url
 
 # Instantiate machine group
 machine = MachineGroup( \
-    machine_type="c2d-highcpu-4")
+    machine_type="c2d-highcpu-2")
 
 # Set simulation input directory
 input_dir = download_from_url(
