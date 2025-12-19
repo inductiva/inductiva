@@ -732,7 +732,9 @@ def remove(remote_path: str, region: Optional[str] = None):
     Parameters:
     - remote_path (str): The path to the remote file or directory.
     """
-    logging.info("Removing '%s' from remote storage...", remote_path)
+    full_path = f"{region}/{remote_path}" if region is not None else remote_path
+
+    logging.info("Removing '%s' from remote storage...", full_path)
 
     # Since we don't allow root files in workspaces it must be a directory
     # otherwise path validation in the backend will give error
@@ -742,7 +744,7 @@ def remove(remote_path: str, region: Optional[str] = None):
     api = inductiva.client.StorageApi(inductiva.api.get_client())
     api.delete_file(path=remote_path, region=region)
 
-    logging.info("Successfully removed '%s' from remote storage.", remote_path)
+    logging.info("Successfully removed '%s' from remote storage.", full_path)
 
 
 def copy(
