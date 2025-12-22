@@ -61,6 +61,7 @@ class PricingApi:
     ) -> object:
         """Get Disk Price
 
+        Get disk pricing for a region.
 
         :param region: (required)
         :type region: str
@@ -142,6 +143,7 @@ class PricingApi:
     ) -> ApiResponse[object]:
         """Get Disk Price
 
+        Get disk pricing for a region.
 
         :param region: (required)
         :type region: str
@@ -223,6 +225,7 @@ class PricingApi:
     ) -> RESTResponseType:
         """Get Disk Price
 
+        Get disk pricing for a region.
 
         :param region: (required)
         :type region: str
@@ -712,6 +715,7 @@ class PricingApi:
     ) -> object:
         """Get Storage Price
 
+        Get storage pricing for a region.
 
         :param region: (required)
         :type region: str
@@ -777,6 +781,7 @@ class PricingApi:
     ) -> ApiResponse[object]:
         """Get Storage Price
 
+        Get storage pricing for a region.
 
         :param region: (required)
         :type region: str
@@ -842,6 +847,7 @@ class PricingApi:
     ) -> RESTResponseType:
         """Get Storage Price
 
+        Get storage pricing for a region.
 
         :param region: (required)
         :type region: str
