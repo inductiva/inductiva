@@ -49,6 +49,7 @@ class RegisterVMGroupRequest(BaseModel):
     cpu_cores_logical: Optional[StrictInt] = None
     cpu_cores_physical: Optional[StrictInt] = None
     zone: Optional[StrictStr] = None
+    region: Optional[StrictStr] = None
     gpu_count: Optional[StrictInt] = None
     gpu_name: Optional[StrictStr] = None
     __properties: ClassVar[List[str]] = [
@@ -56,7 +57,7 @@ class RegisterVMGroupRequest(BaseModel):
         "disk_size_gb", "max_idle_time", "auto_terminate_ts",
         "dynamic_disk_resize_config", "custom_vm_image", "num_vms", "min_vms",
         "max_vms", "type", "is_elastic", "spot", "cpu_cores_logical",
-        "cpu_cores_physical", "zone", "gpu_count", "gpu_name"
+        "cpu_cores_physical", "zone", "region", "gpu_count", "gpu_name"
     ]
 
     model_config = ConfigDict(
@@ -161,6 +162,11 @@ class RegisterVMGroupRequest(BaseModel):
         if self.zone is None and "zone" in self.model_fields_set:
             _dict['zone'] = None
 
+        # set to None if region (nullable) is None
+        # and model_fields_set contains the field
+        if self.region is None and "region" in self.model_fields_set:
+            _dict['region'] = None
+
         # set to None if gpu_count (nullable) is None
         # and model_fields_set contains the field
         if self.gpu_count is None and "gpu_count" in self.model_fields_set:
@@ -225,6 +231,8 @@ class RegisterVMGroupRequest(BaseModel):
                 obj.get("cpu_cores_physical"),
             "zone":
                 obj.get("zone"),
+            "region":
+                obj.get("region"),
             "gpu_count":
                 obj.get("gpu_count"),
             "gpu_name":
