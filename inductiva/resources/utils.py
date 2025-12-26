@@ -111,7 +111,8 @@ def get_available_machine_types(
 
 def estimate_machine_cost(machine_type: str,
                           spot: bool = False,
-                          zone: str = None):
+                          zone: str = None,
+                          region: str = None):
     """Estimate the cloud cost of one machine per hour in US dollars.
 
     Args:
@@ -119,13 +120,20 @@ def estimate_machine_cost(machine_type: str,
             Check https://cloud.google.com/compute/docs/machine-resource for
             more information about machine types.
         zone: The zone where the machines will be launched.
+        region: The region where the machines will be launched.
+            Note: zone and region are mutually exclusive.
         spot: Whether to use spot machines.
     """
+
+    if zone is not None and region is not None:
+        raise ValueError("Cannot specify both 'zone' and 'region'. "
+                         "Please provide only one location parameter.")
 
     api = inductiva.client.ComputeApi(inductiva.api.get_client())
 
     instance_price = api.get_instance_price(machine_type=machine_type,
-                                            zone=zone)
+                                            zone=zone,
+                                            region=region)
 
     if spot:
         estimated_cost = instance_price.get("preemptible_price")
