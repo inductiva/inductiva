@@ -41,6 +41,9 @@ class BaseMachineGroup(ABC):
           Check https://cloud.google.com/compute/docs/machine-resource for
           more information about machine types.
         zone: The zone where the machines will be launched.
+        region: The region where the machines will be launched.
+          Note: zone and region are mutually exclusive. The backend will
+          resolve the region to a specific zone.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
@@ -62,6 +65,7 @@ class BaseMachineGroup(ABC):
     # Constructor arguments
     machine_type: str
     zone: Optional[str] = None
+    region: Optional[str] = None
     provider: Union[ProviderType, str] = "GCP"
     threads_per_core: int = 2
     data_disk_gb: int = 10
@@ -110,6 +114,11 @@ class BaseMachineGroup(ABC):
 
     def _validate_inputs(self):
         """Validate initialization inputs."""
+
+        # Validate zone and region mutual exclusivity
+        if self.zone is not None and self.region is not None:
+            raise ValueError("Cannot specify both 'zone' and 'region'. "
+                             "Please provide only one location parameter.")
 
         if not isinstance(self.data_disk_gb, int):
             raise ValueError("`data_disk_gb` must be an integer.")
@@ -362,6 +371,7 @@ class BaseMachineGroup(ABC):
             dynamic_disk_resize_config=self._dynamic_disk_resize_config(),
             custom_vm_image=self._custom_vm_image,
             zone=self.zone,
+            region=self.region,
             **kwargs,
         )
 
@@ -512,7 +522,8 @@ class BaseMachineGroup(ABC):
         self._estimated_cost = inductiva.resources.estimate_machine_cost(
             self.machine_type,
             spot,
-            self.zone,
+            zone=self.zone,
+            region=self.region,
         )
 
         return self._estimated_cost
@@ -587,7 +598,11 @@ class BaseMachineGroup(ABC):
         """Logs the machine group info."""
 
         logging.info("\t· Name:                       %s", self.name)
-        logging.info("\t· Zone:                       %s", self.zone)
+        if self.region:
+            logging.info("\t· Region:                     %s", self.region)
+            logging.info("\t· Resolved Zone:              %s", self.zone)
+        else:
+            logging.info("\t· Zone:                       %s", self.zone)
         logging.info("\t· Provider:                   %s", self.provider)
         logging.info("\t· Machine Type:               %s", self.machine_type)
         logging.info("\t· Data disk size:             %s GB", self.data_disk_gb)
@@ -656,6 +671,9 @@ class MachineGroup(BaseMachineGroup):
           Check https://cloud.google.com/compute/docs/machine-resource for
           information about machine types.
         zone: The zone where the machines will be launched.
+        region: The region where the machines will be launched.
+          Note: zone and region are mutually exclusive. The backend will
+          resolve the region to a specific zone.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
@@ -707,6 +725,12 @@ class MachineGroup(BaseMachineGroup):
 
     def _validate_inputs(self):
         super()._validate_inputs()
+
+        if self.byoc and self.region is not None:
+            raise ValueError(
+                "BYOC (Bring Your Own Cloud) mode requires an explicit zone. "
+                "Region-based machine creation is not supported for BYOC. "
+                "Please specify a zone instead of region.")
 
         if self.mg_name and not self.byoc:
             raise ValueError(
@@ -924,6 +948,9 @@ class ElasticMachineGroup(BaseMachineGroup):
             Check https://cloud.google.com/compute/docs/machine-resource for
         more information about machine types.
         zone: The zone where the machines will be launched.
+        region: The region where the machines will be launched.
+            Note: zone and region are mutually exclusive. The backend will
+            resolve the region to a specific zone.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
@@ -1035,6 +1062,9 @@ class MPICluster(BaseMachineGroup):
             Check https://cloud.google.com/compute/docs/machine-resource for
             information about machine types.
         zone: The zone where the machines will be launched.
+        region: The region where the machines will be launched.
+            Note: zone and region are mutually exclusive. The backend will
+            resolve the region to a specific zone.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
