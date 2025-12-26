@@ -10,11 +10,15 @@ def start_machine_group(args):
     num_machines = args.num_machines
     data_disk_gb = args.data_disk_gb
     spot = args.spot
+    zone = getattr(args, 'zone', None)
+    region = getattr(args, 'region', None)
 
     machine = resources.MachineGroup(machine_type=machine_type,
                                      num_machines=num_machines,
                                      data_disk_gb=data_disk_gb,
-                                     spot=spot)
+                                     spot=spot,
+                                     zone=zone,
+                                     region=region)
 
     machine.start()
     print(f"{repr(machine)} started.")
@@ -55,5 +59,17 @@ def register(parser):
                            default=True,
                            action="store_true",
                            help="Whether to use spot instances.")
+
+    location_group = subparser.add_mutually_exclusive_group()
+    location_group.add_argument(
+        "--zone",
+        type=str,
+        default=None,
+        help="Zone where the machines will be launched.")
+    location_group.add_argument(
+        "--region",
+        type=str,
+        default=None,
+        help="Region where the machines will be launched.")
 
     subparser.set_defaults(func=start_machine_group)
