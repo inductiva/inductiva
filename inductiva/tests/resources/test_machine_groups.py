@@ -81,15 +81,16 @@ def test_region_only_valid():
         mock_compute_api.return_value.register_vm_group = mock_register
         mock_compute_api.return_value.start_vm_group = mock.MagicMock()
 
-        # Mock the estimate_cloud_cost method to avoid issues with incomplete response
+        # Mock the estimate_cloud_cost method to avoid issues with incomplete
+        # response
         with mock.patch.object(inductiva.resources.MachineGroup,
-                               'estimate_cloud_cost'):
-            mg = inductiva.resources.MachineGroup(machine_type="c2-standard-4",
-                                                  region="europe-west1")
+                               "estimate_cloud_cost"):
+            _ = inductiva.resources.MachineGroup(machine_type="c2-standard-4",
+                                                 region="europe-west1")
 
             # Verify region was passed to register_vm_group
             call_args = mock_register.call_args
-            register_request = call_args.kwargs['register_vm_group_request']
+            register_request = call_args.kwargs["register_vm_group_request"]
             assert register_request.region == "europe-west1"
 
 
@@ -105,15 +106,16 @@ def test_zone_only_valid():
         mock_compute_api.return_value.register_vm_group = mock_register
         mock_compute_api.return_value.start_vm_group = mock.MagicMock()
 
-        # Mock the estimate_cloud_cost method to avoid issues with incomplete response
+        # Mock the estimate_cloud_cost method to avoid issues with incomplete
+        # response
         with mock.patch.object(inductiva.resources.MachineGroup,
-                               'estimate_cloud_cost'):
-            mg = inductiva.resources.MachineGroup(machine_type="c2-standard-4",
-                                                  zone="europe-west1-b")
+                               "estimate_cloud_cost"):
+            _ = inductiva.resources.MachineGroup(machine_type="c2-standard-4",
+                                                 zone="europe-west1-b")
 
             # Verify zone was passed to register_vm_group
             call_args = mock_register.call_args
-            register_request = call_args.kwargs['register_vm_group_request']
+            register_request = call_args.kwargs["register_vm_group_request"]
             assert register_request.zone == "europe-west1-b"
 
 
@@ -129,13 +131,15 @@ def test_byoc_with_region_raises_error():
 def test_byoc_with_zone_valid():
     """Test that BYOC mode with zone still works."""
     mock_compute_api_path = "inductiva.client.ComputeApi"
-    mock_byoc_path = "inductiva.resources.machine_groups.MachineGroup._register_byoc_gcp"
+    mock_byoc_path = ("inductiva.resources.machine_groups."
+                      "MachineGroup._register_byoc_gcp")
 
     with mock.patch(mock_compute_api_path):
         with mock.patch(mock_byoc_path):
-            # Mock the available_vcpus property to avoid issues with BYOC initialization
+            # Mock the available_vcpus property to avoid issues with BYOC
+            # initialization
             with mock.patch.object(inductiva.resources.MachineGroup,
-                                   'available_vcpus',
+                                   "available_vcpus",
                                    new_callable=mock.PropertyMock,
                                    return_value=4):
                 mg = inductiva.resources.MachineGroup(
@@ -164,7 +168,7 @@ def test_estimate_machine_cost_with_region():
 
         # Verify region was passed to API
         call_args = mock_compute_api.return_value.get_instance_price.call_args
-        assert call_args.kwargs['region'] == "europe-west1"
+        assert call_args.kwargs["region"] == "europe-west1"
 
 
 def test_estimate_machine_cost_zone_region_mutual_exclusivity():
