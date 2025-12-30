@@ -600,7 +600,7 @@ class BaseMachineGroup(ABC):
         logging.info("\t· Name:                       %s", self.name)
         if self.region:
             logging.info("\t· Region:                     %s", self.region)
-            logging.info("\t· Resolved Zone:              %s", self.zone)
+            logging.info("\t· Selected Zone:              %s", self.zone)
         else:
             logging.info("\t· Zone:                       %s", self.zone)
         logging.info("\t· Provider:                   %s", self.provider)
