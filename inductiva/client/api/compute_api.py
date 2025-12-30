@@ -284,6 +284,7 @@ class ComputeApi:
         self,
         machine_type: StrictStr,
         zone: Optional[StrictStr] = None,
+        region: Optional[StrictStr] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -304,6 +305,8 @@ class ComputeApi:
         :type machine_type: str
         :param zone:
         :type zone: str
+        :param region:
+        :type region: str
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -330,6 +333,7 @@ class ComputeApi:
 
         _param = self._get_instance_price_serialize(machine_type=machine_type,
                                                     zone=zone,
+                                                    region=region,
                                                     provider_id=provider_id,
                                                     _request_auth=_request_auth,
                                                     _content_type=_content_type,
@@ -353,6 +357,7 @@ class ComputeApi:
         self,
         machine_type: StrictStr,
         zone: Optional[StrictStr] = None,
+        region: Optional[StrictStr] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -373,6 +378,8 @@ class ComputeApi:
         :type machine_type: str
         :param zone:
         :type zone: str
+        :param region:
+        :type region: str
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -399,6 +406,7 @@ class ComputeApi:
 
         _param = self._get_instance_price_serialize(machine_type=machine_type,
                                                     zone=zone,
+                                                    region=region,
                                                     provider_id=provider_id,
                                                     _request_auth=_request_auth,
                                                     _content_type=_content_type,
@@ -422,6 +430,7 @@ class ComputeApi:
         self,
         machine_type: StrictStr,
         zone: Optional[StrictStr] = None,
+        region: Optional[StrictStr] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -442,6 +451,8 @@ class ComputeApi:
         :type machine_type: str
         :param zone:
         :type zone: str
+        :param region:
+        :type region: str
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -468,6 +479,7 @@ class ComputeApi:
 
         _param = self._get_instance_price_serialize(machine_type=machine_type,
                                                     zone=zone,
+                                                    region=region,
                                                     provider_id=provider_id,
                                                     _request_auth=_request_auth,
                                                     _content_type=_content_type,
@@ -486,6 +498,7 @@ class ComputeApi:
         self,
         machine_type,
         zone,
+        region,
         provider_id,
         _request_auth,
         _content_type,
@@ -514,6 +527,10 @@ class ComputeApi:
         if zone is not None:
 
             _query_params.append(('zone', zone))
+
+        if region is not None:
+
+            _query_params.append(('region', region))
 
         if provider_id is not None:
 
@@ -1008,6 +1025,7 @@ class ComputeApi:
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
         zones: Optional[List[StrictStr]] = None,
+        regions: Optional[List[StrictStr]] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1022,7 +1040,8 @@ class ComputeApi:
     ) -> List[MachineType]:
         """List Available Machine Types
 
-        List available machine types for the given provider and zone.
+        List available machine types for the given provider.  
+        Filter by zones or regions.
 
         :param machine_families:
         :type machine_families: List[Optional[str]]
@@ -1042,6 +1061,8 @@ class ComputeApi:
         :type gpu_names: List[str]
         :param zones:
         :type zones: List[str]
+        :param regions:
+        :type regions: List[str]
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1076,6 +1097,7 @@ class ComputeApi:
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
+            regions=regions,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1112,6 +1134,7 @@ class ComputeApi:
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
         zones: Optional[List[StrictStr]] = None,
+        regions: Optional[List[StrictStr]] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1126,7 +1149,8 @@ class ComputeApi:
     ) -> ApiResponse[List[MachineType]]:
         """List Available Machine Types
 
-        List available machine types for the given provider and zone.
+        List available machine types for the given provider. 
+        Filter by zones or regions.
 
         :param machine_families:
         :type machine_families: List[Optional[str]]
@@ -1146,6 +1170,8 @@ class ComputeApi:
         :type gpu_names: List[str]
         :param zones:
         :type zones: List[str]
+        :param regions:
+        :type regions: List[str]
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1180,6 +1206,7 @@ class ComputeApi:
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
+            regions=regions,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1216,6 +1243,7 @@ class ComputeApi:
             List[StrictInt], Field(min_length=2, max_length=2)]] = None,
         gpu_names: Optional[List[StrictStr]] = None,
         zones: Optional[List[StrictStr]] = None,
+        regions: Optional[List[StrictStr]] = None,
         provider_id: Optional[Providers] = None,
         _request_timeout: Union[None, Annotated[StrictFloat,
                                                 Field(gt=0)],
@@ -1230,7 +1258,8 @@ class ComputeApi:
     ) -> RESTResponseType:
         """List Available Machine Types
 
-        List available machine types for the given provider and zone.
+        List available machine types for the given provider. 
+        Filter by zones or regions.
 
         :param machine_families:
         :type machine_families: List[Optional[str]]
@@ -1250,6 +1279,8 @@ class ComputeApi:
         :type gpu_names: List[str]
         :param zones:
         :type zones: List[str]
+        :param regions:
+        :type regions: List[str]
         :param provider_id:
         :type provider_id: Providers
         :param _request_timeout: timeout setting for this request. If one
@@ -1284,6 +1315,7 @@ class ComputeApi:
             gpus_range=gpus_range,
             gpu_names=gpu_names,
             zones=zones,
+            regions=regions,
             provider_id=provider_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -1309,6 +1341,7 @@ class ComputeApi:
         gpus_range,
         gpu_names,
         zones,
+        regions,
         provider_id,
         _request_auth,
         _content_type,
@@ -1327,6 +1360,7 @@ class ComputeApi:
             'gpus_range': 'multi',
             'gpu_names': 'multi',
             'zones': 'multi',
+            'regions': 'multi',
         }
 
         _path_params: Dict[str, str] = {}
@@ -1374,6 +1408,10 @@ class ComputeApi:
         if zones is not None:
 
             _query_params.append(('zones', zones))
+
+        if regions is not None:
+
+            _query_params.append(('regions', regions))
 
         if provider_id is not None:
 

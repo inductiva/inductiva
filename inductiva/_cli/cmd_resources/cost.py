@@ -13,11 +13,13 @@ def estimate_machine_cost(args):
     spot = args.spot
     num_machines = args.num_machines
     zone = args.zone
+    region = args.region
 
     cost = resources.estimate_machine_cost(
         machine_type=machine_type,
         spot=spot,
         zone=zone,
+        region=region,
     )
 
     total_cost = cost * num_machines
@@ -61,10 +63,17 @@ def register(parser):
                            type=int,
                            help="Number of machines to launch.")
 
-    subparser.add_argument("--zone",
-                           type=str,
-                           default="europe-west1-b",
-                           help="Zone where the machines will be launched.")
+    location_group = subparser.add_mutually_exclusive_group()
+    location_group.add_argument(
+        "--zone",
+        type=str,
+        default="europe-west1-b",
+        help="Zone where the machines will be launched.")
+    location_group.add_argument(
+        "--region",
+        type=str,
+        default=None,
+        help="Region where the machines will be launched.")
 
     subparser.set_defaults(func=estimate_machine_cost)
 
