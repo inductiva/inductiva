@@ -42,8 +42,8 @@ class BaseMachineGroup(ABC):
           more information about machine types.
         zone: The zone where the machines will be launched.
         region: The region where the machines will be launched.
-          Note: zone and region are mutually exclusive. The backend will
-          resolve the region to a specific zone.
+          Note: zone and region are mutually exclusive. The Inductiva Web API 
+          will select the region to a specific zone.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
@@ -672,8 +672,8 @@ class MachineGroup(BaseMachineGroup):
           information about machine types.
         zone: The zone where the machines will be launched.
         region: The region where the machines will be launched.
-          Note: zone and region are mutually exclusive. The backend will
-          resolve the region to a specific zone.
+          Note: zone and region are mutually exclusive. The Inductiva Web API 
+          will select the region to a specific zone.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
@@ -949,8 +949,8 @@ class ElasticMachineGroup(BaseMachineGroup):
         more information about machine types.
         zone: The zone where the machines will be launched.
         region: The region where the machines will be launched.
-            Note: zone and region are mutually exclusive. The backend will
-            resolve the region to a specific zone.
+            Note: zone and region are mutually exclusive. The Inductiva Web API 
+            will select the region to a specific zone.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
@@ -1063,8 +1063,8 @@ class MPICluster(BaseMachineGroup):
             information about machine types.
         zone: The zone where the machines will be launched.
         region: The region where the machines will be launched.
-            Note: zone and region are mutually exclusive. The backend will
-            resolve the region to a specific zone.
+            Note: zone and region are mutually exclusive. The Inductiva Web API 
+            will select the region to a specific zone.
         provider: The cloud provider of the machine group.
         threads_per_core: The number of threads per core (1 or 2).
         data_disk_gb: The size of the disk for user data (in GB).
