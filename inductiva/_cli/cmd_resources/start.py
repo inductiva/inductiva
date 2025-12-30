@@ -10,8 +10,8 @@ def start_machine_group(args):
     num_machines = args.num_machines
     data_disk_gb = args.data_disk_gb
     spot = args.spot
-    zone = getattr(args, 'zone', None)
-    region = getattr(args, 'region', None)
+    zone = getattr(args, "zone", None)
+    region = getattr(args, "region", None)
 
     machine = resources.MachineGroup(machine_type=machine_type,
                                      num_machines=num_machines,
