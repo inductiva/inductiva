@@ -33,6 +33,7 @@ from inductiva.machines_catalogue_client.exceptions import ApiAttributeError
 from inductiva.machines_catalogue_client.exceptions import ApiException
 
 # import models into sdk package
+from inductiva.machines_catalogue_client.models.available_locations import AvailableLocations
 from inductiva.machines_catalogue_client.models.available_machine_series import AvailableMachineSeries
 from inductiva.machines_catalogue_client.models.available_simulator_versions import AvailableSimulatorVersions
 from inductiva.machines_catalogue_client.models.available_zones import AvailableZones
@@ -54,6 +55,7 @@ from inductiva.machines_catalogue_client.models.simulator_response import Simula
 from inductiva.machines_catalogue_client.models.simulator_version import SimulatorVersion
 from inductiva.machines_catalogue_client.models.simulator_with_machine_types_paginated import SimulatorWithMachineTypesPaginated
 from inductiva.machines_catalogue_client.models.spot import Spot
+from inductiva.machines_catalogue_client.models.spot1 import Spot1
 from inductiva.machines_catalogue_client.models.validation_error import ValidationError
 from inductiva.machines_catalogue_client.models.validation_error_loc_inner import ValidationErrorLocInner
 from inductiva.machines_catalogue_client.models.validation_result import ValidationResult
