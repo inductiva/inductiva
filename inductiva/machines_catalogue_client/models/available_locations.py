@@ -17,24 +17,20 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, StrictStr
-from typing import Any, ClassVar, Dict, List, Optional
+from typing import Any, ClassVar, Dict, List
 from typing import Optional, Set
 from typing_extensions import Self
 
 
-class CloudLocation(BaseModel):
+class AvailableLocations(BaseModel):
     """
-    CloudLocation
+    Available regions and zones for a provider.
     """
 
   # noqa: E501
-    provider: StrictStr
-    region: StrictStr
-    zone: Optional[StrictStr] = None
-    address: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = [
-        "provider", "region", "zone", "address"
-    ]
+    regions: List[StrictStr]
+    zones: List[StrictStr]
+    __properties: ClassVar[List[str]] = ["regions", "zones"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -53,7 +49,7 @@ class CloudLocation(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of CloudLocation from a JSON string"""
+        """Create an instance of AvailableLocations from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -73,21 +69,11 @@ class CloudLocation(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if zone (nullable) is None
-        # and model_fields_set contains the field
-        if self.zone is None and "zone" in self.model_fields_set:
-            _dict['zone'] = None
-
-        # set to None if address (nullable) is None
-        # and model_fields_set contains the field
-        if self.address is None and "address" in self.model_fields_set:
-            _dict['address'] = None
-
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of CloudLocation from a dict"""
+        """Create an instance of AvailableLocations from a dict"""
         if obj is None:
             return None
 
@@ -95,9 +81,7 @@ class CloudLocation(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "provider": obj.get("provider"),
-            "region": obj.get("region"),
-            "zone": obj.get("zone"),
-            "address": obj.get("address")
+            "regions": obj.get("regions"),
+            "zones": obj.get("zones")
         })
         return _obj
